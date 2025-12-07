@@ -29,7 +29,7 @@
   .card{
     background:#0b0b0b;
     border:1px solid var(--border);
-    padding:26px 22px 20px;
+    padding:26px 22px 22px;
     width:min(460px,96vw);
     border-radius:18px;
     box-shadow:0 0 18px rgba(214,180,76,.22),inset 0 0 0 1px rgba(214,180,76,.12);
@@ -40,18 +40,18 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
-    margin-bottom:2px;
-    padding-bottom:4px;
+    gap:10px;
+    margin-bottom:4px;
+    padding-bottom:6px;
   }
   .brand-logo{
-    width:58px;height:58px;object-fit:contain;
+    width:64px;height:64px;object-fit:contain;
     filter:drop-shadow(0 0 5px rgba(242,214,117,.35));
   }
   .brand h1{
     color:var(--accent);
     margin:0;
-    font-size:22px;
+    font-size:24px;
     font-weight:700;
   }
 
@@ -86,7 +86,7 @@
 
   .btn{
     display:block;
-    margin:14px auto 0;
+    margin:16px auto 0;
     width:85%;
     padding:11px 12px;
     border-radius:999px;
@@ -107,7 +107,7 @@
   }
 
   .btn-discord{
-    margin-top:8px;
+    margin-top:10px;
     border-color:#5865F2;
     background:#141622;
     display:flex;
@@ -152,7 +152,6 @@
     margin-top:10px;
     min-height:1em;
     font-size:12px;
-    white-space:pre-wrap; /* shows multi-line Supabase error text */
   }
   footer{
     margin-top:10px;
@@ -198,13 +197,21 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="js/auth.js"></script>
   <script>
-    // Auto-forward if already logged in
     (async () => {
+      const msg = document.getElementById("msg");
+
+      // show any OAuth error coming from auth.js
+      if (window.__oauthError) {
+        msg.textContent = "Discord login failed: " + window.__oauthError;
+      }
+
+      // if already logged in, go straight to index
       const session = await getSession();
-      if (session) location.replace(getBasePath() + "index.html");
+      if (session) {
+        location.replace(getBasePath() + "index.html");
+      }
     })();
 
-    // Username/password login
     document.getElementById('loginBtn').addEventListener('click', async () => {
       const u = document.getElementById('username').value.trim();
       const p = document.getElementById('password').value;
@@ -219,15 +226,15 @@
       location.replace(getBasePath() + "index.html");
     });
 
-    // Discord login with real error message
     document.getElementById('discordBtn').addEventListener('click', async () => {
       const msg = document.getElementById('msg');
       msg.textContent = "";
       try{
-        await loginWithDiscord();
+        await loginWithDiscord(); // defined in js/auth.js
+        // Supabase will redirect to redirectTo; PKCE handler will run there
       }catch(e){
         console.error(e);
-        msg.textContent = e?.message || JSON.stringify(e, null, 2) || "Discord login failed.";
+        msg.textContent = "Discord login failed.";
       }
     });
   </script>
