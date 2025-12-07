@@ -36,7 +36,6 @@
     text-align:center;
   }
 
-  /* Brand line (logo + text side by side) */
   .brand{
     display:flex;
     align-items:center;
@@ -153,6 +152,7 @@
     margin-top:10px;
     min-height:1em;
     font-size:12px;
+    white-space:pre-wrap; /* shows multi-line Supabase error text */
   }
   footer{
     margin-top:10px;
@@ -204,6 +204,7 @@
       if (session) location.replace(getBasePath() + "index.html");
     })();
 
+    // Username/password login
     document.getElementById('loginBtn').addEventListener('click', async () => {
       const u = document.getElementById('username').value.trim();
       const p = document.getElementById('password').value;
@@ -218,16 +219,15 @@
       location.replace(getBasePath() + "index.html");
     });
 
-    // Discord login button
+    // Discord login with real error message
     document.getElementById('discordBtn').addEventListener('click', async () => {
       const msg = document.getElementById('msg');
       msg.textContent = "";
       try{
-        await loginWithDiscord();   // defined in js/auth.js
-        // Supabase will redirect to redirectTo set in loginWithDiscord()
+        await loginWithDiscord();
       }catch(e){
         console.error(e);
-        msg.textContent = "Discord login failed.";
+        msg.textContent = e?.message || JSON.stringify(e, null, 2) || "Discord login failed.";
       }
     });
   </script>
