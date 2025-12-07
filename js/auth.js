@@ -13,8 +13,6 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 /***** BASE PATH (GitHub Pages friendly) *****/
 function getBasePath() {
-  // e.g. https://username.github.io/repo-name/page.html -> "/repo-name/"
-  // local dev (file:// or localhost) -> "/"
   try {
     const parts = location.pathname.split("/").filter(Boolean);
     const onGithub = /\.github\.io$/.test(location.hostname);
@@ -35,18 +33,40 @@ if (!window.supabase) {
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: true, // handles PKCE redirect
+    detectSessionInUrl: false,     // <-- IMPORTANT: we handle PKCE manually
     flowType: "pkce",
     autoRefreshToken: true,
   },
 });
 
-// shared instance
+// expose shared instance
 window.getSupabase = () => _sb;
+
+/***** NEW — HANDLE ?code=... FROM DISCORD (PKCE) *****/
+(async () => {
+  try {
+    const url = new URL(window.location.href);
+    const hasCode = url.searchParams.get("code") || url.searchParams.get("error_description");
+
+    if (hasCode) {
+      const { data, error } = await _sb.auth.exchangeCodeForSession(
+        window.location.search.substring(1) // strip leading '?'
+      );
+
+      if (error) {
+        console.error("[auth] exchangeCodeForSession failed:", error);
+      } else {
+        // Clean URL so "?code=..." disappears but stays on auth.html
+        window.history.replaceState({}, document.title, BASE + "auth.html");
+      }
+    }
+  } catch (err) {
+    console.error("[auth] PKCE handler error:", err);
+  }
+})();
 
 /***** HELPERS *****/
 window.goto = function goto(path = "") {
-  // path like "auth.html" or "/absolute"
   const isAbs = /^\//.test(path);
   location.href = isAbs ? path : BASE + path;
 };
@@ -77,17 +97,13 @@ window.requireAuth = async function requireAuth() {
   }
 };
 
-/***** ACTIONS: USERNAME / PASSWORD *****/
+/***** USERNAME/PASSWORD LOGIN *****/
 window.signIn = async function signIn(usernameOrEmail, password) {
-  // Accept plain username or full email; append @jmbn.local for usernames
   const email = usernameOrEmail.includes("@")
     ? usernameOrEmail
     : `${usernameOrEmail}@jmbn.local`;
 
-  const { data, error } = await _sb.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { data, error } = await _sb.auth.signInWithPassword({ email, password });
   return { data, error };
 };
 
@@ -99,17 +115,15 @@ window.signOut = async function signOut() {
   }
 };
 
-/***** ACTION: DISCORD OAUTH *****/
-// Called from auth.html "Sign in with Discord" button
+/***** DISCORD OAUTH LOGIN *****/
 window.loginWithDiscord = async function loginWithDiscord() {
-  // After Discord login, Supabase will send the user back here
   const redirectTo = `${location.origin}${BASE}auth.html`;
 
   const { data, error } = await _sb.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo,          // where to return after Supabase callback
-      scopes: "identify email", // optional; email if you want it
+      redirectTo,
+      scopes: "identify email",
     },
   });
 
@@ -117,11 +131,10 @@ window.loginWithDiscord = async function loginWithDiscord() {
     console.error("[auth] Discord OAuth error:", error);
     throw error;
   }
-
   return data;
 };
 
-/***** OPTIONAL: auth state listener *****/
+/***** OPTIONAL LISTENER *****/
 _sb.auth.onAuthStateChange((event, session) => {
   // console.log("[auth] state:", event, session);
 });
