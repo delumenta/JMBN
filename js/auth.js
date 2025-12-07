@@ -8,7 +8,7 @@
 
 /***** CONFIG *****/
 const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8"; // <-- your anon key
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
 
 /***** BASE PATH (GitHub Pages friendly) *****/
 function getBasePath() {
@@ -32,7 +32,7 @@ if (!window.supabase) {
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: false,     // <-- IMPORTANT: we handle PKCE manually
+    detectSessionInUrl: false, // we handle PKCE manually
     flowType: "pkce",
     autoRefreshToken: true,
   },
@@ -41,26 +41,36 @@ const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 // expose shared instance
 window.getSupabase = () => _sb;
 
-/***** NEW — HANDLE ?code=... FROM DISCORD (PKCE) *****/
+// place to stash any OAuth error so auth.html can show it
+window.__oauthError = null;
+
+/***** HANDLE ?code=... FROM DISCORD (PKCE) *****/
 (async () => {
   try {
     const url = new URL(window.location.href);
-    const hasCode = url.searchParams.get("code") || url.searchParams.get("error_description");
+    const params = url.searchParams;
+    const code = params.get("code");
+    const errorDesc = params.get("error_description");
 
-    if (hasCode) {
-      const { data, error } = await _sb.auth.exchangeCodeForSession(
-        window.location.search.substring(1) // strip leading '?'
-      );
+    if (errorDesc) {
+      console.error("[auth] OAuth error:", errorDesc);
+      window.__oauthError = errorDesc;
+    }
+
+    if (code) {
+      const { data, error } = await _sb.auth.exchangeCodeForSession(code);
 
       if (error) {
         console.error("[auth] exchangeCodeForSession failed:", error);
+        window.__oauthError = error.message || "Discord login failed.";
       } else {
-        // Clean URL so "?code=..." disappears but stays on auth.html
+        // Clean URL so ?code=... disappears
         window.history.replaceState({}, document.title, BASE + "auth.html");
       }
     }
   } catch (err) {
     console.error("[auth] PKCE handler error:", err);
+    window.__oauthError = "Discord login failed.";
   }
 })();
 
@@ -83,7 +93,9 @@ window.currentUsername = function currentUsername(session) {
 /***** GUARD *****/
 window.requireAuth = async function requireAuth() {
   try {
-    const { data: { session } } = await _sb.auth.getSession();
+    const {
+      data: { session },
+    } = await _sb.auth.getSession();
     if (!session) {
       goto("auth.html");
       return null;
