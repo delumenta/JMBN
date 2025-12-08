@@ -1,242 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>JMBN — Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --border:#d6b44c;
-    --accent:#f2d675;
-    --text:#f7f1d0;
-    --muted:#c9b06a;
-    --bg:#000;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:
-      radial-gradient(1200px 900px at 15% -10%, rgba(242,214,117,.08), transparent 60%),
-      radial-gradient(900px 700px at 120% 110%, rgba(214,180,76,.05), transparent 60%),
-      var(--bg);
-    color:var(--text);
-    font-family:'Play',system-ui,sans-serif;
-    min-height:100vh;
-    display:grid;
-    place-items:center;
-    padding:16px;
-  }
-  .card{
-    background:#0b0b0b;
-    border:1px solid var(--border);
-    padding:26px 22px 22px;
-    width:min(460px,96vw);
-    border-radius:18px;
-    box-shadow:0 0 18px rgba(214,180,76,.22),inset 0 0 0 1px rgba(214,180,76,.12);
-    text-align:center;
-  }
+// js/auth.js (simple version)
+// ---------------------------
+// Exposes: getSupabase, requireAuth, signIn, signOut,
+// loginWithDiscord, getSession, currentUsername, goto, getBasePath
 
-  .brand{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:4px;
-    padding-bottom:6px;
-  }
-  .brand-logo{
-    width:64px;height:64px;object-fit:contain;
-    filter:drop-shadow(0 0 5px rgba(242,214,117,.35));
-  }
-  .brand h1{
-    color:var(--accent);
-    margin:0;
-    font-size:24px;
-    font-weight:700;
-  }
+/***** CONFIG *****/
+const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY_HERE"; // <-- replace with your anon key
 
-  .muted{
-    color:var(--muted);
-    font-size:13px;
-    margin:6px 0 18px;
-  }
+/***** BASE PATH (GitHub Pages friendly) *****/
+function getBasePath() {
+  try {
+    const parts = location.pathname.split("/").filter(Boolean);
+    const onGithub = /\.github\.io$/.test(location.hostname);
+    if (onGithub && parts.length) return "/" + parts[0] + "/";
+  } catch {}
+  return "/";
+}
+const BASE = getBasePath();
+window.getBasePath = getBasePath;
 
-  label{
-    display:block;
-    width:85%;
-    margin:10px auto 4px;
-    color:var(--accent);
-    font-weight:700;
-    font-size:13px;
-    text-align:left;
-    letter-spacing:.5px;
-  }
-  input{
-    display:block;
-    width:85%;
-    margin:0 auto 8px;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid var(--accent);
-    background:#141414;
-    color:var(--text);
-    font-family:'Play',sans-serif;
-    font-size:14px;
-  }
+/***** SUPABASE CLIENT *****/
+if (!window.supabase) {
+  console.error(
+    '[auth] Supabase JS not loaded. Add <script src="https://unpkg.com/@supabase/supabase-js@2"></script> BEFORE js/auth.js'
+  );
+}
 
-  .btn{
-    display:block;
-    margin:16px auto 0;
-    width:85%;
-    padding:11px 12px;
-    border-radius:999px;
-    border:1px solid var(--accent);
-    background:#141414;
-    color:var(--text);
-    font-weight:700;
-    cursor:pointer;
-    font-family:'Play',sans-serif;
-    font-size:14px;
-    transition:background .15s ease,color .15s ease,box-shadow .15s ease,transform .1s ease;
-  }
-  .btn:hover{
-    background:var(--accent);
-    color:#000;
-    box-shadow:0 0 14px rgba(214,180,76,.35);
-    transform:translateY(-1px);
-  }
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    detectSessionInUrl: true,  // Supabase handles ?code=... for us
+    flowType: "pkce",
+    autoRefreshToken: true,
+  },
+});
 
-  .btn-discord{
-    margin-top:10px;
-    border-color:#5865F2;
-    background:#141622;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    color:#dfe3ff;
+window.getSupabase = () => sb;
+
+/***** HELPERS *****/
+window.goto = function goto(path = "") {
+  const isAbs = /^\//.test(path);
+  location.href = isAbs ? path : BASE + path;
+};
+
+window.getSession = async function getSession() {
+  const { data } = await sb.auth.getSession();
+  return data?.session ?? null;
+};
+
+window.currentUsername = function currentUsername(session) {
+  const email = session?.user?.email || "";
+  return email.split("@")[0] || "";
+};
+
+/***** PROTECT PAGES *****/
+window.requireAuth = async function requireAuth() {
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      goto("auth.html");
+      return null;
+    }
+    return session;
+  } catch (e) {
+    console.error("[auth] requireAuth failed:", e);
+    goto("auth.html");
+    return null;
   }
-  .btn-discord:hover{
-    background:#5865F2;
-    color:#fff;
-    box-shadow:0 0 14px rgba(88,101,242,.7);
+};
+
+/***** USERNAME/PASSWORD LOGIN *****/
+window.signIn = async function signIn(usernameOrEmail, password) {
+  const email = usernameOrEmail.includes("@")
+    ? usernameOrEmail
+    : `${usernameOrEmail}@jmbn.local`;
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  return { data, error };
+};
+
+window.signOut = async function signOut() {
+  try {
+    await sb.auth.signOut();
+  } finally {
+    goto("auth.html");
   }
-  .btn-discord-icon{
-    width:18px;height:18px;border-radius:4px;
-    background:#5865F2;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
+};
+
+/***** DISCORD LINK SYNC (auto /link) *****/
+async function syncDiscordLink(session) {
+  if (!session || !session.user) return;
+
+  const user = session.user;
+  const meta = user.user_metadata || {};
+
+  // Try a couple of common fields for Discord ID
+  const discordId =
+    meta.provider_id ||  // often used
+    meta.sub ||          // sometimes used
+    meta.id ||           // fallback
+    null;
+
+  if (!discordId) {
+    console.log("[auth] No discordId in metadata; skipping discord_links sync.");
+    return;
   }
 
-  .divider{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:14px auto 4px;
-    width:85%;
-    font-size:11px;
-    color:var(--muted);
+  const handle =
+    meta.global_name ||
+    meta.username ||
+    meta.full_name ||
+    (user.email ? user.email.split("@")[0] : null);
+
+  const row = {
+    discord_id: String(discordId),
+    user_id: user.id,
+    handle,
+  };
+
+  const { error } = await sb.from("discord_links").upsert(row);
+  if (error) {
+    console.error("[auth] upsert discord_links failed:", error);
+  } else {
+    console.log("[auth] discord_links synced:", row);
   }
-  .divider::before,
-  .divider::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:linear-gradient(90deg,rgba(214,180,76,.2),rgba(214,180,76,.02));
+}
+
+/***** DISCORD OAUTH LOGIN *****/
+window.loginWithDiscord = async function loginWithDiscord() {
+  const redirectTo = `${location.origin}${BASE}auth.html`;
+
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: "discord",
+    options: {
+      redirectTo,
+      scopes: "identify email",
+    },
+  });
+
+  if (error) {
+    console.error("[auth] Discord OAuth error:", error);
+    throw error;
   }
+};
 
-  .err{
-    color:#ff9b9b;
-    margin-top:10px;
-    min-height:1em;
-    font-size:12px;
+/***** WHENEVER AUTH STATE CHANGES *****/
+sb.auth.onAuthStateChange(async (event, session) => {
+  // When user finishes Discord login, Supabase will:
+  // 1) create the session
+  // 2) fire SIGNED_IN here
+  if (event === "SIGNED_IN") {
+    const provider = session?.user?.app_metadata?.provider;
+    if (provider === "discord") {
+      await syncDiscordLink(session);  // auto-link to discord_links
+    }
   }
-  footer{
-    margin-top:10px;
-    color:var(--muted);
-    font-size:11px;
-  }
-</style>
-</head>
-<body>
-
-  <div class="card">
-    <div class="brand">
-      <img class="brand-logo"
-           src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png/v1/fill/w_66,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/0_New_JMBN_Logo_Gold.png"
-           alt="JMBN Logo">
-      <h1>JMBN Manifest</h1>
-    </div>
-
-    <p class="muted">Organization Access Portal</p>
-
-    <!-- Username / password login -->
-    <label for="username">Username</label>
-    <input id="username" placeholder="e.g. ops" autocomplete="username" />
-
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
-
-    <button id="loginBtn" class="btn">Sign in</button>
-
-    <div class="divider">or</div>
-
-    <!-- Discord login -->
-    <button id="discordBtn" class="btn btn-discord" type="button">
-      <span class="btn-discord-icon">◎</span>
-      <span>Sign in with Discord</span>
-    </button>
-
-    <div id="msg" class="err"></div>
-    <footer>Only authorized JMBN personnel may log in.</footer>
-  </div>
-
-  <!-- Supabase + Auth Logic -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    (async () => {
-      const msg = document.getElementById("msg");
-
-      // show any OAuth error coming from auth.js
-      if (window.__oauthError) {
-        msg.textContent = "Discord login failed: " + window.__oauthError;
-      }
-
-      // if already logged in, go straight to index
-      const session = await getSession();
-      if (session) {
-        location.replace(getBasePath() + "index.html");
-      }
-    })();
-
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value;
-      const msg = document.getElementById('msg');
-
-      msg.textContent = "";
-      const { error } = await signIn(u, p);
-      if (error) {
-        msg.textContent = error.message;
-        return;
-      }
-      location.replace(getBasePath() + "index.html");
-    });
-
-    document.getElementById('discordBtn').addEventListener('click', async () => {
-      const msg = document.getElementById('msg');
-      msg.textContent = "";
-      try{
-        await loginWithDiscord(); // defined in js/auth.js
-        // Supabase will redirect to redirectTo; PKCE handler will run there
-      }catch(e){
-        console.error(e);
-        msg.textContent = "Discord login failed.";
-      }
-    });
-  </script>
-</body>
-</html>
+});
