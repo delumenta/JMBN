@@ -1,17 +1,19 @@
-// js/auth.js (simple + discord_links auto-link)
+// js/auth.js
 // ----------------------------------------------------
-// Exposes on window:
-//   getSupabase, requireAuth, signIn, signOut,
-//   loginWithDiscord, getSession, currentUsername,
-//   goto, getBasePath
+// Supabase auth bootstrap for JMBN (GitHub Pages safe)
+// Exposes helpers on window: getSupabase, requireAuth,
+// signIn, signOut, loginWithDiscord, getSession,
+// currentUsername, goto, getBasePath
 // ----------------------------------------------------
 
 /***** CONFIG *****/
 const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8", // <- keep as-is in your real file
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8"; // <-- your anon key
 
 /***** BASE PATH (GitHub Pages friendly) *****/
 function getBasePath() {
+  // e.g. https://username.github.io/repo-name/page.html -> "/repo-name/"
+  // local dev (file:// or localhost) -> "/"
   try {
     const parts = location.pathname.split("/").filter(Boolean);
     const onGithub = /\.github\.io$/.test(location.hostname);
@@ -29,26 +31,27 @@ if (!window.supabase) {
   );
 }
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: true,   // let supabase handle the PKCE code in URL
+    detectSessionInUrl: true,   // Supabase will process ?code= for PKCE
     flowType: "pkce",
     autoRefreshToken: true,
   },
 });
 
 // shared instance
-window.getSupabase = () => sb;
+window.getSupabase = () => _sb;
 
 /***** HELPERS *****/
 window.goto = function goto(path = "") {
+  // path like "auth.html" or "/absolute"
   const isAbs = /^\//.test(path);
   location.href = isAbs ? path : BASE + path;
 };
 
 window.getSession = async function getSession() {
-  const { data } = await sb.auth.getSession();
+  const { data } = await _sb.auth.getSession();
   return data?.session ?? null;
 };
 
@@ -57,10 +60,10 @@ window.currentUsername = function currentUsername(session) {
   return email.split("@")[0] || "";
 };
 
-/***** AUTH GUARD (for protected pages) *****/
+/***** GUARD *****/
 window.requireAuth = async function requireAuth() {
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await _sb.auth.getSession();
     if (!session) {
       goto("auth.html");
       return null;
@@ -73,73 +76,34 @@ window.requireAuth = async function requireAuth() {
   }
 };
 
-/***** USERNAME/PASSWORD LOGIN *****/
+/***** USERNAME / PASSWORD LOGIN *****/
 window.signIn = async function signIn(usernameOrEmail, password) {
   // Accept plain username or full email; append @jmbn.local for usernames
   const email = usernameOrEmail.includes("@")
     ? usernameOrEmail
     : `${usernameOrEmail}@jmbn.local`;
 
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  const { data, error } = await _sb.auth.signInWithPassword({
+    email,
+    password,
+  });
   return { data, error };
 };
 
 window.signOut = async function signOut() {
   try {
-    await sb.auth.signOut();
+    await _sb.auth.signOut();
   } finally {
     goto("auth.html");
   }
 };
 
-/***** DISCORD_LINKS SYNC *****/
-/**
- * Upserts a row in public.discord_links for a Discord-auth user.
- * - discord_id  = user.user_metadata.provider_id
- * - user_id     = user.id
- * - handle      = user.user_metadata.user_name (if present)
- *
- * Safe to call many times; it just keeps the mapping updated.
- */
-async function syncDiscordLink(session) {
-  if (!session?.user) return;
-
-  const user = session.user;
-  const provider = user.app_metadata?.provider;
-  if (provider !== "discord") return;   // only care about Discord logins
-
-  const meta = user.user_metadata || {};
-  const discordId = meta.provider_id || meta.sub || null;
-  if (!discordId) {
-    console.warn("[auth] No discordId found in user_metadata:", meta);
-    return;
-  }
-
-  const userId = user.id;
-  const handle = meta.user_name || meta.full_name || null;
-
-  const payload = {
-    discord_id: String(discordId),
-    user_id: userId,
-    handle,
-  };
-
-  const { error } = await sb
-    .from("discord_links")
-    .upsert(payload, { onConflict: "discord_id" });
-
-  if (error) {
-    console.error("[auth] Failed to sync discord_links:", error);
-  } else {
-    console.log("[auth] discord_links synced for", discordId);
-  }
-}
-
-/***** DISCORD OAUTH LOGIN *****/
+/***** DISCORD OAUTH LOGIN (button on auth.html) *****/
 window.loginWithDiscord = async function loginWithDiscord() {
+  // After Discord login, Supabase will send the user back to auth.html
   const redirectTo = `${location.origin}${BASE}auth.html`;
 
-  const { data, error } = await sb.auth.signInWithOAuth({
+  const { data, error } = await _sb.auth.signInWithOAuth({
     provider: "discord",
     options: {
       redirectTo,
@@ -155,14 +119,68 @@ window.loginWithDiscord = async function loginWithDiscord() {
   return data;
 };
 
+/***** AUTO-LINK DISCORD → public.discord_links *****/
+/**
+ * Called whenever we have a valid session.
+ * If the user logged in with Discord, upsert a row into public.discord_links.
+ */
+async function linkDiscordFromSession(session) {
+  if (!session?.user) return;
+
+  const user = session.user;
+
+  // identities[] contains the provider info; look for Discord
+  const identities = user.identities || [];
+  const discordIdentity = identities.find((id) => id.provider === "discord");
+  if (!discordIdentity) return; // normal email/password login = nothing to do
+
+  const idData = discordIdentity.identity_data || {};
+
+  // Discord's unique user ID (what your bot uses)
+  const discordId = String(idData.id || discordIdentity.id || "").trim();
+  if (!discordId) {
+    console.warn("[auth] No discord id found in identity_data:", idData);
+    return;
+  }
+
+  // A nice handle to store (fallbacks just in case)
+  const handle =
+    idData.username ||
+    idData.user_name ||
+    user.user_metadata?.preferred_username ||
+    user.user_metadata?.user_name ||
+    null;
+
+  const payload = {
+    discord_id: discordId,
+    user_id: user.id,
+    handle,
+  };
+
+  console.log("[auth] upserting discord_links:", payload);
+
+  const { error } = await _sb
+    .from("discord_links")
+    .upsert(payload, { onConflict: "discord_id" });
+
+  if (error) {
+    console.error("[auth] Failed to upsert discord_links:", error);
+  }
+}
+
 /***** AUTH STATE LISTENER *****/
-// When user signs in (including via Discord), auto-sync discord_links
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === "SIGNED_IN" && session) {
-    try {
-      await syncDiscordLink(session);
-    } catch (e) {
-      console.error("[auth] syncDiscordLink failed:", e);
+// Whenever the auth state changes (including after OAuth redirect),
+// make sure Discord is linked, then you can choose where to send the user.
+_sb.auth.onAuthStateChange(async (event, session) => {
+  console.log("[auth] state:", event, session);
+
+  if (session) {
+    // Try to link Discord if this is a Discord login
+    await linkDiscordFromSession(session);
+
+    // If we’re currently on auth.html, push them to index.html after sign-in
+    if (location.pathname.endsWith("/auth.html") || location.pathname.endsWith("auth.html")) {
+      goto("index.html");
     }
   }
 });
