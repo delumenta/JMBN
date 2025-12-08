@@ -2,15 +2,16 @@
 // ----------------------------------------------------
 // Supabase auth bootstrap for JMBN (GitHub Pages safe)
 // Exposes helpers on window: getSupabase, requireAuth,
-// signIn, signOut, loginWithDiscord, getSession,
-// currentUsername, goto, getBasePath
+// signIn, signOut, getSession, currentUsername, goto,
+// getBasePath
 // ----------------------------------------------------
 
-/***** CONFIG *****/
+/** ***** CONFIG ***** **/
 const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
-const SUPABASE_ANON_KEY = "xxxxx"; // <-- your anon key
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
 
-/***** BASE PATH (GitHub Pages friendly) *****/
+/** ***** BASE PATH (works for GitHub Pages repo sites) ***** **/
 function getBasePath() {
   // e.g. https://username.github.io/repo-name/page.html -> "/repo-name/"
   // local dev (file:// or localhost) -> "/"
@@ -22,33 +23,34 @@ function getBasePath() {
   return "/";
 }
 const BASE = getBasePath();
-window.getBasePath = getBasePath;
 
-/***** SUPABASE CLIENT *****/
+/** ***** SUPABASE CLIENT ***** **/
 if (!window.supabase) {
   console.error(
-    '[auth] Supabase JS not loaded. Add <script src="https://unpkg.com/@supabase/supabase-js@2"></script> BEFORE js/auth.js'
+    "[auth] Supabase JS not loaded. Add <script src=\"https://unpkg.com/@supabase/supabase-js@2\"></script> BEFORE js/auth.js"
   );
 }
 
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: true, // handles PKCE redirect
+    detectSessionInUrl: true, // handles PKCE redirect fragments
     flowType: "pkce",
     autoRefreshToken: true,
   },
 });
 
-// shared instance
+// Expose a getter so all pages share the same instance
 window.getSupabase = () => _sb;
 
-/***** HELPERS *****/
+/** ***** HELPERS ***** **/
 window.goto = function goto(path = "") {
   // path like "auth.html" or "/absolute"
   const isAbs = /^\//.test(path);
   location.href = isAbs ? path : BASE + path;
 };
+
+window.getBasePath = getBasePath;
 
 window.getSession = async function getSession() {
   const { data } = await _sb.auth.getSession();
@@ -60,8 +62,10 @@ window.currentUsername = function currentUsername(session) {
   return email.split("@")[0] || "";
 };
 
-/***** GUARD *****/
+/** ***** GUARDS ***** **/
 window.requireAuth = async function requireAuth() {
+  // If the URL contains PKCE params, Supabase will process them because
+  // detectSessionInUrl=true; a small delay helps on very fast redirects.
   try {
     const { data: { session } } = await _sb.auth.getSession();
     if (!session) {
@@ -76,7 +80,7 @@ window.requireAuth = async function requireAuth() {
   }
 };
 
-/***** ACTIONS: USERNAME / PASSWORD *****/
+/** ***** ACTIONS ***** **/
 window.signIn = async function signIn(usernameOrEmail, password) {
   // Accept plain username or full email; append @jmbn.local for usernames
   const email = usernameOrEmail.includes("@")
@@ -98,29 +102,8 @@ window.signOut = async function signOut() {
   }
 };
 
-/***** ACTION: DISCORD OAUTH *****/
-// Called from auth.html "Sign in with Discord" button
-window.loginWithDiscord = async function loginWithDiscord() {
-  // After Discord login, Supabase will send the user back here
-  const redirectTo = `${location.origin}${BASE}auth.html`;
-
-  const { data, error } = await _sb.auth.signInWithOAuth({
-    provider: "discord",
-    options: {
-      redirectTo,          // where to return after Supabase callback
-      scopes: "identify email", // optional; email if you want it
-    },
-  });
-
-  if (error) {
-    console.error("[auth] Discord OAuth error:", error);
-    throw error;
-  }
-
-  return data;
-};
-
-/***** OPTIONAL: auth state listener *****/
+/** ***** OPTIONAL: auth state listener (for debugging) ***** **/
 _sb.auth.onAuthStateChange((event, session) => {
   // console.log("[auth] state:", event, session);
+  // You can react to sign-in/out here if needed.
 });
