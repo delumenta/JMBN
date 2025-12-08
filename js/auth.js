@@ -8,7 +8,7 @@
 
 /***** CONFIG *****/
 const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
-const SUPABASE_ANON_KEY = "xxxxx"; // <-- your anon key
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8"; // <-- your anon key
 
 /***** BASE PATH (GitHub Pages friendly) *****/
 function getBasePath() {
@@ -34,7 +34,8 @@ if (!window.supabase) {
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: true,   // Supabase will process ?code= for PKCE
+    // IMPORTANT: for PKCE we will handle the code in the URL ourselves
+    detectSessionInUrl: false,
     flowType: "pkce",
     autoRefreshToken: true,
   },
@@ -42,6 +43,31 @@ const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 // shared instance
 window.getSupabase = () => _sb;
+
+/***** PKCE HANDLER: TURN ?code=... INTO A SESSION *****/
+(async () => {
+  try {
+    const url = new URL(window.location.href);
+    const hasCode =
+      url.searchParams.get("code") || url.searchParams.get("error_description");
+
+    if (hasCode) {
+      // This exchanges the code & state in the URL for a session
+      const { data, error } = await _sb.auth.exchangeCodeForSession(
+        window.location.href
+      );
+
+      if (error) {
+        console.error("[auth] exchangeCodeForSession failed:", error);
+      } else {
+        // Clean the ?code=... from the URL but stay on auth.html
+        window.history.replaceState({}, document.title, BASE + "auth.html");
+      }
+    }
+  } catch (err) {
+    console.error("[auth] PKCE handler error:", err);
+  }
+})();
 
 /***** HELPERS *****/
 window.goto = function goto(path = "") {
@@ -63,7 +89,9 @@ window.currentUsername = function currentUsername(session) {
 /***** GUARD *****/
 window.requireAuth = async function requireAuth() {
   try {
-    const { data: { session } } = await _sb.auth.getSession();
+    const {
+      data: { session },
+    } = await _sb.auth.getSession();
     if (!session) {
       goto("auth.html");
       return null;
@@ -120,30 +148,21 @@ window.loginWithDiscord = async function loginWithDiscord() {
 };
 
 /***** AUTO-LINK DISCORD → public.discord_links *****/
-/**
- * Called whenever we have a valid session.
- * If the user logged in with Discord, upsert a row into public.discord_links.
- */
 async function linkDiscordFromSession(session) {
   if (!session?.user) return;
 
   const user = session.user;
-
-  // identities[] contains the provider info; look for Discord
   const identities = user.identities || [];
   const discordIdentity = identities.find((id) => id.provider === "discord");
-  if (!discordIdentity) return; // normal email/password login = nothing to do
+  if (!discordIdentity) return; // email/password login – nothing to do
 
   const idData = discordIdentity.identity_data || {};
-
-  // Discord's unique user ID (what your bot uses)
   const discordId = String(idData.id || discordIdentity.id || "").trim();
   if (!discordId) {
     console.warn("[auth] No discord id found in identity_data:", idData);
     return;
   }
 
-  // A nice handle to store (fallbacks just in case)
   const handle =
     idData.username ||
     idData.user_name ||
@@ -169,8 +188,6 @@ async function linkDiscordFromSession(session) {
 }
 
 /***** AUTH STATE LISTENER *****/
-// Whenever the auth state changes (including after OAuth redirect),
-// make sure Discord is linked, then you can choose where to send the user.
 _sb.auth.onAuthStateChange(async (event, session) => {
   console.log("[auth] state:", event, session);
 
@@ -178,8 +195,12 @@ _sb.auth.onAuthStateChange(async (event, session) => {
     // Try to link Discord if this is a Discord login
     await linkDiscordFromSession(session);
 
-    // If we’re currently on auth.html, push them to index.html after sign-in
-    if (location.pathname.endsWith("/auth.html") || location.pathname.endsWith("auth.html")) {
+    // If we're on auth.html after a sign-in, push them to index.html
+    const path = location.pathname || "";
+    if (
+      event === "SIGNED_IN" &&
+      (path.endsWith("/auth.html") || path.endsWith("auth.html"))
+    ) {
       goto("index.html");
     }
   }
