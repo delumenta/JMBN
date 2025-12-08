@@ -1,19 +1,19 @@
 // js/auth.js
 // ----------------------------------------------------
 // Supabase auth bootstrap for JMBN (GitHub Pages safe)
-//
-// - Handles PKCE Discord OAuth
-// - Redirects auth.html → index.html after login
-// - No discord_links logic
+// Exposes helpers on window: getSupabase, requireAuth,
+// signIn, signOut, loginWithDiscord, getSession,
+// currentUsername, goto, getBasePath
 // ----------------------------------------------------
 
 /***** CONFIG *****/
 const SUPABASE_URL = "https://fcegavhipeaeihxegsnw.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8"; // <-- your anon key
 
 /***** BASE PATH (GitHub Pages friendly) *****/
 function getBasePath() {
+  // e.g. https://username.github.io/repo-name/page.html -> "/repo-name/"
+  // local dev (file:// or localhost) -> "/"
   try {
     const parts = location.pathname.split("/").filter(Boolean);
     const onGithub = /\.github\.io$/.test(location.hostname);
@@ -34,52 +34,18 @@ if (!window.supabase) {
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
-    detectSessionInUrl: false, // we handle PKCE manually
+    detectSessionInUrl: true, // handles PKCE redirect
     flowType: "pkce",
     autoRefreshToken: true,
   },
 });
 
+// shared instance
 window.getSupabase = () => _sb;
-
-/***** PKCE HANDLER: exchange ?code=... → session *****/
-(async () => {
-  try {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get("code");
-    const errorDescription = url.searchParams.get("error_description");
-
-    // If Discord returned an error, just log it
-    if (errorDescription) {
-      console.error("[auth] Discord OAuth error:", errorDescription);
-      // clean URL but stay on auth page
-      window.history.replaceState({}, document.title, BASE + "auth.html");
-      return;
-    }
-
-    // If we have a code from Discord, exchange it for a session
-    if (code) {
-      const { data, error } = await _sb.auth.exchangeCodeForSession(code);
-
-      if (error) {
-        console.error("[auth] exchangeCodeForSession failed:", error);
-        // clean URL, stay on auth page so user sees normal login form
-        window.history.replaceState({}, document.title, BASE + "auth.html");
-      } else {
-        // Successfully signed in via Discord:
-        // 1) clean URL
-        window.history.replaceState({}, document.title, BASE + "auth.html");
-        // 2) go straight to dashboard
-        goto("index.html");
-      }
-    }
-  } catch (err) {
-    console.error("[auth] PKCE handler error:", err);
-  }
-})();
 
 /***** HELPERS *****/
 window.goto = function goto(path = "") {
+  // path like "auth.html" or "/absolute"
   const isAbs = /^\//.test(path);
   location.href = isAbs ? path : BASE + path;
 };
@@ -94,12 +60,10 @@ window.currentUsername = function currentUsername(session) {
   return email.split("@")[0] || "";
 };
 
-/***** AUTH GUARD *****/
+/***** GUARD *****/
 window.requireAuth = async function requireAuth() {
   try {
-    const {
-      data: { session },
-    } = await _sb.auth.getSession();
+    const { data: { session } } = await _sb.auth.getSession();
     if (!session) {
       goto("auth.html");
       return null;
@@ -112,29 +76,39 @@ window.requireAuth = async function requireAuth() {
   }
 };
 
-/***** USERNAME/PASSWORD LOGIN *****/
+/***** ACTIONS: USERNAME / PASSWORD *****/
 window.signIn = async function signIn(usernameOrEmail, password) {
+  // Accept plain username or full email; append @jmbn.local for usernames
   const email = usernameOrEmail.includes("@")
     ? usernameOrEmail
     : `${usernameOrEmail}@jmbn.local`;
 
-  return await _sb.auth.signInWithPassword({ email, password });
+  const { data, error } = await _sb.auth.signInWithPassword({
+    email,
+    password,
+  });
+  return { data, error };
 };
 
 window.signOut = async function signOut() {
-  await _sb.auth.signOut();
-  goto("auth.html");
+  try {
+    await _sb.auth.signOut();
+  } finally {
+    goto("auth.html");
+  }
 };
 
-/***** DISCORD LOGIN BUTTON *****/
+/***** ACTION: DISCORD OAUTH *****/
+// Called from auth.html "Sign in with Discord" button
 window.loginWithDiscord = async function loginWithDiscord() {
+  // After Discord login, Supabase will send the user back here
   const redirectTo = `${location.origin}${BASE}auth.html`;
 
-  const { error } = await _sb.auth.signInWithOAuth({
+  const { data, error } = await _sb.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo,
-      scopes: "identify email",
+      redirectTo,          // where to return after Supabase callback
+      scopes: "identify email", // optional; email if you want it
     },
   });
 
@@ -142,9 +116,11 @@ window.loginWithDiscord = async function loginWithDiscord() {
     console.error("[auth] Discord OAuth error:", error);
     throw error;
   }
+
+  return data;
 };
 
-/***** AUTH STATE LISTENER (optional, mostly for debugging) *****/
+/***** OPTIONAL: auth state listener *****/
 _sb.auth.onAuthStateChange((event, session) => {
-  console.log("[auth] event:", event, session);
+  // console.log("[auth] state:", event, session);
 });
