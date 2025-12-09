@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png"
-      href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"/>
+      href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
 
 <style>
 :root{
@@ -61,7 +61,8 @@ body{
   padding:10px 14px;
   border-bottom:1px solid var(--border);
 }
-.panel .hd h2{
+.panel .hd h2,
+.panel .hd h3{
   margin:0;color:var(--accent);font-size:16px;font-weight:700;
   display:flex;align-items:center;gap:10px;
 }
@@ -213,7 +214,6 @@ button:hover{
 @media(max-width:720px){.kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.kpis{grid-template-columns:1fr}}
 
-/* KPI card */
 .kpi{
   background:linear-gradient(180deg,#0b0b0b,#080808);
   border-radius:10px;
@@ -270,12 +270,9 @@ button:hover{
 .subpanel .hd{
   padding:8px 10px;
   border-bottom:1px solid rgba(214,180,76,.5);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
 }
 .subpanel .body{padding:8px 10px 10px}
+.subpanel .hd h3{font-size:13px}
 
 /* Cert grid – 6-up */
 .certGrid{
@@ -368,16 +365,14 @@ button:hover{
   <!-- Big unified panel -->
   <section class="panel main-panel">
     <div class="hd">
-      <div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <h2>Member Management</h2>
-        <span class="small">View activity • Manage ranks • Roles • Certs</span>
+        <span class="small">View activity • Manage ranks • Grant certs</span>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <button id="btnSyncProfiles" class="pill" type="button" title="Run sync_missing_profiles() RPC">
-          Sync Profiles
-        </button>
-        <span id="syncMsg" class="small"></span>
-      </div>
+      <!-- NEW: sync button -->
+      <button id="btnSyncProfiles" class="pill" type="button" title="Sync auth users into public.profiles">
+        Sync Profiles
+      </button>
     </div>
     <div class="body">
       <div class="main-grid">
@@ -401,7 +396,7 @@ button:hover{
               <option value="Enlisted">Enlisted</option>
               <option value="Warrant">Warrant</option>
             </select>
-            <button id="btnForceTrack" class="pill" title="Force set user's rank track">Force Track</button>
+            <button id="btnForce" class="pill" title="Force set user's rank track">Force Track</button>
 
             <select id="rankCode" title="Rank Code">
               <option value="">— Select Rank —</option>
@@ -425,7 +420,7 @@ button:hover{
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-/* ===== Supabase config ===== */
+/* ===== Supabase config (same project as mission-log / editor) ===== */
 const SUPABASE_URL  = 'https://fcegavhipeaeihxegsnw.supabase.co'
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8'
 
@@ -438,8 +433,6 @@ const setFill = (el,p) => {
   const x = Math.max(0, Math.min(1, Number(p)||0))
   el.style.width = (x*100) + '%'
 }
-
-const ROLE_OPTIONS = ['Admin','Member','Recruit','Guest']
 
 let me        = null
 let isElev    = false
@@ -458,7 +451,7 @@ async function mountHeader2(){
     mount.innerHTML = html
 
     const here = (location.pathname.split('/').pop() || 'index.html')
-    const active = mount.querySelector(\`.nav-btn[href="\${here}"]\`)
+    const active = mount.querySelector(`.nav-btn[href="${here}"]`)
     if(active) active.classList.add('active')
   }catch(err){
     console.error('Failed to mount header2:', err)
@@ -477,14 +470,13 @@ async function boot(){
     console.error('getSession error:', sErr.message)
   }
   if(!session){
-    $('#inspector').innerHTML = '<div class="small" style="color:#ff9c9c">Not signed in. Please log in via your auth.html flow.</div>'
-    $('#mList').textContent   = 'No access.'
+    $('#inspector').innerHTML = '<div class="small" style="color:#ff9c9c">Not signed in. Please log in via your auth flow.</div>'
+    // You can optionally still allow read-only here if desired.
     return
   }
 
   me = session.user.id
 
-  // Check elevated via RPC is_elevated(u uuid)
   try{
     const { data, error } = await sb.rpc('is_elevated',{ u: me })
     if(error) console.warn('is_elevated error:', error.message)
@@ -499,18 +491,29 @@ async function boot(){
     return
   }
 
-  // Wire sync button (optional RPC sync_missing_profiles)
-  $('#btnSyncProfiles').onclick = async () => {
-    const msgEl = $('#syncMsg')
-    msgEl.textContent = 'Syncing…'
-    try{
-      const { data, error } = await sb.rpc('sync_missing_profiles')
-      if(error) throw error
-      msgEl.textContent = 'Synced ✓'
-      await loadMembers()
-    }catch(e){
-      console.error('sync_missing_profiles error', e)
-      msgEl.textContent = 'Sync failed: ' + (e.message || e)
+  // NEW: sync button handler
+  const btnSync = $('#btnSyncProfiles')
+  if (btnSync){
+    btnSync.onclick = async () => {
+      if(!confirm('Sync profiles from auth.users into public.profiles?')){
+        return
+      }
+      btnSync.disabled = true
+      btnSync.textContent = 'Syncing…'
+      try{
+        const { data, error } = await sb.rpc('sync_missing_profiles')
+        if(error){
+          alert('Sync failed: ' + error.message)
+        }else{
+          alert('Sync completed.')
+          await loadMembers()
+        }
+      }catch(e){
+        alert('Sync failed: ' + (e.message || e))
+      }finally{
+        btnSync.disabled = false
+        btnSync.textContent = 'Sync Profiles'
+      }
     }
   }
 
@@ -520,9 +523,37 @@ async function boot(){
   $('#mSearch').oninput        = renderMembers
   $('#rankTrack').onchange     = e => loadRankOptions(e.target.value)
 
-  $('#btnForceTrack').onclick = forceTrack
-  $('#btnSetRank').onclick    = forceRank
-  $('#btnPromote').onclick    = runPromotion
+  $('#btnForce').onclick = async () => {
+    if(!SELECTED) return alert('Select a member first.')
+    const track = $('#rankTrack').value
+    if(!track) return alert('Choose a track.')
+    if(!confirm(`Force set ${SELECTED.handle || SELECTED.display_name || SELECTED.user_id.slice(0,8)} to ${track}?`)) return
+    const { error } = await sb.rpc('set_rank_track',{ p_user: SELECTED.user_id, p_track: track })
+    if(error) return alert('Force set failed: ' + error.message)
+    alert('Track updated ✓')
+    await openMember(SELECTED.user_id)
+    await loadMembers()
+  }
+
+  $('#btnSetRank').onclick = async () => {
+    if(!SELECTED) return alert('Select a member first.')
+    const code = $('#rankCode').value
+    if(!code) return alert('Choose a rank.')
+    if(!confirm(`Force set ${SELECTED.handle || SELECTED.display_name || SELECTED.user_id.slice(0,8)} to ${code}?`)) return
+    const { error } = await sb.rpc('set_rank_code',{ p_user: SELECTED.user_id, p_code: code })
+    if(error) return alert('Set rank failed: ' + error.message)
+    alert('Rank updated ✓')
+    await openMember(SELECTED.user_id)
+    await loadMembers()
+  }
+
+  $('#btnPromote').onclick = async () => {
+    if(!SELECTED) return
+    const { data, error } = await sb.rpc('request_promotion',{ p_user: SELECTED.user_id })
+    if(error) return alert('Promotion failed: ' + error.message)
+    alert(data?.message || (data?.ok ? 'Promotion OK' : 'Not eligible yet'))
+    await openMember(SELECTED.user_id)
+  }
 }
 
 /* ===== Ranks dropdown ===== */
@@ -542,35 +573,23 @@ async function loadRankOptions(track=''){
   const items = RANKS.filter(r => !want || (r.category || '').toLowerCase() === want)
   const sel   = $('#rankCode')
   sel.innerHTML = '<option value="">— Select Rank —</option>' +
-    items.map(r => \`<option value="\${r.code}">\${r.code} — \${esc(r.name)}</option>\`).join('')
+    items.map(r => `<option value="${r.code}">${r.code} — ${esc(r.name)}</option>`).join('')
 }
 
-/* ===== Members list (from public.profiles) ===== */
+/* ===== Members list ===== */
 async function loadMembers(){
   const list = $('#mList')
   list.textContent = 'Loading…'
-
-  const { data, error } = await sb
-    .from('profiles')
-    .select(`
-      user_id,
-      handle,
-      display_name,
-      rank_image_url,
-      rank_code,
-      rank_category,
-      role,
-      rank_track,
-      missions_attended
-    `)
-    .order('handle', { ascending:true })
+  const { data, error } = await sb.from('v_profiles_detailed').select(`
+    user_id,handle,display_name,
+    current_rank_category,current_rank_name,current_rank_code,current_rank_image_url
+  `).order('handle')
 
   if(error){
     console.error('loadMembers error:', error.message)
     list.textContent = 'Failed to load members: ' + error.message
     return
   }
-
   MEMBERS = data || []
   renderMembers()
 }
@@ -579,7 +598,7 @@ function renderMembers(){
   const q    = ($('#mSearch').value || '').toLowerCase().trim()
   const list = $('#mList')
   const rows = q
-    ? MEMBERS.filter(m => (\`\${m.handle} \${m.display_name}\`).toLowerCase().includes(q))
+    ? MEMBERS.filter(m => (`${m.handle} ${m.display_name}`).toLowerCase().includes(q))
     : MEMBERS
 
   if(!rows.length){
@@ -592,17 +611,16 @@ function renderMembers(){
     row.className = 'mrow'
     row.innerHTML = `
       <div class="mavatar">
-        ${m.rank_image_url ? `<img src="${esc(m.rank_image_url)}" alt="rank">` : '👤'}
+        ${m.current_rank_image_url
+          ? `<img src="${esc(m.current_rank_image_url)}" alt="rank">`
+          : '👤'}
       </div>
       <div>
-        <div>
-          <b>${esc(m.handle || '(no handle)')}</b>
+        <div><b>${esc(m.handle || '(no handle)')}</b>
           <span class="small">• ${esc(m.display_name || '')}</span>
         </div>
         <div class="small">
-          ${esc(m.rank_category || 'Unrated')}
-          ${m.rank_code ? ' • ' + esc(m.rank_code) : ''}
-          ${m.role ? ' • Role: ' + esc(m.role) : ''}
+          ${esc(m.current_rank_category || 'Unrated')} — ${esc(m.current_rank_name || 'Unrated')}
         </div>
       </div>
       <div><button class="pill" type="button">Open</button></div>`
@@ -624,25 +642,12 @@ async function openMember(userId, rowEl){
   markActive(rowEl)
   $('#btnPromote').disabled = false
 
-  // preload track dropdown
-  $('#rankTrack').value = res.rank_track || res.rank_category || ''
-  await loadRankOptions(res.rank_track || res.rank_category || '')
-  if(res.rank_code) $('#rankCode').value = res.rank_code
+  $('#rankTrack').value = res.current_rank_category || ''
+  await loadRankOptions(res.current_rank_category || '')
+  if(res.current_rank_code) $('#rankCode').value = res.current_rank_code
 
   $('#inspector').innerHTML = `
     <div id="summary"></div>
-
-    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px;margin-bottom:4px;">
-      <div>
-        <div class="small">Supabase Role</div>
-        <select id="roleSelect" style="min-width:140px;">
-          <option value="">— Role —</option>
-          ${ROLE_OPTIONS.map(r => `<option value="${r}">${r}</option>`).join('')}
-        </select>
-      </div>
-      <button id="btnSaveRole" class="pill" type="button">Save Role</button>
-      <span id="roleMsg" class="small"></span>
-    </div>
 
     <div class="kpis">
       <div class="kpi"><h4>Total Missions</h4><div class="val" id="k_mis">—</div></div>
@@ -693,32 +698,6 @@ async function openMember(userId, rowEl){
       <div class="body"><div id="misList" class="list">Loading…</div></div>
     </div>
   `
-
-  // init role UI
-  const roleSel = $('#roleSelect')
-  if(roleSel) roleSel.value = res.role || ''
-
-  $('#btnSaveRole').onclick = async () => {
-    const newRole = $('#roleSelect').value || null
-    const msgEl = $('#roleMsg')
-    msgEl.textContent = 'Saving…'
-    try{
-      const { error } = await sb
-        .from('profiles')
-        .update({ role:newRole })
-        .eq('user_id', userId)
-      if(error) throw error
-      msgEl.textContent = 'Saved ✓'
-      // update local cache
-      const idx = MEMBERS.findIndex(m => m.user_id === userId)
-      if(idx !== -1) MEMBERS[idx].role = newRole
-      SELECTED.role = newRole
-      renderMembers()
-    }catch(e){
-      console.error('update role error', e)
-      msgEl.textContent = 'Failed: ' + (e.message || e)
-    }
-  }
 
   await Promise.all([
     loadProgress(userId),
@@ -948,40 +927,6 @@ async function loadMissions(uid){
     </div>`
     count.textContent = '0'
   }
-}
-
-/* ===== Rank / Promotion RPC helpers ===== */
-
-async function forceTrack(){
-  if(!SELECTED) return alert('Select a member first.')
-  const track = $('#rankTrack').value
-  if(!track) return alert('Choose a track.')
-  if(!confirm(\`Force set \${SELECTED.handle || SELECTED.display_name || SELECTED.user_id.slice(0,8)} to track "\${track}"?\`)) return
-  const { error } = await sb.rpc('set_rank_track',{ p_user: SELECTED.user_id, p_track: track })
-  if(error) return alert('Force set failed: ' + error.message)
-  alert('Track updated ✓')
-  await openMember(SELECTED.user_id)
-  await loadMembers()
-}
-
-async function forceRank(){
-  if(!SELECTED) return alert('Select a member first.')
-  const code = $('#rankCode').value
-  if(!code) return alert('Choose a rank.')
-  if(!confirm(\`Force set \${SELECTED.handle || SELECTED.display_name || SELECTED.user_id.slice(0,8)} to rank \${code}?\`)) return
-  const { error } = await sb.rpc('set_rank_code',{ p_user: SELECTED.user_id, p_code: code })
-  if(error) return alert('Set rank failed: ' + error.message)
-  alert('Rank updated ✓')
-  await openMember(SELECTED.user_id)
-  await loadMembers()
-}
-
-async function runPromotion(){
-  if(!SELECTED) return
-  const { data, error } = await sb.rpc('request_promotion',{ p_user: SELECTED.user_id })
-  if(error) return alert('Promotion failed: ' + error.message)
-  alert(data?.message || (data?.ok ? 'Promotion OK' : 'Not eligible yet'))
-  await openMember(SELECTED.user_id)
 }
 </script>
 </body>
