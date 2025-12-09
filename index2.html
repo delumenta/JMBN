@@ -377,7 +377,8 @@ button:hover{
             <h3 style="margin:0;color:var(--accent);font-size:14px;">Members</h3>
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="small">Pick a member to inspect</span>
-              <button id="btnSync" class="pill" type="button" style="font-size:10px;padding:2px 8px;">Sync Profiles</button>
+              <button id="btnSync" class="pill" type="button"
+                      style="font-size:10px;padding:2px 8px;">Sync Profiles</button>
             </div>
           </div>
           <input id="mSearch" type="search" placeholder="Search handle / name…">
@@ -455,7 +456,7 @@ async function mountHeader2(){
   }
 }
 
-/* ===== Sync profiles RPC (can be called quietly or via button) ===== */
+/* ===== Sync missing profiles (RPC) ===== */
 async function runSyncProfiles(quiet = false){
   const btn = $('#btnSync')
   if(!quiet && btn){
@@ -463,13 +464,13 @@ async function runSyncProfiles(quiet = false){
     btn.textContent = 'Syncing…'
   }
   try{
-    const { data, error } = await sb.rpc('sync_missing_profiles')
-    if(error){
-      console.warn('sync_missing_profiles error:', error.message)
-      if(!quiet) alert('Sync failed: ' + error.message)
+    const { data: syncCount, error: syncErr } = await sb.rpc('sync_missing_profiles')
+    if(syncErr){
+      console.warn('sync_missing_profiles error:', syncErr.message)
+      if(!quiet) alert('Sync failed: ' + syncErr.message)
     }else{
-      console.log('Profiles synced:', data)
-      if(!quiet) alert(`Profiles synced: ${data ?? 0}`)
+      console.log('Profiles synced:', syncCount)
+      if(!quiet) alert(`Profiles synced: ${syncCount ?? 0}`)
       await loadMembers()
     }
   }catch(e){
@@ -495,12 +496,17 @@ async function boot(){
     console.error('getSession error:', sErr.message)
   }
   if(!session){
-    $('#inspector').innerHTML = '<div class="small" style="color:#ff9c9c">Not signed in. Please log in via your auth flow.</div>'
+    $('#inspector').innerHTML =
+      '<div class="small" style="color:#ff9c9c">Not signed in. Please log in via your auth flow.</div>'
     return
   }
 
   me = session.user.id
 
+  // Quiet auto-sync on load
+  runSyncProfiles(true)
+
+  /* ==== CHECK ELEVATION ==== */
   try{
     const { data, error } = await sb.rpc('is_elevated',{ u: me })
     if(error) console.warn('is_elevated error:', error.message)
@@ -510,25 +516,24 @@ async function boot(){
   }
 
   if(!isElev){
-    $('#inspector').innerHTML = '<div class="small" style="color:#ff6b6b">Access denied — not elevated.</div>'
-    $('#mList').textContent   = 'No access.'
+    $('#inspector').innerHTML =
+      '<div class="small" style="color:#ff6b6b">Access denied — not elevated.</div>'
+    $('#mList').textContent = 'No access.'
     return
   }
 
-  // Wire Sync Profiles button
+  // Wire Sync button for manual use
   const syncBtn = $('#btnSync')
   if(syncBtn){
     syncBtn.onclick = () => runSyncProfiles(false)
   }
 
-  // Optional: auto sync quietly on load
-  runSyncProfiles(true)
-
+  /* ==== CONTINUE NORMAL BOOT ==== */
   await loadMembers()
   await loadRankOptions()
 
-  $('#mSearch').oninput        = renderMembers
-  $('#rankTrack').onchange     = e => loadRankOptions(e.target.value)
+  $('#mSearch').oninput    = renderMembers
+  $('#rankTrack').onchange = e => loadRankOptions(e.target.value)
 
   $('#btnForce').onclick = async () => {
     if(!SELECTED) return alert('Select a member first.')
@@ -574,7 +579,7 @@ async function loadRankOptions(track=''){
       console.warn('ranks error:', error.message)
       return
     }
-    RANKS = data || []
+    RANKS = (data || [])
   }
   const want  = (track || $('#rankTrack').value || '').toLowerCase()
   const items = RANKS.filter(r => !want || (r.category || '').toLowerCase() === want)
@@ -587,19 +592,43 @@ async function loadRankOptions(track=''){
 async function loadMembers(){
   const list = $('#mList')
   list.textContent = 'Loading…'
-  const { data, error } = await sb.from('v_profiles_detailed').select(`
-    user_id,handle,display_name,
-    current_rank_category,current_rank_name,current_rank_code,current_rank_image_url,
-    role
-  `).order('handle')
 
-  if(error){
-    console.error('loadMembers error:', error.message)
-    list.textContent = 'Failed to load members: ' + error.message
-    return
+  try {
+    // rank + basic info
+    const { data: vrows, error: vErr } = await sb
+      .from('v_profiles_detailed')
+      .select(`
+        user_id,
+        handle,
+        display_name,
+        current_rank_category,
+        current_rank_name,
+        current_rank_code,
+        current_rank_image_url
+      `)
+      .order('handle')
+
+    if (vErr) throw vErr
+
+    // roles from public.profiles
+    const { data: prows, error: pErr } = await sb
+      .from('profiles')
+      .select('user_id, role')
+
+    if (pErr) throw pErr
+
+    const roleMap = new Map((prows || []).map(r => [r.user_id, r.role]))
+
+    MEMBERS = (vrows || []).map(r => ({
+      ...r,
+      role: roleMap.get(r.user_id) || 'Guest'
+    }))
+
+    renderMembers()
+  } catch (err) {
+    console.error('loadMembers error:', err.message || err)
+    list.textContent = 'Failed to load members: ' + (err.message || err)
   }
-  MEMBERS = data || []
-  renderMembers()
 }
 
 function renderMembers(){
@@ -628,7 +657,8 @@ function renderMembers(){
           <span class="small">• ${esc(m.display_name || '')}</span>
         </div>
         <div class="small">
-          Role: ${esc(m.role || 'Guest')} • ${esc(m.current_rank_category || 'Unrated')} — ${esc(m.current_rank_name || 'Unrated')}
+          Role: ${esc(m.role || 'Guest')} •
+          ${esc(m.current_rank_category || 'Unrated')} — ${esc(m.current_rank_name || 'Unrated')}
         </div>
       </div>
       <div><button class="pill" type="button">Open</button></div>`
@@ -716,7 +746,7 @@ async function openMember(userId, rowEl){
   $('#misReload').onclick = () => loadMissions(userId)
 }
 
-/* ===== Progress + simple ROLE line ===== */
+/* ===== Progress + ROLE CONTROL ===== */
 async function loadProgress(uid){
   const [{ data: prog }, { data: up }] = await Promise.all([
     sb.from('v_user_rank_progress').select('*').eq('user_id', uid).maybeSingle(),
@@ -729,7 +759,7 @@ async function loadProgress(uid){
   const nxtPg = esc(prog?.next_paygrade || '—')
 
   $('#summary').innerHTML = `
-    <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap">
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
       <div>
         <div><b>Current:</b>
           <span style="color:var(--accent)">${cur}</span>
@@ -739,30 +769,25 @@ async function loadProgress(uid){
           Next: ${nxt} <span class="pill">PG: ${nxtPg}</span>
         </div>
       </div>
-      <div class="small">
-        Targets • M:${prog?.missions_target ?? 0}
-        • H:${prog?.hours_target ?? 0}
-        • C:${prog?.certification_target ?? 0}
+      <div>
+        <div class="small">
+          Targets • M:${prog?.missions_target ?? 0}
+          • H:${prog?.hours_target ?? 0}
+          • C:${prog?.certification_target ?? 0}
+        </div>
+        <label class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+          Role:
+          <select id="roleSelect"
+            style="max-width:150px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:4px 6px;color:var(--text);font-family:'Play';font-size:11px;">
+            <option value="Admin">Admin</option>
+            <option value="Member">Member</option>
+            <option value="Recruit">Recruit</option>
+            <option value="Guest">Guest</option>
+          </select>
+          <button id="btnSetRole" class="pill" type="button" style="font-size:11px;padding:3px 8px;">Update</button>
+        </label>
       </div>
-    </div>
-
-    <!-- SIMPLE ROLE LINE just below ranks -->
-    <div class="small"
-         style="margin-top:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-      Role:
-      <select id="roleSelect"
-        style="max-width:150px;background:#0a0a0a;border:1px solid var(--border);
-               border-radius:8px;padding:4px 6px;color:var(--text);
-               font-family:'Play';font-size:11px;">
-        <option value="Admin">Admin</option>
-        <option value="Member">Member</option>
-        <option value="Recruit">Recruit</option>
-        <option value="Guest">Guest</option>
-      </select>
-      <button id="btnSetRole" class="pill" type="button"
-              style="font-size:11px;padding:3px 8px;">Update</button>
-    </div>
-  `
+    </div>`
 
   const m  = Number(up?.missions_attended || 0)
   const h  = Number(up?.hours_total || 0)
@@ -783,33 +808,32 @@ async function loadProgress(uid){
   setFill($('#pbHrs'), ht ? Math.min(1, h/ht) : 1)
   setFill($('#pbCer'), ct ? Math.min(1, c/ct) : 1)
 
-  // --- role line wiring ---
-  const roleSelect  = document.getElementById('roleSelect')
-  const btnSetRole  = document.getElementById('btnSetRole')
+  // Wire up Role controls
+  const roleSelect = document.getElementById('roleSelect')
+  const btnSetRole = document.getElementById('btnSetRole')
 
-  if (roleSelect) {
+  if(roleSelect){
     roleSelect.value = SELECTED?.role || 'Guest'
   }
 
-  if (btnSetRole) {
+  if(btnSetRole){
     btnSetRole.onclick = async () => {
-      if (!SELECTED) return alert('No member selected.')
+      if(!SELECTED) return alert('No member selected.')
       const newRole = roleSelect.value
-      try {
+      try{
         const { error } = await sb
           .from('profiles')
           .update({ role: newRole })
-          .eq('user_id', SELECTED.user_id) // <-- adjust to match your FK column name
-
-        if (error) throw error
-
+          .eq('user_id', SELECTED.user_id)
+        if(error) return alert('Failed to update role: ' + error.message)
         alert('Role updated ✓')
-        // update local cache + UI
+
+        // update local cache
         SELECTED.role = newRole
         const idx = MEMBERS.findIndex(m => m.user_id === SELECTED.user_id)
-        if (idx !== -1) MEMBERS[idx].role = newRole
+        if(idx !== -1) MEMBERS[idx].role = newRole
         renderMembers()
-      } catch (e) {
+      }catch(e){
         alert('Failed to update role: ' + (e.message || e))
       }
     }
