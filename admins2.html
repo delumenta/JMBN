@@ -398,7 +398,15 @@ button:hover{
             <button id="btnSetRank" class="pill" title="Force set a specific rank code">Set Rank</button>
 
             <button id="btnPromote" class="pill" disabled>Run Promotion Check</button>
-            <button id="btnSyncProfiles" class="pill" type="button">Sync Profiles</button>
+
+            <!-- NEW: role selector -->
+            <select id="roleSelect" title="Org Role">
+              <option value="Member">Member</option>
+              <option value="Admin">Admin</option>
+              <option value="Recruit">Recruit</option>
+              <option value="Guest">Guest</option>
+            </select>
+            <button id="btnSetRole" class="pill" title="Update org role">Set Role</button>
           </div>
 
           <div id="inspector">
@@ -434,6 +442,7 @@ let isElev    = false
 let MEMBERS   = []
 let SELECTED  = null
 let RANKS     = []
+let ROLES_MAP = {}   // user_id -> role
 
 /* ===== Shared header mount ===== */
 async function mountHeader2(){
@@ -450,6 +459,20 @@ async function mountHeader2(){
     if(active) active.classList.add('active')
   }catch(err){
     console.error('Failed to mount header2:', err)
+  }
+}
+
+/* ===== Sync profiles helper (calls RPC) ===== */
+async function syncProfiles(){
+  try{
+    const { data, error } = await sb.rpc('sync_missing_profiles')
+    if(error){
+      console.warn('sync_missing_profiles error:', error.message)
+    }else{
+      console.log('sync_missing_profiles inserted:', data)
+    }
+  }catch(e){
+    console.warn('sync_profiles failed:', e.message || e)
   }
 }
 
@@ -484,6 +507,9 @@ async function boot(){
     $('#mList').textContent   = 'No access.'
     return
   }
+
+  // Make sure every auth user has a profile row
+  await syncProfiles()
 
   await loadMembers()
   await loadRankOptions()
@@ -523,25 +549,29 @@ async function boot(){
     await openMember(SELECTED.user_id)
   }
 
-  // Sync profiles → run RPC then refresh member list
-  $('#btnSyncProfiles').onclick = async () => {
-    const btn = $('#btnSyncProfiles')
-    btn.disabled = true
-    const original = btn.textContent
-    btn.textContent = 'Syncing…'
-    try{
-      const { data, error } = await sb.rpc('sync_missing_profiles')
-      if(error){
-        console.error('sync_missing_profiles error', error)
-        alert('Sync failed: ' + error.message)
-      }else{
-        alert(`Sync complete. Inserted ${data ?? 0} profiles.`)
-        await loadMembers()
-      }
-    }finally{
-      btn.disabled = false
-      btn.textContent = original
+  // NEW: Set Role
+  $('#btnSetRole').onclick = async () => {
+    if(!SELECTED) return alert('Select a member first.')
+    const newRole = $('#roleSelect').value || 'Member'
+    const label = SELECTED.handle || SELECTED.display_name || SELECTED.user_id.slice(0,8)
+
+    if(!confirm(`Set role for ${label} to ${newRole}?`)) return
+
+    const { error } = await sb
+      .from('profiles')
+      .update({ role: newRole })
+      .eq('user_id', SELECTED.user_id)
+
+    if(error){
+      alert('Failed to update role: ' + error.message)
+      return
     }
+
+    alert('Role updated ✓')
+    // update local cache
+    SELECTED.role = newRole
+    ROLES_MAP[SELECTED.user_id] = newRole
+    renderMembers()               // refresh left list labels
   }
 }
 
@@ -570,34 +600,34 @@ async function loadMembers(){
   const list = $('#mList')
   list.textContent = 'Loading…'
 
-  // main view with rank info
-  const { data: basics, error: e1 } = await sb.from('v_profiles_detailed').select(`
-    user_id,handle,display_name,
-    current_rank_category,current_rank_name,current_rank_code,current_rank_image_url
-  `).order('handle')
+  // 1) rank + handle from v_profiles_detailed
+  // 2) roles from public.profiles
+  const [{ data: members, error: e1 }, { data: roles, error: e2 }] =
+    await Promise.all([
+      sb.from('v_profiles_detailed').select(`
+        user_id,handle,display_name,
+        current_rank_category,current_rank_name,current_rank_code,current_rank_image_url
+      `).order('handle'),
+      sb.from('profiles').select('user_id,role')
+    ])
 
   if(e1){
-    console.error('loadMembers v_profiles_detailed error:', e1.message)
+    console.error('loadMembers error (v_profiles_detailed):', e1.message)
     list.textContent = 'Failed to load members: ' + e1.message
     return
   }
-
-  // roles from public.profiles
-  const { data: roles, error: e2 } = await sb
-    .from('profiles')
-    .select('user_id_uuid, role')
-
   if(e2){
-    console.warn('profiles role load error:', e2.message)
+    console.warn('loadMembers roles error:', e2.message)
   }
 
-  const roleMap = new Map((roles || []).map(r => [r.user_id_uuid, r.role || '']))
+  ROLES_MAP = Object.fromEntries(
+    (roles || []).map(r => [r.user_id, r.role || 'Member'])
+  )
 
-  MEMBERS = (basics || []).map(m => ({
+  MEMBERS = (members || []).map(m => ({
     ...m,
-    role: roleMap.get(m.user_id) || ''
+    role: ROLES_MAP[m.user_id] || 'Member'
   }))
-
   renderMembers()
 }
 
@@ -628,7 +658,9 @@ function renderMembers(){
         </div>
         <div class="small">
           ${esc(m.current_rank_category || 'Unrated')} — ${esc(m.current_rank_name || 'Unrated')}
-          • Role: ${esc(m.role || 'Guest')}
+        </div>
+        <div class="small">
+          Role: ${esc(m.role || 'Member')}
         </div>
       </div>
       <div><button class="pill" type="button">Open</button></div>`
@@ -654,24 +686,14 @@ async function openMember(userId, rowEl){
   await loadRankOptions(res.current_rank_category || '')
   if(res.current_rank_code) $('#rankCode').value = res.current_rank_code
 
+  // set role dropdown
+  const roleSel = $('#roleSelect')
+  if(roleSel){
+    roleSel.value = res.role || 'Member'
+  }
+
   $('#inspector').innerHTML = `
     <div id="summary"></div>
-
-    <div class="subpanel">
-      <div class="hd"><h3>Org Role</h3></div>
-      <div class="body">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <select id="roleSelect" style="max-width:180px">
-            <option value="Admin">Admin</option>
-            <option value="Member">Member</option>
-            <option value="Recruit">Recruit</option>
-            <option value="Guest">Guest</option>
-          </select>
-          <button id="btnSaveRole" class="pill" type="button">Save Role</button>
-          <span id="roleStatus" class="small"></span>
-        </div>
-      </div>
-    </div>
 
     <div class="kpis">
       <div class="kpi"><h4>Total Missions</h4><div class="val" id="k_mis">—</div></div>
@@ -722,38 +744,6 @@ async function openMember(userId, rowEl){
       <div class="body"><div id="misList" class="list">Loading…</div></div>
     </div>
   `
-
-  // initialise role selector
-  const roleSelect  = $('#roleSelect')
-  const roleStatus  = $('#roleStatus')
-  roleSelect.value  = SELECTED.role || 'Member'
-
-  $('#btnSaveRole').onclick = async () => {
-    const newRole = roleSelect.value || 'Member'
-    roleStatus.textContent = 'Saving…'
-    try{
-      const { error } = await sb
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('user_id_uuid', SELECTED.user_id)
-
-      if(error){
-        console.error('role update error', error)
-        roleStatus.textContent = 'Failed to save.'
-        alert('Failed to update role: ' + error.message)
-        return
-      }
-      // update local cache + sidebar
-      SELECTED.role = newRole
-      const idx = MEMBERS.findIndex(m => m.user_id === SELECTED.user_id)
-      if(idx >= 0) MEMBERS[idx].role = newRole
-      renderMembers()
-      roleStatus.textContent = 'Saved ✓'
-    }catch(e){
-      console.error('role update error', e)
-      roleStatus.textContent = 'Error.'
-    }
-  }
 
   await Promise.all([
     loadProgress(userId),
