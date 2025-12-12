@@ -3,286 +3,405 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>JMBN Member Roster</title>
+<title>JMBN – Member</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" sizes="32x32">
+<link rel="icon" type="image/png"
+      href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+      sizes="32x32">
 
 <style>
 :root{
-  --bg:#000;--panel:#0b0b0b;--border:#d6b44c;--card:#141414;
-  --accent:#f2d675;--text:#f7f1d0;--muted:#c9b06a;--bad:#ff6b6b;
-  --fs-base:14px;--fs-small:11px;--fs-table:13px;--fs-h1:clamp(18px,2.2vw,22px);
+  --bg:#000;
+  --panel:#0b0b0b;
+  --card:#101010;
+  --border:#d6b44c;
+  --accent:#f2d675;
+  --accent-soft:#c9b06a;
+  --text:#f7f1d0;
+  --muted:#c9b06a;
+  --bad:#ff6b6b;
+  --good:#5cd47c;
+  --row:#0a0a0a;
+  --fs:14px;
 }
-*{box-sizing:border-box}
+
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+
+/* ===== Global scrollbar (kills the “white scroll”) ===== */
+*{
+  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{
+  background:rgba(10,10,10,.92);
+  border-left:1px solid rgba(214,180,76,.25);
+}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
+  border:2px solid rgba(10,10,10,.95);
+  border-radius:999px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg, rgba(242,214,117,.95), rgba(214,180,76,.75));
+}
+::-webkit-scrollbar-corner{background:rgba(10,10,10,.92)}
+
 body{
   background:
     radial-gradient(1200px 900px at 15% -10%, rgba(242,214,117,.08), transparent 60%),
     radial-gradient(900px 700px at 120% 110%, rgba(214,180,76,.05), transparent 60%),
     #000;
-  color:var(--text); font-family:'Play',system-ui,sans-serif;
-  margin:0; padding:14px; letter-spacing:.25px; font-size:var(--fs-base);
+  color:var(--text);
+  font-family:'Play',system-ui,sans-serif;
+  font-size:var(--fs);
+  letter-spacing:.25px;
+  padding:14px;
 }
 
-/* Shared header target */
+/* Header mount target */
 #header{margin-bottom:10px}
 
-/* Panel & table */
+/* Shell */
+.shell{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
 .panel{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:16px;
-  padding:12px;
-  margin-top:4px;
-  box-shadow:
-    inset 0 0 0 1px rgba(242,214,117,.18),
-    0 0 0 1px rgba(214,180,76,.35),
-    0 18px 45px rgba(0,0,0,.9);
+  padding:14px 14px 16px;
+  box-shadow:0 0 24px rgba(214,180,76,.22);
 }
+
+/* A small “hero strip” like progression */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(242,214,117,.18),transparent 55%),
+    radial-gradient(circle at 90% 100%,rgba(214,180,76,.12),transparent 55%);
+  opacity:.8;
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.hero-title{
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--accent-soft);
+}
+.hero-sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* Controls */
 .controls{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-bottom:10px;
   align-items:center;
 }
 input[type="search"]{
   background:#0a0a0a;
   border:1px solid var(--border);
-  border-radius:8px;
+  border-radius:999px;
   padding:9px 12px;
   color:var(--text);
-  font-size:var(--fs-table);
-  min-width:260px
+  font-size:13px;
+  min-width:280px;
+  outline:none;
 }
+input[type="search"]::placeholder{color:rgba(201,176,106,.7)}
 .badge{
   border:1px solid var(--border);
-  padding:6px 10px;
+  padding:7px 12px;
   border-radius:999px;
   color:var(--accent);
-  font-weight:700
+  font-weight:800;
+  background:linear-gradient(180deg,#0c0c0c,#060606);
 }
+
+/* Table */
 .tableWrap{
-  border:1px solid var(--border);
-  border-radius:12px;
+  margin-top:10px;
+  border:1px solid rgba(214,180,76,.75);
+  border-radius:14px;
   overflow:auto;
-  max-height:70vh
+  max-height:70vh;
+  background:#070707;
 }
+
+/* Ensure the tableWrap scrollbar is also dark (some browsers treat nested scrollbars separately) */
+.tableWrap{
+  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
+  scrollbar-width: thin;
+}
+.tableWrap::-webkit-scrollbar{width:12px;height:12px}
+.tableWrap::-webkit-scrollbar-track{
+  background:rgba(10,10,10,.92);
+  border-left:1px solid rgba(214,180,76,.25);
+}
+.tableWrap::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
+  border:2px solid rgba(10,10,10,.95);
+  border-radius:999px;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:var(--fs-table)
+  font-size:13px;
 }
 th,td{
-  border-bottom:1px solid rgba(214,180,76,.3);
-  padding:10px;
+  border-bottom:1px solid rgba(214,180,76,.26);
+  padding:12px 12px;
   text-align:left;
-  vertical-align:middle
+  vertical-align:middle;
 }
 th{
   color:var(--accent);
   background:#080808;
-  font-weight:600;
+  font-weight:700;
   position:sticky;
   top:0;
-  z-index:1
+  z-index:2;
 }
-tr:nth-child(even){background:#111}
+tr:nth-child(even){background:#0d0d0d}
 tr:hover{background:rgba(214,180,76,.08)}
-.name{font-weight:700}
+.name{font-weight:800}
 
-/* Rank cell — image beside rank text, NO frame/background */
+/* Rank cell — icon + text */
 .rankCell{
   display:flex;
   align-items:center;
-  gap:12px
+  gap:10px;
 }
 .rankCell img{
-  width:28px;
-  height:28px;
+  width:26px;height:26px;
   object-fit:contain;
-  flex:0 0 28px;
-  border:none;
-  border-radius:0;
-  background:transparent;
-  box-shadow:none;
+  border:none;background:transparent;box-shadow:none;
 }
 
 /* Role chips */
 .roles{
   display:flex;
   flex-wrap:wrap;
-  gap:8px
+  gap:8px;
 }
 .role-chip{
-  border:1px solid var(--border);
+  border:1px solid rgba(214,180,76,.75);
   border-radius:999px;
   padding:4px 10px;
   font-size:12px;
-  background:#0c0c0c;
-  color:var(--muted);
+  background:linear-gradient(180deg,#0c0c0c,#060606);
+  color:var(--accent-soft);
 }
 
 /* Buttons */
 .btn{
   padding:8px 12px;
-  border-radius:10px;
+  border-radius:999px;
+  border:1px solid var(--border);
   background:linear-gradient(180deg,#0c0c0c,#060606);
   color:var(--accent);
-  border:1px solid var(--border);
   cursor:pointer;
-  font-family:'Play'
+  font-family:'Play',system-ui,sans-serif;
+  font-size:12px;
+  font-weight:800;
 }
 .btn:hover{
   background:var(--accent);
-  color:#000
+  color:#000;
 }
+
+/* Footer note */
+.meta{
+  font-size:12px;
+  color:var(--muted);
+  padding-top:10px;
+}
+.meta b{color:var(--accent)}
 
 /* Modal */
 .modal-mask{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.75);
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:50
+  z-index:50;
+  padding:18px;
 }
 .modal{
-  background:#0b0b0b;
+  width:min(860px, 96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:16px;
-  max-width:760px;
-  width:94vw;
-  padding:20px 18px;
-  box-shadow:0 0 28px rgba(214,180,76,.3)
+  padding:18px;
+  box-shadow:0 0 28px rgba(214,180,76,.3);
 }
-.modal h3{
-  margin:0 0 14px;
-  color:var(--accent);
-  font-size:18px;
-  letter-spacing:.3px
+
+/* Modal scrollbar */
+.modal{
+  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
+  scrollbar-width: thin;
 }
+.modal::-webkit-scrollbar{width:12px;height:12px}
+.modal::-webkit-scrollbar-track{background:rgba(10,10,10,.92)}
+.modal::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
+  border:2px solid rgba(10,10,10,.95);
+  border-radius:999px;
+}
+
 .modal .header-row{
   display:flex;
   align-items:center;
   gap:12px;
-  margin-bottom:14px
+  margin-bottom:12px;
 }
-.modal .header-row .spacer{flex:1}
+.modal h3{
+  margin:0;
+  color:var(--accent);
+  font-size:18px;
+  letter-spacing:.3px;
+}
+.modal .spacer{flex:1}
 
-/* Rank card in modal — NO frame/background on image */
 .rankCard{
   display:flex;
   gap:16px;
   align-items:center;
-  border:1px solid var(--border);
+  border:1px solid rgba(214,180,76,.75);
   border-radius:14px;
   padding:14px;
-  background:#0f0f0f
+  background:linear-gradient(180deg,#0f0f0f,#0a0a0a);
 }
 .rankCard img{
-  width:70px;
-  height:70px;
+  width:74px;
+  height:74px;
   object-fit:contain;
-  border:none;
-  border-radius:0;
-  background:transparent;
-  box-shadow:none;
+  border:none;background:transparent;box-shadow:none;
 }
-
-.meta{
+.cardMeta{
   font-size:13px;
   color:var(--muted);
-  line-height:1.55
+  line-height:1.7;
 }
-.meta b{color:var(--accent)}
-
+.cardMeta b{color:var(--accent)}
 .divider{
   height:1px;
-  background:linear-gradient(90deg,rgba(214,180,76,.15),rgba(214,180,76,.4),rgba(214,180,76,.15));
   border:none;
-  margin:16px 0
+  background:linear-gradient(90deg,rgba(214,180,76,.15),rgba(214,180,76,.45),rgba(214,180,76,.15));
+  margin:14px 0;
 }
 
-/* Section blocks inside modal */
 .section{
-  border:1px solid var(--border);
-  border-radius:12px;
+  border:1px solid rgba(214,180,76,.70);
+  border-radius:14px;
   padding:14px;
-  background:#0f0f0f;
-  margin-bottom:12px
+  background:linear-gradient(180deg,#0f0f0f,#0a0a0a);
 }
 .section h4{
   margin:0 0 10px;
   color:var(--accent);
-  font-size:14px;
-  letter-spacing:.3px
-}
-.section .body{
   font-size:13px;
-  color:var(--text);
-  line-height:1.6
+  text-transform:uppercase;
+  letter-spacing:.18em;
 }
-.section .muted{color:var(--muted)}
 
-/* Certifications-only gallery in modal */
 .certThumbs{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
-  align-items:center
+  gap:10px;
+  align-items:center;
 }
 .certThumbs img{
-  width:56px;
-  height:56px;
+  width:58px;height:58px;
   object-fit:contain;
-  display:block;
-  border:none;
-  background:transparent;
-  box-shadow:none;
-  border-radius:0;
+  border:none;background:transparent;box-shadow:none;
 }
 .subtle{font-size:11px;color:var(--muted)}
 </style>
 </head>
-<body>
 
+<body>
   <!-- Shared header mount -->
   <div id="header"></div>
 
-  <div class="panel">
-    <div class="controls">
-      <input id="q" type="search" placeholder="Search handle, rank, or specialization…">
-      <span id="count" class="badge">0 members</span>
-    </div>
+  <main class="shell">
+    <!-- HERO / TOP STRIP -->
+    <section class="panel hero">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-title">Member Roster</div>
+          <div class="hero-sub">Search, sort by rank, and view a member’s rank card + earned cert badges.</div>
+        </div>
 
-    <div class="tableWrap">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:23%">Handle</th>
-            <th style="width:19%">Rank Category</th>
-            <th style="width:20%">Current Rank</th>
-            <th style="width:20%">Specialization</th>
-            <th style="width:13%">Certifications</th>
-            <th style="width:5%"></th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr><td colspan="6" style="padding:12px;color:var(--muted)">Loading…</td></tr>
-        </tbody>
-      </table>
-    </div>
+        <div class="controls">
+          <input id="q" type="search" placeholder="Search handle, rank, or specialization…">
+          <span id="count" class="badge">0 members</span>
+        </div>
+      </div>
+    </section>
 
-    <div class="meta" style="padding-top:10px">
-      Attendance counts only missions with status <b>Success / Fail / Abort</b>.
-    </div>
-  </div>
+    <!-- TABLE -->
+    <section class="panel">
+      <div class="tableWrap" id="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:23%">Handle</th>
+              <th style="width:16%">Rank Category</th>
+              <th style="width:23%">Current Rank</th>
+              <th style="width:23%">Specialization</th>
+              <th style="width:10%">Certs</th>
+              <th style="width:5%"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="6" style="padding:12px;color:var(--muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-  <!-- Modal -->
+      <div class="meta">
+        Attendance counts only missions with status <b>Success / Fail / Abort</b>.
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
   <div id="viewMask" class="modal-mask" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="header-row">
@@ -293,18 +412,11 @@ tr:hover{background:rgba(214,180,76,.08)}
 
       <div class="rankCard">
         <img id="rankImg" alt="Rank">
-        <div class="meta">
+        <div class="cardMeta">
           <div><b>Handle:</b> <span id="vHandle"></span></div>
           <div><b>Rank Category:</b> <span id="vRankCat"></span></div>
-          <div>
-            <b>Current Rank:</b>
-            <span id="vRankName"></span>
-            <span id="vRankCode" class="meta"></span>
-          </div>
-          <div>
-            <b>Specialization (role chips):</b>
-            <span id="vRoles"></span>
-          </div>
+          <div><b>Current Rank:</b> <span id="vRankName"></span> <span id="vRankCode" class="subtle"></span></div>
+          <div><b>Specialization:</b> <span id="vRoles"></span></div>
           <div><b>Missions attended:</b> <span id="vAttended"></span></div>
         </div>
       </div>
@@ -313,8 +425,8 @@ tr:hover{background:rgba(214,180,76,.08)}
 
       <div class="section">
         <h4>Certifications</h4>
-        <!-- ONLY images below, no labels/text -->
         <div id="vCertThumbs" class="certThumbs"></div>
+        <div class="subtle" style="margin-top:8px">Only earned certifications are shown.</div>
       </div>
     </div>
   </div>
@@ -346,25 +458,22 @@ const CERT_BUCKET = 'Certifications';
 
 function rankPublicUrlFromCode(code){
   if(!code) return '';
-  return sb.storage.from(RANK_BUCKET).getPublicUrl(`${code}.png`).data.publicUrl;
+  return sb.storage.from(RANK_BUCKET).getPublicUrl(code + '.png').data.publicUrl;
 }
 function certPublicUrlFromCode(code){
   if(!code) return '';
-  return sb.storage.from(CERT_BUCKET).getPublicUrl(`${code}.png`).data.publicUrl;
+  return sb.storage.from(CERT_BUCKET).getPublicUrl(code + '.png').data.publicUrl;
 }
 
 /* ---------- Rank sorting helpers (highest first) ---------- */
 function rankScore(r){
   const code = String(r.current_rank_code || '').toUpperCase().trim();
-  // O > W > E ; higher number = higher rank
   const m = code.match(/^([OWE])-(\d{1,2})$/);
   if(m){
     const tier = { O: 300, W: 200, E: 100 }[m[1]] || 0;
     const n = Number(m[2]) || 0;
-    return tier + n; // O-10 => 310, E-1 => 101
+    return tier + n;
   }
-
-  // Fallbacks when there's no code — use name hints
   const name = String(r.current_rank_name || '').toLowerCase();
   const hints = [
     ['admiral','general','marshal','commodore','captain of fleet'],
@@ -378,14 +487,13 @@ function rankScore(r){
   for(let i=0;i<hints.length;i++){
     if(hints[i].some(k=>name.includes(k))) return 240 - i*10;
   }
-  return 0; // unknown => bottom
+  return 0;
 }
 
 function sortByRank(rows){
   return (rows||[]).slice().sort((a,b)=>{
     const diff = rankScore(b) - rankScore(a);
     if(diff) return diff;
-    // Tie-breakers: category then handle
     const catA = (a.current_rank_category||'').localeCompare(b.current_rank_category||'');
     if(catA) return catA;
     return (a.handle||'').localeCompare(b.handle||'');
@@ -412,15 +520,16 @@ function render(rows){
     const imgUrl   = r.current_rank_image_url || rankPublicUrlFromCode(r.current_rank_code);
     const roles    = normalizeRoles(r);
 
+    // keep cert column compact for now (you can wire counts later)
+    const certText = '—';
+
     return `
       <tr>
         <td class="name">${esc(handle)}</td>
         <td>${esc(rankCat)}</td>
         <td>
           <div class="rankCell">
-            ${imgUrl
-              ? `<img src="${imgUrl}" alt="${esc(r.current_rank_code||'Rank')}" loading="lazy" onerror="this.style.display='none'">`
-              : ''}
+            ${imgUrl ? `<img src="${imgUrl}" alt="${esc(r.current_rank_code||'Rank')}" loading="lazy" onerror="this.style.display='none'">` : ``}
             <span>${esc(rankName)}</span>
           </div>
         </td>
@@ -429,7 +538,7 @@ function render(rows){
             ? `<div class="roles">${roles.map(x=>`<span class="role-chip">${esc(x)}</span>`).join('')}</div>`
             : `<span style="color:var(--muted)">—</span>`
         }</td>
-        <td><span style="color:var(--muted)">—</span></td>
+        <td><span style="color:var(--muted)">${certText}</span></td>
         <td><button class="btn" type="button" onclick="viewMember('${r.user_id}')">View</button></td>
       </tr>`;
   }).join('');
@@ -446,7 +555,6 @@ function filterRows(){
     return all.includes(term);
   });
 }
-
 function applyAndRender(){
   const filtered = filterRows();
   const sorted   = sortByRank(filtered);
@@ -467,19 +575,22 @@ async function loadCertThumbs(userId){
       .from('v_user_certifications')
       .select('certification_code,image_url,owned')
       .eq('user_id', userId);
+
     if(error){
       console.warn(error.message);
       return;
     }
+
     const imgs = (data||[])
       .filter(c=>c.owned)
       .map(c => c.image_url || certPublicUrlFromCode(c.certification_code))
       .filter(Boolean);
 
     if(!imgs.length){
-      box.innerHTML = '';
+      box.innerHTML = `<span class="subtle">No certifications earned yet.</span>`;
       return;
     }
+
     box.innerHTML = imgs
       .map(src => `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.style.display='none'">`)
       .join('');
@@ -516,7 +627,6 @@ function viewMember(userId){
   imgEl.onerror = () => { imgEl.style.visibility='hidden'; };
 
   loadCertThumbs(userId);
-
   $('#viewMask').style.display='flex';
 }
 window.viewMember = viewMember;
@@ -535,17 +645,16 @@ async function loadRoster(){
       current_rank_image_url,
       ingame_role,
       missions_attended
-    `)
-    .order('current_rank_category',{ascending:true})
-    .order('handle',{ascending:true});
+    `);
 
   if(error){
     tbody.innerHTML = `<tr><td colspan="6" style="padding:12px;color:var(--bad)">Failed to load: ${esc(error.message)}</td></tr>`;
     countEl.textContent = '0 members';
     return;
   }
+
   ROWS = data || [];
-  applyAndRender(); // sort highest rank first
+  applyAndRender();
 }
 
 /* ---------- Init ---------- */
@@ -557,15 +666,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch('header.html', { cache:'no-cache' });
       if(res.ok){
         host.innerHTML = await res.text();
-        const here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+        const here = (location.pathname.split('/').pop() || 'member.html').toLowerCase();
         requestAnimationFrame(() => {
           document.querySelectorAll('.nav-btn').forEach(a=>{
             const href = (a.getAttribute('href')||'').toLowerCase();
-            if(href === here) {
-              a.classList.add('active');
-              a.setAttribute('aria-current','page');
-            }
-            if(/member/.test(here) && /member/.test(href)){
+            if(href === here || (/member/.test(here) && /member/.test(href))){
               a.classList.add('active');
               a.setAttribute('aria-current','page');
             }
@@ -582,7 +687,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if(!session) return;
   sb = getSupabase();
 
-  // 3) Wire events + load data
+  // 3) Wire + load
   q.addEventListener('input', applyAndRender);
   await loadRoster();
 });
