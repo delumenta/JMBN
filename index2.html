@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>JMBN – Member</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JMBN – Loadouts</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,7 @@
   --bg:#000;
   --panel:#0b0b0b;
   --card:#101010;
+  --row:#0a0a0a;
   --border:#d6b44c;
   --accent:#f2d675;
   --accent-soft:#c9b06a;
@@ -24,34 +25,9 @@
   --muted:#c9b06a;
   --bad:#ff6b6b;
   --good:#5cd47c;
-  --row:#0a0a0a;
   --fs:14px;
 }
-
-/* Reset */
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-
-/* ===== Global scrollbar (kills the “white scroll”) ===== */
-*{
-  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
-  scrollbar-width: thin;
-}
-::-webkit-scrollbar{width:12px;height:12px}
-::-webkit-scrollbar-track{
-  background:rgba(10,10,10,.92);
-  border-left:1px solid rgba(214,180,76,.25);
-}
-::-webkit-scrollbar-thumb{
-  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
-  border:2px solid rgba(10,10,10,.95);
-  border-radius:999px;
-}
-::-webkit-scrollbar-thumb:hover{
-  background:linear-gradient(180deg, rgba(242,214,117,.95), rgba(214,180,76,.75));
-}
-::-webkit-scrollbar-corner{background:rgba(10,10,10,.92)}
-
 body{
   background:
     radial-gradient(1200px 900px at 15% -10%, rgba(242,214,117,.08), transparent 60%),
@@ -64,550 +40,663 @@ body{
   padding:14px;
 }
 
-/* Header mount target */
-#header{margin-bottom:10px}
+/* Header mount */
+#header-container{margin-bottom:10px}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid var(--border);
+}
+.brand-logo{width:44px;height:44px;object-fit:contain;border:none;background:transparent;box-shadow:none}
+.brand h1{font-weight:700;font-size:clamp(18px,2.2vw,22px);color:var(--accent)}
 
 /* Shell */
-.shell{
-  max-width:1200px;
-  margin:0 auto;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
+.shell{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 .panel{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:16px;
-  padding:14px 14px 16px;
+  padding:14px;
   box-shadow:0 0 24px rgba(214,180,76,.22);
 }
 
-/* Hero strip */
-.hero{
-  position:relative;
-  overflow:hidden;
-}
+/* Hero */
+.hero{position:relative;overflow:hidden}
 .hero::before{
-  content:"";
-  position:absolute;
-  inset:-40%;
+  content:"";position:absolute;inset:-40%;
   background:
     radial-gradient(circle at 10% 0%,rgba(242,214,117,.18),transparent 55%),
     radial-gradient(circle at 90% 100%,rgba(214,180,76,.12),transparent 55%);
-  opacity:.8;
-  mix-blend-mode:screen;
-  pointer-events:none;
+  opacity:.8;mix-blend-mode:screen;pointer-events:none;
 }
-.hero-inner{
-  position:relative;
-  z-index:1;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
+.hero-inner{position:relative;z-index:1;display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .hero-title{
-  font-size:14px;
-  text-transform:uppercase;
-  letter-spacing:.18em;
-  color:var(--accent-soft);
+  font-size:16px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent-soft)
 }
-.hero-sub{
+.hero-sub{font-size:12px;color:var(--muted);margin-top:6px;max-width:72ch}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pill{
+  border:1px solid rgba(214,180,76,.65);
+  color:var(--accent);
+  background:linear-gradient(180deg,#0c0c0c,#060606);
+  border-radius:999px;
+  padding:6px 10px;
   font-size:12px;
-  color:var(--muted);
-  margin-top:4px;
 }
 
 /* Controls */
 .controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
 }
+.left-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 input[type="search"]{
   background:#0a0a0a;
   border:1px solid var(--border);
-  border-radius:999px;
+  border-radius:10px;
   padding:9px 12px;
   color:var(--text);
-  font-size:13px;
   min-width:280px;
-  outline:none;
+  font-family:'Play';
 }
-input[type="search"]::placeholder{color:rgba(201,176,106,.7)}
-.badge{
+select{
+  background:#0a0a0a;
   border:1px solid var(--border);
-  padding:7px 12px;
-  border-radius:999px;
-  color:var(--accent);
-  font-weight:800;
-  background:linear-gradient(180deg,#0c0c0c,#060606);
-}
-
-/* Table */
-.tableWrap{
-  margin-top:10px;
-  border:1px solid rgba(214,180,76,.75);
-  border-radius:14px;
-  overflow:auto;
-  max-height:70vh;
-  background:#070707;
-}
-
-/* Table scrollbar */
-.tableWrap{
-  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
-  scrollbar-width: thin;
-}
-.tableWrap::-webkit-scrollbar{width:12px;height:12px}
-.tableWrap::-webkit-scrollbar-track{
-  background:rgba(10,10,10,.92);
-  border-left:1px solid rgba(214,180,76,.25);
-}
-.tableWrap::-webkit-scrollbar-thumb{
-  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
-  border:2px solid rgba(10,10,10,.95);
-  border-radius:999px;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-}
-th,td{
-  border-bottom:1px solid rgba(214,180,76,.26);
-  padding:12px 12px;
-  text-align:left;
-  vertical-align:middle;
-}
-th{
-  color:var(--accent);
-  background:#080808;
-  font-weight:700;
-  position:sticky;
-  top:0;
-  z-index:2;
-}
-tr:nth-child(even){background:#0d0d0d}
-tr:hover{background:rgba(214,180,76,.08)}
-.name{font-weight:800}
-
-/* Rank cell — icon + text */
-.rankCell{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.rankCell img{
-  width:26px;height:26px;
-  object-fit:contain;
-  border:none;background:transparent;box-shadow:none;
-}
-
-/* Role chips */
-.roles{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.role-chip{
-  border:1px solid rgba(214,180,76,.75);
-  border-radius:999px;
-  padding:4px 10px;
+  border-radius:10px;
+  padding:9px 10px;
+  color:var(--text);
+  font-family:'Play';
   font-size:12px;
-  background:linear-gradient(180deg,#0c0c0c,#060606);
-  color:var(--accent-soft);
 }
-
-/* Buttons */
+.badge{
+  border:1px solid rgba(214,180,76,.65);
+  padding:7px 10px;border-radius:999px;
+  color:var(--accent);
+  font-weight:700;
+  font-size:12px;
+}
 .btn{
-  padding:8px 12px;
-  border-radius:999px;
+  padding:8px 12px;border-radius:999px;
   border:1px solid var(--border);
   background:linear-gradient(180deg,#0c0c0c,#060606);
   color:var(--accent);
   cursor:pointer;
-  font-family:'Play',system-ui,sans-serif;
+  font-family:'Play';
   font-size:12px;
-  font-weight:800;
 }
-.btn:hover{
-  background:var(--accent);
-  color:#000;
-}
-
-/* Footer note */
-.meta{
-  font-size:12px;
+.btn:hover{background:var(--accent);color:#000}
+.btn.ghost{
+  background:transparent;
+  border:1px solid rgba(214,180,76,.55);
   color:var(--muted);
-  padding-top:10px;
 }
-.meta b{color:var(--accent)}
+.btn.ghost:hover{background:rgba(242,214,117,.12);color:var(--accent)}
+
+/* Cards */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+
+.card{
+  background:var(--card);
+  border:1px solid rgba(214,180,76,.55);
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 0 16px rgba(0,0,0,.75);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card-head{
+  display:flex;gap:10px;align-items:flex-start;justify-content:space-between
+}
+.card-title{
+  font-size:14px;font-weight:700;color:var(--accent);line-height:1.25;
+}
+.card-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tag{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  border:1px solid rgba(214,180,76,.55);
+  border-radius:999px;
+  padding:4px 8px;
+  color:var(--accent-soft);
+  background:#070707;
+}
+.summary{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.slots{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+.slot{
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  padding:10px;
+  background:#070707;
+}
+.slot h4{
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent-soft);
+  margin-bottom:6px;
+}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding-bottom:6px;
+}
+.item:last-child{border-bottom:none;padding-bottom:0}
+.item b{color:var(--text);font-weight:700}
+.item small{color:var(--muted);font-size:11px}
+.qty{
+  color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  font-size:12px;
+}
+.card-actions{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:2px
+}
 
 /* Modal */
 .modal-mask{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:50;
-  padding:18px;
+  position:fixed;inset:0;background:rgba(0,0,0,.72);
+  display:none;align-items:center;justify-content:center;z-index:50;
 }
 .modal{
-  width:min(860px, 96vw);
+  width:min(980px,94vw);
   max-height:88vh;
   overflow:auto;
-  background:var(--panel);
+  background:#0b0b0b;
   border:1px solid var(--border);
   border-radius:16px;
-  padding:18px;
-  box-shadow:0 0 28px rgba(214,180,76,.3);
+  box-shadow:0 0 28px rgba(214,180,76,.25);
+  padding:16px;
 }
-
-/* Modal scrollbar */
-.modal{
-  scrollbar-color: rgba(214,180,76,.85) rgba(10,10,10,.9);
-  scrollbar-width: thin;
-}
-.modal::-webkit-scrollbar{width:12px;height:12px}
-.modal::-webkit-scrollbar-track{background:rgba(10,10,10,.92)}
+.modal::-webkit-scrollbar{width:10px;height:10px}
+.modal::-webkit-scrollbar-track{background:#060606;border-radius:999px}
 .modal::-webkit-scrollbar-thumb{
-  background:linear-gradient(180deg, rgba(242,214,117,.75), rgba(214,180,76,.55));
-  border:2px solid rgba(10,10,10,.95);
+  background:linear-gradient(180deg,rgba(242,214,117,.35),rgba(214,180,76,.55));
+  border:1px solid rgba(214,180,76,.55);
   border-radius:999px;
 }
-
-.modal .header-row{
-  display:flex;
-  align-items:center;
+.modal::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg,rgba(242,214,117,.55),rgba(214,180,76,.75));
+}
+.modal-head{
+  display:flex;align-items:flex-start;gap:10px;justify-content:space-between;margin-bottom:10px
+}
+.modal h3{margin:0;color:var(--accent);font-size:16px}
+.modal .muted{color:var(--muted);font-size:12px;line-height:1.5;margin-top:4px}
+.hr{
+  height:1px;border:none;margin:12px 0;
+  background:linear-gradient(90deg,rgba(214,180,76,.10),rgba(214,180,76,.45),rgba(214,180,76,.10));
+}
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:12px;
-  margin-bottom:12px;
 }
-.modal h3{
-  margin:0;
-  color:var(--accent);
-  font-size:18px;
-  letter-spacing:.3px;
-}
-.modal .spacer{flex:1}
-
-.rankCard{
-  display:flex;
-  gap:16px;
-  align-items:center;
-  border:1px solid rgba(214,180,76,.75);
+@media(max-width:860px){.two-col{grid-template-columns:1fr}}
+.kit{
+  border:1px solid rgba(214,180,76,.55);
   border-radius:14px;
-  padding:14px;
-  background:linear-gradient(180deg,#0f0f0f,#0a0a0a);
+  padding:12px;
+  background:#0f0f0f;
 }
-.rankCard img{
-  width:74px;
-  height:74px;
-  object-fit:contain;
-  border:none;background:transparent;box-shadow:none;
+.kit h4{
+  font-size:12px;
+  color:var(--accent-soft);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  margin-bottom:8px;
 }
-.cardMeta{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.7;
+.kit ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.kit li{
+  display:flex;gap:10px;justify-content:space-between;align-items:flex-start;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding-bottom:8px;
 }
-.cardMeta b{color:var(--accent)}
-.subtle{font-size:11px;color:var(--muted)}
+.kit li:last-child{border-bottom:none;padding-bottom:0}
+.kit li .left b{display:block;color:var(--text)}
+.kit li .left small{color:var(--muted);font-size:11px}
+.toast{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+  background:#0b0b0b;border:1px solid rgba(214,180,76,.65);
+  border-radius:999px;padding:10px 14px;
+  color:var(--accent);font-size:12px;
+  box-shadow:0 10px 28px rgba(0,0,0,.65);
+  display:none;z-index:80;
+}
 </style>
 </head>
-
 <body>
-  <!-- Shared header mount -->
-  <div id="header"></div>
 
-  <main class="shell">
-    <!-- HERO -->
-    <section class="panel hero">
-      <div class="hero-inner">
-        <div>
-          <div class="hero-title">Member Roster</div>
-          <div class="hero-sub">Search, sort by rank, and view a member’s rank card.</div>
+<!-- Header mount (uses header.html if present) -->
+<div id="header-container">
+  <div class="brand">
+    <img class="brand-logo"
+      src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+      alt="JMBN">
+    <h1>JMBN – Loadouts</h1>
+  </div>
+</div>
+
+<script>
+/* Inject shared header.html and highlight current page */
+(async () => {
+  try{
+    const r = await fetch('header.html',{ cache:'no-cache' });
+    if(!r.ok) return;
+    const html = await r.text();
+    const mount = document.getElementById('header-container');
+    if(mount) mount.outerHTML = html;
+
+    requestAnimationFrame(() => {
+      const here = (location.pathname.split('/').pop() || 'loadouts.html').toLowerCase();
+      document.querySelectorAll('.nav-btn').forEach(a => {
+        const href = (a.getAttribute('href') || '').toLowerCase();
+        if(href === here) a.classList.add('active');
+      });
+    });
+  }catch(e){
+    console.warn('Header mount failed:', e);
+  }
+})();
+</script>
+
+<main class="shell">
+
+  <section class="panel hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-title">Approved Gear Presets</div>
+        <div class="hero-sub">
+          Pick a role, grab a preset, and you’re ready to deploy. This is a UI-only prototype (no Supabase yet),
+          so everything is stored in a local JSON object.
         </div>
+        <div class="pills">
+          <span class="pill">FPS</span>
+          <span class="pill">VBSS</span>
+          <span class="pill">Medical</span>
+          <span class="pill">Utility</span>
+          <span class="pill">Zero-G</span>
+        </div>
+      </div>
 
+      <div style="margin-left:auto;max-width:520px">
         <div class="controls">
-          <input id="q" type="search" placeholder="Search handle, rank, or specialization…">
-          <span id="count" class="badge">0 members</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- TABLE -->
-    <section class="panel">
-      <div class="tableWrap" id="tableWrap">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:25%">Handle</th>
-              <th style="width:16%">Rank Category</th>
-              <th style="width:26%">Current Rank</th>
-              <th style="width:27%">Specialization</th>
-              <th style="width:6%"></th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <tr><td colspan="5" style="padding:12px;color:var(--muted)">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="meta">
-        Attendance counts only missions with status <b>Success / Fail / Abort</b>.
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL -->
-  <div id="viewMask" class="modal-mask" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="header-row">
-        <h3 id="viewTitle">Member</h3>
-        <div class="spacer"></div>
-        <button class="btn" type="button" onclick="closeView()">Close</button>
-      </div>
-
-      <div class="rankCard">
-        <img id="rankImg" alt="Rank">
-        <div class="cardMeta">
-          <div><b>Handle:</b> <span id="vHandle"></span></div>
-          <div><b>Rank Category:</b> <span id="vRankCat"></span></div>
-          <div><b>Current Rank:</b> <span id="vRankName"></span> <span id="vRankCode" class="subtle"></span></div>
-          <div><b>Specialization:</b> <span id="vRoles"></span></div>
-          <div><b>Missions attended:</b> <span id="vAttended"></span></div>
+          <div class="left-controls">
+            <input id="q" type="search" placeholder="Search loadout name, role, or items…">
+            <select id="role">
+              <option value="">All roles</option>
+              <option value="vbss">VBSS</option>
+              <option value="fps">FPS / Bunker</option>
+              <option value="med">Medical</option>
+              <option value="cargo">Utility / Cargo</option>
+            </select>
+            <select id="env">
+              <option value="">All environments</option>
+              <option value="zerog">Zero-G</option>
+              <option value="bunker">Bunker</option>
+              <option value="urban">Urban</option>
+              <option value="any">Any</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span id="count" class="badge">0 loadouts</span>
+            <button class="btn ghost" type="button" id="btnReset">Reset</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Supabase -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="js/auth.js"></script>
+  <section class="panel">
+    <div id="grid" class="grid"></div>
+  </section>
+</main>
+
+<!-- Modal -->
+<div id="mask" class="modal-mask" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div>
+        <h3 id="mTitle">Loadout</h3>
+        <div class="muted" id="mMeta"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn" type="button" id="btnCopy">Copy as checklist</button>
+        <button class="btn ghost" type="button" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="two-col">
+      <div class="kit">
+        <h4>Weapons & Attachments</h4>
+        <ul id="mWeapons"></ul>
+      </div>
+      <div class="kit">
+        <h4>Armor, Tools & Consumables</h4>
+        <ul id="mGear"></ul>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="kit">
+      <h4>Notes</h4>
+      <div class="muted" id="mNotes">—</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast">Copied ✅</div>
 
 <script>
-/* ---------- Utilities ---------- */
-const $  = s => document.querySelector(s);
-const esc = s => { const d=document.createElement('div'); d.textContent=s??''; return d.innerHTML; };
-const toTitleCase = s => s
-  ? s.replace(/\s+/g,' ').trim().toLowerCase().replace(/\b\w/g,c=>c.toUpperCase())
-  : '';
+const $ = s => document.querySelector(s);
+const esc = (s) => {
+  const d=document.createElement('div');
+  d.textContent = s ?? '';
+  return d.innerHTML;
+};
 
-function normalizeRoles(r){
-  const raw = r.ingame_role ?? null;
-  if(!raw) return [];
-  if(Array.isArray(raw)) return raw.map(toTitleCase).filter(Boolean);
-  return String(raw).split(/[,;/]+/).map(s=>toTitleCase(s)).filter(Boolean);
-}
-
-/* ---------- Supabase + buckets ---------- */
-let sb = null;
-let ROWS = [];
-const RANK_BUCKET = 'Ranks';
-
-function rankPublicUrlFromCode(code){
-  if(!code) return '';
-  return sb.storage.from(RANK_BUCKET).getPublicUrl(code + '.png').data.publicUrl;
-}
-
-/* ---------- Rank sorting helpers (highest first) ---------- */
-function rankScore(r){
-  const code = String(r.current_rank_code || '').toUpperCase().trim();
-  const m = code.match(/^([OWE])-(\d{1,2})$/);
-  if(m){
-    const tier = { O: 300, W: 200, E: 100 }[m[1]] || 0;
-    const n = Number(m[2]) || 0;
-    return tier + n;
+const LOADOUTS = [
+  {
+    id:"vbss-standard",
+    name:"VBSS – Standard Breach",
+    role:"vbss",
+    env:"zerog",
+    tier:"standard",
+    tags:["VBSS","Zero-G","Standard"],
+    summary:"Balanced boarding kit for ship-to-ship actions: non-stop utility, controlled lethality, lots of med + ammo discipline.",
+    weapons:[
+      {name:"Primary: (Choose) SMG / Carbine", note:"Prefer controllable recoil for corridors / Zero-G", qty:"1"},
+      {name:"Secondary: Pistol", note:"Backup for reload downtime", qty:"1"},
+      {name:"Attachment: 1× Optic (any)", note:"Keep it simple", qty:"1"},
+      {name:"Attachment: Suppressor (optional)", note:"If running stealth", qty:"1"}
+    ],
+    gear:[
+      {name:"Armor Set: Medium", note:"Helmet + Torso + Arms + Legs", qty:"1 set"},
+      {name:"Backpack: Medium", note:"Ammo + med + utility", qty:"1"},
+      {name:"Multi-Tool + Tractor Beam", note:"Loot / bodies / cargo", qty:"1"},
+      {name:"Medgun + Medpens", note:"Bring enough for team", qty:"1 + x6"},
+      {name:"Ammo", note:"Primary + secondary (don’t overpack)", qty:"3 mags + 2 mags"},
+      {name:"Utility", note:"OxyPen / Glowsticks / Knife", qty:"x2 / x4 / 1"}
+    ],
+    notes:"If you’re the point-man: trade 1 mag for extra medpens. If you’re the rear: carry extra tractor + ammo for the team."
+  },
+  {
+    id:"fps-bunker-standard",
+    name:"FPS – Bunker Standard",
+    role:"fps",
+    env:"bunker",
+    tier:"standard",
+    tags:["FPS","Bunker","Standard"],
+    summary:"Clean and simple bunker preset: medium armor, reliable primary, enough meds, minimal clutter.",
+    weapons:[
+      {name:"Primary: Assault Rifle / LMG", note:"Reliable mid-range", qty:"1"},
+      {name:"Secondary: Pistol", note:"Emergency only", qty:"1"},
+      {name:"Attachment: 1× Optic", note:"Prefer 1× / 2×", qty:"1"}
+    ],
+    gear:[
+      {name:"Armor Set: Medium", note:"Good balance vs movement", qty:"1 set"},
+      {name:"Backpack: Medium", note:"For loot + extra mags", qty:"1"},
+      {name:"Medgun", note:"If solo, mandatory", qty:"1"},
+      {name:"Medpens", note:"Quick heal + bleed control", qty:"x6"},
+      {name:"Ammo", note:"Primary + secondary", qty:"4 mags + 2 mags"},
+      {name:"Multi-Tool + Tractor", note:"Optional (nice to have)", qty:"1"}
+    ],
+    notes:"Rule: if you’re going deep, carry one extra mag. If you’re overwatch, carry extra meds."
+  },
+  {
+    id:"med-respond",
+    name:"Medical – First Response",
+    role:"med",
+    env:"any",
+    tier:"standard",
+    tags:["Medical","Any","Standard"],
+    summary:"Built for stabilizing teammates fast. You’re not the DPS—your value is uptime and recovery.",
+    weapons:[
+      {name:"Primary: Compact Carbine / SMG", note:"Defense only", qty:"1"},
+      {name:"Secondary: Pistol", note:"Backup", qty:"1"}
+    ],
+    gear:[
+      {name:"Armor Set: Light/Medium", note:"Mobility first", qty:"1 set"},
+      {name:"Backpack: Large", note:"Carry supplies for others", qty:"1"},
+      {name:"Medgun", note:"Core tool", qty:"1"},
+      {name:"Medpens", note:"For self + quick stabilizations", qty:"x10"},
+      {name:"Utility", note:"Tractor beam / OxyPen", qty:"1 / x2"},
+      {name:"Ammo", note:"Keep it light", qty:"2 mags + 1 mag"}
+    ],
+    notes:"If team has 2 medics, split: one carries extra pens, the other carries tractor + extra ammo for others."
+  },
+  {
+    id:"utility-cargo",
+    name:"Utility – Cargo / Recovery",
+    role:"cargo",
+    env:"any",
+    tier:"standard",
+    tags:["Utility","Any","Standard"],
+    summary:"Not a combat kit. This is the ‘make the mission smooth’ kit: tractors, storage discipline, and survivability.",
+    weapons:[
+      {name:"Secondary: Pistol", note:"Self-defense only", qty:"1"}
+    ],
+    gear:[
+      {name:"Armor Set: Light/Medium", note:"Comfort + mobility", qty:"1 set"},
+      {name:"Backpack: Large", note:"Storage focus", qty:"1"},
+      {name:"Multi-Tool + Tractor Beam", note:"Mandatory", qty:"1"},
+      {name:"Spare Tractor Attachment", note:"In case someone loses theirs", qty:"1"},
+      {name:"Medpens", note:"Basic self sustain", qty:"x4"},
+      {name:"Utility", note:"OxyPen / Glowsticks", qty:"x2 / x4"}
+    ],
+    notes:"If you’re supporting VBSS, add 2 primary mags (for teammates) and 2 extra medpens."
   }
-  const name = String(r.current_rank_name || '').toLowerCase();
-  const hints = [
-    ['admiral','general','marshal','commodore','captain of fleet'],
-    ['captain','commander'],
-    ['lieutenant colonel','major','lieutenant commander'],
-    ['lieutenant','ensign'],
-    ['sergeant major','master sergeant','gunnery sergeant'],
-    ['sergeant','corporal'],
-    ['private','recruit','cadet','trainee','unrated','unranked']
-  ];
-  for(let i=0;i<hints.length;i++){
-    if(hints[i].some(k=>name.includes(k))) return 240 - i*10;
-  }
-  return 0;
+];
+
+/* Filtering */
+function norm(s){ return String(s||'').toLowerCase().trim(); }
+function matches(loadout, term){
+  if(!term) return true;
+  const hay = [
+    loadout.name, loadout.role, loadout.env, loadout.tier,
+    ...(loadout.tags||[]),
+    ...(loadout.weapons||[]).map(x=>x.name+' '+(x.note||'')),
+    ...(loadout.gear||[]).map(x=>x.name+' '+(x.note||'')),
+    loadout.summary, loadout.notes
+  ].join(' ').toLowerCase();
+  return hay.includes(term);
 }
 
-function sortByRank(rows){
-  return (rows||[]).slice().sort((a,b)=>{
-    const diff = rankScore(b) - rankScore(a);
-    if(diff) return diff;
-    const catA = (a.current_rank_category||'').localeCompare(b.current_rank_category||'');
-    if(catA) return catA;
-    return (a.handle||'').localeCompare(b.handle||'');
+function getFiltered(){
+  const term = norm($('#q').value);
+  const role = norm($('#role').value);
+  const env  = norm($('#env').value);
+
+  return LOADOUTS.filter(l => {
+    if(role && l.role !== role) return false;
+    if(env && l.env !== env) return false;
+    return matches(l, term);
   });
 }
 
-/* ---------- DOM refs ---------- */
-const tbody  = $('#tbody');
-const countEl= $('#count');
-const q      = $('#q');
+/* Render cards */
+function render(){
+  const rows = getFiltered();
+  $('#count').textContent = `${rows.length} loadout${rows.length===1?'':'s'}`;
+  const grid = $('#grid');
 
-/* ---------- Render ---------- */
-function render(rows){
-  if(!rows?.length){
-    tbody.innerHTML = `<tr><td colspan="5" style="padding:12px;color:var(--muted)">No members found</td></tr>`;
-    countEl.textContent = '0 members';
+  if(!rows.length){
+    grid.innerHTML = `<div class="summary" style="color:var(--muted)">No loadouts match your filters.</div>`;
     return;
   }
 
-  tbody.innerHTML = rows.map(r=>{
-    const handle   = toTitleCase(r.handle || r.display_name || r.user_id?.slice(0,8) || '—');
-    const rankCat  = r.current_rank_category ? toTitleCase(r.current_rank_category) : '—';
-    const rankName = r.current_rank_name ? toTitleCase(r.current_rank_name) : 'Unrated';
-    const imgUrl   = r.current_rank_image_url || rankPublicUrlFromCode(r.current_rank_code);
-    const roles    = normalizeRoles(r);
+  grid.innerHTML = rows.map(l => {
+    const tags = (l.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+    const quickWeapons = (l.weapons||[]).slice(0,3).map(x=>`
+      <div class="item">
+        <div><b>${esc(x.name)}</b><br><small>${esc(x.note||'')}</small></div>
+        <div class="qty">${esc(x.qty||'')}</div>
+      </div>
+    `).join('');
+    const quickGear = (l.gear||[]).slice(0,3).map(x=>`
+      <div class="item">
+        <div><b>${esc(x.name)}</b><br><small>${esc(x.note||'')}</small></div>
+        <div class="qty">${esc(x.qty||'')}</div>
+      </div>
+    `).join('');
 
     return `
-      <tr>
-        <td class="name">${esc(handle)}</td>
-        <td>${esc(rankCat)}</td>
-        <td>
-          <div class="rankCell">
-            ${imgUrl ? `<img src="${imgUrl}" alt="${esc(r.current_rank_code||'Rank')}" loading="lazy" onerror="this.style.display='none'">` : ``}
-            <span>${esc(rankName)}</span>
+      <article class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">${esc(l.name)}</div>
+            <div class="card-meta">${esc((l.summary||'').slice(0,120))}${(l.summary||'').length>120?'…':''}</div>
           </div>
-        </td>
-        <td>${
-          roles.length
-            ? `<div class="roles">${roles.map(x=>`<span class="role-chip">${esc(x)}</span>`).join('')}</div>`
-            : `<span style="color:var(--muted)">—</span>`
-        }</td>
-        <td><button class="btn" type="button" onclick="viewMember('${r.user_id}')">View</button></td>
-      </tr>`;
+          <div class="tags">${tags}</div>
+        </div>
+
+        <div class="slots">
+          <div class="slot">
+            <h4>Quick weapons</h4>
+            <div class="items">${quickWeapons || `<div class="summary">—</div>`}</div>
+          </div>
+
+          <div class="slot">
+            <h4>Quick gear</h4>
+            <div class="items">${quickGear || `<div class="summary">—</div>`}</div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn" type="button" onclick="openModal('${l.id}')">View details</button>
+          <button class="btn ghost" type="button" onclick="copyChecklist('${l.id}')">Copy checklist</button>
+        </div>
+      </article>
+    `;
   }).join('');
-
-  countEl.textContent = `${rows.length} member${rows.length===1?'':'s'}`;
 }
 
-/* ---------- Filter ---------- */
-function filterRows(){
-  const term = (q.value || '').toLowerCase().trim();
-  if(!term) return ROWS;
-  return ROWS.filter(r=>{
-    const all = `${r.handle||''} ${r.display_name||''} ${r.current_rank_category||''} ${r.current_rank_name||''} ${r.current_rank_code||''} ${normalizeRoles(r).join(' ')}`.toLowerCase();
-    return all.includes(term);
-  });
-}
-function applyAndRender(){
-  const filtered = filterRows();
-  const sorted   = sortByRank(filtered);
-  render(sorted);
-}
+/* Modal */
+let ACTIVE = null;
 
-/* ---------- Modal logic ---------- */
-function closeView(){
-  $('#viewMask').style.display='none';
-}
-window.closeView = closeView;
-
-function viewMember(userId){
-  const r = ROWS.find(x=>x.user_id===userId);
-  if(!r) return;
-
-  const handle   = toTitleCase(r.handle || r.display_name || r.user_id.slice(0,8));
-  const attended = Number(r.missions_attended)||0;
-  const rankCat  = r.current_rank_category ? toTitleCase(r.current_rank_category) : '—';
-  const rankName = r.current_rank_name ? toTitleCase(r.current_rank_name) : 'Unrated';
-  const roles    = normalizeRoles(r);
-  const imgUrl   = r.current_rank_image_url || rankPublicUrlFromCode(r.current_rank_code);
-
-  $('#viewTitle').textContent = `Member — ${handle}`;
-  $('#vHandle').textContent   = handle;
-  $('#vRankCat').textContent  = rankCat;
-  $('#vRankName').textContent = rankName;
-  $('#vRankCode').textContent = r.current_rank_code ? `(${r.current_rank_code})` : '';
-  $('#vRoles').innerHTML      = roles.length
-    ? roles.map(x=>`<span class="role-chip">${esc(x)}</span>`).join(' ')
-    : '—';
-  $('#vAttended').textContent = attended;
-
-  const imgEl = $('#rankImg');
-  imgEl.src   = imgUrl || '';
-  imgEl.alt   = r.current_rank_code || 'Rank';
-  imgEl.style.visibility = imgUrl ? 'visible' : 'hidden';
-  imgEl.onerror = () => { imgEl.style.visibility='hidden'; };
-
-  $('#viewMask').style.display='flex';
-}
-window.viewMember = viewMember;
-
-/* ---------- Data load ---------- */
-async function loadRoster(){
-  const { data, error } = await sb
-    .from('v_profiles_detailed')
-    .select(`
-      user_id,
-      handle,
-      display_name,
-      current_rank_category,
-      current_rank_name,
-      current_rank_code,
-      current_rank_image_url,
-      ingame_role,
-      missions_attended
-    `);
-
-  if(error){
-    tbody.innerHTML = `<tr><td colspan="5" style="padding:12px;color:var(--bad)">Failed to load: ${esc(error.message)}</td></tr>`;
-    countEl.textContent = '0 members';
-    return;
-  }
-
-  ROWS = data || [];
-  applyAndRender();
+function liRow(x){
+  return `
+    <li>
+      <div class="left">
+        <b>${esc(x.name)}</b>
+        <small>${esc(x.note||'')}</small>
+      </div>
+      <div class="qty">${esc(x.qty||'')}</div>
+    </li>
+  `;
 }
 
-/* ---------- Init ---------- */
-document.addEventListener('DOMContentLoaded', async () => {
-  // 1) Inject shared header
-  try{
-    const host = document.getElementById('header');
-    if(host){
-      const res = await fetch('header.html', { cache:'no-cache' });
-      if(res.ok){
-        host.innerHTML = await res.text();
-        const here = (location.pathname.split('/').pop() || 'member.html').toLowerCase();
-        requestAnimationFrame(() => {
-          document.querySelectorAll('.nav-btn').forEach(a=>{
-            const href = (a.getAttribute('href')||'').toLowerCase();
-            if(href === here || (/member/.test(here) && /member/.test(href))){
-              a.classList.add('active');
-              a.setAttribute('aria-current','page');
-            }
-          });
-        });
-      }
-    }
-  }catch(e){
-    console.warn('Header load failed:', e);
-  }
+function openModal(id){
+  const l = LOADOUTS.find(x=>x.id===id);
+  if(!l) return;
+  ACTIVE = l;
+  $('#mTitle').textContent = l.name;
+  $('#mMeta').innerHTML = `${esc(l.tags.join(' • '))} <span style="opacity:.55">—</span> ${esc(l.summary||'')}`;
+  $('#mWeapons').innerHTML = (l.weapons||[]).map(liRow).join('') || `<li><div class="left"><b>—</b></div></li>`;
+  $('#mGear').innerHTML = (l.gear||[]).map(liRow).join('') || `<li><div class="left"><b>—</b></div></li>`;
+  $('#mNotes').textContent = l.notes || '—';
+  $('#mask').style.display = 'flex';
+}
+function closeModal(){
+  $('#mask').style.display = 'none';
+}
+window.openModal = openModal;
+window.closeModal = closeModal;
 
-  // 2) Auth + Supabase
-  const session = await requireAuth();
-  if(!session) return;
-  sb = getSupabase();
-
-  // 3) Wire + load
-  q.addEventListener('input', applyAndRender);
-  await loadRoster();
+$('#mask').addEventListener('click', (e)=>{
+  if(e.target.id === 'mask') closeModal();
 });
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeModal();
+});
+
+/* Copy checklist */
+function buildChecklist(l){
+  const lines = [];
+  lines.push(`JMBN Loadout: ${l.name}`);
+  lines.push(`Tags: ${l.tags.join(', ')}`);
+  lines.push('');
+  lines.push('WEAPONS');
+  (l.weapons||[]).forEach(x => lines.push(`- [ ] ${x.name} (${x.qty || '1'})${x.note?` — ${x.note}`:''}`));
+  lines.push('');
+  lines.push('GEAR');
+  (l.gear||[]).forEach(x => lines.push(`- [ ] ${x.name} (${x.qty || '1'})${x.note?` — ${x.note}`:''}`));
+  lines.push('');
+  if(l.notes) lines.push(`Notes: ${l.notes}`);
+  return lines.join('\n');
+}
+
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    showToast('Copied ✅');
+  }catch(e){
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    showToast('Copied ✅');
+  }
+}
+
+function showToast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.style.display='none', 1400);
+}
+
+function copyChecklist(id){
+  const l = LOADOUTS.find(x=>x.id===id);
+  if(!l) return;
+  copyText(buildChecklist(l));
+}
+window.copyChecklist = copyChecklist;
+
+$('#btnCopy').addEventListener('click', ()=>{
+  if(!ACTIVE) return;
+  copyText(buildChecklist(ACTIVE));
+});
+
+/* Controls */
+$('#q').addEventListener('input', render);
+$('#role').addEventListener('change', render);
+$('#env').addEventListener('change', render);
+$('#btnReset').addEventListener('click', ()=>{
+  $('#q').value = '';
+  $('#role').value = '';
+  $('#env').value = '';
+  render();
+});
+
+/* Init */
+render();
 </script>
 </body>
 </html>
