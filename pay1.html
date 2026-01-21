@@ -1,4 +1,4 @@
-<t<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -85,17 +85,8 @@ body{
   gap:12px;
   margin-bottom:12px;
 }
-@media(max-width:980px){
-  .wrap{grid-template-columns:1fr}
-}
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
-  box-shadow:0 0 18px rgba(214,180,76,.22),inset 0 0 0 1px rgba(214,180,76,.12);
-}
-.full-panel{
+@media(max-width:980px){ .wrap{grid-template-columns:1fr} }
+.panel, .full-panel{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:12px;
@@ -129,12 +120,8 @@ body{
 }
 
 /* Fields */
-.field{
-  display:flex;flex-direction:column;gap:4px;margin-bottom:8px;font-size:12px;color:var(--muted)
-}
-.field-row{
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;
-}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;font-size:12px;color:var(--muted)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 input,select{
   background:#050505;border:1px solid var(--border);border-radius:8px;
   padding:7px 9px;color:var(--text);
@@ -142,23 +129,14 @@ input,select{
 }
 
 /* Toggle switch */
-.switch{
-  position:relative;display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;color:var(--muted);cursor:pointer;
-}
+.switch{position:relative;display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer;}
 .switch-input{display:none}
 .switch-track{
-  width:34px;height:18px;border-radius:999px;
-  background:#111;border:1px solid var(--border);
+  width:34px;height:18px;border-radius:999px;background:#111;border:1px solid var(--border);
   position:relative;flex-shrink:0;
 }
-.switch-thumb{
-  position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;
-  background:var(--accent);transition:transform .15s ease;
-}
-.switch-input:checked + .switch-track .switch-thumb{
-  transform:translateX(14px);
-}
+.switch-thumb{position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:var(--accent);transition:transform .15s ease;}
+.switch-input:checked + .switch-track .switch-thumb{transform:translateX(14px);}
 
 /* Buttons */
 button{
@@ -168,21 +146,13 @@ button{
   font-family:'Play';font-size:12px;font-weight:700;
   transition:.18s;
 }
-button:hover{
-  background:var(--accent);color:#000;
-  box-shadow:0 0 12px rgba(214,180,76,.35);
-}
+button:hover{background:var(--accent);color:#000;box-shadow:0 0 12px rgba(214,180,76,.35);}
 .btn-primary{background:var(--accent);color:#000}
 .btn-danger{border-color:var(--bad);color:var(--bad)}
-.btn-ghost{
-  background:transparent;
-  border-radius:999px;
-}
+.btn-ghost{background:transparent;border-radius:999px}
 
 /* KPI bar */
-.kpis{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;
-}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
 @media(max-width:720px){.kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.kpis{grid-template-columns:1fr}}
 .kpi{
@@ -198,11 +168,8 @@ button:hover{
 
 /* Tables */
 .tableWrap{
-  margin-top:6px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  overflow:auto;
-  max-height:52vh;
+  margin-top:6px;border-radius:10px;border:1px solid var(--border);
+  overflow:auto;max-height:52vh;
 }
 table{width:100%;border-collapse:collapse;font-size:var(--fs-table);min-width:780px;}
 th,td{padding:7px 8px;border-bottom:1px solid rgba(214,180,76,.28);text-align:left}
@@ -215,19 +182,12 @@ tbody tr:nth-child(even){background:#111}
 tbody tr:hover{background:rgba(214,180,76,.08)}
 td input{width:100%;padding:4px 6px;font-size:12px}
 
-/* Mission overrides search row */
-.controls{
-  display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px;
-}
-.controls input[type="search"]{
-  min-width:220px;
-}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px;}
+.controls input[type="search"]{min-width:220px;}
 
-/* Pills */
 .pill{
   display:inline-flex;align-items:center;gap:6px;
-  padding:2px 8px;border-radius:999px;
-  border:1px solid var(--border);
+  padding:2px 8px;border-radius:999px;border:1px solid var(--border);
   background:#050505;font-size:11px;color:var(--muted);
 }
 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
@@ -240,13 +200,8 @@ td input{width:100%;padding:4px 6px;font-size:12px}
 .nowrap{white-space:nowrap}
 .hilite{color:var(--accent);}
 
-/* Tiny helper */
-hr.sep{
-  border:none;border-top:1px dashed rgba(214,180,76,.4);
-  margin:6px 0 4px;
-}
+hr.sep{border:none;border-top:1px dashed rgba(214,180,76,.4);margin:6px 0 4px;}
 
-/* Toast */
 .toast{
   position:fixed;right:16px;bottom:16px;
   background:#111;border:1px solid var(--border);border-radius:10px;
@@ -258,36 +213,23 @@ hr.sep{
 
 /* Modal */
 .modal-backdrop{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.7);
-  display:flex;align-items:center;justify-content:center;
-  z-index:80;
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center;z-index:80;
 }
 .modal{
-  background:#0b0b0b;
-  border:1px solid var(--border);
-  border-radius:12px;
-  max-width:800px;width:95%;
-  max-height:80vh;
-  overflow:auto;
+  background:#0b0b0b;border:1px solid var(--border);border-radius:12px;
+  max-width:900px;width:95%;max-height:80vh;overflow:auto;
   box-shadow:0 0 25px rgba(214,180,76,.4);
   padding:12px;
 }
-.modal-header{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  gap:12px;margin-bottom:6px;
-}
-.modal-title{
-  font-size:14px;font-weight:700;color:var(--accent);
-}
-.modal-close{
-  border:none;background:transparent;color:var(--accent);
-  font-size:18px;line-height:1;cursor:pointer;padding:0 4px;
-}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px;}
+.modal-title{font-size:14px;font-weight:700;color:var(--accent);}
+.modal-close{border:none;background:transparent;color:var(--accent);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;}
 .modal-body{font-size:12px;}
 .modal-body table{min-width:100%;font-size:12px;}
 </style>
 </head>
+
 <body>
 
 <!-- Shared header2 mount -->
@@ -376,6 +318,7 @@ hr.sep{
           </select>
         </div>
       </div>
+
       <hr class="sep">
       <div class="subtle" id="rulesSummary"></div>
       <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px">
@@ -422,15 +365,15 @@ hr.sep{
     <div class="tableWrap">
       <table>
         <thead>
-  <tr>
-    <th>Handle</th>
-    <th>Rank / PG</th>
-    <th class="text-right">Weight</th>
-    <th class="text-right">Add_aUEC</th>
-    <th class="text-right">Final Share (aUEC)</th>
-  </tr>
-</thead>
-<tbody id="crewRows"></tbody>
+          <tr>
+            <th>Code</th>
+            <th>Label</th>
+            <th class="text-right">Weight</th>
+            <th class="text-right">Bonus %</th>
+            <th class="text-right">Flat Add (aUEC)</th>
+          </tr>
+        </thead>
+        <tbody id="pgRows"></tbody>
       </table>
     </div>
 
@@ -450,7 +393,7 @@ hr.sep{
     <div>
       <div class="section-title">Mission Overrides</div>
       <div class="subtle">
-        Adjust org cut % and lock missions that must not be auto-recalculated.  
+        Adjust org cut % and lock missions that must not be auto-recalculated.
         The weighted ledger will respect these overrides.
       </div>
     </div>
@@ -511,7 +454,7 @@ hr.sep{
   </div>
 </section>
 
-<!-- Crew modal (UPDATED to include Add_aUEC, remove Weight column) -->
+<!-- Crew modal -->
 <div id="crewModal" class="modal-backdrop" style="display:none">
   <div class="modal">
     <div class="modal-header">
@@ -523,18 +466,19 @@ hr.sep{
     </div>
     <div class="modal-body">
       <div class="subtle" id="crewSummary" style="margin-bottom:4px"></div>
+
       <div class="tableWrap" style="max-height:55vh;margin-top:4px">
         <table>
           <thead>
-  <tr>
-    <th>Handle</th>
-    <th>Rank / PG</th>
-    <th class="text-right">Weight</th>
-    <th class="text-right">Add_aUEC</th>
-    <th class="text-right">Final Share (aUEC)</th>
-  </tr>
-</thead>
-<tbody id="crewRows"></tbody>
+            <tr>
+              <th>Handle</th>
+              <th>Rank / PG</th>
+              <th class="text-right">Weight</th>
+              <th class="text-right">Add_aUEC</th>
+              <th class="text-right">Final Share (aUEC)</th>
+            </tr>
+          </thead>
+          <tbody id="crewRows"></tbody>
         </table>
       </div>
     </div>
@@ -556,9 +500,8 @@ async function mountHeader2(){
     const html = await res.text();
     mount.innerHTML = html;
 
-    // auto-activate nav link for this file
     const here = (location.pathname.split('/').pop() || 'index.html');
-    const active = mount.querySelector(`.nav-btn[href="${here}"]`);
+    const active = mount.querySelector(\`.nav-btn[href="\${here}"]\`);
     if(active) active.classList.add('active');
   }catch(err){
     console.error('Failed to mount header2:', err);
@@ -625,21 +568,12 @@ function updateOrgSummary(){
   readOrgRulesFromUI();
   const r = orgRules;
   const shareModeText = r.share_mode === 'weight' ? 'weight' : 'flat split';
-  const roundModeText = {
-    nearest:'nearest',
-    down:'down',
-    up:'up',
-    full:'no rounding'
-  }[r.round_mode] || 'nearest';
-  const residualText = {
-    highestWeight:'highest weight',
-    leader:'mission leader',
-    org:'org pot'
-  }[r.residual_mode] || 'highest weight';
+  const roundModeText = { nearest:'nearest', down:'down', up:'up', full:'no rounding' }[r.round_mode] || 'nearest';
+  const residualText = { highestWeight:'highest weight', leader:'mission leader', org:'org pot' }[r.residual_mode] || 'highest weight';
 
   $('#rulesSummary').innerHTML = `
     Org takes <span class="hilite">${r.org_default_pct}%</span> by default (max
-    <span class="hilite">${r.org_max_pct}%</span>).  
+    <span class="hilite">${r.org_max_pct}%</span>).
     Crew shares use <span class="hilite">${shareModeText}</span>,
     rounding <span class="hilite">${roundModeText}</span> to
     <span class="hilite">${r.round_step} aUEC</span> steps; residuals go to
@@ -666,6 +600,7 @@ async function loadOrgRulesFromSupabase(){
     .order('updated_at',{ascending:false})
     .limit(1)
     .maybeSingle();
+
   if(error){
     console.error(error);
     showToast('Failed to load org rules; using defaults',true);
@@ -673,17 +608,15 @@ async function loadOrgRulesFromSupabase(){
   }else if(data){
     orgRules = {
       ...orgRulesDefault,
-      ...{
-        org_default_pct: data.org_default_pct ?? orgRulesDefault.org_default_pct,
-        org_max_pct: data.org_max_pct ?? orgRulesDefault.org_max_pct,
-        min_crew_payout: data.min_crew_payout ?? orgRulesDefault.min_crew_payout,
-        min_crew_mode: data.min_crew_mode ?? orgRulesDefault.min_crew_mode,
-        allow_mission_override: data.allow_mission_override ?? orgRulesDefault.allow_mission_override,
-        share_mode: data.share_mode ?? orgRulesDefault.share_mode,
-        round_mode: data.round_mode ?? orgRulesDefault.round_mode,
-        round_step: data.round_step ?? orgRulesDefault.round_step,
-        residual_mode: data.residual_mode ?? orgRulesDefault.residual_mode
-      }
+      org_default_pct: data.org_default_pct ?? orgRulesDefault.org_default_pct,
+      org_max_pct: data.org_max_pct ?? orgRulesDefault.org_max_pct,
+      min_crew_payout: data.min_crew_payout ?? orgRulesDefault.min_crew_payout,
+      min_crew_mode: data.min_crew_mode ?? orgRulesDefault.min_crew_mode,
+      allow_mission_override: data.allow_mission_override ?? orgRulesDefault.allow_mission_override,
+      share_mode: data.share_mode ?? orgRulesDefault.share_mode,
+      round_mode: data.round_mode ?? orgRulesDefault.round_mode,
+      round_step: data.round_step ?? orgRulesDefault.round_step,
+      residual_mode: data.residual_mode ?? orgRulesDefault.residual_mode
     };
   }
   loadOrgRulesToUI();
@@ -702,19 +635,12 @@ async function saveOrgRulesToSupabase(){
   }
 }
 
-['orgDefaultPct','orgMaxPct','minCrewPayout','minCrewMode','shareMode',
- 'roundMode','roundStep','residualMode'].forEach(id=>{
-  $('#'+id).addEventListener('input',()=>{
-    updateOrgSummary();
-    updateKpiPreview();
-  });
-});
-$('#allowMissionOverride').addEventListener('change',updateOrgSummary);
-$('#resetOrgRules').addEventListener('click',()=>{
-  orgRules = {...orgRulesDefault};
-  loadOrgRulesToUI();
-});
-$('#saveOrgRules').addEventListener('click',saveOrgRulesToSupabase);
+['orgDefaultPct','orgMaxPct','minCrewPayout','minCrewMode','shareMode','roundMode','roundStep','residualMode']
+  .forEach(id => $('#'+id).addEventListener('input', ()=>{ updateOrgSummary(); updateKpiPreview(); }));
+
+$('#allowMissionOverride').addEventListener('change', updateOrgSummary);
+$('#resetOrgRules').addEventListener('click', ()=>{ orgRules = {...orgRulesDefault}; loadOrgRulesToUI(); });
+$('#saveOrgRules').addEventListener('click', saveOrgRulesToSupabase);
 
 /* ============== PAYGRADE WEIGHTS ============== */
 let paygrades = [];
@@ -730,15 +656,9 @@ function renderPaygrades(){
     <tr data-code="${pg.paygrade}">
       <td>${pg.paygrade}</td>
       <td>${pg.label || ''}</td>
-      <td class="text-right">
-        <input type="number" step="0.1" value="${pg.weight ?? 1}" data-field="weight">
-      </td>
-      <td class="text-right">
-        <input type="number" step="0.5" value="${pg.default_bonus_pct ?? 0}" data-field="default_bonus_pct">
-      </td>
-      <td class="text-right">
-        <input type="number" step="100" value="${pg.default_add_pay ?? 0}" data-field="default_add_pay">
-      </td>
+      <td class="text-right"><input type="number" step="0.1" value="${pg.weight ?? 1}" data-field="weight"></td>
+      <td class="text-right"><input type="number" step="0.5" value="${pg.default_bonus_pct ?? 0}" data-field="default_bonus_pct"></td>
+      <td class="text-right"><input type="number" step="100" value="${pg.default_add_pay ?? 0}" data-field="default_add_pay"></td>
     </tr>
   `).join('');
 }
@@ -753,9 +673,8 @@ function applyPgFilter(){
   renderPaygrades();
 }
 
-$('#pgSearch').addEventListener('input',applyPgFilter);
-
-$('#pgRows').addEventListener('input',e=>{
+$('#pgSearch').addEventListener('input', applyPgFilter);
+$('#pgRows').addEventListener('input', e=>{
   const input = e.target;
   const row = input.closest('tr[data-code]');
   if(!row) return;
@@ -766,8 +685,8 @@ $('#pgRows').addEventListener('input',e=>{
   pg[field] = Number(input.value||0);
 });
 
-$('#revertPg').addEventListener('click',loadPaygradesFromSupabase);
-$('#savePg').addEventListener('click',savePaygradesToSupabase);
+$('#revertPg').addEventListener('click', loadPaygradesFromSupabase);
+$('#savePg').addEventListener('click', savePaygradesToSupabase);
 
 async function loadPaygradesFromSupabase(){
   const { data, error } = await sb
@@ -785,10 +704,7 @@ async function loadPaygradesFromSupabase(){
 }
 
 async function savePaygradesToSupabase(){
-  if(!paygrades.length){
-    showToast('No pay grades to save',true);
-    return;
-  }
+  if(!paygrades.length){ showToast('No pay grades to save',true); return; }
   const { error } = await sb.from('pay_grade_rules').upsert(paygrades,{onConflict:'paygrade'});
   if(error){
     console.error(error);
@@ -826,10 +742,8 @@ function renderMissions(){
         <td class="text-right mono">${payout ? fmt(crewPool) : '—'}</td>
         <td class="text-right">
           <input type="number" step="0.5" min="0" max="100"
-                 value="${m.override_org_pct ?? ''}"
-                 placeholder="—"
-                 ${m.locked ? 'disabled' : ''}
-                 data-field="override_org_pct">
+                 value="${m.override_org_pct ?? ''}" placeholder="—"
+                 ${m.locked ? 'disabled' : ''} data-field="override_org_pct">
         </td>
         <td class="text-center">
           <input type="checkbox" data-field="locked" ${m.locked ? 'checked' : ''}>
@@ -847,8 +761,10 @@ function applyMissionFilter(){
   const q = ($('#missionSearch').value||'').toLowerCase();
   const st = $('#missionStatus').value;
   const band = $('#missionOrgBand').value;
+
   missionFiltered = missions.filter(m=>{
     if(st && (m.status || '') !== st) return false;
+
     const effOrg = m.override_org_pct ?? m.default_org_pct ?? orgRules.org_default_pct;
     if(band){
       if(band==='0-10' && !(effOrg>=0 && effOrg<10)) return false;
@@ -860,42 +776,45 @@ function applyMissionFilter(){
     const hay = (m.id + ' ' + (m.title||'')).toLowerCase();
     return hay.includes(q);
   });
+
   renderMissions();
 }
 
-$('#missionSearch').addEventListener('input',applyMissionFilter);
-$('#missionStatus').addEventListener('change',applyMissionFilter);
-$('#missionOrgBand').addEventListener('change',applyMissionFilter);
-$('#missionReset').addEventListener('click',()=>{
+$('#missionSearch').addEventListener('input', applyMissionFilter);
+$('#missionStatus').addEventListener('change', applyMissionFilter);
+$('#missionOrgBand').addEventListener('change', applyMissionFilter);
+$('#missionReset').addEventListener('click', ()=>{
   $('#missionSearch').value='';
   $('#missionStatus').value='';
   $('#missionOrgBand').value='';
   applyMissionFilter();
 });
 
-$('#missionRows').addEventListener('input',e=>{
+$('#missionRows').addEventListener('input', e=>{
   const input = e.target;
   const row = input.closest('tr[data-id]');
   if(!row) return;
   const id = row.dataset.id;
   const m = missions.find(x=>x.id===id);
   if(!m) return;
+
   const field = input.dataset.field;
   if(field === 'override_org_pct'){
     const v = input.value;
     m.override_org_pct = v === '' ? null : Number(v);
     if(!m.last_editor || m.last_editor==='—') m.last_editor = me?.slice(0,8) || 'ADMIN';
-    applyMissionFilter(); // recompute crew pool
+    applyMissionFilter();
   }
 });
 
-$('#missionRows').addEventListener('change',e=>{
+$('#missionRows').addEventListener('change', e=>{
   const input = e.target;
   const row = input.closest('tr[data-id]');
   if(!row) return;
   const id = row.dataset.id;
   const m = missions.find(x=>x.id===id);
   if(!m) return;
+
   const field = input.dataset.field;
   if(field === 'locked'){
     m.locked = input.checked;
@@ -904,7 +823,7 @@ $('#missionRows').addEventListener('change',e=>{
   }
 });
 
-$('#clearOverrides').addEventListener('click',async ()=>{
+$('#clearOverrides').addEventListener('click', async ()=>{
   if(!confirm('Clear ALL mission org % overrides?')) return;
   const { error } = await sb.from('mission_org_cut_overrides').delete().neq('mission_id',null);
   if(error){
@@ -916,7 +835,7 @@ $('#clearOverrides').addEventListener('click',async ()=>{
   }
 });
 
-$('#saveOverrides').addEventListener('click',saveOverridesToSupabase);
+$('#saveOverrides').addEventListener('click', saveOverridesToSupabase);
 
 async function loadMissionsFromSupabase(){
   const { data: ms, error } = await sb
@@ -924,6 +843,7 @@ async function loadMissionsFromSupabase(){
     .select('id,title,status,payout_auec,org_cut_percent,start_time')
     .order('start_time',{ascending:false})
     .limit(200);
+
   if(error){
     console.error(error);
     showToast('Failed to load missions',true);
@@ -931,6 +851,7 @@ async function loadMissionsFromSupabase(){
     applyMissionFilter();
     return;
   }
+
   const ids = ms.map(m=>m.id);
   let overrides = [];
   if(ids.length){
@@ -945,6 +866,7 @@ async function loadMissionsFromSupabase(){
       overrides = ov || [];
     }
   }
+
   const mapOv = {};
   overrides.forEach(o=>{ mapOv[o.mission_id] = o; });
 
@@ -961,24 +883,25 @@ async function loadMissionsFromSupabase(){
       last_editor: ov.updated_by ? ov.updated_by.slice(0,8) : '—'
     };
   });
+
   applyMissionFilter();
 }
 
 async function saveOverridesToSupabase(){
-  if(!missions.length){
-    showToast('No missions to save',true);
-    return;
-  }
+  if(!missions.length){ showToast('No missions to save',true); return; }
+
   const ids = missions.map(m=>m.id);
   const { error: delErr } = await sb
     .from('mission_org_cut_overrides')
     .delete()
     .in('mission_id', ids);
+
   if(delErr){
     console.error(delErr);
     showToast('Failed to reset overrides',true);
     return;
   }
+
   const payload = missions
     .filter(m=>m.override_org_pct!=null || m.locked)
     .map(m=>({
@@ -987,6 +910,7 @@ async function saveOverridesToSupabase(){
       locked: m.locked,
       updated_by: me
     }));
+
   if(payload.length){
     const { error } = await sb.from('mission_org_cut_overrides').upsert(payload);
     if(error){
@@ -995,18 +919,17 @@ async function saveOverridesToSupabase(){
       return;
     }
   }
+
   showToast('Mission overrides saved');
   await loadMissionsFromSupabase();
 }
 
-/* ============== CREW MODAL (UPDATED: show Add_aUEC + Final Share from view) ============== */
+/* ============== CREW MODAL (Handle+Rank from v_profiles_detailed; rest from payout view) ============== */
 const crewModal = $('#crewModal');
-$('#crewModalClose').addEventListener('click',()=>{ crewModal.style.display='none'; });
-crewModal.addEventListener('click',e=>{
-  if(e.target === crewModal) crewModal.style.display='none';
-});
+$('#crewModalClose').addEventListener('click', ()=>{ crewModal.style.display='none'; });
+crewModal.addEventListener('click', e=>{ if(e.target === crewModal) crewModal.style.display='none'; });
 
-document.body.addEventListener('click',e=>{
+document.body.addEventListener('click', e=>{
   const btn = e.target.closest('.btn-crew');
   if(!btn) return;
   const id = btn.dataset.id;
@@ -1024,13 +947,12 @@ async function openCrewModal(mission){
     Payout: <span class="hilite">${payout ? fmt(payout) : '—'} aUEC</span>
   `;
 
-  // 5 columns now
   $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Loading…</td></tr>`;
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
-  // ✅ 1) Get payout rows (weight/add/final) from “pay grades with overrides” view
-  // CHANGE THIS VIEW NAME if yours is different
+  // IMPORTANT: change this view name if yours differs.
+  // It must provide: user_id, paygrade, weight, default_add_pay_auec, final_share
   const { data: payouts, error } = await sb
     .from('v_missions_payout_with_overrides')
     .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share')
@@ -1049,20 +971,18 @@ async function openCrewModal(mission){
     return;
   }
 
-  // ✅ 2) Get handle + rank from user detailed
+  // Fetch handle + rank from user detailed view
   const userIds = [...new Set(payouts.map(p=>p.user_id).filter(Boolean))];
-
   let profiles = [];
   if(userIds.length){
     const { data: profs, error: e2 } = await sb
       .from('v_profiles_detailed')
       .select('user_id,handle,current_rank_code,current_rank_name')
       .in('user_id', userIds);
-
     if(e2){
       console.error(e2);
       showToast('Failed to load profile details', true);
-    } else {
+    }else{
       profiles = profs || [];
     }
   }
@@ -1070,47 +990,37 @@ async function openCrewModal(mission){
   const profMap = {};
   profiles.forEach(p => { profMap[p.user_id] = p; });
 
-  // Sort by final share desc
-  payouts.sort((a,b)=>(Number(b.final_share||0) - Number(a.final_share||0)));
+  payouts.sort((a,b)=>Number(b.final_share||0) - Number(a.final_share||0));
 
   let totalShare = 0;
-
   const rows = payouts.map(p=>{
     const prof = profMap[p.user_id] || {};
     const handle = prof.handle || p.user_id?.slice(0,8) || '—';
 
-    // rank from user detailed
     const rank =
       prof.current_rank_code ||
       prof.current_rank_name ||
       '—';
 
-    // paygrade from payout view
     const pg = p.paygrade || '—';
-
-    // weight from payout view
-    const w = Number(p.weight ?? 0);
-
-    // add_aUEC from payout view (your requested column)
+    const weight = Number(p.weight ?? 0);
     const add = Number(p.default_add_pay_auec ?? 0);
-
-    // final share from payout view
     const share = Number(p.final_share ?? 0);
+
     totalShare += share;
 
     return `
       <tr>
         <td>${handle}</td>
         <td>${rank} / ${pg}</td>
-        <td class="text-right mono">${w ? w.toFixed(3) : ''}</td>
-        <td class="text-right mono">${add ? fmt(Math.round(add)) : '0'}</td>
+        <td class="text-right mono">${weight ? weight.toFixed(3) : ''}</td>
+        <td class="text-right mono">${fmt(Math.round(add))}</td>
         <td class="text-right mono">${share ? fmt(Math.round(share)) : '—'}</td>
       </tr>
     `;
   }).join('');
 
   $('#crewRows').innerHTML = rows;
-
   $('#crewSummary').innerHTML = `
     Participants: <span class="hilite">${payouts.length}</span>
     • Total distributed: <span class="hilite">${fmt(Math.round(totalShare))} aUEC</span>
