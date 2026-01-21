@@ -46,10 +46,7 @@ body{
 }
 
 /* Nav pills (used by header2.html) */
-.nav{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  margin:6px 0 12px;
-}
+.nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 12px;}
 .nav-btn{
   --gold:#f2d675;--gold2:#e7c760;--ring:#d6b44c;
   position:relative;display:inline-flex;align-items:center;justify-content:center;
@@ -86,7 +83,8 @@ body{
   margin-bottom:12px;
 }
 @media(max-width:980px){ .wrap{grid-template-columns:1fr} }
-.panel, .full-panel{
+
+.panel,.full-panel{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:12px;
@@ -109,15 +107,9 @@ body{
   padding:10px;margin-top:6px;
   box-shadow:0 0 10px rgba(214,180,76,.16),inset 0 0 0 1px rgba(214,180,76,.12);
 }
-.block-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:6px;
-}
+.block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
 .block-header-title{font-size:12px;font-weight:700;color:var(--accent)}
-.tag{
-  border-radius:999px;border:1px solid var(--border);
-  padding:2px 8px;font-size:10px;color:var(--muted);background:#050505;
-}
+.tag{border-radius:999px;border:1px solid var(--border);padding:2px 8px;font-size:10px;color:var(--muted);background:#050505;}
 
 /* Fields */
 .field{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;font-size:12px;color:var(--muted)}
@@ -135,7 +127,10 @@ input,select{
   width:34px;height:18px;border-radius:999px;background:#111;border:1px solid var(--border);
   position:relative;flex-shrink:0;
 }
-.switch-thumb{position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:var(--accent);transition:transform .15s ease;}
+.switch-thumb{
+  position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;
+  background:var(--accent);transition:transform .15s ease;
+}
 .switch-input:checked + .switch-track .switch-thumb{transform:translateX(14px);}
 
 /* Buttons */
@@ -466,7 +461,6 @@ hr.sep{border:none;border-top:1px dashed rgba(214,180,76,.4);margin:6px 0 4px;}
     </div>
     <div class="modal-body">
       <div class="subtle" id="crewSummary" style="margin-bottom:4px"></div>
-
       <div class="tableWrap" style="max-height:55vh;margin-top:4px">
         <table>
           <thead>
@@ -474,7 +468,7 @@ hr.sep{border:none;border-top:1px dashed rgba(214,180,76,.4);margin:6px 0 4px;}
               <th>Handle</th>
               <th>Rank / PG</th>
               <th class="text-right">Weight</th>
-              <th class="text-right">Add_aUEC</th>
+              <th class="text-right">Add_AUEC</th>
               <th class="text-right">Final Share (aUEC)</th>
             </tr>
           </thead>
@@ -496,12 +490,12 @@ async function mountHeader2(){
   const mount = document.getElementById('header2-mount');
   if(!mount) return;
   try{
-    const res = await fetch('header2.html'); // adjust path if needed
+    const res = await fetch('header2.html');
     const html = await res.text();
     mount.innerHTML = html;
 
     const here = (location.pathname.split('/').pop() || 'index.html');
-    const active = mount.querySelector(\`.nav-btn[href="\${here}"]\`);
+    const active = mount.querySelector(`.nav-btn[href="${here}"]`);
     if(active) active.classList.add('active');
   }catch(err){
     console.error('Failed to mount header2:', err);
@@ -924,7 +918,20 @@ async function saveOverridesToSupabase(){
   await loadMissionsFromSupabase();
 }
 
-/* ============== CREW MODAL (Handle+Rank from v_profiles_detailed; rest from payout view) ============== */
+/* ============== CREW MODAL ============== */
+const crewModal = $('#crewModal');
+
+$('#crewModalClose').addEventListener('click', ()=>{ crewModal.style.display='none'; });
+crewModal.addEventListener('click', (e)=>{ if(e.target === crewModal) crewModal.style.display='none'; });
+
+document.body.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.btn-crew');
+  if(!btn) return;
+  const id = btn.dataset.id;
+  const m = missions.find(x=>x.id === id);
+  if(m) openCrewModal(m);
+});
+
 async function openCrewModal(mission){
   $('#crewMissionTitle').textContent = mission.title || 'Mission Crew';
   const payout = mission.payout_auec || 0;
@@ -939,7 +946,7 @@ async function openCrewModal(mission){
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
-  // Pull payout facts from your view (ONLY default_add_pay_auec for Add_AUEC)
+  // ✅ Payout facts from v_mission_payout_with_overrides
   const { data: payouts, error } = await sb
     .from('v_mission_payout_with_overrides')
     .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share_auec')
@@ -957,9 +964,8 @@ async function openCrewModal(mission){
     return;
   }
 
-  // Load identities from v_profiles_detailed
+  // ✅ Identity from v_profiles_detailed
   const userIds = [...new Set(payouts.map(p => p.user_id).filter(Boolean))];
-
   let profiles = [];
   if(userIds.length){
     const { data: profs, error: e2 } = await sb
@@ -970,49 +976,44 @@ async function openCrewModal(mission){
     if(e2){
       console.error('profiles view error:', e2);
       showToast('Failed to load profile details', true);
-    } else {
+    }else{
       profiles = profs || [];
     }
   }
-
   const profMap = {};
   profiles.forEach(p => { profMap[p.user_id] = p; });
 
-  // Sort by final share desc
   payouts.sort((a,b)=>Number(b.final_share_auec||0)-Number(a.final_share_auec||0));
 
   let totalFinal = 0;
-  let totalAdd   = 0;
+  let totalAdd = 0;
 
   const rows = payouts.map(p=>{
     const prof = profMap[p.user_id] || {};
 
-    const handle =
-      prof.handle ||
-      (p.user_id ? String(p.user_id).slice(0,8) : '—');
-
-    const rankPg =
-      prof.current_rank_name ||
-      prof.current_rank_code ||
-      p.paygrade ||
-      '—';
+    const handle = prof.handle || (p.user_id ? String(p.user_id).slice(0,8) : '—');
+    const rankPg = prof.current_rank_name || prof.current_rank_code || p.paygrade || '—';
 
     const w = (p.weight == null) ? null : Number(p.weight);
 
-    // ✅ Add_AUEC is ONLY default_add_pay_auec
+    // ✅ Add_AUEC shows ONLY default_add_pay_auec
     const addAuec = Number(p.default_add_pay_auec || 0);
     const finalShare = Number(p.final_share_auec || 0);
 
-    totalAdd   += addAuec;
+    totalAdd += addAuec;
     totalFinal += finalShare;
+
+    // ✅ IMPORTANT: show 0 as "0", only null as "—"
+    const addCell = (p.default_add_pay_auec == null) ? '—' : fmt(Math.round(addAuec));
+    const finalCell = (p.final_share_auec == null) ? '—' : fmt(Math.round(finalShare));
 
     return `
       <tr>
         <td>${handle}</td>
         <td>${rankPg}</td>
         <td class="text-right mono">${w == null ? '' : w.toFixed(3)}</td>
-        <td class="text-right mono">${addAuec ? fmt(Math.round(addAuec)) : '—'}</td>
-        <td class="text-right mono">${finalShare ? fmt(Math.round(finalShare)) : '—'}</td>
+        <td class="text-right mono">${addCell}</td>
+        <td class="text-right mono">${finalCell}</td>
       </tr>
     `;
   }).join('');
@@ -1025,7 +1026,6 @@ async function openCrewModal(mission){
     • Total Final: <span class="hilite">${fmt(Math.round(totalFinal))} aUEC</span>
   `;
 }
-
 
 /* ============== INIT ============== */
 document.addEventListener('DOMContentLoaded', async ()=>{
