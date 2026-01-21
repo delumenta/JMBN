@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<t<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -526,14 +526,15 @@ hr.sep{
       <div class="tableWrap" style="max-height:55vh;margin-top:4px">
         <table>
           <thead>
-            <tr>
-              <th>Handle</th>
-              <th>Rank / PG</th>
-              <th class="text-right">Add_aUEC</th>
-              <th class="text-right">Final Share (aUEC)</th>
-            </tr>
-          </thead>
-          <tbody id="crewRows"></tbody>
+  <tr>
+    <th>Handle</th>
+    <th>Rank / PG</th>
+    <th class="text-right">Weight</th>
+    <th class="text-right">Add_aUEC</th>
+    <th class="text-right">Final Share (aUEC)</th>
+  </tr>
+</thead>
+<tbody id="crewRows"></tbody>
         </table>
       </div>
     </div>
@@ -1016,84 +1017,93 @@ document.body.addEventListener('click',e=>{
 async function openCrewModal(mission){
   $('#crewMissionTitle').textContent = mission.title || 'Mission Crew';
   const payout = mission.payout_auec || 0;
+
   $('#crewMissionMeta').innerHTML = `
     ID: <span class="hilite">${mission.id}</span> •
     Status: <span class="hilite">${mission.status || 'unknown'}</span> •
     Payout: <span class="hilite">${payout ? fmt(payout) : '—'} aUEC</span>
   `;
-  $('#crewRows').innerHTML = `<tr><td colspan="4" class="subtle">Loading…</td></tr>`;
+
+  $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Loading…</td></tr>`;
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
+  // ✅ Pull from your view (includes flat pay fields)
   const { data: payouts, error } = await sb
     .from('v_missions_payout_with_overrides')
-    .select('user_id,paygrade,default_add_pay_auec,final_share_auec')
+    .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share_auec')
     .eq('mission_id', mission.id);
 
   if(error){
     console.error(error);
-    $('#crewRows').innerHTML = `<tr><td colspan="4" class="subtle">Failed to load crew payouts.</td></tr>`;
-    showToast('Failed to load crew payouts',true);
+    $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Failed to load crew payouts.</td></tr>`;
+    showToast('Failed to load crew payouts', true);
     return;
   }
+
   if(!payouts || !payouts.length){
-    $('#crewRows').innerHTML = `<tr><td colspan="4" class="subtle">No payout rows for this mission yet.</td></tr>`;
+    $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">No payout rows for this mission yet.</td></tr>`;
     $('#crewSummary').textContent = 'No participants recorded.';
     return;
   }
 
+  // Load profiles (for handle + rank display)
   const userIds = [...new Set(payouts.map(p=>p.user_id).filter(Boolean))];
   let profiles = [];
   if(userIds.length){
     const { data: profs, error: e2 } = await sb
       .from('v_profiles_detailed')
-      .select('user_id,handle,display_name,current_rank_code,current_rank_name')
+      .select('user_id,handle,current_rank_code,current_rank_name')
       .in('user_id', userIds);
+
     if(e2){
       console.error(e2);
-      showToast('Failed to load profile details',true);
+      showToast('Failed to load profile details', true);
     }else{
       profiles = profs || [];
     }
   }
+
   const profMap = {};
   profiles.forEach(p=>{ profMap[p.user_id] = p; });
 
-  payouts.sort((a,b)=> Number(b.final_share_auec||0) - Number(a.final_share_auec||0));
+  // Sort by final share desc
+  payouts.sort((a,b)=>Number(b.final_share_auec||0) - Number(a.final_share_auec||0));
 
   let totalFinal = 0;
 
   const rows = payouts.map(p=>{
-    const prof   = profMap[p.user_id] || {};
-    const handle = prof.handle || p.user_id?.slice(0,8) || '—';
+    const prof = profMap[p.user_id] || {};
+    const handle = prof.handle || (p.user_id ? p.user_id.slice(0,8) : '—');
 
-    const rank =
-      prof.current_rank_code ||
-      prof.current_rank_name ||
-      p.paygrade ||
-      '—';
+    // Rank/PG: prefer rank; fallback to paygrade
+    const rankPg = prof.current_rank_code || prof.current_rank_name || p.paygrade || '—';
 
-    const addPay = Number(p.default_add_pay_auec || 0);
-    const final  = Number(p.final_share_auec || 0);
+    const weight = Number(p.weight || 0);
+    const addAuec = Number(p.default_add_pay_auec || 0);   // ✅ your requested source
+    const finalShare = Number(p.final_share_auec || 0);    // ✅ includes flat pay already
 
-    totalFinal += final;
+    totalFinal += finalShare;
 
     return `
       <tr>
         <td>${handle}</td>
-        <td>${rank}</td>
-        <td class="text-right mono">${addPay ? fmt(Math.round(addPay)) : '—'}</td>
-        <td class="text-right mono">${final ? fmt(Math.round(final)) : '—'}</td>
+        <td>${rankPg}</td>
+        <td class="text-right mono">${weight ? weight.toFixed(3) : '—'}</td>
+        <td class="text-right mono">${addAuec ? fmt(Math.round(addAuec)) : '—'}</td>
+        <td class="text-right mono">${finalShare ? fmt(Math.round(finalShare)) : '—'}</td>
       </tr>
     `;
   }).join('');
 
   $('#crewRows').innerHTML = rows;
+
   $('#crewSummary').innerHTML = `
     Participants: <span class="hilite">${payouts.length}</span>
     • Total distributed: <span class="hilite">${fmt(Math.round(totalFinal))} aUEC</span>
   `;
 }
+
 
 /* ============== INIT ============== */
 document.addEventListener('DOMContentLoaded', async ()=>{
