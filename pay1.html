@@ -1024,14 +1024,16 @@ async function openCrewModal(mission){
     Payout: <span class="hilite">${payout ? fmt(payout) : '—'} aUEC</span>
   `;
 
+  // 5 columns now
   $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Loading…</td></tr>`;
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
-  // ✅ Pull from your view (includes flat pay fields)
+  // ✅ 1) Get payout rows (weight/add/final) from “pay grades with overrides” view
+  // CHANGE THIS VIEW NAME if yours is different
   const { data: payouts, error } = await sb
     .from('v_missions_payout_with_overrides')
-    .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share_auec')
+    .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share')
     .eq('mission_id', mission.id);
 
   if(error){
@@ -1047,8 +1049,9 @@ async function openCrewModal(mission){
     return;
   }
 
-  // Load profiles (for handle + rank display)
+  // ✅ 2) Get handle + rank from user detailed
   const userIds = [...new Set(payouts.map(p=>p.user_id).filter(Boolean))];
+
   let profiles = [];
   if(userIds.length){
     const { data: profs, error: e2 } = await sb
@@ -1059,39 +1062,49 @@ async function openCrewModal(mission){
     if(e2){
       console.error(e2);
       showToast('Failed to load profile details', true);
-    }else{
+    } else {
       profiles = profs || [];
     }
   }
 
   const profMap = {};
-  profiles.forEach(p=>{ profMap[p.user_id] = p; });
+  profiles.forEach(p => { profMap[p.user_id] = p; });
 
   // Sort by final share desc
-  payouts.sort((a,b)=>Number(b.final_share_auec||0) - Number(a.final_share_auec||0));
+  payouts.sort((a,b)=>(Number(b.final_share||0) - Number(a.final_share||0)));
 
-  let totalFinal = 0;
+  let totalShare = 0;
 
   const rows = payouts.map(p=>{
     const prof = profMap[p.user_id] || {};
-    const handle = prof.handle || (p.user_id ? p.user_id.slice(0,8) : '—');
+    const handle = prof.handle || p.user_id?.slice(0,8) || '—';
 
-    // Rank/PG: prefer rank; fallback to paygrade
-    const rankPg = prof.current_rank_code || prof.current_rank_name || p.paygrade || '—';
+    // rank from user detailed
+    const rank =
+      prof.current_rank_code ||
+      prof.current_rank_name ||
+      '—';
 
-    const weight = Number(p.weight || 0);
-    const addAuec = Number(p.default_add_pay_auec || 0);   // ✅ your requested source
-    const finalShare = Number(p.final_share_auec || 0);    // ✅ includes flat pay already
+    // paygrade from payout view
+    const pg = p.paygrade || '—';
 
-    totalFinal += finalShare;
+    // weight from payout view
+    const w = Number(p.weight ?? 0);
+
+    // add_aUEC from payout view (your requested column)
+    const add = Number(p.default_add_pay_auec ?? 0);
+
+    // final share from payout view
+    const share = Number(p.final_share ?? 0);
+    totalShare += share;
 
     return `
       <tr>
         <td>${handle}</td>
-        <td>${rankPg}</td>
-        <td class="text-right mono">${weight ? weight.toFixed(3) : '—'}</td>
-        <td class="text-right mono">${addAuec ? fmt(Math.round(addAuec)) : '—'}</td>
-        <td class="text-right mono">${finalShare ? fmt(Math.round(finalShare)) : '—'}</td>
+        <td>${rank} / ${pg}</td>
+        <td class="text-right mono">${w ? w.toFixed(3) : ''}</td>
+        <td class="text-right mono">${add ? fmt(Math.round(add)) : '0'}</td>
+        <td class="text-right mono">${share ? fmt(Math.round(share)) : '—'}</td>
       </tr>
     `;
   }).join('');
@@ -1100,10 +1113,9 @@ async function openCrewModal(mission){
 
   $('#crewSummary').innerHTML = `
     Participants: <span class="hilite">${payouts.length}</span>
-    • Total distributed: <span class="hilite">${fmt(Math.round(totalFinal))} aUEC</span>
+    • Total distributed: <span class="hilite">${fmt(Math.round(totalShare))} aUEC</span>
   `;
 }
-
 
 /* ============== INIT ============== */
 document.addEventListener('DOMContentLoaded', async ()=>{
