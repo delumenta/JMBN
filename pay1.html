@@ -954,9 +954,9 @@ async function openCrewModal(mission){
   // IMPORTANT: change this view name if yours differs.
   // It must provide: user_id, paygrade, weight, default_add_pay_auec, final_share
   const { data: payouts, error } = await sb
-    .from('v_missions_payout_with_overrides')
-    .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share')
-    .eq('mission_id', mission.id);
+  .from('v_mission_payout_with_overrides')
+  .select('mission_id,user_id,paygrade,weight,default_add_pay_auec,final_share_auec')
+  .eq('mission_id', mission.id);
 
   if(error){
     console.error(error);
