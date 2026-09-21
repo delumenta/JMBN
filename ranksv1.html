@@ -1084,364 +1084,6 @@ body::before{
   }
 }
 </style>
-
-
-
-<style id="natural-ratio-panel-fix">
-/* =========================================================
-   NATURAL-RATIO GENERATED UI PANELS
-   The PNG is a real <img>, never stretched to an arbitrary CSS height.
-========================================================= */
-
-.center{
-  position:relative;
-  width:min(1420px,96vw);
-}
-
-/* ---------- MEMBER ---------- */
-.member-art-panel{
-  position:relative;
-  width:100%;
-  margin-bottom:22px;
-  isolation:isolate;
-  filter:drop-shadow(0 18px 28px rgba(0,0,0,.46));
-}
-
-.panel-art{
-  display:block;
-  width:100%;
-  height:auto;
-  pointer-events:none;
-  user-select:none;
-}
-
-.member-art{
-  position:relative;
-  z-index:0;
-}
-
-.member-overlay{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  display:grid;
-  grid-template-columns:36% 42% 22%;
-}
-
-.member-art-panel .member-ident{
-  position:relative;
-  padding:2.2% 3.1%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.member-art-panel .name{
-  color:#f2d576;
-  font-size:clamp(19px,2.35vw,34px);
-  line-height:1;
-  font-weight:700;
-  text-shadow:0 2px 7px rgba(0,0,0,.95);
-}
-
-.member-art-panel .rankline{
-  margin-top:.55vw;
-  gap:8px;
-  color:#f3eedf;
-  font-size:clamp(9px,.95vw,14px);
-  text-shadow:0 1px 5px #000;
-}
-
-.member-art-panel .badge{
-  min-height:0;
-  padding:2px 9px;
-  font-size:clamp(7px,.62vw,9px);
-  background:rgba(0,0,0,.64);
-}
-
-.member-art-panel .member-welcome{
-  margin-top:.65vw;
-  color:#eee9da;
-  font-size:clamp(8px,.85vw,12px);
-  text-shadow:0 1px 5px #000;
-}
-
-.member-art-panel .member-status{
-  margin-top:.25vw;
-  color:#b8b09a;
-  font-size:clamp(6px,.57vw,8px);
-  letter-spacing:.2px;
-  text-transform:uppercase;
-  text-shadow:0 1px 4px #000;
-}
-
-.member-art-panel .link-chip{
-  margin-top:.75vw;
-  padding:5px 10px;
-  border-radius:5px;
-  background:rgba(0,0,0,.68);
-  font-size:clamp(7px,.68vw,10px);
-}
-
-.member-art-panel .link-code-box{
-  position:absolute;
-  left:3.1%;
-  top:88%;
-  z-index:10;
-  padding:7px 9px;
-  max-width:330px;
-  border:1px solid rgba(216,184,78,.55);
-  background:rgba(0,0,0,.94);
-  box-shadow:0 10px 24px rgba(0,0,0,.6);
-}
-
-.member-art-panel .member-rank{
-  position:relative;
-  padding:3.5% 8% 2.5% 6%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  border:0;
-}
-
-.member-art-panel .rank-kicker{
-  font-size:clamp(6px,.58vw,9px);
-  color:#d8b84e;
-  letter-spacing:1.7px;
-}
-
-.member-art-panel .rank-current{
-  margin-top:.55vw;
-  display:block;
-}
-
-.member-art-panel .rank-current-code{
-  color:#f3d46b;
-  font-size:clamp(10px,1.05vw,15px);
-}
-
-.member-art-panel .rank-rule{
-  width:84%;
-  height:4px;
-  margin-top:.5vw;
-  border-radius:999px;
-  background:rgba(0,0,0,.4);
-}
-
-.member-art-panel .rank-note{
-  margin-top:1.05vw;
-  color:#e0d9c6;
-  font-size:clamp(7px,.68vw,10px);
-  text-shadow:0 1px 5px #000;
-}
-
-.rankimg-hidden{
-  position:absolute!important;
-  width:1px!important;
-  height:1px!important;
-  opacity:0!important;
-  pointer-events:none!important;
-}
-
-/* ---------- ADMIN ---------- */
-.admin-art-panel{
-  position:relative;
-  width:100%;
-  margin-top:22px;
-  display:none; /* existing Supabase JS changes this to block for elevated users */
-  isolation:isolate;
-  filter:drop-shadow(0 18px 28px rgba(0,0,0,.46));
-}
-
-.admin-art{
-  position:relative;
-  z-index:0;
-}
-
-.admin-overlay{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  display:grid;
-  grid-template-columns:34% 66%;
-}
-
-.admin-art-panel .admin-left{
-  padding:2.0% 3.0%;
-  border:0;
-  background:none;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.admin-art-panel .admin-eyebrow{
-  gap:7px;
-  color:#f1d371;
-  font-size:clamp(6px,.58vw,9px);
-  letter-spacing:1.35px;
-  text-shadow:0 1px 5px #000;
-}
-
-.admin-art-panel .admin-title{
-  margin-top:.55vw;
-  color:#f1d371;
-  font-size:clamp(12px,1.35vw,19px);
-  text-shadow:0 1px 5px #000;
-}
-
-.admin-art-panel .admin-sub{
-  margin-top:.28vw;
-  color:#aaa187;
-  font-size:clamp(6px,.62vw,9px);
-  text-shadow:0 1px 4px #000;
-}
-
-.admin-art-panel .admin-right{
-  padding:1.8% 3.0% 1.6% 13.0%;
-  border:0;
-  background:none;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.admin-art-panel .admin-body{
-  max-width:650px;
-  color:#e1dbc9;
-  font-size:clamp(6px,.66vw,10px);
-  line-height:1.45;
-  text-shadow:0 1px 5px #000;
-}
-
-.admin-art-panel .admin-cta-row{
-  margin-top:.7vw;
-  gap:10px;
-}
-
-.admin-art-panel .admin-cta{
-  padding:6px 11px;
-  border-radius:5px;
-  background:rgba(0,0,0,.7);
-  font-size:clamp(6px,.62vw,9px);
-}
-
-.admin-art-panel .admin-links{
-  font-size:clamp(6px,.55vw,8px);
-  text-shadow:0 1px 4px #000;
-}
-
-/* optional side motto from the concept */
-.side-motto{
-  position:absolute;
-  right:-62px;
-  top:44%;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-  color:#9d947b;
-  font-size:9px;
-  letter-spacing:1.1px;
-  line-height:1;
-}
-.side-motto::after{
-  content:"";
-  width:24px;
-  height:2px;
-  margin-top:4px;
-  background:#e5c45b;
-  box-shadow:0 0 7px rgba(229,196,91,.32);
-}
-
-@media(max-width:1540px){
-  .side-motto{display:none}
-}
-
-@media(max-width:1050px){
-  .center{width:min(900px,96vw)}
-
-  /* Keep artwork proportions. Only scale text; do not reflow the art itself. */
-  .member-overlay{grid-template-columns:36% 42% 22%}
-  .admin-overlay{grid-template-columns:34% 66%}
-
-  .member-art-panel .member-ident{padding-left:3.2%}
-  .member-art-panel .member-rank{padding-left:5%}
-  .admin-art-panel .admin-right{padding-left:12%}
-}
-
-@media(max-width:700px){
-  /* On phones the generated panoramic art would become too tiny.
-     Use it as a cover background while preserving readable controls. */
-  .member-art-panel{
-    min-height:300px;
-    overflow:hidden;
-  }
-  .member-art-panel > .panel-art{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
-  }
-  .member-overlay{
-    position:relative;
-    min-height:300px;
-    grid-template-columns:1fr;
-    background:linear-gradient(90deg,rgba(0,0,0,.74),rgba(0,0,0,.28));
-  }
-  .member-art-panel .member-ident{
-    padding:24px 20px 12px;
-    justify-content:flex-end;
-  }
-  .member-art-panel .member-rank{
-    padding:12px 20px 22px;
-    justify-content:flex-start;
-  }
-  .member-art-panel .name{font-size:28px}
-  .member-art-panel .rankline{font-size:12px}
-  .member-art-panel .member-welcome{font-size:11px}
-  .member-art-panel .member-status{font-size:8px}
-  .member-art-panel .link-chip{font-size:9px;margin-top:10px}
-  .member-art-panel .rank-kicker{font-size:8px}
-  .member-art-panel .rank-current-code{font-size:13px}
-  .member-art-panel .rank-note{font-size:9px;margin-top:10px}
-
-  .admin-art-panel{
-    min-height:250px;
-    overflow:hidden;
-  }
-  .admin-art-panel > .panel-art{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
-  }
-  .admin-overlay{
-    position:relative;
-    min-height:250px;
-    grid-template-columns:1fr;
-    background:rgba(0,0,0,.48);
-  }
-  .admin-art-panel .admin-left{
-    padding:22px 20px 8px;
-    justify-content:flex-end;
-  }
-  .admin-art-panel .admin-right{
-    padding:8px 20px 22px;
-    justify-content:flex-start;
-  }
-  .admin-art-panel .admin-eyebrow{font-size:8px}
-  .admin-art-panel .admin-title{font-size:18px}
-  .admin-art-panel .admin-sub{font-size:9px}
-  .admin-art-panel .admin-body{font-size:9px}
-  .admin-art-panel .admin-cta{font-size:9px}
-  .admin-art-panel .admin-links{font-size:8px}
-}
-</style>
-
 </head>
 
 <body>
@@ -1516,49 +1158,80 @@ window.addEventListener('error', () => {
       </div>
     </header>
 
-    <div class="side-motto" aria-hidden="true"><span>PLAY</span><span>EXPLORE</span><span>BUILD</span><span>TOGETHER</span></div>
+    <!-- MEMBER HERO -->
+    <section class="member" id="memberCard">
 
-    <!-- MEMBER HERO: PNG keeps its natural aspect ratio; live HTML overlays it -->
-    <section class="member-art-panel" id="memberCard">
-      <img class="panel-art member-art" src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(Member%20Panel0.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoTWVtYmVyIFBhbmVsMC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5OTU3NjA2LCJleHAiOjMzMzI1OTU3NjA2fQ.PJs3NSMPq_NI_eu3uEovBEi-UXZJWj21M90CTqU-Pqo" alt="" aria-hidden="true">
+      <div class="member-ident">
+        <div class="name" id="mName">Loading…</div>
 
-      <div class="member-overlay">
-        <div class="member-ident">
-          <div class="name" id="mName">Loading…</div>
-          <div class="rankline">
-            <span id="mRank">Unranked</span>
-            <span class="badge" id="mCategory">—</span>
-          </div>
-          <div class="member-welcome">Welcome back, Lieutenant.</div>
-          <div class="member-status">JMBN PERSONNEL RECORD • ACTIVE SESSION</div>
-
-          <div>
-            <span class="link-chip" id="genDiscordLinkCode">◉ Link Discord</span>
-            <div class="link-code-box" id="discordLinkBox">
-              <div style="font-size:10px;color:var(--muted);margin-top:4px;">
-                Paste this in Discord:
-                <span style="color:var(--gold-2);font-weight:700">/mission link code:&lt;CODE&gt;</span>
-              </div>
-              <div class="link-code" id="discordLinkCode" title="Click to copy"></div>
-              <div id="discordLinkExpiry" style="font-size:10px;color:var(--muted);margin-top:4px;"></div>
-            </div>
-          </div>
+        <div class="rankline">
+          <span id="mRank">Unranked</span>
+          <span class="badge" id="mCategory">—</span>
         </div>
 
-        <div class="member-rank">
-          <div class="rank-kicker">Current Rank</div>
-          <div class="rank-current">
-            <div class="rank-current-code" id="mRankCode">CURRENT RANK</div>
+        <div class="member-welcome">
+          Welcome back, Lieutenant.
+        </div>
+
+        <div class="member-status">
+          JMBN PERSONNEL RECORD • ACTIVE SESSION
+        </div>
+
+        <div>
+          <span class="link-chip" id="genDiscordLinkCode">
+            ◉ Link Discord
+          </span>
+
+          <div class="link-code-box" id="discordLinkBox">
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">
+              Paste this in Discord:
+              <span style="color:var(--gold-2);font-weight:700">
+                /mission link code:&lt;CODE&gt;
+              </span>
+            </div>
+
+            <div
+              class="link-code"
+              id="discordLinkCode"
+              title="Click to copy"
+            ></div>
+
+            <div
+              id="discordLinkExpiry"
+              style="font-size:10px;color:var(--muted);margin-top:4px;"
+            ></div>
           </div>
-          <div class="rank-rule"></div>
-          <div class="rank-note">“Same crew. Further horizons.”</div>
         </div>
       </div>
 
-      <!-- kept for existing Supabase JS; hidden because the generated artwork has no rank emblem slot -->
-      <img id="mRankImg" class="rankimg rankimg-hidden"
-           src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-           alt="Rank">
+      <div class="member-rank">
+        <div class="rank-kicker">Current Rank</div>
+
+        <div class="rank-current">
+          <div class="rank-current-name">
+            Personnel standing within the JMBN Manifest
+          </div>
+          <div class="rank-current-code" id="mRankCode">
+            CURRENT RANK
+          </div>
+        </div>
+
+        <div class="rank-rule"></div>
+
+        <div class="rank-note">
+          “Same crew. Further horizons.”
+        </div>
+      </div>
+
+      <div class="member-emblem">
+        <img
+          id="mRankImg"
+          class="rankimg"
+          src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+          alt="Rank"
+        >
+      </div>
+
     </section>
 
     <!-- PRIMARY DESTINATIONS -->
@@ -1619,35 +1292,49 @@ window.addEventListener('error', () => {
       </div>
     </section>
 
-    <!-- ELEVATED / ADMIN ACCESS: natural-ratio generated artwork -->
-    <section class="admin-art-panel" id="adminPanelTeaser">
-      <img class="panel-art admin-art" src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(ADmin%20Panel).png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoQURtaW4gUGFuZWwpLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODk5NTc1NzIsImV4cCI6MzMzMjU5NTc1NzJ9.ZHLjt2ADllcBO0v3z-1xlcwVUljILpXvQNexxB9xgCE" alt="" aria-hidden="true">
+    <!-- ELEVATED / ADMIN ACCESS -->
+    <section class="admin-panel" id="adminPanelTeaser">
 
-      <div class="admin-overlay">
-        <div class="admin-left">
-          <div class="admin-eyebrow"><span>▣</span> Officer Access</div>
-          <div class="admin-title">Member Management Console</div>
-          <div class="admin-sub">Tools for ranks, certifications, and mission oversight.</div>
+      <div class="admin-left">
+        <div class="admin-eyebrow">
+          <span>▣</span>
+          Officer Access
         </div>
 
-        <div class="admin-right">
-          <div class="admin-body">
-            You have elevated access. Use the Admin Console to review member progress,
-            adjust rank tracks, grant certifications, and run promotion checks for your crew.
-          </div>
-          <div class="admin-cta-row">
-            <a class="admin-cta" href="admins.html">⬈ Open JMBN Admin Console</a>
-            <div class="admin-links">
-              <a href="admins.html#activity">View activity</a>
-              &nbsp;•&nbsp;
-              <a href="admins.html#ranks">Manage ranks</a>
-              &nbsp;•&nbsp;
-              <a href="admins.html#certs">Grant certs</a>
-            </div>
-            <span class="admin-pill" id="adminHint">All changes are logged in Supabase for audit.</span>
-          </div>
+        <div class="admin-title">
+          Member Management Console
+        </div>
+
+        <div class="admin-sub">
+          Tools for ranks, certifications, and mission oversight.
         </div>
       </div>
+
+      <div class="admin-right">
+        <div class="admin-body">
+          You have elevated access. Use the Admin Console to review member progress,
+          adjust rank tracks, grant certifications, and run promotion checks for your crew.
+        </div>
+
+        <div class="admin-cta-row">
+          <a class="admin-cta" href="admins.html">
+            ⬈ Open JMBN Admin Console
+          </a>
+
+          <div class="admin-links">
+            <a href="admins.html#activity">View activity</a>
+            &nbsp;•&nbsp;
+            <a href="admins.html#ranks">Manage ranks</a>
+            &nbsp;•&nbsp;
+            <a href="admins.html#certs">Grant certs</a>
+          </div>
+
+          <span class="admin-pill" id="adminHint">
+            All changes are logged in Supabase for audit.
+          </span>
+        </div>
+      </div>
+
     </section>
 
   </main>
