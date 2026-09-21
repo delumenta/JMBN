@@ -2008,6 +2008,333 @@ tbody tr:hover{
 }
 
 
+
+
+/* =========================================================
+   CUSTOM JMBN ROLE DROPDOWNS
+   Replaces native <select> popups so Windows/Chrome cannot
+   force a white dropdown menu.
+========================================================= */
+
+.role-dropdown{
+  position:relative;
+  min-width:130px;
+  font-family:"Play",sans-serif;
+}
+
+#attElevatedTools .role-dropdown{
+  width:150px;
+  flex:0 0 150px;
+}
+
+.role-trigger{
+  width:100%;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:0 11px;
+  border:1px solid rgba(219,180,54,.48);
+  border-radius:8px;
+  outline:none;
+  background:linear-gradient(180deg,#080907,#030403);
+  color:#f0e8c7;
+  font-family:"Play",sans-serif;
+  font-size:9px;
+  text-align:left;
+  cursor:pointer;
+  transition:.16s ease;
+}
+
+.role-trigger:hover,
+.role-dropdown.open .role-trigger{
+  border-color:var(--gold);
+  box-shadow:
+    0 0 0 1px rgba(240,199,61,.10),
+    0 0 12px rgba(239,196,58,.08);
+}
+
+.role-trigger:disabled{
+  opacity:.48;
+  cursor:default;
+}
+
+.role-trigger-label{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-transform:none;
+}
+
+.role-chevron{
+  flex:0 0 auto;
+  color:var(--gold);
+  font-size:10px;
+  transition:transform .15s ease;
+}
+
+.role-dropdown.open .role-chevron{
+  transform:rotate(180deg);
+}
+
+.role-menu{
+  position:absolute;
+  z-index:10050;
+  top:calc(100% + 5px);
+  left:0;
+  width:max(100%,180px);
+  max-height:245px;
+  overflow-y:auto;
+  display:none;
+  padding:5px;
+  border:1px solid rgba(240,201,78,.72);
+  border-radius:8px;
+  background:
+    radial-gradient(circle at top left,rgba(227,188,58,.07),transparent 48%),
+    #050605;
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.92),
+    0 0 18px rgba(239,196,58,.08);
+}
+
+.role-dropdown.open .role-menu{
+  display:block;
+}
+
+.role-option{
+  width:100%;
+  min-height:31px;
+  display:flex;
+  align-items:center;
+  padding:6px 9px;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:#d9d1b1;
+  font-family:"Play",sans-serif;
+  font-size:9px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.role-option:hover,
+.role-option:focus{
+  outline:none;
+  background:rgba(240,201,78,.11);
+  color:var(--gold-bright);
+}
+
+.role-option.selected{
+  background:linear-gradient(90deg,rgba(240,201,78,.18),rgba(240,201,78,.05));
+  color:var(--gold-bright);
+}
+
+.role-option.none{
+  color:#827b65;
+  font-style:italic;
+}
+
+.role-menu::-webkit-scrollbar{
+  width:7px;
+}
+
+.role-menu::-webkit-scrollbar-track{
+  background:#020302;
+}
+
+.role-menu::-webkit-scrollbar-thumb{
+  background:#6f5d1f;
+  border-radius:999px;
+}
+
+#attList .role-dropdown{
+  width:100%;
+  min-width:0;
+}
+
+#attList .role-trigger{
+  height:31px;
+  border-radius:6px;
+  font-size:9px;
+  padding:0 9px;
+}
+
+#attList .role-menu{
+  width:max(100%,175px);
+}
+
+/* Let open attendee dropdowns escape their row cleanly. */
+#attList .chip{
+  overflow:visible;
+}
+
+@media(max-width:600px){
+  #attElevatedTools .role-dropdown{
+    width:100%;
+    flex:1 1 100%;
+  }
+
+  .role-menu{
+    width:100%;
+  }
+}
+
+
+/* =========================================================
+   FINAL MISSION STATUS TREATMENT
+   Planned / Success = standard JMBN card
+   Active = brighter gold command glow
+   Fail / Abort = subtle red alert border + left rail
+========================================================= */
+
+.op-card{
+  --status-accent:var(--gold);
+  --status-glow:rgba(237,195,57,.12);
+}
+
+/* Keep the ordinary card unchanged for planned and success. */
+.op-card.status-planned,
+.op-card.status-success{
+  border-color:rgba(220,182,55,.55);
+}
+
+/* ACTIVE — brighter gold only */
+.op-card.status-active{
+  --status-accent:var(--gold-bright);
+  border-color:rgba(255,226,123,.78);
+  box-shadow:
+    inset 0 0 22px rgba(240,201,78,.025),
+    0 0 18px rgba(240,201,78,.11);
+}
+
+.op-card.status-active::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:10px;
+  bottom:10px;
+  width:2px;
+  background:var(--gold-bright);
+  box-shadow:0 0 10px rgba(255,226,123,.62);
+}
+
+.op-card.status-active:hover{
+  border-color:var(--gold-bright);
+  box-shadow:
+    inset 0 0 24px rgba(240,201,78,.04),
+    0 0 24px rgba(240,201,78,.18);
+}
+
+/* FAILED / ABORTED — subtle red alert treatment */
+.op-card.status-fail,
+.op-card.status-abort{
+  border-color:rgba(255,103,103,.46);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,72,72,.075) 0%,
+      rgba(255,72,72,.022) 18%,
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #0a0a08,
+      #050505
+    );
+  box-shadow:
+    inset 4px 0 18px rgba(255,70,70,.035),
+    0 0 15px rgba(255,70,70,.055);
+}
+
+.op-card.status-fail::before,
+.op-card.status-abort::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:9px;
+  bottom:9px;
+  width:2px;
+  border-radius:2px;
+  background:var(--red);
+  box-shadow:
+    0 0 7px rgba(255,103,103,.68),
+    0 0 15px rgba(255,70,70,.25);
+}
+
+.op-card.status-fail::after,
+.op-card.status-abort::after{
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,103,103,.72)
+    );
+}
+
+.op-card.status-fail:hover,
+.op-card.status-abort:hover{
+  border-color:rgba(255,103,103,.66);
+  box-shadow:
+    inset 5px 0 20px rgba(255,70,70,.045),
+    0 0 19px rgba(255,70,70,.09);
+}
+
+/* Success intentionally remains a normal black/gold card.
+   The existing green SUCCESS badge is the only green status cue. */
+
+
+
+/* =========================================================
+   FINAL TIMELINE AXIS ALIGNMENT
+========================================================= */
+
+.timeline{
+  position:relative;
+  padding-left:28px;
+}
+
+.timeline::before{
+  left:7px;
+  top:12px;
+}
+
+.day-group{
+  position:relative;
+}
+
+.day-header{
+  position:relative;
+  min-height:25px;
+  margin:0 0 8px 0;
+  display:inline-flex;
+  align-items:center;
+  line-height:1;
+  z-index:2;
+}
+
+.day-header::before{
+  left:-25px;
+  top:50%;
+  transform:translateY(-50%);
+  box-shadow:
+    0 0 0 2px #050604,
+    0 0 8px rgba(240,200,60,.48);
+}
+
+.day-header::after{
+  content:"";
+  position:absolute;
+  left:-17px;
+  top:50%;
+  width:17px;
+  height:1px;
+  transform:translateY(-50%);
+  background:rgba(230,190,55,.58);
+}
+
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */
@@ -2778,14 +3105,32 @@ tbody tr:hover{
       >
 
 
-      <select
-        id="attAddRole"
-        style="width:auto"
+      <div
+        id="attAddRoleDropdown"
+        class="role-dropdown"
+        data-role-dropdown="add"
       >
-        <option value="">
-          Role
-        </option>
-      </select>
+        <input
+          id="attAddRole"
+          type="hidden"
+          value=""
+        >
+
+        <button
+          class="role-trigger"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+        >
+          <span class="role-trigger-label">Role</span>
+          <span class="role-chevron">⌄</span>
+        </button>
+
+        <div
+          class="role-menu"
+          role="listbox"
+        ></div>
+      </div>
 
 
       <button
@@ -3057,6 +3402,229 @@ async function fetchRoles(){
 
 }
 
+
+
+
+function getRoleLabels(){
+
+  return (
+    ROLES.length
+      ? ROLES
+      : DEFAULT_ROLES
+  )
+  .map(r => r.label)
+  .filter(Boolean);
+
+}
+
+
+function closeRoleDropdowns(except=null){
+
+  $$(".role-dropdown.open")
+    .forEach(drop => {
+
+      if(drop === except)
+        return;
+
+      drop.classList.remove("open");
+
+      const trigger =
+        drop.querySelector(".role-trigger");
+
+      if(trigger){
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      }
+
+    });
+
+}
+
+
+function setRoleDropdownValue(drop,value,placeholder="Role"){
+
+  if(!drop)
+    return;
+
+  const hidden =
+    drop.querySelector(
+      'input[type="hidden"]'
+    );
+
+  const label =
+    drop.querySelector(
+      ".role-trigger-label"
+    );
+
+  if(hidden){
+    hidden.value =
+      value || "";
+  }
+
+  if(label){
+    label.textContent =
+      value || placeholder;
+  }
+
+  drop.querySelectorAll(
+    ".role-option"
+  )
+  .forEach(btn => {
+
+    btn.classList.toggle(
+      "selected",
+      (btn.dataset.value || "") ===
+      (value || "")
+    );
+
+  });
+
+}
+
+
+function buildRoleDropdown(
+  drop,
+  {
+    value="",
+    placeholder="Role",
+    disabled=false,
+    onChange=null
+  }={}
+){
+
+  if(!drop)
+    return;
+
+  const trigger =
+    drop.querySelector(
+      ".role-trigger"
+    );
+
+  const menu =
+    drop.querySelector(
+      ".role-menu"
+    );
+
+  if(!trigger || !menu)
+    return;
+
+  trigger.disabled =
+    !!disabled;
+
+  menu.innerHTML = "";
+
+  const options = [
+    {label:placeholder,value:"",none:true},
+    ...getRoleLabels()
+      .map(label => ({
+        label,
+        value:label,
+        none:false
+      }))
+  ];
+
+  options.forEach(opt => {
+
+    const btn =
+      document.createElement(
+        "button"
+      );
+
+    btn.type =
+      "button";
+
+    btn.className =
+      "role-option" +
+      (opt.none ? " none" : "");
+
+    btn.dataset.value =
+      opt.value;
+
+    btn.textContent =
+      opt.label;
+
+    btn.addEventListener(
+      "click",
+      async event => {
+
+        event.stopPropagation();
+
+        setRoleDropdownValue(
+          drop,
+          opt.value,
+          placeholder
+        );
+
+        drop.classList.remove(
+          "open"
+        );
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        if(onChange){
+          await onChange(
+            opt.value
+          );
+        }
+
+      }
+    );
+
+    menu.appendChild(btn);
+
+  });
+
+  setRoleDropdownValue(
+    drop,
+    value,
+    placeholder
+  );
+
+  trigger.onclick =
+    event => {
+
+      event.stopPropagation();
+
+      if(trigger.disabled)
+        return;
+
+      const willOpen =
+        !drop.classList.contains(
+          "open"
+        );
+
+      closeRoleDropdowns(
+        willOpen ? drop : null
+      );
+
+      drop.classList.toggle(
+        "open",
+        willOpen
+      );
+
+      trigger.setAttribute(
+        "aria-expanded",
+        willOpen
+          ? "true"
+          : "false"
+      );
+
+    };
+
+}
+
+
+document.addEventListener(
+  "click",
+  () => {
+    closeRoleDropdowns();
+  }
+);
 
 
 function roleOptionsHtml(
@@ -3401,7 +3969,11 @@ function missionCardHtml(m){
   return `
 
     <article
-      class="op-card"
+      class="op-card status-${esc(
+        (m.status || "planned")
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]/g,"")
+      )}"
       data-id="${esc(m.id)}"
       data-title="${esc(
         m.title ||
@@ -4601,6 +5173,8 @@ let ATT_MISSION_ID =
 
 function closeAttendance(){
 
+  closeRoleDropdowns();
+
   $("#attModalMask")
     .style.display =
       "none";
@@ -4715,11 +5289,13 @@ async function openAttendance(
       "";
 
 
-  $("#attAddRole")
-    .innerHTML =
-      roleOptionsHtml(
-        "Role"
-      );
+  buildRoleDropdown(
+    $("#attAddRoleDropdown"),
+    {
+      value:"",
+      placeholder:"Role"
+    }
+  );
 
 
   $("#attSelfRow")
@@ -4913,9 +5489,11 @@ async function openAttendance(
             "";
 
 
-        $("#attAddRole")
-          .value =
-            "";
+        setRoleDropdownValue(
+          $("#attAddRoleDropdown"),
+          "",
+          "Role"
+        );
 
 
         await loadAttendees();
@@ -5147,22 +5725,34 @@ async function loadAttendees(){
         </span>
 
 
-        <select
-          data-uid="${esc(
-            a.user_id
-          )}"
-          ${
-            canEdit
-              ? ""
-              : "disabled"
-          }
+        <div
+          class="role-dropdown attendee-role-dropdown"
+          data-uid="${esc(a.user_id)}"
         >
+          <input
+            type="hidden"
+            class="att-role-value"
+            value="${esc(a.role_in_mission || "")}"
+          >
 
-          ${roleOptionsHtml(
-            "role"
-          )}
+          <button
+            class="role-trigger"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            ${canEdit ? "" : "disabled"}
+          >
+            <span class="role-trigger-label">
+              ${esc(a.role_in_mission || "role")}
+            </span>
+            <span class="role-chevron">⌄</span>
+          </button>
 
-        </select>
+          <div
+            class="role-menu"
+            role="listbox"
+          ></div>
+        </div>
 
 
         <span class="subtle">
@@ -5196,19 +5786,80 @@ async function loadAttendees(){
       `;
 
 
-      const sel =
+      const roleDrop =
         chip.querySelector(
-          "select"
+          ".attendee-role-dropdown"
         );
 
 
-      if(sel){
+      buildRoleDropdown(
+        roleDrop,
+        {
+          value:
+            a.role_in_mission || "",
 
-        sel.value =
-          a.role_in_mission ||
-          "";
+          placeholder:
+            "role",
 
-      }
+          disabled:
+            !canEdit,
+
+          onChange:
+            canEdit
+            ?
+            async roleValue => {
+
+              const {
+                error
+              } = await sb
+
+                .from(
+                  "mission_attendees"
+                )
+
+                .update(
+                  {
+                    role_in_mission:
+                      roleValue || null
+                  }
+                )
+
+                .eq(
+                  "mission_id",
+                  ATT_MISSION_ID
+                )
+
+                .eq(
+                  "user_id",
+                  a.user_id
+                );
+
+
+              if(error){
+
+                alert(
+                  "Update failed: " +
+                  error.message
+                );
+
+                setRoleDropdownValue(
+                  roleDrop,
+                  a.role_in_mission || "",
+                  "role"
+                );
+
+                return;
+
+              }
+
+              a.role_in_mission =
+                roleValue || null;
+
+            }
+            :
+            null
+        }
+      );
 
 
       if(canEdit){
@@ -5269,69 +5920,6 @@ async function loadAttendees(){
               await loadOngoing();
 
               await loadMissions();
-
-            }
-          );
-
-        }
-
-
-        if(sel){
-
-          sel.addEventListener(
-            "change",
-            async () => {
-
-              const uid =
-                sel.getAttribute(
-                  "data-uid"
-                );
-
-
-              const role =
-                sel.value ||
-                null;
-
-
-              const {
-                error
-              } = await sb
-
-                .from(
-                  "mission_attendees"
-                )
-
-                .update(
-                  {
-                    role_in_mission:
-                      role
-                  }
-                )
-
-                .eq(
-                  "mission_id",
-                  ATT_MISSION_ID
-                )
-
-                .eq(
-                  "user_id",
-                  uid
-                );
-
-
-              if(error){
-
-                alert(
-                  "Update failed: " +
-                  error.message
-                );
-
-                return;
-
-              }
-
-
-              await loadAttendees();
 
             }
           );
