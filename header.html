@@ -44,6 +44,9 @@
 
   overflow:visible;
 
+  /*
+    Header sits above the page content.
+  */
   z-index:100;
 
   border:
@@ -111,15 +114,18 @@
   top:-2px;
 }
 
+
 .jmbn-frame-node.n2{
   right:22%;
   top:-2px;
 }
 
+
 .jmbn-frame-node.n3{
   left:10%;
   bottom:-2px;
 }
+
 
 .jmbn-frame-node.n4{
   right:18px;
@@ -162,6 +168,10 @@
 
   position:relative;
 
+  /*
+    Top section sits above navigation.
+    Dropdown is contained inside this stacking context.
+  */
   z-index:20;
 
   display:grid;
@@ -286,6 +296,10 @@
 .jmbn-account-wrap{
   position:relative;
 
+  /*
+    Account area sits above other elements
+    inside the top section.
+  */
   z-index:30;
 
   padding-left:28px;
@@ -468,6 +482,9 @@
 
   width:205px;
 
+  /*
+    Highest element inside the account area.
+  */
   z-index:1000;
 
   border:
@@ -520,6 +537,10 @@
   display:block;
 
   width:100%;
+
+  position:relative;
+
+  z-index:1;
 
   padding:
     10px 9px;
@@ -577,6 +598,10 @@
 
   position:relative;
 
+  /*
+    Navigation remains visible,
+    but stays below the top/account/dropdown layer.
+  */
   z-index:10;
 
   display:flex;
@@ -646,6 +671,8 @@
 }
 
 
+/* Active underline */
+
 .jmbn-navlink.active::after{
 
   content:"";
@@ -668,6 +695,8 @@
 
 }
 
+
+/* Active center notch */
 
 .jmbn-navlink.active::before{
 
@@ -900,22 +929,6 @@
 
 }
 
-
-/* =========================================================
-   ACCOUNT MENU OPEN FIX
-
-   When the account dropdown is open, hide the navigation
-   underneath it. This prevents scroll/compositing layers
-   from drawing MANIFEST / OPERATIONS / MEMBERS etc.
-   through the dropdown on desktop or mobile.
-========================================================= */
-
-.jmbn-header:has(
-  .jmbn-account[aria-expanded="true"]
-) .jmbn-navrow{
-  visibility:hidden;
-}
-
 </style>
 
 
@@ -1089,6 +1102,8 @@
         </div>
 
 
+        <!-- PERSONAL PROFILE -->
+
         <a
           class="jmbn-dropitem"
           href="profile.html"
@@ -1097,6 +1112,8 @@
           View Profile
         </a>
 
+
+        <!-- ADMIN ONLY -->
 
         <a
           class="jmbn-dropitem"
@@ -1108,6 +1125,8 @@
           Admin Console
         </a>
 
+
+        <!-- LOGOUT -->
 
         <button
           class="jmbn-dropitem logout"
