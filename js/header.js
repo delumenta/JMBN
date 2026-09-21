@@ -1,73 +1,75 @@
+/* =========================================================
+   JMBN SHARED HEADER
+   js/header.js
+
+   Used with:
+   header.html
+
+   Handles:
+   - Active navigation
+   - Logged-in member identity
+   - Rank display
+   - Account dropdown
+   - Admin Console visibility
+   - Logout
+========================================================= */
+
 (function () {
+
+  "use strict";
+
+
+  /* =========================================================
+     INITIALIZE HEADER
+  ========================================================= */
 
   window.initJmbnHeader = async function initJmbnHeader() {
 
-    const root = document.getElementById("jmbnHeader");
+
+    /* ---------------------------------------------------------
+       FIND HEADER
+    --------------------------------------------------------- */
+
+    const root =
+      document.getElementById("jmbnHeader");
+
 
     if (!root) {
-      console.warn("JMBN header root not found.");
+
+      console.warn(
+        "JMBN header root #jmbnHeader was not found."
+      );
+
       return;
+
     }
 
-    // Prevent duplicate initialization
+
+    /*
+      Prevent the same injected header from being
+      initialized more than once.
+    */
+
     if (root.dataset.ready === "1") {
+
       return;
+
     }
+
 
     root.dataset.ready = "1";
 
 
-    /* =====================================================
-       ACTIVE NAVIGATION
-    ====================================================== */
 
-    const current =
-      (
-        window.location.pathname.split("/").pop()
-        || "index.html"
-      ).toLowerCase();
-
-
-    root
-      .querySelectorAll(".jmbn-navlink")
-      .forEach(function (link) {
-
-        const page =
-          String(
-            link.dataset.page || ""
-          ).toLowerCase();
-
-        const active =
-          page === current;
-
-        link.classList.toggle(
-          "active",
-          active
-        );
-
-        if (active) {
-          link.setAttribute(
-            "aria-current",
-            "page"
-          );
-        } else {
-          link.removeAttribute(
-            "aria-current"
-          );
-        }
-
-      });
-
-
-
-    /* =====================================================
-       ACCOUNT DROPDOWN
-    ====================================================== */
+    /* =========================================================
+       ELEMENT REFERENCES
+    ========================================================= */
 
     const accountButton =
       root.querySelector(
         "#jmbnAccountButton"
       );
+
 
     const accountMenu =
       root.querySelector(
@@ -75,128 +77,29 @@
       );
 
 
-    function closeAccountMenu() {
-
-      if (!accountMenu) return;
-
-      accountMenu.classList.remove(
-        "open"
-      );
-
-      if (accountButton) {
-        accountButton.setAttribute(
-          "aria-expanded",
-          "false"
-        );
-      }
-
-    }
-
-
-    function openAccountMenu() {
-
-      if (!accountMenu) return;
-
-      accountMenu.classList.add(
-        "open"
-      );
-
-      if (accountButton) {
-        accountButton.setAttribute(
-          "aria-expanded",
-          "true"
-        );
-      }
-
-    }
-
-
-    if (
-      accountButton &&
-      accountMenu
-    ) {
-
-      accountButton.addEventListener(
-        "click",
-        function (event) {
-
-          event.stopPropagation();
-
-          const isOpen =
-            accountMenu.classList.contains(
-              "open"
-            );
-
-          if (isOpen) {
-            closeAccountMenu();
-          } else {
-            openAccountMenu();
-          }
-
-        }
-      );
-
-
-      document.addEventListener(
-        "click",
-        function (event) {
-
-          if (
-            !root.contains(
-              event.target
-            )
-          ) {
-            closeAccountMenu();
-          }
-
-        }
-      );
-
-
-      document.addEventListener(
-        "keydown",
-        function (event) {
-
-          if (
-            event.key === "Escape"
-          ) {
-
-            closeAccountMenu();
-
-            accountButton.focus();
-
-          }
-
-        }
-      );
-
-    }
-
-
-
-    /* =====================================================
-       HEADER ELEMENTS
-    ====================================================== */
-
     const nameEl =
       root.querySelector(
         "#jmbnName"
       );
+
 
     const rankEl =
       root.querySelector(
         "#jmbnRank"
       );
 
+
     const avatarEl =
       root.querySelector(
         "#jmbnAvatar"
       );
 
+
     const adminLink =
       root.querySelector(
         "#jmbnAdminLink"
       );
+
 
     const logoutButton =
       root.querySelector(
@@ -205,157 +108,659 @@
 
 
 
-    /* =====================================================
-       INITIALS
-    ====================================================== */
+    /* =========================================================
+       ACTIVE NAVIGATION
+    ========================================================= */
 
-    function getInitials(value) {
+    const currentPage =
+      (
+        window.location.pathname
+          .split("/")
+          .pop()
 
-      const text =
-        String(
-          value || ""
-        ).trim();
+        ||
 
-      if (!text) {
-        return "--";
-      }
-
-      const parts =
-        text
-          .split(/\s+/)
-          .filter(Boolean);
-
-      if (!parts.length) {
-        return "--";
-      }
-
-      if (parts.length === 1) {
-        return parts[0]
-          .slice(0, 2)
-          .toUpperCase();
-      }
-
-      return (
-        parts[0][0] +
-        parts[
-          parts.length - 1
-        ][0]
-      ).toUpperCase();
-
-    }
+        "index.html"
+      )
+        .toLowerCase();
 
 
 
-    /* =====================================================
-       SUPABASE
-    ====================================================== */
+    root
+      .querySelectorAll(
+        ".jmbn-navlink"
+      )
+      .forEach(
+        function (link) {
 
-    if (
-      typeof window.getSupabase !==
-      "function"
-    ) {
 
-      console.error(
-        "getSupabase() was not found. Make sure js/auth.js loads before js/header.js."
+          const page =
+            String(
+              link.dataset.page ||
+              ""
+            )
+              .toLowerCase();
+
+
+          const isActive =
+            page === currentPage;
+
+
+          link.classList.toggle(
+            "active",
+            isActive
+          );
+
+
+          if (isActive) {
+
+            link.setAttribute(
+              "aria-current",
+              "page"
+            );
+
+          }
+          else {
+
+            link.removeAttribute(
+              "aria-current"
+            );
+
+          }
+
+
+        }
       );
 
-      if (nameEl) {
-        nameEl.textContent =
-          "PERSONNEL";
-      }
-
-      if (rankEl) {
-        rankEl.textContent =
-          "OFFLINE";
-      }
-
-      return;
-
-    }
 
 
-    let sb;
-
-    try {
-
-      sb =
-        window.getSupabase();
-
-    } catch (error) {
-
-      console.error(
-        "Unable to initialize Supabase for header:",
-        error
-      );
-
-      return;
-
-    }
+    /* =========================================================
+       ACCOUNT DROPDOWN
+    ========================================================= */
 
 
+    /*
+      IMPORTANT:
 
-    /* =====================================================
-       SESSION
-    ====================================================== */
+      header.html uses:
 
-    try {
+          hidden
 
-      const {
-        data,
-        error
-      } =
-        await sb.auth.getSession();
+      to control whether the menu is visible.
 
-
-      if (error) {
-        throw error;
-      }
+      Therefore we change accountMenu.hidden directly.
+    */
 
 
-      const session =
-        data?.session;
+    function closeAccountMenu() {
 
 
-      if (!session?.user) {
-
-        if (nameEl) {
-          nameEl.textContent =
-            "SIGN IN";
-        }
-
-        if (rankEl) {
-          rankEl.textContent =
-            "PERSONNEL";
-        }
-
-        if (avatarEl) {
-          avatarEl.textContent =
-            "--";
-        }
+      if (!accountMenu) {
 
         return;
 
       }
 
 
+      accountMenu.hidden =
+        true;
+
+
+      if (accountButton) {
+
+        accountButton.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+      }
+
+    }
+
+
+
+    function openAccountMenu() {
+
+
+      if (!accountMenu) {
+
+        return;
+
+      }
+
+
+      accountMenu.hidden =
+        false;
+
+
+      if (accountButton) {
+
+        accountButton.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+
+      }
+
+    }
+
+
+
+    function toggleAccountMenu() {
+
+
+      if (!accountMenu) {
+
+        return;
+
+      }
+
+
+      if (accountMenu.hidden) {
+
+        openAccountMenu();
+
+      }
+      else {
+
+        closeAccountMenu();
+
+      }
+
+    }
+
+
+
+    /* ---------------------------------------------------------
+       ACCOUNT BUTTON
+    --------------------------------------------------------- */
+
+    if (
+      accountButton &&
+      accountMenu
+    ) {
+
+
+      accountButton.addEventListener(
+        "click",
+        function (event) {
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          toggleAccountMenu();
+
+
+        }
+      );
+
+
+
+      /* -------------------------------------------------------
+         CLICK INSIDE MENU
+
+         Prevent document click from immediately closing it.
+      ------------------------------------------------------- */
+
+      accountMenu.addEventListener(
+        "click",
+        function (event) {
+
+          event.stopPropagation();
+
+        }
+      );
+
+
+
+      /* -------------------------------------------------------
+         CLICK OUTSIDE
+      ------------------------------------------------------- */
+
+      document.addEventListener(
+        "click",
+        function (event) {
+
+
+          if (
+            !root.contains(
+              event.target
+            )
+          ) {
+
+            closeAccountMenu();
+
+            return;
+
+          }
+
+
+          if (
+            !accountButton.contains(
+              event.target
+            )
+
+            &&
+
+            !accountMenu.contains(
+              event.target
+            )
+          ) {
+
+            closeAccountMenu();
+
+          }
+
+
+        }
+      );
+
+
+
+      /* -------------------------------------------------------
+         ESCAPE KEY
+      ------------------------------------------------------- */
+
+      document.addEventListener(
+        "keydown",
+        function (event) {
+
+
+          if (
+            event.key !==
+            "Escape"
+          ) {
+
+            return;
+
+          }
+
+
+          if (
+            !accountMenu.hidden
+          ) {
+
+
+            closeAccountMenu();
+
+
+            accountButton.focus();
+
+
+          }
+
+
+        }
+      );
+
+
+    }
+
+
+
+    /* =========================================================
+       INITIALS
+    ========================================================= */
+
+    function getInitials(value) {
+
+
+      const text =
+        String(
+          value ||
+          ""
+        )
+          .trim();
+
+
+      if (!text) {
+
+        return "--";
+
+      }
+
+
+      const parts =
+        text
+          .split(/\s+/)
+          .filter(Boolean);
+
+
+      if (!parts.length) {
+
+        return "--";
+
+      }
+
+
+      /*
+        Single word:
+
+        DELUMENTA
+        becomes
+        DE
+      */
+
+      if (
+        parts.length === 1
+      ) {
+
+        return parts[0]
+          .slice(
+            0,
+            2
+          )
+          .toUpperCase();
+
+      }
+
+
+      /*
+        Multiple words:
+
+        DEREK LUMENTA
+        becomes
+        DL
+      */
+
+      return (
+        parts[0][0]
+        +
+        parts[
+          parts.length - 1
+        ][0]
+      )
+        .toUpperCase();
+
+    }
+
+
+
+    /* =========================================================
+       ADMIN LINK DEFAULT
+    ========================================================= */
+
+    if (adminLink) {
+
+      adminLink.hidden =
+        true;
+
+    }
+
+
+
+    /* =========================================================
+       CHECK AUTH.JS
+    ========================================================= */
+
+    if (
+      typeof window.getSupabase !==
+      "function"
+    ) {
+
+
+      console.error(
+        "JMBN Header: getSupabase() was not found. " +
+        "Make sure js/auth.js loads before js/header.js."
+      );
+
+
+      if (nameEl) {
+
+        nameEl.textContent =
+          "PERSONNEL";
+
+      }
+
+
+      if (rankEl) {
+
+        rankEl.textContent =
+          "OFFLINE";
+
+      }
+
+
+      if (avatarEl) {
+
+        avatarEl.textContent =
+          "--";
+
+      }
+
+
+      return;
+
+    }
+
+
+
+    /* =========================================================
+       GET SUPABASE CLIENT
+    ========================================================= */
+
+    let sb;
+
+
+    try {
+
+
+      sb =
+        window.getSupabase();
+
+
+      if (!sb) {
+
+        throw new Error(
+          "getSupabase() returned no client."
+        );
+
+      }
+
+
+    }
+    catch (error) {
+
+
+      console.error(
+        "JMBN Header: Unable to initialize Supabase.",
+        error
+      );
+
+
+      if (nameEl) {
+
+        nameEl.textContent =
+          "PERSONNEL";
+
+      }
+
+
+      if (rankEl) {
+
+        rankEl.textContent =
+          "OFFLINE";
+
+      }
+
+
+      return;
+
+    }
+
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    /*
+      We can attach logout now that we have
+      the Supabase client.
+    */
+
+    if (logoutButton) {
+
+
+      logoutButton.addEventListener(
+        "click",
+        async function (event) {
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          try {
+
+
+            logoutButton.disabled =
+              true;
+
+
+            logoutButton.textContent =
+              "Signing Out...";
+
+
+            const {
+              error
+            } =
+              await sb.auth.signOut();
+
+
+            if (error) {
+
+              throw error;
+
+            }
+
+
+            window.location.href =
+              "login.html";
+
+
+          }
+          catch (error) {
+
+
+            console.error(
+              "JMBN Header logout failed:",
+              error
+            );
+
+
+            logoutButton.disabled =
+              false;
+
+
+            logoutButton.textContent =
+              "Log Out";
+
+
+          }
+
+
+        }
+      );
+
+
+    }
+
+
+
+    /* =========================================================
+       GET SESSION
+    ========================================================= */
+
+    try {
+
+
+      const {
+        data:sessionData,
+        error:sessionError
+      } =
+        await sb.auth.getSession();
+
+
+
+      if (sessionError) {
+
+        throw sessionError;
+
+      }
+
+
+
+      const session =
+        sessionData?.session;
+
+
       const user =
-        session.user;
-
-      const uid =
-        user.id;
+        session?.user;
 
 
 
-      /* ===================================================
-         PROFILE
-      ==================================================== */
+      /* ---------------------------------------------------------
+         NOT SIGNED IN
+      --------------------------------------------------------- */
+
+      if (!user) {
+
+
+        if (nameEl) {
+
+          nameEl.textContent =
+            "SIGN IN";
+
+        }
+
+
+        if (rankEl) {
+
+          rankEl.textContent =
+            "PERSONNEL";
+
+        }
+
+
+        if (avatarEl) {
+
+          avatarEl.textContent =
+            "--";
+
+        }
+
+
+        if (adminLink) {
+
+          adminLink.hidden =
+            true;
+
+        }
+
+
+        return;
+
+      }
+
+
+
+      /* =========================================================
+         LOAD PROFILE
+      ========================================================= */
 
       const {
         data:profile,
         error:profileError
       } =
         await sb
-          .from("profiles")
+          .from(
+            "profiles"
+          )
           .select(`
             display_name,
             handle,
@@ -365,79 +770,110 @@
           `)
           .eq(
             "user_id",
-            uid
+            user.id
           )
           .maybeSingle();
 
 
+
       if (profileError) {
 
+
         console.warn(
-          "Header profile query:",
+          "JMBN Header profile query:",
           profileError.message
         );
+
 
       }
 
 
 
-      /* ===================================================
+      /* =========================================================
          DISPLAY NAME
-      ==================================================== */
+      ========================================================= */
 
       const emailName =
         user.email
-          ? user.email.split("@")[0]
+
+          ? user.email
+              .split("@")[0]
+
           : "";
+
 
 
       const displayName =
         profile?.display_name
+
         ||
+
         profile?.handle
+
         ||
+
         emailName
+
         ||
+
         "Member";
 
 
+
       if (nameEl) {
+
         nameEl.textContent =
           displayName;
+
       }
 
 
+
       if (avatarEl) {
+
         avatarEl.textContent =
           getInitials(
             displayName
           );
+
       }
 
 
 
-      /* ===================================================
-         RANK
-      ==================================================== */
+      /* =========================================================
+         RANK FALLBACK
+      ========================================================= */
 
       let rankName =
         profile?.rank_code
+
         ||
+
         profile?.role
+
         ||
+
         "Member";
 
+
+
+      /* =========================================================
+         LOAD FULL RANK NAME
+      ========================================================= */
 
       if (
         profile?.current_rank_id
       ) {
+
 
         const {
           data:rank,
           error:rankError
         } =
           await sb
-            .from("ranks")
+            .from(
+              "ranks"
+            )
             .select(
               "name, code"
             )
@@ -448,129 +884,142 @@
             .maybeSingle();
 
 
+
         if (rankError) {
 
+
           console.warn(
-            "Header rank query:",
+            "JMBN Header rank query:",
             rankError.message
           );
 
-        } else if (rank) {
+
+        }
+        else if (rank) {
+
+
+          /*
+            Prefer the full rank name.
+
+            Example:
+            Lieutenant, Junior Grade (O-2)
+          */
 
           rankName =
             rank.name
+
             ||
+
             rank.code
+
             ||
+
             rankName;
+
 
         }
 
+
       }
+
 
 
       if (rankEl) {
+
         rankEl.textContent =
           rankName;
+
       }
 
 
 
-      /* ===================================================
-         ADMIN CONSOLE
-      ==================================================== */
+      /* =========================================================
+         ADMIN CONSOLE VISIBILITY
+      ========================================================= */
 
-      const role =
+      const userRole =
         String(
-          profile?.role || ""
-        ).toLowerCase();
+          profile?.role ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
 
 
       if (adminLink) {
 
+
         if (
-          role === "admin"
+          userRole === "admin"
         ) {
+
 
           adminLink.hidden =
             false;
 
-          adminLink.style.display =
-            "";
 
-        } else {
+        }
+        else {
+
 
           adminLink.hidden =
             true;
 
-          adminLink.style.display =
-            "none";
 
         }
 
-      }
-
-
-
-      /* ===================================================
-         LOGOUT
-      ==================================================== */
-
-      if (logoutButton) {
-
-        logoutButton.addEventListener(
-          "click",
-          async function () {
-
-            try {
-
-              logoutButton.disabled =
-                true;
-
-              await sb.auth.signOut();
-
-              window.location.href =
-                "login.html";
-
-            } catch (error) {
-
-              console.error(
-                "Logout failed:",
-                error
-              );
-
-              logoutButton.disabled =
-                false;
-
-            }
-
-          }
-        );
 
       }
 
 
-    } catch (error) {
+
+    }
+    catch (error) {
+
 
       console.error(
-        "JMBN header initialization failed:",
+        "JMBN Header initialization failed:",
         error
       );
 
 
       if (nameEl) {
+
         nameEl.textContent =
           "PERSONNEL";
+
       }
 
 
       if (rankEl) {
+
         rankEl.textContent =
           "OFFLINE";
+
       }
+
+
+      if (avatarEl) {
+
+        avatarEl.textContent =
+          "--";
+
+      }
+
+
+      if (adminLink) {
+
+        adminLink.hidden =
+          true;
+
+      }
+
 
     }
 
+
   };
+
 
 })();
