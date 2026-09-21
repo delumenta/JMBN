@@ -1,5 +1,13 @@
-<!-- header.html — JMBN live shared header -->
+<!-- =========================================================
+     JMBN SHARED HEADER
+     header.html
+
+     Behaviour is handled by:
+     js/header.js
+========================================================= -->
+
 <style>
+
 :root{
   --jmbn-gold:#f0d270;
   --jmbn-gold2:#b8953e;
@@ -7,361 +15,977 @@
   --jmbn-muted:#827b65;
 }
 
-*{box-sizing:border-box}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   HEADER FRAME
+========================================================= */
 
 .jmbn-header{
   position:relative;
+
+  /* Match the main JMBN page width */
   width:90%;
   max-width:1700px;
+
+  /* Center + space before page content */
   margin:0 auto 18px;
+
   min-height:138px;
+
   overflow:visible;
-  border:1px solid rgba(214,180,76,.62);
+
+  border:
+    1px solid rgba(214,180,76,.62);
+
   border-radius:12px;
+
   background:
-    linear-gradient(100deg,rgba(214,180,76,.045),transparent 34%),
-    linear-gradient(180deg,rgba(9,10,8,.96),rgba(5,5,5,.97));
+    linear-gradient(
+      100deg,
+      rgba(214,180,76,.045),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(9,10,8,.96),
+      rgba(5,5,5,.97)
+    );
+
   box-shadow:
     0 0 0 1px rgba(214,180,76,.025),
     0 8px 35px rgba(0,0,0,.70),
     inset 0 0 24px rgba(214,180,76,.018);
+
   color:var(--jmbn-text);
-  font-family:Arial,Helvetica,sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
-.jmbn-header a{font-family:inherit}
+
+.jmbn-header a{
+  font-family:inherit;
+}
+
+
+/* =========================================================
+   FRAME ACCENT POINTS
+========================================================= */
 
 .jmbn-frame-node{
   position:absolute;
+
   z-index:5;
+
   width:3px;
   height:3px;
+
   border-radius:50%;
-  background:rgba(240,210,112,.75);
-  box-shadow:0 0 5px rgba(240,210,112,.35);
+
+  background:
+    rgba(240,210,112,.75);
+
+  box-shadow:
+    0 0 5px rgba(240,210,112,.35);
+
   pointer-events:none;
 }
-.jmbn-frame-node.n1{left:14px;top:-2px}
-.jmbn-frame-node.n2{right:22%;top:-2px}
-.jmbn-frame-node.n3{left:10%;bottom:-2px}
-.jmbn-frame-node.n4{right:18px;bottom:-2px}
+
+
+.jmbn-frame-node.n1{
+  left:14px;
+  top:-2px;
+}
+
+.jmbn-frame-node.n2{
+  right:22%;
+  top:-2px;
+}
+
+.jmbn-frame-node.n3{
+  left:10%;
+  bottom:-2px;
+}
+
+.jmbn-frame-node.n4{
+  right:18px;
+  bottom:-2px;
+}
+
+
+/* =========================================================
+   GOLD HAZE
+========================================================= */
 
 .jmbn-haze{
   position:absolute;
+
   right:0;
   top:0;
+
   width:48%;
   height:100%;
+
   pointer-events:none;
-  background:radial-gradient(ellipse at 35% 35%,rgba(132,98,27,.15),transparent 67%);
+
+  background:
+    radial-gradient(
+      ellipse at 35% 35%,
+      rgba(132,98,27,.15),
+      transparent 67%
+    );
+
   filter:blur(9px);
 }
 
+
+/* =========================================================
+   TOP SECTION
+========================================================= */
+
 .jmbn-top{
   height:77px;
+
   position:relative;
   z-index:2;
+
   display:grid;
-  grid-template-columns:minmax(430px,1fr) 1px 360px;
+
+  grid-template-columns:
+    minmax(430px,1fr)
+    1px
+    360px;
+
   align-items:center;
-  padding:0 28px;
-  border-bottom:1px solid rgba(214,180,76,.17);
+
+  padding:
+    0 28px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.17);
 }
+
+
+/* =========================================================
+   IDENTITY
+========================================================= */
 
 .jmbn-identity{
   display:flex;
+
   align-items:center;
+
   gap:15px;
+
   min-width:0;
 }
+
 
 .jmbn-logo{
   width:48px;
   height:48px;
-  flex:0 0 48px;
+
+  flex:
+    0 0 48px;
+
   object-fit:contain;
-  filter:drop-shadow(0 0 7px rgba(240,210,112,.22));
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(240,210,112,.22)
+    );
 }
+
 
 .jmbn-eyebrow{
   color:var(--jmbn-gold2);
+
   text-transform:uppercase;
+
   letter-spacing:.22em;
+
   font-size:9px;
+
   font-weight:700;
 }
 
+
 .jmbn-title{
-  margin:3px 0 0;
-  color:var(--jmbn-gold);
+  margin:
+    3px 0 0;
+
+  color:
+    var(--jmbn-gold);
+
   font-size:24px;
+
   letter-spacing:.2em;
+
   line-height:1;
+
   white-space:nowrap;
 }
 
+
 .jmbn-subtitle{
   margin-top:5px;
+
   color:#716c5d;
+
   font-size:9px;
+
   text-transform:uppercase;
+
   letter-spacing:.18em;
 }
 
+
+/* =========================================================
+   DIAGONAL DIVIDER
+========================================================= */
+
 .jmbn-diagonal{
   height:49px;
+
   width:1px;
-  background:linear-gradient(transparent,var(--jmbn-gold),transparent);
-  transform:skewX(-25deg);
+
+  background:
+    linear-gradient(
+      transparent,
+      var(--jmbn-gold),
+      transparent
+    );
+
+  transform:
+    skewX(-25deg);
+
   opacity:.8;
 }
 
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
 .jmbn-account-wrap{
   position:relative;
+
   padding-left:28px;
 }
+
 
 .jmbn-account{
   width:100%;
   height:51px;
+
   border:0;
   outline:0;
+
   appearance:none;
-  background:transparent;
+
+  background:
+    transparent;
+
   display:grid;
-  grid-template-columns:38px 1fr 20px;
+
+  grid-template-columns:
+    38px
+    1fr
+    20px;
+
   align-items:center;
+
   gap:10px;
-  padding:6px 10px;
+
+  padding:
+    6px 10px;
+
   cursor:pointer;
+
   text-align:left;
+
   color:inherit;
-  transition:background .18s ease;
+
+  transition:
+    background .18s ease;
 }
+
+
 .jmbn-account:hover,
 .jmbn-account:focus-visible,
 .jmbn-account[aria-expanded="true"]{
-  background:rgba(214,180,76,.035);
+
+  background:
+    rgba(214,180,76,.035);
+
 }
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
 
 .jmbn-avatar{
   width:34px;
   height:34px;
-  border:1px solid var(--jmbn-gold2);
+
+  border:
+    1px solid var(--jmbn-gold2);
+
   border-radius:50%;
+
   display:grid;
+
   place-items:center;
-  color:var(--jmbn-gold);
-  background:#090909;
+
+  color:
+    var(--jmbn-gold);
+
+  background:
+    #090909;
+
   font-size:12px;
+
   letter-spacing:.04em;
-  box-shadow:0 0 10px rgba(214,180,76,.12);
+
+  box-shadow:
+    0 0 10px rgba(214,180,76,.12);
 }
+
+
+/* =========================================================
+   ACCOUNT TEXT
+========================================================= */
 
 .jmbn-name{
   overflow:hidden;
+
   text-overflow:ellipsis;
+
   white-space:nowrap;
+
   font-size:11px;
-  color:var(--jmbn-gold);
+
+  color:
+    var(--jmbn-gold);
+
   font-weight:700;
+
   letter-spacing:.13em;
+
   text-transform:uppercase;
 }
+
 
 .jmbn-rank{
   margin-top:3px;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
   white-space:nowrap;
+
   font-size:8px;
+
   color:#8c805a;
+
   letter-spacing:.16em;
+
   text-transform:uppercase;
 }
 
+
+/* =========================================================
+   DROPDOWN ARROW
+========================================================= */
+
 .jmbn-chev{
-  color:var(--jmbn-gold);
+  color:
+    var(--jmbn-gold);
+
   font-size:14px;
+
   text-align:center;
-  transition:transform .18s ease;
+
+  transition:
+    transform .18s ease;
 }
-.jmbn-account[aria-expanded="true"] .jmbn-chev{transform:rotate(180deg)}
+
+
+.jmbn-account[aria-expanded="true"]
+.jmbn-chev{
+
+  transform:
+    rotate(180deg);
+
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
 
 .jmbn-dropdown{
   position:absolute;
+
   right:0;
+
   top:57px;
+
   width:205px;
+
   z-index:1000;
-  border:1px solid rgba(214,180,76,.5);
+
+  border:
+    1px solid rgba(214,180,76,.5);
+
   border-radius:7px;
-  background:rgba(8,9,7,.985);
-  box-shadow:0 16px 35px rgba(0,0,0,.8),0 0 20px rgba(214,180,76,.08);
+
+  background:
+    rgba(8,9,7,.985);
+
+  box-shadow:
+    0 16px 35px rgba(0,0,0,.8),
+    0 0 20px rgba(214,180,76,.08);
+
   padding:6px;
 }
-.jmbn-dropdown[hidden]{display:none!important}
+
+
+.jmbn-dropdown[hidden]{
+  display:none !important;
+}
+
+
+/* =========================================================
+   DROPDOWN HEADER
+========================================================= */
 
 .jmbn-drop-head{
-  padding:8px 9px 7px;
+  padding:
+    8px 9px 7px;
+
   color:#6e6858;
+
   font-size:8px;
+
   letter-spacing:.18em;
+
   text-transform:uppercase;
-  border-bottom:1px solid rgba(214,180,76,.15);
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
 }
+
+
+/* =========================================================
+   DROPDOWN ITEMS
+========================================================= */
 
 .jmbn-dropitem{
   display:block;
+
   width:100%;
-  padding:10px 9px;
+
+  padding:
+    10px 9px;
+
   color:#aaa28a;
+
   text-decoration:none;
+
   text-transform:uppercase;
+
   letter-spacing:.12em;
+
   font-size:9px;
+
   border:0;
-  border-bottom:1px solid rgba(255,255,255,.035);
-  background:transparent;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.035);
+
+  background:
+    transparent;
+
   text-align:left;
+
   cursor:pointer;
 }
+
+
 .jmbn-dropitem:hover,
 .jmbn-dropitem:focus-visible{
-  color:var(--jmbn-gold);
-  background:rgba(214,180,76,.06);
+
+  color:
+    var(--jmbn-gold);
+
+  background:
+    rgba(214,180,76,.06);
+
   outline:0;
 }
+
+
 .jmbn-dropitem.logout{
   border-bottom:0;
+
   color:#9a755b;
 }
 
+
+/* =========================================================
+   NAVIGATION ROW
+========================================================= */
+
 .jmbn-navrow{
   height:60px;
+
   position:relative;
+
   z-index:2;
+
   display:flex;
+
   align-items:center;
-  padding:0 27px;
+
+  padding:
+    0 27px;
+
   gap:4px;
 }
 
+
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
 .jmbn-navlink{
   position:relative;
+
   height:59px;
-  padding:0 18px;
+
+  padding:
+    0 18px;
+
   display:flex;
+
   align-items:center;
+
   color:#9d9680;
+
   text-decoration:none;
+
   text-transform:uppercase;
+
   letter-spacing:.13em;
+
   font-size:10px;
+
   font-weight:700;
-  transition:color .18s ease;
-}
-.jmbn-navlink:hover{color:#cdbb7b}
-.jmbn-navlink.active{color:var(--jmbn-gold)}
-.jmbn-navlink.active::after{
-  content:"";
-  position:absolute;
-  left:16px;
-  right:16px;
-  bottom:0;
-  height:2px;
-  background:var(--jmbn-gold);
-  box-shadow:0 -2px 10px rgba(240,210,112,.5);
-}
-.jmbn-navlink.active::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:0;
-  width:20px;
-  height:7px;
-  transform:translate(-50%,50%);
-  background:var(--jmbn-gold);
-  clip-path:polygon(50% 0,100% 100%,0 100%);
-  opacity:.75;
+
+  transition:
+    color .18s ease,
+    text-shadow .18s ease;
 }
 
-.jmbn-nav-spacer{flex:1}
+
+.jmbn-navlink:hover{
+
+  color:#cdbb7b;
+
+}
+
+
+/* =========================================================
+   ACTIVE NAVIGATION TAB
+========================================================= */
+
+.jmbn-navlink.active{
+
+  color:
+    var(--jmbn-gold);
+
+  text-shadow:
+    0 0 10px rgba(240,210,112,.20);
+
+}
+
+
+/* Active underline */
+
+.jmbn-navlink.active::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:16px;
+  right:16px;
+
+  bottom:0;
+
+  height:2px;
+
+  background:
+    var(--jmbn-gold);
+
+  box-shadow:
+    0 -2px 10px rgba(240,210,112,.55),
+    0 0 14px rgba(240,210,112,.20);
+
+}
+
+
+/* Active center notch */
+
+.jmbn-navlink.active::before{
+
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+
+  bottom:0;
+
+  width:20px;
+  height:7px;
+
+  transform:
+    translate(-50%,50%);
+
+  background:
+    var(--jmbn-gold);
+
+  clip-path:
+    polygon(
+      50% 0,
+      100% 100%,
+      0 100%
+    );
+
+  opacity:.82;
+
+  filter:
+    drop-shadow(
+      0 0 4px
+      rgba(240,210,112,.35)
+    );
+}
+
+
+/* =========================================================
+   NAVIGATION SPACER
+========================================================= */
+
+.jmbn-nav-spacer{
+  flex:1;
+}
+
+
+/* =========================================================
+   NETWORK NODE
+========================================================= */
 
 .jmbn-node{
   font-size:8px;
+
   letter-spacing:.15em;
+
   color:#565246;
+
   text-transform:uppercase;
+
   white-space:nowrap;
 }
-.jmbn-node b{color:#9b8b58;font-weight:400}
+
+
+.jmbn-node b{
+
+  color:#9b8b58;
+
+  font-weight:400;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media(max-width:900px){
+
+
   .jmbn-header{
-    width:calc(100% - 24px);
+
+    width:
+      calc(100% - 24px);
+
     max-width:none;
+
+    margin-bottom:14px;
+
   }
+
 
   .jmbn-top{
+
     height:auto;
-    grid-template-columns:1fr;
-    padding:14px 18px;
+
+    grid-template-columns:
+      1fr;
+
+    padding:
+      14px 18px;
+
   }
-  .jmbn-diagonal{display:none}
+
+
+  .jmbn-diagonal{
+
+    display:none;
+
+  }
+
+
   .jmbn-account-wrap{
-    padding:12px 0 0;
+
+    padding:
+      12px 0 0;
+
     margin-top:12px;
-    border-top:1px solid rgba(214,180,76,.18);
+
+    border-top:
+      1px solid rgba(214,180,76,.18);
+
   }
-  .jmbn-account{padding-left:0}
+
+
+  .jmbn-account{
+
+    padding-left:0;
+
+  }
+
+
   .jmbn-dropdown{
+
     top:69px;
+
     left:0;
+
     right:auto;
-    width:min(260px,calc(100vw - 56px));
+
+    width:
+      min(
+        260px,
+        calc(100vw - 56px)
+      );
+
   }
+
+
   .jmbn-navrow{
+
     overflow-x:auto;
+
     scrollbar-width:none;
-    padding:0 9px;
+
+    padding:
+      0 9px;
+
   }
-  .jmbn-navrow::-webkit-scrollbar{display:none}
-  .jmbn-navlink{flex:none;padding:0 12px}
-  .jmbn-node{display:none}
+
+
+  .jmbn-navrow::-webkit-scrollbar{
+
+    display:none;
+
+  }
+
+
+  .jmbn-navlink{
+
+    flex:none;
+
+    padding:
+      0 12px;
+
+  }
+
+
+  .jmbn-node{
+
+    display:none;
+
+  }
+
 }
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:560px){
-  .jmbn-title{font-size:19px;letter-spacing:.15em}
-  .jmbn-subtitle{font-size:8px;letter-spacing:.12em}
-  .jmbn-logo{width:42px;height:42px;flex-basis:42px}
+
+
+  .jmbn-header{
+
+    width:
+      calc(100% - 14px);
+
+    margin-bottom:10px;
+
+  }
+
+
+  .jmbn-title{
+
+    font-size:19px;
+
+    letter-spacing:.15em;
+
+  }
+
+
+  .jmbn-subtitle{
+
+    font-size:8px;
+
+    letter-spacing:.12em;
+
+  }
+
+
+  .jmbn-logo{
+
+    width:42px;
+    height:42px;
+
+    flex-basis:42px;
+
+  }
+
 }
+
 </style>
 
-<header class="jmbn-header" id="jmbnHeader">
-  <div class="jmbn-haze"></div>
-  <span class="jmbn-frame-node n1"></span>
-  <span class="jmbn-frame-node n2"></span>
-  <span class="jmbn-frame-node n3"></span>
-  <span class="jmbn-frame-node n4"></span>
+
+<!-- =========================================================
+     JMBN HEADER
+========================================================= -->
+
+<header
+  class="jmbn-header"
+  id="jmbnHeader"
+>
+
+
+  <!-- Background haze -->
+
+  <div
+    class="jmbn-haze"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- Frame accent nodes -->
+
+  <span
+    class="jmbn-frame-node n1"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n2"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n3"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n4"
+    aria-hidden="true"
+  ></span>
+
+
+
+  <!-- =====================================================
+       TOP ROW
+  ====================================================== -->
 
   <div class="jmbn-top">
+
+
+    <!-- JMBN identity -->
+
     <div class="jmbn-identity">
+
+
       <img
         class="jmbn-logo"
         src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
         alt="JMBN"
       >
+
+
       <div>
-        <div class="jmbn-eyebrow">JMBN // Organization Network</div>
-        <div class="jmbn-title">MANIFEST SYSTEM</div>
-        <div class="jmbn-subtitle">Personnel · Operations · Advancement · Academy</div>
+
+        <div class="jmbn-eyebrow">
+          JMBN // Organization Network
+        </div>
+
+
+        <div class="jmbn-title">
+          MANIFEST SYSTEM
+        </div>
+
+
+        <div class="jmbn-subtitle">
+          Personnel · Operations · Advancement · Academy
+        </div>
+
       </div>
+
+
     </div>
 
-    <div class="jmbn-diagonal"></div>
+
+
+    <!-- Diagonal divider -->
+
+    <div
+      class="jmbn-diagonal"
+      aria-hidden="true"
+    ></div>
+
+
+
+    <!-- ===================================================
+         MEMBER ACCOUNT
+    ==================================================== -->
 
     <div class="jmbn-account-wrap">
+
+
       <button
         class="jmbn-account"
         id="jmbnAccountButton"
@@ -370,160 +994,179 @@
         aria-haspopup="menu"
         aria-controls="jmbnAccountMenu"
       >
-        <div class="jmbn-avatar" id="jmbnAvatar">--</div>
-        <div>
-          <div class="jmbn-name" id="jmbnName">LOADING</div>
-          <div class="jmbn-rank" id="jmbnRank">Personnel</div>
+
+
+        <div
+          class="jmbn-avatar"
+          id="jmbnAvatar"
+        >
+          --
         </div>
-        <div class="jmbn-chev">⌄</div>
+
+
+        <div>
+
+
+          <div
+            class="jmbn-name"
+            id="jmbnName"
+          >
+            LOADING
+          </div>
+
+
+          <div
+            class="jmbn-rank"
+            id="jmbnRank"
+          >
+            Personnel
+          </div>
+
+
+        </div>
+
+
+        <div
+          class="jmbn-chev"
+          aria-hidden="true"
+        >
+          ⌄
+        </div>
+
+
       </button>
 
-      <div class="jmbn-dropdown" id="jmbnAccountMenu" role="menu" hidden>
-        <div class="jmbn-drop-head">Personnel Access</div>
-        <a class="jmbn-dropitem" href="member.html" role="menuitem">View Profile</a>
-        <a class="jmbn-dropitem" id="jmbnAdminLink" href="admins.html" role="menuitem" hidden>Admin Console</a>
-        <button class="jmbn-dropitem logout" id="jmbnLogout" type="button" role="menuitem">Log Out</button>
+
+
+      <!-- =================================================
+           ACCOUNT DROPDOWN
+      ================================================== -->
+
+      <div
+        class="jmbn-dropdown"
+        id="jmbnAccountMenu"
+        role="menu"
+        hidden
+      >
+
+
+        <div class="jmbn-drop-head">
+          Personnel Access
+        </div>
+
+
+        <a
+          class="jmbn-dropitem"
+          href="member.html"
+          role="menuitem"
+        >
+          View Profile
+        </a>
+
+
+        <a
+          class="jmbn-dropitem"
+          id="jmbnAdminLink"
+          href="admins.html"
+          role="menuitem"
+          hidden
+        >
+          Admin Console
+        </a>
+
+
+        <button
+          class="jmbn-dropitem logout"
+          id="jmbnLogout"
+          type="button"
+          role="menuitem"
+        >
+          Log Out
+        </button>
+
+
       </div>
+
+
     </div>
+
+
   </div>
 
-  <nav class="jmbn-navrow" aria-label="JMBN primary navigation">
-    <a class="jmbn-navlink" data-page="index.html" href="index.html">Manifest</a>
-    <a class="jmbn-navlink" data-page="mission-log.html" href="mission-log.html">Operations</a>
-    <a class="jmbn-navlink" data-page="member.html" href="member.html">Members</a>
-    <a class="jmbn-navlink" data-page="rank-progression.html" href="rank-progression.html">Progression</a>
-    <a class="jmbn-navlink" data-page="academy.html" href="academy.html">Academy</a>
+
+
+  <!-- =====================================================
+       PRIMARY NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="jmbn-navrow"
+    aria-label="JMBN primary navigation"
+  >
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="index.html"
+      href="index.html"
+    >
+      Manifest
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="mission-log.html"
+      href="mission-log.html"
+    >
+      Operations
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="member.html"
+      href="member.html"
+    >
+      Members
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="rank-progression.html"
+      href="rank-progression.html"
+    >
+      Progression
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="academy.html"
+      href="academy.html"
+    >
+      Academy
+    </a>
+
+
 
     <div class="jmbn-nav-spacer"></div>
-    <div class="jmbn-node">Network Node&nbsp; <b>JMBN-01</b></div>
+
+
+
+    <div class="jmbn-node">
+
+      Network Node&nbsp;
+
+      <b>
+        JMBN-01
+      </b>
+
+    </div>
+
+
   </nav>
+
+
 </header>
-
-<script>
-(function(){
-  const root = document.getElementById("jmbnHeader");
-  if(!root || root.dataset.ready === "1") return;
-  root.dataset.ready = "1";
-
-  const accountBtn = document.getElementById("jmbnAccountButton");
-  const menu = document.getElementById("jmbnAccountMenu");
-  const logoutBtn = document.getElementById("jmbnLogout");
-  const adminLink = document.getElementById("jmbnAdminLink");
-
-  function closeMenu(){
-    menu.hidden = true;
-    accountBtn.setAttribute("aria-expanded","false");
-  }
-
-  function toggleMenu(){
-    const opening = menu.hidden;
-    menu.hidden = !opening;
-    accountBtn.setAttribute("aria-expanded", opening ? "true" : "false");
-  }
-
-  accountBtn.addEventListener("click", function(e){
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  menu.addEventListener("click", function(e){ e.stopPropagation(); });
-  document.addEventListener("click", closeMenu);
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-      closeMenu();
-      accountBtn.focus();
-    }
-  });
-
-  // Automatically highlights the current page.
-  const current = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  root.querySelectorAll(".jmbn-navlink").forEach(function(link){
-    const page = String(link.dataset.page || "").toLowerCase();
-    link.classList.toggle("active", page === current);
-    if(page === current) link.setAttribute("aria-current","page");
-    else link.removeAttribute("aria-current");
-  });
-
-  function initials(value){
-    const clean = String(value || "").trim();
-    if(!clean) return "--";
-    const parts = clean.split(/\s+/).filter(Boolean);
-    if(parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
-    return clean.slice(0,2).toUpperCase();
-  }
-
-  async function loadSignedInMember(){
-    try{
-      if(typeof getSupabase !== "function"){
-        console.warn("JMBN header: getSupabase() is unavailable. Load js/auth.js before header initialization.");
-        return;
-      }
-
-      const sb = getSupabase();
-      if(!sb) return;
-
-      const { data:{ session }, error:sessionError } = await sb.auth.getSession();
-      if(sessionError || !session?.user) return;
-
-      const uid = session.user.id;
-
-      const { data:profile, error } = await sb
-        .from("profiles")
-        .select(`
-          display_name,
-          handle,
-          role,
-          rank_code,
-          current_rank_id,
-          ranks:current_rank_id (
-            name,
-            code
-          )
-        `)
-        .eq("user_id",uid)
-        .maybeSingle();
-
-      if(error){
-        console.warn("JMBN header profile:", error.message);
-        return;
-      }
-
-      const display = profile?.display_name || profile?.handle || session.user.email?.split("@")[0] || "Member";
-      const rankName =
-        profile?.ranks?.name ||
-        profile?.rank_code ||
-        profile?.role ||
-        "Member";
-
-      document.getElementById("jmbnName").textContent = display;
-      document.getElementById("jmbnRank").textContent = rankName;
-      document.getElementById("jmbnAvatar").textContent = initials(display);
-
-      // Existing profiles.role supports Admin / Member / Recruit / Guest.
-      if(String(profile?.role || "").toLowerCase() === "admin"){
-        adminLink.hidden = false;
-      }
-    }catch(err){
-      console.warn("JMBN header initialization:", err);
-    }
-  }
-
-  logoutBtn.addEventListener("click", async function(){
-    logoutBtn.disabled = true;
-    logoutBtn.textContent = "Signing Out…";
-
-    try{
-      if(typeof getSupabase === "function"){
-        const sb = getSupabase();
-        if(sb) await sb.auth.signOut();
-      }
-    }catch(err){
-      console.warn("JMBN logout:", err);
-    }finally{
-      location.href = "login.html";
-    }
-  });
-
-  loadSignedInMember();
-})();
-</script>
