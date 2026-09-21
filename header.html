@@ -11,6 +11,9 @@
 
 .jmbn-header{
   position:relative;
+  width:90%;
+  max-width:1700px;
+  margin:0 auto;
   min-height:138px;
   overflow:visible;
   border:1px solid rgba(214,180,76,.62);
@@ -295,6 +298,11 @@
 .jmbn-node b{color:#9b8b58;font-weight:400}
 
 @media(max-width:900px){
+  .jmbn-header{
+    width:calc(100% - 24px);
+    max-width:none;
+  }
+
   .jmbn-top{
     height:auto;
     grid-template-columns:1fr;
