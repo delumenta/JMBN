@@ -591,6 +591,122 @@ button{cursor:pointer}
 }
 
 /* =========================================================
+   PROGRAMME MODAL
+========================================================= */
+body.modal-open{overflow:hidden}
+.programme-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(5px);
+}
+.programme-modal[hidden]{display:none!important}
+.modal-frame{
+  --cut:16px;
+  width:min(920px,100%);
+  max-height:min(860px,92vh);
+  padding:1px;
+  background:linear-gradient(135deg,var(--gold-bright),#735b1c 36%,#312912 72%,var(--gold));
+  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
+  filter:drop-shadow(0 24px 60px rgba(0,0,0,.7));
+}
+.modal-shell{
+  position:relative;
+  max-height:min(858px,calc(92vh - 2px));
+  overflow:auto;
+  background:linear-gradient(180deg,#0b0e0a,#050705);
+  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
+}
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:5;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:0 14px 0 18px;
+  border-bottom:1px solid var(--line-soft);
+  background:rgba(8,10,8,.97);
+}
+.modal-head-copy{min-width:0}
+.modal-eyebrow{color:#77705c;font-size:7px;letter-spacing:.18em}
+.modal-head-title{margin-top:3px;color:var(--gold-bright);font-size:11px;font-weight:700;letter-spacing:.15em}
+.modal-close{
+  width:34px;height:30px;
+  flex:0 0 auto;
+  border:1px solid #51431c;
+  background:#080a07;
+  color:var(--gold-bright);
+  font-size:15px;
+}
+.modal-close:hover{border-color:var(--gold-bright);background:rgba(214,180,76,.08)}
+.modal-content{padding:24px}
+.modal-intro{display:grid;grid-template-columns:150px minmax(0,1fr);gap:22px;align-items:center}
+.modal-art{
+  min-height:145px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(214,180,76,.18);
+  background:radial-gradient(circle,rgba(214,180,76,.1),transparent 58%),#070907;
+}
+.modal-art img{width:135px;height:135px;object-fit:contain;filter:drop-shadow(0 8px 12px #000)}
+.modal-code{color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em}
+.modal-name{margin:7px 0 8px;color:#f0dc91;font-size:25px;line-height:1.1;letter-spacing:.07em}
+.modal-description{margin:0;color:#9d957d;font-size:10px;line-height:1.65}
+.modal-progress{margin-top:15px}
+.modal-progress-meta{display:flex;justify-content:space-between;gap:12px;color:#a99b68;font-size:8px}
+.modal-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:25px;
+  padding:10px 0 8px;
+  border-bottom:1px solid #3a3218;
+}
+.modal-section-head b{color:var(--gold-bright);font-size:9px;letter-spacing:.17em}
+.modal-section-head span{color:#746c55;font-size:7px;letter-spacing:.12em}
+.requirement-list{margin-top:5px}
+.requirement-row{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  gap:13px;
+  align-items:center;
+  padding:14px 9px;
+  border-bottom:1px solid #242113;
+}
+.requirement-number{color:#5e573f;font-size:10px;font-weight:700}
+.requirement-code{color:#81785d;font-size:7px;letter-spacing:.12em}
+.requirement-title{margin-top:3px;color:#d9c66e;font-size:11px;font-weight:700}
+.requirement-desc{margin-top:4px;color:#716c5d;font-size:8px;line-height:1.45}
+.requirement-state{white-space:nowrap;font-size:8px;font-weight:700;letter-spacing:.08em;color:#9c947c}
+.requirement-state.done{color:var(--green)}
+.modal-rule-box{
+  margin-top:20px;
+  padding:13px 14px;
+  border-left:2px solid var(--gold);
+  background:linear-gradient(90deg,rgba(214,180,76,.07),transparent);
+  color:#8d856d;
+  font-size:9px;
+  line-height:1.6;
+}
+.modal-rule-box b{color:#d9c66e}
+@media(max-width:650px){
+  .programme-modal{padding:10px}
+  .modal-content{padding:17px 14px 22px}
+  .modal-intro{grid-template-columns:1fr}
+  .modal-art{min-height:120px}
+  .requirement-row{grid-template-columns:30px minmax(0,1fr);gap:9px}
+  .requirement-state{grid-column:2;margin-top:2px}
+}
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 @media(max-width:1250px){
@@ -810,6 +926,25 @@ button{cursor:pointer}
   </section>
 
 </main>
+
+
+<!-- =====================================================
+     PROGRAMME REQUIREMENTS MODAL
+====================================================== -->
+<div class="programme-modal" id="programmeModal" hidden aria-hidden="true">
+  <div class="modal-frame" role="dialog" aria-modal="true" aria-labelledby="programmeModalTitle">
+    <div class="modal-shell">
+      <div class="modal-head">
+        <div class="modal-head-copy">
+          <div class="modal-eyebrow">JMBN // ACADEMY PROGRAMME</div>
+          <div class="modal-head-title" id="programmeModalTitle">PROGRAMME REQUIREMENTS</div>
+        </div>
+        <button class="modal-close" id="programmeModalClose" type="button" aria-label="Close programme">×</button>
+      </div>
+      <div class="modal-content" id="programmeModalContent"></div>
+    </div>
+  </div>
+</div>
 
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -1124,7 +1259,7 @@ function renderProgrammes(){
 
             <button
               class="programme-action"
-              onclick="openProgramme('${encodeURIComponent(code)}')"
+              onclick="openProgrammeModal('${encodeURIComponent(code)}')"
             >
               VIEW PROGRAMME →
             </button>
@@ -1298,16 +1433,107 @@ function renderCurrentObjective(){
 
 
 /* =========================================================
-   PROGRAMME NAVIGATION
+   PROGRAMME MODAL
 ========================================================= */
 
-function openProgramme(encodedCode){
-  const code = decodeURIComponent(encodedCode);
-
-  window.location.href =
-    "academy-programme.html?cert=" + encodeURIComponent(code);
+function trainingEventFor(code){
+  return TRAINING_EVENTS.find(event =>
+    norm(event.event_code) === norm(code)
+  );
 }
 
+function isTrainingEventCompleted(code){
+  return USER_EVENTS.some(row =>
+    norm(userEventCode(row)) === norm(code) && isEventComplete(row)
+  );
+}
+
+function openProgrammeModal(encodedCode){
+  const code = decodeURIComponent(encodedCode);
+  const cert = CERTIFICATIONS.find(item => norm(certCode(item)) === norm(code));
+  if(!cert) return;
+
+  const modal = document.getElementById("programmeModal");
+  const content = document.getElementById("programmeModalContent");
+  const title = document.getElementById("programmeModalTitle");
+  const requirements = requirementsFor(code);
+  const complete = completedRequirementsFor(code);
+  const earned = userOwnsCertification(code);
+  const percent = earned ? 100 : (requirements.length ? Math.round((complete / requirements.length) * 100) : 0);
+  const art = artworkFor(cert);
+
+  title.textContent = `${code} // ${cert.name || "CERTIFICATION"}`;
+
+  const rows = requirements.length
+    ? requirements.map((requirement,index) => {
+        const eventCode = requirementEventCode(requirement);
+        const event = trainingEventFor(eventCode);
+        const done = isTrainingEventCompleted(eventCode);
+        return `
+          <div class="requirement-row">
+            <div class="requirement-number">${String(index + 1).padStart(2,"0")}</div>
+            <div>
+              <div class="requirement-code">${esc(eventCode)}</div>
+              <div class="requirement-title">${esc(event?.title || eventCode || "Training Requirement")}</div>
+              ${event?.description ? `<div class="requirement-desc">${esc(event.description)}</div>` : ""}
+            </div>
+            <div class="requirement-state ${done ? "done" : ""}">${done ? "✓ COMPLETE" : "○ REQUIRED"}</div>
+          </div>
+        `;
+      }).join("")
+    : `<div class="training-empty"><strong>NO REQUIREMENTS ASSIGNED</strong><span>This certification does not currently have training requirements configured.</span></div>`;
+
+  content.innerHTML = `
+    <div class="modal-intro">
+      <div class="modal-art">
+        ${art
+          ? `<img src="${esc(art)}" alt="${esc(cert.name || code)}" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><div class="cert-fallback" hidden>${esc(code)}</div>`
+          : `<div class="cert-fallback">${esc(code)}</div>`
+        }
+      </div>
+
+      <div>
+        <div class="modal-code">CERTIFICATION // ${esc(code)}</div>
+        <h2 class="modal-name">${esc(cert.name || code)}</h2>
+        <p class="modal-description">${esc(cert.description || "Complete the required JMBN Academy training events below to qualify for this certification.")}</p>
+
+        <div class="modal-progress">
+          <div class="modal-progress-meta">
+            <span>${earned ? "CERTIFICATION EARNED" : `${complete} OF ${requirements.length} REQUIREMENTS COMPLETED`}</span>
+            <span>${percent}%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section-head">
+      <b>REQUIRED TRAINING</b>
+      <span>${requirements.length} ${requirements.length === 1 ? "REQUIREMENT" : "REQUIREMENTS"}</span>
+    </div>
+
+    <div class="requirement-list">${rows}</div>
+
+    <div class="modal-rule-box">
+      <b>CERTIFICATION REQUIREMENT //</b><br>
+      ${requirements.length
+        ? `Complete all ${requirements.length} required training ${requirements.length === 1 ? "event" : "events"} to qualify for ${esc(cert.name || code)}.`
+        : `Training requirements for this certification have not yet been configured.`
+      }
+    </div>
+  `;
+
+  modal.hidden = false;
+  modal.setAttribute("aria-hidden","false");
+  document.body.classList.add("modal-open");
+}
+
+function closeProgrammeModal(){
+  const modal = document.getElementById("programmeModal");
+  modal.hidden = true;
+  modal.setAttribute("aria-hidden","true");
+  document.body.classList.remove("modal-open");
+}
 
 /* =========================================================
    LOAD DATA
@@ -1424,6 +1650,19 @@ document.querySelectorAll(".filter-btn").forEach(button => {
     currentFilter = button.dataset.filter || "all";
     renderProgrammes();
   });
+});
+
+
+document.getElementById("programmeModalClose").addEventListener("click",closeProgrammeModal);
+
+document.getElementById("programmeModal").addEventListener("click",event => {
+  if(event.target.id === "programmeModal") closeProgrammeModal();
+});
+
+document.addEventListener("keydown",event => {
+  if(event.key === "Escape" && !document.getElementById("programmeModal").hidden){
+    closeProgrammeModal();
+  }
 });
 
 
