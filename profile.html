@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020303">
+<title>JMBN — Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#020303;--panel:#080a0b;--gold:#d8b84e;--gold2:#f4d878;--text:#f7f0d2;--muted:#9c8d5e}
+*{box-sizing:border-box}body{margin:0;background:#000;color:var(--text);font-family:Play,sans-serif}
+#header{position:relative;z-index:50}.page{width:90%;max-width:1700px;margin:18px auto 50px}
+.frame{padding:1px;background:linear-gradient(135deg,var(--gold2),#5c4a17);clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.inner{background:linear-gradient(180deg,#0a0c0c,#050606);min-height:520px;padding:28px;clip-path:inherit}
+.kicker{font-size:9px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}.title{font-size:27px;margin:8px 0 26px}
+.profile{display:grid;grid-template-columns:190px 1fr;gap:30px;align-items:start}
+.avatar{width:170px;height:170px;border:1px solid rgba(216,184,78,.6);background:#0d0f0f;display:grid;place-items:center;font-size:38px;color:var(--gold2);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+.avatar.has-avatar-image{background-size:cover!important;background-position:center!important;color:transparent!important}
+.name{font-size:24px;font-weight:700}.rank{margin-top:7px;color:var(--gold);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.meta{margin-top:26px;display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:10px;max-width:650px}
+.cell{border:1px solid rgba(216,184,78,.18);padding:13px;background:rgba(216,184,78,.025)}.cell span{display:block;font-size:8px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}.cell b{font-size:12px}
+.note{margin-top:22px;color:#756e58;font-size:9px;line-height:1.7;max-width:650px}
+@media(max-width:700px){.page{width:calc(100% - 22px)}.inner{padding:20px}.profile{grid-template-columns:1fr}.avatar{width:120px;height:120px}.meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="header"></div>
+<main class="page">
+  <section class="frame"><div class="inner">
+    <div class="kicker">Personnel File // My Profile</div>
+    <div class="title">JMBN PROFILE</div>
+    <div class="profile">
+      <div id="profileAvatar" class="avatar">--</div>
+      <div>
+        <div id="profileName" class="name">Loading...</div>
+        <div id="profileRank" class="rank">Personnel</div>
+        <div class="meta">
+          <div class="cell"><span>Handle</span><b id="profileHandle">—</b></div>
+          <div class="cell"><span>Discord</span><b id="discordStatus">Checking...</b></div>
+        </div>
+        <div class="note">Your Discord profile image will appear here automatically once avatar syncing is enabled on the JMBN backend. Until then, your initials are used as the fallback.</div>
+      </div>
+    </div>
+  </div></section>
+</main>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<script src="js/avatars.js"></script>
+<script src="js/header.js"></script>
+<script>
+(async()=>{
+  fetch("header.html",{cache:"no-cache"})
+    .then(r=>r.text()).then(html=>{
+      document.getElementById("header").innerHTML=html;
+      if(window.initJmbnHeader) window.initJmbnHeader();
+    });
+
+  const sb = window.getSupabase ? window.getSupabase() : null;
+  if(!sb) return;
+
+  const {data:{session}} = await sb.auth.getSession();
+  const user=session?.user;
+  if(!user){ location.href="login.html"; return; }
+
+  const {data:p}=await sb.from("profiles")
+    .select("display_name,handle,role,rank_code,current_rank_id")
+    .eq("user_id",user.id).maybeSingle();
+
+  const display=p?.display_name || p?.handle || user.email || "Member";
+  document.getElementById("profileName").textContent=display;
+  document.getElementById("profileHandle").textContent=p?.handle || "—";
+  document.getElementById("profileRank").textContent=p?.rank_code || p?.role || "Personnel";
+
+  const discord=window.JMBNAvatars
+    ? await window.JMBNAvatars.getDiscordLink(sb,user.id)
+    : null;
+
+  if(window.JMBNAvatars)
+    window.JMBNAvatars.renderAvatar(document.getElementById("profileAvatar"),discord,display);
+
+  document.getElementById("discordStatus").textContent =
+    discord?.discord_id ? "LINKED" : "NOT LINKED";
+})();
+</script>
+</body>
+</html>
