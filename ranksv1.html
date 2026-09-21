@@ -1084,6 +1084,173 @@ body::before{
   }
 }
 </style>
+
+<style id="generated-panel-overrides">
+/* =========================================================
+   GENERATED MEMBER + ADMIN PANEL ARTWORK
+   Keeps all existing Supabase/announcement/mission/Discord JS.
+========================================================= */
+
+.member {
+  min-height: 220px;
+  grid-template-columns: 36% 42% 22%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 18px 55px rgba(0,0,0,.50);
+  background-image: url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(Member%20Panel0.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoTWVtYmVyIFBhbmVsMC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5OTU3NjA2LCJleHAiOjMzMzI1OTU3NjA2fQ.PJs3NSMPq_NI_eu3uEovBEi-UXZJWj21M90CTqU-Pqo");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.member::before { display:none; }
+
+.member-ident {
+  padding: 30px 34px 28px 38px;
+}
+.member .name {
+  color:#f4d36b;
+  font-size:clamp(27px,3vw,37px);
+  text-shadow:0 1px 8px rgba(0,0,0,.85);
+}
+.rankline {
+  margin-top:7px;
+  color:#f2eee0;
+}
+.badge {
+  min-height:22px;
+  padding:2px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.58);
+}
+.member-welcome {
+  margin-top:11px;
+  color:#f0ece0;
+  text-shadow:0 1px 5px #000;
+}
+.member-status {
+  margin-top:4px;
+  color:#d0c8b3;
+  text-transform:none;
+  letter-spacing:0;
+}
+.link-chip {
+  margin-top:14px;
+  border-radius:6px;
+  background:rgba(0,0,0,.72);
+}
+
+.member-rank {
+  padding: 35px 32px 30px 40px;
+  border-left:0;
+}
+.rank-kicker {
+  color:#e4c55e;
+}
+.rank-current {
+  margin-top:10px;
+}
+.rank-current-name {
+  display:none;
+}
+.rank-current-code {
+  color:#f1d16b;
+  font-size:17px;
+}
+.rank-rule {
+  margin-top:8px;
+  height:5px;
+  max-width:100%;
+  background:rgba(0,0,0,.45);
+}
+.rank-note {
+  margin-top:22px;
+  color:#e3dcc8;
+  text-shadow:0 1px 5px #000;
+}
+
+.member-emblem {
+  /* The generated member artwork already contains the right-side visual.
+     Hide the old separately loaded six-point/rank image. */
+  border-left:0;
+  background:none;
+}
+.member-emblem::after { display:none; }
+.rankimg { display:none !important; }
+
+/* Generated Officer Access / Management Console strip */
+.admin-panel {
+  min-height:138px;
+  grid-template-columns:34% 66%;
+  border:0;
+  border-radius:0;
+  background-image:url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(ADmin%20Panel).png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoQURtaW4gUGFuZWwpLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODk5NTc1NzIsImV4cCI6MzMzMjU5NTc1NzJ9.ZHLjt2ADllcBO0v3z-1xlcwVUljILpXvQNexxB9xgCE");
+  background-position:center;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  box-shadow:0 18px 44px rgba(0,0,0,.48);
+}
+.admin-panel::before { display:none; }
+.admin-left {
+  padding:23px 26px 22px 32px;
+  border-right:0;
+  background:none;
+}
+.admin-right {
+  padding:22px 28px;
+  background:none;
+}
+.admin-eyebrow,
+.admin-title,
+.admin-sub,
+.admin-body,
+.admin-links {
+  text-shadow:0 1px 5px rgba(0,0,0,.95);
+}
+.admin-cta {
+  background:rgba(0,0,0,.66);
+  border-radius:6px;
+}
+
+@media(max-width:1050px) {
+  .member {
+    grid-template-columns:1fr 1fr;
+    background-size:cover;
+  }
+  .member-emblem {
+    display:none;
+  }
+  .admin-panel {
+    grid-template-columns:1fr;
+    background-size:cover;
+  }
+}
+
+@media(max-width:700px) {
+  .member {
+    grid-template-columns:1fr;
+    background-size:cover;
+    background-position:center;
+  }
+  .member-ident {
+    padding:25px 20px 20px;
+    background:rgba(0,0,0,.24);
+  }
+  .member-rank {
+    padding:20px;
+    border-top:1px solid rgba(216,184,78,.12);
+    background:rgba(0,0,0,.20);
+  }
+  .admin-panel {
+    grid-template-columns:1fr;
+    background-size:cover;
+    background-position:center;
+  }
+  .admin-left,.admin-right {
+    background:rgba(0,0,0,.25);
+  }
+}
+</style>
+
 </head>
 
 <body>
