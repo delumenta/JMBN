@@ -44,6 +44,8 @@
 
   overflow:visible;
 
+  z-index:100;
+
   border:
     1px solid rgba(214,180,76,.62);
 
@@ -72,11 +74,6 @@
     Arial,
     Helvetica,
     sans-serif;
-
-  /*
-    Keeps the entire shared header above page content.
-  */
-  z-index:100;
 }
 
 
@@ -165,11 +162,6 @@
 
   position:relative;
 
-  /*
-    IMPORTANT:
-    Top section must sit ABOVE the navigation row.
-    The account dropdown lives inside this section.
-  */
   z-index:20;
 
   display:grid;
@@ -294,10 +286,6 @@
 .jmbn-account-wrap{
   position:relative;
 
-  /*
-    Account and dropdown sit above other elements
-    inside the top section.
-  */
   z-index:30;
 
   padding-left:28px;
@@ -388,11 +376,6 @@
     0 0 10px rgba(214,180,76,.12);
 }
 
-
-/*
-   Applied automatically by avatars.js
-   when a Discord avatar exists.
-*/
 
 .jmbn-avatar.has-avatar-image{
   color:transparent;
@@ -485,10 +468,6 @@
 
   width:205px;
 
-  /*
-    Dropdown remains the highest element
-    inside the account stacking context.
-  */
   z-index:1000;
 
   border:
@@ -497,10 +476,10 @@
   border-radius:7px;
 
   background:
-    rgba(8,9,7,.985);
+    rgba(8,9,7,.995);
 
   box-shadow:
-    0 16px 35px rgba(0,0,0,.8),
+    0 16px 35px rgba(0,0,0,.9),
     0 0 20px rgba(214,180,76,.08);
 
   padding:6px;
@@ -598,12 +577,6 @@
 
   position:relative;
 
-  /*
-    IMPORTANT:
-    Navigation stays below .jmbn-top.
-    This prevents navigation text from rendering
-    over the account dropdown.
-  */
   z-index:10;
 
   display:flex;
@@ -673,8 +646,6 @@
 }
 
 
-/* Active underline */
-
 .jmbn-navlink.active::after{
 
   content:"";
@@ -697,8 +668,6 @@
 
 }
 
-
-/* Active center notch */
 
 .jmbn-navlink.active::before{
 
@@ -931,6 +900,22 @@
 
 }
 
+
+/* =========================================================
+   ACCOUNT MENU OPEN FIX
+
+   When the account dropdown is open, hide the navigation
+   underneath it. This prevents scroll/compositing layers
+   from drawing MANIFEST / OPERATIONS / MEMBERS etc.
+   through the dropdown on desktop or mobile.
+========================================================= */
+
+.jmbn-header:has(
+  .jmbn-account[aria-expanded="true"]
+) .jmbn-navrow{
+  visibility:hidden;
+}
+
 </style>
 
 
@@ -1044,13 +1029,6 @@
       >
 
 
-        <!--
-          Discord avatar will be inserted here by
-          js/avatars.js + js/header.js.
-
-          Until then, initials are displayed.
-        -->
-
         <div
           class="jmbn-avatar"
           id="jmbnAvatar"
@@ -1111,8 +1089,6 @@
         </div>
 
 
-        <!-- PERSONAL PROFILE -->
-
         <a
           class="jmbn-dropitem"
           href="profile.html"
@@ -1121,8 +1097,6 @@
           View Profile
         </a>
 
-
-        <!-- ADMIN ONLY -->
 
         <a
           class="jmbn-dropitem"
@@ -1134,8 +1108,6 @@
           Admin Console
         </a>
 
-
-        <!-- LOGOUT -->
 
         <button
           class="jmbn-dropitem logout"
