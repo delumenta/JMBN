@@ -72,6 +72,11 @@
     Arial,
     Helvetica,
     sans-serif;
+
+  /*
+    Keeps the entire shared header above page content.
+  */
+  z-index:100;
 }
 
 
@@ -159,7 +164,13 @@
   height:77px;
 
   position:relative;
-  z-index:2;
+
+  /*
+    IMPORTANT:
+    Top section must sit ABOVE the navigation row.
+    The account dropdown lives inside this section.
+  */
+  z-index:20;
 
   display:grid;
 
@@ -282,6 +293,12 @@
 
 .jmbn-account-wrap{
   position:relative;
+
+  /*
+    Account and dropdown sit above other elements
+    inside the top section.
+  */
+  z-index:30;
 
   padding-left:28px;
 }
@@ -468,6 +485,10 @@
 
   width:205px;
 
+  /*
+    Dropdown remains the highest element
+    inside the account stacking context.
+  */
   z-index:1000;
 
   border:
@@ -577,7 +598,13 @@
 
   position:relative;
 
-  z-index:2;
+  /*
+    IMPORTANT:
+    Navigation stays below .jmbn-top.
+    This prevents navigation text from rendering
+    over the account dropdown.
+  */
+  z-index:10;
 
   display:flex;
 
