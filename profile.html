@@ -1,10 +1,2596 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JMBN – Personnel Profile Visual</title><link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet"><style>
-:root{--bg:#020302;--p:#070806;--p2:#0b0d0a;--g:#d9b53e;--g2:#f0d46a;--t:#f4edcf;--m:#8f896f;--good:#43df91}*{box-sizing:border-box}body{margin:0;padding:14px;background:radial-gradient(900px 500px at 85% -10%,rgba(217,181,62,.07),transparent 60%),var(--bg);color:var(--t);font-family:Play,system-ui,sans-serif}.wrap{width:90%;max-width:1700px;margin:auto}.top{height:96px;border:1px solid rgba(217,181,62,.6);border-radius:12px;background:#030403;position:relative;overflow:hidden;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}.top:before{content:"";position:absolute;left:14px;top:15px;bottom:15px;width:2px;background:var(--g2);box-shadow:0 0 10px var(--g)}.kicker,.label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b99b3e}.title{font-size:25px;letter-spacing:.14em;color:#fff3bd;margin-top:6px;font-weight:700}.status{text-align:right;font-size:9px;color:var(--m);line-height:1.7}.status b{color:var(--good);letter-spacing:.14em}.identity{margin-top:12px;border:1px solid rgba(217,181,62,.5);border-radius:10px;background:linear-gradient(105deg,rgba(217,181,62,.07),transparent 42%),#050604;overflow:hidden}.identity-main{padding:24px 28px;display:grid;grid-template-columns:100px 1fr auto;gap:22px;align-items:center}.avatar{width:92px;height:92px;border-radius:50%;border:1px solid var(--g2);display:grid;place-items:center;font-size:26px;color:var(--g2);background:radial-gradient(circle at 50% 35%,#30342d,#080908 70%);box-shadow:0 0 22px rgba(217,181,62,.12)}.name{font-size:28px;font-weight:700;letter-spacing:.08em}.rank{margin-top:6px;color:#c9bd91;font-size:12px;letter-spacing:.1em}.tags{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}.tag{border:1px solid rgba(217,181,62,.4);border-radius:999px;padding:5px 10px;font-size:8px;color:var(--g2);letter-spacing:.08em}.verified{text-align:right}.verified .dot{color:var(--good);font-size:11px}.verified strong{display:block;color:var(--g2);font-size:10px;letter-spacing:.14em;margin-top:6px}.verified small{color:var(--m)}.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(217,181,62,.2)}.kpi{padding:15px;text-align:center;border-right:1px solid rgba(217,181,62,.15)}.kpi:last-child{border-right:0}.num{font-size:22px;font-weight:700}.kpi span{display:block;color:var(--m);font-size:8px;letter-spacing:.16em;margin-top:3px}.grid{display:grid;grid-template-columns:1fr 1.35fr;gap:12px;margin-top:12px}.card{border:1px solid rgba(217,181,62,.4);border-radius:10px;background:linear-gradient(180deg,#080906,#040504);padding:16px}.cardhead{display:flex;justify-content:space-between;border-bottom:1px solid rgba(217,181,62,.16);padding-bottom:10px;margin-bottom:12px;color:var(--g2);font-size:9px;letter-spacing:.17em}.row{display:grid;grid-template-columns:145px 1fr;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.025);font-size:10px}.row span:first-child{color:var(--m)}.role{border:1px solid rgba(217,181,62,.24);padding:12px;margin-bottom:8px;background:#070806}.role b{color:var(--g2);font-size:12px}.role small{float:right;color:var(--m)}.certs{margin-top:12px}.certgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.cert{height:105px;border:1px solid rgba(217,181,62,.25);border-radius:7px;background:#060705;display:flex;flex-direction:column;align-items:center;justify-content:center}.hex{width:48px;height:48px;clip-path:polygon(25% 6%,75% 6%,100% 50%,75% 94%,25% 94%,0 50%);border:1px solid var(--g);background:rgba(217,181,62,.1);display:grid;place-items:center;color:var(--g2);font-weight:700}.cert b{font-size:8px;margin-top:7px;color:#cdbd82}.cert small{font-size:7px;color:var(--good);margin-top:3px}.history{margin-top:12px}.mission{display:grid;grid-template-columns:1.5fr .8fr .7fr .7fr;gap:8px;padding:10px;border-bottom:1px solid rgba(217,181,62,.12);font-size:9px}.mission.head{color:#b99b3e;font-size:8px;letter-spacing:.12em}.mission .ok{color:var(--good)}.progress{margin-top:12px}.rankline{display:flex;justify-content:space-between;align-items:end}.bar{height:7px;background:#17170f;margin:15px 0 8px;overflow:hidden}.bar i{display:block;width:74%;height:100%;background:linear-gradient(90deg,#9e7e25,var(--g2));box-shadow:0 0 8px rgba(240,212,106,.35)}.requirements{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.req{border:1px solid rgba(217,181,62,.2);padding:9px;font-size:8px;color:var(--m)}.req b{color:var(--t);float:right}@media(max-width:800px){.wrap{width:100%}.identity-main{grid-template-columns:75px 1fr}.avatar{width:70px;height:70px}.verified{grid-column:1/-1;text-align:left}.grid{grid-template-columns:1fr}.certgrid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.mission{grid-template-columns:1fr .6fr}.mission>*:nth-child(3),.mission>*:nth-child(4){display:none}.top{height:auto;gap:15px}.status{display:none}}
-</style></head><body><main class="wrap">
-<section class="top"><div><div class="kicker">JMBN // Personnel Command</div><div class="title">PERSONNEL DOSSIER</div></div><div class="status"><b>● RECORD ACTIVE</b><br>PERSONNEL FILE // VERIFIED</div></section>
-<section class="identity"><div class="identity-main"><div class="avatar">DL</div><div><div class="label">JMBN Personnel Identification</div><div class="name">DELUMENTA</div><div class="rank">LIEUTENANT, JUNIOR GRADE &nbsp;//&nbsp; O-2 &nbsp;//&nbsp; OFFICER CORPS</div><div class="tags"><span class="tag">PILOT</span><span class="tag">COMMAND</span><span class="tag">COMBAT</span></div></div><div class="verified"><span class="dot">● ACTIVE</span><strong>IDENTITY VERIFIED</strong><small>Discord-linked personnel record</small></div></div><div class="kpis"><div class="kpi"><div class="num">28</div><span>MISSIONS</span></div><div class="kpi"><div class="num">64.5</div><span>OPERATIONAL HOURS</span></div><div class="kpi"><div class="num">04</div><span>CERTIFICATIONS</span></div><div class="kpi"><div class="num">O-2</div><span>CURRENT RANK</span></div></div></section>
-<section class="grid"><div class="card"><div class="cardhead"><span>SERVICE RECORD</span><span>01 // PERSONNEL</span></div><div class="row"><span>HANDLE</span><span>DELUMENTA</span></div><div class="row"><span>SERVICE STATUS</span><span style="color:var(--good)">ACTIVE</span></div><div class="row"><span>RANK</span><span>Lieutenant, Junior Grade</span></div><div class="row"><span>RANK CODE</span><span>O-2</span></div><div class="row"><span>CATEGORY</span><span>Officer Corps</span></div></div><div class="card"><div class="cardhead"><span>OPERATIONAL PROFILE</span><span>ROLE ANALYSIS</span></div><div class="role"><span class="label">01 // PRIMARY ROLE</span><br><b>PILOT</b><small>18 OPERATIONS</small></div><div class="role"><span class="label">02 // SECONDARY ROLE</span><br><b>GUNNER</b><small>7 OPERATIONS</small></div><div class="role"><span class="label">ASSIGNED SPECIALISATIONS</span><br><b>PILOT · COMMAND · COMBAT</b></div></div></section>
-<section class="card certs"><div class="cardhead"><span>CERTIFICATION RECORD</span><span>04 // VERIFIED</span></div><div class="certgrid"><div class="cert"><div class="hex">BMT</div><b>BASIC MILITARY TRAINING</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">SOC</div><b>STANDARD OBSTACLE COURSE</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">MED</div><b>MEDICAL CERTIFICATION</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">+</div><b>ADDITIONAL CERTIFICATION</b><small style="color:var(--m)">RECORD SLOT</small></div></div></section>
-<section class="card history"><div class="cardhead"><span>OPERATIONAL HISTORY</span><span>28 // MISSIONS</span></div><div class="mission head"><span>OPERATION</span><span>ROLE</span><span>STATUS</span><span>DATE</span></div><div class="mission"><span>OP // NIGHTFALL</span><span>Pilot</span><span class="ok">● ATTENDED</span><span>18 SEP</span></div><div class="mission"><span>OP // IRON ROUTE</span><span>Gunner</span><span class="ok">● ATTENDED</span><span>12 SEP</span></div><div class="mission"><span>OP // LONG WATCH</span><span>Pilot</span><span class="ok">● ATTENDED</span><span>04 SEP</span></div><div class="mission"><span>OP // BLACK SPEAR</span><span>Command</span><span class="ok">● ATTENDED</span><span>28 AUG</span></div></section>
-<section class="card progress"><div class="cardhead"><span>ADVANCEMENT STATUS</span><span>RANK PROGRESSION</span></div><div class="rankline"><div><div class="label">CURRENT RANK</div><b>O-2 // LIEUTENANT, JUNIOR GRADE</b></div><div style="text-align:right"><div class="label">NEXT RANK</div><b>O-3 // LIEUTENANT</b></div></div><div class="bar"><i></i></div><div style="text-align:right;color:var(--g2);font-size:9px">74% COMPLETE</div><div class="requirements"><div class="req">MISSIONS <b>28 / 20 ✓</b></div><div class="req">HOURS <b>64 / 50 ✓</b></div><div class="req">CERTIFICATIONS <b>4 / 5</b></div></div></section>
-</main></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#020302">
+
+  <title>JMBN – Personnel Profile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+    sizes="32x32"
+  >
+
+  <style>
+    :root{
+      --bg:#020302;
+      --panel:#070806;
+      --panel2:#0b0d0a;
+      --gold:#d9b53e;
+      --gold2:#f0d46a;
+      --gold-soft:#b99b3e;
+      --text:#f4edcf;
+      --muted:#8f896f;
+      --good:#43df91;
+      --bad:#ff6767;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      min-height:100%;
+    }
+
+    body{
+      margin:0;
+      padding:14px;
+
+      background:
+        radial-gradient(
+          900px 500px at 85% -10%,
+          rgba(217,181,62,.07),
+          transparent 60%
+        ),
+        var(--bg);
+
+      color:var(--text);
+
+      font-family:
+        "Play",
+        system-ui,
+        sans-serif;
+    }
+
+    button{
+      font:inherit;
+    }
+
+    #header{
+      width:100%;
+    }
+
+    .wrap{
+      width:90%;
+      max-width:1700px;
+      margin:0 auto;
+    }
+
+    .top{
+      min-height:96px;
+
+      position:relative;
+      overflow:hidden;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:20px 32px;
+
+      border:1px solid rgba(217,181,62,.6);
+      border-radius:12px;
+
+      background:#030403;
+    }
+
+    .top::before{
+      content:"";
+
+      position:absolute;
+
+      left:14px;
+      top:15px;
+      bottom:15px;
+
+      width:2px;
+
+      background:var(--gold2);
+
+      box-shadow:
+        0 0 10px var(--gold);
+    }
+
+    .kicker,
+    .label{
+      color:var(--gold-soft);
+
+      font-size:9px;
+
+      letter-spacing:.22em;
+
+      text-transform:uppercase;
+    }
+
+    .title{
+      margin-top:6px;
+
+      color:#fff3bd;
+
+      font-size:25px;
+      font-weight:700;
+
+      letter-spacing:.14em;
+    }
+
+    .status{
+      color:var(--muted);
+
+      font-size:9px;
+
+      line-height:1.7;
+
+      text-align:right;
+    }
+
+    .status b{
+      color:var(--good);
+
+      letter-spacing:.14em;
+    }
+
+    .identity{
+      margin-top:12px;
+
+      overflow:hidden;
+
+      border:1px solid rgba(217,181,62,.5);
+      border-radius:10px;
+
+      background:
+        linear-gradient(
+          105deg,
+          rgba(217,181,62,.07),
+          transparent 42%
+        ),
+        #050604;
+    }
+
+    .identity-main{
+      display:grid;
+
+      grid-template-columns:
+        100px
+        minmax(0,1fr)
+        auto;
+
+      gap:22px;
+
+      align-items:center;
+
+      padding:24px 28px;
+    }
+
+    .avatar{
+      width:92px;
+      height:92px;
+
+      display:grid;
+      place-items:center;
+
+      overflow:hidden;
+
+      border:1px solid var(--gold2);
+      border-radius:50%;
+
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          #30342d,
+          #080908 70%
+        );
+
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+
+      box-shadow:
+        0 0 22px rgba(217,181,62,.12);
+
+      color:var(--gold2);
+
+      font-size:26px;
+      font-weight:700;
+    }
+
+    .avatar.has-avatar-image{
+      color:transparent;
+    }
+
+    .name{
+      margin-top:5px;
+
+      color:#f7efcf;
+
+      font-size:28px;
+      font-weight:700;
+
+      letter-spacing:.08em;
+    }
+
+    .rank{
+      margin-top:6px;
+
+      display:flex;
+      align-items:center;
+
+      gap:8px;
+
+      color:#c9bd91;
+
+      font-size:12px;
+
+      letter-spacing:.1em;
+    }
+
+    .rank img{
+      width:28px;
+      height:28px;
+
+      object-fit:contain;
+    }
+
+    .tags{
+      display:flex;
+
+      gap:7px;
+
+      flex-wrap:wrap;
+
+      margin-top:13px;
+    }
+
+    .tag{
+      padding:5px 10px;
+
+      border:1px solid rgba(217,181,62,.4);
+      border-radius:999px;
+
+      color:var(--gold2);
+
+      font-size:8px;
+
+      letter-spacing:.08em;
+
+      text-transform:uppercase;
+    }
+
+    .verified{
+      min-width:150px;
+
+      text-align:right;
+    }
+
+    .verified .dot{
+      color:var(--good);
+
+      font-size:11px;
+    }
+
+    .verified strong{
+      display:block;
+
+      margin-top:6px;
+
+      color:var(--gold2);
+
+      font-size:10px;
+
+      letter-spacing:.14em;
+    }
+
+    .verified small{
+      color:var(--muted);
+    }
+
+    .kpis{
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      border-top:
+        1px solid rgba(217,181,62,.2);
+    }
+
+    .kpi{
+      padding:15px;
+
+      border-right:
+        1px solid rgba(217,181,62,.15);
+
+      text-align:center;
+    }
+
+    .kpi:last-child{
+      border-right:0;
+    }
+
+    .num{
+      color:#f5edcf;
+
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .kpi span{
+      display:block;
+
+      margin-top:3px;
+
+      color:var(--muted);
+
+      font-size:8px;
+
+      letter-spacing:.16em;
+    }
+
+    .grid{
+      display:grid;
+
+      grid-template-columns:
+        1fr
+        1.35fr;
+
+      gap:12px;
+
+      margin-top:12px;
+    }
+
+    .card{
+      padding:16px;
+
+      border:1px solid rgba(217,181,62,.4);
+      border-radius:10px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #080906,
+          #040504
+        );
+    }
+
+    .cardhead{
+      display:flex;
+
+      justify-content:space-between;
+
+      gap:12px;
+
+      margin-bottom:12px;
+
+      padding-bottom:10px;
+
+      border-bottom:
+        1px solid rgba(217,181,62,.16);
+
+      color:var(--gold2);
+
+      font-size:9px;
+
+      letter-spacing:.17em;
+
+      text-transform:uppercase;
+    }
+
+    .row{
+      display:grid;
+
+      grid-template-columns:
+        145px
+        minmax(0,1fr);
+
+      padding:7px 0;
+
+      border-bottom:
+        1px solid rgba(255,255,255,.025);
+
+      font-size:10px;
+    }
+
+    .row span:first-child{
+      color:var(--muted);
+    }
+
+    .role{
+      margin-bottom:8px;
+
+      padding:12px;
+
+      border:
+        1px solid rgba(217,181,62,.24);
+
+      background:#070806;
+    }
+
+    .role b{
+      color:var(--gold2);
+
+      font-size:12px;
+    }
+
+    .role small{
+      float:right;
+
+      color:var(--muted);
+    }
+
+    .certs,
+    .history,
+    .progress{
+      margin-top:12px;
+    }
+
+    .certgrid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:9px;
+    }
+
+    .cert{
+      min-height:115px;
+
+      display:flex;
+
+      flex-direction:column;
+
+      align-items:center;
+      justify-content:center;
+
+      padding:10px;
+
+      border:
+        1px solid rgba(217,181,62,.25);
+
+      border-radius:7px;
+
+      background:#060705;
+
+      text-align:center;
+    }
+
+    .cert img{
+      width:52px;
+      height:52px;
+
+      object-fit:contain;
+    }
+
+    .hex{
+      width:48px;
+      height:48px;
+
+      display:grid;
+      place-items:center;
+
+      clip-path:
+        polygon(
+          25% 6%,
+          75% 6%,
+          100% 50%,
+          75% 94%,
+          25% 94%,
+          0 50%
+        );
+
+      background:
+        rgba(217,181,62,.1);
+
+      color:var(--gold2);
+
+      font-weight:700;
+    }
+
+    .cert b{
+      margin-top:7px;
+
+      color:#cdbd82;
+
+      font-size:8px;
+    }
+
+    .cert small{
+      margin-top:3px;
+
+      color:var(--good);
+
+      font-size:7px;
+    }
+
+    .mission{
+      display:grid;
+
+      grid-template-columns:
+        1.5fr
+        .8fr
+        .7fr
+        .7fr;
+
+      gap:8px;
+
+      padding:10px;
+
+      border-bottom:
+        1px solid rgba(217,181,62,.12);
+
+      font-size:9px;
+    }
+
+    .mission.head{
+      color:var(--gold-soft);
+
+      font-size:8px;
+
+      letter-spacing:.12em;
+    }
+
+    .mission .ok{
+      color:var(--good);
+    }
+
+    .mission .withdrawn{
+      color:var(--muted);
+    }
+
+    .rankline{
+      display:flex;
+
+      justify-content:space-between;
+
+      gap:18px;
+
+      align-items:flex-end;
+    }
+
+    .bar{
+      height:7px;
+
+      overflow:hidden;
+
+      margin:15px 0 8px;
+
+      background:#17170f;
+    }
+
+    .bar i{
+      display:block;
+
+      width:0%;
+      height:100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #9e7e25,
+          var(--gold2)
+        );
+
+      box-shadow:
+        0 0 8px rgba(240,212,106,.35);
+
+      transition:width .3s ease;
+    }
+
+    .requirements{
+      display:grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      gap:8px;
+    }
+
+    .req{
+      padding:9px;
+
+      border:
+        1px solid rgba(217,181,62,.2);
+
+      color:var(--muted);
+
+      font-size:8px;
+    }
+
+    .req b{
+      float:right;
+
+      color:var(--text);
+    }
+
+    .empty{
+      grid-column:1/-1;
+
+      padding:18px;
+
+      color:var(--muted);
+
+      font-size:9px;
+
+      text-align:center;
+    }
+
+    .error{
+      color:var(--bad);
+    }
+
+    @media(max-width:800px){
+
+      body{
+        padding:9px;
+      }
+
+      .wrap{
+        width:100%;
+      }
+
+      .top{
+        height:auto;
+
+        gap:15px;
+      }
+
+      .status{
+        display:none;
+      }
+
+      .identity-main{
+        grid-template-columns:
+          75px
+          minmax(0,1fr);
+      }
+
+      .avatar{
+        width:70px;
+        height:70px;
+      }
+
+      .name{
+        font-size:21px;
+      }
+
+      .rank{
+        font-size:9px;
+      }
+
+      .verified{
+        grid-column:1/-1;
+
+        text-align:left;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .certgrid{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+
+      .kpis{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+
+      .kpi:nth-child(2){
+        border-right:0;
+      }
+
+      .kpi:nth-child(-n+2){
+        border-bottom:
+          1px solid rgba(217,181,62,.15);
+      }
+
+      .mission{
+        grid-template-columns:
+          1fr
+          .7fr;
+      }
+
+      .mission > *:nth-child(3),
+      .mission > *:nth-child(4){
+        display:none;
+      }
+
+      .rankline{
+        align-items:flex-start;
+      }
+
+    }
+
+    @media(max-width:480px){
+
+      .top{
+        padding:18px 25px;
+      }
+
+      .title{
+        font-size:19px;
+      }
+
+      .identity-main{
+        padding:18px;
+
+        gap:14px;
+      }
+
+      .tags{
+        gap:5px;
+      }
+
+      .kpis{
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+      .row{
+        grid-template-columns:
+          120px
+          minmax(0,1fr);
+      }
+
+      .requirements{
+        grid-template-columns:1fr;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="header"></div>
+
+  <main class="wrap">
+
+    <section class="top">
+
+      <div>
+
+        <div class="kicker">
+          JMBN // Personnel Command
+        </div>
+
+        <div class="title">
+          PERSONNEL DOSSIER
+        </div>
+
+      </div>
+
+      <div class="status">
+
+        <b>● RECORD ACTIVE</b>
+
+        <br>
+
+        PERSONNEL FILE // VERIFIED
+
+      </div>
+
+    </section>
+
+
+    <section class="identity">
+
+      <div class="identity-main">
+
+        <div
+          id="profileAvatar"
+          class="avatar"
+        >
+          --
+        </div>
+
+
+        <div>
+
+          <div class="label">
+            JMBN Personnel Identification
+          </div>
+
+          <div
+            id="profileName"
+            class="name"
+          >
+            Loading…
+          </div>
+
+          <div
+            id="profileRank"
+            class="rank"
+          >
+            Loading personnel record…
+          </div>
+
+          <div
+            id="profileTags"
+            class="tags"
+          ></div>
+
+        </div>
+
+
+        <div class="verified">
+
+          <span class="dot">
+            ● ACTIVE
+          </span>
+
+          <strong>
+            IDENTITY VERIFIED
+          </strong>
+
+          <small id="discordStatus">
+            Checking Discord link…
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <div class="kpis">
+
+        <div class="kpi">
+
+          <div
+            id="kMissions"
+            class="num"
+          >
+            —
+          </div>
+
+          <span>
+            MISSIONS
+          </span>
+
+        </div>
+
+
+        <div class="kpi">
+
+          <div
+            id="kHours"
+            class="num"
+          >
+            —
+          </div>
+
+          <span>
+            OPERATIONAL HOURS
+          </span>
+
+        </div>
+
+
+        <div class="kpi">
+
+          <div
+            id="kCerts"
+            class="num"
+          >
+            —
+          </div>
+
+          <span>
+            CERTIFICATIONS
+          </span>
+
+        </div>
+
+
+        <div class="kpi">
+
+          <div
+            id="kRank"
+            class="num"
+          >
+            —
+          </div>
+
+          <span>
+            CURRENT RANK
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="grid">
+
+      <div class="card">
+
+        <div class="cardhead">
+
+          <span>
+            SERVICE RECORD
+          </span>
+
+          <span>
+            01 // PERSONNEL
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>
+            HANDLE
+          </span>
+
+          <span id="vHandle">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>
+            SERVICE STATUS
+          </span>
+
+          <span style="color:var(--good)">
+            ACTIVE
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>
+            RANK
+          </span>
+
+          <span id="vRankName">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>
+            RANK CODE
+          </span>
+
+          <span id="vRankCode">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>
+            CATEGORY
+          </span>
+
+          <span id="vRankCategory">
+            —
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="cardhead">
+
+          <span>
+            OPERATIONAL PROFILE
+          </span>
+
+          <span>
+            ROLE ANALYSIS
+          </span>
+
+        </div>
+
+
+        <div class="role">
+
+          <span class="label">
+            01 // PRIMARY ROLE
+          </span>
+
+          <br>
+
+          <b id="primaryRole">
+            —
+          </b>
+
+          <small id="primaryRoleCount">
+            —
+          </small>
+
+        </div>
+
+
+        <div class="role">
+
+          <span class="label">
+            02 // SECONDARY ROLE
+          </span>
+
+          <br>
+
+          <b id="secondaryRole">
+            —
+          </b>
+
+          <small id="secondaryRoleCount">
+            —
+          </small>
+
+        </div>
+
+
+        <div class="role">
+
+          <span class="label">
+            ASSIGNED SPECIALISATIONS
+          </span>
+
+          <br>
+
+          <b id="assignedRoles">
+            —
+          </b>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card certs">
+
+      <div class="cardhead">
+
+        <span>
+          CERTIFICATION RECORD
+        </span>
+
+        <span id="certCountLabel">
+          — // VERIFIED
+        </span>
+
+      </div>
+
+      <div
+        id="certGrid"
+        class="certgrid"
+      >
+
+        <div class="empty">
+          Loading certifications…
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card history">
+
+      <div class="cardhead">
+
+        <span>
+          OPERATIONAL HISTORY
+        </span>
+
+        <span id="missionCountLabel">
+          — // MISSIONS
+        </span>
+
+      </div>
+
+
+      <div class="mission head">
+
+        <span>
+          OPERATION
+        </span>
+
+        <span>
+          ROLE
+        </span>
+
+        <span>
+          STATUS
+        </span>
+
+        <span>
+          DATE
+        </span>
+
+      </div>
+
+
+      <div id="missionRows">
+
+        <div class="empty">
+          Loading operational history…
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card progress">
+
+      <div class="cardhead">
+
+        <span>
+          ADVANCEMENT STATUS
+        </span>
+
+        <span>
+          RANK PROGRESSION
+        </span>
+
+      </div>
+
+
+      <div class="rankline">
+
+        <div>
+
+          <div class="label">
+            CURRENT RANK
+          </div>
+
+          <b id="progressCurrentRank">
+            —
+          </b>
+
+        </div>
+
+
+        <div style="text-align:right">
+
+          <div class="label">
+            NEXT RANK
+          </div>
+
+          <b id="progressNextRank">
+            —
+          </b>
+
+        </div>
+
+      </div>
+
+
+      <div class="bar">
+
+        <i id="progressBar"></i>
+
+      </div>
+
+
+      <div
+        id="progressPercent"
+        style="
+          text-align:right;
+          color:var(--gold2);
+          font-size:9px;
+        "
+      >
+        —
+      </div>
+
+
+      <div class="requirements">
+
+        <div class="req">
+
+          MISSIONS
+
+          <b id="progressMissions">
+            —
+          </b>
+
+        </div>
+
+
+        <div class="req">
+
+          HOURS
+
+          <b id="progressHours">
+            —
+          </b>
+
+        </div>
+
+
+        <div class="req">
+
+          CERTIFICATIONS
+
+          <b id="progressCerts">
+            —
+          </b>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/avatars.js"></script>
+  <script src="js/header.js"></script>
+
+
+  <script>
+    (async () => {
+
+      try {
+
+        const response =
+          await fetch(
+            "header.html",
+            {
+              cache:"no-cache"
+            }
+          );
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Header request failed: " +
+            response.status
+          );
+
+        }
+
+        const html =
+          await response.text();
+
+        const host =
+          document.getElementById(
+            "header"
+          );
+
+        if (!host) {
+
+          throw new Error(
+            "#header was not found."
+          );
+
+        }
+
+        host.innerHTML =
+          html;
+
+        if (
+          typeof window.initJmbnHeader ===
+          "function"
+        ) {
+
+          window.initJmbnHeader();
+
+        }
+
+      }
+      catch (error) {
+
+        console.error(
+          "Failed to load JMBN header:",
+          error
+        );
+
+      }
+
+    })();
+  </script>
+
+
+  <script>
+    const $ =
+      selector =>
+        document.querySelector(
+          selector
+        );
+
+
+    const esc =
+      value => {
+
+        const node =
+          document.createElement(
+            "div"
+          );
+
+        node.textContent =
+          value ?? "";
+
+        return node.innerHTML;
+
+      };
+
+
+    const titleCase =
+      value => {
+
+        const text =
+          String(
+            value || ""
+          )
+            .trim()
+            .replace(
+              /\s+/g,
+              " "
+            );
+
+        if (!text) {
+
+          return "";
+
+        }
+
+        return text
+          .toLowerCase()
+          .replace(
+            /\b\w/g,
+            char =>
+              char.toUpperCase()
+          );
+
+      };
+
+
+    function normalizeRoles(
+      row
+    ){
+
+      const raw =
+        row?.ingame_role;
+
+      if (!raw) {
+
+        return [];
+
+      }
+
+      if (
+        Array.isArray(raw)
+      ) {
+
+        return raw
+          .map(titleCase)
+          .filter(Boolean);
+
+      }
+
+      return String(raw)
+        .split(
+          /[,;/]+/
+        )
+        .map(titleCase)
+        .filter(Boolean);
+
+    }
+
+
+    function firstValue(
+      row,
+      keys,
+      fallback = null
+    ){
+
+      for (
+        const key of keys
+      ) {
+
+        const value =
+          row?.[key];
+
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== ""
+        ) {
+
+          return value;
+
+        }
+
+      }
+
+      return fallback;
+
+    }
+
+
+    function numberValue(
+      row,
+      keys,
+      fallback = 0
+    ){
+
+      const value =
+        firstValue(
+          row,
+          keys,
+          fallback
+        );
+
+      const number =
+        Number(value);
+
+      return Number.isFinite(number)
+        ? number
+        : fallback;
+
+    }
+
+
+    function formatHours(
+      value
+    ){
+
+      const number =
+        Number(value || 0);
+
+      if (
+        Number.isInteger(number)
+      ) {
+
+        return String(number);
+
+      }
+
+      return number
+        .toFixed(1)
+        .replace(
+          /\.0$/,
+          ""
+        );
+
+    }
+
+
+    function formatDate(
+      value
+    ){
+
+      if (!value) {
+
+        return "—";
+
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return "—";
+
+      }
+
+      return date
+        .toLocaleDateString(
+          undefined,
+          {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+          }
+        )
+        .toUpperCase();
+
+    }
+
+
+    function initials(
+      label
+    ){
+
+      const parts =
+        String(
+          label || ""
+        )
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+
+      if (!parts.length) {
+
+        return "--";
+
+      }
+
+      if (
+        parts.length === 1
+      ) {
+
+        return parts[0]
+          .slice(
+            0,
+            2
+          )
+          .toUpperCase();
+
+      }
+
+      return (
+        parts[0][0] +
+        parts[
+          parts.length - 1
+        ][0]
+      )
+        .toUpperCase();
+
+    }
+
+
+    function calculateMissionCount(
+      rows
+    ){
+
+      const ids =
+        new Set(
+          (rows || [])
+            .filter(
+              row =>
+                row.mission_id &&
+                String(
+                  row.attendance ||
+                  ""
+                )
+                  .toLowerCase() !==
+                  "withdrawn"
+            )
+            .map(
+              row =>
+                row.mission_id
+            )
+        );
+
+      return ids.size;
+
+    }
+
+
+    function roleRanking(
+      rows
+    ){
+
+      const counts =
+        new Map();
+
+      (rows || [])
+        .filter(
+          row =>
+            String(
+              row.attendance ||
+              ""
+            )
+              .toLowerCase() !==
+              "withdrawn"
+        )
+        .forEach(
+          row => {
+
+            const role =
+              titleCase(
+                row.role_in_mission
+              );
+
+            if (!role) {
+
+              return;
+
+            }
+
+            counts.set(
+              role,
+              (
+                counts.get(role) ||
+                0
+              ) + 1
+            );
+
+          }
+        );
+
+      return [
+        ...counts.entries()
+      ]
+        .sort(
+          (a,b) =>
+            b[1] - a[1] ||
+            a[0].localeCompare(
+              b[0]
+            )
+        );
+
+    }
+
+
+    function renderIdentity(
+      profile,
+      discord
+    ){
+
+      const handle =
+        titleCase(
+          profile?.handle ||
+          profile?.display_name ||
+          "JMBN Member"
+        );
+
+      const rankName =
+        titleCase(
+          profile?.current_rank_name ||
+          "Unrated"
+        );
+
+      const rankCode =
+        String(
+          profile?.current_rank_code ||
+          "—"
+        )
+          .toUpperCase();
+
+      const category =
+        titleCase(
+          profile?.current_rank_category ||
+          "Personnel"
+        );
+
+      const roles =
+        normalizeRoles(
+          profile
+        );
+
+      $("#profileName")
+        .textContent =
+          handle;
+
+      $("#kRank")
+        .textContent =
+          rankCode;
+
+      $("#vHandle")
+        .textContent =
+          handle;
+
+      $("#vRankName")
+        .textContent =
+          rankName;
+
+      $("#vRankCode")
+        .textContent =
+          rankCode;
+
+      $("#vRankCategory")
+        .textContent =
+          category;
+
+      $("#assignedRoles")
+        .textContent =
+          roles.length
+            ? roles.join(" · ")
+            : "—";
+
+      $("#profileTags")
+        .innerHTML =
+          roles.length
+
+            ? roles
+                .map(
+                  role =>
+                    `<span class="tag">${esc(role)}</span>`
+                )
+                .join("")
+
+            : `<span class="tag">JMBN PERSONNEL</span>`;
+
+      const rankImage =
+        profile?.current_rank_image_url ||
+        "";
+
+      $("#profileRank")
+        .innerHTML =
+          `
+            ${
+              rankImage
+                ? `
+                  <img
+                    src="${esc(rankImage)}"
+                    alt="${esc(rankCode)}"
+                    onerror="this.style.display='none'"
+                  >
+                `
+                : ""
+            }
+
+            <span>
+              ${esc(rankName)}
+              &nbsp;//&nbsp;
+              ${esc(rankCode)}
+              &nbsp;//&nbsp;
+              ${esc(category)}
+            </span>
+          `;
+
+      const avatar =
+        $("#profileAvatar");
+
+      if (
+        window.JMBNAvatars
+      ) {
+
+        window.JMBNAvatars
+          .renderAvatar(
+            avatar,
+            discord,
+            handle
+          );
+
+      }
+      else {
+
+        avatar.textContent =
+          initials(handle);
+
+      }
+
+      $("#discordStatus")
+        .textContent =
+          discord
+            ? "Discord-linked personnel record"
+            : "JMBN personnel record";
+
+      $("#progressCurrentRank")
+        .textContent =
+          `${rankCode} // ${rankName.toUpperCase()}`;
+
+    }
+
+
+    function renderRoleAnalysis(
+      attendance
+    ){
+
+      const ranked =
+        roleRanking(
+          attendance
+        );
+
+      const primary =
+        ranked[0];
+
+      const secondary =
+        ranked[1];
+
+      $("#primaryRole")
+        .textContent =
+          primary
+            ? primary[0].toUpperCase()
+            : "—";
+
+      $("#primaryRoleCount")
+        .textContent =
+          primary
+            ? `${primary[1]} OPERATION${primary[1] === 1 ? "" : "S"}`
+            : "NO DATA";
+
+      $("#secondaryRole")
+        .textContent =
+          secondary
+            ? secondary[0].toUpperCase()
+            : "—";
+
+      $("#secondaryRoleCount")
+        .textContent =
+          secondary
+            ? `${secondary[1]} OPERATION${secondary[1] === 1 ? "" : "S"}`
+            : "NO DATA";
+
+    }
+
+
+    function renderMissions(
+      attendance,
+      missionMap
+    ){
+
+      const count =
+        calculateMissionCount(
+          attendance
+        );
+
+      $("#kMissions")
+        .textContent =
+          count;
+
+      $("#missionCountLabel")
+        .textContent =
+          `${count} // MISSIONS`;
+
+      const rows =
+        (attendance || [])
+          .slice()
+          .sort(
+            (a,b) => {
+
+              const aMission =
+                missionMap.get(
+                  a.mission_id
+                );
+
+              const bMission =
+                missionMap.get(
+                  b.mission_id
+                );
+
+              return (
+                new Date(
+                  bMission?.start_time ||
+                  0
+                )
+                -
+                new Date(
+                  aMission?.start_time ||
+                  0
+                )
+              );
+
+            }
+          )
+          .slice(
+            0,
+            8
+          );
+
+      if (!rows.length) {
+
+        $("#missionRows")
+          .innerHTML =
+            `
+              <div class="empty">
+                No operational history recorded.
+              </div>
+            `;
+
+        return;
+
+      }
+
+      $("#missionRows")
+        .innerHTML =
+          rows
+            .map(
+              row => {
+
+                const mission =
+                  missionMap.get(
+                    row.mission_id
+                  ) ||
+                  {};
+
+                const status =
+                  titleCase(
+                    row.attendance ||
+                    "Recorded"
+                  );
+
+                const statusClass =
+                  status.toLowerCase() ===
+                  "withdrawn"
+                    ? "withdrawn"
+                    : "ok";
+
+                return `
+                  <div class="mission">
+
+                    <span>
+                      ${esc(
+                        mission.title ||
+                        mission.name ||
+                        `MISSION ${row.mission_id || ""}`
+                      )}
+                    </span>
+
+                    <span>
+                      ${esc(
+                        titleCase(
+                          row.role_in_mission ||
+                          "—"
+                        )
+                      )}
+                    </span>
+
+                    <span class="${statusClass}">
+                      ● ${esc(status.toUpperCase())}
+                    </span>
+
+                    <span>
+                      ${esc(
+                        formatDate(
+                          mission.start_time ||
+                          mission.mission_date ||
+                          mission.date
+                        )
+                      )}
+                    </span>
+
+                  </div>
+                `;
+
+              }
+            )
+            .join("");
+
+    }
+
+
+    function renderCertifications(
+      certs
+    ){
+
+      const owned =
+        (certs || [])
+          .filter(
+            row =>
+              row.owned !== false
+          );
+
+      $("#kCerts")
+        .textContent =
+          owned.length;
+
+      $("#certCountLabel")
+        .textContent =
+          `${String(owned.length).padStart(2,"0")} // VERIFIED`;
+
+      if (!owned.length) {
+
+        $("#certGrid")
+          .innerHTML =
+            `
+              <div class="empty">
+                No certifications earned yet.
+              </div>
+            `;
+
+        return;
+
+      }
+
+      $("#certGrid")
+        .innerHTML =
+          owned
+            .map(
+              cert => {
+
+                const code =
+                  String(
+                    cert.certification_code ||
+                    "CERT"
+                  )
+                    .toUpperCase();
+
+                const name =
+                  titleCase(
+                    cert.name ||
+                    cert.certification_name ||
+                    code
+                  );
+
+                const image =
+                  cert.image_url ||
+                  "";
+
+                return `
+                  <div class="cert">
+
+                    ${
+                      image
+
+                        ? `
+                          <img
+                            src="${esc(image)}"
+                            alt="${esc(code)}"
+                            loading="lazy"
+                            onerror="
+                              this.style.display='none';
+                              this.nextElementSibling.style.display='grid';
+                            "
+                          >
+
+                          <div
+                            class="hex"
+                            style="display:none"
+                          >
+                            ${esc(code.slice(0,4))}
+                          </div>
+                        `
+
+                        : `
+                          <div class="hex">
+                            ${esc(code.slice(0,4))}
+                          </div>
+                        `
+                    }
+
+                    <b>
+                      ${esc(name.toUpperCase())}
+                    </b>
+
+                    <small>
+                      ● VERIFIED
+                    </small>
+
+                  </div>
+                `;
+
+              }
+            )
+            .join("");
+
+    }
+
+
+    function renderProgress(
+      progress,
+      profile,
+      missionCount,
+      hours,
+      certCount
+    ){
+
+      const currentCode =
+        String(
+          profile?.current_rank_code ||
+          "—"
+        )
+          .toUpperCase();
+
+      const currentName =
+        titleCase(
+          profile?.current_rank_name ||
+          "Unrated"
+        );
+
+      const nextCode =
+        String(
+          firstValue(
+            progress,
+            [
+              "next_rank_code",
+              "target_rank_code",
+              "promotion_rank_code"
+            ],
+            "—"
+          )
+        )
+          .toUpperCase();
+
+      const nextName =
+        titleCase(
+          firstValue(
+            progress,
+            [
+              "next_rank_name",
+              "target_rank_name",
+              "promotion_rank_name"
+            ],
+            ""
+          )
+        );
+
+      $("#progressCurrentRank")
+        .textContent =
+          `${currentCode} // ${currentName.toUpperCase()}`;
+
+      $("#progressNextRank")
+        .textContent =
+          nextName
+            ? `${nextCode} // ${nextName.toUpperCase()}`
+            : nextCode;
+
+      let percent =
+        numberValue(
+          progress,
+          [
+            "progress_percent",
+            "overall_progress_percent",
+            "completion_percent",
+            "progress_pct"
+          ],
+          0
+        );
+
+      if (
+        percent > 0 &&
+        percent <= 1
+      ) {
+
+        percent *= 100;
+
+      }
+
+      percent =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            percent
+          )
+        );
+
+      $("#progressBar")
+        .style
+        .width =
+          `${percent}%`;
+
+      $("#progressPercent")
+        .textContent =
+          progress
+            ? `${Math.round(percent)}% COMPLETE`
+            : "PROGRESSION DATA UNAVAILABLE";
+
+      const missionRequired =
+        numberValue(
+          progress,
+          [
+            "missions_required",
+            "required_missions",
+            "missions_needed",
+            "mission_requirement"
+          ],
+          0
+        );
+
+      const hoursRequired =
+        numberValue(
+          progress,
+          [
+            "hours_required",
+            "required_hours",
+            "hours_needed",
+            "hours_requirement"
+          ],
+          0
+        );
+
+      const certsRequired =
+        numberValue(
+          progress,
+          [
+            "certifications_required",
+            "required_certifications",
+            "certs_required",
+            "certifications_needed"
+          ],
+          0
+        );
+
+      $("#progressMissions")
+        .textContent =
+          missionRequired
+            ? `${missionCount} / ${missionRequired}${missionCount >= missionRequired ? " ✓" : ""}`
+            : `${missionCount}`;
+
+      $("#progressHours")
+        .textContent =
+          hoursRequired
+            ? `${formatHours(hours)} / ${formatHours(hoursRequired)}${hours >= hoursRequired ? " ✓" : ""}`
+            : formatHours(hours);
+
+      $("#progressCerts")
+        .textContent =
+          certsRequired
+            ? `${certCount} / ${certsRequired}${certCount >= certsRequired ? " ✓" : ""}`
+            : `${certCount}`;
+
+    }
+
+
+    async function loadProfile(){
+
+      const session =
+        await requireAuth();
+
+      if (!session) {
+
+        return;
+
+      }
+
+      const sb =
+        getSupabase();
+
+      const userId =
+        session.user.id;
+
+
+      const [
+        profileResult,
+        progressResult,
+        rankProgressResult,
+        attendanceResult,
+        certResult
+      ] =
+        await Promise.all([
+
+          sb
+            .from(
+              "v_profiles_detailed"
+            )
+            .select("*")
+            .eq(
+              "user_id",
+              userId
+            )
+            .maybeSingle(),
+
+          sb
+            .from(
+              "v_user_progress"
+            )
+            .select("*")
+            .eq(
+              "user_id",
+              userId
+            )
+            .maybeSingle(),
+
+          sb
+            .from(
+              "v_user_rank_progress"
+            )
+            .select("*")
+            .eq(
+              "user_id",
+              userId
+            )
+            .maybeSingle(),
+
+          sb
+            .from(
+              "v_mission_attendees_detailed"
+            )
+            .select(
+              "mission_id,attendance,role_in_mission"
+            )
+            .eq(
+              "user_id",
+              userId
+            ),
+
+          sb
+            .from(
+              "v_user_certifications"
+            )
+            .select("*")
+            .eq(
+              "user_id",
+              userId
+            )
+
+        ]);
+
+
+      if (
+        profileResult.error
+      ) {
+
+        throw profileResult.error;
+
+      }
+
+
+      const profile =
+        profileResult.data ||
+        {};
+
+      const userProgress =
+        progressResult.data ||
+        null;
+
+      const rankProgress =
+        rankProgressResult.data ||
+        null;
+
+      const attendance =
+        attendanceResult.error
+          ? []
+          : attendanceResult.data || [];
+
+      const certs =
+        certResult.error
+          ? []
+          : certResult.data || [];
+
+
+      if (
+        progressResult.error
+      ) {
+
+        console.warn(
+          "v_user_progress:",
+          progressResult.error.message
+        );
+
+      }
+
+
+      if (
+        rankProgressResult.error
+      ) {
+
+        console.warn(
+          "v_user_rank_progress:",
+          rankProgressResult.error.message
+        );
+
+      }
+
+
+      if (
+        attendanceResult.error
+      ) {
+
+        console.warn(
+          "v_mission_attendees_detailed:",
+          attendanceResult.error.message
+        );
+
+      }
+
+
+      if (
+        certResult.error
+      ) {
+
+        console.warn(
+          "v_user_certifications:",
+          certResult.error.message
+        );
+
+      }
+
+
+      let discord =
+        null;
+
+
+      if (
+        window.JMBNAvatars
+      ) {
+
+        discord =
+          await window.JMBNAvatars
+            .getDiscordLink(
+              sb,
+              userId
+            );
+
+      }
+
+
+      renderIdentity(
+        profile,
+        discord
+      );
+
+
+      renderRoleAnalysis(
+        attendance
+      );
+
+
+      const missionCount =
+        calculateMissionCount(
+          attendance
+        );
+
+
+      const missionIds =
+        [
+          ...new Set(
+            attendance
+              .map(
+                row =>
+                  row.mission_id
+              )
+              .filter(Boolean)
+          )
+        ];
+
+
+      let missionMap =
+        new Map();
+
+
+      if (
+        missionIds.length
+      ) {
+
+        const {
+          data:missions,
+          error:missionError
+        } =
+          await sb
+            .from(
+              "missions"
+            )
+            .select("*")
+            .in(
+              "id",
+              missionIds
+            );
+
+
+        if (
+          missionError
+        ) {
+
+          console.warn(
+            "missions:",
+            missionError.message
+          );
+
+        }
+        else {
+
+          missionMap =
+            new Map(
+              (missions || [])
+                .map(
+                  mission => [
+                    mission.id,
+                    mission
+                  ]
+                )
+            );
+
+        }
+
+      }
+
+
+      renderMissions(
+        attendance,
+        missionMap
+      );
+
+
+      renderCertifications(
+        certs
+      );
+
+
+      const hours =
+        numberValue(
+          userProgress,
+          [
+            "hours_total",
+            "total_hours",
+            "operational_hours",
+            "hours"
+          ],
+          0
+        );
+
+
+      const certCount =
+        certs
+          .filter(
+            row =>
+              row.owned !== false
+          )
+          .length;
+
+
+      $("#kHours")
+        .textContent =
+          formatHours(
+            hours
+          );
+
+
+      renderProgress(
+        rankProgress,
+        profile,
+        missionCount,
+        hours,
+        certCount
+      );
+
+    }
+
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        loadProfile()
+          .catch(
+            error => {
+
+              console.error(
+                "Profile load failed:",
+                error
+              );
+
+              $("#profileName")
+                .textContent =
+                  "Unable to load profile";
+
+              $("#profileRank")
+                .innerHTML =
+                  `<span class="error">${esc(error.message || "Unknown error")}</span>`;
+
+            }
+          );
+
+      }
+    );
+  </script>
+
+</body>
+
+</html>
