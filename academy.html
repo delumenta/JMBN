@@ -498,74 +498,34 @@ button{cursor:pointer}
 }
 
 /* =========================================================
-   ACADEMY RECORD CONSOLE
+   UPCOMING TRAINING CONSOLE
 ========================================================= */
-.record-body{padding:18px}
-.ring{
-  --pct:0deg;
-  width:138px;height:138px;
-  margin:17px auto 18px;
-  border-radius:50%;
-  background:conic-gradient(var(--gold-bright) var(--pct),#24231c 0);
-  display:grid;
-  place-items:center;
-  box-shadow:0 0 18px rgba(214,180,76,.05);
-}
-.ring-inner{
-  width:108px;height:108px;
-  border-radius:50%;
-  border:1px solid rgba(214,180,76,.13);
-  background:#050605;
-  display:grid;
-  place-items:center;
-  text-align:center;
-}
-.ring-inner strong{
-  display:block;
-  color:var(--gold-bright);
-  font-size:25px;
-}
-.ring-inner span{
-  display:block;
-  margin-top:2px;
-  color:#716b59;
-  font-size:7px;
-  letter-spacing:.15em;
-}
-.side-heading{
-  margin:18px 0 7px;
-  color:var(--gold);
-  font-size:8px;
-  font-weight:700;
-  letter-spacing:.18em;
-}
-.side-stat{
+.upcoming-body{padding:18px}
+.next-training{
   position:relative;
-  padding:11px 10px 11px 13px;
-  border-top:1px solid #2e2916;
-  background:linear-gradient(90deg,rgba(214,180,76,.025),transparent);
+  padding:16px 14px 15px;
+  border:1px solid rgba(214,180,76,.24);
+  background:linear-gradient(135deg,rgba(214,180,76,.075),rgba(214,180,76,.015) 55%,transparent);
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
 }
-.side-stat::before{
-  content:"";
-  position:absolute;
-  left:0;top:13px;
-  width:3px;height:3px;
-  background:var(--gold);
-}
-.side-stat b{
-  display:block;
-  color:#d9c267;
-  font-size:9px;
-  letter-spacing:.05em;
-}
-.side-stat span{
-  display:block;
-  margin-top:3px;
-  color:#847e6a;
-  font-size:8px;
-  line-height:1.45;
-}
-
+.next-training::before{content:"";position:absolute;left:0;top:0;width:38px;height:2px;background:var(--gold-bright)}
+.upcoming-kicker{color:#81785d;font-size:7px;font-weight:700;letter-spacing:.18em}
+.upcoming-code{margin-top:12px;color:var(--gold-bright);font-size:9px;font-weight:700;letter-spacing:.11em}
+.upcoming-title{margin:5px 0 0;color:#f0dc91;font-size:16px;line-height:1.15}
+.upcoming-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
+.meta-cell{padding:9px 10px;border-top:1px solid #332d17;background:rgba(255,255,255,.01)}
+.meta-cell small{display:block;color:#6f6958;font-size:7px;letter-spacing:.14em;margin-bottom:4px}
+.meta-cell b{display:block;color:#cdb85f;font-size:9px}
+.upcoming-list-title{margin:20px 0 8px;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em}
+.training-row{position:relative;padding:11px 8px 11px 13px;border-top:1px solid #2e2916}
+.training-row::before{content:"";position:absolute;left:0;top:14px;width:3px;height:3px;background:var(--gold)}
+.training-row .date{color:#8f8565;font-size:7px;letter-spacing:.12em}
+.training-row b{display:block;margin-top:3px;color:#d9c267;font-size:9px}
+.training-row span{display:block;margin-top:3px;color:#77715f;font-size:8px}
+.training-empty{padding:34px 15px;text-align:center;border:1px dashed rgba(214,180,76,.18);background:rgba(214,180,76,.018)}
+.training-empty strong{display:block;color:#bca956;font-size:10px;letter-spacing:.12em}
+.training-empty span{display:block;max-width:240px;margin:8px auto 0;color:#756f5f;font-size:8px;line-height:1.6}
+.training-note{margin-top:14px;padding-top:12px;border-top:1px solid #211e12;color:#5f5b50;font-size:7px;line-height:1.55;letter-spacing:.04em}
 /* =========================================================
    CERTIFICATION RECORD
 ========================================================= */
@@ -812,55 +772,12 @@ button{cursor:pointer}
         <span class="corner-mark br"></span>
 
         <div class="terminal-head">
-          <span class="terminal-title">YOUR ACADEMY RECORD</span>
-          <span class="terminal-id">PERSONNEL // LIVE</span>
+          <span class="terminal-title">UPCOMING TRAINING</span>
+          <span class="terminal-id">SCHEDULE // LIVE</span>
         </div>
 
-        <div class="record-body">
-
-          <div class="ring" id="academyRing">
-            <div class="ring-inner">
-              <div>
-                <strong id="academyPercent">0%</strong>
-                <span>OVERALL PROGRESS</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="side-stat">
-            <b id="sideEarned">0 CERTIFICATIONS</b>
-            <span>Qualifications earned through JMBN Academy.</span>
-          </div>
-
-          <div class="side-stat">
-            <b id="sideTraining">0 TRAINING EVENTS</b>
-            <span>Completed certification requirements.</span>
-          </div>
-
-          <div class="side-heading">CURRENT OBJECTIVE</div>
-
-          <div class="side-stat">
-            <b id="currentObjective">BEGIN BASIC MILITARY TRAINING</b>
-            <span id="currentObjectiveNote">Your first step into JMBN team operations.</span>
-          </div>
-
-          <div class="side-heading">ACADEMY PROCESS</div>
-
-          <div class="side-stat">
-            <b>01 // LEARN</b>
-            <span>Understand JMBN procedures, roles and standards.</span>
-          </div>
-
-          <div class="side-stat">
-            <b>02 // TRAIN</b>
-            <span>Complete the practical training events required by the programme.</span>
-          </div>
-
-          <div class="side-stat">
-            <b>03 // QUALIFY</b>
-            <span>Complete all requirements and earn the certification.</span>
-          </div>
-
+        <div class="upcoming-body" id="upcomingTraining">
+          <div class="loading">LOADING TRAINING SCHEDULE...</div>
         </div>
       </div>
     </aside>
@@ -913,6 +830,7 @@ let CERTIFICATIONS = [];
 let USER_CERTS = [];
 let REQUIREMENTS = [];
 let USER_EVENTS = [];
+let TRAINING_EVENTS = [];
 let CURRENT_USER_ID = null;
 let currentFilter = "all";
 
@@ -973,21 +891,17 @@ function requirementCertCode(row){
 }
 
 function requirementEventCode(row){
-  return row.training_event_code || row.event_code || row.requirement_code || row.code || "";
+  return row.event_code || "";
 }
 
 function userEventCode(row){
-  return row.training_event_code || row.event_code || row.code || "";
+  return row.event_code || "";
 }
 
 function isEventComplete(row){
-  const status = norm(row.status || row.completion_status || row.result);
-
-  if(row.completed === true || row.passed === true || row.approved === true){
-    return true;
-  }
-
-  return ["completed","complete","passed","approved"].includes(status);
+  // A row in user_training_events represents a completed training event.
+  // completed_at is populated by default in the current schema.
+  return Boolean(row?.event_code && row?.completed_at);
 }
 
 function userOwnsCertification(code){
@@ -1212,7 +1126,7 @@ function renderProgrammes(){
               class="programme-action"
               onclick="openProgramme('${encodeURIComponent(code)}')"
             >
-              ACCESS PROGRAMME →
+              VIEW PROGRAMME →
             </button>
 
           </div>
@@ -1289,7 +1203,6 @@ function renderCertificationRecord(){
 
 function renderSummary(){
   const total = CERTIFICATIONS.length;
-
   const earned = CERTIFICATIONS.filter(cert =>
     userOwnsCertification(certCode(cert))
   ).length;
@@ -1302,51 +1215,41 @@ function renderSummary(){
       .map(code => String(code).toLowerCase())
   );
 
-  const totalRequirements = REQUIREMENTS.length;
-
-  const completedRequirements = REQUIREMENTS.filter(row => {
-    const eventCode = requirementEventCode(row);
-
-    return (
-      eventCode &&
-      completedEventCodes.has(String(eventCode).toLowerCase())
-    );
-  }).length;
-
   const inProgress = CERTIFICATIONS.filter(cert => {
     const code = certCode(cert);
-
     if(userOwnsCertification(code)) return false;
-
     return completedRequirementsFor(code) > 0;
   }).length;
-
-  const percent =
-    totalRequirements
-      ? Math.round((completedRequirements / totalRequirements) * 100)
-      : total
-        ? Math.round((earned / total) * 100)
-        : 0;
 
   document.getElementById("kpiProgrammes").textContent = total;
   document.getElementById("kpiEarned").textContent = earned;
   document.getElementById("kpiProgress").textContent = inProgress;
-  document.getElementById("kpiEvents").textContent = completedRequirements;
-
-  document.getElementById("academyPercent").textContent = percent + "%";
-
-  document.getElementById("academyRing")
-    .style.setProperty("--pct",(percent * 3.6) + "deg");
-
-  document.getElementById("sideEarned").textContent =
-    `${earned} CERTIFICATION${earned === 1 ? "" : "S"}`;
-
-  document.getElementById("sideTraining").textContent =
-    `${completedRequirements} TRAINING EVENT${completedRequirements === 1 ? "" : "S"}`;
-
-  renderCurrentObjective();
+  document.getElementById("kpiEvents").textContent = completedEventCodes.size;
 }
 
+function renderUpcomingTraining(){
+  const host = document.getElementById("upcomingTraining");
+  if(!host) return;
+
+  // training_events currently stores Academy module definitions (BMT-CQC,
+  // BMT-FIREMOVE, etc.), not scheduled sessions. Until a training schedule
+  // table/fields are added, show a truthful empty state instead of fake dates.
+  host.innerHTML = `
+    <div class="training-empty">
+      <strong>NO TRAINING SCHEDULED</strong>
+      <span>There are currently no upcoming Academy training sessions on the schedule.</span>
+    </div>
+    <div class="upcoming-list-title">TRAINING MODULES</div>
+    ${TRAINING_EVENTS.slice(0,4).map(event => `
+      <div class="training-row">
+        <div class="date">${esc(event.event_code || "TRAINING")}</div>
+        <b>${esc(event.title || event.event_code || "Academy Training")}</b>
+        <span>Academy module · scheduling not yet assigned</span>
+      </div>
+    `).join("")}
+    <div class="training-note">Upcoming dates will appear here once Academy training sessions are scheduled.</div>
+  `;
+}
 
 /* =========================================================
    CURRENT OBJECTIVE
@@ -1436,7 +1339,8 @@ async function loadAcademy(){
       certResult,
       requirementResult,
       userCertResult,
-      userEventResult
+      userEventResult,
+      trainingEventResult
     ] = await Promise.all([
 
       sb
@@ -1456,7 +1360,12 @@ async function loadAcademy(){
       sb
         .from("user_training_events")
         .select("*")
-        .eq("user_id",CURRENT_USER_ID)
+        .eq("user_id",CURRENT_USER_ID),
+
+      sb
+        .from("training_events")
+        .select("event_code,title,description,duration_hrs,sort_order")
+        .order("sort_order",{ ascending:true })
 
     ]);
 
@@ -1474,14 +1383,20 @@ async function loadAcademy(){
       console.warn("user_training_events:",userEventResult.error);
     }
 
+    if(trainingEventResult.error){
+      console.warn("training_events:",trainingEventResult.error);
+    }
+
     CERTIFICATIONS = certResult.data || [];
     REQUIREMENTS = requirementResult.data || [];
     USER_CERTS = userCertResult.data || [];
     USER_EVENTS = userEventResult.data || [];
+    TRAINING_EVENTS = trainingEventResult.data || [];
 
     renderProgrammes();
     renderCertificationRecord();
     renderSummary();
+    renderUpcomingTraining();
 
   }catch(error){
     console.error("Academy load failed:",error);
