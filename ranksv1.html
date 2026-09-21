@@ -1851,6 +1851,163 @@ tbody tr:hover{
 }
 
 
+
+/* =========================================================
+   ATTENDANCE MANIFEST — COMMAND UI ENHANCEMENT
+   Keeps the supplied Operations Command page as the base.
+========================================================= */
+
+.att-kicker{
+  color:var(--gold-soft);
+  font-size:8px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+.att-status-buttons{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  width:100%;
+}
+
+.att-status-btn{
+  min-height:36px;
+  border:1px solid rgba(218,180,55,.42);
+  border-radius:7px;
+  background:#050605;
+  color:#d8d1b4;
+  font-family:"Play",sans-serif;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  cursor:pointer;
+  transition:.16s ease;
+}
+
+.att-status-btn:hover{
+  border-color:var(--gold-bright);
+  color:var(--gold-bright);
+}
+
+.att-status-btn.active[data-att-value="going"]{
+  color:#06120c;
+  border-color:var(--green);
+  background:var(--green);
+  box-shadow:0 0 14px rgba(67,223,145,.16);
+}
+
+.att-status-btn.active[data-att-value="not_going"]{
+  color:#180505;
+  border-color:#ff7c7c;
+  background:#ff7c7c;
+  box-shadow:0 0 14px rgba(255,103,103,.14);
+}
+
+.att-status-btn.active[data-att-value="withdraw"]{
+  color:#ffdede;
+  border-color:rgba(255,103,103,.72);
+  background:rgba(128,25,25,.36);
+}
+
+#attSelfRow{
+  padding:12px;
+  border:1px solid rgba(218,180,55,.24);
+  border-radius:8px;
+  background:linear-gradient(90deg,rgba(226,184,47,.05),rgba(0,0,0,.18));
+}
+
+#attSelfSave{
+  width:100%;
+  margin-top:2px;
+}
+
+.att-list-head{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding-bottom:7px;
+  border-bottom:1px solid rgba(218,180,55,.14);
+}
+
+#attList{
+  width:100%;
+  flex-direction:column;
+}
+
+#attList .chip{
+  width:100%;
+  display:grid;
+  grid-template-columns:minmax(120px,1fr) minmax(130px,180px) 72px 26px;
+  gap:8px;
+  align-items:center;
+  position:relative;
+  border-radius:7px;
+  padding:7px 8px 7px 12px;
+  background:linear-gradient(90deg,rgba(227,188,58,.045),rgba(0,0,0,.16));
+}
+
+#attList .chip::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:7px;
+  bottom:7px;
+  width:2px;
+  background:var(--gold);
+}
+
+#attList .chip[data-attendance="going"]::before{
+  background:var(--green);
+  box-shadow:0 0 7px rgba(67,223,145,.36);
+}
+
+#attList .chip[data-attendance="not_going"]::before{
+  background:var(--red);
+  box-shadow:0 0 7px rgba(255,103,103,.36);
+}
+
+#attList .chip > span:first-child{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+#attList .chip > .subtle{
+  text-transform:uppercase;
+  font-size:8px;
+  text-align:right;
+}
+
+#attList .chip[data-attendance="going"] > .subtle{color:var(--green)}
+#attList .chip[data-attendance="not_going"] > .subtle{color:var(--red)}
+
+#attList .chip select{
+  width:100%;
+  min-width:0;
+}
+
+#attList .chip .x{
+  width:24px;
+  height:24px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,103,103,.25);
+  border-radius:5px;
+}
+
+@media(max-width:600px){
+  .att-status-buttons{grid-template-columns:1fr}
+  #attList .chip{
+    grid-template-columns:minmax(95px,1fr) 105px 58px 24px;
+    gap:5px;
+  }
+}
+
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */
@@ -2568,41 +2725,35 @@ tbody tr:hover{
       style="display:none"
     >
 
-      <span class="subtle">
-        Your status:
-      </span>
+      <div style="width:100%">
+        <div class="att-kicker">Your Deployment Status</div>
 
-      <select id="attSelfSelect">
+        <input id="attSelfSelect" type="hidden" value="">
 
-        <option value="">
-          Select...
-        </option>
+        <div class="att-status-buttons">
+          <button class="att-status-btn" type="button" data-att-value="going">
+            Going
+          </button>
 
-        <option value="going">
-          Going
-        </option>
+          <button class="att-status-btn" type="button" data-att-value="not_going">
+            Not Going
+          </button>
 
-        <option value="not_going">
-          Not going
-        </option>
-
-        <option value="withdraw">
-          Withdraw
-        </option>
-
-      </select>
-
+          <button class="att-status-btn" type="button" data-att-value="withdraw">
+            Withdraw
+          </button>
+        </div>
+      </div>
 
       <button
         id="attSelfSave"
         class="small-btn"
         type="button"
       >
-        Save
+        Save Status
       </button>
 
     </div>
-
 
 
     <div
@@ -2651,9 +2802,18 @@ tbody tr:hover{
 
     <div class="row">
 
-      <span class="subtle">
-        Attendees:
-      </span>
+      <div class="att-list-head">
+        <span class="subtle">
+          Attendees
+        </span>
+
+        <span
+          id="attCount"
+          class="subtle"
+        >
+          0 confirmed
+        </span>
+      </div>
 
       <div
         id="attList"
@@ -4464,6 +4624,50 @@ window.closeAttendance =
 
 
 
+function setAttendanceChoice(value){
+
+  const input =
+    $("#attSelfSelect");
+
+  if(input){
+    input.value =
+      value || "";
+  }
+
+  $$(".att-status-btn")
+    .forEach(
+      btn => {
+
+        btn.classList.toggle(
+          "active",
+          btn.dataset.attValue === value
+        );
+
+      }
+    );
+
+}
+
+
+$$(".att-status-btn")
+  .forEach(
+    btn => {
+
+      btn.addEventListener(
+        "click",
+        () => {
+
+          setAttendanceChoice(
+            btn.dataset.attValue || ""
+          );
+
+        }
+      );
+
+    }
+  );
+
+
 async function openAttendance(
   id,
   title
@@ -4788,8 +4992,45 @@ async function loadAttendees(){
   }
 
 
-  const rows =
-    data || [];
+  const rows = data || [];
+
+  const attCount =
+    $("#attCount");
+
+  if(attCount){
+
+    const confirmed =
+      rows.filter(
+        a =>
+          (a.attendance || "")
+            .toLowerCase()
+          === "going"
+      ).length;
+
+    attCount.textContent =
+      `${confirmed} confirmed`;
+
+  }
+
+  if(session && session.user){
+
+    const mine =
+      rows.find(
+        a =>
+          a.user_id ===
+          session.user.id
+      );
+
+    if(mine){
+
+      setAttendanceChoice(
+        (mine.attendance || "")
+          .toLowerCase()
+      );
+
+    }
+
+  }
 
 
   if(
