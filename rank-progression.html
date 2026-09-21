@@ -1,758 +1,3396 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+/>
+
 <title>JMBN – Progression</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png"
-      href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-      sizes="32x32">
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="icon"
+  type="image/png"
+  href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+  sizes="32x32"
+>
+
 
 <style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
 :root{
+
   --bg:#020303;
+
   --panel:#080907;
   --panel2:#050605;
+
   --gold:#d9b53e;
   --gold-bright:#f0d46a;
   --gold-soft:#c7a83e;
+
   --cream:#fff3bd;
+
   --text:#f7f3df;
+
   --muted:#958e75;
+
   --line:rgba(217,181,62,.42);
+
   --good:#68c989;
   --bad:#e56f69;
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{
-  padding:14px;
-  background:
-    radial-gradient(1000px 600px at 60% -15%,rgba(190,147,34,.08),transparent 60%),
-    #020303;
-  color:var(--text);
-  font-family:'Play',system-ui,sans-serif;
-  font-size:14px;
-  letter-spacing:.25px;
-}
-button,select{font:inherit}
 
-/* fallback header */
-.brand{
-  width:90%;max-width:1700px;margin:0 auto 14px;display:flex;align-items:center;gap:10px;
-  padding-bottom:7px;border-bottom:1px solid var(--line)
 }
-.brand-logo{width:44px;height:44px;object-fit:contain}
-.brand h1{margin:0;font-size:20px;color:var(--gold-bright)}
 
-/* page */
-.shell{width:90%;max-width:1700px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
 /* =========================================================
-   COMPACT COMMAND HEADER
+   RESET
 ========================================================= */
-.command-hero{
-  position:relative;height:116px;min-height:116px;overflow:hidden;
-  border:1px solid rgba(217,181,62,.65);border-radius:12px;background:#030403;
-  box-shadow:0 0 22px rgba(217,181,62,.055)
+
+*{
+  box-sizing:border-box;
 }
-.command-hero::before{
-  content:"";position:absolute;z-index:5;left:14px;top:16px;bottom:16px;width:2px;
-  background:var(--gold-bright);
-  box-shadow:0 0 5px rgba(240,212,106,.72),0 0 13px rgba(240,212,106,.24)
+
+html,
+body{
+  margin:0;
+  min-height:100%;
 }
-.command-hero::after{
-  content:"";position:absolute;z-index:1;pointer-events:none;right:-4%;top:-48px;
-  width:53%;height:215px;
+
+
+body{
+
+  padding:14px;
+
   background:
-    radial-gradient(ellipse 68% 50% at 20% 66%,rgba(122,91,26,.24) 0%,rgba(91,69,23,.16) 28%,rgba(49,39,18,.09) 50%,rgba(15,15,10,.025) 69%,transparent 82%),
-    radial-gradient(ellipse 92% 35% at 45% 5%,rgba(152,118,30,.12) 0%,rgba(86,69,24,.06) 42%,transparent 72%);
-  filter:blur(13px);opacity:.95
+    radial-gradient(
+      1000px 600px at 60% -15%,
+      rgba(190,147,34,.08),
+      transparent 60%
+    ),
+    #020303;
+
+  color:var(--text);
+
+  font-family:
+    'Play',
+    system-ui,
+    sans-serif;
+
+  font-size:14px;
+
+  letter-spacing:.25px;
+
 }
+
+
+button,
+select{
+  font:inherit;
+}
+
+
+/* =========================================================
+   HEADER MOUNT
+========================================================= */
+
+#header-container{
+  width:100%;
+}
+
+
+/* =========================================================
+   PAGE SHELL
+========================================================= */
+
+.shell{
+
+  width:90%;
+  max-width:1700px;
+
+  margin:0 auto;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:14px;
+
+}
+
+
+/* =========================================================
+   COMMAND HEADER
+========================================================= */
+
+.command-hero{
+
+  position:relative;
+
+  height:116px;
+  min-height:116px;
+
+  overflow:hidden;
+
+  border:
+    1px solid rgba(217,181,62,.65);
+
+  border-radius:12px;
+
+  background:#030403;
+
+  box-shadow:
+    0 0 22px rgba(217,181,62,.055);
+
+}
+
+
+.command-hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  z-index:5;
+
+  left:14px;
+
+  top:16px;
+  bottom:16px;
+
+  width:2px;
+
+  background:
+    var(--gold-bright);
+
+  box-shadow:
+    0 0 5px rgba(240,212,106,.72),
+    0 0 13px rgba(240,212,106,.24);
+
+}
+
+
+.command-hero::after{
+
+  content:"";
+
+  position:absolute;
+
+  z-index:1;
+
+  pointer-events:none;
+
+  right:-4%;
+  top:-48px;
+
+  width:53%;
+  height:215px;
+
+  background:
+
+    radial-gradient(
+      ellipse 68% 50% at 20% 66%,
+      rgba(122,91,26,.24) 0%,
+      rgba(91,69,23,.16) 28%,
+      rgba(49,39,18,.09) 50%,
+      rgba(15,15,10,.025) 69%,
+      transparent 82%
+    ),
+
+    radial-gradient(
+      ellipse 92% 35% at 45% 5%,
+      rgba(152,118,30,.12) 0%,
+      rgba(86,69,24,.06) 42%,
+      transparent 72%
+    );
+
+  filter:blur(13px);
+
+  opacity:.95;
+
+}
+
+
+/* =========================================================
+   HERO LEFT
+========================================================= */
+
 .hero-left{
-  position:absolute;z-index:5;left:0;top:0;bottom:0;width:54%;padding:20px 34px;
-  display:flex;flex-direction:column;justify-content:center
+
+  position:absolute;
+
+  z-index:5;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:54%;
+
+  padding:
+    20px 34px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
 }
+
+
 .hero-kicker{
-  color:var(--gold-soft);font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:7px
+
+  color:
+    var(--gold-soft);
+
+  font-size:9px;
+
+  letter-spacing:.22em;
+
+  text-transform:uppercase;
+
+  margin-bottom:7px;
+
 }
+
+
 .hero-title{
-  margin:0;color:var(--cream);font-size:25px;line-height:1;letter-spacing:.14em;
-  text-transform:uppercase;white-space:nowrap
+
+  margin:0;
+
+  color:
+    var(--cream);
+
+  font-size:25px;
+
+  line-height:1;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+
+  white-space:nowrap;
+
 }
+
+
 .hero-sub{
-  margin-top:7px;color:#9c9270;font-size:10px;line-height:1.35;letter-spacing:.08em
+
+  margin-top:7px;
+
+  color:#9c9270;
+
+  font-size:10px;
+
+  line-height:1.35;
+
+  letter-spacing:.08em;
+
 }
+
+
+/* =========================================================
+   HERO DIAGONAL
+========================================================= */
+
 .hero-diagonal{
-  position:absolute;z-index:4;left:61%;top:-108px;width:1px;height:330px;transform:rotate(25deg);
-  background:linear-gradient(to bottom,transparent 0%,rgba(217,181,62,.12) 18%,rgba(217,181,62,.40) 49%,rgba(217,181,62,.24) 70%,transparent 100%)
+
+  position:absolute;
+
+  z-index:4;
+
+  left:61%;
+
+  top:-108px;
+
+  width:1px;
+  height:330px;
+
+  transform:
+    rotate(25deg);
+
+  background:
+
+    linear-gradient(
+      to bottom,
+
+      transparent 0%,
+
+      rgba(217,181,62,.12) 18%,
+
+      rgba(217,181,62,.40) 49%,
+
+      rgba(217,181,62,.24) 70%,
+
+      transparent 100%
+    );
+
 }
+
+
+/* =========================================================
+   HERO STATUS
+========================================================= */
+
 .hero-status{
-  position:absolute;z-index:5;right:34px;top:0;bottom:0;width:min(390px,31%);
-  display:flex;flex-direction:column;justify-content:center
+
+  position:absolute;
+
+  z-index:5;
+
+  right:34px;
+
+  top:0;
+  bottom:0;
+
+  width:
+    min(390px,31%);
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
 }
+
+
 .hero-status-label{
-  color:#d1b13f;font-size:8px;font-weight:700;letter-spacing:.25em;text-transform:uppercase
+
+  color:#d1b13f;
+
+  font-size:8px;
+
+  font-weight:700;
+
+  letter-spacing:.25em;
+
+  text-transform:uppercase;
+
 }
+
+
 .hero-status-rule{
-  height:1px;width:100%;margin:8px 0;
-  background:linear-gradient(90deg,rgba(217,181,62,.72),rgba(217,181,62,.28) 50%,rgba(217,181,62,.06) 84%,transparent)
+
+  height:1px;
+
+  width:100%;
+
+  margin:
+    8px 0;
+
+  background:
+
+    linear-gradient(
+      90deg,
+
+      rgba(217,181,62,.72),
+
+      rgba(217,181,62,.28) 50%,
+
+      rgba(217,181,62,.06) 84%,
+
+      transparent
+    );
+
 }
+
+
 .hero-status-main{
-  color:var(--gold-bright);font-size:11px;font-weight:700;text-transform:uppercase
+
+  color:
+    var(--gold-bright);
+
+  font-size:11px;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
 }
-.hero-status-copy{margin-top:4px;color:#aaa28a;font-size:9px;line-height:1.35}
+
+
+.hero-status-copy{
+
+  margin-top:4px;
+
+  color:#aaa28a;
+
+  font-size:9px;
+
+  line-height:1.35;
+
+}
+
 
 /* =========================================================
    ADVANCEMENT CARD
 ========================================================= */
+
 .rank-card{
-  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:13px;
-  background:linear-gradient(145deg,#0b0c09,#050605 58%,#020303);
-  padding:24px 26px;
-  box-shadow:0 15px 45px rgba(0,0,0,.55)
+
+  position:relative;
+
+  overflow:hidden;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:13px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #0b0c09,
+      #050605 58%,
+      #020303
+    );
+
+  padding:
+    24px 26px;
+
+  box-shadow:
+    0 15px 45px rgba(0,0,0,.55);
+
 }
+
+
 .rank-card::before{
-  content:"";position:absolute;left:0;top:22px;bottom:22px;width:2px;
-  background:linear-gradient(transparent,var(--gold),transparent)
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+
+  top:22px;
+  bottom:22px;
+
+  width:2px;
+
+  background:
+
+    linear-gradient(
+      transparent,
+      var(--gold),
+      transparent
+    );
+
 }
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
 .section-kicker{
-  font-size:8px;letter-spacing:.2em;color:var(--gold-soft);text-transform:uppercase
+
+  font-size:8px;
+
+  letter-spacing:.2em;
+
+  color:
+    var(--gold-soft);
+
+  text-transform:uppercase;
+
 }
+
+
 .section-title{
-  font-size:14px;color:var(--gold-bright);letter-spacing:.12em;text-transform:uppercase;margin-top:4px
+
+  font-size:14px;
+
+  color:
+    var(--gold-bright);
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  margin-top:4px;
+
 }
+
+
+/* =========================================================
+   RANK ROUTE
+========================================================= */
+
 .rank-route{
-  display:grid;grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr);align-items:center;gap:22px;margin-top:20px
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    96px
+    minmax(0,1fr);
+
+  align-items:center;
+
+  gap:22px;
+
+  margin-top:20px;
+
 }
+
+
 .rank-box{
-  min-height:132px;border:1px solid rgba(217,181,62,.32);border-radius:10px;padding:16px;
-  background:radial-gradient(circle at 12% 0,rgba(240,201,78,.08),transparent 55%),#050605;
-  display:flex;align-items:center;gap:16px
+
+  min-height:132px;
+
+  border:
+    1px solid rgba(217,181,62,.32);
+
+  border-radius:10px;
+
+  padding:16px;
+
+  background:
+
+    radial-gradient(
+      circle at 12% 0,
+      rgba(240,201,78,.08),
+      transparent 55%
+    ),
+
+    #050605;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:16px;
+
 }
+
+
 .rank-insignia{
-  width:78px;height:78px;flex:0 0 78px;display:grid;place-items:center;
-  border:1px solid rgba(217,181,62,.35);border-radius:50%;
-  box-shadow:inset 0 0 24px rgba(217,181,62,.06)
+
+  width:78px;
+  height:78px;
+
+  flex:
+    0 0 78px;
+
+  display:grid;
+
+  place-items:center;
+
+  border:
+    1px solid rgba(217,181,62,.35);
+
+  border-radius:50%;
+
+  box-shadow:
+
+    inset
+    0 0 24px
+    rgba(217,181,62,.06);
+
 }
+
+
 .rank-insignia img{
-  display:none;max-width:62px;max-height:62px;object-fit:contain
+
+  display:none;
+
+  max-width:62px;
+  max-height:62px;
+
+  object-fit:contain;
+
 }
-.rank-fallback{color:var(--gold);font-size:23px}
+
+
+.rank-fallback{
+
+  color:
+    var(--gold);
+
+  font-size:23px;
+
+}
+
+
 .rank-label{
-  font-size:8px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase
+
+  font-size:8px;
+
+  color:
+    var(--muted);
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
 }
-.rank-name{font-size:19px;color:#fff0ae;font-weight:700;margin-top:5px}
-.rank-code{font-size:10px;color:var(--gold-soft);margin-top:4px}
-.rank-arrow{text-align:center;color:var(--gold);font-size:25px}
+
+
+.rank-name{
+
+  font-size:19px;
+
+  color:#fff0ae;
+
+  font-weight:700;
+
+  margin-top:5px;
+
+}
+
+
+.rank-code{
+
+  font-size:10px;
+
+  color:
+    var(--gold-soft);
+
+  margin-top:4px;
+
+}
+
+
+.rank-arrow{
+
+  text-align:center;
+
+  color:
+    var(--gold);
+
+  font-size:25px;
+
+}
+
+
 .rank-arrow small{
-  display:block;font-size:7px;letter-spacing:.13em;margin-top:5px;color:var(--muted)
+
+  display:block;
+
+  font-size:7px;
+
+  letter-spacing:.13em;
+
+  margin-top:5px;
+
+  color:
+    var(--muted);
+
 }
 
-/* overall progress */
-.progress-wrap{margin-top:20px}
+
+/* =========================================================
+   OVERALL PROGRESS
+========================================================= */
+
+.progress-wrap{
+
+  margin-top:20px;
+
+}
+
+
 .progress-head{
-  display:flex;justify-content:space-between;gap:15px;font-size:9px;color:var(--muted);margin-bottom:7px
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:15px;
+
+  font-size:9px;
+
+  color:
+    var(--muted);
+
+  margin-bottom:7px;
+
 }
-.progress-head b{color:var(--gold-bright)}
+
+
+.progress-head b{
+
+  color:
+    var(--gold-bright);
+
+}
+
+
 .track{
-  height:7px;border:1px solid rgba(217,181,62,.38);background:#020302;border-radius:99px;overflow:hidden
+
+  height:7px;
+
+  border:
+    1px solid rgba(217,181,62,.38);
+
+  background:#020302;
+
+  border-radius:99px;
+
+  overflow:hidden;
+
 }
+
+
 .track-fill{
-  height:100%;width:100%;
-  background:linear-gradient(90deg,#8f7628,var(--gold-bright));
-  transform-origin:left center;transform:scaleX(0);
-  transition:transform .5s ease-out;
-  box-shadow:0 0 12px rgba(240,201,78,.3)
+
+  height:100%;
+
+  width:100%;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #8f7628,
+      var(--gold-bright)
+    );
+
+  transform-origin:
+    left center;
+
+  transform:
+    scaleX(0);
+
+  transition:
+    transform .5s ease-out;
+
+  box-shadow:
+    0 0 12px rgba(240,201,78,.3);
+
 }
 
-/* requirements */
-.reqs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+
+/* =========================================================
+   REQUIREMENTS
+========================================================= */
+
+.reqs{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:10px;
+
+  margin-top:14px;
+
+}
+
+
 .req{
-  border:1px solid rgba(217,181,62,.30);border-radius:9px;padding:12px 14px;background:#050605
-}
-.req-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.req-name{
-  font-size:8px;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-soft)
-}
-.req-num{font-size:12px;color:var(--gold-bright);font-variant-numeric:tabular-nums}
-.mini{
-  height:4px;margin-top:9px;background:#17160f;border-radius:10px;overflow:hidden
-}
-.mini-fill{
-  display:block;width:100%;height:100%;background:var(--gold);
-  transform-origin:left center;transform:scaleX(0);transition:transform .5s ease-out
+
+  border:
+    1px solid rgba(217,181,62,.30);
+
+  border-radius:9px;
+
+  padding:
+    12px 14px;
+
+  background:#050605;
+
 }
 
-/* promotion row */
+
+.req-top{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  align-items:center;
+
+}
+
+
+.req-name{
+
+  font-size:8px;
+
+  letter-spacing:.17em;
+
+  text-transform:uppercase;
+
+  color:
+    var(--gold-soft);
+
+}
+
+
+.req-num{
+
+  font-size:12px;
+
+  color:
+    var(--gold-bright);
+
+  font-variant-numeric:
+    tabular-nums;
+
+}
+
+
+.mini{
+
+  height:4px;
+
+  margin-top:9px;
+
+  background:#17160f;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+}
+
+
+.mini-fill{
+
+  display:block;
+
+  width:100%;
+
+  height:100%;
+
+  background:
+    var(--gold);
+
+  transform-origin:
+    left center;
+
+  transform:
+    scaleX(0);
+
+  transition:
+    transform .5s ease-out;
+
+}
+
+
+/* =========================================================
+   PROMOTION
+========================================================= */
+
 .promotion-row{
-  margin-top:14px;padding-top:13px;border-top:1px solid rgba(217,181,62,.14);
-  display:flex;align-items:center;gap:12px;justify-content:flex-end
+
+  margin-top:14px;
+
+  padding-top:13px;
+
+  border-top:
+    1px solid rgba(217,181,62,.14);
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  justify-content:flex-end;
+
 }
+
+
 .btn{
-  padding:8px 12px;border-radius:7px;border:1px solid rgba(217,181,62,.65);
-  background:linear-gradient(180deg,#0c0c0a,#060605);color:var(--gold-bright);
-  cursor:pointer;font-family:'Play',system-ui,sans-serif;font-size:11px;
-  text-transform:uppercase;letter-spacing:.08em
+
+  padding:
+    8px 12px;
+
+  border-radius:7px;
+
+  border:
+    1px solid rgba(217,181,62,.65);
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #0c0c0a,
+      #060605
+    );
+
+  color:
+    var(--gold-bright);
+
+  cursor:pointer;
+
+  font-family:
+    'Play',
+    system-ui,
+    sans-serif;
+
+  font-size:11px;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+
 }
-.btn:hover:not(:disabled){background:var(--gold-bright);color:#000}
-.btn:disabled{opacity:.38;cursor:not-allowed}
-.small{font-size:10px;color:var(--muted)}
+
+
+.btn:hover:not(:disabled){
+
+  background:
+    var(--gold-bright);
+
+  color:#000;
+
+}
+
+
+.btn:disabled{
+
+  opacity:.38;
+
+  cursor:not-allowed;
+
+}
+
+
+.small{
+
+  font-size:10px;
+
+  color:
+    var(--muted);
+
+}
+
 
 /* =========================================================
    LOWER PANELS
 ========================================================= */
+
 .lower{
-  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(360px,.75fr);gap:14px
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.45fr)
+    minmax(360px,.75fr);
+
+  gap:14px;
+
 }
+
+
 .panel{
-  border:1px solid var(--line);border-radius:12px;background:#070806;padding:18px;
-  box-shadow:0 10px 35px rgba(0,0,0,.32)
+
+  border:
+    1px solid var(--line);
+
+  border-radius:12px;
+
+  background:#070806;
+
+  padding:18px;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.32);
+
 }
+
+
 .panel-title{
-  font-size:11px;color:var(--gold-bright);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px
+
+  font-size:11px;
+
+  color:
+    var(--gold-bright);
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+
+  margin-bottom:14px;
+
 }
 
-/* certs */
-.cert-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.cert{
-  min-height:104px;padding:10px 6px;text-align:center;
-  border:1px solid rgba(217,181,62,.22);border-radius:8px;background:#050605;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:transform .15s ease,opacity .15s ease,filter .15s ease
-}
-.cert:hover{transform:translateY(-1px)}
-.cert.dim{opacity:.30;filter:grayscale(.55)}
-.cert-thumb{
-  width:52px;height:52px;display:grid;place-items:center;margin-bottom:5px
-}
-.cert-thumb img{max-width:48px;max-height:48px;object-fit:contain}
-.cert-thumb span{font-size:25px;color:var(--gold)}
-.cert-title{font-size:9px;color:#e5dfc7;font-weight:700}
-.cert-code{font-size:8px;color:var(--muted);margin-top:3px}
-.cert-hint{margin-top:9px;font-size:9px;color:var(--muted)}
-
-/* timeline */
-.timeline-controls{
-  display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px
-}
-.timeline-select{
-  min-width:0;flex:1;background:#050605;border:1px solid rgba(217,181,62,.42);
-  border-radius:7px;padding:8px 9px;color:var(--text);font-size:10px
-}
-.timeline-hint{font-size:9px;color:var(--muted);margin-bottom:12px}
-.timeline{
-  position:relative;border-left:1px solid rgba(217,181,62,.45);margin-left:5px;padding-left:16px
-}
-.titem{
-  position:relative;padding:0 0 15px;font-size:9px;color:var(--muted)
-}
-.titem::before{
-  content:"";position:absolute;width:7px;height:7px;border:1px solid var(--gold);
-  border-radius:50%;left:-20px;top:2px;background:#050605
-}
-.titem.done::before{background:var(--gold);box-shadow:0 0 8px rgba(240,201,78,.45)}
-.tlabel{display:block;color:#ded6b7;font-size:10px;font-weight:700;margin-bottom:2px}
-.tstatus{font-size:9px;color:var(--muted)}
-.titem.done .tstatus{color:var(--good)}
 
 /* =========================================================
-   WIDE SITE ALIGNMENT — matches Operations page
+   CERTIFICATIONS
 ========================================================= */
+
+.cert-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
+
+  gap:8px;
+
+}
+
+
+.cert{
+
+  min-height:104px;
+
+  padding:
+    10px 6px;
+
+  text-align:center;
+
+  border:
+    1px solid rgba(217,181,62,.22);
+
+  border-radius:8px;
+
+  background:#050605;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  transition:
+    transform .15s ease,
+    opacity .15s ease,
+    filter .15s ease;
+
+}
+
+
+.cert:hover{
+
+  transform:
+    translateY(-1px);
+
+}
+
+
+.cert.dim{
+
+  opacity:.30;
+
+  filter:
+    grayscale(.55);
+
+}
+
+
+.cert-thumb{
+
+  width:52px;
+  height:52px;
+
+  display:grid;
+
+  place-items:center;
+
+  margin-bottom:5px;
+
+}
+
+
+.cert-thumb img{
+
+  max-width:48px;
+  max-height:48px;
+
+  object-fit:contain;
+
+}
+
+
+.cert-thumb span{
+
+  font-size:25px;
+
+  color:
+    var(--gold);
+
+}
+
+
+.cert-title{
+
+  font-size:9px;
+
+  color:#e5dfc7;
+
+  font-weight:700;
+
+}
+
+
+.cert-code{
+
+  font-size:8px;
+
+  color:
+    var(--muted);
+
+  margin-top:3px;
+
+}
+
+
+.cert-hint{
+
+  margin-top:9px;
+
+  font-size:9px;
+
+  color:
+    var(--muted);
+
+}
+
+
+/* =========================================================
+   TRAINING TIMELINE
+========================================================= */
+
+.timeline-controls{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  align-items:center;
+
+  margin-bottom:10px;
+
+}
+
+
+.timeline-select{
+
+  min-width:0;
+
+  flex:1;
+
+  background:#050605;
+
+  border:
+    1px solid rgba(217,181,62,.42);
+
+  border-radius:7px;
+
+  padding:
+    8px 9px;
+
+  color:
+    var(--text);
+
+  font-size:10px;
+
+}
+
+
+.timeline-hint{
+
+  font-size:9px;
+
+  color:
+    var(--muted);
+
+  margin-bottom:12px;
+
+}
+
+
+.timeline{
+
+  position:relative;
+
+  border-left:
+    1px solid rgba(217,181,62,.45);
+
+  margin-left:5px;
+
+  padding-left:16px;
+
+}
+
+
+.titem{
+
+  position:relative;
+
+  padding:
+    0 0 15px;
+
+  font-size:9px;
+
+  color:
+    var(--muted);
+
+}
+
+
+.titem::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:7px;
+  height:7px;
+
+  border:
+    1px solid var(--gold);
+
+  border-radius:50%;
+
+  left:-20px;
+  top:2px;
+
+  background:#050605;
+
+}
+
+
+.titem.done::before{
+
+  background:
+    var(--gold);
+
+  box-shadow:
+    0 0 8px rgba(240,201,78,.45);
+
+}
+
+
+.tlabel{
+
+  display:block;
+
+  color:#ded6b7;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  margin-bottom:2px;
+
+}
+
+
+.tstatus{
+
+  font-size:9px;
+
+  color:
+    var(--muted);
+
+}
+
+
+.titem.done .tstatus{
+
+  color:
+    var(--good);
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
 @media(min-width:901px){
+
   .command-hero,
   .rank-card,
   .panel{
-    box-shadow:0 14px 42px rgba(0,0,0,.42),0 0 22px rgba(217,181,62,.035);
+
+    box-shadow:
+      0 14px 42px rgba(0,0,0,.42),
+      0 0 22px rgba(217,181,62,.035);
+
   }
+
 
   .rank-box{
-    padding:18px 20px;
+
+    padding:
+      18px 20px;
+
   }
+
 
   .rank-insignia{
-    width:82px;height:82px;flex-basis:82px;
+
+    width:82px;
+    height:82px;
+
+    flex-basis:82px;
+
   }
+
 
   .rank-insignia img{
-    max-width:66px;max-height:66px;
+
+    max-width:66px;
+    max-height:66px;
+
   }
 
-  .rank-name{font-size:20px}
+
+  .rank-name{
+
+    font-size:20px;
+
+  }
+
 
   .cert-grid{
-    grid-template-columns:repeat(5,minmax(0,1fr));
+
+    grid-template-columns:
+      repeat(5,minmax(0,1fr));
+
     gap:10px;
+
   }
+
 }
 
-@media(max-width:650px){
-  .shell{width:100%;}
-  .brand{width:100%;}
-}
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media(max-width:900px){
-  .command-hero{height:100px;min-height:100px}
-  .hero-left{width:56%;padding:18px 28px}
-  .hero-title{font-size:20px}
-  .hero-sub{font-size:8px}
-  .hero-diagonal{left:59%}
-  .hero-status{right:24px;width:34%}
-  .rank-route{grid-template-columns:1fr 60px 1fr;gap:12px}
-  .rank-name{font-size:16px}
-  .lower{grid-template-columns:1fr}
-}
-@media(max-width:650px){
-  body{padding:7px}
-  .command-hero{height:164px;min-height:164px}
-  .hero-left{width:100%;height:90px;bottom:auto;padding:17px 22px}
-  .hero-kicker{font-size:7px}
-  .hero-title{font-size:17px;letter-spacing:.11em}
-  .hero-sub{font-size:7px}
-  .hero-diagonal{display:none}
-  .hero-status{
-    left:22px;right:22px;top:91px;bottom:9px;width:auto;
-    border-top:1px solid rgba(217,181,62,.16)
+
+  .command-hero{
+
+    height:100px;
+
+    min-height:100px;
+
   }
-  .hero-status-label{font-size:7px;margin-top:7px}
-  .hero-status-rule{margin:5px 0}
-  .hero-status-main{font-size:9px}
-  .hero-status-copy{font-size:7px}
-  .command-hero::after{right:-15%;top:65px;width:115%;height:120px}
-  .rank-card{padding:18px 14px}
-  .rank-route{grid-template-columns:1fr;gap:10px}
-  .rank-arrow{transform:rotate(90deg);padding:0}
-  .rank-box{min-height:105px}
-  .rank-insignia{width:62px;height:62px;flex-basis:62px}
-  .rank-insignia img{max-width:50px;max-height:50px}
-  .reqs{grid-template-columns:1fr}
-  .promotion-row{align-items:flex-start;flex-direction:column}
-  .cert-grid{grid-template-columns:repeat(2,1fr)}
+
+
+  .hero-left{
+
+    width:56%;
+
+    padding:
+      18px 28px;
+
+  }
+
+
+  .hero-title{
+
+    font-size:20px;
+
+  }
+
+
+  .hero-sub{
+
+    font-size:8px;
+
+  }
+
+
+  .hero-diagonal{
+
+    left:59%;
+
+  }
+
+
+  .hero-status{
+
+    right:24px;
+
+    width:34%;
+
+  }
+
+
+  .rank-route{
+
+    grid-template-columns:
+      1fr 60px 1fr;
+
+    gap:12px;
+
+  }
+
+
+  .rank-name{
+
+    font-size:16px;
+
+  }
+
+
+  .lower{
+
+    grid-template-columns:
+      1fr;
+
+  }
+
 }
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px){
+
+  body{
+
+    padding:7px;
+
+  }
+
+
+  .shell{
+
+    width:100%;
+
+  }
+
+
+  .command-hero{
+
+    height:164px;
+
+    min-height:164px;
+
+  }
+
+
+  .hero-left{
+
+    width:100%;
+
+    height:90px;
+
+    bottom:auto;
+
+    padding:
+      17px 22px;
+
+  }
+
+
+  .hero-kicker{
+
+    font-size:7px;
+
+  }
+
+
+  .hero-title{
+
+    font-size:17px;
+
+    letter-spacing:.11em;
+
+  }
+
+
+  .hero-sub{
+
+    font-size:7px;
+
+  }
+
+
+  .hero-diagonal{
+
+    display:none;
+
+  }
+
+
+  .hero-status{
+
+    left:22px;
+    right:22px;
+
+    top:91px;
+    bottom:9px;
+
+    width:auto;
+
+    border-top:
+      1px solid rgba(217,181,62,.16);
+
+  }
+
+
+  .hero-status-label{
+
+    font-size:7px;
+
+    margin-top:7px;
+
+  }
+
+
+  .hero-status-rule{
+
+    margin:
+      5px 0;
+
+  }
+
+
+  .hero-status-main{
+
+    font-size:9px;
+
+  }
+
+
+  .hero-status-copy{
+
+    font-size:7px;
+
+  }
+
+
+  .command-hero::after{
+
+    right:-15%;
+
+    top:65px;
+
+    width:115%;
+
+    height:120px;
+
+  }
+
+
+  .rank-card{
+
+    padding:
+      18px 14px;
+
+  }
+
+
+  .rank-route{
+
+    grid-template-columns:
+      1fr;
+
+    gap:10px;
+
+  }
+
+
+  .rank-arrow{
+
+    transform:
+      rotate(90deg);
+
+    padding:0;
+
+  }
+
+
+  .rank-box{
+
+    min-height:105px;
+
+  }
+
+
+  .rank-insignia{
+
+    width:62px;
+    height:62px;
+
+    flex-basis:62px;
+
+  }
+
+
+  .rank-insignia img{
+
+    max-width:50px;
+    max-height:50px;
+
+  }
+
+
+  .reqs{
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .promotion-row{
+
+    align-items:flex-start;
+
+    flex-direction:column;
+
+  }
+
+
+  .cert-grid{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+  }
+
+}
+
 </style>
+
 </head>
+
+
 <body>
 
-<!-- Header mount point (replaced by header.html if available) -->
-<div id="header-container">
-  <div class="brand">
-    <img class="brand-logo"
-         src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-         alt="JMBN">
-    <h1>JMBN – Progression</h1>
-  </div>
-</div>
 
-<script>
-/* Inject shared header.html and highlight current page */
-(async () => {
-  try{
-    const r = await fetch('header.html',{ cache:'no-cache' });
-    if(!r.ok) return;
-    const html = await r.text();
-    const mount = document.getElementById('header-container');
-    if(mount) mount.outerHTML = html;
+<!-- =========================================================
+     SHARED JMBN HEADER
+========================================================= -->
 
-    requestAnimationFrame(() => {
-      const here = (location.pathname.split('/').pop() || 'rank-progression.html').toLowerCase();
-      document.querySelectorAll('.nav-btn').forEach(a => {
-        const href = (a.getAttribute('href') || '').toLowerCase();
-        if(href === here) a.classList.add('active');
-      });
-    });
-  }catch(e){
-    console.warn('Header mount failed:', e);
-  }
-})();
-</script>
+<div id="header-container"></div>
+
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
 
 <main class="shell">
 
-  <!-- COMPACT COMMAND HEADER -->
+
+  <!-- =====================================================
+       COMMAND HEADER
+  ====================================================== -->
+
   <section class="command-hero">
+
+
     <div class="hero-left">
-      <div class="hero-kicker">JMBN // Personnel Command</div>
-      <h1 class="hero-title">Rank Progression</h1>
-      <div class="hero-sub">
-        Track advancement, requirements and certifications across the JMBN rank structure.
+
+      <div class="hero-kicker">
+        JMBN // Personnel Command
       </div>
+
+      <h1 class="hero-title">
+        Rank Progression
+      </h1>
+
+      <div class="hero-sub">
+        Track advancement, requirements and certifications
+        across the JMBN rank structure.
+      </div>
+
     </div>
 
-    <div class="hero-diagonal" aria-hidden="true"></div>
+
+    <div
+      class="hero-diagonal"
+      aria-hidden="true"
+    ></div>
+
 
     <div class="hero-status">
-      <div class="hero-status-label">Progression Status</div>
+
+      <div class="hero-status-label">
+        Progression Status
+      </div>
+
       <div class="hero-status-rule"></div>
-      <div class="hero-status-main">Advancement Record Online</div>
-      <div class="hero-status-copy">Personnel progression synchronized with JMBN Command.</div>
+
+      <div class="hero-status-main">
+        Advancement Record Online
+      </div>
+
+      <div class="hero-status-copy">
+        Personnel progression synchronized with JMBN Command.
+      </div>
+
     </div>
+
+
   </section>
 
-  <!-- CURRENT → NEXT RANK -->
+
+
+  <!-- =====================================================
+       CURRENT → NEXT RANK
+  ====================================================== -->
+
   <section class="rank-card">
-    <div class="section-kicker">Advancement Path</div>
-    <div class="section-title">Current Rank → Next Rank</div>
+
+
+    <div class="section-kicker">
+      Advancement Path
+    </div>
+
+
+    <div class="section-title">
+      Current Rank → Next Rank
+    </div>
+
+
 
     <div class="rank-route">
-      <div class="rank-box">
-        <div class="rank-insignia">
-          <img id="railCurImg" alt="Current Rank">
-          <span id="curFallback" class="rank-fallback">◆</span>
-        </div>
-        <div>
-          <div class="rank-label">Current Rank</div>
-          <div class="rank-name" id="curRank">(unranked)</div>
-          <div class="rank-code" id="curPg">PG: —</div>
-        </div>
-      </div>
 
-      <div class="rank-arrow">➜<small>ADVANCE</small></div>
+
+      <!-- CURRENT RANK -->
 
       <div class="rank-box">
+
+
         <div class="rank-insignia">
-          <img id="railNextImg" alt="Next Rank">
-          <span id="nextFallback" class="rank-fallback">◇</span>
+
+          <img
+            id="railCurImg"
+            alt="Current Rank"
+          >
+
+          <span
+            id="curFallback"
+            class="rank-fallback"
+          >
+            ◆
+          </span>
+
         </div>
+
+
         <div>
-          <div class="rank-label">Next Rank</div>
-          <div class="rank-name" id="nextName">—</div>
-          <div class="rank-code" id="nextPg">PG: —</div>
+
+          <div class="rank-label">
+            Current Rank
+          </div>
+
+          <div
+            class="rank-name"
+            id="curRank"
+          >
+            (unranked)
+          </div>
+
+          <div
+            class="rank-code"
+            id="curPg"
+          >
+            PG: —
+          </div>
+
         </div>
+
+
       </div>
+
+
+
+      <!-- ARROW -->
+
+      <div class="rank-arrow">
+
+        ➜
+
+        <small>
+          ADVANCE
+        </small>
+
+      </div>
+
+
+
+      <!-- NEXT RANK -->
+
+      <div class="rank-box">
+
+
+        <div class="rank-insignia">
+
+          <img
+            id="railNextImg"
+            alt="Next Rank"
+          >
+
+          <span
+            id="nextFallback"
+            class="rank-fallback"
+          >
+            ◇
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <div class="rank-label">
+            Next Rank
+          </div>
+
+          <div
+            class="rank-name"
+            id="nextName"
+          >
+            —
+          </div>
+
+          <div
+            class="rank-code"
+            id="nextPg"
+          >
+            PG: —
+          </div>
+
+        </div>
+
+
+      </div>
+
+
     </div>
+
+
+
+    <!-- ===================================================
+         OVERALL PROGRESS
+    ==================================================== -->
 
     <div class="progress-wrap">
+
+
       <div class="progress-head">
-        <span>OVERALL RANK PROGRESS</span>
-        <b id="overallPct">0%</b>
+
+        <span>
+          OVERALL RANK PROGRESS
+        </span>
+
+        <b id="overallPct">
+          0%
+        </b>
+
       </div>
+
+
       <div class="track">
-        <div id="railFill" class="track-fill"></div>
+
+        <div
+          id="railFill"
+          class="track-fill"
+        ></div>
+
       </div>
-      <div id="railGlow" hidden></div>
+
+
+      <div
+        id="railGlow"
+        hidden
+      ></div>
+
+
     </div>
+
+
+
+    <!-- ===================================================
+         REQUIREMENTS
+    ==================================================== -->
 
     <div class="reqs">
-      <div class="req">
-        <div class="req-top">
-          <span class="req-name">Missions</span>
-          <span class="req-num" id="valMissions">0 / 0</span>
-        </div>
-        <div class="mini"><span id="pbMissions" class="mini-fill"></span></div>
-      </div>
+
+
+      <!-- MISSIONS -->
 
       <div class="req">
+
         <div class="req-top">
-          <span class="req-name">Operational Hours</span>
-          <span class="req-num" id="valHours">0 / 0</span>
+
+          <span class="req-name">
+            Missions
+          </span>
+
+          <span
+            class="req-num"
+            id="valMissions"
+          >
+            0 / 0
+          </span>
+
         </div>
-        <div class="mini"><span id="pbHours" class="mini-fill"></span></div>
+
+        <div class="mini">
+
+          <span
+            id="pbMissions"
+            class="mini-fill"
+          ></span>
+
+        </div>
+
       </div>
 
+
+
+      <!-- HOURS -->
+
       <div class="req">
+
         <div class="req-top">
-          <span class="req-name">Certifications</span>
-          <span class="req-num" id="valCerts">0 / 0</span>
+
+          <span class="req-name">
+            Operational Hours
+          </span>
+
+          <span
+            class="req-num"
+            id="valHours"
+          >
+            0 / 0
+          </span>
+
         </div>
-        <div class="mini"><span id="pbCerts" class="mini-fill"></span></div>
+
+        <div class="mini">
+
+          <span
+            id="pbHours"
+            class="mini-fill"
+          ></span>
+
+        </div>
+
       </div>
+
+
+
+      <!-- CERTIFICATIONS -->
+
+      <div class="req">
+
+        <div class="req-top">
+
+          <span class="req-name">
+            Certifications
+          </span>
+
+          <span
+            class="req-num"
+            id="valCerts"
+          >
+            0 / 0
+          </span>
+
+        </div>
+
+        <div class="mini">
+
+          <span
+            id="pbCerts"
+            class="mini-fill"
+          ></span>
+
+        </div>
+
+      </div>
+
+
     </div>
+
+
+
+    <!-- ===================================================
+         PROMOTION
+    ==================================================== -->
 
     <div class="promotion-row">
-      <span class="small" id="note">Promotion is available when all targets are met.</span>
-      <button id="btnPromote" class="btn" disabled>Request Promotion</button>
+
+
+      <span
+        class="small"
+        id="note"
+      >
+        Promotion is available when all targets are met.
+      </span>
+
+
+      <button
+        id="btnPromote"
+        class="btn"
+        disabled
+      >
+        Request Promotion
+      </button>
+
+
     </div>
+
+
   </section>
 
+
+
+  <!-- =====================================================
+       LOWER PANELS
+  ====================================================== -->
+
   <div class="lower">
-    <!-- CERTIFICATIONS -->
+
+
+    <!-- ===================================================
+         CERTIFICATIONS
+    ==================================================== -->
+
     <section class="panel">
-      <div class="panel-title">Certification Record</div>
-      <div id="certGrid" class="cert-grid">
-        <div class="small">Loading certifications…</div>
+
+
+      <div class="panel-title">
+        Certification Record
       </div>
-      <div class="cert-hint">Dim badges are not yet earned.</div>
+
+
+      <div
+        id="certGrid"
+        class="cert-grid"
+      >
+
+        <div class="small">
+          Loading certifications…
+        </div>
+
+      </div>
+
+
+      <div class="cert-hint">
+        Dim badges are not yet earned.
+      </div>
+
+
     </section>
 
-    <!-- TRAINING TIMELINE -->
+
+
+    <!-- ===================================================
+         TRAINING TIMELINE
+    ==================================================== -->
+
     <section class="panel">
-      <div class="panel-title">Training Timeline</div>
-      <div class="timeline-controls">
-        <select id="certSelect" class="timeline-select">
-          <option value="">— Select a Certification —</option>
-        </select>
-        <button id="btnReloadTL" class="btn" type="button">Load</button>
+
+
+      <div class="panel-title">
+        Training Timeline
       </div>
-      <div id="tlHint" class="timeline-hint">
+
+
+      <div class="timeline-controls">
+
+
+        <select
+          id="certSelect"
+          class="timeline-select"
+        >
+
+          <option value="">
+            — Select a Certification —
+          </option>
+
+        </select>
+
+
+        <button
+          id="btnReloadTL"
+          class="btn"
+          type="button"
+        >
+          Load
+        </button>
+
+
+      </div>
+
+
+      <div
+        id="tlHint"
+        class="timeline-hint"
+      >
         Pick a certification to view its required training events.
       </div>
-      <div id="timeline" class="timeline"></div>
+
+
+      <div
+        id="timeline"
+        class="timeline"
+      ></div>
+
+
     </section>
+
+
   </div>
+
 
 </main>
 
-<!-- Supabase + auth -->
+
+
+<!-- =========================================================
+     SUPABASE + AUTH + HEADER
+========================================================= -->
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <script src="js/auth.js"></script>
+
+<script src="js/header.js"></script>
+
+
+
+<!-- =========================================================
+     LOAD SHARED HEADER
+========================================================= -->
+
 <script>
-const $ = s => document.querySelector(s);
-let sb = null;
-let me = null;
 
-function setFill(el, pct){
-  const x = Math.max(0, Math.min(1, Number(pct) || 0));
-  el.style.transform = 'scaleX(' + x + ')';
-}
+(async () => {
 
-/* Load rank image from Ranks bucket and show/hide img */
-function setRankImg(imgEl, code){
-  if(!imgEl) return;
-  const fallback = imgEl.parentElement?.querySelector('.rank-fallback');
+  try {
 
-  const showFallback = () => {
-    imgEl.style.display = 'none';
-    if(fallback) fallback.style.display = 'block';
-  };
+    const response =
+      await fetch(
+        "header.html",
+        {
+          cache:"no-cache"
+        }
+      );
 
-  if(!code){
-    imgEl.removeAttribute('src');
-    showFallback();
-    return;
-  }
 
-  try{
-    const { data } = sb.storage.from('Ranks').getPublicUrl(code + '.png');
-    const url = data?.publicUrl || '';
-    if(!url){
-      imgEl.removeAttribute('src');
-      showFallback();
-      return;
+    if (!response.ok) {
+
+      throw new Error(
+        "Header request failed: " +
+        response.status
+      );
+
     }
 
-    imgEl.onload = () => {
-      imgEl.style.display = 'block';
-      if(fallback) fallback.style.display = 'none';
-    };
-    imgEl.onerror = showFallback;
-    imgEl.src = url;
-  }catch(e){
-    showFallback();
-  }
-}
 
-/* Apply hero rail progress + glow */
-function applyRailProgress(ratio){
-  const fill = $('#railFill');
-  const x = Math.max(0, Math.min(1, Number(ratio) || 0));
-  if(fill) fill.style.transform = 'scaleX(' + x + ')';
+    const html =
+      await response.text();
 
-  const pct = $('#overallPct');
-  if(pct) pct.textContent = Math.round(x * 100) + '%';
-}
 
-/* MAIN INIT */
-document.addEventListener('DOMContentLoaded', async () => {
-  const session = await requireAuth();
-  if(!session) return;
-  sb  = getSupabase();
-  me  = session.user.id;
+    const mount =
+      document.getElementById(
+        "header-container"
+      );
 
-  async function loadProgress(){
-    const { data: prog } = await sb
-      .from('v_user_rank_progress')
-      .select('*')
-      .eq('user_id', me)
-      .maybeSingle();
 
-    // Text under the logos
-    $('#curRank').textContent = prog?.current_name || '(unranked)';
-    $('#curPg').textContent   = 'PG: ' + (prog?.current_paygrade || '—');
-    $('#nextName').textContent = prog?.next_name || '—';
-    $('#nextPg').textContent   = 'PG: ' + (prog?.next_paygrade || '—');
+    if (!mount) {
 
-    // Images in the rail
-    setRankImg($('#railCurImg'), prog?.current_code || null);
-    setRankImg($('#railNextImg'),prog?.next_code    || null);
+      throw new Error(
+        "#header-container was not found."
+      );
 
-    // Progress stats.
-    // Missions intentionally follow the same attendance logic as admins.html:
-    // count this user's mission-attendance rows except Withdrawn.
-    // Hours and certifications continue to come from v_user_progress.
-    const [{ data: up }, { data: missionRows, error: missionErr }] = await Promise.all([
-      sb.from('v_user_progress')
-        .select('*')
-        .eq('user_id', me)
-        .maybeSingle(),
-      sb.from('v_mission_attendees_detailed')
-        .select('mission_id, attendance')
-        .eq('user_id', me)
-    ]);
-
-    if(missionErr){
-      console.warn('Mission attendance count failed:', missionErr.message);
     }
 
-    const attendedMissionIds = new Set(
-      (missionRows || [])
-        .filter(r =>
-          r.mission_id &&
-          r.attendance &&
-          String(r.attendance).toLowerCase() !== 'withdrawn'
-        )
-        .map(r => r.mission_id)
+
+    /*
+      Insert the shared header.
+
+      We deliberately use innerHTML rather than replacing
+      #header-container itself.
+    */
+
+    mount.innerHTML =
+      html;
+
+
+    /*
+      header.html now contains markup/CSS only.
+
+      header.js is responsible for:
+      - Active navigation tab
+      - Member name
+      - Rank
+      - Avatar initials
+      - Dropdown
+      - Admin Console
+      - Logout
+    */
+
+    if (
+      typeof window.initJmbnHeader ===
+      "function"
+    ) {
+
+      window.initJmbnHeader();
+
+    }
+    else {
+
+      console.warn(
+        "JMBN header.js loaded but initJmbnHeader() was not found."
+      );
+
+    }
+
+
+  }
+  catch (error) {
+
+    console.error(
+      "Failed to load JMBN header:",
+      error
     );
 
-    // Use the actual attendance count when available.
-    // If the attendance query fails, fall back to the existing progress view.
-    const m  = missionErr
-      ? Number(up?.missions_attended || 0)
-      : attendedMissionIds.size;
-    const h  = Number(up?.hours_total          || 0);
-    const c  = Number(up?.certifications_total || 0);
-    const mt = Number(prog?.missions_target       || 0);
-    const ht = Number(prog?.hours_target          || 0);
-    const ct = Number(prog?.certification_target  || 0);
-
-    $('#valMissions').textContent = m + ' / ' + mt;
-    $('#valHours').textContent    = h + ' / ' + ht;
-    $('#valCerts').textContent    = c + ' / ' + ct;
-
-    setFill($('#pbMissions'), mt ? m/mt : 1);
-    setFill($('#pbHours'),    ht ? h/ht : 1);
-    setFill($('#pbCerts'),    ct ? c/ct : 1);
-
-    // Cinematic rail ratio (simple average of met requirements)
-    let parts = [];
-    if(mt) parts.push(Math.min(1, m/mt));
-    if(ht) parts.push(Math.min(1, h/ht));
-    if(ct) parts.push(Math.min(1, c/ct));
-    const ratio = parts.length ? (parts.reduce((s,x)=>s+x,0) / parts.length) : 0;
-    applyRailProgress(ratio);
-
-    // Promotion availability
-    const allMet = (!!prog?.next_code) &&
-      (mt ? m >= mt : true) &&
-      (ht ? h >= ht : true) &&
-      (ct ? c >= ct : true);
-
-    const btn  = $('#btnPromote');
-    const note = $('#note');
-
-    btn.disabled = !allMet;
-
-    if(!prog?.next_code){
-      note.textContent = 'You are at the highest configured rank, or next rank is not set.';
-    } else if(allMet){
-      note.textContent = 'All requirements met. You can request promotion.';
-    } else {
-      note.textContent = 'Promotion is available when all targets are met.';
-    }
-
-    btn.onclick = () => {
-      if(btn.disabled) return;
-      alert('Promotion request flow not wired yet – later you can hook this to a RPC or Discord ticket.');
-    };
   }
 
-  async function loadCerts(){
-    const [{ data: cat }, { data: mine }] = await Promise.all([
-      sb.from('certifications')
-        .select('certification_code,name,image_url,sort_order')
-        .order('sort_order'),
-      sb.from('user_certifications')
-        .select('certification_code')
-        .eq('user_id', me)
-    ]);
+})();
 
-    const owned = new Set((mine || []).map(x => x.certification_code));
-    const grid  = $('#certGrid');
-
-    if(!cat || !cat.length){
-      grid.innerHTML = '<div class="small">No certifications configured yet.</div>';
-    } else {
-      grid.innerHTML = cat.map(c => {
-        const dim = owned.has(c.certification_code) ? '' : ' dim';
-        const img = c.image_url
-          ? '<img src="'+c.image_url+'" alt="">'
-          : '<span>🏅</span>';
-        return `
-          <div class="cert${dim}">
-            <div class="cert-thumb">${img}</div>
-            <div class="cert-title">${c.name}</div>
-            <div class="cert-code">${c.certification_code}</div>
-          </div>`;
-      }).join('');
-    }
-
-    const sel = $('#certSelect');
-    sel.innerHTML = '<option value="">— Select a Certification —</option>' +
-      (cat || []).map(c =>
-        `<option value="${c.certification_code}">${c.certification_code} — ${c.name}</option>`
-      ).join('');
-  }
-
-  async function loadTimeline(code){
-    const tl = $('#timeline');
-    if(!code){
-      tl.innerHTML = '';
-      $('#tlHint').textContent = 'Pick a certification to view its required training events.';
-      return;
-    }
-
-    $('#tlHint').textContent = 'Training events required for ' + code + ':';
-
-    const [{ data: reqs }, { data: done }] = await Promise.all([
-      sb.from('certification_requirements')
-        .select('event_code,sort_order,training_events(title,description)')
-        .eq('certification_code', code)
-        .order('sort_order'),
-      sb.from('user_training_events')
-        .select('event_code,completed_at,approved_by')
-        .eq('user_id', me)
-    ]);
-
-    const map = new Map((done || []).map(r => [r.event_code, r]));
-
-    if(!reqs || !reqs.length){
-      tl.innerHTML = '<div class="small">No training events configured yet for this certification.</div>';
-      return;
-    }
-
-    tl.innerHTML = reqs.map(r => {
-      const rec = map.get(r.event_code);
-      const doneFlag = !!rec;
-      const title = r.training_events?.title || r.event_code;
-      const status = doneFlag
-        ? 'Completed' + (rec.completed_at ? ' (' + new Date(rec.completed_at).toLocaleDateString('en-SG') + ')' : '')
-        : 'Pending';
-      return `
-        <div class="titem${doneFlag ? ' done' : ''}">
-          <div class="tlabel">${title}</div>
-          <div class="tstatus">${status}</div>
-        </div>`;
-    }).join('');
-  }
-
-  // Wire events
-  $('#certSelect').addEventListener('change', () => {
-    const code = $('#certSelect').value;
-    loadTimeline(code);
-  });
-  $('#btnReloadTL').addEventListener('click', () => {
-    const code = $('#certSelect').value;
-    loadTimeline(code);
-  });
-
-  // Initial loads
-  await loadProgress();
-  await loadCerts();
-  await loadTimeline('');
-});
 </script>
+
+
+
+<!-- =========================================================
+     RANK PROGRESSION LOGIC
+========================================================= -->
+
+<script>
+
+
+const $ =
+  s => document.querySelector(s);
+
+
+let sb = null;
+
+let me = null;
+
+
+
+/* =========================================================
+   PROGRESS BAR
+========================================================= */
+
+function setFill(
+  el,
+  pct
+){
+
+  if (!el) return;
+
+
+  const x =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        Number(pct) || 0
+      )
+    );
+
+
+  el.style.transform =
+    "scaleX(" + x + ")";
+
+}
+
+
+
+/* =========================================================
+   RANK IMAGE
+========================================================= */
+
+function setRankImg(
+  imgEl,
+  code
+){
+
+  if (!imgEl) return;
+
+
+  const fallback =
+    imgEl
+      .parentElement
+      ?.querySelector(
+        ".rank-fallback"
+      );
+
+
+  const showFallback =
+    () => {
+
+      imgEl.style.display =
+        "none";
+
+
+      if (fallback) {
+
+        fallback.style.display =
+          "block";
+
+      }
+
+    };
+
+
+  if (!code) {
+
+    imgEl.removeAttribute(
+      "src"
+    );
+
+    showFallback();
+
+    return;
+
+  }
+
+
+  try {
+
+
+    const {
+      data
+    } =
+      sb
+        .storage
+        .from("Ranks")
+        .getPublicUrl(
+          code + ".png"
+        );
+
+
+    const url =
+      data?.publicUrl || "";
+
+
+    if (!url) {
+
+      imgEl.removeAttribute(
+        "src"
+      );
+
+      showFallback();
+
+      return;
+
+    }
+
+
+    imgEl.onload =
+      () => {
+
+        imgEl.style.display =
+          "block";
+
+
+        if (fallback) {
+
+          fallback.style.display =
+            "none";
+
+        }
+
+      };
+
+
+    imgEl.onerror =
+      showFallback;
+
+
+    imgEl.src =
+      url;
+
+
+  }
+  catch (error) {
+
+    showFallback();
+
+  }
+
+}
+
+
+
+/* =========================================================
+   RANK RAIL PROGRESS
+========================================================= */
+
+function applyRailProgress(
+  ratio
+){
+
+  const fill =
+    $("#railFill");
+
+
+  const x =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        Number(ratio) || 0
+      )
+    );
+
+
+  if (fill) {
+
+    fill.style.transform =
+      "scaleX(" + x + ")";
+
+  }
+
+
+  const pct =
+    $("#overallPct");
+
+
+  if (pct) {
+
+    pct.textContent =
+      Math.round(
+        x * 100
+      ) + "%";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MAIN INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+
+    const session =
+      await requireAuth();
+
+
+    if (!session) {
+
+      return;
+
+    }
+
+
+    sb =
+      getSupabase();
+
+
+    me =
+      session.user.id;
+
+
+
+    /* =====================================================
+       LOAD RANK PROGRESS
+    ====================================================== */
+
+    async function loadProgress(){
+
+
+      const {
+        data:prog
+      } =
+        await sb
+          .from(
+            "v_user_rank_progress"
+          )
+          .select("*")
+          .eq(
+            "user_id",
+            me
+          )
+          .maybeSingle();
+
+
+
+      /* ===================================================
+         CURRENT / NEXT RANK TEXT
+      ==================================================== */
+
+      $("#curRank").textContent =
+        prog?.current_name ||
+        "(unranked)";
+
+
+      $("#curPg").textContent =
+        "PG: " +
+        (
+          prog?.current_paygrade ||
+          "—"
+        );
+
+
+      $("#nextName").textContent =
+        prog?.next_name ||
+        "—";
+
+
+      $("#nextPg").textContent =
+        "PG: " +
+        (
+          prog?.next_paygrade ||
+          "—"
+        );
+
+
+
+      /* ===================================================
+         RANK INSIGNIAS
+      ==================================================== */
+
+      setRankImg(
+        $("#railCurImg"),
+        prog?.current_code ||
+        null
+      );
+
+
+      setRankImg(
+        $("#railNextImg"),
+        prog?.next_code ||
+        null
+      );
+
+
+
+      /* ===================================================
+         PROGRESSION STATISTICS
+      ==================================================== */
+
+      /*
+        Missions intentionally use the same attendance
+        logic as admins.html:
+
+        Count this user's mission attendance rows except
+        attendance = Withdrawn.
+
+        Hours and certifications continue to come from
+        v_user_progress.
+      */
+
+
+      const [
+        {
+          data:up
+        },
+        {
+          data:missionRows,
+          error:missionErr
+        }
+      ] =
+        await Promise.all([
+
+
+          sb
+            .from(
+              "v_user_progress"
+            )
+            .select("*")
+            .eq(
+              "user_id",
+              me
+            )
+            .maybeSingle(),
+
+
+          sb
+            .from(
+              "v_mission_attendees_detailed"
+            )
+            .select(
+              "mission_id, attendance"
+            )
+            .eq(
+              "user_id",
+              me
+            )
+
+
+        ]);
+
+
+
+      if (missionErr) {
+
+        console.warn(
+          "Mission attendance count failed:",
+          missionErr.message
+        );
+
+      }
+
+
+
+      const attendedMissionIds =
+        new Set(
+
+
+          (missionRows || [])
+
+
+            .filter(
+              row =>
+
+                row.mission_id &&
+
+                row.attendance &&
+
+                String(
+                  row.attendance
+                )
+                  .toLowerCase() !==
+                  "withdrawn"
+            )
+
+
+            .map(
+              row =>
+                row.mission_id
+            )
+
+
+        );
+
+
+
+      /*
+        Use actual attendance count whenever possible.
+
+        If that query fails, fall back to the existing
+        v_user_progress mission count.
+      */
+
+
+      const m =
+        missionErr
+
+          ? Number(
+              up?.missions_attended ||
+              0
+            )
+
+          : attendedMissionIds.size;
+
+
+      const h =
+        Number(
+          up?.hours_total ||
+          0
+        );
+
+
+      const c =
+        Number(
+          up?.certifications_total ||
+          0
+        );
+
+
+      const mt =
+        Number(
+          prog?.missions_target ||
+          0
+        );
+
+
+      const ht =
+        Number(
+          prog?.hours_target ||
+          0
+        );
+
+
+      const ct =
+        Number(
+          prog?.certification_target ||
+          0
+        );
+
+
+
+      /* ===================================================
+         DISPLAY COUNTS
+      ==================================================== */
+
+      $("#valMissions").textContent =
+        m + " / " + mt;
+
+
+      $("#valHours").textContent =
+        h + " / " + ht;
+
+
+      $("#valCerts").textContent =
+        c + " / " + ct;
+
+
+
+      /* ===================================================
+         REQUIREMENT BARS
+      ==================================================== */
+
+      setFill(
+        $("#pbMissions"),
+        mt
+          ? m / mt
+          : 1
+      );
+
+
+      setFill(
+        $("#pbHours"),
+        ht
+          ? h / ht
+          : 1
+      );
+
+
+      setFill(
+        $("#pbCerts"),
+        ct
+          ? c / ct
+          : 1
+      );
+
+
+
+      /* ===================================================
+         OVERALL PROGRESS
+      ==================================================== */
+
+      const parts = [];
+
+
+      if (mt) {
+
+        parts.push(
+          Math.min(
+            1,
+            m / mt
+          )
+        );
+
+      }
+
+
+      if (ht) {
+
+        parts.push(
+          Math.min(
+            1,
+            h / ht
+          )
+        );
+
+      }
+
+
+      if (ct) {
+
+        parts.push(
+          Math.min(
+            1,
+            c / ct
+          )
+        );
+
+      }
+
+
+      const ratio =
+        parts.length
+
+          ? (
+              parts.reduce(
+                (sum,value) =>
+                  sum + value,
+                0
+              )
+              /
+              parts.length
+            )
+
+          : 0;
+
+
+      applyRailProgress(
+        ratio
+      );
+
+
+
+      /* ===================================================
+         PROMOTION AVAILABILITY
+      ==================================================== */
+
+      const allMet =
+
+        (
+          !!prog?.next_code
+        )
+
+        &&
+
+        (
+          mt
+            ? m >= mt
+            : true
+        )
+
+        &&
+
+        (
+          ht
+            ? h >= ht
+            : true
+        )
+
+        &&
+
+        (
+          ct
+            ? c >= ct
+            : true
+        );
+
+
+
+      const btn =
+        $("#btnPromote");
+
+
+      const note =
+        $("#note");
+
+
+      btn.disabled =
+        !allMet;
+
+
+
+      if (!prog?.next_code) {
+
+
+        note.textContent =
+          "You are at the highest configured rank, or next rank is not set.";
+
+
+      }
+      else if (allMet) {
+
+
+        note.textContent =
+          "All requirements met. You can request promotion.";
+
+
+      }
+      else {
+
+
+        note.textContent =
+          "Promotion is available when all targets are met.";
+
+
+      }
+
+
+
+      btn.onclick =
+        () => {
+
+
+          if (
+            btn.disabled
+          ) {
+
+            return;
+
+          }
+
+
+          alert(
+            "Promotion request flow not wired yet – later you can hook this to a RPC or Discord ticket."
+          );
+
+
+        };
+
+
+    }
+
+
+
+    /* =====================================================
+       LOAD CERTIFICATIONS
+    ====================================================== */
+
+    async function loadCerts(){
+
+
+      const [
+        {
+          data:cat
+        },
+        {
+          data:mine
+        }
+      ] =
+        await Promise.all([
+
+
+          sb
+            .from(
+              "certifications"
+            )
+            .select(
+              "certification_code,name,image_url,sort_order"
+            )
+            .order(
+              "sort_order"
+            ),
+
+
+          sb
+            .from(
+              "user_certifications"
+            )
+            .select(
+              "certification_code"
+            )
+            .eq(
+              "user_id",
+              me
+            )
+
+
+        ]);
+
+
+
+      const owned =
+        new Set(
+
+          (mine || [])
+            .map(
+              row =>
+                row.certification_code
+            )
+
+        );
+
+
+
+      const grid =
+        $("#certGrid");
+
+
+
+      if (
+        !cat ||
+        !cat.length
+      ) {
+
+
+        grid.innerHTML =
+          '<div class="small">No certifications configured yet.</div>';
+
+
+      }
+      else {
+
+
+        grid.innerHTML =
+          cat
+            .map(
+              cert => {
+
+
+                const dim =
+                  owned.has(
+                    cert.certification_code
+                  )
+                    ? ""
+                    : " dim";
+
+
+                const img =
+                  cert.image_url
+
+                    ? (
+                        '<img src="' +
+                        cert.image_url +
+                        '" alt="">'
+                      )
+
+                    : "<span>🏅</span>";
+
+
+
+                return `
+
+                  <div class="cert${dim}">
+
+                    <div class="cert-thumb">
+                      ${img}
+                    </div>
+
+                    <div class="cert-title">
+                      ${cert.name}
+                    </div>
+
+                    <div class="cert-code">
+                      ${cert.certification_code}
+                    </div>
+
+                  </div>
+
+                `;
+
+              }
+            )
+            .join("");
+
+
+      }
+
+
+
+      const sel =
+        $("#certSelect");
+
+
+      sel.innerHTML =
+
+        '<option value="">— Select a Certification —</option>'
+
+        +
+
+        (cat || [])
+
+          .map(
+            cert =>
+
+              `<option value="${cert.certification_code}">${cert.certification_code} — ${cert.name}</option>`
+
+          )
+
+          .join("");
+
+
+    }
+
+
+
+    /* =====================================================
+       LOAD TRAINING TIMELINE
+    ====================================================== */
+
+    async function loadTimeline(
+      code
+    ){
+
+
+      const tl =
+        $("#timeline");
+
+
+
+      if (!code) {
+
+
+        tl.innerHTML =
+          "";
+
+
+        $("#tlHint").textContent =
+          "Pick a certification to view its required training events.";
+
+
+        return;
+
+      }
+
+
+
+      $("#tlHint").textContent =
+        "Training events required for " +
+        code +
+        ":";
+
+
+
+      const [
+        {
+          data:reqs
+        },
+        {
+          data:done
+        }
+      ] =
+        await Promise.all([
+
+
+          sb
+            .from(
+              "certification_requirements"
+            )
+            .select(
+              "event_code,sort_order,training_events(title,description)"
+            )
+            .eq(
+              "certification_code",
+              code
+            )
+            .order(
+              "sort_order"
+            ),
+
+
+          sb
+            .from(
+              "user_training_events"
+            )
+            .select(
+              "event_code,completed_at,approved_by"
+            )
+            .eq(
+              "user_id",
+              me
+            )
+
+
+        ]);
+
+
+
+      const map =
+        new Map(
+
+          (done || [])
+            .map(
+              row => [
+                row.event_code,
+                row
+              ]
+            )
+
+        );
+
+
+
+      if (
+        !reqs ||
+        !reqs.length
+      ) {
+
+
+        tl.innerHTML =
+          '<div class="small">No training events configured yet for this certification.</div>';
+
+
+        return;
+
+      }
+
+
+
+      tl.innerHTML =
+
+        reqs
+
+          .map(
+            requirement => {
+
+
+              const record =
+                map.get(
+                  requirement.event_code
+                );
+
+
+              const doneFlag =
+                !!record;
+
+
+              const title =
+                requirement
+                  .training_events
+                  ?.title
+
+                ||
+
+                requirement.event_code;
+
+
+              const status =
+                doneFlag
+
+                  ? (
+                      "Completed"
+
+                      +
+
+                      (
+                        record.completed_at
+
+                          ? (
+                              " (" +
+                              new Date(
+                                record.completed_at
+                              )
+                                .toLocaleDateString(
+                                  "en-SG"
+                                )
+                              +
+                              ")"
+                            )
+
+                          : ""
+                      )
+                    )
+
+                  : "Pending";
+
+
+
+              return `
+
+                <div class="titem${doneFlag ? " done" : ""}">
+
+                  <div class="tlabel">
+                    ${title}
+                  </div>
+
+                  <div class="tstatus">
+                    ${status}
+                  </div>
+
+                </div>
+
+              `;
+
+
+            }
+          )
+
+          .join("");
+
+
+    }
+
+
+
+    /* =====================================================
+       TIMELINE EVENTS
+    ====================================================== */
+
+    $("#certSelect")
+      .addEventListener(
+        "change",
+        () => {
+
+
+          const code =
+            $("#certSelect").value;
+
+
+          loadTimeline(
+            code
+          );
+
+
+        }
+      );
+
+
+
+    $("#btnReloadTL")
+      .addEventListener(
+        "click",
+        () => {
+
+
+          const code =
+            $("#certSelect").value;
+
+
+          loadTimeline(
+            code
+          );
+
+
+        }
+      );
+
+
+
+    /* =====================================================
+       INITIAL LOADS
+    ====================================================== */
+
+    await loadProgress();
+
+    await loadCerts();
+
+    await loadTimeline("");
+
+
+  }
+);
+
+
+</script>
+
+
 </body>
+
 </html>
