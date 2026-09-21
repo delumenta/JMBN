@@ -319,10 +319,30 @@ button,input,select{font:inherit} button{color:inherit}
                 <div class="detail-row"><span>Rank Category</span><span id="vRankCat">—</span></div>
                 <div class="detail-row"><span>Rank Code</span><span id="vRankCode">—</span></div>
                 <div class="detail-row"><span>Missions</span><span id="vAttended">0</span></div>
+                <div class="detail-row"><span>Total Hours</span><span id="vHours">0</span></div>
+                <div class="detail-row"><span>Certifications</span><span id="vCertCount">0</span></div>
               </div>
               <div class="detail-card">
                 <div class="detail-title">Specialisation</div>
                 <div id="vRoles" class="profile-roles"></div>
+
+                <div class="detail-title" style="margin-top:16px">Favourite Role</div>
+                <div id="vFavouriteRole">
+                  <span style="color:var(--muted)">Loading…</span>
+                </div>
+                <div id="vFavouriteRoleMeta"
+                     style="margin-top:6px;color:var(--muted);font-size:8px;line-height:1.5">
+                  #1 most-used role across mission attendance.
+                </div>
+
+                <div class="detail-title" style="margin-top:14px">Secondary Role</div>
+                <div id="vSecondaryRole">
+                  <span style="color:var(--muted)">Loading…</span>
+                </div>
+                <div id="vSecondaryRoleMeta"
+                     style="margin-top:6px;color:var(--muted);font-size:8px;line-height:1.5">
+                  #2 most-used role across mission attendance.
+                </div>
               </div>
             </div>
           </div>
@@ -569,6 +589,160 @@ function switchProfileTab(name){
 }
 window.switchProfileTab=switchProfileTab;
 
+
+async function loadMemberProgress(uid){
+  try{
+    const [{data:up,error:upErr},{data:prog,error:progErr}] = await Promise.all([
+      sb.from("v_user_progress").select("*").eq("user_id",uid).maybeSingle(),
+      sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle()
+    ]);
+
+    if(upErr) console.warn("v_user_progress:",upErr.message);
+    if(progErr) console.warn("v_user_rank_progress:",progErr.message);
+
+    // Admin Console uses exactly these three values.
+    const m = Number(up?.missions_attended || 0);
+    const h = Number(up?.hours_total || 0);
+    const c = Number(up?.certifications_total || 0);
+
+    $("#vAttended").textContent = m;
+    $("#vHours").textContent = h;
+    $("#vCertCount").textContent = c;
+
+    // Keep the selected row in sync with the authoritative progress view.
+    const row = ROWS.find(x=>x.user_id===uid);
+    if(row && up && up.missions_attended != null){
+      row.missions_attended = m;
+      render();
+      updateKPIs();
+    }
+  }catch(e){
+    console.warn("member progress:",e.message || e);
+    $("#vHours").textContent="—";
+    $("#vCertCount").textContent="—";
+  }
+}
+
+async function loadMemberMissions(uid){
+  const box=$("#vMissionList");
+
+  try{
+    let {data,error}=await sb
+      .from("v_mission_attendees_detailed")
+      .select("mission_id, attendance, role_in_mission, missions(id,title,start_time)")
+      .eq("user_id",uid)
+      .order("missions.start_time",{ascending:false})
+      .limit(20);
+
+    // Same fallback used by the Admin Console if the joined mission is null.
+    if(error || (data && data.length && data[0].missions==null)){
+      const {data:bare,error:e2}=await sb
+        .from("v_mission_attendees_detailed")
+        .select("mission_id, attendance, role_in_mission")
+        .eq("user_id",uid)
+        .order("mission_id",{ascending:false})
+        .limit(50);
+
+      if(e2) throw e2;
+
+      const ids=[...new Set((bare||[]).map(x=>x.mission_id))];
+      let map={};
+
+      if(ids.length){
+        const {data:mrows,error:mErr}=await sb
+          .from("missions")
+          .select("id,title,start_time")
+          .in("id",ids);
+
+        if(mErr) throw mErr;
+        map=Object.fromEntries((mrows||[]).map(m=>[m.id,m]));
+      }
+
+      data=(bare||[])
+        .map(x=>({...x,missions:map[x.mission_id]||null}))
+        .sort((a,b)=>new Date(b.missions?.start_time||0)-new Date(a.missions?.start_time||0))
+        .slice(0,20);
+    }
+
+    if(!data?.length){
+      box.innerHTML=`<div class="mission-note">No missions found.</div>`;
+      $("#vFavouriteRole").innerHTML=`<span style="color:var(--muted)">—</span>`;
+      $("#vFavouriteRoleMeta").textContent="No mission roles recorded yet.";
+      $("#vSecondaryRole").innerHTML=`<span style="color:var(--muted)">—</span>`;
+      $("#vSecondaryRoleMeta").textContent="No secondary mission role recorded yet.";
+      return;
+    }
+
+    // Favourite Role = the role this member has actually used most often
+    // across missions. Withdrawn attendance is ignored.
+    const roleCounts = new Map();
+
+    (data || [])
+      .filter(x => String(x.attendance || "").toLowerCase() !== "withdrawn")
+      .forEach(x => {
+        const role = toTitleCase(String(x.role_in_mission || "").trim());
+        if(!role) return;
+        roleCounts.set(role, (roleCounts.get(role) || 0) + 1);
+      });
+
+    const rankedRoles = [...roleCounts.entries()]
+      .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+    const favourite = rankedRoles[0];
+    const secondary = rankedRoles[1];
+
+    if(favourite){
+      $("#vFavouriteRole").innerHTML =
+        `<span class="role-chip">#1 ${esc(favourite[0])}</span>`;
+      $("#vFavouriteRoleMeta").textContent =
+        `Used in ${favourite[1]} mission${favourite[1]===1 ? "" : "s"}.`;
+    }else{
+      $("#vFavouriteRole").innerHTML =
+        `<span style="color:var(--muted)">—</span>`;
+      $("#vFavouriteRoleMeta").textContent =
+        "No mission roles recorded yet.";
+    }
+
+    if(secondary){
+      $("#vSecondaryRole").innerHTML =
+        `<span class="role-chip">#2 ${esc(secondary[0])}</span>`;
+      $("#vSecondaryRoleMeta").textContent =
+        `Used in ${secondary[1]} mission${secondary[1]===1 ? "" : "s"}.`;
+    }else{
+      $("#vSecondaryRole").innerHTML =
+        `<span style="color:var(--muted)">—</span>`;
+      $("#vSecondaryRoleMeta").textContent =
+        "No secondary mission role recorded yet.";
+    }
+
+    box.innerHTML=data.map(x=>{
+      const m=x.missions||{};
+      const when=m.start_time
+        ? new Date(m.start_time).toLocaleString()
+        : "";
+      const attendance=x.attendance||"—";
+
+      return `
+        <div class="mission-note" style="margin-bottom:8px">
+          <div style="color:var(--gold2);font-weight:700;margin-bottom:4px">
+            ${esc(m.title||"Untitled Mission")}
+          </div>
+          <div style="color:var(--muted)">
+            ${esc(when)}${when?" · ":""}Attendance: ${esc(attendance)}
+            ${x.role_in_mission ? ` · Role: ${esc(toTitleCase(x.role_in_mission))}` : ""}
+          </div>
+        </div>`;
+    }).join("");
+  }catch(e){
+    console.warn("mission history:",e.message || e);
+    box.innerHTML=`<div class="mission-note" style="color:var(--bad)">Unable to load mission history.</div>`;
+    $("#vFavouriteRole").innerHTML=`<span style="color:var(--muted)">—</span>`;
+    $("#vFavouriteRoleMeta").textContent="Unable to calculate mission role usage.";
+    $("#vSecondaryRole").innerHTML=`<span style="color:var(--muted)">—</span>`;
+    $("#vSecondaryRoleMeta").textContent="Unable to calculate mission role usage.";
+  }
+}
+
 function viewMember(userId){
   const r=ROWS.find(x=>x.user_id===userId);
   if(!r) return;
@@ -593,6 +767,12 @@ function viewMember(userId){
   $("#vRankCat").textContent=rankCat;
   $("#vRankCode").textContent=r.current_rank_code||"—";
   $("#vAttended").textContent=attended;
+  $("#vHours").textContent="…";
+  $("#vCertCount").textContent="…";
+  $("#vFavouriteRole").innerHTML=`<span style="color:var(--muted)">Loading…</span>`;
+  $("#vFavouriteRoleMeta").textContent="#1 most-used role across mission attendance.";
+  $("#vSecondaryRole").innerHTML=`<span style="color:var(--muted)">Loading…</span>`;
+  $("#vSecondaryRoleMeta").textContent="#2 most-used role across mission attendance.";
 
   $("#vRoles").innerHTML=roles.length
     ? roles.map(x=>`<span class="role-chip">${esc(x)}</span>`).join("")
@@ -607,14 +787,11 @@ function viewMember(userId){
     rankEl.style.display="none";
   }
 
-  $("#vMissionList").innerHTML=`
-    <div class="mission-note">
-      <strong style="color:var(--gold2)">${attended}</strong>
-      mission${attended===1?"":"s"} attended.
-      Attendance is the same completed-mission count supplied by your existing
-      <b>v_profiles_detailed</b> view.
-    </div>`;
+  $("#vMissionList").innerHTML=`<div class="mission-note">Loading mission history…</div>`;
 
+  // These are the SAME progress + mission sources used by your Admin Console.
+  loadMemberProgress(userId);
+  loadMemberMissions(userId);
   loadCertThumbs(userId);
   switchProfileTab("overview");
 
