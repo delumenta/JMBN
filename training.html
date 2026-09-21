@@ -1,252 +1,2785 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>JMBN – Badge Case</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
+<meta charset="utf-8">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
 
-<style>
-:root{
-  --bg:#000; --panel:#0a0a0a;
-  --border:#d6b44c; --accent:#f2d675;
-  --text:#f7f1d0; --muted:#c9b06a;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:
-    radial-gradient(800px 600px at 20% -10%, rgba(242,214,117,.06), transparent 60%),
-    radial-gradient(900px 700px at 120% 110%, rgba(214,180,76,.05), transparent 60%),
-    #000;
-  font-family:'Play',sans-serif; color:var(--text); min-height:100vh;
-}
-h1{ text-align:center; margin:40px 0 20px; font-size:1.8em; color:var(--accent); }
+<title>JMBN // Academy</title>
 
-/* grid */
-.badge-grid{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:22px; padding:0 20px 60px; max-width:1200px; margin:0 auto;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-/* --- HEX MEDALLION CARD --- */
-.badge{ position:relative; padding:16px 14px 14px; }
+<link
+  href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+  rel="stylesheet"
+>
 
-/* hex shell */
-.hex{
-  position:relative; margin:0 auto; width:180px; height:200px;
-  clip-path:polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-  background:linear-gradient(180deg,#0b0b0b,#000);
-  box-shadow:inset 0 0 0 2px rgba(214,180,76,.35), 0 0 30px rgba(214,180,76,.08);
-  transition:transform .2s ease, box-shadow .25s ease;
-}
-
-/* thick gold rim */
-.hex::before{
-  content:""; position:absolute; inset:-6px; clip-path:inherit; border-radius:8px;
-  background:linear-gradient(180deg,#f2d675,#d6b44c,#9d7f2b);
-  filter:saturate(1.1); z-index:-1;
-}
-
-/* rotating halo (owned only) */
-.hex::after{
-  content:""; position:absolute; inset:-16px; clip-path:inherit; border-radius:12px;
-  background:conic-gradient(from 0deg, rgba(242,214,117,.35), transparent 40%, transparent 60%, rgba(242,214,117,.35));
-  animation:spin 8s linear infinite; opacity:0; pointer-events:none;
-}
-.badge.owned .hex::after{ opacity:.55 }
-@keyframes spin { to{ transform:rotate(360deg) } }
-
-.medal{ position:absolute; inset:12px; display:flex; align-items:center; justify-content:center; }
-.medal img{ max-width:85%; max-height:85%; filter:drop-shadow(0 4px 8px rgba(0,0,0,.6)) }
-
-/* underglow strip */
-.badge::after{
-  content:""; position:absolute; left:0; right:0; bottom:-2px; height:10px;
-  background:radial-gradient(60% 100% at 50% 100%, rgba(242,214,117,.22), transparent 70%);
-  filter:blur(6px); opacity:.25; pointer-events:none;
-}
-.badge.owned::after{ opacity:.8 }
-
-/* title / code */
-.title{ text-align:center; font-weight:700; margin-top:10px }
-.code{ text-align:center; font-size:11px; color:var(--muted) }
-
-/* locked vs owned feel */
-.badge.locked .hex{ filter:grayscale(.85) contrast(.85) brightness(.95); box-shadow:inset 0 0 0 2px rgba(214,180,76,.22) }
-.badge.locked .title{ opacity:.75 }
-.badge.owned:hover .hex{ transform:translateY(-2px); box-shadow:inset 0 0 0 2px rgba(214,180,76,.55), 0 0 40px rgba(242,214,117,.25) }
-
-/* --- hover overlay (requirements shown only on hover) --- */
-.overlay{
-  position:absolute; inset:0; background:rgba(0,0,0,.9);
-  opacity:0; transition:opacity .22s ease; border-radius:16px;
-  display:flex; flex-direction:column; align-items:stretch; padding:12px;
-}
-.badge:hover .overlay{ opacity:1; }
-
-.overlay .status{ font-weight:700; margin-bottom:6px; }
-.overlay .bar{ height:8px; background:#0a0a0a; border:1px solid var(--border); border-radius:999px; overflow:hidden; margin:6px 0 10px }
-.overlay .fill{ height:100%; background:linear-gradient(180deg,var(--accent),#d6b44c) }
-
-.reqs{ list-style:none; margin:0; padding:0; flex:1; overflow:auto; max-height:200px; border-top:1px solid rgba(255,255,255,.06); padding-top:8px }
-.reqs li{ display:flex; justify-content:space-between; gap:10px; font-size:12px; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.05) }
-.reqs .ok{ color:var(--accent) }
-.reqs .pending{ color:var(--muted) }
-
-/* admin modal */
-#adminPanel{ position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; }
-.modal{ background:#111; border:1px solid var(--border); border-radius:12px; padding:20px; width:360px; max-height:80vh; overflow:auto }
-.modal h3{ color:var(--accent); margin-top:0 }
-button,select{
-  background:#0c0c0c; color:var(--text); border:1px solid var(--border); border-radius:6px;
-  padding:6px 10px; font-family:'Play'; cursor:pointer;
-}
-button:hover{ background:var(--border); color:#000 }
-</style>
-</head>
-<body>
-<div id="header-container"></div>
-<script>
-(async()=>{const r=await fetch('header.html',{cache:'no-cache'});const h=await r.text();document.getElementById('header-container').outerHTML=h;})();
-</script>
-
-<h1>Badge Case</h1>
-<div id="badgeGrid" class="badge-grid">Loading…</div>
-
-<!-- Admin modal -->
-<div id="adminPanel">
-  <div class="modal">
-    <h3>Modify Training</h3>
-    <label>User:</label>
-    <select id="userSelect"></select>
-    <div id="eventList" style="margin-top:10px;font-size:13px;"></div>
-    <button id="closeModal" style="margin-top:10px;width:100%">Close</button>
-  </div>
-</div>
+<link
+  rel="icon"
+  type="image/png"
+  href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+  sizes="32x32"
+>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
-<script>
-let sb, me, isElevated=false;
-const $ = s => document.querySelector(s);
 
-document.addEventListener('DOMContentLoaded', async ()=>{
-  const session = await requireAuth(); if(!session) return;
-  sb = getSupabase(); me = session.user.id;
-  const { data:e } = await sb.rpc('is_elevated', { u: me }); isElevated = e === true;
-  await buildBadges();
+
+<style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root{
+
+  --bg:#000;
+  --panel:#070806;
+  --panel2:#0b0d09;
+  --panel3:#10120d;
+
+  --gold:#f2d675;
+  --gold2:#d6b44c;
+  --gold3:#9c8034;
+
+  --text:#f7f1d0;
+  --text2:#ded7bd;
+
+  --muted:#9d9782;
+  --muted2:#696758;
+
+  --line:#4c4223;
+  --line2:#282519;
+
+  --green:#64d68b;
+  --red:#ff7272;
+
+  --sidebar:236px;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  min-height:100%;
+  background:#000;
+}
+
+body{
+
+  margin:0;
+  min-height:100vh;
+
+  font-family:"Play",sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 72% 14%,
+      rgba(194,158,58,.07),
+      transparent 32%
+    ),
+    #000;
+
+  color:var(--text);
+
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   BACKGROUND GRID
+========================================================= */
+
+body::before{
+
+  content:"";
+
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+
+  background-image:
+    linear-gradient(
+      rgba(242,214,117,.018) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(242,214,117,.018) 1px,
+      transparent 1px
+    );
+
+  background-size:54px 54px;
+
+  opacity:.55;
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.academy-app{
+
+  position:relative;
+  z-index:1;
+
+  min-height:100vh;
+
+  display:grid;
+
+  grid-template-columns:
+    var(--sidebar)
+    minmax(0,1fr);
+
+}
+
+
+/* =========================================================
+   SIDEBAR MOUNT
+========================================================= */
+
+#academySidebar{
+
+  width:var(--sidebar);
+
+  min-height:100vh;
+
+  border-right:
+    1px solid rgba(214,180,76,.34);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,10,8,.98),
+      rgba(2,3,2,.99)
+    );
+
+}
+
+
+/* temporary fallback until sidebar.html loads */
+
+.sidebar-fallback{
+
+  padding:24px 18px;
+
+}
+
+.sidebar-fallback-title{
+
+  color:var(--gold);
+
+  font-size:18px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+  margin-bottom:22px;
+
+}
+
+.sidebar-fallback a{
+
+  display:block;
+
+  padding:13px 12px;
+
+  color:var(--text2);
+
+  text-decoration:none;
+
+  font-size:13px;
+
+  border-left:2px solid transparent;
+
+}
+
+.sidebar-fallback a.active{
+
+  color:var(--gold);
+
+  border-left-color:var(--gold);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(242,214,117,.12),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.academy-main{
+
+  min-width:0;
+
+  padding:
+    26px
+    28px
+    50px;
+
+}
+
+.academy-shell{
+
+  width:100%;
+  max-width:1500px;
+
+  margin:0 auto;
+
+}
+
+
+/* =========================================================
+   MOBILE TOP BAR
+========================================================= */
+
+.mobile-academy-bar{
+
+  display:none;
+
+  align-items:center;
+  justify-content:space-between;
+
+  min-height:58px;
+
+  padding:
+    0
+    15px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.45);
+
+  background:
+    rgba(5,6,5,.97);
+
+}
+
+.mobile-menu-btn{
+
+  border:0;
+  background:none;
+
+  color:var(--gold);
+
+  font-size:20px;
+
+  padding:10px;
+
+}
+
+.mobile-title{
+
+  font-size:12px;
+  font-weight:700;
+
+  letter-spacing:.16em;
+
+}
+
+.mobile-manifest{
+
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:700;
+
+  letter-spacing:.12em;
+
+  text-decoration:none;
+
+}
+
+
+/* =========================================================
+   FRAME
+========================================================= */
+
+.frame{
+
+  position:relative;
+
+  border:
+    1px solid rgba(214,180,76,.72);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(9,11,7,.96),
+      rgba(4,5,4,.98)
+    );
+
+  clip-path:
+    polygon(
+      18px 0,
+      100% 0,
+      100% calc(100% - 18px),
+      calc(100% - 18px) 100%,
+      0 100%,
+      0 18px
+    );
+
+}
+
+.frame::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:12px;
+
+  pointer-events:none;
+
+  border:
+    1px solid rgba(214,180,76,.10);
+
+}
+
+.frame::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:28px;
+
+  width:72px;
+  height:2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--gold),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   FRAME HEADER
+========================================================= */
+
+.frame-header{
+
+  position:relative;
+  z-index:1;
+
+  min-height:52px;
+
+  padding:
+    14px
+    22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.18);
+
+}
+
+.frame-title{
+
+  color:var(--gold);
+
+  font-size:13px;
+  font-weight:700;
+
+  letter-spacing:.20em;
+
+}
+
+.frame-code{
+
+  color:#59584e;
+
+  font-size:10px;
+
+  letter-spacing:.22em;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+  min-height:550px;
+
+  margin-bottom:22px;
+
+}
+
+.hero-body{
+
+  position:relative;
+  z-index:1;
+
+  min-height:495px;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.12fr)
+    minmax(340px,.88fr);
+
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-copy{
+
+  padding:
+    48px
+    46px
+    42px;
+
+}
+
+.eyebrow{
+
+  color:var(--gold);
+
+  font-size:13px;
+  font-weight:700;
+
+  letter-spacing:.24em;
+
+  line-height:1.45;
+
+  margin-bottom:20px;
+
+}
+
+.academy-heading{
+
+  margin:0;
+
+  color:var(--gold);
+
+  font-size:
+    clamp(44px,5vw,72px);
+
+  line-height:.95;
+
+  letter-spacing:.055em;
+
+}
+
+.heading-rule{
+
+  width:310px;
+  max-width:75%;
+
+  height:3px;
+
+  margin:
+    28px
+    0
+    42px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--gold),
+      rgba(242,214,117,.04)
+    );
+
+}
+
+.welcome{
+
+  margin:0 0 45px;
+
+  font-size:22px;
+  font-weight:700;
+
+}
+
+.hero-copy p{
+
+  max-width:760px;
+
+  margin:
+    0
+    0
+    38px;
+
+  color:#c0baa5;
+
+  font-size:18px;
+
+  line-height:1.75;
+
+}
+
+.hero-copy strong{
+
+  color:var(--text);
+
+}
+
+.academy-statement{
+
+  margin:
+    44px
+    0;
+
+  padding:
+    25px
+    30px;
+
+  border-left:
+    5px solid var(--gold);
+
+  border-top:
+    1px solid rgba(214,180,76,.16);
+
+  border-bottom:
+    1px solid rgba(214,180,76,.16);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(242,214,117,.055),
+      transparent 85%
+    );
+
+  color:var(--gold);
+
+  font-size:
+    clamp(18px,2vw,25px);
+
+  font-weight:700;
+
+  letter-spacing:.11em;
+
+  line-height:1.55;
+
+}
+
+.journey{
+
+  color:#8f8a77 !important;
+
+  font-size:16px !important;
+
+  margin-bottom:0 !important;
+
+}
+
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.hero-visual{
+
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:100%;
+
+  border-left:
+    1px solid rgba(214,180,76,.15);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(3,4,3,.92),
+      rgba(3,4,3,.22)
+    ),
+
+    radial-gradient(
+      circle at 55% 35%,
+      rgba(242,214,117,.18),
+      transparent 28%
+    ),
+
+    linear-gradient(
+      145deg,
+      #151812,
+      #060706 70%
+    );
+
+}
+
+.hero-visual::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    46px
+    46px;
+
+}
+
+.hero-visual-center{
+
+  position:absolute;
+
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:.75;
+
+}
+
+.academy-mark{
+
+  width:190px;
+  height:190px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(242,214,117,.4);
+
+  transform:rotate(45deg);
+
+}
+
+.academy-mark-inner{
+
+  transform:rotate(-45deg);
+
+  text-align:center;
+
+}
+
+.academy-mark-big{
+
+  color:var(--gold);
+
+  font-size:34px;
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+}
+
+.academy-mark-small{
+
+  margin-top:8px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  letter-spacing:.28em;
+
+}
+
+.hero-quote{
+
+  position:absolute;
+
+  right:35px;
+  bottom:42px;
+
+  width:210px;
+
+  color:#a8a28f;
+
+  font-size:11px;
+
+  letter-spacing:.22em;
+
+  line-height:1.8;
+
+  text-align:right;
+
+}
+
+.hero-quote strong{
+
+  color:var(--gold);
+
+}
+
+
+/* =========================================================
+   TRAINING RECORD
+========================================================= */
+
+.record{
+
+  margin-bottom:22px;
+
+}
+
+.record-grid{
+
+  position:relative;
+  z-index:1;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+}
+
+.record-item{
+
+  min-height:150px;
+
+  padding:
+    28px
+    32px;
+
+  display:flex;
+  align-items:center;
+
+  gap:20px;
+
+}
+
+.record-item +
+.record-item{
+
+  border-left:
+    1px solid rgba(214,180,76,.19);
+
+}
+
+.record-icon{
+
+  width:62px;
+  height:62px;
+
+  flex:0 0 62px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.5);
+
+  color:var(--gold);
+
+  font-size:24px;
+
+}
+
+.record-number{
+
+  font-size:34px;
+  font-weight:700;
+
+  line-height:1;
+
+}
+
+.record-label{
+
+  margin-top:7px;
+
+  color:#aaa48f;
+
+  font-size:11px;
+
+  letter-spacing:.12em;
+
+  line-height:1.5;
+
+}
+
+
+/* =========================================================
+   CONTENT GRID
+========================================================= */
+
+.dashboard-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.55fr)
+    minmax(340px,.85fr);
+
+  gap:22px;
+
+  align-items:start;
+
+}
+
+
+/* =========================================================
+   CURRENT PROGRAMMES
+========================================================= */
+
+.programmes-body{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    16px
+    20px
+    20px;
+
+}
+
+.programme-row{
+
+  display:grid;
+
+  grid-template-columns:
+    150px
+    minmax(0,1fr);
+
+  gap:22px;
+
+  padding:
+    18px
+    0;
+
+}
+
+.programme-row +
+.programme-row{
+
+  border-top:
+    1px solid rgba(214,180,76,.15);
+
+}
+
+.programme-visual{
+
+  min-height:126px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.25);
+
+  background:
+
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(242,214,117,.12),
+      transparent 45%
+    ),
+
+    linear-gradient(
+      145deg,
+      #161913,
+      #070807
+    );
+
+  color:#5f5b4d;
+
+  font-size:34px;
+
+}
+
+.programme-top{
+
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:15px;
+
+}
+
+.programme-name{
+
+  margin:0;
+
+  font-size:21px;
+
+  letter-spacing:.04em;
+
+}
+
+.programme-subtitle{
+
+  margin-top:4px;
+
+  color:#9c9682;
+
+  font-size:11px;
+
+  letter-spacing:.09em;
+
+}
+
+.status{
+
+  flex:0 0 auto;
+
+  padding:
+    5px
+    10px;
+
+  border:
+    1px solid #62542b;
+
+  color:var(--gold);
+
+  font-size:9px;
+
+  letter-spacing:.15em;
+
+}
+
+.status.available{
+
+  border-color:#686b62;
+  color:#c4c6bc;
+
+}
+
+.status.locked{
+
+  border-color:#42433f;
+  color:#70726c;
+
+}
+
+.module-code{
+
+  margin-top:11px;
+
+  color:#aaa48f;
+
+  font-size:11px;
+
+  letter-spacing:.12em;
+
+}
+
+.progress-row{
+
+  margin-top:15px;
+
+  display:grid;
+
+  grid-template-columns:
+    auto
+    1fr
+    auto;
+
+  align-items:center;
+
+  gap:12px;
+
+  color:#9b9581;
+
+  font-size:10px;
+
+}
+
+.progress{
+
+  height:6px;
+
+  background:#25251d;
+
+  overflow:hidden;
+
+}
+
+.progress-fill{
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #b7993d,
+      var(--gold)
+    );
+
+}
+
+.programme-note{
+
+  margin-top:14px;
+
+  color:#8f8976;
+
+  font-size:12px;
+
+  line-height:1.5;
+
+}
+
+.programme-actions{
+
+  margin-top:17px;
+
+}
+
+.action-btn{
+
+  width:100%;
+
+  min-height:44px;
+
+  border:
+    1px solid rgba(214,180,76,.65);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(242,214,117,.055),
+      rgba(242,214,117,.015)
+    );
+
+  color:var(--gold);
+
+  font-size:10px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease;
+
+}
+
+.action-btn:hover{
+
+  border-color:var(--gold);
+
+  background:
+    rgba(242,214,117,.09);
+
+}
+
+.action-btn.disabled{
+
+  color:#62635d;
+
+  border-color:#393a36;
+
+  cursor:not-allowed;
+
+}
+
+.view-all{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    0
+    20px
+    20px;
+
+}
+
+.view-all .action-btn{
+
+  min-height:48px;
+
+}
+
+
+/* =========================================================
+   UPCOMING TRAINING
+========================================================= */
+
+.right-stack{
+
+  display:grid;
+
+  gap:22px;
+
+}
+
+.training-body{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    10px
+    20px
+    20px;
+
+}
+
+.training-event{
+
+  display:grid;
+
+  grid-template-columns:
+    58px
+    1fr
+    auto;
+
+  gap:15px;
+
+  align-items:center;
+
+  padding:
+    16px
+    0;
+
+}
+
+.training-event +
+.training-event{
+
+  border-top:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.event-date{
+
+  min-height:55px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.4);
+
+}
+
+.event-month{
+
+  color:var(--gold);
+
+  font-size:9px;
+
+  letter-spacing:.12em;
+
+}
+
+.event-day{
+
+  margin-top:3px;
+
+  font-size:20px;
+  font-weight:700;
+
+}
+
+.event-name{
+
+  font-size:13px;
+  font-weight:700;
+
+}
+
+.event-meta{
+
+  margin-top:5px;
+
+  color:#7f7b6d;
+
+  font-size:10px;
+
+}
+
+.event-arrow{
+
+  color:var(--gold);
+
+  font-size:18px;
+
+}
+
+
+/* =========================================================
+   QUALIFICATIONS
+========================================================= */
+
+.qualifications-body{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    10px
+    20px
+    20px;
+
+}
+
+.qualification{
+
+  display:grid;
+
+  grid-template-columns:
+    42px
+    1fr
+    auto;
+
+  align-items:center;
+
+  gap:14px;
+
+  padding:
+    16px
+    0;
+
+}
+
+.qualification +
+.qualification{
+
+  border-top:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.qual-icon{
+
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.45);
+
+  color:var(--gold);
+
+}
+
+.qual-name{
+
+  font-size:12px;
+  font-weight:700;
+
+}
+
+.qual-date{
+
+  margin-top:5px;
+
+  color:#767267;
+
+  font-size:9px;
+
+}
+
+.qual-code{
+
+  color:#9a9585;
+
+  font-size:10px;
+
+  letter-spacing:.15em;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.academy-footer{
+
+  margin-top:34px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  color:#66645a;
+
+  font-size:9px;
+
+  letter-spacing:.25em;
+
+}
+
+.footer-line{
+
+  flex:1;
+
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(214,180,76,.4),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1100px){
+
+  :root{
+    --sidebar:210px;
+  }
+
+  .academy-main{
+    padding:20px;
+  }
+
+  .hero-body{
+    grid-template-columns:1fr;
+  }
+
+  .hero-visual{
+    min-height:240px;
+    border-left:0;
+    border-top:
+      1px solid rgba(214,180,76,.15);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  body{
+    min-height:100%;
+  }
+
+  .mobile-academy-bar{
+    display:flex;
+  }
+
+  .academy-app{
+    display:block;
+  }
+
+  #academySidebar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    z-index:100;
+
+    width:min(300px,84vw);
+
+    min-height:100%;
+
+    transform:
+      translateX(-105%);
+
+    transition:
+      transform .22s ease;
+
+    box-shadow:
+      20px 0 50px rgba(0,0,0,.55);
+
+  }
+
+  body.sidebar-open
+  #academySidebar{
+
+    transform:
+      translateX(0);
+
+  }
+
+  .academy-main{
+
+    padding:
+      16px
+      14px
+      38px;
+
+  }
+
+  .frame-header{
+
+    padding:
+      13px
+      18px;
+
+  }
+
+  .frame-title{
+
+    max-width:68%;
+
+    font-size:11px;
+
+  }
+
+  .frame-code{
+
+    font-size:8px;
+
+  }
+
+  .hero{
+
+    min-height:0;
+
+  }
+
+  .hero-body{
+
+    min-height:0;
+
+    display:block;
+
+  }
+
+  .hero-copy{
+
+    padding:
+      42px
+      30px
+      38px;
+
+  }
+
+  .eyebrow{
+
+    font-size:11px;
+
+  }
+
+  .academy-heading{
+
+    font-size:56px;
+
+  }
+
+  .heading-rule{
+
+    margin:
+      27px
+      0
+      40px;
+
+  }
+
+  .welcome{
+
+    font-size:19px;
+
+    margin-bottom:42px;
+
+  }
+
+  .hero-copy p{
+
+    font-size:16px;
+
+    line-height:1.75;
+
+  }
+
+  .academy-statement{
+
+    padding:
+      23px
+      24px;
+
+    font-size:17px;
+
+  }
+
+  .journey{
+
+    font-size:14px !important;
+
+  }
+
+  .hero-visual{
+
+    display:none;
+
+  }
+
+  .record-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .record-item{
+
+    min-height:auto;
+
+    padding:
+      22px
+      25px;
+
+  }
+
+  .record-item +
+  .record-item{
+
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.16);
+
+  }
+
+  .record-icon{
+
+    width:52px;
+    height:52px;
+
+    flex-basis:52px;
+
+  }
+
+  .record-number{
+
+    font-size:29px;
+
+  }
+
+  .programme-row{
+
+    grid-template-columns:1fr;
+
+    gap:12px;
+
+  }
+
+  .programme-visual{
+
+    min-height:110px;
+
+  }
+
+  .training-event{
+
+    grid-template-columns:
+      50px
+      1fr
+      auto;
+
+    gap:12px;
+
+  }
+
+  .academy-footer{
+
+    font-size:7px;
+
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media(max-width:390px){
+
+  .academy-main{
+
+    padding-left:10px;
+    padding-right:10px;
+
+  }
+
+  .hero-copy{
+
+    padding:
+      36px
+      24px;
+
+  }
+
+  .academy-heading{
+
+    font-size:48px;
+
+  }
+
+  .programme-top{
+
+    display:block;
+
+  }
+
+  .status{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     MOBILE ACADEMY BAR
+========================================================= -->
+
+<header class="mobile-academy-bar">
+
+  <button
+    class="mobile-menu-btn"
+    id="mobileMenuBtn"
+    type="button"
+    aria-label="Open Academy navigation"
+  >
+    ☰
+  </button>
+
+  <div class="mobile-title">
+    JMBN // ACADEMY
+  </div>
+
+  <a
+    href="index.html"
+    class="mobile-manifest"
+  >
+    MANIFEST ↗
+  </a>
+
+</header>
+
+
+<!-- =========================================================
+     APPLICATION
+========================================================= -->
+
+<div class="academy-app">
+
+
+  <!-- =======================================================
+       SHARED ACADEMY SIDEBAR
+  ======================================================== -->
+
+  <aside id="academySidebar">
+
+    <!-- Temporary fallback.
+         sidebar.js can replace this with sidebar.html. -->
+
+    <div class="sidebar-fallback">
+
+      <div class="sidebar-fallback-title">
+        ACADEMY
+      </div>
+
+      <a
+        href="academy.html"
+        class="active"
+      >
+        OVERVIEW
+      </a>
+
+      <a href="programmes.html">
+        PROGRAMMES
+      </a>
+
+      <a href="my-training.html">
+        MY TRAINING
+      </a>
+
+      <a href="training-schedule.html">
+        TRAINING SCHEDULE
+      </a>
+
+      <a href="qualifications.html">
+        QUALIFICATIONS
+      </a>
+
+      <br>
+
+      <a href="index.html">
+        ← BACK TO MANIFEST
+      </a>
+
+    </div>
+
+  </aside>
+
+
+
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
+
+  <main class="academy-main">
+
+    <div class="academy-shell">
+
+
+      <!-- ===================================================
+           ACADEMY INTRODUCTION
+      ==================================================== -->
+
+      <section class="frame hero">
+
+        <div class="frame-header">
+
+          <div class="frame-title">
+            JMBN // ACADEMY DIVISION
+          </div>
+
+          <div class="frame-code">
+            TRAINING NETWORK // ACAD-01
+          </div>
+
+        </div>
+
+
+        <div class="hero-body">
+
+
+          <!-- COPY -->
+
+          <div class="hero-copy">
+
+            <div class="eyebrow">
+              PERSONNEL DEVELOPMENT // CERTIFICATION SYSTEM
+            </div>
+
+            <h1 class="academy-heading">
+              ACADEMY
+            </h1>
+
+            <div class="heading-rule"></div>
+
+
+            <h2 class="welcome">
+              Welcome to JMBN.
+            </h2>
+
+
+            <p>
+
+              You already know the basics of Star Citizen.
+              You've flown ships, fought battles, completed
+              missions, and learned the game through experience.
+
+            </p>
+
+
+            <p>
+
+              <strong>
+                Now, you'll learn how to operate as part of a team.
+              </strong>
+
+              <br>
+
+              The JMBN Academy isn't here to teach you how to
+              play the game. It's here to teach you how we
+              operate together — our procedures, communication,
+              formations, roles, and the standards expected when
+              working as a JMBN unit.
+
+            </p>
+
+
+            <div class="academy-statement">
+
+              WE DON'T TEACH YOU HOW TO PLAY STAR CITIZEN.
+
+              <br>
+
+              WE TEACH YOU HOW JMBN PLAYS STAR CITIZEN.
+
+            </div>
+
+
+            <p class="journey">
+
+              Your journey begins with
+
+              <strong>
+                Basic Military Training (BMT)
+              </strong>
+
+              and continues into specialised certifications as
+              you develop your role within the organization.
+
+            </p>
+
+          </div>
+
+
+
+          <!-- VISUAL -->
+
+          <div class="hero-visual">
+
+            <div class="hero-visual-center">
+
+              <div class="academy-mark">
+
+                <div class="academy-mark-inner">
+
+                  <div class="academy-mark-big">
+                    JMBN
+                  </div>
+
+                  <div class="academy-mark-small">
+                    ACADEMY
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="hero-quote">
+
+              <strong>
+                SAME PEOPLE.
+                <br>
+                HIGHER STANDARDS.
+              </strong>
+
+              <br><br>
+
+              DISCIPLINE
+              <br>
+              SKILL
+              <br>
+              UNITY
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           TRAINING RECORD
+      ==================================================== -->
+
+      <section class="frame record">
+
+        <div class="frame-header">
+
+          <div class="frame-title">
+            TRAINING RECORD
+          </div>
+
+          <div class="frame-code">
+            02
+          </div>
+
+        </div>
+
+
+        <div class="record-grid">
+
+
+          <!-- QUALIFICATIONS -->
+
+          <div class="record-item">
+
+            <div class="record-icon">
+              ★
+            </div>
+
+            <div>
+
+              <div
+                class="record-number"
+                id="qualificationCount"
+              >
+                2 / 12
+              </div>
+
+              <div class="record-label">
+                QUALIFICATIONS
+                <br>
+                EARNED
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- TRAINING -->
+
+          <div class="record-item">
+
+            <div class="record-icon">
+              ◇
+            </div>
+
+            <div>
+
+              <div
+                class="record-number"
+                id="activeTrainingCount"
+              >
+                1
+              </div>
+
+              <div class="record-label">
+                IN TRAINING
+                <br>
+                CURRENTLY
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- EVENTS -->
+
+          <div class="record-item">
+
+            <div class="record-icon">
+              ▣
+            </div>
+
+            <div>
+
+              <div
+                class="record-number"
+                id="trainingEventsCount"
+              >
+                8
+              </div>
+
+              <div class="record-label">
+                TRAINING EVENTS
+                <br>
+                PASSED
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           LOWER GRID
+      ==================================================== -->
+
+      <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             CURRENT PROGRAMMES
+        ================================================== -->
+
+        <section class="frame">
+
+          <div class="frame-header">
+
+            <div class="frame-title">
+              CURRENT PROGRAMMES
+            </div>
+
+            <div class="frame-code">
+              03
+            </div>
+
+          </div>
+
+
+          <div
+            class="programmes-body"
+            id="programmesList"
+          >
+
+
+            <!-- MED -->
+
+            <article class="programme-row">
+
+              <div class="programme-visual">
+                ✚
+              </div>
+
+
+              <div>
+
+                <div class="programme-top">
+
+                  <div>
+
+                    <h3 class="programme-name">
+                      MED
+                    </h3>
+
+                    <div class="programme-subtitle">
+                      MEDICAL SPECIALIST
+                    </div>
+
+                  </div>
+
+
+                  <div class="status">
+                    IN TRAINING
+                  </div>
+
+                </div>
+
+
+                <div class="module-code">
+                  CURRENT // MED-CCR
+                </div>
+
+
+                <div class="progress-row">
+
+                  <span>
+                    PROGRESS
+                  </span>
+
+                  <div class="progress">
+
+                    <div
+                      class="progress-fill"
+                      style="width:20%"
+                    ></div>
+
+                  </div>
+
+                  <span>
+                    1 / 5
+                  </span>
+
+                </div>
+
+
+                <div class="programme-actions">
+
+                  <button
+                    class="action-btn"
+                    type="button"
+                    data-link="AP-MED.html"
+                  >
+                    CONTINUE TRAINING →
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+
+
+            <!-- PILOT -->
+
+            <article class="programme-row">
+
+              <div class="programme-visual">
+                △
+              </div>
+
+
+              <div>
+
+                <div class="programme-top">
+
+                  <div>
+
+                    <h3 class="programme-name">
+                      PILOT
+                    </h3>
+
+                    <div class="programme-subtitle">
+                      FLIGHT OPERATIONS
+                    </div>
+
+                  </div>
+
+
+                  <div class="status available">
+                    AVAILABLE
+                  </div>
+
+                </div>
+
+
+                <div class="programme-note">
+                  Prerequisites met. This qualification
+                  programme is available to begin.
+                </div>
+
+
+                <div class="programme-actions">
+
+                  <button
+                    class="action-btn"
+                    type="button"
+                    data-link="AP-PILOT.html"
+                  >
+                    ACCESS PROGRAMME →
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+
+
+            <!-- GUNNERY -->
+
+            <article class="programme-row">
+
+              <div class="programme-visual">
+                ◎
+              </div>
+
+
+              <div>
+
+                <div class="programme-top">
+
+                  <div>
+
+                    <h3 class="programme-name">
+                      GUNNERY
+                    </h3>
+
+                    <div class="programme-subtitle">
+                      WEAPON SYSTEMS
+                    </div>
+
+                  </div>
+
+
+                  <div class="status available">
+                    AVAILABLE
+                  </div>
+
+                </div>
+
+
+                <div class="programme-note">
+                  Basic Military Training prerequisite completed.
+                </div>
+
+
+                <div class="programme-actions">
+
+                  <button
+                    class="action-btn"
+                    type="button"
+                    data-link="AP-GUNNERY.html"
+                  >
+                    ACCESS PROGRAMME →
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+
+
+            <!-- ENGINEERING -->
+
+            <article class="programme-row">
+
+              <div class="programme-visual">
+                ⚙
+              </div>
+
+
+              <div>
+
+                <div class="programme-top">
+
+                  <div>
+
+                    <h3 class="programme-name">
+                      ENGINEERING
+                    </h3>
+
+                    <div class="programme-subtitle">
+                      SHIP SYSTEMS
+                    </div>
+
+                  </div>
+
+
+                  <div class="status locked">
+                    LOCKED
+                  </div>
+
+                </div>
+
+
+                <div class="programme-note">
+                  Requires BMT + SOC.
+                </div>
+
+
+                <div class="programme-actions">
+
+                  <button
+                    class="action-btn disabled"
+                    type="button"
+                    disabled
+                  >
+                    LOCKED
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+
+          </div>
+
+
+          <div class="view-all">
+
+            <button
+              class="action-btn"
+              type="button"
+              data-link="programmes.html"
+            >
+              VIEW ALL PROGRAMMES →
+            </button>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div class="right-stack">
+
+
+          <!-- ===============================================
+               UPCOMING TRAINING
+          ================================================ -->
+
+          <section class="frame">
+
+            <div class="frame-header">
+
+              <div class="frame-title">
+                UPCOMING TRAINING
+              </div>
+
+              <div class="frame-code">
+                04
+              </div>
+
+            </div>
+
+
+            <div class="training-body">
+
+
+              <div class="training-event">
+
+                <div class="event-date">
+
+                  <span class="event-month">
+                    SEP
+                  </span>
+
+                  <span class="event-day">
+                    22
+                  </span>
+
+                </div>
+
+
+                <div>
+
+                  <div class="event-name">
+                    BMT Field Exercise
+                  </div>
+
+                  <div class="event-meta">
+                    20:00 SGT · Everus Harbor
+                  </div>
+
+                </div>
+
+
+                <div class="event-arrow">
+                  ›
+                </div>
+
+              </div>
+
+
+
+              <div class="training-event">
+
+                <div class="event-date">
+
+                  <span class="event-month">
+                    SEP
+                  </span>
+
+                  <span class="event-day">
+                    24
+                  </span>
+
+                </div>
+
+
+                <div>
+
+                  <div class="event-name">
+                    SOC Drop Training
+                  </div>
+
+                  <div class="event-meta">
+                    20:00 SGT · MicroTech
+                  </div>
+
+                </div>
+
+
+                <div class="event-arrow">
+                  ›
+                </div>
+
+              </div>
+
+
+
+              <div class="training-event">
+
+                <div class="event-date">
+
+                  <span class="event-month">
+                    SEP
+                  </span>
+
+                  <span class="event-day">
+                    27
+                  </span>
+
+                </div>
+
+
+                <div>
+
+                  <div class="event-name">
+                    Medical Evacuation Drill
+                  </div>
+
+                  <div class="event-meta">
+                    20:00 SGT · Hurston
+                  </div>
+
+                </div>
+
+
+                <div class="event-arrow">
+                  ›
+                </div>
+
+              </div>
+
+
+              <button
+                class="action-btn"
+                type="button"
+                data-link="training-schedule.html"
+              >
+                VIEW FULL SCHEDULE →
+              </button>
+
+
+            </div>
+
+          </section>
+
+
+
+          <!-- ===============================================
+               QUALIFICATIONS
+          ================================================ -->
+
+          <section class="frame">
+
+            <div class="frame-header">
+
+              <div class="frame-title">
+                RECENT QUALIFICATIONS
+              </div>
+
+              <div class="frame-code">
+                05
+              </div>
+
+            </div>
+
+
+            <div class="qualifications-body">
+
+
+              <div class="qualification">
+
+                <div class="qual-icon">
+                  ★
+                </div>
+
+
+                <div>
+
+                  <div class="qual-name">
+                    Basic Military Training
+                  </div>
+
+                  <div class="qual-date">
+                    Earned 12 Sep 2026
+                  </div>
+
+                </div>
+
+
+                <div class="qual-code">
+                  BMT
+                </div>
+
+              </div>
+
+
+
+              <div class="qualification">
+
+                <div class="qual-icon">
+                  ★
+                </div>
+
+
+                <div>
+
+                  <div class="qual-name">
+                    Standard Obstacle Course
+                  </div>
+
+                  <div class="qual-date">
+                    Earned 18 Sep 2026
+                  </div>
+
+                </div>
+
+
+                <div class="qual-code">
+                  SOC
+                </div>
+
+              </div>
+
+
+
+              <button
+                class="action-btn"
+                type="button"
+                data-link="qualifications.html"
+              >
+                VIEW ALL QUALIFICATIONS →
+              </button>
+
+
+            </div>
+
+          </section>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ===================================================
+           FOOTER
+      ==================================================== -->
+
+      <footer class="academy-footer">
+
+        <span>
+          JMBN
+        </span>
+
+        <div class="footer-line"></div>
+
+        <span>
+          A MORE CAPABLE TOMORROW.
+        </span>
+
+        <div class="footer-line"></div>
+
+        <span>
+          DISCIPLINE · SKILL · UNITY
+        </span>
+
+      </footer>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     PAGE SCRIPT
+========================================================= -->
+
+<script>
+
+let sb = null;
+let me = null;
+
+
+/* =========================================================
+   NAVIGATION BUTTONS
+========================================================= */
+
+document.querySelectorAll("[data-link]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    const link = button.dataset.link;
+
+    if(link){
+      window.location.href = link;
+    }
+
+  });
+
 });
 
-/* Build all badges with one round of data fetches */
-async function buildBadges(){
-  const [{data: certs},{data: owned},{data: reqs},{data: done}] = await Promise.all([
-    sb.from('certifications').select('certification_code,name,image_url,sort_order').order('sort_order'),
-    sb.from('user_certifications').select('certification_code').eq('user_id', me),
-    sb.from('certification_requirements').select('certification_code,event_code,sort_order,training_events(title)').order('sort_order'),
-    sb.from('user_training_events').select('event_code').eq('user_id', me),
-  ]);
 
-  const ownedSet   = new Set(owned.map(c=>c.certification_code));
-  const doneSet    = new Set(done.map(d=>d.event_code));
-  const reqByCert  = new Map(); // code -> [{event_code,title}]
-  reqs.forEach(r=>{
-    if(!reqByCert.has(r.certification_code)) reqByCert.set(r.certification_code,[]);
-    reqByCert.get(r.certification_code).push({event_code:r.event_code,title:r.training_events?.title||r.event_code});
-  });
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
 
-  const grid = $('#badgeGrid'); grid.innerHTML = '';
-  for(const cert of certs){
-    const rel = reqByCert.get(cert.certification_code) || [];
-    const completed = rel.filter(r=>doneSet.has(r.event_code)).length;
-    const pct = Math.round((completed / Math.max(1, rel.length)) * 100);
-    const isOwned = ownedSet.has(cert.certification_code);
+const mobileMenuBtn =
+  document.getElementById("mobileMenuBtn");
 
-    const div = document.createElement('div');
-    div.className = 'badge ' + (isOwned ? 'owned' : 'locked');
+mobileMenuBtn?.addEventListener("click",()=>{
 
-    /* ---------- innerHTML template (hex + hover overlay) ---------- */
-    div.innerHTML = `
-      <div class="hex">
-        <div class="medal">
-          <img src="${cert.image_url || ''}" alt="${cert.name}">
-        </div>
-      </div>
-      <div class="title">${cert.name}</div>
-      <div class="code">${cert.certification_code}</div>
+  document.body.classList.toggle(
+    "sidebar-open"
+  );
 
-      <div class="overlay">
-        <div class="status">${isOwned ? '✅ Earned' : '⏳ In Progress'}</div>
-        <div class="bar"><div class="fill" style="width:${pct}%"></div></div>
-        <ul class="reqs">
-          ${rel.map(r=>{
-            const ok = doneSet.has(r.event_code);
-            return `<li>
-              <span>${r.title}</span>
-              <span class="${ok?'ok':'pending'}">${ok?'✔':'—'}</span>
-            </li>`;
-          }).join('')}
-        </ul>
-        ${isElevated ? `<div style="margin-top:8px;text-align:right">
-          <button class="manage" style="font-size:12px">Manage</button>
-        </div>` : ``}
-      </div>
-    `;
-    /* -------------------------------------------------------------- */
+});
 
-    if(isElevated){
-      div.querySelector('.manage').onclick = () => openModal(cert.certification_code, cert.name);
-    }
-    grid.appendChild(div);
+
+document.addEventListener("click",(event)=>{
+
+  if(
+    window.innerWidth > 760 ||
+    !document.body.classList.contains("sidebar-open")
+  ){
+    return;
   }
-}
 
-/* Admin modal */
-async function openModal(code,name){
-  $('#adminPanel').style.display='flex';
-  const {data:users}=await sb.from('profiles').select('id,handle').order('handle');
-  $('#userSelect').innerHTML=users.map(u=>`<option value="${u.id}">${u.handle}</option>`).join('');
-  $('#userSelect').onchange=()=>loadEvents($('#userSelect').value,code);
-  if(users.length) loadEvents(users[0].id,code);
-  $('#closeModal').onclick=()=>$('#adminPanel').style.display='none';
-}
-async function loadEvents(uid,code){
-  const {data:reqs}=await sb.from('certification_requirements')
-    .select('event_code,sort_order,training_events(title)')
-    .eq('certification_code',code).order('sort_order');
-  const {data:done}=await sb.from('user_training_events')
-    .select('event_code').eq('user_id',uid);
-  const doneSet=new Set(done.map(d=>d.event_code));
+  const sidebar =
+    document.getElementById("academySidebar");
 
-  $('#eventList').innerHTML=reqs.map(r=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-      <span>${r.training_events.title}</span>
-      ${doneSet.has(r.event_code)
-        ? `<button data-remove="${r.event_code}">Remove</button>`
-        : `<button data-add="${r.event_code}">Grant</button>`}
-    </div>`).join('');
+  const clickedSidebar =
+    sidebar.contains(event.target);
 
-  // handlers
-  $('#eventList').querySelectorAll('button[data-add]').forEach(b=>{
-    b.onclick=async()=>{
-      await sb.from('user_training_events').insert({
-        user_id:uid,event_code:b.dataset.add,completed_at:new Date().toISOString()
-      });
-      await loadEvents(uid,code);
-      if(uid===me) await buildBadges();
-    };
-  });
-  $('#eventList').querySelectorAll('button[data-remove]').forEach(b=>{
-    b.onclick=async()=>{
-      await sb.from('user_training_events').delete()
-        .eq('user_id',uid).eq('event_code',b.dataset.remove);
-      await loadEvents(uid,code);
-      if(uid===me) await buildBadges();
-    };
-  });
-}
+  const clickedButton =
+    mobileMenuBtn.contains(event.target);
+
+  if(!clickedSidebar && !clickedButton){
+
+    document.body.classList.remove(
+      "sidebar-open"
+    );
+
+  }
+
+});
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async ()=>{
+
+    try{
+
+      const session =
+        await requireAuth();
+
+      if(!session){
+        return;
+      }
+
+      sb =
+        getSupabase();
+
+      me =
+        session.user.id;
+
+
+      /*
+       * =====================================================
+       * SUPABASE DATA
+       * =====================================================
+       *
+       * For now the Academy dashboard uses the visual/demo
+       * values above.
+       *
+       * Next we can connect:
+       *
+       * qualificationCount
+       * activeTrainingCount
+       * trainingEventsCount
+       * programmesList
+       * upcoming training
+       * recent qualifications
+       *
+       * to your existing JMBN views/tables.
+       *
+       */
+
+
+    }
+    catch(error){
+
+      console.error(
+        "Academy initialization failed:",
+        error
+      );
+
+    }
+
+  }
+);
+
 </script>
+
+
+<!-- =========================================================
+     SHARED SIDEBAR
+========================================================= -->
+
+<script src="js/sidebar.js"></script>
+
+
 </body>
+
 </html>
