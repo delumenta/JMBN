@@ -482,7 +482,6 @@ button{color:inherit}
     </select>
 
     <div id="count" class="member-count">0 members</div>
-    <div id="dataStatus" class="member-count" style="margin-left:auto">Connecting to JMBN database…</div>
   </section>
 
   <section class="registry-grid">
@@ -647,7 +646,7 @@ function initials(r){
 }
 
 function primaryRole(r){
-  return normalizeRoles(r)[0] || "—";
+  return normalizeRoles(r)[0] || "Unassigned";
 }
 
 function populateFilters(){
@@ -821,7 +820,7 @@ async function selectMember(userId){
 
   $("#vRoles").innerHTML=roles.length
     ? roles.map(x=>`<span class="role-chip">${esc(x)}</span>`).join("")
-    : `<span style="color:var(--muted)">—</span>`;
+    : `<span style="color:var(--muted)">No specialisation assigned.</span>`;
 
   const rankEl=$("#profileRankImg");
   if(rankImg){
@@ -864,17 +863,8 @@ $$(".profile-tab").forEach(btn=>{
 });
 
 async function loadRoster(){
-
-  $("#dataStatus").textContent =
-    "Loading personnel…";
-
-  const {
-    data,
-    error
-  } = await sb
-
+  const {data,error}=await sb
     .from("v_profiles_detailed")
-
     .select(`
       user_id,
       handle,
@@ -887,62 +877,21 @@ async function loadRoster(){
       missions_attended
     `);
 
-
   if(error){
-
-    console.error(
-      "v_profiles_detailed:",
-      error
-    );
-
-    $("#rosterList").innerHTML =
-      `<div style="padding:18px;color:var(--red)">
-        Failed to load members: ${esc(error.message)}
-      </div>`;
-
-    $("#count").textContent =
-      "0 members";
-
-    $("#dataStatus").textContent =
-      "Database error";
-
+    $("#rosterList").innerHTML=`<div style="padding:18px;color:var(--red)">Failed to load: ${esc(error.message)}</div>`;
+    $("#count").textContent="0 members";
     return;
   }
 
-
-  ROWS =
-    data || [];
-
-
-  $("#dataStatus").textContent =
-    "JMBN database connected";
-
-
+  ROWS=data||[];
   populateFilters();
-
   updateKPIs();
-
   render();
 
-
-  if(
-    ROWS.length &&
-    window.matchMedia(
-      "(min-width:821px)"
-    ).matches
-  ){
-
-    const first =
-      filteredRows()[0];
-
-    if(first){
-      selectMember(
-        first.user_id
-      );
-    }
-
+  if(ROWS.length && window.matchMedia("(min-width:821px)").matches){
+    const first=filteredRows()[0];
+    if(first) selectMember(first.user_id);
   }
-
 }
 
 document.addEventListener("DOMContentLoaded",async()=>{
@@ -968,33 +917,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
     console.warn("Header load failed:",e);
   }
 
-  if(
-    typeof requireAuth !== "function" ||
-    typeof getSupabase !== "function"
-  ){
-    $("#dataStatus").textContent =
-      "auth.js not loaded";
+  const session=await requireAuth();
+  if(!session) return;
 
-    $("#rosterList").innerHTML =
-      `<div style="padding:18px;color:var(--red)">
-        JMBN auth.js could not be loaded. Make sure this file is deployed
-        beside the existing <b>js/auth.js</b> used by your current member.html.
-      </div>`;
-
-    return;
-  }
-
-  const session =
-    await requireAuth();
-
-  if(!session)
-    return;
-
-  sb =
-    getSupabase();
-
-  $("#dataStatus").textContent =
-    "JMBN database connected";
+  sb=getSupabase();
 
   $("#q").addEventListener("input",render);
   $("#rankFilter").addEventListener("change",render);
