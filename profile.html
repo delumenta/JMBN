@@ -1,89 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#020303">
-<title>JMBN — Profile</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#020303;--panel:#080a0b;--gold:#d8b84e;--gold2:#f4d878;--text:#f7f0d2;--muted:#9c8d5e}
-*{box-sizing:border-box}body{margin:0;background:#000;color:var(--text);font-family:Play,sans-serif}
-#header{position:relative;z-index:50}.page{width:90%;max-width:1700px;margin:18px auto 50px}
-.frame{padding:1px;background:linear-gradient(135deg,var(--gold2),#5c4a17);clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
-.inner{background:linear-gradient(180deg,#0a0c0c,#050606);min-height:520px;padding:28px;clip-path:inherit}
-.kicker{font-size:9px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}.title{font-size:27px;margin:8px 0 26px}
-.profile{display:grid;grid-template-columns:190px 1fr;gap:30px;align-items:start}
-.avatar{width:170px;height:170px;border:1px solid rgba(216,184,78,.6);background:#0d0f0f;display:grid;place-items:center;font-size:38px;color:var(--gold2);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
-.avatar.has-avatar-image{background-size:cover!important;background-position:center!important;color:transparent!important}
-.name{font-size:24px;font-weight:700}.rank{margin-top:7px;color:var(--gold);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.meta{margin-top:26px;display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:10px;max-width:650px}
-.cell{border:1px solid rgba(216,184,78,.18);padding:13px;background:rgba(216,184,78,.025)}.cell span{display:block;font-size:8px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}.cell b{font-size:12px}
-.note{margin-top:22px;color:#756e58;font-size:9px;line-height:1.7;max-width:650px}
-@media(max-width:700px){.page{width:calc(100% - 22px)}.inner{padding:20px}.profile{grid-template-columns:1fr}.avatar{width:120px;height:120px}.meta{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<div id="header"></div>
-<main class="page">
-  <section class="frame"><div class="inner">
-    <div class="kicker">Personnel File // My Profile</div>
-    <div class="title">JMBN PROFILE</div>
-    <div class="profile">
-      <div id="profileAvatar" class="avatar">--</div>
-      <div>
-        <div id="profileName" class="name">Loading...</div>
-        <div id="profileRank" class="rank">Personnel</div>
-        <div class="meta">
-          <div class="cell"><span>Handle</span><b id="profileHandle">—</b></div>
-          <div class="cell"><span>Discord</span><b id="discordStatus">Checking...</b></div>
-        </div>
-        <div class="note">Your Discord profile image will appear here automatically once avatar syncing is enabled on the JMBN backend. Until then, your initials are used as the fallback.</div>
-      </div>
-    </div>
-  </div></section>
-</main>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="js/auth.js"></script>
-<script src="js/avatars.js"></script>
-<script src="js/header.js"></script>
-<script>
-(async()=>{
-  fetch("header.html",{cache:"no-cache"})
-    .then(r=>r.text()).then(html=>{
-      document.getElementById("header").innerHTML=html;
-      if(window.initJmbnHeader) window.initJmbnHeader();
-    });
-
-  const sb = window.getSupabase ? window.getSupabase() : null;
-  if(!sb) return;
-
-  const {data:{session}} = await sb.auth.getSession();
-  const user=session?.user;
-  if(!user){ location.href="login.html"; return; }
-
-  const {data:p}=await sb.from("profiles")
-    .select("display_name,handle,role,rank_code,current_rank_id")
-    .eq("user_id",user.id).maybeSingle();
-
-  const display=p?.display_name || p?.handle || user.email || "Member";
-  document.getElementById("profileName").textContent=display;
-  document.getElementById("profileHandle").textContent=p?.handle || "—";
-  document.getElementById("profileRank").textContent=p?.rank_code || p?.role || "Personnel";
-
-  const discord=window.JMBNAvatars
-    ? await window.JMBNAvatars.getDiscordLink(sb,user.id)
-    : null;
-
-  if(window.JMBNAvatars)
-    window.JMBNAvatars.renderAvatar(document.getElementById("profileAvatar"),discord,display);
-
-  document.getElementById("discordStatus").textContent =
-    discord?.discord_id ? "LINKED" : "NOT LINKED";
-})();
-</script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JMBN – Personnel Profile Visual</title><link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet"><style>
+:root{--bg:#020302;--p:#070806;--p2:#0b0d0a;--g:#d9b53e;--g2:#f0d46a;--t:#f4edcf;--m:#8f896f;--good:#43df91}*{box-sizing:border-box}body{margin:0;padding:14px;background:radial-gradient(900px 500px at 85% -10%,rgba(217,181,62,.07),transparent 60%),var(--bg);color:var(--t);font-family:Play,system-ui,sans-serif}.wrap{width:90%;max-width:1700px;margin:auto}.top{height:96px;border:1px solid rgba(217,181,62,.6);border-radius:12px;background:#030403;position:relative;overflow:hidden;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}.top:before{content:"";position:absolute;left:14px;top:15px;bottom:15px;width:2px;background:var(--g2);box-shadow:0 0 10px var(--g)}.kicker,.label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b99b3e}.title{font-size:25px;letter-spacing:.14em;color:#fff3bd;margin-top:6px;font-weight:700}.status{text-align:right;font-size:9px;color:var(--m);line-height:1.7}.status b{color:var(--good);letter-spacing:.14em}.identity{margin-top:12px;border:1px solid rgba(217,181,62,.5);border-radius:10px;background:linear-gradient(105deg,rgba(217,181,62,.07),transparent 42%),#050604;overflow:hidden}.identity-main{padding:24px 28px;display:grid;grid-template-columns:100px 1fr auto;gap:22px;align-items:center}.avatar{width:92px;height:92px;border-radius:50%;border:1px solid var(--g2);display:grid;place-items:center;font-size:26px;color:var(--g2);background:radial-gradient(circle at 50% 35%,#30342d,#080908 70%);box-shadow:0 0 22px rgba(217,181,62,.12)}.name{font-size:28px;font-weight:700;letter-spacing:.08em}.rank{margin-top:6px;color:#c9bd91;font-size:12px;letter-spacing:.1em}.tags{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}.tag{border:1px solid rgba(217,181,62,.4);border-radius:999px;padding:5px 10px;font-size:8px;color:var(--g2);letter-spacing:.08em}.verified{text-align:right}.verified .dot{color:var(--good);font-size:11px}.verified strong{display:block;color:var(--g2);font-size:10px;letter-spacing:.14em;margin-top:6px}.verified small{color:var(--m)}.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(217,181,62,.2)}.kpi{padding:15px;text-align:center;border-right:1px solid rgba(217,181,62,.15)}.kpi:last-child{border-right:0}.num{font-size:22px;font-weight:700}.kpi span{display:block;color:var(--m);font-size:8px;letter-spacing:.16em;margin-top:3px}.grid{display:grid;grid-template-columns:1fr 1.35fr;gap:12px;margin-top:12px}.card{border:1px solid rgba(217,181,62,.4);border-radius:10px;background:linear-gradient(180deg,#080906,#040504);padding:16px}.cardhead{display:flex;justify-content:space-between;border-bottom:1px solid rgba(217,181,62,.16);padding-bottom:10px;margin-bottom:12px;color:var(--g2);font-size:9px;letter-spacing:.17em}.row{display:grid;grid-template-columns:145px 1fr;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.025);font-size:10px}.row span:first-child{color:var(--m)}.role{border:1px solid rgba(217,181,62,.24);padding:12px;margin-bottom:8px;background:#070806}.role b{color:var(--g2);font-size:12px}.role small{float:right;color:var(--m)}.certs{margin-top:12px}.certgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.cert{height:105px;border:1px solid rgba(217,181,62,.25);border-radius:7px;background:#060705;display:flex;flex-direction:column;align-items:center;justify-content:center}.hex{width:48px;height:48px;clip-path:polygon(25% 6%,75% 6%,100% 50%,75% 94%,25% 94%,0 50%);border:1px solid var(--g);background:rgba(217,181,62,.1);display:grid;place-items:center;color:var(--g2);font-weight:700}.cert b{font-size:8px;margin-top:7px;color:#cdbd82}.cert small{font-size:7px;color:var(--good);margin-top:3px}.history{margin-top:12px}.mission{display:grid;grid-template-columns:1.5fr .8fr .7fr .7fr;gap:8px;padding:10px;border-bottom:1px solid rgba(217,181,62,.12);font-size:9px}.mission.head{color:#b99b3e;font-size:8px;letter-spacing:.12em}.mission .ok{color:var(--good)}.progress{margin-top:12px}.rankline{display:flex;justify-content:space-between;align-items:end}.bar{height:7px;background:#17170f;margin:15px 0 8px;overflow:hidden}.bar i{display:block;width:74%;height:100%;background:linear-gradient(90deg,#9e7e25,var(--g2));box-shadow:0 0 8px rgba(240,212,106,.35)}.requirements{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.req{border:1px solid rgba(217,181,62,.2);padding:9px;font-size:8px;color:var(--m)}.req b{color:var(--t);float:right}@media(max-width:800px){.wrap{width:100%}.identity-main{grid-template-columns:75px 1fr}.avatar{width:70px;height:70px}.verified{grid-column:1/-1;text-align:left}.grid{grid-template-columns:1fr}.certgrid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.mission{grid-template-columns:1fr .6fr}.mission>*:nth-child(3),.mission>*:nth-child(4){display:none}.top{height:auto;gap:15px}.status{display:none}}
+</style></head><body><main class="wrap">
+<section class="top"><div><div class="kicker">JMBN // Personnel Command</div><div class="title">PERSONNEL DOSSIER</div></div><div class="status"><b>● RECORD ACTIVE</b><br>PERSONNEL FILE // VERIFIED</div></section>
+<section class="identity"><div class="identity-main"><div class="avatar">DL</div><div><div class="label">JMBN Personnel Identification</div><div class="name">DELUMENTA</div><div class="rank">LIEUTENANT, JUNIOR GRADE &nbsp;//&nbsp; O-2 &nbsp;//&nbsp; OFFICER CORPS</div><div class="tags"><span class="tag">PILOT</span><span class="tag">COMMAND</span><span class="tag">COMBAT</span></div></div><div class="verified"><span class="dot">● ACTIVE</span><strong>IDENTITY VERIFIED</strong><small>Discord-linked personnel record</small></div></div><div class="kpis"><div class="kpi"><div class="num">28</div><span>MISSIONS</span></div><div class="kpi"><div class="num">64.5</div><span>OPERATIONAL HOURS</span></div><div class="kpi"><div class="num">04</div><span>CERTIFICATIONS</span></div><div class="kpi"><div class="num">O-2</div><span>CURRENT RANK</span></div></div></section>
+<section class="grid"><div class="card"><div class="cardhead"><span>SERVICE RECORD</span><span>01 // PERSONNEL</span></div><div class="row"><span>HANDLE</span><span>DELUMENTA</span></div><div class="row"><span>SERVICE STATUS</span><span style="color:var(--good)">ACTIVE</span></div><div class="row"><span>RANK</span><span>Lieutenant, Junior Grade</span></div><div class="row"><span>RANK CODE</span><span>O-2</span></div><div class="row"><span>CATEGORY</span><span>Officer Corps</span></div></div><div class="card"><div class="cardhead"><span>OPERATIONAL PROFILE</span><span>ROLE ANALYSIS</span></div><div class="role"><span class="label">01 // PRIMARY ROLE</span><br><b>PILOT</b><small>18 OPERATIONS</small></div><div class="role"><span class="label">02 // SECONDARY ROLE</span><br><b>GUNNER</b><small>7 OPERATIONS</small></div><div class="role"><span class="label">ASSIGNED SPECIALISATIONS</span><br><b>PILOT · COMMAND · COMBAT</b></div></div></section>
+<section class="card certs"><div class="cardhead"><span>CERTIFICATION RECORD</span><span>04 // VERIFIED</span></div><div class="certgrid"><div class="cert"><div class="hex">BMT</div><b>BASIC MILITARY TRAINING</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">SOC</div><b>STANDARD OBSTACLE COURSE</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">MED</div><b>MEDICAL CERTIFICATION</b><small>● VERIFIED</small></div><div class="cert"><div class="hex">+</div><b>ADDITIONAL CERTIFICATION</b><small style="color:var(--m)">RECORD SLOT</small></div></div></section>
+<section class="card history"><div class="cardhead"><span>OPERATIONAL HISTORY</span><span>28 // MISSIONS</span></div><div class="mission head"><span>OPERATION</span><span>ROLE</span><span>STATUS</span><span>DATE</span></div><div class="mission"><span>OP // NIGHTFALL</span><span>Pilot</span><span class="ok">● ATTENDED</span><span>18 SEP</span></div><div class="mission"><span>OP // IRON ROUTE</span><span>Gunner</span><span class="ok">● ATTENDED</span><span>12 SEP</span></div><div class="mission"><span>OP // LONG WATCH</span><span>Pilot</span><span class="ok">● ATTENDED</span><span>04 SEP</span></div><div class="mission"><span>OP // BLACK SPEAR</span><span>Command</span><span class="ok">● ATTENDED</span><span>28 AUG</span></div></section>
+<section class="card progress"><div class="cardhead"><span>ADVANCEMENT STATUS</span><span>RANK PROGRESSION</span></div><div class="rankline"><div><div class="label">CURRENT RANK</div><b>O-2 // LIEUTENANT, JUNIOR GRADE</b></div><div style="text-align:right"><div class="label">NEXT RANK</div><b>O-3 // LIEUTENANT</b></div></div><div class="bar"><i></i></div><div style="text-align:right;color:var(--g2);font-size:9px">74% COMPLETE</div><div class="requirements"><div class="req">MISSIONS <b>28 / 20 ✓</b></div><div class="req">HOURS <b>64 / 50 ✓</b></div><div class="req">CERTIFICATIONS <b>4 / 5</b></div></div></section>
+</main></body></html>
