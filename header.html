@@ -4,6 +4,9 @@
 
      Behaviour is handled by:
      js/header.js
+
+     Discord avatar is handled by:
+     js/avatars.js
 ========================================================= -->
 
 <style>
@@ -32,11 +35,9 @@
 .jmbn-header{
   position:relative;
 
-  /* Match the main JMBN page width */
   width:90%;
   max-width:1700px;
 
-  /* Center + space before page content */
   margin:0 auto 18px;
 
   min-height:138px;
@@ -350,11 +351,17 @@
 
   place-items:center;
 
+  overflow:hidden;
+
   color:
     var(--jmbn-gold);
 
   background:
     #090909;
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 
   font-size:12px;
 
@@ -362,6 +369,20 @@
 
   box-shadow:
     0 0 10px rgba(214,180,76,.12);
+}
+
+
+/*
+   Applied automatically by avatars.js
+   when a Discord avatar exists.
+*/
+
+.jmbn-avatar.has-avatar-image{
+  color:transparent;
+
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
 }
 
 
@@ -996,9 +1017,17 @@
       >
 
 
+        <!--
+          Discord avatar will be inserted here by
+          js/avatars.js + js/header.js.
+
+          Until then, initials are displayed.
+        -->
+
         <div
           class="jmbn-avatar"
           id="jmbnAvatar"
+          aria-label="Member avatar"
         >
           --
         </div>
@@ -1055,14 +1084,18 @@
         </div>
 
 
+        <!-- PERSONAL PROFILE -->
+
         <a
           class="jmbn-dropitem"
-          href="member.html"
+          href="profile.html"
           role="menuitem"
         >
           View Profile
         </a>
 
+
+        <!-- ADMIN ONLY -->
 
         <a
           class="jmbn-dropitem"
@@ -1074,6 +1107,8 @@
           Admin Console
         </a>
 
+
+        <!-- LOGOUT -->
 
         <button
           class="jmbn-dropitem logout"
