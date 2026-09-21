@@ -537,6 +537,19 @@ button,input,select{font:inherit} button{color:inherit}
 <script src="js/header.js"></script>
 
 <script>
+fetch("header.html", { cache: "no-cache" })
+  .then(response => response.text())
+  .then(html => {
+
+    document.getElementById("headerMount").innerHTML = html;
+
+    initJmbnHeader();
+
+  })
+  .catch(error => {
+    console.error("Failed to load JMBN header:", error);
+  });
+</script>
 /* =========================================================
    THIS DATA LAYER IS BASED DIRECTLY ON THE WORKING MEMBER.HTML
    ========================================================= */
