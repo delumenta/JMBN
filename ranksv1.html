@@ -1083,6 +1083,250 @@ body::before{
     transition-duration:.001ms!important;
   }
 }
+
+/* =========================================================
+   2026-09-21 IMAGE-UI PANEL REFINEMENT
+   Member frame now matches the Announcement visual language.
+   Admin gets a stronger command-console frame.
+   ========================================================= */
+
+.member {
+  position:relative;
+  isolation:isolate;
+  min-height:220px;
+  margin-bottom:22px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(280px,.9fr) minmax(300px,1.05fr) 230px;
+  align-items:stretch;
+
+  /* Announcement-style shell */
+  border:1px solid rgba(216,184,78,.68);
+  border-radius:10px;
+  background:#050606;
+  box-shadow:
+    0 0 24px rgba(216,184,78,.08),
+    0 18px 55px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+/* Artwork lives INSIDE the CSS frame */
+.member::after {
+  content:"";
+  position:absolute;
+  inset:1px;
+  z-index:-2;
+  border-radius:9px;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.72) 0%,
+      rgba(0,0,0,.48) 29%,
+      rgba(0,0,0,.14) 49%,
+      rgba(0,0,0,.18) 70%,
+      rgba(0,0,0,.55) 100%),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(Member%20Panel).png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoTWVtYmVyIFBhbmVsKS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5OTU4NjMxLCJleHAiOjMzMzI1OTU4NjMxfQ.H6FEMJ5J9UYLjQECmsBegLrhuXsJq6dvE88fIwVCrs0") center / cover no-repeat;
+}
+
+/* Same slim illuminated rail as the Announcement ticket */
+.member::before {
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent,var(--gold-2),transparent);
+  box-shadow:0 0 14px rgba(244,216,120,.34);
+}
+
+/* Keep the live content readable over the artwork */
+.member-ident,
+.member-rank,
+.member-emblem {
+  background:transparent;
+}
+
+.member-rank {
+  border-left:1px solid rgba(216,184,78,.10);
+}
+
+.member-emblem {
+  border-left:1px solid rgba(216,184,78,.10);
+}
+
+.member-emblem::after {
+  opacity:.72;
+}
+
+/* ---------------------------------------------------------
+   ADMIN / OFFICER CONSOLE
+   --------------------------------------------------------- */
+.admin-panel {
+  position:relative;
+  isolation:isolate;
+  margin-top:22px;
+  min-height:152px;
+  overflow:hidden;
+  display:none;
+  grid-template-columns:minmax(320px,.78fr) minmax(460px,1.22fr);
+
+  border:1px solid rgba(244,216,120,.86);
+  border-radius:12px;
+  background:#050606;
+  box-shadow:
+    0 20px 52px rgba(0,0,0,.58),
+    0 0 28px rgba(216,184,78,.11),
+    inset 0 0 0 1px rgba(255,232,154,.045);
+}
+
+/* Command-centre artwork, contained by the CSS frame */
+.admin-panel::after {
+  content:"";
+  position:absolute;
+  inset:1px;
+  z-index:-3;
+  border-radius:11px;
+  background:
+    linear-gradient(90deg,
+      rgba(2,3,3,.94) 0%,
+      rgba(2,3,3,.82) 25%,
+      rgba(2,3,3,.32) 48%,
+      rgba(2,3,3,.54) 72%,
+      rgba(2,3,3,.90) 100%),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20(Member%20Panel).png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCAoTWVtYmVyIFBhbmVsKS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5OTU4NjAxLCJleHAiOjMzMzI1OTU4NjAxfQ.HoRMT9Lyj44T1n_RhdM2o_Sz66UaBvU0GfW7R7AuuKQ") center / cover no-repeat;
+}
+
+/* More substantial illuminated left rail */
+.admin-panel::before {
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:0;
+  top:13px;
+  bottom:13px;
+  width:4px;
+  border-radius:0 4px 4px 0;
+  background:linear-gradient(
+    180deg,
+    rgba(244,216,120,.12),
+    var(--gold-2) 18%,
+    #fff0aa 50%,
+    var(--gold-2) 82%,
+    rgba(244,216,120,.12)
+  );
+  box-shadow:
+    0 0 8px rgba(244,216,120,.80),
+    0 0 20px rgba(216,184,78,.30);
+}
+
+/* Inner HUD line gives the admin panel a more premium frame */
+.admin-left::before {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:8px;
+  z-index:-1;
+  border-top:1px solid rgba(244,216,120,.16);
+  border-bottom:1px solid rgba(244,216,120,.10);
+  clip-path:polygon(0 0,96% 0,100% 22%,100% 78%,96% 100%,0 100%);
+}
+
+.admin-left {
+  position:relative;
+  padding:25px 28px;
+  border-right:1px solid rgba(216,184,78,.12);
+  background:
+    linear-gradient(110deg,rgba(216,184,78,.08),transparent 58%);
+}
+
+.admin-right {
+  position:relative;
+  padding:24px 28px;
+  background:linear-gradient(90deg,rgba(0,0,0,.10),rgba(0,0,0,.34));
+}
+
+.admin-eyebrow {
+  color:#f4d878;
+  text-shadow:0 0 12px rgba(244,216,120,.20);
+}
+
+.admin-title {
+  color:#f3d675;
+  text-shadow:0 0 14px rgba(216,184,78,.12);
+}
+
+.admin-cta {
+  border-color:rgba(244,216,120,.84);
+  background:rgba(5,6,6,.76);
+  box-shadow:
+    inset 0 0 0 1px rgba(244,216,120,.06),
+    0 0 14px rgba(216,184,78,.06);
+  backdrop-filter:blur(5px);
+}
+
+/* Gold corner cuts without baking them into the image */
+.admin-panel .admin-right::after {
+  content:"";
+  position:absolute;
+  right:9px;
+  top:9px;
+  width:44px;
+  height:16px;
+  pointer-events:none;
+  border-top:2px solid rgba(244,216,120,.75);
+  border-right:2px solid rgba(244,216,120,.75);
+  clip-path:polygon(18% 0,100% 0,100% 100%,88% 100%,88% 30%,0 30%);
+  filter:drop-shadow(0 0 5px rgba(244,216,120,.28));
+}
+
+@media(max-width:1050px){
+  .member{
+    grid-template-columns:1fr 1fr;
+  }
+  .member-emblem{
+    grid-column:1/-1;
+    min-height:145px;
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.10);
+  }
+  .admin-panel{
+    grid-template-columns:1fr;
+  }
+  .admin-left{
+    border-right:0;
+    border-bottom:1px solid rgba(216,184,78,.12);
+  }
+}
+
+@media(max-width:700px){
+  .member{
+    grid-template-columns:1fr;
+    min-height:0;
+  }
+  .member::after{
+    background-position:58% center;
+  }
+  .member-rank{
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.10);
+    background:rgba(0,0,0,.24);
+  }
+  .member-emblem{
+    min-height:125px;
+    background:rgba(0,0,0,.18);
+  }
+  .admin-panel::after{
+    background-position:center;
+  }
+  .admin-left,
+  .admin-right{
+    background:rgba(2,3,3,.66);
+    backdrop-filter:blur(2px);
+  }
+}
+
 </style>
 </head>
 
