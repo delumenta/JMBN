@@ -175,9 +175,6 @@ button{
     0 0 22px rgba(217,181,62,.055);
 }
 
-
-/* LEFT GOLD COMMAND RAIL */
-
 .registry-hero::before{
   content:"";
 
@@ -198,9 +195,6 @@ button{
     0 0 5px rgba(240,212,106,.72),
     0 0 13px rgba(240,212,106,.24);
 }
-
-
-/* ATMOSPHERIC HAZE */
 
 .registry-hero::after{
   content:"";
@@ -756,6 +750,11 @@ button{
   min-width:0;
 }
 
+
+/* =========================================================
+   MEMBER AVATAR
+========================================================= */
+
 .avatar{
   position:relative;
 
@@ -771,6 +770,8 @@ button{
 
   place-items:center;
 
+  overflow:hidden;
+
   border:
     1px solid rgba(217,181,62,.38);
 
@@ -781,11 +782,23 @@ button{
       #0a0b09 68%
     );
 
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
   color:#d7c16e;
 
   font-size:12px;
 
   font-weight:700;
+}
+
+.avatar.has-avatar-image{
+  color:transparent;
+
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
 }
 
 .member-text{
@@ -985,15 +998,25 @@ button{
     );
 }
 
+
+/* =========================================================
+   LARGE PROFILE AVATAR
+========================================================= */
+
 .profile-avatar{
   width:68px;
   height:68px;
+
+  flex:
+    0 0 68px;
 
   border-radius:50%;
 
   display:grid;
 
   place-items:center;
+
+  overflow:hidden;
 
   border:
     1px solid rgba(217,181,62,.55);
@@ -1005,11 +1028,23 @@ button{
       #090a08 68%
     );
 
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
   color:#e3cd76;
 
   font-size:20px;
 
   font-weight:700;
+}
+
+.profile-avatar.has-avatar-image{
+  color:transparent;
+
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
 }
 
 .profile-name{
@@ -1739,6 +1774,8 @@ button{
   .profile-avatar{
     width:58px;
     height:58px;
+
+    flex-basis:58px;
   }
 
   .profile-name{
@@ -2110,8 +2147,6 @@ button{
       >
 
 
-        <!-- PROFILE HEADER -->
-
         <div class="profile-top">
 
 
@@ -2199,10 +2234,6 @@ button{
         </div>
 
 
-
-        <!-- =================================================
-             TAB CONTENT
-        ================================================== -->
 
         <div class="tab-body">
 
@@ -2484,12 +2515,14 @@ button{
 
 
 <!-- =========================================================
-     SUPABASE + AUTH + SHARED HEADER
+     SUPABASE + AUTH + AVATARS + SHARED HEADER
 ========================================================= -->
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script src="js/auth.js"></script>
+
+<script src="js/avatars.js"></script>
 
 <script src="js/header.js"></script>
 
@@ -2700,6 +2733,15 @@ let ROWS =
   [];
 
 
+/*
+  Discord links are stored here by Supabase user ID.
+
+  user_id -> discord_links row
+*/
+let DISCORD_BY_USER =
+  new Map();
+
+
 let SELECTED_ID =
   null;
 
@@ -2764,6 +2806,123 @@ function certPublicUrlFromCode(
     )
     .data
     .publicUrl;
+
+}
+
+
+
+/* =========================================================
+   DISCORD AVATARS
+========================================================= */
+
+async function loadDiscordAvatars(){
+
+  DISCORD_BY_USER =
+    new Map();
+
+
+  if (
+    !window.JMBNAvatars
+  ) {
+
+    console.warn(
+      "JMBNAvatars helper was not loaded."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+
+    const links =
+      await window.JMBNAvatars
+        .getDiscordLinks(
+          sb
+        );
+
+
+    DISCORD_BY_USER =
+      new Map(
+
+        (links || [])
+
+          .filter(
+            row =>
+              row.user_id
+          )
+
+          .map(
+            row => [
+              row.user_id,
+              row
+            ]
+          )
+
+      );
+
+
+  }
+  catch (error) {
+
+
+    console.warn(
+      "Discord avatar registry:",
+      error
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   APPLY DISCORD AVATAR
+========================================================= */
+
+function applyDiscordAvatar(
+  element,
+  userId,
+  label
+){
+
+  if (!element) {
+
+    return;
+
+  }
+
+
+  const discord =
+    DISCORD_BY_USER.get(
+      userId
+    );
+
+
+  if (
+    window.JMBNAvatars
+  ) {
+
+    window.JMBNAvatars
+      .renderAvatar(
+        element,
+        discord,
+        label
+      );
+
+    return;
+
+  }
+
+
+  element.textContent =
+    String(label || "J")
+      .trim()
+      .slice(0,2)
+      .toUpperCase();
 
 }
 
@@ -3377,10 +3536,12 @@ function render(){
               <div class="member-ident">
 
 
-                <div class="avatar">
-
+                <div
+                  class="avatar"
+                  data-avatar-user="${esc(r.user_id)}"
+                  data-avatar-label="${esc(handle)}"
+                >
                   ${esc(initials(r))}
-
                 </div>
 
 
@@ -3498,6 +3659,36 @@ function render(){
               row.dataset.id
             )
         );
+
+      }
+    );
+
+
+
+  /* =====================================================
+     APPLY DISCORD AVATARS TO ROSTER
+  ====================================================== */
+
+  $$("[data-avatar-user]")
+    .forEach(
+      avatar => {
+
+
+        const userId =
+          avatar.dataset.avatarUser;
+
+
+        const label =
+          avatar.dataset.avatarLabel ||
+          "Member";
+
+
+        applyDiscordAvatar(
+          avatar,
+          userId,
+          label
+        );
+
 
       }
     );
@@ -3765,12 +3956,6 @@ async function loadMemberProgress(
     }
 
 
-    /*
-      Mission count is already calculated from
-      v_mission_attendees_detailed in loadRoster().
-      Do not overwrite it with v_user_progress.
-    */
-
     const row =
       ROWS.find(
         x =>
@@ -3885,11 +4070,6 @@ async function loadMemberMissions(
         .limit(20);
 
 
-
-    /*
-      Fallback when the joined mission relationship
-      isn't returned correctly.
-    */
 
     if (
       error
@@ -4449,8 +4629,21 @@ function viewMember(
     handle;
 
 
-  $("#profileAvatar").textContent =
-    initials(r);
+
+  /* =====================================================
+     DISCORD PROFILE AVATAR
+  ====================================================== */
+
+  const profileAvatar =
+    $("#profileAvatar");
+
+
+  applyDiscordAvatar(
+    profileAvatar,
+    userId,
+    handle
+  );
+
 
 
   $("#profileRankName").textContent =
@@ -4692,14 +4885,6 @@ $$(".profile-tab")
 async function loadRoster(){
 
 
-  /*
-    Load personnel and attendance together.
-
-    Mission totals are calculated directly from
-    v_mission_attendees_detailed so the roster, profile,
-    sorting and KPI all use the same mission count.
-  */
-
   const [
     {
       data:profiles,
@@ -4914,11 +5099,7 @@ document.addEventListener(
 
     /*
       Authentication is handled by js/auth.js.
-
-      Header loading is NOT performed here anymore.
-      header.html + js/header.js are handled separately above.
     */
-
 
     const session =
       await requireAuth();
@@ -4969,7 +5150,17 @@ document.addEventListener(
 
 
 
-    /* LOAD PERSONNEL */
+    /* =====================================================
+       LOAD DISCORD AVATARS
+    ====================================================== */
+
+    await loadDiscordAvatars();
+
+
+
+    /* =====================================================
+       LOAD PERSONNEL
+    ====================================================== */
 
     await loadRoster();
 
