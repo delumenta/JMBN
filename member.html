@@ -3708,7 +3708,6 @@ async function loadMemberProgress(
 
   try {
 
-
     const [
       {
         data:up,
@@ -3721,7 +3720,6 @@ async function loadMemberProgress(
     ] =
       await Promise.all([
 
-
         sb
           .from(
             "v_user_progress"
@@ -3733,7 +3731,6 @@ async function loadMemberProgress(
           )
           .maybeSingle(),
 
-
         sb
           .from(
             "v_user_rank_progress"
@@ -3744,7 +3741,6 @@ async function loadMemberProgress(
             uid
           )
           .maybeSingle()
-
 
       ]);
 
@@ -3769,9 +3765,22 @@ async function loadMemberProgress(
     }
 
 
+    /*
+      Mission count is already calculated from
+      v_mission_attendees_detailed in loadRoster().
+      Do not overwrite it with v_user_progress.
+    */
+
+    const row =
+      ROWS.find(
+        x =>
+          x.user_id === uid
+      );
+
+
     const m =
       Number(
-        up?.missions_attended ||
+        row?.missions_attended ||
         0
       );
 
@@ -3801,6 +3810,13 @@ async function loadMemberProgress(
     $("#vCertCount").textContent =
       c;
 
+  }
+  catch (e) {
+
+    console.warn(
+      "member progress:",
+      e.message || e
+    );
 
 
     const row =
@@ -3810,31 +3826,11 @@ async function loadMemberProgress(
       );
 
 
-    if (
-      row &&
-      up &&
-      up.missions_attended != null
-    ) {
-
-      row.missions_attended =
-        m;
-
-
-      render();
-
-      updateKPIs();
-
-    }
-
-
-  }
-  catch (e) {
-
-
-    console.warn(
-      "member progress:",
-      e.message || e
-    );
+    $("#vAttended").textContent =
+      Number(
+        row?.missions_attended ||
+        0
+      );
 
 
     $("#vHours").textContent =
@@ -4696,35 +4692,57 @@ $$(".profile-tab")
 async function loadRoster(){
 
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from(
-        "v_profiles_detailed"
-      )
-      .select(`
-        user_id,
-        handle,
-        display_name,
-        current_rank_category,
-        current_rank_name,
-        current_rank_code,
-        current_rank_image_url,
-        ingame_role,
-        missions_attended
-      `);
+  /*
+    Load personnel and attendance together.
 
+    Mission totals are calculated directly from
+    v_mission_attendees_detailed so the roster, profile,
+    sorting and KPI all use the same mission count.
+  */
+
+  const [
+    {
+      data:profiles,
+      error:profileError
+    },
+    {
+      data:attendanceRows,
+      error:attendanceError
+    }
+  ] =
+    await Promise.all([
+
+      sb
+        .from(
+          "v_profiles_detailed"
+        )
+        .select(`
+          user_id,
+          handle,
+          display_name,
+          current_rank_category,
+          current_rank_name,
+          current_rank_code,
+          current_rank_image_url,
+          ingame_role
+        `),
+
+      sb
+        .from(
+          "v_mission_attendees_detailed"
+        )
+        .select(
+          "user_id, mission_id, attendance"
+        )
+
+    ]);
 
 
   if (
-    error
+    profileError
   ) {
 
-
     $("#rosterList").innerHTML =
-
       `
         <div
           style="
@@ -4733,7 +4751,7 @@ async function loadRoster(){
           "
         >
           Failed to load:
-          ${esc(error.message)}
+          ${esc(profileError.message)}
         </div>
       `;
 
@@ -4747,10 +4765,98 @@ async function loadRoster(){
   }
 
 
+  if (
+    attendanceError
+  ) {
+
+    console.warn(
+      "v_mission_attendees_detailed:",
+      attendanceError.message
+    );
+
+  }
+
+
+  /*
+    Build one unique mission set per user.
+    Withdrawn rows are excluded.
+  */
+
+  const missionSets =
+    new Map();
+
+
+  (
+    attendanceError
+      ? []
+      : attendanceRows || []
+  )
+    .filter(
+      row =>
+
+        row.user_id
+
+        &&
+
+        row.mission_id
+
+        &&
+
+        row.attendance
+
+        &&
+
+        String(
+          row.attendance
+        )
+          .toLowerCase() !==
+          "withdrawn"
+    )
+    .forEach(
+      row => {
+
+        if (
+          !missionSets.has(
+            row.user_id
+          )
+        ) {
+
+          missionSets.set(
+            row.user_id,
+            new Set()
+          );
+
+        }
+
+
+        missionSets
+          .get(
+            row.user_id
+          )
+          .add(
+            row.mission_id
+          );
+
+      }
+    );
+
 
   ROWS =
-    data ||
-    [];
+    (profiles || [])
+      .map(
+        row => ({
+
+          ...row,
+
+          missions_attended:
+            missionSets
+              .get(
+                row.user_id
+              )
+              ?.size || 0
+
+        })
+      );
 
 
   populateFilters();
@@ -4758,7 +4864,6 @@ async function loadRoster(){
   updateKPIs();
 
   render();
-
 
 
   /*
@@ -4777,7 +4882,6 @@ async function loadRoster(){
       )
       .matches
   ) {
-
 
     const first =
       filteredRows()[0];
