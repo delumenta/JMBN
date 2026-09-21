@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#030504">
+<title>JMBN – Academy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#030504;
+  --panel:#090b08;
+  --panel2:#0d100b;
+  --line:#705914;
+  --line-soft:rgba(214,180,76,.18);
+  --gold:#d6b44c;
+  --gold2:#f2d675;
+  --text:#f7f1d0;
+  --muted:#aaa184;
+  --muted2:#746f5d;
+  --green:#37d996;
+  --red:#ff6b6b;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:"Play",system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 70% -10%,rgba(214,180,76,.10),transparent 28%),
+    linear-gradient(180deg,#050705 0,#010201 70%);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+
+.academy-page{
+  width:90%;
+  max-width:1700px;
+  margin:18px auto 60px;
+}
+
+/* HERO */
+.hero{
+  min-height:330px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 78% 45%,rgba(229,186,61,.16),transparent 24%),
+    linear-gradient(105deg,#0a0d09 0,#070907 56%,#10130e 100%);
+  box-shadow:inset 0 0 55px rgba(0,0,0,.75);
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.05),rgba(0,0,0,0) 50%,rgba(0,0,0,.25)),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.009) 4px);
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;
+  z-index:1;
+  padding:38px 42px;
+  max-width:980px;
+}
+.kicker{
+  color:var(--gold);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.22em;
+}
+.hero h1{
+  margin:8px 0 8px;
+  color:var(--gold2);
+  font-size:44px;
+  line-height:1;
+  letter-spacing:.13em;
+}
+.hero-intro{
+  max-width:850px;
+  margin-top:26px;
+  color:#c3baa0;
+  font-size:14px;
+  line-height:1.72;
+}
+.hero-intro strong{color:#fff1b7}
+.hero-statement{
+  margin-top:25px;
+  padding:15px 18px;
+  max-width:760px;
+  border-left:3px solid var(--gold2);
+  background:linear-gradient(90deg,rgba(214,180,76,.10),transparent);
+  color:var(--gold2);
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.07em;
+  line-height:1.5;
+}
+.hero-foot{
+  margin-top:21px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+.hero-foot b{color:#ddd0a0}
+
+/* KPI */
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+  margin-top:14px;
+}
+.kpi{
+  min-height:104px;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:linear-gradient(145deg,#0d100b,#060806);
+}
+.kpi-label{
+  color:var(--gold);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+.kpi-value{
+  margin-top:6px;
+  color:var(--gold2);
+  font-size:28px;
+  font-weight:700;
+}
+.kpi-note{
+  margin-top:3px;
+  color:var(--muted2);
+  font-size:10px;
+}
+
+/* MAIN */
+.academy-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:14px;
+  margin-top:14px;
+}
+.panel{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:linear-gradient(145deg,rgba(13,16,11,.98),rgba(5,7,5,.99));
+}
+.catalog{padding:24px}
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:20px;
+}
+.section-title{
+  margin:0;
+  color:var(--gold2);
+  font-size:21px;
+  letter-spacing:.11em;
+}
+.section-sub{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+.filters{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.filter-btn{
+  padding:8px 12px;
+  border:1px solid #44391a;
+  border-radius:5px;
+  background:#080a07;
+  color:#8e8771;
+  font-size:9px;
+  letter-spacing:.10em;
+}
+.filter-btn.active{
+  border-color:var(--gold);
+  color:var(--gold2);
+  box-shadow:inset 0 0 16px rgba(214,180,76,.12);
+}
+
+/* CERTIFICATION CARDS */
+.programmes{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.programme{
+  overflow:hidden;
+  min-height:390px;
+  border:1px solid #655117;
+  border-radius:9px;
+  background:linear-gradient(180deg,#10130e,#060806);
+  transition:.18s ease;
+}
+.programme:hover{
+  transform:translateY(-2px);
+  border-color:var(--gold2);
+  box-shadow:0 10px 28px rgba(0,0,0,.35);
+}
+.programme-art{
+  height:215px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid #413515;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(214,180,76,.14),transparent 37%),
+    #080a07;
+}
+.programme-art:after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:48px;
+  background:linear-gradient(transparent,rgba(0,0,0,.75));
+}
+.programme-art img{
+  width:92%;
+  height:92%;
+  object-fit:contain;
+  display:block;
+  filter:drop-shadow(0 9px 16px rgba(0,0,0,.65));
+}
+.no-art{
+  width:126px;height:126px;
+  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  background:linear-gradient(145deg,#28271d,#080a08);
+  display:grid;
+  place-items:center;
+  color:var(--gold2);
+  font-size:22px;
+  font-weight:700;
+  border:2px solid var(--gold);
+}
+.programme-body{padding:15px}
+.programme-code{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:4px;
+  background:var(--gold2);
+  color:#171307;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.10em;
+}
+.programme h3{
+  margin:9px 0 6px;
+  min-height:35px;
+  color:#eed782;
+  font-size:15px;
+  line-height:1.2;
+  letter-spacing:.07em;
+}
+.programme-desc{
+  min-height:47px;
+  margin:0;
+  color:#99927d;
+  font-size:10px;
+  line-height:1.55;
+}
+.progress-meta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:12px;
+  color:#b4a873;
+  font-size:9px;
+}
+.progress-track{
+  height:6px;
+  margin-top:7px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#28271f;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#aa8019,#f2d675);
+}
+.programme-status{
+  margin-top:9px;
+  color:var(--green);
+  font-size:9px;
+  font-weight:700;
+}
+.programme-status.pending{color:#aaa184}
+.programme-action{
+  width:100%;
+  margin-top:12px;
+  padding:10px 12px;
+  border:1px solid var(--gold);
+  border-radius:5px;
+  background:rgba(214,180,76,.04);
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.10em;
+}
+.programme-action:hover{background:rgba(214,180,76,.12)}
+
+/* SIDEBAR */
+.record-side{padding:21px}
+.record-side h2{
+  margin:0;
+  color:var(--gold2);
+  font-size:18px;
+  letter-spacing:.11em;
+}
+.ring{
+  --pct:0deg;
+  width:136px;height:136px;
+  margin:22px auto 18px;
+  border-radius:50%;
+  background:conic-gradient(var(--gold2) var(--pct),#25241d 0);
+  display:grid;
+  place-items:center;
+}
+.ring-inner{
+  width:104px;height:104px;
+  border-radius:50%;
+  background:#050605;
+  display:grid;
+  place-items:center;
+  text-align:center;
+}
+.ring-inner strong{display:block;color:var(--gold2);font-size:25px}
+.ring-inner span{display:block;color:#77715e;font-size:8px;margin-top:2px}
+.side-stat{
+  padding:12px 0;
+  border-top:1px solid #302a15;
+}
+.side-stat b{
+  display:block;
+  color:#ddc464;
+  font-size:10px;
+}
+.side-stat span{
+  display:block;
+  margin-top:3px;
+  color:#8d8671;
+  font-size:9px;
+  line-height:1.4;
+}
+.side-heading{
+  margin:18px 0 7px;
+  color:var(--gold);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+.loading{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* RECORD */
+.cert-record{
+  margin-top:14px;
+  padding:22px;
+}
+.cert-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:11px;
+  margin-top:16px;
+}
+.cert-item{
+  min-height:112px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px;
+  border:1px solid #514316;
+  border-radius:8px;
+  background:#080a07;
+}
+.cert-item.unearned{opacity:.40}
+.cert-thumb{
+  width:78px;height:78px;
+  flex:0 0 78px;
+  object-fit:contain;
+}
+.cert-fallback{
+  width:68px;height:68px;
+  flex:0 0 68px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--gold);
+  color:var(--gold2);
+  font-size:12px;
+  font-weight:700;
+}
+.cert-item b{
+  display:block;
+  color:#e9d47f;
+  font-size:11px;
+  line-height:1.25;
+}
+.cert-item small{
+  display:block;
+  margin-top:3px;
+  color:#827b67;
+  font-size:8px;
+}
+.cert-state{
+  margin-top:7px;
+  color:var(--green);
+  font-size:8px;
+  font-weight:700;
+}
+.cert-item.unearned .cert-state{color:#aaa184}
+
+@media(max-width:1200px){
+  .programmes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cert-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  .academy-page{width:calc(100% - 22px)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .academy-grid{grid-template-columns:1fr}
+  .section-head{align-items:flex-start;flex-direction:column}
+  .filters{justify-content:flex-start}
+  .hero-inner{padding:28px 24px}
+  .hero h1{font-size:35px}
+}
+@media(max-width:620px){
+  .programmes,.cert-grid,.kpis{grid-template-columns:1fr}
+  .hero{min-height:0}
+  .hero-statement{font-size:14px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main class="academy-page">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="kicker">JMBN // ACADEMY DIVISION</div>
+      <h1>ACADEMY</h1>
+
+      <div class="hero-intro">
+        <strong>Welcome to JMBN.</strong><br><br>
+        You already know the basics of Star Citizen. You've flown ships, fought battles,
+        completed missions, and learned the game through experience.
+        <br><br>
+        <strong>Now, you'll learn how to operate as part of a team.</strong>
+        The JMBN Academy isn't here to teach you how to play the game. It's here to teach
+        you how we operate together — our procedures, communication, formations, roles,
+        and the standards expected when working as a JMBN unit.
+      </div>
+
+      <div class="hero-statement">
+        WE DON'T TEACH YOU HOW TO PLAY STAR CITIZEN.<br>
+        WE TEACH YOU HOW JMBN PLAYS STAR CITIZEN.
+      </div>
+
+      <div class="hero-foot">
+        Your journey begins with <b>Basic Military Training (BMT)</b> and continues into
+        specialised certifications as you develop your role within the organization.
+      </div>
+    </div>
+  </section>
+
+  <section class="kpis">
+    <div class="kpi">
+      <div class="kpi-label">AVAILABLE PROGRAMMES</div>
+      <div class="kpi-value" id="kpiProgrammes">—</div>
+      <div class="kpi-note">Certification pathways</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">CERTIFICATIONS EARNED</div>
+      <div class="kpi-value" id="kpiEarned">—</div>
+      <div class="kpi-note">Current qualifications</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">IN PROGRESS</div>
+      <div class="kpi-value" id="kpiProgress">—</div>
+      <div class="kpi-note">Active programmes</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">TRAINING EVENTS PASSED</div>
+      <div class="kpi-value" id="kpiEvents">—</div>
+      <div class="kpi-note">Completed requirements</div>
+    </div>
+  </section>
+
+  <div class="academy-grid">
+
+    <section class="panel catalog">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">CERTIFICATION PROGRAMMES</h2>
+          <p class="section-sub">
+            Each certification contains its own training events, practicals and assessment requirements.
+          </p>
+        </div>
+
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">ALL</button>
+          <button class="filter-btn" data-filter="foundation">FOUNDATION</button>
+          <button class="filter-btn" data-filter="medical">MEDICAL</button>
+          <button class="filter-btn" data-filter="combat">COMBAT</button>
+          <button class="filter-btn" data-filter="flight">FLIGHT</button>
+          <button class="filter-btn" data-filter="command">COMMAND</button>
+        </div>
+      </div>
+
+      <div class="programmes" id="programmeGrid">
+        <div class="loading">LOADING ACADEMY PROGRAMMES...</div>
+      </div>
+    </section>
+
+    <aside class="panel record-side">
+      <h2>YOUR ACADEMY RECORD</h2>
+
+      <div class="ring" id="academyRing">
+        <div class="ring-inner">
+          <div>
+            <strong id="academyPercent">0%</strong>
+            <span>OVERALL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-stat">
+        <b id="sideEarned">0 CERTIFICATIONS</b>
+        <span>Qualifications earned through JMBN Academy.</span>
+      </div>
+
+      <div class="side-stat">
+        <b id="sideTraining">0 TRAINING EVENTS</b>
+        <span>Completed certification requirements.</span>
+      </div>
+
+      <div class="side-heading">CURRENT OBJECTIVE</div>
+      <div class="side-stat">
+        <b id="currentObjective">BEGIN BASIC MILITARY TRAINING</b>
+        <span id="currentObjectiveNote">Your first step into JMBN team operations.</span>
+      </div>
+
+      <div class="side-heading">HOW THE ACADEMY WORKS</div>
+      <div class="side-stat">
+        <b>1 // LEARN</b>
+        <span>Understand JMBN procedures, roles and standards.</span>
+      </div>
+      <div class="side-stat">
+        <b>2 // TRAIN</b>
+        <span>Complete the practical training events required by the programme.</span>
+      </div>
+      <div class="side-stat">
+        <b>3 // QUALIFY</b>
+        <span>Complete all requirements and earn the certification.</span>
+      </div>
+    </aside>
+
+  </div>
+
+  <section class="panel cert-record">
+    <h2 class="section-title">CERTIFICATION RECORD</h2>
+    <p class="section-sub">Your earned and available JMBN qualifications.</p>
+
+    <div class="cert-grid" id="certRecord">
+      <div class="loading">LOADING CERTIFICATION RECORD...</div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+
+<script>
+/* =========================================================
+   SHARED HEADER
+========================================================= */
+fetch("header.html", { cache:"no-cache" })
+  .then(r => {
+    if(!r.ok) throw new Error("Header request failed: " + r.status);
+    return r.text();
+  })
+  .then(html => {
+    document.getElementById("header").innerHTML = html;
+    if(typeof window.initJmbnHeader === "function"){
+      window.initJmbnHeader();
+    }
+  })
+  .catch(err => console.error("Failed to load JMBN header:", err));
+
+
+/* =========================================================
+   ACADEMY
+========================================================= */
+
+let CERTIFICATIONS = [];
+let USER_CERTS = [];
+let REQUIREMENTS = [];
+let USER_EVENTS = [];
+let CURRENT_USER_ID = null;
+let currentFilter = "all";
+
+function esc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+function norm(v){
+  return String(v ?? "").trim().toLowerCase();
+}
+
+function certCode(cert){
+  return cert.certification_code || cert.code || "";
+}
+
+function requirementCertCode(row){
+  return row.certification_code || row.cert_code || row.certification || "";
+}
+
+function requirementEventCode(row){
+  return row.training_event_code || row.event_code || row.requirement_code || row.code || "";
+}
+
+function userEventCode(row){
+  return row.training_event_code || row.event_code || row.code || "";
+}
+
+function isEventComplete(row){
+  const status = norm(row.status || row.completion_status || row.result);
+  if(row.completed === true || row.passed === true || row.approved === true) return true;
+  return ["completed","complete","passed","approved"].includes(status);
+}
+
+function userOwnsCertification(code){
+  return USER_CERTS.some(row => {
+    const c = row.certification_code || row.code || row.cert_code;
+    const status = norm(row.status || row.certification_status);
+    if(String(c) !== String(code)) return false;
+    if(!status) return true;
+    return ["earned","certified","active","completed","passed"].includes(status);
+  });
+}
+
+function requirementsFor(code){
+  return REQUIREMENTS.filter(r =>
+    String(requirementCertCode(r)).toLowerCase() === String(code).toLowerCase()
+  );
+}
+
+function completedRequirementsFor(code){
+  const reqs = requirementsFor(code);
+  const completedCodes = new Set(
+    USER_EVENTS.filter(isEventComplete)
+      .map(userEventCode)
+      .filter(Boolean)
+      .map(x => String(x).toLowerCase())
+  );
+
+  return reqs.filter(r => {
+    const e = requirementEventCode(r);
+    return e && completedCodes.has(String(e).toLowerCase());
+  }).length;
+}
+
+function inferCategory(cert){
+  const hay = `${certCode(cert)} ${cert.name || ""} ${cert.description || ""}`.toLowerCase();
+
+  if(hay.includes("bmt") || hay.includes("basic military")) return "foundation";
+  if(hay.includes("medic") || hay.includes("medical")) return "medical";
+  if(hay.includes("pilot") || hay.includes("flight") || hay.includes("aviation")) return "flight";
+  if(hay.includes("command") || hay.includes("leadership")) return "command";
+  if(
+    hay.includes("combat") ||
+    hay.includes("gunnery") ||
+    hay.includes("vbss") ||
+    hay.includes("soc")
+  ) return "combat";
+
+  return "other";
+}
+
+function renderArtwork(cert){
+  const url = cert.image_url;
+  const code = certCode(cert) || "CERT";
+
+  if(url){
+    return `<img src="${esc(url)}" alt="${esc(cert.name || code)}"
+      onerror="this.style.display='none';this.nextElementSibling.hidden=false;">
+      <div class="no-art" hidden>${esc(code)}</div>`;
+  }
+
+  return `<div class="no-art">${esc(code)}</div>`;
+}
+
+function renderProgrammes(){
+  const grid = document.getElementById("programmeGrid");
+
+  const list = CERTIFICATIONS.filter(cert =>
+    currentFilter === "all" || inferCategory(cert) === currentFilter
+  );
+
+  if(!list.length){
+    grid.innerHTML = `<div class="loading">NO CERTIFICATION PROGRAMMES FOUND.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(cert => {
+    const code = certCode(cert);
+    const reqs = requirementsFor(code);
+    const complete = completedRequirementsFor(code);
+    const earned = userOwnsCertification(code);
+
+    let pct = 0;
+    if(earned) pct = 100;
+    else if(reqs.length) pct = Math.round((complete / reqs.length) * 100);
+
+    const statusClass = earned ? "" : "pending";
+    const statusText = earned
+      ? "✓ CERTIFIED"
+      : complete > 0
+        ? "◐ IN PROGRESS"
+        : "○ NOT STARTED";
+
+    const desc =
+      cert.description ||
+      "JMBN certification programme with dedicated training and assessment requirements.";
+
+    return `
+      <article class="programme" data-category="${esc(inferCategory(cert))}">
+        <div class="programme-art">
+          ${renderArtwork(cert)}
+        </div>
+
+        <div class="programme-body">
+          <span class="programme-code">${esc(code || "CERTIFICATION")}</span>
+
+          <h3>${esc(cert.name || code || "Certification")}</h3>
+
+          <p class="programme-desc">${esc(desc)}</p>
+
+          <div class="progress-meta">
+            <span>${complete} / ${reqs.length} REQUIREMENTS</span>
+            <span>${pct}%</span>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${pct}%"></div>
+          </div>
+
+          <div class="programme-status ${statusClass}">
+            ${statusText}
+          </div>
+
+          <button class="programme-action"
+            onclick="openProgramme('${encodeURIComponent(code)}')">
+            VIEW PROGRAMME →
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderCertificationRecord(){
+  const host = document.getElementById("certRecord");
+
+  if(!CERTIFICATIONS.length){
+    host.innerHTML = `<div class="loading">NO CERTIFICATIONS FOUND.</div>`;
+    return;
+  }
+
+  host.innerHTML = CERTIFICATIONS.map(cert => {
+    const code = certCode(cert);
+    const earned = userOwnsCertification(code);
+
+    return `
+      <div class="cert-item ${earned ? "" : "unearned"}">
+        ${
+          cert.image_url
+            ? `<img class="cert-thumb" src="${esc(cert.image_url)}" alt="${esc(cert.name || code)}">`
+            : `<div class="cert-fallback">${esc(code || "CERT")}</div>`
+        }
+
+        <div>
+          <b>${esc(cert.name || code)}</b>
+          <small>${esc(code)}</small>
+          <div class="cert-state">
+            ${earned ? "✓ EARNED" : "NOT EARNED"}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderSummary(){
+  const total = CERTIFICATIONS.length;
+  const earned = CERTIFICATIONS.filter(c => userOwnsCertification(certCode(c))).length;
+
+  const completedEventCodes = new Set(
+    USER_EVENTS.filter(isEventComplete)
+      .map(userEventCode)
+      .filter(Boolean)
+      .map(x => String(x).toLowerCase())
+  );
+
+  const totalReq = REQUIREMENTS.length;
+  const completedReq = REQUIREMENTS.filter(r => {
+    const e = requirementEventCode(r);
+    return e && completedEventCodes.has(String(e).toLowerCase());
+  }).length;
+
+  const inProgress = CERTIFICATIONS.filter(cert => {
+    const code = certCode(cert);
+    if(userOwnsCertification(code)) return false;
+    return completedRequirementsFor(code) > 0;
+  }).length;
+
+  const pct = totalReq
+    ? Math.round((completedReq / totalReq) * 100)
+    : total
+      ? Math.round((earned / total) * 100)
+      : 0;
+
+  document.getElementById("kpiProgrammes").textContent = total;
+  document.getElementById("kpiEarned").textContent = earned;
+  document.getElementById("kpiProgress").textContent = inProgress;
+  document.getElementById("kpiEvents").textContent = completedReq;
+
+  document.getElementById("academyPercent").textContent = pct + "%";
+  document.getElementById("academyRing").style.setProperty("--pct", (pct * 3.6) + "deg");
+
+  document.getElementById("sideEarned").textContent =
+    `${earned} CERTIFICATION${earned === 1 ? "" : "S"}`;
+
+  document.getElementById("sideTraining").textContent =
+    `${completedReq} TRAINING EVENT${completedReq === 1 ? "" : "S"}`;
+
+  const bmt = CERTIFICATIONS.find(c =>
+    norm(certCode(c)).includes("bmt") ||
+    norm(c.name).includes("basic military")
+  );
+
+  if(bmt && !userOwnsCertification(certCode(bmt))){
+    document.getElementById("currentObjective").textContent =
+      "COMPLETE BASIC MILITARY TRAINING";
+
+    const totalBmt = requirementsFor(certCode(bmt)).length;
+    const doneBmt = completedRequirementsFor(certCode(bmt));
+
+    document.getElementById("currentObjectiveNote").textContent =
+      `${doneBmt} of ${totalBmt} BMT requirements completed.`;
+  }else{
+    const next = CERTIFICATIONS.find(c => !userOwnsCertification(certCode(c)));
+
+    if(next){
+      document.getElementById("currentObjective").textContent =
+        String(next.name || certCode(next)).toUpperCase();
+
+      document.getElementById("currentObjectiveNote").textContent =
+        "Continue your JMBN qualification pathway.";
+    }else{
+      document.getElementById("currentObjective").textContent =
+        "ALL AVAILABLE CERTIFICATIONS COMPLETE";
+
+      document.getElementById("currentObjectiveNote").textContent =
+        "No additional certification programmes are currently outstanding.";
+    }
+  }
+}
+
+function openProgramme(encodedCode){
+  const code = decodeURIComponent(encodedCode);
+
+  /*
+    This keeps Academy as the programme catalogue.
+    Later, point this to your dedicated programme page/modal.
+  */
+  window.location.href =
+    "academy-programme.html?cert=" + encodeURIComponent(code);
+}
+
+async function loadAcademy(){
+  try{
+    if(typeof window.getSupabase !== "function"){
+      throw new Error("getSupabase() not found. Check js/auth.js.");
+    }
+
+    const sb = window.getSupabase();
+
+    const { data:{ session }, error:sessionError } =
+      await sb.auth.getSession();
+
+    if(sessionError) throw sessionError;
+
+    if(!session?.user){
+      window.location.href = "login.html";
+      return;
+    }
+
+    CURRENT_USER_ID = session.user.id;
+
+    /*
+      Only fields already used elsewhere in the JMBN project are relied on
+      for the certification catalogue: certification_code, name, image_url,
+      sort_order.
+
+      The remaining queries use SELECT * so this page can tolerate your
+      current schema while we finalise exact status column names.
+    */
+    const [
+      certRes,
+      reqRes,
+      userCertRes,
+      userEventRes
+    ] = await Promise.all([
+      sb.from("certifications")
+        .select("*")
+        .order("sort_order", { ascending:true }),
+
+      sb.from("certification_requirements")
+        .select("*"),
+
+      sb.from("user_certifications")
+        .select("*")
+        .eq("user_id", CURRENT_USER_ID),
+
+      sb.from("user_training_events")
+        .select("*")
+        .eq("user_id", CURRENT_USER_ID)
+    ]);
+
+    if(certRes.error) throw certRes.error;
+    if(reqRes.error) console.warn("certification_requirements:", reqRes.error);
+    if(userCertRes.error) console.warn("user_certifications:", userCertRes.error);
+    if(userEventRes.error) console.warn("user_training_events:", userEventRes.error);
+
+    CERTIFICATIONS = certRes.data || [];
+    REQUIREMENTS = reqRes.data || [];
+    USER_CERTS = userCertRes.data || [];
+    USER_EVENTS = userEventRes.data || [];
+
+    renderProgrammes();
+    renderCertificationRecord();
+    renderSummary();
+
+  }catch(err){
+    console.error("Academy load failed:", err);
+
+    document.getElementById("programmeGrid").innerHTML =
+      `<div class="loading">ACADEMY DATA COULD NOT BE LOADED.</div>`;
+
+    document.getElementById("certRecord").innerHTML =
+      `<div class="loading">CERTIFICATION RECORD COULD NOT BE LOADED.</div>`;
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(x =>
+      x.classList.remove("active")
+    );
+
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter || "all";
+    renderProgrammes();
+  });
+});
+
+document.addEventListener("DOMContentLoaded", loadAcademy);
+</script>
+
+</body>
+</html>
