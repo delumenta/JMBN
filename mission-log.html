@@ -178,7 +178,8 @@ body::before{
 
 .ops-page{
 
-  width:min(1540px,calc(100% - 42px));
+  width:90%;
+  max-width:1700px;
 
   margin:18px auto 50px;
 
@@ -2270,7 +2271,8 @@ tbody tr:hover{
 @media(max-width:850px){
 
   .ops-page{
-    width:min(100% - 22px,1540px);
+    width:calc(100% - 22px);
+    max-width:1700px;
   }
 
   .command-hero{height:100px;min-height:100px}
@@ -3118,13 +3120,26 @@ tbody tr:hover{
 
 <script>
 fetch("header.html", { cache: "no-cache" })
-  .then(response => response.text())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Header request failed: " + response.status);
+    }
+    return response.text();
+  })
   .then(html => {
+    const host = document.getElementById("header");
 
-    document.getElementById("headerMount").innerHTML = html;
+    if (!host) {
+      throw new Error("#header was not found.");
+    }
 
-    initJmbnHeader();
+    host.innerHTML = html;
 
+    if (typeof window.initJmbnHeader === "function") {
+      window.initJmbnHeader();
+    } else {
+      console.error("initJmbnHeader() was not found. Check js/header.js.");
+    }
   })
   .catch(error => {
     console.error("Failed to load JMBN header:", error);
@@ -5903,72 +5918,6 @@ async function loadAttendees(){
 document.addEventListener(
   "DOMContentLoaded",
   async () => {
-
-
-    /* -----------------------------
-       SHARED HEADER
-    ------------------------------ */
-
-    try{
-
-      const host =
-        document.getElementById(
-          "header"
-        );
-
-
-      if(host){
-
-        const res =
-          await fetch(
-            "header.html"
-          );
-
-
-        host.innerHTML =
-          await res.text();
-
-
-        const here =
-          location.pathname
-            .split("/")
-            .pop() ||
-          "mission-log.html";
-
-
-        host
-          .querySelectorAll(
-            ".nav-btn"
-          )
-          .forEach(
-            a => {
-
-              if(
-                a.getAttribute(
-                  "href"
-                ) === here
-              ){
-
-                a.classList.add(
-                  "active"
-                );
-
-              }
-
-            }
-          );
-
-      }
-
-    }
-    catch(e){
-
-      console.error(
-        "Failed to load header.html",
-        e
-      );
-
-    }
 
 
     /* -----------------------------
