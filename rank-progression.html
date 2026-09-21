@@ -544,14 +544,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     setRankImg($('#railCurImg'), prog?.current_code || null);
     setRankImg($('#railNextImg'),prog?.next_code    || null);
 
-    // Progress stats from v_user_progress
-    const { data: up } = await sb
-      .from('v_user_progress')
-      .select('*')
-      .eq('user_id', me)
-      .maybeSingle();
+    // Progress stats.
+    // Missions intentionally follow the same attendance logic as admins.html:
+    // count this user's mission-attendance rows except Withdrawn.
+    // Hours and certifications continue to come from v_user_progress.
+    const [{ data: up }, { data: missionRows, error: missionErr }] = await Promise.all([
+      sb.from('v_user_progress')
+        .select('*')
+        .eq('user_id', me)
+        .maybeSingle(),
+      sb.from('v_mission_attendees_detailed')
+        .select('mission_id, attendance')
+        .eq('user_id', me)
+    ]);
 
-    const m  = Number(up?.missions_attended    || 0);
+    if(missionErr){
+      console.warn('Mission attendance count failed:', missionErr.message);
+    }
+
+    const attendedMissionIds = new Set(
+      (missionRows || [])
+        .filter(r =>
+          r.mission_id &&
+          r.attendance &&
+          String(r.attendance).toLowerCase() !== 'withdrawn'
+        )
+        .map(r => r.mission_id)
+    );
+
+    // Use the actual attendance count when available.
+    // If the attendance query fails, fall back to the existing progress view.
+    const m  = missionErr
+      ? Number(up?.missions_attended || 0)
+      : attendedMissionIds.size;
     const h  = Number(up?.hours_total          || 0);
     const c  = Number(up?.certifications_total || 0);
     const mt = Number(prog?.missions_target       || 0);
