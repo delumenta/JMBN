@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JMBN Components</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png"
+        href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+        sizes="32x32">
+
+  <style>
+    :root{
+      --bg:#000;
+      --panel:#0b0b0b;
+      --sub:#101010;
+      --row:#0a0a0a;
+      --border:#d6b44c;
+      --card:#141414;
+      --accent:#f2d675;
+      --text:#f7f1d0;
+      --muted:#c9b06a;
+      --bad:#ff6b6b;
+
+      --fs-base:14px;
+      --fs-sm:12px;
+      --fs-lg:16px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    html,body{
+      height:100%;
+      background:radial-gradient(circle at top,#1b160a 0,#000 55%);
+      color:var(--text);
+      font-family:'Play',sans-serif;
+    }
+
+    body{
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      padding:14px;
+    }
+
+    /* Header container where header.html will be injected */
+    #site-header{
+      margin-bottom:12px;
+    }
+
+    main{
+      flex:1;
+      max-width:1400px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    .panel{
+      background:linear-gradient(145deg,#050505,#101010);
+      border:1px solid rgba(214,180,76,.7);
+      box-shadow:0 0 20px rgba(0,0,0,.7);
+      border-radius:14px;
+      padding:14px 14px 18px;
+    }
+
+    .panel-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+      border-bottom:1px solid rgba(214,180,76,.4);
+      padding-bottom:8px;
+    }
+
+    .panel-title{
+      font-size:clamp(16px,2vw,20px);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--accent);
+    }
+
+    .panel-subtitle{
+      font-size:var(--fs-sm);
+      color:var(--muted);
+    }
+
+    .filters{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    @media (max-width:900px){
+      .filters{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:600px){
+      .filters{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .filter-group{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:var(--fs-sm);
+    }
+
+    .filter-label{
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+    }
+
+    .filter-input,
+    .filter-select{
+      background:var(--sub);
+      border:1px solid rgba(214,180,76,.5);
+      border-radius:999px;
+      padding:6px 10px;
+      color:var(--text);
+      font-size:var(--fs-base);
+      outline:none;
+      transition:border-color .15s,box-shadow .15s,background .15s;
+    }
+
+    .filter-input::placeholder{
+      color:rgba(247,241,208,.5);
+    }
+
+    .filter-input:focus,
+    .filter-select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(242,214,117,.5);
+      background:#151515;
+    }
+
+    .table-wrap{
+      margin-top:6px;
+      border-radius:10px;
+      border:1px solid rgba(214,180,76,.6);
+      overflow:hidden;
+      background:radial-gradient(circle at top,#18120a 0,#050505 60%);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:var(--fs-base);
+    }
+
+    thead{
+      background:rgba(6,6,6,.98);
+      position:sticky;
+      top:0;
+      z-index:2;
+    }
+
+    th,td{
+      padding:6px 10px;
+      text-align:left;
+      white-space:nowrap;
+    }
+
+    th{
+      font-weight:700;
+      font-size:var(--fs-sm);
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      border-bottom:1px solid rgba(214,180,76,.4);
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    th.sortable:hover{
+      color:var(--accent);
+      background:rgba(214,180,76,.08);
+    }
+
+    th .sort-indicator{
+      font-size:10px;
+      margin-left:4px;
+      opacity:.7;
+    }
+
+    tbody tr:nth-child(even){
+      background:rgba(12,12,12,.85);
+    }
+
+    tbody tr:nth-child(odd){
+      background:rgba(5,5,5,.9);
+    }
+
+    tbody tr:hover{
+      background:rgba(40,32,18,.9);
+    }
+
+    td{
+      border-bottom:1px solid rgba(255,255,255,.02);
+      max-width:280px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .col-name{font-weight:700;color:var(--accent);}
+    .col-where{font-size:var(--fs-sm);color:var(--muted);white-space:normal;}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(214,180,76,.7);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .pill-component{border-color:rgba(242,214,117,.8);}
+    .pill-size{border-color:rgba(155,214,255,.8);}
+    .pill-grade{border-color:rgba(255,188,120,.8);}
+    .pill-class{border-color:rgba(186,255,186,.8);}
+
+    .status-bar{
+      margin-top:6px;
+      font-size:var(--fs-sm);
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .status-bar strong{
+      color:var(--accent);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(214,180,76,.5);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .loading,
+    .error,
+    .empty{
+      padding:16px;
+      text-align:center;
+      font-size:var(--fs-base);
+    }
+
+    .loading{color:var(--muted);}
+    .error{color:var(--bad);}
+  </style>
+</head>
+<body>
+  <!-- Shared header will be injected here -->
+  <header id="site-header"></header>
+
+  <main>
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Components Registry</div>
+          <div class="panel-subtitle">
+            Browse ship components by type, size, class and supplier.
+          </div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label class="filter-label" for="searchInput">Search</label>
+          <input id="searchInput" class="filter-input" type="text"
+                 placeholder="Name or manufacturer…">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" for="filterComponent">Component</label>
+          <select id="filterComponent" class="filter-select">
+            <option value="">All Components</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" for="filterClass">Class</label>
+          <select id="filterClass" class="filter-select">
+            <option value="">All Classes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" for="filterSize">Size</label>
+          <select id="filterSize" class="filter-select">
+            <option value="">All Sizes</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="tableRegion" class="table-wrap">
+        <div class="loading">Loading components…</div>
+      </div>
+
+      <div id="statusBar" class="status-bar" style="display:none;">
+        <div><strong id="countText"></strong></div>
+        <div class="badge">
+          Active filters:
+          <span id="activeFiltersLabel">None</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Inject shared header.html
+    fetch('header.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
+      })
+      .catch(err => {
+        console.error('Failed to load header.html', err);
+      });
+  </script>
+
+  <script>
+    const DATA_URL = 'data/components.js'; // your JSON path
+
+    let allComponents = [];
+    let currentSort = { key:'Names', dir:'asc' };
+
+    const tableRegion = document.getElementById('tableRegion');
+    const statusBar   = document.getElementById('statusBar');
+    const countText   = document.getElementById('countText');
+    const activeFiltersLabel = document.getElementById('activeFiltersLabel');
+
+    const searchInput     = document.getElementById('searchInput');
+    const filterComponent = document.getElementById('filterComponent');
+    const filterClass     = document.getElementById('filterClass');
+    const filterSize      = document.getElementById('filterSize');
+
+    async function loadComponents(){
+      try{
+        const res = await fetch(DATA_URL,{cache:'no-store'});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data = await res.json();
+
+        allComponents = Array.isArray(data) ? data : [];
+        buildFilterOptions(allComponents);
+        renderTable(allComponents);
+      }catch(err){
+        console.error(err);
+        tableRegion.innerHTML =
+          '<div class="error">Failed to load components data.</div>';
+      }
+    }
+
+    function buildFilterOptions(list){
+      const components = new Set();
+      const classes    = new Set();
+      const sizes      = new Set();
+
+      list.forEach(item=>{
+        if(item.Component) components.add(item.Component.trim());
+        if(item.Class)     classes.add(String(item.Class).trim());
+        if(item.Size)      sizes.add(String(item.Size).trim());
+      });
+
+      const makeOptions = (set, selectEl)=>{
+        const values = Array.from(set).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+        values.forEach(v=>{
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.textContent = v;
+          selectEl.appendChild(opt);
+        });
+      };
+
+      makeOptions(components, filterComponent);
+      makeOptions(classes,    filterClass);
+      makeOptions(sizes,      filterSize);
+    }
+
+    function applyFiltersAndSort(){
+      const q       = searchInput.value.trim().toLowerCase();
+      const comp    = filterComponent.value;
+      const cls     = filterClass.value;
+      const size    = filterSize.value;
+
+      let filtered = allComponents.filter(item=>{
+        if(comp && item.Component.trim() !== comp) return false;
+        if(cls  && String(item.Class).trim() !== cls) return false;
+        if(size && String(item.Size).trim() !== size) return false;
+
+        if(q){
+          const hay = [
+            item.Names,
+            item.Manufacturer,
+            item.Component,
+            item.WhereToBuy
+          ].map(v=>String(v||'').toLowerCase()).join(' ');
+          if(!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a,b)=>{
+        const key = currentSort.key;
+        let av = (a[key] ?? '').toString().toLowerCase();
+        let bv = (b[key] ?? '').toString().toLowerCase();
+        if(av < bv) return currentSort.dir === 'asc' ? -1 : 1;
+        if(av > bv) return currentSort.dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+
+      renderTable(filtered);
+      updateStatus(filtered.length);
+    }
+
+    function updateStatus(count){
+      const total = allComponents.length;
+      statusBar.style.display = 'flex';
+      countText.textContent = `${count} of ${total} components shown`;
+
+      const filters = [];
+      if(filterComponent.value) filters.push(`Component: ${filterComponent.value}`);
+      if(filterClass.value)     filters.push(`Class: ${filterClass.value}`);
+      if(filterSize.value)      filters.push(`Size: ${filterSize.value}`);
+      if(searchInput.value.trim()) filters.push(`Search: "${searchInput.value.trim()}"`);
+
+      activeFiltersLabel.textContent = filters.length ? filters.join(' • ') : 'None';
+    }
+
+    function renderTable(list){
+      if(!list.length){
+        tableRegion.innerHTML = '<div class="empty">No components match your filters.</div>';
+        return;
+      }
+
+      const sortIcon = (key)=>{
+        if(currentSort.key !== key) return '';
+        return currentSort.dir === 'asc' ? '▲' : '▼';
+      };
+
+      const headerHtml = `
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable" data-key="Names">Name <span class="sort-indicator">${sortIcon('Names')}</span></th>
+              <th class="sortable" data-key="Component">Component <span class="sort-indicator">${sortIcon('Component')}</span></th>
+              <th class="sortable" data-key="Size">Size <span class="sort-indicator">${sortIcon('Size')}</span></th>
+              <th class="sortable" data-key="Grade">Grade <span class="sort-indicator">${sortIcon('Grade')}</span></th>
+              <th class="sortable" data-key="Class">Class <span class="sort-indicator">${sortIcon('Class')}</span></th>
+              <th class="sortable" data-key="Manufacturer">Manufacturer <span class="sort-indicator">${sortIcon('Manufacturer')}</span></th>
+              <th data-key="WhereToBuy">Where to Buy</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(item=>{
+              const gradeStr = item.Grade === null || item.Grade === undefined
+                ? ''
+                : String(item.Grade);
+              return `
+                <tr>
+                  <td class="col-name">${item.Names || ''}</td>
+                  <td><span class="pill pill-component">${item.Component || ''}</span></td>
+                  <td><span class="pill pill-size">${item.Size || ''}</span></td>
+                  <td><span class="pill pill-grade">${gradeStr}</span></td>
+                  <td><span class="pill pill-class">${item.Class || ''}</span></td>
+                  <td>${item.Manufacturer || ''}</td>
+                  <td class="col-where">${item.WhereToBuy || ''}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      tableRegion.innerHTML = headerHtml;
+
+      // Attach sort handlers
+      tableRegion.querySelectorAll('th.sortable').forEach(th=>{
+        th.addEventListener('click',()=>{
+          const key = th.getAttribute('data-key');
+          if(currentSort.key === key){
+            currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+          }else{
+            currentSort.key = key;
+            currentSort.dir = 'asc';
+          }
+          applyFiltersAndSort();
+        });
+      });
+    }
+
+    // Hook up filter events
+    [searchInput, filterComponent, filterClass, filterSize].forEach(el=>{
+      el.addEventListener('input', applyFiltersAndSort);
+      el.addEventListener('change', applyFiltersAndSort);
+    });
+
+    loadComponents();
+  </script>
+</body>
+</html>
