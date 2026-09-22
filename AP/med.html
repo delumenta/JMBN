@@ -52,16 +52,17 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1500px;margin:auto}
 <div class="hero-art"><div class="med-mark"><i class="fa-solid fa-plus"></i><span>MED</span></div></div>
 </section>
 <section class="frame summary">
-<div class="cell"><div class="eyebrow">YOUR PROGRESS</div><div class="progress"><i></i></div><b>1 / 4 TRAINING MODULES</b></div>
-<div class="cell"><div class="eyebrow">PROGRAMME STATUS</div><div class="status">◉ IN TRAINING</div><small>Complete the practical modules and receive instructor sign-off.</small></div>
-<div class="cell"><div class="eyebrow">KEY REQUIREMENTS // SUMMARY</div><div class="requirements"><span class="done">● BMT — COMPLETED</span><span class="current">◉ MED-01 — IN TRAINING</span><span>○ MED-02 — REQUIRED</span><span>○ MED-FEX — REQUIRED</span></div></div>
+<div class="cell"><div class="eyebrow">YOUR PROGRESS</div><div class="progress"><i id="progressFill" style="width:0%"></i></div><b id="progressText">0 / 4 TRAINING EVENTS</b></div>
+<div class="cell"><div class="eyebrow">PROGRAMME STATUS</div><div class="status" id="programmeStatus">LOADING...</div><small id="programmeStatusNote">Checking your Academy training record.</small></div>
+<div class="cell"><div class="eyebrow">KEY REQUIREMENTS // SUMMARY</div><div class="requirements" id="requirementsSummary"><span>ACCESSING TRAINING RECORD...</span></div></div>
 </section>
 <div class="section-title"><div><h3>TRAINING MODULES</h3><small>PRACTICAL // IN-GAME // INSTRUCTOR-LED</small></div><small>AP-MED // 04 MODULES</small></div>
 <section class="module-grid" id="moduleGrid">
-<article class="frame module-card current" data-module="01" tabindex="0"><div class="module-img"><div class="module-no">01</div><div class="badge current">◉ IN TRAINING</div><i class="fa-solid fa-kit-medical"></i></div><div class="module-copy"><div class="module-code">MED-01</div><div class="module-name">MEDICAL EQUIPMENT & LOADOUT</div><p class="module-desc">Bring the correct medical equipment and prepare for field deployment.</p><div class="module-meta">◷ IN-GAME DRILL　~10 MIN<br>♟ INSTRUCTOR　REQUIRED</div><button class="module-btn">OPEN MODULE →</button></div></article>
-<article class="frame module-card" data-module="02" tabindex="0"><div class="module-img"><div class="module-no">02</div><div class="badge">AVAILABLE</div><i class="fa-solid fa-heart-pulse"></i></div><div class="module-copy"><div class="module-code">MED-02</div><div class="module-name">CASUALTY ASSESSMENT</div><p class="module-desc">Assess casualty condition, injuries and immediate treatment priority.</p><div class="module-meta">◷ IN-GAME DRILL　~15 MIN<br>♟ INSTRUCTOR　REQUIRED</div><button class="module-btn">OPEN MODULE →</button></div></article>
-<article class="frame module-card locked"><div class="module-img"><div class="module-no">03</div><div class="badge">🔒 LOCKED</div><i class="fa-solid fa-user-shield"></i></div><div class="module-copy"><div class="module-code">MED-03</div><div class="module-name">TREATMENT & EXTRACTION</div><p class="module-desc">Stabilise the casualty and recover them from the operational area.</p><div class="module-meta">REQUIRES MED-02 SIGN-OFF</div><button class="module-btn" disabled>LOCKED</button></div></article>
-<article class="frame module-card locked"><div class="module-img"><div class="module-no">04</div><div class="badge">🔒 LOCKED</div><i class="fa-solid fa-people-group"></i></div><div class="module-copy"><div class="module-code">MED-FEX</div><div class="module-name">MEDICAL FIELD EXERCISE</div><p class="module-desc">Apply the full medical response sequence during a live JMBN training scenario.</p><div class="module-meta">REQUIRES MED-03 SIGN-OFF</div><button class="module-btn" disabled>LOCKED</button></div></article>
+<!-- Status/locking below is replaced from the signed-in member's real Supabase training record. -->
+<article class="frame module-card" data-module="01" data-event="MED-01" tabindex="0"><div class="module-img"><div class="module-no">01</div><div class="badge current">◉ IN TRAINING</div><i class="fa-solid fa-kit-medical"></i></div><div class="module-copy"><div class="module-code">MED-01</div><div class="module-name">MEDICAL EQUIPMENT & LOADOUT</div><p class="module-desc">Bring the correct medical equipment and prepare for field deployment.</p><div class="module-meta">◷ IN-GAME DRILL　~10 MIN<br>♟ INSTRUCTOR　REQUIRED</div><button class="module-btn">OPEN MODULE →</button></div></article>
+<article class="frame module-card" data-module="02" data-event="MED-02" tabindex="0"><div class="module-img"><div class="module-no">02</div><div class="badge">AVAILABLE</div><i class="fa-solid fa-heart-pulse"></i></div><div class="module-copy"><div class="module-code">MED-02</div><div class="module-name">CASUALTY ASSESSMENT</div><p class="module-desc">Assess casualty condition, injuries and immediate treatment priority.</p><div class="module-meta">◷ IN-GAME DRILL　~15 MIN<br>♟ INSTRUCTOR　REQUIRED</div><button class="module-btn">OPEN MODULE →</button></div></article>
+<article class="frame module-card" data-module="03" data-event="MED-03" tabindex="0"><div class="module-img"><div class="module-no">03</div><div class="badge">🔒 LOCKED</div><i class="fa-solid fa-user-shield"></i></div><div class="module-copy"><div class="module-code">MED-03</div><div class="module-name">TREATMENT & EXTRACTION</div><p class="module-desc">Stabilise the casualty and recover them from the operational area.</p><div class="module-meta">REQUIRES MED-02 SIGN-OFF</div><button class="module-btn" disabled>LOCKED</button></div></article>
+<article class="frame module-card" data-module="04" data-event="MED-FEX" tabindex="0"><div class="module-img"><div class="module-no">04</div><div class="badge">🔒 LOCKED</div><i class="fa-solid fa-people-group"></i></div><div class="module-copy"><div class="module-code">MED-FEX</div><div class="module-name">MEDICAL FIELD EXERCISE</div><p class="module-desc">Apply the full medical response sequence during a live JMBN training scenario.</p><div class="module-meta">REQUIRES MED-03 SIGN-OFF</div><button class="module-btn" disabled>LOCKED</button></div></article>
 </section>
 <section class="frame module-view" id="module01">
 <div class="detail-head"><button class="back-modules" data-close>‹ ALL MODULES</button><div class="detail-no">01</div><div class="detail-title"><strong>MED-01 // MEDICAL EQUIPMENT & LOADOUT</strong><small>Prepare the standard JMBN medical loadout before deployment.</small></div><div class="detail-tag">// EQUIP</div></div>
@@ -73,14 +74,77 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1500px;margin:auto}
 <div class="detail-footer"><button class="return" data-close>‹ RETURN TO ALL MODULES</button><span class="hint">AP-MED // MODULE 01</span></div>
 </section>
 <section class="frame module-view" id="module02"><div class="detail-head"><button class="back-modules" data-close>‹ ALL MODULES</button><div class="detail-no">02</div><div class="detail-title"><strong>MED-02 // CASUALTY ASSESSMENT</strong><small>Module content will be built next.</small></div><div class="detail-tag">// ASSESS</div></div><div class="detail-footer"><button class="return" data-close>‹ RETURN TO ALL MODULES</button><span class="hint">AP-MED // MODULE 02</span></div></section>
+<section class="frame module-view" id="module03"><div class="detail-head"><button class="back-modules" data-close>‹ ALL MODULES</button><div class="detail-no">03</div><div class="detail-title"><strong>MED-03 // TREATMENT & RECOVERY</strong><small>Module content will be built next.</small></div><div class="detail-tag">// TREAT · EXTRACT</div></div><div class="detail-footer"><button class="return" data-close>‹ RETURN TO ALL MODULES</button><span class="hint">AP-MED // MODULE 03</span></div></section>
+<section class="frame module-view" id="module04"><div class="detail-head"><button class="back-modules" data-close>‹ ALL MODULES</button><div class="detail-no">04</div><div class="detail-title"><strong>MED-FEX // MEDICAL FIELD EXERCISE</strong><small>Module content will be built next.</small></div><div class="detail-tag">// APPLY</div></div><div class="detail-footer"><button class="return" data-close>‹ RETURN TO ALL MODULES</button><span class="hint">AP-MED // MODULE 04</span></div></section>
 <footer class="footer"><span>JMBN // ACADEMY DIVISION</span><div class="footer-line"></div><span>DISCIPLINE · SKILL · UNITY</span></footer>
 </div></main></div>
 <script>
+const MED_EVENTS=["MED-01","MED-02","MED-03","MED-FEX"];
 const grid=document.getElementById("moduleGrid");
 const views=[...document.querySelectorAll(".module-view")];
-function openModule(id){const view=document.getElementById("module"+id);if(!view)return;grid.style.display="none";views.forEach(v=>v.classList.remove("open"));view.classList.add("open");view.scrollIntoView({behavior:"smooth",block:"start"});}
-function closeModule(){views.forEach(v=>v.classList.remove("open"));grid.style.display="grid";document.querySelector(".section-title").scrollIntoView({behavior:"smooth",block:"start"});}
-document.querySelectorAll(".module-card[data-module]").forEach(card=>{card.addEventListener("click",()=>openModule(card.dataset.module));card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openModule(card.dataset.module)}})});
+let approved=new Set();
+
+function openModule(id){
+  const card=document.querySelector('.module-card[data-module="'+id+'"]');
+  if(card?.classList.contains("locked")) return;
+  const view=document.getElementById("module"+id);
+  if(!view)return;
+  grid.style.display="none";
+  views.forEach(v=>v.classList.remove("open"));
+  view.classList.add("open");
+  view.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeModule(){
+  views.forEach(v=>v.classList.remove("open"));
+  grid.style.display="grid";
+  document.querySelector(".section-title").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function setCard(card,state,requirement){
+  const badge=card.querySelector(".badge"),btn=card.querySelector(".module-btn");
+  card.classList.remove("locked","current");
+  badge.className="badge";
+  if(state==="done"){badge.classList.add("done");badge.textContent="✓ COMPLETED";btn.textContent="REVIEW MODULE →";btn.disabled=false;}
+  else if(state==="current"){card.classList.add("current");badge.classList.add("current");badge.textContent="◉ IN TRAINING";btn.textContent="OPEN MODULE →";btn.disabled=false;}
+  else{card.classList.add("locked");badge.textContent="🔒 LOCKED";btn.textContent="LOCKED";btn.disabled=true;const meta=card.querySelector(".module-meta");if(requirement)meta.textContent="REQUIRES "+requirement+" SIGN-OFF";}
+}
+async function init(){
+  try{
+    await requireAuth();
+    const sb=getSupabase();
+    const {data:{user}}=await sb.auth.getUser();
+    if(!user) return;
+    const {data:rows,error}=await sb.from("user_training_events").select("event_code,approved_at,approved_by").eq("user_id",user.id).in("event_code",MED_EVENTS);
+    if(error) throw error;
+    approved=new Set((rows||[]).filter(r=>r.approved_at&&r.approved_by).map(r=>r.event_code));
+    const completed=MED_EVENTS.filter(e=>approved.has(e)).length;
+    document.getElementById("progressFill").style.width=(completed/MED_EVENTS.length*100)+"%";
+    document.getElementById("progressText").textContent=completed+" / "+MED_EVENTS.length+" TRAINING EVENTS";
+    const status=document.getElementById("programmeStatus"),note=document.getElementById("programmeStatusNote");
+    if(completed===MED_EVENTS.length){status.textContent="✓ REQUIREMENTS COMPLETE";status.style.color="var(--green)";note.textContent="All MED training events have been instructor-approved.";}
+    else{status.textContent=completed?"◉ IN TRAINING":"○ NOT STARTED";note.textContent=completed?"Continue with the next available practical module.":"Begin with MED-01 Medical Equipment & Loadout.";}
+    const summary=document.getElementById("requirementsSummary");summary.innerHTML="";
+    MED_EVENTS.forEach((code,i)=>{
+      const span=document.createElement("span");
+      if(approved.has(code)){span.className="done";span.textContent="✓ "+code+" — COMPLETED";}
+      else if(i===0||approved.has(MED_EVENTS[i-1])){span.className="current";span.textContent="◉ "+code+" — AVAILABLE";}
+      else span.textContent="○ "+code+" — REQUIRES "+MED_EVENTS[i-1];
+      summary.appendChild(span);
+      const card=document.querySelector('[data-event="'+code+'"]');
+      if(approved.has(code)) setCard(card,"done");
+      else if(i===0||approved.has(MED_EVENTS[i-1])) setCard(card,"current");
+      else setCard(card,"locked",MED_EVENTS[i-1]);
+    });
+  }catch(err){
+    console.error("AP-MED load failed:",err);
+    document.getElementById("programmeStatus").textContent="RECORD UNAVAILABLE";
+    document.getElementById("programmeStatusNote").textContent="Unable to load your Academy training record.";
+  }
+}
+document.querySelectorAll(".module-card[data-module]").forEach(card=>{
+  card.addEventListener("click",()=>openModule(card.dataset.module));
+  card.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!card.classList.contains("locked")){e.preventDefault();openModule(card.dataset.module);}});
+});
 document.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",closeModule));
+init();
 </script>
 </body></html>
