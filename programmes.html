@@ -2233,6 +2233,20 @@ button{
       </a>
 
 
+      <!-- INSTRUCTOR ACCESS
+           Hidden unless the signed-in user is an Admin
+           or has an active Academy instructor authorisation. -->
+      <a
+        class="nav-item"
+        id="instructorAccessNav"
+        href="instructor.html"
+        style="display:none"
+      >
+        <i class="fa-solid fa-user-shield"></i>
+        INSTRUCTOR ACCESS
+      </a>
+
+
       <div class="sidebar-divider"></div>
 
 
@@ -2834,6 +2848,124 @@ function getProgrammeIcon(code){
 
     default:
       return "fa-certificate";
+
+  }
+
+}
+
+
+/* =========================================================
+   INSTRUCTOR ACCESS
+========================================================= */
+
+async function loadInstructorAccess(){
+
+  const nav =
+    $("#instructorAccessNav");
+
+
+  if(!nav || !sb || !me){
+    return;
+  }
+
+
+  nav.style.display =
+    "none";
+
+
+  try{
+
+
+    /* Admins always receive Instructor Access. */
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await sb
+        .from("profiles")
+        .select("role")
+        .eq("user_id", me)
+        .maybeSingle();
+
+
+    if(profileError){
+
+      console.warn(
+        "Instructor profile check failed:",
+        profileError.message
+      );
+
+    }
+
+
+    const isAdmin =
+      String(
+        profile?.role || ""
+      ).toLowerCase() ===
+      "admin";
+
+
+    if(isAdmin){
+
+      nav.style.display =
+        "flex";
+
+      return;
+
+    }
+
+
+    /*
+      Non-admin users need at least one active Academy
+      instructor authorisation with training or sign-off
+      permission.
+    */
+
+    const {
+      data: instructor,
+      error: instructorError
+    } =
+      await sb
+        .from("academy_instructors")
+        .select("id")
+        .eq("user_id", me)
+        .eq("is_active", true)
+        .or(
+          "can_instruct.eq.true,can_sign_off.eq.true"
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+    if(instructorError){
+
+      console.warn(
+        "Instructor authorisation check failed:",
+        instructorError.message
+      );
+
+      return;
+
+    }
+
+
+    if(instructor){
+
+      nav.style.display =
+        "flex";
+
+    }
+
+
+  }
+
+  catch(error){
+
+    console.warn(
+      "Instructor access check failed:",
+      error
+    );
 
   }
 
@@ -4324,7 +4456,10 @@ document.addEventListener(
         session.user.id;
 
 
-      await loadAcademy();
+      await Promise.all([
+        loadAcademy(),
+        loadInstructorAccess()
+      ]);
 
 
     }
