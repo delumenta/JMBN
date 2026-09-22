@@ -2369,6 +2369,89 @@ tbody tr:hover{
   text-decoration:underline;
 }
 
+
+
+/* =========================================================
+   JMBN SPACE STARFIELD
+   Shared visual treatment with the Manifest system
+========================================================= */
+
+body{
+  position:relative;
+  isolation:isolate;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:-90px;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.52;
+
+  background-image:
+    radial-gradient(circle, rgba(244,216,120,.95) 0 1px, transparent 1.45px),
+    radial-gradient(circle, rgba(247,241,208,.60) 0 .8px, transparent 1.25px),
+    radial-gradient(circle, rgba(216,180,76,.45) 0 1.15px, transparent 1.7px);
+
+  background-size:
+    157px 157px,
+    239px 239px,
+    389px 389px;
+
+  background-position:
+    12px 24px,
+    77px 53px,
+    131px 181px;
+
+  animation:jmbnStarDrift 110s linear infinite;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+
+  background:
+    radial-gradient(circle at 12% 18%, rgba(244,216,120,.72) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 29% 72%, rgba(247,241,208,.46) 0 .9px, transparent 1.7px),
+    radial-gradient(circle at 54% 31%, rgba(244,216,120,.62) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 73% 81%, rgba(216,180,76,.58) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 88% 24%, rgba(247,241,208,.48) 0 .8px, transparent 1.6px);
+
+  opacity:.58;
+  animation:jmbnStarTwinkle 6.5s ease-in-out infinite alternate;
+}
+
+@keyframes jmbnStarDrift{
+  from{
+    background-position:
+      12px 24px,
+      77px 53px,
+      131px 181px;
+  }
+  to{
+    background-position:
+      -145px -133px,
+      -162px -186px,
+      -258px -208px;
+  }
+}
+
+@keyframes jmbnStarTwinkle{
+  from{opacity:.34}
+  to{opacity:.68}
+}
+
+@media (prefers-reduced-motion:reduce){
+  body::before,
+  body::after{
+    animation:none;
+  }
+}
+
 </style>
 
 </head>
