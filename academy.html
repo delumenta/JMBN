@@ -171,18 +171,14 @@ body::before{
   align-items:center;
   justify-content:space-between;
 
-  padding:
-    0
-    15px;
+  padding:0 15px;
 
-  background:
-    rgba(3,4,3,.97);
+  background:rgba(3,4,3,.97);
 
   border-bottom:
     1px solid rgba(214,180,76,.45);
 
-  backdrop-filter:
-    blur(10px);
+  backdrop-filter:blur(10px);
 
 }
 
@@ -197,6 +193,8 @@ body::before{
   color:var(--gold);
 
   font-size:20px;
+
+  cursor:pointer;
 
 }
 
@@ -216,7 +214,6 @@ body::before{
   color:#a9a38d;
 
   font-size:9px;
-
   font-weight:700;
 
   letter-spacing:.14em;
@@ -286,9 +283,7 @@ body::before{
 
   min-height:52px;
 
-  padding:
-    0
-    21px;
+  padding:0 21px;
 
   color:#777365;
 
@@ -354,7 +349,7 @@ body::before{
 
 
 /* =========================================================
-   SIDEBAR NAV
+   SIDEBAR NAVIGATION
 ========================================================= */
 
 .sidebar-section-label{
@@ -381,9 +376,7 @@ body::before{
 
   min-height:48px;
 
-  padding:
-    0
-    21px;
+  padding:0 21px;
 
   display:flex;
   align-items:center;
@@ -415,6 +408,35 @@ body::before{
 
 }
 
+
+/* =========================================================
+   SIDEBAR JMBN LOGO
+========================================================= */
+
+.nav-logo{
+
+  width:20px;
+  height:25px;
+
+  flex:0 0 20px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+}
+
+.nav-logo img{
+
+  display:block;
+
+  width:25px;
+  height:25px;
+
+  object-fit:contain;
+
+}
+
 .nav-item:hover{
 
   color:var(--text);
@@ -428,8 +450,7 @@ body::before{
 
   color:var(--gold);
 
-  border-left-color:
-    var(--gold);
+  border-left-color:var(--gold);
 
   background:
 
@@ -465,6 +486,7 @@ body::before{
     21px;
 
   background:
+
     linear-gradient(
       90deg,
       rgba(214,180,76,.45),
@@ -557,9 +579,6 @@ body::before{
 
 }
 
-
-/* INNER BORDER */
-
 .frame::before{
 
   content:"";
@@ -585,9 +604,6 @@ body::before{
     );
 
 }
-
-
-/* TOP GOLD DETAIL */
 
 .frame::after{
 
@@ -671,9 +687,7 @@ body::before{
 
   min-height:56px;
 
-  padding:
-    0
-    26px;
+  padding:0 26px;
 
   display:flex;
   align-items:center;
@@ -890,7 +904,7 @@ body::before{
 
 
 /* =========================================================
-   HERO ART
+   HERO ART / JMBN LOGO
 ========================================================= */
 
 .hero-art{
@@ -905,9 +919,9 @@ body::before{
   background:
 
     radial-gradient(
-      circle at 55% 37%,
-      rgba(240,210,112,.12),
-      transparent 28%
+      circle at 50% 42%,
+      rgba(240,210,112,.10),
+      transparent 30%
     ),
 
     linear-gradient(
@@ -946,11 +960,11 @@ body::before{
 
 .hero-art::after{
 
-  content:"TRAINING NETWORK";
+  content:"JMBN // ACADEMY";
 
   position:absolute;
 
-  right:-38px;
+  right:-35px;
   top:50%;
 
   transform:
@@ -965,26 +979,45 @@ body::before{
 
 }
 
-.academy-emblem{
+
+/* =========================================================
+   ACTUAL JMBN HERO LOGO
+========================================================= */
+
+.hero-logo-wrap{
 
   position:absolute;
 
   left:50%;
-  top:45%;
-
-  width:210px;
-  height:210px;
+  top:43%;
 
   transform:
-    translate(-50%,-50%)
-    rotate(45deg);
+    translate(-50%,-50%);
 
-  border:
-    1px solid rgba(240,210,112,.35);
+  width:min(64%,330px);
+
+  aspect-ratio:1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
 }
 
-.academy-emblem::before{
+.hero-logo-ring{
+
+  position:absolute;
+
+  inset:0;
+
+  border:
+    1px solid rgba(240,210,112,.20);
+
+  transform:rotate(45deg);
+
+}
+
+.hero-logo-ring::before{
 
   content:"";
 
@@ -993,47 +1026,61 @@ body::before{
   inset:15px;
 
   border:
-    1px solid rgba(240,210,112,.12);
+    1px solid rgba(240,210,112,.08);
 
 }
 
-.emblem-content{
+.hero-logo-ring::after{
+
+  content:"";
 
   position:absolute;
 
-  inset:0;
+  inset:31px;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  transform:
-    rotate(-45deg);
-
-  text-align:center;
+  border:
+    1px solid rgba(240,210,112,.05);
 
 }
 
-.emblem-jmbn{
+.hero-jmbn-logo{
 
-  color:var(--gold);
+  position:relative;
+  z-index:2;
 
-  font-size:33px;
-  font-weight:700;
+  display:block;
 
-  letter-spacing:.18em;
+  width:68%;
+  height:68%;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 0 20px
+      rgba(240,210,112,.12)
+    );
 
 }
 
-.emblem-academy{
+.hero-logo-label{
 
-  margin-top:8px;
+  position:absolute;
 
-  color:#767262;
+  z-index:3;
 
-  font-size:9px;
+  left:50%;
+  bottom:-26px;
 
-  letter-spacing:.3em;
+  transform:translateX(-50%);
+
+  white-space:nowrap;
+
+  color:#7d7868;
+
+  font-size:8px;
+
+  letter-spacing:.32em;
 
 }
 
@@ -1174,14 +1221,6 @@ body::before{
 
 }
 
-.right-stack{
-
-  display:grid;
-
-  gap:20px;
-
-}
-
 
 /* =========================================================
    PROGRAMMES
@@ -1222,9 +1261,6 @@ body::before{
     1px solid rgba(214,180,76,.14);
 
 }
-
-
-/* IMAGE */
 
 .programme-image{
 
@@ -1289,9 +1325,6 @@ body::before{
   letter-spacing:.08em;
 
 }
-
-
-/* CONTENT */
 
 .programme-head{
 
@@ -1364,9 +1397,6 @@ body::before{
 
 }
 
-
-/* PROGRESS */
-
 .progress-info{
 
   margin-top:18px;
@@ -1420,18 +1450,13 @@ body::before{
 
 }
 
-
-/* BUTTON */
-
 .programme-button{
 
   min-height:42px;
 
   margin-top:17px;
 
-  padding:
-    0
-    17px;
+  padding:0 17px;
 
   display:inline-flex;
   align-items:center;
@@ -1597,97 +1622,7 @@ body::before{
 
 
 /* =========================================================
-   QUALIFICATIONS
-========================================================= */
-
-.qualification-list{
-
-  position:relative;
-  z-index:1;
-
-  padding:
-    8px
-    20px
-    20px;
-
-}
-
-.qualification{
-
-  display:grid;
-
-  grid-template-columns:
-    39px
-    1fr
-    auto;
-
-  gap:13px;
-
-  align-items:center;
-
-  padding:
-    15px
-    0;
-
-}
-
-.qualification +
-.qualification{
-
-  border-top:
-    1px solid rgba(214,180,76,.11);
-
-}
-
-.qual-icon{
-
-  width:36px;
-  height:36px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:
-    1px solid rgba(214,180,76,.40);
-
-  color:var(--gold);
-
-  font-size:12px;
-
-}
-
-.qual-title{
-
-  font-size:11px;
-
-  line-height:1.4;
-
-}
-
-.qual-date{
-
-  margin-top:5px;
-
-  color:#68665c;
-
-  font-size:8px;
-
-}
-
-.qual-code{
-
-  color:#8c8775;
-
-  font-size:9px;
-
-  letter-spacing:.14em;
-
-}
-
-
-/* =========================================================
-   LOADING / EMPTY
+   EMPTY / LOADING
 ========================================================= */
 
 .loading,
@@ -1777,7 +1712,7 @@ body::before{
 
   .hero-art{
 
-    min-height:250px;
+    min-height:330px;
 
     border-left:0;
 
@@ -1828,11 +1763,9 @@ body::before{
     display:flex;
   }
 
-
   .academy-app{
     display:block;
   }
-
 
   .academy-sidebar{
 
@@ -1862,7 +1795,6 @@ body::before{
 
   }
 
-
   body.sidebar-open
   .academy-sidebar{
 
@@ -1870,7 +1802,6 @@ body::before{
       translateX(0);
 
   }
-
 
   body.sidebar-open::after{
 
@@ -1886,7 +1817,6 @@ body::before{
 
   }
 
-
   .sidebar-inner{
 
     position:relative;
@@ -1894,7 +1824,6 @@ body::before{
     min-height:100%;
 
   }
-
 
   .academy-main{
 
@@ -1904,9 +1833,6 @@ body::before{
       38px;
 
   }
-
-
-  /* FRAME */
 
   .frame{
 
@@ -1925,24 +1851,17 @@ body::before{
 
   }
 
-
   .frame::before{
-
     inset:11px;
-
   }
-
 
   .frame-header{
 
     min-height:54px;
 
-    padding:
-      0
-      20px;
+    padding:0 20px;
 
   }
-
 
   .frame-title{
 
@@ -1954,15 +1873,9 @@ body::before{
 
   }
 
-
   .frame-code{
-
     font-size:7px;
-
   }
-
-
-  /* HERO */
 
   .hero-body{
 
@@ -1971,7 +1884,6 @@ body::before{
     display:block;
 
   }
-
 
   .hero-copy{
 
@@ -1982,7 +1894,6 @@ body::before{
 
   }
 
-
   .hero-eyebrow{
 
     font-size:10px;
@@ -1991,14 +1902,12 @@ body::before{
 
   }
 
-
   .hero-heading{
 
     font-size:
       clamp(47px,14vw,64px);
 
   }
-
 
   .hero-rule{
 
@@ -2009,7 +1918,6 @@ body::before{
 
   }
 
-
   .hero-welcome{
 
     margin-bottom:42px;
@@ -2018,7 +1926,6 @@ body::before{
 
   }
 
-
   .hero-copy p{
 
     font-size:15px;
@@ -2026,7 +1933,6 @@ body::before{
     line-height:1.82;
 
   }
-
 
   .academy-statement{
 
@@ -2043,13 +1949,9 @@ body::before{
 
   }
 
-
   .hero-art{
     display:none;
   }
-
-
-  /* RECORD */
 
   .record-grid{
 
@@ -2058,7 +1960,6 @@ body::before{
       1fr;
 
   }
-
 
   .record-item{
 
@@ -2072,13 +1973,9 @@ body::before{
 
   }
 
-
   .record-item:nth-child(3){
-
     border-left:0;
-
   }
-
 
   .record-icon{
 
@@ -2091,22 +1988,13 @@ body::before{
 
   }
 
-
   .record-value{
-
     font-size:23px;
-
   }
-
 
   .record-label{
-
     font-size:7px;
-
   }
-
-
-  /* PROGRAMME */
 
   .programme-row{
 
@@ -2116,46 +2004,28 @@ body::before{
 
   }
 
-
   .programme-image{
-
     min-height:180px;
-
   }
-
 
   .programme-image-code{
-
     font-size:28px;
-
   }
-
 
   .programme-head{
-
     gap:10px;
-
   }
-
 
   .programme-title{
-
     font-size:18px;
-
   }
-
 
   .dashboard-grid{
-
     grid-template-columns:1fr;
-
   }
 
-
   .academy-footer{
-
     font-size:6px;
-
   }
 
 }
@@ -2174,7 +2044,6 @@ body::before{
 
   }
 
-
   .hero-copy{
 
     padding:
@@ -2182,7 +2051,6 @@ body::before{
       25px;
 
   }
-
 
   .record-item{
 
@@ -2192,11 +2060,8 @@ body::before{
 
   }
 
-
   .record-icon{
-
     display:none;
-
   }
 
 }
@@ -2294,17 +2159,29 @@ body::before{
 
     <nav class="sidebar-nav">
 
+
+      <!-- OVERVIEW -->
+
       <a
         class="nav-item active"
         href="academy.html"
       >
 
-        <i class="fa-solid fa-graduation-cap"></i>
+        <span class="nav-logo">
+
+          <img
+            src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+            alt="JMBN"
+          >
+
+        </span>
 
         OVERVIEW
 
       </a>
 
+
+      <!-- PROGRAMMES -->
 
       <a
         class="nav-item"
@@ -2318,7 +2195,7 @@ body::before{
       </a>
 
 
-
+      <!-- TRAINING SCHEDULE -->
 
       <a
         class="nav-item"
@@ -2330,7 +2207,6 @@ body::before{
         TRAINING SCHEDULE
 
       </a>
-
 
 
       <div class="sidebar-divider"></div>
@@ -2349,6 +2225,7 @@ body::before{
 
       </div>
 
+
     </nav>
 
 
@@ -2359,6 +2236,7 @@ body::before{
       DEPLOY
 
     </div>
+
 
   </div>
 
@@ -2400,6 +2278,8 @@ body::before{
 
   <div class="hero-body">
 
+
+    <!-- HERO COPY -->
 
     <div class="hero-copy">
 
@@ -2480,26 +2360,32 @@ body::before{
 
 
 
+    <!-- =====================================================
+         JMBN HERO ART
+    ====================================================== -->
+
     <div class="hero-art">
 
 
-      <div class="academy-emblem">
+      <div class="hero-logo-wrap">
 
-        <div class="emblem-content">
 
-          <div>
+        <div class="hero-logo-ring"></div>
 
-            <div class="emblem-jmbn">
-              JMBN
-            </div>
 
-            <div class="emblem-academy">
-              ACADEMY
-            </div>
+        <img
+          class="hero-jmbn-logo"
+          src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+          alt="JMBN"
+        >
 
-          </div>
+
+        <div class="hero-logo-label">
+
+          JOINT MULTI-BRANCH NETWORK
 
         </div>
+
 
       </div>
 
@@ -2558,7 +2444,7 @@ body::before{
   <div class="record-grid">
 
 
-    <!-- AVAILABLE -->
+    <!-- PROGRAMMES AVAILABLE -->
 
     <div class="record-item">
 
@@ -2624,7 +2510,7 @@ body::before{
 
 
 
-    <!-- QUALIFICATIONS -->
+    <!-- CERTIFICATIONS -->
 
     <div class="record-item">
 
@@ -2638,14 +2524,14 @@ body::before{
 
         <div
           class="record-value"
-          id="qualificationCount"
+          id="certificationCount"
         >
           —
         </div>
 
         <div class="record-label">
 
-          QUALIFICATIONS
+          CERTIFICATIONS
           <br>
           EARNED
 
@@ -2657,7 +2543,7 @@ body::before{
 
 
 
-    <!-- EVENTS -->
+    <!-- TRAINING EVENTS -->
 
     <div class="record-item">
 
@@ -2760,13 +2646,6 @@ body::before{
 
 
 <!-- =========================================================
-     RIGHT COLUMN
-========================================================= -->
-
-<div class="right-stack">
-
-
-<!-- =========================================================
      04 // RECENT TRAINING
 ========================================================= -->
 
@@ -2805,65 +2684,6 @@ body::before{
 
 </section>
 
-
-
-<!-- =========================================================
-     05 // QUALIFICATIONS
-========================================================= -->
-
-<section class="frame">
-
-  <span class="corner corner-tl"></span>
-  <span class="corner corner-br"></span>
-
-
-  <div class="frame-header">
-
-    <div class="frame-title">
-      YOUR QUALIFICATIONS
-    </div>
-
-    <div class="frame-code">
-      RECORD // 05
-    </div>
-
-  </div>
-
-
-  <div
-    class="qualification-list"
-    id="qualificationList"
-  >
-
-    <div class="loading">
-
-      ACCESSING QUALIFICATION RECORD...
-
-    </div>
-
-  </div>
-
-
-  <div class="view-all-area">
-
-    <a
-      class="view-all-button"
-      href="qualifications.html"
-    >
-
-      VIEW ALL QUALIFICATIONS
-
-      <i class="fa-solid fa-arrow-right"></i>
-
-    </a>
-
-  </div>
-
-
-</section>
-
-
-</div>
 
 </div>
 
@@ -2946,8 +2766,10 @@ function formatDate(value){
     return "—";
   }
 
+
   const date =
     new Date(value);
+
 
   return date.toLocaleDateString(
     "en-SG",
@@ -2967,14 +2789,6 @@ function formatDate(value){
 
 function getProgrammeUrl(code){
 
-  /*
-    We use your Access Programme naming convention:
-
-    AP-BMT.html
-    AP-SOC.html
-    AP-MED.html
-  */
-
   return (
     "AP-" +
     encodeURIComponent(code) +
@@ -2990,7 +2804,10 @@ function getProgrammeUrl(code){
 
 function getProgrammeIcon(code){
 
-  switch(code){
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
 
     case "BMT":
 
@@ -3012,11 +2829,13 @@ function getProgrammeIcon(code){
       return "fa-plane";
 
 
+    case "GUN":
     case "GUNNERY":
 
       return "fa-crosshairs";
 
 
+    case "ENG":
     case "ENGINEERING":
 
       return "fa-screwdriver-wrench";
@@ -3048,9 +2867,7 @@ async function loadAcademyData(){
   ] = await Promise.all([
 
 
-    /* =====================================================
-       CERTIFICATIONS
-    ===================================================== */
+    /* CERTIFICATIONS */
 
     sb
       .from("certifications")
@@ -3068,9 +2885,7 @@ async function loadAcademyData(){
       ),
 
 
-    /* =====================================================
-       REQUIREMENTS
-    ===================================================== */
+    /* REQUIREMENTS */
 
     sb
       .from("certification_requirements")
@@ -3086,9 +2901,7 @@ async function loadAcademyData(){
       ),
 
 
-    /* =====================================================
-       TRAINING EVENTS
-    ===================================================== */
+    /* TRAINING EVENTS */
 
     sb
       .from("training_events")
@@ -3105,9 +2918,7 @@ async function loadAcademyData(){
       ),
 
 
-    /* =====================================================
-       USER QUALIFICATIONS
-    ===================================================== */
+    /* USER CERTIFICATIONS */
 
     sb
       .from("user_certifications")
@@ -3121,9 +2932,7 @@ async function loadAcademyData(){
       ),
 
 
-    /* =====================================================
-       USER TRAINING EVENTS
-    ===================================================== */
+    /* USER TRAINING EVENTS */
 
     sb
       .from("user_training_events")
@@ -3144,10 +2953,6 @@ async function loadAcademyData(){
 
   ]);
 
-
-  /* =====================================================
-     HANDLE ERRORS
-  ===================================================== */
 
   const errors = [
 
@@ -3327,7 +3132,7 @@ function buildProgrammeData(){
 
 
 /* =========================================================
-   RENDER
+   RENDER ACADEMY
 ========================================================= */
 
 function renderAcademy(){
@@ -3343,8 +3148,6 @@ function renderAcademy(){
   renderProgrammes(programmes);
 
   renderRecentTraining();
-
-  renderQualifications();
 
 }
 
@@ -3378,7 +3181,7 @@ function renderStats(programmes){
     inTraining;
 
 
-  $("#qualificationCount").textContent =
+  $("#certificationCount").textContent =
     myCertifications.length;
 
 
@@ -3419,6 +3222,7 @@ function renderSidebar(programmes){
     programmes
 
       .map(programme=>{
+
 
         const icon =
           getProgrammeIcon(
@@ -3465,16 +3269,11 @@ function renderProgrammes(programmes){
 
 
   /*
-    Completed qualifications are deliberately
-    excluded from this section.
+    Academy Overview only shows programmes that
+    have not yet been certified.
 
-    This section is ONLY:
-
-    - in progress
-    - available / not started
-
-    Completed programmes belong under
-    Qualifications.
+    Full history / certified programmes are
+    available from programmes.html.
   */
 
   const visible =
@@ -3487,6 +3286,7 @@ function renderProgrammes(programmes){
 
       .sort((a,b)=>{
 
+
         const priority = {
 
           progress:0,
@@ -3497,6 +3297,7 @@ function renderProgrammes(programmes){
 
         const ap =
           priority[a.status] ?? 2;
+
 
         const bp =
           priority[b.status] ?? 2;
@@ -3510,7 +3311,8 @@ function renderProgrammes(programmes){
 
 
         return (
-          Number(a.sort_order || 999) -
+          Number(a.sort_order || 999)
+          -
           Number(b.sort_order || 999)
         );
 
@@ -3528,8 +3330,8 @@ function renderProgrammes(programmes){
 
         <br><br>
 
-        YOUR COMPLETED PROGRAMMES ARE
-        AVAILABLE UNDER QUALIFICATIONS.
+        VIEW THE PROGRAMME DIRECTORY
+        TO REVIEW YOUR CERTIFIED PROGRAMMES.
 
       </div>
 
@@ -3542,9 +3344,11 @@ function renderProgrammes(programmes){
 
   host.innerHTML =
     visible
+
       .map(
         renderProgramme
       )
+
       .join("");
 
 }
@@ -3669,6 +3473,7 @@ function renderProgramme(programme){
               )}
 
             </h3>
+
 
             <div class="programme-subtitle">
 
@@ -3801,7 +3606,7 @@ function renderRecentTraining(){
 
 
   const recent =
-    myEvents.slice(0,5);
+    myEvents.slice(0,6);
 
 
   host.innerHTML =
@@ -3833,6 +3638,7 @@ function renderRecentTraining(){
 
             <div>
 
+
               <div class="training-title">
 
                 ${escapeHtml(
@@ -3857,137 +3663,6 @@ function renderRecentTraining(){
 
               </div>
 
-            </div>
-
-
-          </div>
-
-        `;
-
-      })
-
-      .join("");
-
-}
-
-
-/* =========================================================
-   QUALIFICATIONS
-========================================================= */
-
-function renderQualifications(){
-
-  const host =
-    $("#qualificationList");
-
-
-  if(!myCertifications.length){
-
-    host.innerHTML = `
-
-      <div class="empty-state">
-
-        NO ACADEMY QUALIFICATIONS
-        EARNED YET.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const certMap = {};
-
-
-  certifications.forEach(cert=>{
-
-    certMap[
-      cert.certification_code
-    ] = cert;
-
-  });
-
-
-  const sorted =
-    [...myCertifications]
-
-      .sort(
-        (a,b)=>
-
-          new Date(
-            b.awarded_at || 0
-          )
-
-          -
-
-          new Date(
-            a.awarded_at || 0
-          )
-      )
-
-      .slice(0,5);
-
-
-  host.innerHTML =
-    sorted
-
-      .map(record=>{
-
-
-        const cert =
-          certMap[
-            record.certification_code
-          ] || {};
-
-
-        return `
-
-          <div class="qualification">
-
-
-            <div class="qual-icon">
-
-              <i
-                class="fa-solid
-                       fa-award"
-              ></i>
-
-            </div>
-
-
-            <div>
-
-              <div class="qual-title">
-
-                ${escapeHtml(
-                  cert.name ||
-                  record.certification_code
-                )}
-
-              </div>
-
-
-              <div class="qual-date">
-
-                EARNED //
-
-                ${formatDate(
-                  record.awarded_at
-                )}
-
-              </div>
-
-            </div>
-
-
-            <div class="qual-code">
-
-              ${escapeHtml(
-                record.certification_code
-              )}
 
             </div>
 
@@ -4083,18 +3758,12 @@ document.addEventListener(
     try{
 
 
-      /* -----------------------------------------------
-         AUTH
-      ----------------------------------------------- */
-
       const session =
         await requireAuth();
 
 
       if(!session){
-
         return;
-
       }
 
 
@@ -4105,11 +3774,6 @@ document.addEventListener(
       me =
         session.user.id;
 
-
-
-      /* -----------------------------------------------
-         LOAD REAL ACADEMY DATA
-      ----------------------------------------------- */
 
       await loadAcademyData();
 
@@ -4139,6 +3803,16 @@ document.addEventListener(
 
       `;
 
+
+      $("#recentTraining").innerHTML = `
+
+        <div class="empty-state">
+
+          TRAINING LOG UNAVAILABLE.
+
+        </div>
+
+      `;
 
     }
 
