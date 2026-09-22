@@ -1140,9 +1140,15 @@ async function loadTimeline(uid, certCode){
       .eq('certification_code', certCode)
       .order('sort_order'),
     sb.from('user_training_events')
-      .select('event_code, completed_at, approved_by, approved_at')
+      .select('event_code, completed_at, approved_by, approved_at, notes')
       .eq('user_id', uid)
   ])
+  const approverIds = [...new Set((recs || []).map(r => r.approved_by).filter(Boolean))]
+  let approverMap = new Map()
+  if(approverIds.length){
+    const { data: approvers } = await sb.from('profiles').select('user_id,handle,display_name').in('user_id', approverIds)
+    approverMap = new Map((approvers || []).map(p => [p.user_id, p.handle || p.display_name || p.user_id.slice(0,8)]))
+  }
   const done = new Map((recs || []).map(r => [r.event_code, r]))
 
   if(!reqs?.length){
@@ -1161,7 +1167,7 @@ async function loadTimeline(uid, certCode){
         <div class="small">${esc(r.training_events?.description || '')}</div>
         ${ok ? `<div class="small">
           Completed: ${new Date(rec.approved_at || rec.completed_at).toLocaleString()}
-          ${rec.approved_by ? ` • by ${esc(rec.approved_by.slice(0,8))}` : ''}
+          ${rec.approved_by ? ` • Approved by ${esc(approverMap.get(rec.approved_by) || rec.approved_by.slice(0,8))}` : ''}${rec.notes ? ` • ${esc(rec.notes)}` : ''}
         </div>` : ''}
       </div>
       <div>
@@ -1174,10 +1180,11 @@ async function loadTimeline(uid, certCode){
 
   tl.querySelectorAll('button[data-add]').forEach(b => {
     b.onclick = async () => {
-      const { error } = await sb.from('user_training_events').insert({
-        user_id: uid,
-        event_code: b.dataset.add,
-        completed_at: new Date().toISOString()
+      const { error } = await sb.rpc('admin_grant_training_event', {
+        p_trainee: uid,
+        p_event_code: b.dataset.add,
+        p_certification_code: certCode,
+        p_notes: 'Administrative grant'
       })
       if(error) return alert('Grant failed: ' + error.message)
       await Promise.all([loadTimeline(uid, certCode), loadProgress(uid)])
