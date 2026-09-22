@@ -113,15 +113,34 @@ async function init(){
     const sb=getSupabase();
     const {data:{user}}=await sb.auth.getUser();
     if(!user) return;
-    const {data:rows,error}=await sb.from("user_training_events").select("event_code,approved_at,approved_by").eq("user_id",user.id).in("event_code",MED_EVENTS);
+    const [{data:certRows,error:certError},{data:rows,error}] = await Promise.all([
+      sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",user.id).eq("certification_code","MED"),
+      sb.from("user_training_events").select("event_code,approved_at,approved_by").eq("user_id",user.id).in("event_code",MED_EVENTS)
+    ]);
+    if(certError) throw certError;
     if(error) throw error;
-    approved=new Set((rows||[]).filter(r=>r.approved_at&&r.approved_by).map(r=>r.event_code));
+
+    const isCertified=(certRows||[]).length>0;
+    approved=isCertified
+      ? new Set(MED_EVENTS)
+      : new Set((rows||[]).filter(r=>r.approved_at&&r.approved_by).map(r=>r.event_code));
+
     const completed=MED_EVENTS.filter(e=>approved.has(e)).length;
     document.getElementById("progressFill").style.width=(completed/MED_EVENTS.length*100)+"%";
     document.getElementById("progressText").textContent=completed+" / "+MED_EVENTS.length+" TRAINING EVENTS";
     const status=document.getElementById("programmeStatus"),note=document.getElementById("programmeStatusNote");
-    if(completed===MED_EVENTS.length){status.textContent="✓ REQUIREMENTS COMPLETE";status.style.color="var(--green)";note.textContent="All MED training events have been instructor-approved.";}
-    else{status.textContent=completed?"◉ IN TRAINING":"○ NOT STARTED";note.textContent=completed?"Continue with the next available practical module.":"Begin with MED-01 Medical Equipment & Loadout.";}
+    if(isCertified){
+      status.textContent="✓ MED CERTIFIED";
+      status.style.color="var(--green)";
+      note.textContent="MED certification awarded. All programme modules are available for review.";
+    }else if(completed===MED_EVENTS.length){
+      status.textContent="✓ REQUIREMENTS COMPLETE";
+      status.style.color="var(--green)";
+      note.textContent="All MED training events have been instructor-approved.";
+    }else{
+      status.textContent=completed?"◉ IN TRAINING":"○ NOT STARTED";
+      note.textContent=completed?"Continue with the next available practical module.":"Begin with MED-01 Medical Equipment & Loadout.";
+    }
     const summary=document.getElementById("requirementsSummary");summary.innerHTML="";
     MED_EVENTS.forEach((code,i)=>{
       const span=document.createElement("span");
