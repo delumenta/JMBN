@@ -2406,6 +2406,12 @@ tbody tr:hover{
    Random stars + soft nebula dust + subtle planetary horizon
 ========================================================= */
 
+
+/* =========================================================
+   JMBN CLEAN SPACE BACKDROP
+   Random starfield + soft ambient gas only
+========================================================= */
+
 #jmbnSignatureBackdrop{
   position:fixed;
   inset:0;
@@ -2414,46 +2420,92 @@ tbody tr:hover{
   overflow:hidden;
 
   background:
-    radial-gradient(ellipse at 16% 18%,
-      rgba(216,180,76,.035) 0%,
-      rgba(216,180,76,.012) 24%,
-      transparent 52%),
+    radial-gradient(
+      ellipse 62vw 34vh at 16% 20%,
+      rgba(216,180,76,.026) 0%,
+      rgba(156,132,76,.012) 34%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 58vw 32vh at 82% 34%,
+      rgba(214,203,166,.018) 0%,
+      rgba(149,126,72,.008) 38%,
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 72vw 28vh at 50% 100%,
+      rgba(216,180,76,.012) 0%,
+      transparent 70%
+    );
 
-    radial-gradient(ellipse at 78% 30%,
-      rgba(205,190,150,.025) 0%,
-      rgba(216,180,76,.010) 28%,
-      transparent 58%),
-
-    linear-gradient(115deg,
-      transparent 12%,
-      rgba(216,180,76,.012) 42%,
-      rgba(255,238,185,.008) 56%,
-      transparent 82%);
+  filter:blur(22px);
+  opacity:.72;
 }
 
-#jmbnSignatureBackdrop::before{
-  content:"";
-  position:absolute;
-
-  left:-18vw;
-  top:17vh;
-
-  width:138vw;
-  height:31vh;
-
-  transform:rotate(-12deg);
-
-  background:
-    radial-gradient(ellipse at 50% 50%,
-      rgba(220,196,130,.11) 0%,
-      rgba(137,119,79,.065) 24%,
-      rgba(68,60,45,.028) 48%,
-      transparent 73%);
-
-  filter:blur(46px);
-  opacity:.30;
+#jmbnSignatureBackdrop::before,
+#jmbnSignatureBackdrop::after{
+  content:none !important;
+  display:none !important;
 }
 
+
+
+/* =========================================================
+   OPERATIONS — SOLID BLACK INTERIOR PANELS
+   Keep space effects outside the interface only
+========================================================= */
+
+.command-hero,
+.command-stat,
+.console-panel,
+.ongoing,
+.op-card,
+.day-header,
+.modal{
+  background:#030403 !important;
+  background-image:none !important;
+}
+
+.command-hero::after{
+  display:none !important;
+}
+
+.command-stat{
+  box-shadow:
+    inset 0 0 0 1px rgba(255,224,116,.018),
+    0 10px 30px rgba(0,0,0,.42) !important;
+}
+
+.console-panel{
+  box-shadow:
+    inset 0 0 0 1px rgba(255,224,116,.018),
+    0 14px 34px rgba(0,0,0,.46) !important;
+}
+
+.ongoing{
+  background:#040504 !important;
+}
+
+.op-card{
+  background:#040504 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,224,116,.012),
+    0 7px 20px rgba(0,0,0,.24) !important;
+}
+
+.day-header{
+  background:#050604 !important;
+}
+
+.timeline-heading-icon{
+  background:#050604 !important;
+  background-image:none !important;
+}
+
+.modal{
+  background:#040504 !important;
+  background-image:none !important;
+}
 
 </style>
 
