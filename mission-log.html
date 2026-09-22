@@ -2398,88 +2398,89 @@ tbody tr:hover{
 
 
 
+
+
+
 /* =========================================================
-   JMBN SUBTLE HUD GRID
-   Sparse tactical grid + orbital arcs over the starfield
+   JMBN SIGNATURE SPACE BACKDROP
+   Random stars + soft nebula dust + subtle planetary horizon
 ========================================================= */
 
-#jmbnHudGrid{
+#jmbnSignatureBackdrop{
   position:fixed;
   inset:0;
   z-index:0;
   pointer-events:none;
   overflow:hidden;
 
-  background-image:
-    linear-gradient(rgba(240,210,112,.026) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240,210,112,.026) 1px, transparent 1px);
+  background:
+    radial-gradient(ellipse at 16% 18%,
+      rgba(216,180,76,.035) 0%,
+      rgba(216,180,76,.012) 24%,
+      transparent 52%),
 
-  background-size:
-    120px 120px,
-    120px 120px;
+    radial-gradient(ellipse at 78% 30%,
+      rgba(205,190,150,.025) 0%,
+      rgba(216,180,76,.010) 28%,
+      transparent 58%),
 
-  background-position:
-    0 0,
-    0 0;
-
-  opacity:.34;
-
-  -webkit-mask-image:
-    radial-gradient(circle at 50% 42%, #000 0 58%, transparent 92%);
-  mask-image:
-    radial-gradient(circle at 50% 42%, #000 0 58%, transparent 92%);
-
-  animation:jmbnHudDrift 120s linear infinite;
+    linear-gradient(115deg,
+      transparent 12%,
+      rgba(216,180,76,.012) 42%,
+      rgba(255,238,185,.008) 56%,
+      transparent 82%);
 }
 
-#jmbnHudGrid::before{
+#jmbnSignatureBackdrop::before{
   content:"";
   position:absolute;
-  width:min(78vw,1080px);
-  aspect-ratio:1;
-  left:-24vw;
-  top:10vh;
 
-  border:
-    1px solid rgba(240,210,112,.065);
+  left:-18vw;
+  top:17vh;
 
-  border-radius:50%;
+  width:138vw;
+  height:31vh;
 
-  box-shadow:
-    0 0 0 140px rgba(240,210,112,.024),
-    0 0 0 280px rgba(240,210,112,.015);
+  transform:rotate(-12deg);
 
-  opacity:.72;
+  background:
+    radial-gradient(ellipse at 50% 50%,
+      rgba(220,196,130,.11) 0%,
+      rgba(137,119,79,.065) 24%,
+      rgba(68,60,45,.028) 48%,
+      transparent 73%);
+
+  filter:blur(46px);
+  opacity:.30;
 }
 
-#jmbnHudGrid::after{
+#jmbnSignatureBackdrop::after{
   content:"";
   position:absolute;
-  width:min(54vw,760px);
-  aspect-ratio:1;
-  right:-18vw;
-  bottom:-22vh;
 
-  border:
-    1px solid rgba(240,210,112,.05);
+  left:50%;
+  bottom:-77vh;
+
+  width:158vw;
+  height:92vh;
+
+  transform:translateX(-50%);
 
   border-radius:50%;
+  border-top:1px solid rgba(240,210,112,.22);
+
+  background:
+    radial-gradient(ellipse at 50% 0%,
+      rgba(240,210,112,.075) 0%,
+      rgba(240,210,112,.025) 13%,
+      rgba(0,0,0,.58) 31%,
+      rgba(0,0,0,.94) 62%);
 
   box-shadow:
-    0 0 0 110px rgba(240,210,112,.018);
+    0 -3px 22px rgba(240,210,112,.09),
+    0 -18px 58px rgba(216,180,76,.035);
 
-  opacity:.58;
-}
-
-@keyframes jmbnHudDrift{
-  from{ background-position:0 0,0 0; }
-  to{ background-position:-240px -120px,-240px -120px; }
-}
-
-@media (prefers-reduced-motion:reduce){
-  #jmbnHudGrid{
-    animation:none;
-  }
+  opacity:.92;
 }
 
 </style>
@@ -2490,7 +2491,7 @@ tbody tr:hover{
 <body>
 
 <canvas id="jmbnStarfield" aria-hidden="true"></canvas>
-<div id="jmbnHudGrid" aria-hidden="true"></div>
+<div id="jmbnSignatureBackdrop" aria-hidden="true"></div>
 
 
 
