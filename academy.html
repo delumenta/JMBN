@@ -2795,8 +2795,10 @@ function formatDate(value){
 function getProgrammeUrl(code){
 
   return (
-    "AP-" +
-    encodeURIComponent(code) +
+    "AP/" +
+    encodeURIComponent(
+      String(code || "").toLowerCase()
+    ) +
     ".html"
   );
 
