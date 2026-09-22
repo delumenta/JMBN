@@ -2066,6 +2066,72 @@ body::before{
 
 }
 
+
+/* =========================================================
+   ACADEMY OVERVIEW CINEMATIC HERO // APOV
+========================================================= */
+.hero-body{
+  position:relative;
+  min-height:570px;
+  display:block;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,
+      rgba(1,3,2,.98) 0%,
+      rgba(1,3,2,.93) 27%,
+      rgba(1,3,2,.70) 44%,
+      rgba(1,3,2,.22) 66%,
+      rgba(1,3,2,.06) 100%),
+    linear-gradient(0deg,rgba(0,0,0,.72),transparent 42%),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/certification/APOV.png")
+      center center / cover no-repeat;
+}
+.hero-body::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18));
+}
+.hero-copy{
+  position:relative;
+  z-index:2;
+  width:min(610px,55%);
+  padding:48px 0 44px 48px;
+}
+.hero-copy p{max-width:590px}
+.hero-welcome{margin-bottom:28px}
+.hero-rule{margin:27px 0 34px}
+.academy-statement{margin:32px 0 28px}
+.hero-journey{max-width:560px!important}
+.hero-art{display:none!important}
+
+@media(max-width:1150px){
+  .hero-body{
+    min-height:620px;
+    background-position:58% center;
+  }
+  .hero-copy{
+    width:min(610px,62%);
+    padding:44px 0 42px 42px;
+  }
+}
+@media(max-width:760px){
+  .hero-body{
+    min-height:760px;
+    background:
+      linear-gradient(90deg,rgba(1,3,2,.95) 0%,rgba(1,3,2,.78) 58%,rgba(1,3,2,.32) 100%),
+      linear-gradient(0deg,rgba(0,0,0,.72),transparent 42%),
+      url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/certification/APOV.png")
+        62% center / cover no-repeat;
+  }
+  .hero-copy{
+    width:100%;
+    padding:40px 28px 42px;
+  }
+  .hero-copy p{max-width:92%}
+}
+
 </style>
 
 </head>
