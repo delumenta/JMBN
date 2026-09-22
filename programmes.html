@@ -630,9 +630,7 @@ button{
 ========================================================= */
 
 .page-hero{
-
   margin-bottom:20px;
-
 }
 
 .hero-inner{
@@ -718,9 +716,7 @@ button{
 }
 
 .hero-status strong{
-
   color:#9c957e;
-
 }
 
 
@@ -729,9 +725,7 @@ button{
 ========================================================= */
 
 .summary{
-
   margin-bottom:20px;
-
 }
 
 .summary-grid{
@@ -815,9 +809,7 @@ button{
 ========================================================= */
 
 .programme-frame{
-
   margin-bottom:20px;
-
 }
 
 .section-header{
@@ -950,7 +942,7 @@ button{
   grid-template-columns:
     repeat(2,minmax(0,1fr));
 
-  gap:18px;
+  gap:20px;
 
 }
 
@@ -962,8 +954,6 @@ button{
 .programme-card{
 
   position:relative;
-
-  min-height:290px;
 
   overflow:hidden;
 
@@ -995,7 +985,8 @@ button{
 
   transition:
     border-color .15s ease,
-    background .15s ease;
+    background .15s ease,
+    transform .15s ease;
 
 }
 
@@ -1013,6 +1004,8 @@ button{
     ),
 
     #090b08;
+
+  transform:translateY(-2px);
 
 }
 
@@ -1038,15 +1031,7 @@ button{
 }
 
 .card-inner{
-
-  min-height:290px;
-
-  display:grid;
-
-  grid-template-columns:
-    170px
-    minmax(0,1fr);
-
+  min-height:100%;
 }
 
 
@@ -1058,14 +1043,16 @@ button{
 
   position:relative;
 
-  overflow:hidden;
+  width:100%;
 
-  min-height:290px;
+  aspect-ratio:16 / 9;
+
+  overflow:hidden;
 
   background:#050605;
 
-  border-right:
-    1px solid rgba(214,180,76,.13);
+  border-bottom:
+    1px solid rgba(214,180,76,.20);
 
 }
 
@@ -1079,11 +1066,13 @@ button{
 
   object-fit:cover;
 
-  opacity:.66;
+  object-position:center;
+
+  opacity:.82;
 
   transition:
-    transform .3s ease,
-    opacity .3s ease;
+    transform .35s ease,
+    opacity .35s ease;
 
 }
 
@@ -1092,7 +1081,7 @@ button{
 
   transform:scale(1.035);
 
-  opacity:.78;
+  opacity:.95;
 
 }
 
@@ -1103,13 +1092,40 @@ button{
   position:absolute;
   inset:0;
 
+  pointer-events:none;
+
   background:
 
     linear-gradient(
       180deg,
-      rgba(0,0,0,.04),
-      rgba(0,0,0,.80)
+      rgba(0,0,0,.02) 25%,
+      rgba(0,0,0,.15) 60%,
+      rgba(0,0,0,.88) 100%
     );
+
+}
+
+.card-art::before{
+
+  content:"";
+
+  position:absolute;
+
+  z-index:2;
+
+  top:16px;
+  left:16px;
+
+  width:26px;
+  height:26px;
+
+  border-top:
+    1px solid rgba(240,210,112,.65);
+
+  border-left:
+    1px solid rgba(240,210,112,.65);
+
+  pointer-events:none;
 
 }
 
@@ -1117,17 +1133,37 @@ button{
 
   position:absolute;
 
-  z-index:2;
+  z-index:3;
 
-  left:18px;
-  bottom:18px;
+  left:21px;
+  bottom:17px;
 
   color:#fff4c8;
 
-  font-size:28px;
+  font-size:30px;
   font-weight:700;
 
-  letter-spacing:.08em;
+  letter-spacing:.10em;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.85);
+
+}
+
+.card-art-label{
+
+  position:absolute;
+
+  z-index:3;
+
+  right:18px;
+  bottom:19px;
+
+  color:rgba(255,244,200,.60);
+
+  font-size:7px;
+
+  letter-spacing:.20em;
 
 }
 
@@ -1141,7 +1177,7 @@ button{
   position:relative;
 
   padding:
-    24px
+    23px
     25px
     22px;
 
@@ -1256,9 +1292,7 @@ button{
 ========================================================= */
 
 .progress-block{
-
-  margin-top:28px;
-
+  margin-top:27px;
 }
 
 .progress-line{
@@ -1304,9 +1338,7 @@ button{
 
 .certified
 .progress-fill{
-
   background:var(--green);
-
 }
 
 
@@ -1664,9 +1696,7 @@ button{
 
 .requirement-row.done
 .requirement-state{
-
   color:var(--green);
-
 }
 
 .no-syllabus{
@@ -1824,6 +1854,10 @@ button{
     grid-template-columns:1fr;
   }
 
+  .card-art{
+    aspect-ratio:2 / 1;
+  }
+
   .summary-grid{
     grid-template-columns:repeat(2,1fr);
   }
@@ -1890,10 +1924,7 @@ button{
 
   body.sidebar-open
   .academy-sidebar{
-
-    transform:
-      translateX(0);
-
+    transform:translateX(0);
   }
 
   body.sidebar-open::after{
@@ -1982,33 +2013,19 @@ button{
   }
 
   .programme-grid{
-
-    padding:
-      16px;
-
-  }
-
-  .card-inner{
-
-    grid-template-columns:1fr;
-
+    padding:16px;
   }
 
   .card-art{
+    aspect-ratio:1 / 1;
+  }
 
-    min-height:190px;
-
-    border-right:0;
-
-    border-bottom:
-      1px solid rgba(214,180,76,.13);
-
+  .card-code{
+    font-size:26px;
   }
 
   .modal-overlay{
-
     padding:12px;
-
   }
 
   .programme-modal{
@@ -2069,9 +2086,7 @@ button{
   }
 
   .filter-button{
-
     flex:1;
-
   }
 
   .card-body{
@@ -2083,9 +2098,11 @@ button{
   }
 
   .card-top{
-
     flex-direction:column;
+  }
 
+  .card-art-label{
+    display:none;
   }
 
 }
@@ -2113,11 +2130,9 @@ button{
     <i class="fa-solid fa-bars"></i>
   </button>
 
-
   <div class="mobile-title">
     JMBN // ACADEMY
   </div>
-
 
   <a
     class="mobile-manifest"
@@ -2848,6 +2863,8 @@ async function loadAcademy(){
         certification_code,
         name,
         image_url,
+        big_art_cover,
+        small_art_cover,
         sort_order,
         is_active
       `)
@@ -3101,17 +3118,14 @@ function buildProgrammeData(){
 
       /*
         -----------------------------------------------------
-        PREREQUISITES
+        PROGRAMME PREREQUISITES
         -----------------------------------------------------
 
-        There is currently no programme-to-programme
-        prerequisite table in the existing Academy schema.
+        No programme-to-programme prerequisite table
+        currently exists in this Academy schema.
 
-        Therefore prerequisiteMet remains true for now.
-
-        Once we create the prerequisite table, this is where
-        we calculate whether BMT / SOC / etc. are required.
-
+        Until that table is created, programmes remain
+        accessible when not already certified.
       */
 
       const prerequisiteMet = true;
@@ -3349,17 +3363,6 @@ function renderProgrammes(){
   }
 
 
-  /*
-    Useful display order:
-
-    1. Undergoing
-    2. Available
-    3. Locked
-    4. Certified
-
-    Within each group use certification sort_order.
-  */
-
   const priority = {
 
     undergoing:0,
@@ -3544,17 +3547,39 @@ function renderProgrammeCard(programme){
   }
 
 
+  /*
+    ---------------------------------------------------------
+    COURSE ART
+    ---------------------------------------------------------
+
+    Primary:
+      big_art_cover
+
+    Fallback:
+      image_url (programme insignia)
+
+    This means existing/future programmes will still display
+    something even if no cinematic artwork has been uploaded.
+  */
+
+  const artworkUrl =
+    programme.big_art_cover ||
+    programme.image_url ||
+    "";
+
+
   const image =
-    programme.image_url
+    artworkUrl
     ?
     `
       <img
         src="${escapeHtml(
-          programme.image_url
+          artworkUrl
         )}"
         alt="${escapeHtml(
           programme.name
         )}"
+        loading="lazy"
       >
     `
     :
@@ -3588,6 +3613,10 @@ function renderProgrammeCard(programme){
               programme.certification_code
             )}
 
+          </div>
+
+          <div class="card-art-label">
+            JMBN // ACADEMY
           </div>
 
         </div>
@@ -4016,13 +4045,6 @@ function renderModalPrerequisites(
   const host =
     $("#modalPrerequisites");
 
-
-  /*
-    Programme prerequisite records do not exist
-    in the current database yet.
-
-    So do NOT invent prerequisite information.
-  */
 
   if(
     programme.prerequisiteMet
