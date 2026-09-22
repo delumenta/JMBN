@@ -1,0 +1,4348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<title>JMBN // Academy Programmes</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+<link
+  rel="icon"
+  type="image/png"
+  href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+  sizes="32x32"
+>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+
+
+<style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root{
+
+  --bg:#020302;
+
+  --panel:#070906;
+  --panel2:#0a0c08;
+  --panel3:#0e110c;
+
+  --gold:#f0d270;
+  --gold2:#d6b44c;
+  --gold3:#8d7430;
+
+  --text:#f3ecd2;
+  --text2:#d8d1b8;
+
+  --muted:#928c77;
+  --muted2:#646154;
+
+  --green:#70d98c;
+  --blue:#79bde8;
+  --red:#e97b72;
+
+  --line:rgba(214,180,76,.54);
+  --line-soft:rgba(214,180,76,.14);
+
+  --sidebar-width:238px;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  min-height:100%;
+  background:var(--bg);
+}
+
+body{
+
+  margin:0;
+
+  min-height:100vh;
+
+  color:var(--text);
+
+  font-family:"Play",sans-serif;
+
+  background:
+
+    radial-gradient(
+      circle at 78% 8%,
+      rgba(177,139,39,.08),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(177,139,39,.035),
+      transparent 35%
+    ),
+
+    #020302;
+
+}
+
+body::before{
+
+  content:"";
+
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+
+  background-image:
+
+    linear-gradient(
+      rgba(240,210,112,.014) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.014) 1px,
+      transparent 1px
+    );
+
+  background-size:52px 52px;
+
+}
+
+a{
+  color:inherit;
+}
+
+button{
+  font:inherit;
+}
+
+
+/* =========================================================
+   MOBILE BAR
+========================================================= */
+
+.mobile-bar{
+
+  display:none;
+
+  position:sticky;
+  top:0;
+
+  z-index:200;
+
+  height:58px;
+
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 15px;
+
+  background:rgba(3,4,3,.97);
+
+  border-bottom:
+    1px solid rgba(214,180,76,.45);
+
+  backdrop-filter:blur(10px);
+
+}
+
+.mobile-menu{
+
+  width:40px;
+  height:40px;
+
+  border:0;
+  background:none;
+
+  color:var(--gold);
+
+  font-size:20px;
+
+}
+
+.mobile-title{
+
+  font-size:12px;
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+}
+
+.mobile-manifest{
+
+  color:#a9a38d;
+
+  text-decoration:none;
+
+  font-size:9px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.academy-app{
+
+  min-height:100vh;
+
+  display:grid;
+
+  grid-template-columns:
+    var(--sidebar-width)
+    minmax(0,1fr);
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.academy-sidebar{
+
+  min-height:100vh;
+
+  position:relative;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(10,12,9,.99),
+      rgba(3,4,3,.99)
+    );
+
+  border-right:
+    1px solid rgba(214,180,76,.36);
+
+}
+
+.sidebar-inner{
+
+  position:sticky;
+  top:0;
+
+  min-height:100vh;
+
+  padding-bottom:30px;
+
+}
+
+.sidebar-manifest{
+
+  min-height:52px;
+
+  padding:0 21px;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  color:#777365;
+
+  text-decoration:none;
+
+  font-size:10px;
+
+  letter-spacing:.14em;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.sidebar-manifest:hover{
+  color:var(--gold);
+}
+
+.sidebar-heading{
+
+  padding:
+    25px
+    22px
+    18px;
+
+}
+
+.sidebar-kicker{
+
+  color:#6d695c;
+
+  font-size:8px;
+
+  letter-spacing:.27em;
+
+}
+
+.sidebar-heading strong{
+
+  display:block;
+
+  margin-top:5px;
+
+  color:var(--gold);
+
+  font-size:20px;
+
+  letter-spacing:.13em;
+
+}
+
+.sidebar-network{
+
+  margin-top:6px;
+
+  color:#817c6c;
+
+  font-size:8px;
+
+  letter-spacing:.24em;
+
+}
+
+.sidebar-section-label{
+
+  padding:
+    10px
+    22px;
+
+  color:#59574e;
+
+  font-size:8px;
+
+  letter-spacing:.25em;
+
+}
+
+.nav-item{
+
+  position:relative;
+
+  min-height:48px;
+
+  padding:0 21px;
+
+  display:flex;
+  align-items:center;
+
+  gap:14px;
+
+  color:#a6a18f;
+
+  text-decoration:none;
+
+  font-size:12px;
+
+  letter-spacing:.08em;
+
+  border-left:
+    3px solid transparent;
+
+  transition:.15s ease;
+
+}
+
+.nav-item i{
+
+  width:20px;
+
+  text-align:center;
+
+  font-size:15px;
+
+}
+
+.nav-item:hover{
+
+  color:var(--text);
+
+  background:
+    rgba(240,210,112,.035);
+
+}
+
+.nav-item.active{
+
+  color:var(--gold);
+
+  border-left-color:
+    var(--gold);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.15),
+      rgba(240,210,112,.025)
+    );
+
+}
+
+.nav-item.active::after{
+
+  content:"";
+
+  position:absolute;
+
+  right:0;
+
+  width:2px;
+  height:20px;
+
+  background:var(--gold);
+
+}
+
+.sidebar-divider{
+
+  height:1px;
+
+  margin:
+    12px
+    21px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(214,180,76,.45),
+      transparent
+    );
+
+}
+
+.sidebar-footer{
+
+  padding:
+    25px
+    24px;
+
+  color:#5f5c50;
+
+  font-size:8px;
+
+  line-height:2;
+
+  letter-spacing:.32em;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.academy-main{
+
+  min-width:0;
+
+  padding:
+    28px
+    30px
+    52px;
+
+}
+
+.container{
+
+  width:100%;
+  max-width:1500px;
+
+  margin:0 auto;
+
+}
+
+
+/* =========================================================
+   FANCY FRAME
+========================================================= */
+
+.frame{
+
+  position:relative;
+
+  overflow:hidden;
+
+  border:
+    1px solid rgba(214,180,76,.67);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.025),
+      transparent 16%
+    ),
+
+    linear-gradient(
+      180deg,
+      rgba(8,10,7,.98),
+      rgba(3,5,3,.99)
+    );
+
+  clip-path:
+
+    polygon(
+      18px 0,
+      calc(100% - 18px) 0,
+      100% 18px,
+      100% calc(100% - 18px),
+      calc(100% - 18px) 100%,
+      18px 100%,
+      0 calc(100% - 18px),
+      0 18px
+    );
+
+}
+
+.frame::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:12px;
+
+  pointer-events:none;
+
+  border:
+    1px solid rgba(214,180,76,.09);
+
+  clip-path:
+
+    polygon(
+      9px 0,
+      100% 0,
+      100% calc(100% - 9px),
+      calc(100% - 9px) 100%,
+      0 100%,
+      0 9px
+    );
+
+}
+
+.frame::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:32px;
+
+  width:100px;
+  height:2px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      var(--gold),
+      rgba(240,210,112,.20),
+      transparent
+    );
+
+}
+
+.corner{
+
+  position:absolute;
+
+  pointer-events:none;
+
+  z-index:3;
+
+}
+
+.corner-tl{
+
+  top:17px;
+  left:17px;
+
+  width:18px;
+  height:18px;
+
+  border-top:
+    1px solid var(--gold);
+
+  border-left:
+    1px solid var(--gold);
+
+}
+
+.corner-br{
+
+  right:17px;
+  bottom:17px;
+
+  width:18px;
+  height:18px;
+
+  border-right:
+    1px solid var(--gold);
+
+  border-bottom:
+    1px solid var(--gold);
+
+}
+
+
+/* =========================================================
+   PAGE HERO
+========================================================= */
+
+.page-hero{
+
+  margin-bottom:20px;
+
+}
+
+.hero-inner{
+
+  position:relative;
+  z-index:2;
+
+  padding:
+    45px
+    46px
+    42px;
+
+}
+
+.system-line{
+
+  color:var(--gold);
+
+  font-size:10px;
+  font-weight:700;
+
+  letter-spacing:.24em;
+
+}
+
+.page-title{
+
+  margin:
+    17px
+    0
+    15px;
+
+  color:var(--gold);
+
+  font-size:
+    clamp(40px,5vw,68px);
+
+  line-height:.95;
+
+  letter-spacing:.06em;
+
+}
+
+.page-description{
+
+  max-width:760px;
+
+  margin:0;
+
+  color:#a39d8b;
+
+  font-size:14px;
+
+  line-height:1.8;
+
+}
+
+.hero-bottom{
+
+  margin-top:34px;
+
+  padding-top:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  border-top:
+    1px solid rgba(214,180,76,.15);
+
+}
+
+.hero-status{
+
+  color:#625f53;
+
+  font-size:8px;
+
+  letter-spacing:.20em;
+
+}
+
+.hero-status strong{
+
+  color:#9c957e;
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summary{
+
+  margin-bottom:20px;
+
+}
+
+.summary-grid{
+
+  position:relative;
+  z-index:2;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+}
+
+.summary-item{
+
+  min-height:104px;
+
+  padding:
+    22px
+    26px;
+
+  display:flex;
+  align-items:center;
+
+  gap:16px;
+
+}
+
+.summary-item +
+.summary-item{
+
+  border-left:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.summary-icon{
+
+  width:44px;
+  height:44px;
+
+  flex:
+    0 0 44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.4);
+
+  color:var(--gold);
+
+}
+
+.summary-value{
+
+  font-size:25px;
+  font-weight:700;
+
+  color:#f7e8aa;
+
+}
+
+.summary-label{
+
+  margin-top:4px;
+
+  color:#817c6d;
+
+  font-size:8px;
+
+  letter-spacing:.13em;
+
+}
+
+
+/* =========================================================
+   PROGRAMME SECTION
+========================================================= */
+
+.programme-frame{
+
+  margin-bottom:20px;
+
+}
+
+.section-header{
+
+  position:relative;
+  z-index:2;
+
+  min-height:60px;
+
+  padding:
+    0
+    27px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+
+}
+
+.section-title{
+
+  color:var(--gold);
+
+  font-size:12px;
+  font-weight:700;
+
+  letter-spacing:.20em;
+
+}
+
+.section-code{
+
+  color:#545248;
+
+  font-size:8px;
+
+  letter-spacing:.24em;
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filters{
+
+  position:relative;
+  z-index:2;
+
+  padding:
+    18px
+    26px;
+
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.12);
+
+}
+
+.filter-button{
+
+  min-height:34px;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid rgba(214,180,76,.22);
+
+  background:
+    rgba(240,210,112,.015);
+
+  color:#777365;
+
+  cursor:pointer;
+
+  font-size:8px;
+  font-weight:700;
+
+  letter-spacing:.13em;
+
+}
+
+.filter-button:hover{
+
+  color:var(--text);
+
+  border-color:
+    rgba(214,180,76,.45);
+
+}
+
+.filter-button.active{
+
+  color:var(--gold);
+
+  border-color:
+    rgba(214,180,76,.65);
+
+  background:
+    rgba(240,210,112,.06);
+
+}
+
+
+/* =========================================================
+   PROGRAMME GRID
+========================================================= */
+
+.programme-grid{
+
+  position:relative;
+  z-index:2;
+
+  padding:24px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:18px;
+
+}
+
+
+/* =========================================================
+   PROGRAMME CARD
+========================================================= */
+
+.programme-card{
+
+  position:relative;
+
+  min-height:290px;
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  border:
+    1px solid rgba(214,180,76,.30);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.025),
+      transparent 25%
+    ),
+
+    #080a07;
+
+  clip-path:
+
+    polygon(
+      14px 0,
+      100% 0,
+      100% calc(100% - 14px),
+      calc(100% - 14px) 100%,
+      0 100%,
+      0 14px
+    );
+
+  transition:
+    border-color .15s ease,
+    background .15s ease;
+
+}
+
+.programme-card:hover{
+
+  border-color:
+    rgba(240,210,112,.72);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.055),
+      transparent 28%
+    ),
+
+    #090b08;
+
+}
+
+.programme-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:22px;
+  bottom:0;
+
+  width:65px;
+  height:2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--gold),
+      transparent
+    );
+
+}
+
+.card-inner{
+
+  min-height:290px;
+
+  display:grid;
+
+  grid-template-columns:
+    170px
+    minmax(0,1fr);
+
+}
+
+
+/* =========================================================
+   PROGRAMME ART
+========================================================= */
+
+.card-art{
+
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:290px;
+
+  background:#050605;
+
+  border-right:
+    1px solid rgba(214,180,76,.13);
+
+}
+
+.card-art img{
+
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  opacity:.66;
+
+  transition:
+    transform .3s ease,
+    opacity .3s ease;
+
+}
+
+.programme-card:hover
+.card-art img{
+
+  transform:scale(1.035);
+
+  opacity:.78;
+
+}
+
+.card-art::after{
+
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.04),
+      rgba(0,0,0,.80)
+    );
+
+}
+
+.card-code{
+
+  position:absolute;
+
+  z-index:2;
+
+  left:18px;
+  bottom:18px;
+
+  color:#fff4c8;
+
+  font-size:28px;
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.card-body{
+
+  position:relative;
+
+  padding:
+    24px
+    25px
+    22px;
+
+}
+
+.card-top{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+
+  gap:15px;
+
+}
+
+.card-name{
+
+  margin:0;
+
+  color:#eee7ce;
+
+  font-size:18px;
+
+  line-height:1.25;
+
+}
+
+.card-sub{
+
+  margin-top:7px;
+
+  color:#68665a;
+
+  font-size:8px;
+
+  letter-spacing:.15em;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+
+  flex:0 0 auto;
+
+  padding:
+    6px
+    9px;
+
+  border:1px solid;
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:.13em;
+
+  white-space:nowrap;
+
+}
+
+.status-certified{
+
+  color:var(--green);
+
+  border-color:
+    rgba(112,217,140,.40);
+
+  background:
+    rgba(112,217,140,.035);
+
+}
+
+.status-undergoing{
+
+  color:var(--gold);
+
+  border-color:
+    rgba(240,210,112,.52);
+
+  background:
+    rgba(240,210,112,.035);
+
+}
+
+.status-available{
+
+  color:#aaa698;
+
+  border-color:
+    rgba(170,166,152,.30);
+
+}
+
+.status-locked{
+
+  color:var(--red);
+
+  border-color:
+    rgba(233,123,114,.40);
+
+  background:
+    rgba(233,123,114,.025);
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-block{
+
+  margin-top:28px;
+
+}
+
+.progress-line{
+
+  display:flex;
+  justify-content:space-between;
+
+  gap:15px;
+
+  color:#7e796a;
+
+  font-size:8px;
+
+  letter-spacing:.10em;
+
+}
+
+.progress-track{
+
+  height:6px;
+
+  margin-top:9px;
+
+  background:#24251d;
+
+  overflow:hidden;
+
+}
+
+.progress-fill{
+
+  height:100%;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #a88b37,
+      var(--gold)
+    );
+
+}
+
+.certified
+.progress-fill{
+
+  background:var(--green);
+
+}
+
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.card-note{
+
+  min-height:35px;
+
+  margin-top:18px;
+
+  color:#777365;
+
+  font-size:10px;
+
+  line-height:1.55;
+
+}
+
+.card-footer{
+
+  margin-top:20px;
+
+  padding-top:15px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:15px;
+
+  border-top:
+    1px solid rgba(214,180,76,.10);
+
+}
+
+.card-footer-label{
+
+  color:#5e5b50;
+
+  font-size:7px;
+
+  letter-spacing:.16em;
+
+}
+
+.card-action{
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  color:var(--gold);
+
+  font-size:8px;
+  font-weight:700;
+
+  letter-spacing:.13em;
+
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.loading,
+.empty{
+
+  grid-column:1/-1;
+
+  padding:
+    50px
+    20px;
+
+  color:#706c5f;
+
+  font-size:9px;
+
+  text-align:center;
+
+  letter-spacing:.15em;
+
+  line-height:1.8;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-overlay{
+
+  position:fixed;
+  inset:0;
+
+  z-index:500;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:25px;
+
+  background:
+    rgba(0,0,0,.78);
+
+  backdrop-filter:
+    blur(7px);
+
+}
+
+.modal-overlay.open{
+  display:flex;
+}
+
+.programme-modal{
+
+  width:min(760px,100%);
+
+  max-height:
+    calc(100vh - 50px);
+
+  overflow:auto;
+
+  position:relative;
+
+  border:
+    1px solid rgba(214,180,76,.78);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.035),
+      transparent 22%
+    ),
+
+    #060806;
+
+  clip-path:
+
+    polygon(
+      18px 0,
+      calc(100% - 18px) 0,
+      100% 18px,
+      100% calc(100% - 18px),
+      calc(100% - 18px) 100%,
+      18px 100%,
+      0 calc(100% - 18px),
+      0 18px
+    );
+
+}
+
+.modal-header{
+
+  min-height:76px;
+
+  padding:
+    20px
+    26px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.16);
+
+}
+
+.modal-code{
+
+  color:var(--gold);
+
+  font-size:11px;
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+}
+
+.modal-name{
+
+  margin-top:5px;
+
+  color:#d9d2b9;
+
+  font-size:15px;
+
+}
+
+.modal-close{
+
+  width:38px;
+  height:38px;
+
+  flex:0 0 38px;
+
+  cursor:pointer;
+
+  border:
+    1px solid rgba(214,180,76,.30);
+
+  background:transparent;
+
+  color:#918b79;
+
+}
+
+.modal-close:hover{
+
+  color:var(--gold);
+
+  border-color:var(--gold);
+
+}
+
+.modal-body{
+
+  padding:
+    28px
+    28px
+    30px;
+
+}
+
+.modal-status-row{
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+
+  margin-bottom:27px;
+
+}
+
+.modal-label{
+
+  color:#646155;
+
+  font-size:8px;
+
+  letter-spacing:.18em;
+
+}
+
+.requirements-title{
+
+  margin:
+    28px
+    0
+    10px;
+
+  padding-bottom:10px;
+
+  color:var(--gold);
+
+  font-size:9px;
+
+  letter-spacing:.18em;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+
+}
+
+.requirement-row{
+
+  min-height:57px;
+
+  display:grid;
+
+  grid-template-columns:
+    32px
+    minmax(0,1fr)
+    auto;
+
+  gap:12px;
+
+  align-items:center;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.08);
+
+}
+
+.requirement-icon{
+
+  width:26px;
+  height:26px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.20);
+
+  color:#6d695c;
+
+  font-size:9px;
+
+}
+
+.requirement-row.done
+.requirement-icon{
+
+  color:var(--green);
+
+  border-color:
+    rgba(112,217,140,.35);
+
+}
+
+.requirement-name{
+
+  color:#c4bea8;
+
+  font-size:11px;
+
+}
+
+.requirement-code{
+
+  margin-top:4px;
+
+  color:#5d5a50;
+
+  font-size:7px;
+
+  letter-spacing:.12em;
+
+}
+
+.requirement-state{
+
+  color:#656257;
+
+  font-size:7px;
+
+  letter-spacing:.12em;
+
+}
+
+.requirement-row.done
+.requirement-state{
+
+  color:var(--green);
+
+}
+
+.no-syllabus{
+
+  padding:
+    24px
+    0;
+
+  color:#777366;
+
+  font-size:10px;
+
+  line-height:1.7;
+
+}
+
+.prerequisite-note{
+
+  margin-top:25px;
+
+  padding:
+    16px
+    18px;
+
+  border-left:
+    3px solid var(--red);
+
+  background:
+    rgba(233,123,114,.035);
+
+  color:#a98079;
+
+  font-size:10px;
+
+  line-height:1.7;
+
+}
+
+.modal-footer{
+
+  margin-top:30px;
+
+  padding-top:22px;
+
+  display:flex;
+  justify-content:flex-end;
+
+  border-top:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.access-button{
+
+  min-height:45px;
+
+  padding:
+    0
+    20px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  color:var(--gold);
+
+  text-decoration:none;
+
+  border:
+    1px solid rgba(214,180,76,.65);
+
+  background:
+    rgba(240,210,112,.035);
+
+  font-size:9px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+}
+
+.access-button:hover{
+
+  border-color:var(--gold);
+
+  background:
+    rgba(240,210,112,.08);
+
+}
+
+.access-button.locked{
+
+  pointer-events:none;
+
+  color:#6b625f;
+
+  border-color:
+    rgba(233,123,114,.25);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.academy-footer{
+
+  margin-top:30px;
+
+  display:flex;
+  align-items:center;
+
+  gap:18px;
+
+  color:#56544b;
+
+  font-size:8px;
+
+  letter-spacing:.25em;
+
+}
+
+.footer-line{
+
+  height:1px;
+
+  flex:1;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(214,180,76,.35),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1100px){
+
+  :root{
+    --sidebar-width:210px;
+  }
+
+  .programme-grid{
+    grid-template-columns:1fr;
+  }
+
+  .summary-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .summary-item:nth-child(3){
+
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.14);
+
+  }
+
+  .summary-item:nth-child(4){
+
+    border-top:
+      1px solid rgba(214,180,76,.14);
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  .mobile-bar{
+    display:flex;
+  }
+
+  .academy-app{
+    display:block;
+  }
+
+  .academy-sidebar{
+
+    position:fixed;
+
+    z-index:300;
+
+    top:0;
+    left:0;
+
+    width:min(300px,84vw);
+    height:100vh;
+
+    min-height:0;
+
+    overflow:auto;
+
+    transform:
+      translateX(-105%);
+
+    transition:
+      transform .22s ease;
+
+    box-shadow:
+      25px 0 60px rgba(0,0,0,.7);
+
+  }
+
+  body.sidebar-open
+  .academy-sidebar{
+
+    transform:
+      translateX(0);
+
+  }
+
+  body.sidebar-open::after{
+
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    z-index:250;
+
+    background:
+      rgba(0,0,0,.65);
+
+  }
+
+  .sidebar-inner{
+
+    position:relative;
+
+    min-height:100%;
+
+  }
+
+  .academy-main{
+
+    padding:
+      14px
+      13px
+      38px;
+
+  }
+
+  .hero-inner{
+
+    padding:
+      37px
+      30px
+      33px;
+
+  }
+
+  .page-title{
+
+    font-size:
+      clamp(40px,13vw,58px);
+
+  }
+
+  .hero-bottom{
+
+    align-items:flex-start;
+    flex-direction:column;
+
+  }
+
+  .summary-grid{
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+  .summary-item{
+
+    padding:
+      18px
+      15px;
+
+    gap:11px;
+
+  }
+
+  .summary-icon{
+
+    width:38px;
+    height:38px;
+
+    flex-basis:38px;
+
+  }
+
+  .summary-value{
+    font-size:21px;
+  }
+
+  .programme-grid{
+
+    padding:
+      16px;
+
+  }
+
+  .card-inner{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .card-art{
+
+    min-height:190px;
+
+    border-right:0;
+
+    border-bottom:
+      1px solid rgba(214,180,76,.13);
+
+  }
+
+  .modal-overlay{
+
+    padding:12px;
+
+  }
+
+  .programme-modal{
+
+    max-height:
+      calc(100vh - 24px);
+
+  }
+
+  .modal-body{
+
+    padding:
+      23px
+      20px
+      25px;
+
+  }
+
+  .requirement-row{
+
+    grid-template-columns:
+      30px
+      minmax(0,1fr);
+
+  }
+
+  .requirement-state{
+
+    grid-column:2;
+
+    padding-bottom:10px;
+
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:420px){
+
+  .summary-icon{
+    display:none;
+  }
+
+  .summary-item{
+    min-height:90px;
+  }
+
+  .filters{
+
+    padding:
+      15px
+      17px;
+
+  }
+
+  .filter-button{
+
+    flex:1;
+
+  }
+
+  .card-body{
+
+    padding:
+      21px
+      19px;
+
+  }
+
+  .card-top{
+
+    flex-direction:column;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     MOBILE HEADER
+========================================================= -->
+
+<header class="mobile-bar">
+
+  <button
+    class="mobile-menu"
+    id="mobileMenu"
+    type="button"
+    aria-label="Open Academy navigation"
+  >
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+
+  <div class="mobile-title">
+    JMBN // ACADEMY
+  </div>
+
+
+  <a
+    class="mobile-manifest"
+    href="index.html"
+  >
+    MANIFEST ↗
+  </a>
+
+</header>
+
+
+
+<div class="academy-app">
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside
+  class="academy-sidebar"
+  id="academySidebar"
+>
+
+  <div class="sidebar-inner">
+
+
+    <a
+      class="sidebar-manifest"
+      href="index.html"
+    >
+
+      <i class="fa-solid fa-arrow-left"></i>
+
+      BACK TO MANIFEST
+
+    </a>
+
+
+    <div class="sidebar-heading">
+
+      <div class="sidebar-kicker">
+        JMBN //
+      </div>
+
+      <strong>
+        ACADEMY
+      </strong>
+
+      <div class="sidebar-network">
+        TRAINING NETWORK
+      </div>
+
+    </div>
+
+
+    <div class="sidebar-section-label">
+      ACADEMY
+    </div>
+
+
+    <nav>
+
+
+      <a
+        class="nav-item"
+        href="academy.html"
+      >
+
+        <i class="fa-solid fa-graduation-cap"></i>
+
+        OVERVIEW
+
+      </a>
+
+
+      <a
+        class="nav-item active"
+        href="programmes.html"
+      >
+
+        <i class="fa-solid fa-layer-group"></i>
+
+        PROGRAMMES
+
+      </a>
+
+
+      <a
+        class="nav-item"
+        href="training-schedule.html"
+      >
+
+        <i class="fa-regular fa-calendar-days"></i>
+
+        TRAINING SCHEDULE
+
+      </a>
+
+
+      <div class="sidebar-divider"></div>
+
+
+      <div class="sidebar-section-label">
+        TRAINING PATHWAYS
+      </div>
+
+
+      <div id="programmeNav">
+
+        <div class="nav-item">
+          LOADING...
+        </div>
+
+      </div>
+
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+      TRAIN<br>
+      DEVELOP<br>
+      DEPLOY
+
+    </div>
+
+
+  </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="academy-main">
+
+<div class="container">
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="frame page-hero">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="hero-inner">
+
+
+    <div class="system-line">
+
+      JMBN // ACADEMY DIVISION //
+      TRAINING PROGRAMMES
+
+    </div>
+
+
+    <h1 class="page-title">
+
+      ALL PROGRAMMES
+
+    </h1>
+
+
+    <p class="page-description">
+
+      Explore all JMBN Academy training programmes,
+      review your current progress, identify outstanding
+      training requirements, and access programmes
+      available to your personnel record.
+
+    </p>
+
+
+    <div class="hero-bottom">
+
+
+      <div class="hero-status">
+
+        PERSONNEL TRAINING RECORD //
+        <strong id="personnelStatus">
+          CONNECTING
+        </strong>
+
+      </div>
+
+
+      <div class="hero-status">
+
+        ACADEMY NETWORK //
+        <strong>
+          ACAD-PROG
+        </strong>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+<section class="frame summary">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="summary-grid">
+
+
+    <div class="summary-item">
+
+      <div class="summary-icon">
+        <i class="fa-solid fa-layer-group"></i>
+      </div>
+
+      <div>
+
+        <div
+          class="summary-value"
+          id="totalCount"
+        >
+          —
+        </div>
+
+        <div class="summary-label">
+          ALL PROGRAMMES
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-item">
+
+      <div class="summary-icon">
+        <i class="fa-solid fa-person-running"></i>
+      </div>
+
+      <div>
+
+        <div
+          class="summary-value"
+          id="undergoingCount"
+        >
+          —
+        </div>
+
+        <div class="summary-label">
+          UNDERGOING
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-item">
+
+      <div class="summary-icon">
+        <i class="fa-solid fa-award"></i>
+      </div>
+
+      <div>
+
+        <div
+          class="summary-value"
+          id="certifiedCount"
+        >
+          —
+        </div>
+
+        <div class="summary-label">
+          CERTIFIED
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-item">
+
+      <div class="summary-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+
+      <div>
+
+        <div
+          class="summary-value"
+          id="lockedCount"
+        >
+          0
+        </div>
+
+        <div class="summary-label">
+          PREREQUISITE NOT MET
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     PROGRAMMES
+========================================================= -->
+
+<section class="frame programme-frame">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="section-header">
+
+    <div class="section-title">
+      PROGRAMME DIRECTORY
+    </div>
+
+    <div class="section-code">
+      ACADEMY // 01
+    </div>
+
+  </div>
+
+
+
+  <div class="filters">
+
+    <button
+      class="filter-button active"
+      data-filter="all"
+      type="button"
+    >
+      ALL
+    </button>
+
+    <button
+      class="filter-button"
+      data-filter="undergoing"
+      type="button"
+    >
+      UNDERGOING
+    </button>
+
+    <button
+      class="filter-button"
+      data-filter="available"
+      type="button"
+    >
+      AVAILABLE
+    </button>
+
+    <button
+      class="filter-button"
+      data-filter="certified"
+      type="button"
+    >
+      CERTIFIED
+    </button>
+
+    <button
+      class="filter-button"
+      data-filter="locked"
+      type="button"
+    >
+      PREREQUISITE NOT MET
+    </button>
+
+  </div>
+
+
+
+  <div
+    class="programme-grid"
+    id="programmeGrid"
+  >
+
+    <div class="loading">
+
+      ACCESSING ACADEMY PROGRAMME DIRECTORY...
+
+    </div>
+
+  </div>
+
+
+</section>
+
+
+
+<footer class="academy-footer">
+
+  <span>
+    JMBN
+  </span>
+
+  <div class="footer-line"></div>
+
+  <span>
+    TRAIN // DEVELOP // DEPLOY
+  </span>
+
+  <div class="footer-line"></div>
+
+  <span>
+    ACADEMY NETWORK
+  </span>
+
+</footer>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+
+<!-- =========================================================
+     PROGRAMME DETAILS MODAL
+========================================================= -->
+
+<div
+  class="modal-overlay"
+  id="programmeModal"
+>
+
+  <div
+    class="programme-modal"
+    role="dialog"
+    aria-modal="true"
+  >
+
+
+    <div class="modal-header">
+
+
+      <div>
+
+        <div
+          class="modal-code"
+          id="modalCode"
+        >
+          —
+        </div>
+
+        <div
+          class="modal-name"
+          id="modalName"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        type="button"
+        aria-label="Close"
+      >
+
+        <i class="fa-solid fa-xmark"></i>
+
+      </button>
+
+
+    </div>
+
+
+
+    <div class="modal-body">
+
+
+      <div class="modal-status-row">
+
+        <div>
+
+          <div class="modal-label">
+            PROGRAMME STATUS
+          </div>
+
+        </div>
+
+
+        <div id="modalStatus"></div>
+
+      </div>
+
+
+
+      <div class="modal-label">
+        PROGRAMME PROGRESS
+      </div>
+
+
+      <div class="progress-block">
+
+        <div class="progress-line">
+
+          <span>
+            TRAINING REQUIREMENTS
+          </span>
+
+          <span id="modalProgressText">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="progress-track">
+
+          <div
+            class="progress-fill"
+            id="modalProgressBar"
+            style="width:0%"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="requirements-title">
+
+        TRAINING REQUIREMENTS
+
+      </div>
+
+
+      <div id="modalRequirements"></div>
+
+
+
+      <div
+        id="modalPrerequisites"
+        style="display:none;"
+      ></div>
+
+
+
+      <div class="modal-footer">
+
+
+        <a
+          class="access-button"
+          id="modalAccess"
+          href="#"
+        >
+
+          ACCESS PROGRAMME
+
+          <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let sb = null;
+let me = null;
+
+let certifications = [];
+let requirements = [];
+let trainingEvents = [];
+
+let myCertifications = [];
+let myEvents = [];
+
+let programmeData = [];
+
+let currentFilter = "all";
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = selector =>
+  document.querySelector(selector);
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  return new Date(value)
+    .toLocaleDateString(
+      "en-SG",
+      {
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+}
+
+
+function programmeUrl(code){
+
+  return (
+    "AP-" +
+    encodeURIComponent(code) +
+    ".html"
+  );
+
+}
+
+
+function getProgrammeIcon(code){
+
+  switch(code){
+
+    case "BMT":
+      return "fa-shield-halved";
+
+    case "SOC":
+      return "fa-mountain";
+
+    case "MED":
+      return "fa-kit-medical";
+
+    case "GUN":
+    case "GUNNERY":
+      return "fa-crosshairs";
+
+    case "PILOT":
+      return "fa-plane";
+
+    case "ENG":
+    case "ENGINEERING":
+      return "fa-screwdriver-wrench";
+
+    default:
+      return "fa-certificate";
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD DATABASE
+========================================================= */
+
+async function loadAcademy(){
+
+  const [
+
+    certResult,
+    reqResult,
+    trainingResult,
+    myCertResult,
+    myTrainingResult
+
+  ] = await Promise.all([
+
+
+    sb
+      .from("certifications")
+      .select(`
+        certification_code,
+        name,
+        image_url,
+        sort_order,
+        is_active
+      `)
+      .eq("is_active",true)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    sb
+      .from("certification_requirements")
+      .select(`
+        certification_code,
+        event_code,
+        required,
+        sort_order
+      `)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    sb
+      .from("training_events")
+      .select(`
+        event_code,
+        title,
+        description,
+        duration_hrs,
+        sort_order
+      `)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    sb
+      .from("user_certifications")
+      .select(`
+        certification_code,
+        awarded_at
+      `)
+      .eq(
+        "user_id",
+        me
+      ),
+
+
+    sb
+      .from("user_training_events")
+      .select(`
+        event_code,
+        completed_at,
+        approved_at,
+        notes
+      `)
+      .eq(
+        "user_id",
+        me
+      )
+      .order(
+        "completed_at",
+        {ascending:false}
+      )
+
+
+  ]);
+
+
+  const errors = [
+
+    certResult.error,
+    reqResult.error,
+    trainingResult.error,
+    myCertResult.error,
+    myTrainingResult.error
+
+  ].filter(Boolean);
+
+
+  if(errors.length){
+
+    console.error(
+      "Academy database errors:",
+      errors
+    );
+
+  }
+
+
+  certifications =
+    certResult.data || [];
+
+  requirements =
+    reqResult.data || [];
+
+  trainingEvents =
+    trainingResult.data || [];
+
+  myCertifications =
+    myCertResult.data || [];
+
+  myEvents =
+    myTrainingResult.data || [];
+
+
+  buildProgrammeData();
+
+  renderAll();
+
+}
+
+
+/* =========================================================
+   BUILD PROGRAMMES
+========================================================= */
+
+function buildProgrammeData(){
+
+  const completedCerts =
+    new Map();
+
+
+  myCertifications.forEach(record=>{
+
+    completedCerts.set(
+      record.certification_code,
+      record
+    );
+
+  });
+
+
+  const completedEvents =
+    new Map();
+
+
+  myEvents.forEach(record=>{
+
+    completedEvents.set(
+      record.event_code,
+      record
+    );
+
+  });
+
+
+  const trainingMap =
+    new Map();
+
+
+  trainingEvents.forEach(event=>{
+
+    trainingMap.set(
+      event.event_code,
+      event
+    );
+
+  });
+
+
+  programmeData =
+    certifications.map(cert=>{
+
+
+      const reqs =
+        requirements
+
+          .filter(
+            requirement =>
+              requirement.certification_code ===
+              cert.certification_code
+              &&
+              requirement.required !== false
+          )
+
+          .sort(
+            (a,b)=>
+              Number(a.sort_order || 0)
+              -
+              Number(b.sort_order || 0)
+          );
+
+
+      const detailedRequirements =
+        reqs.map(requirement=>{
+
+          const training =
+            trainingMap.get(
+              requirement.event_code
+            );
+
+
+          const completion =
+            completedEvents.get(
+              requirement.event_code
+            );
+
+
+          return {
+
+            ...requirement,
+
+            title:
+              training?.title ||
+              requirement.event_code,
+
+            description:
+              training?.description ||
+              null,
+
+            duration_hrs:
+              training?.duration_hrs ||
+              null,
+
+            completed:
+              !!completion,
+
+            completed_at:
+              completion?.completed_at ||
+              null
+
+          };
+
+        });
+
+
+      const completed =
+        detailedRequirements.filter(
+          requirement =>
+            requirement.completed
+        ).length;
+
+
+      const total =
+        detailedRequirements.length;
+
+
+      const certification =
+        completedCerts.get(
+          cert.certification_code
+        );
+
+
+      const certified =
+        !!certification;
+
+
+      /*
+        -----------------------------------------------------
+        PREREQUISITES
+        -----------------------------------------------------
+
+        There is currently no programme-to-programme
+        prerequisite table in the existing Academy schema.
+
+        Therefore prerequisiteMet remains true for now.
+
+        Once we create the prerequisite table, this is where
+        we calculate whether BMT / SOC / etc. are required.
+
+      */
+
+      const prerequisiteMet = true;
+
+      const missingPrerequisites = [];
+
+
+      let percent = 0;
+
+
+      if(total > 0){
+
+        percent =
+          Math.round(
+            (
+              completed /
+              total
+            ) * 100
+          );
+
+      }
+
+
+      if(certified){
+        percent = 100;
+      }
+
+
+      let status;
+
+
+      if(certified){
+
+        status =
+          "certified";
+
+      }
+
+      else if(!prerequisiteMet){
+
+        status =
+          "locked";
+
+      }
+
+      else if(completed > 0){
+
+        status =
+          "undergoing";
+
+      }
+
+      else{
+
+        status =
+          "available";
+
+      }
+
+
+      return {
+
+        ...cert,
+
+        requirements:
+          detailedRequirements,
+
+        completed,
+
+        total,
+
+        percent,
+
+        certified,
+
+        certification,
+
+        prerequisiteMet,
+
+        missingPrerequisites,
+
+        status
+
+      };
+
+    });
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll(){
+
+  $("#personnelStatus")
+    .textContent =
+      "RECORD ONLINE";
+
+
+  renderStats();
+
+  renderSidebar();
+
+  renderProgrammes();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderStats(){
+
+  $("#totalCount")
+    .textContent =
+      programmeData.length;
+
+
+  $("#undergoingCount")
+    .textContent =
+      programmeData.filter(
+        p =>
+          p.status ===
+          "undergoing"
+      ).length;
+
+
+  $("#certifiedCount")
+    .textContent =
+      programmeData.filter(
+        p =>
+          p.status ===
+          "certified"
+      ).length;
+
+
+  $("#lockedCount")
+    .textContent =
+      programmeData.filter(
+        p =>
+          p.status ===
+          "locked"
+      ).length;
+
+}
+
+
+/* =========================================================
+   SIDEBAR PATHWAYS
+========================================================= */
+
+function renderSidebar(){
+
+  const host =
+    $("#programmeNav");
+
+
+  if(!programmeData.length){
+
+    host.innerHTML = `
+
+      <div class="nav-item">
+        NO PROGRAMMES
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    programmeData
+
+      .map(programme=>{
+
+        return `
+
+          <a
+            class="nav-item"
+            href="${programmeUrl(
+              programme.certification_code
+            )}"
+          >
+
+            <i
+              class="fa-solid
+              ${getProgrammeIcon(
+                programme.certification_code
+              )}"
+            ></i>
+
+            ${escapeHtml(
+              programme.certification_code
+            )}
+
+          </a>
+
+        `;
+
+      })
+
+      .join("");
+
+}
+
+
+/* =========================================================
+   FILTER PROGRAMMES
+========================================================= */
+
+function renderProgrammes(){
+
+  const host =
+    $("#programmeGrid");
+
+
+  let visible =
+    [...programmeData];
+
+
+  if(currentFilter !== "all"){
+
+    visible =
+      visible.filter(
+        programme =>
+          programme.status ===
+          currentFilter
+      );
+
+  }
+
+
+  /*
+    Useful display order:
+
+    1. Undergoing
+    2. Available
+    3. Locked
+    4. Certified
+
+    Within each group use certification sort_order.
+  */
+
+  const priority = {
+
+    undergoing:0,
+    available:1,
+    locked:2,
+    certified:3
+
+  };
+
+
+  visible.sort((a,b)=>{
+
+    const statusDiff =
+      (
+        priority[a.status] ?? 99
+      )
+      -
+      (
+        priority[b.status] ?? 99
+      );
+
+
+    if(statusDiff !== 0){
+
+      return statusDiff;
+
+    }
+
+
+    return (
+      Number(a.sort_order || 999)
+      -
+      Number(b.sort_order || 999)
+    );
+
+  });
+
+
+  if(!visible.length){
+
+    host.innerHTML = `
+
+      <div class="empty">
+
+        NO PROGRAMMES FOUND
+        FOR THIS STATUS.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    visible
+
+      .map(
+        renderProgrammeCard
+      )
+
+      .join("");
+
+
+  host
+    .querySelectorAll(
+      ".programme-card"
+    )
+    .forEach(card=>{
+
+      card.addEventListener(
+        "click",
+        ()=>{
+
+          openProgramme(
+            card.dataset.code
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   PROGRAMME CARD
+========================================================= */
+
+function renderProgrammeCard(programme){
+
+  const statusMap = {
+
+    certified:
+      "CERTIFIED",
+
+    undergoing:
+      "UNDERGOING",
+
+    available:
+      "AVAILABLE",
+
+    locked:
+      "PREREQUISITE NOT MET"
+
+  };
+
+
+  let progressText;
+
+
+  if(programme.total > 0){
+
+    progressText =
+      `${programme.completed} / ${programme.total}`;
+
+  }
+
+  else{
+
+    progressText =
+      "—";
+
+  }
+
+
+  let note;
+
+
+  switch(programme.status){
+
+
+    case "certified":
+
+      note =
+        programme.certification?.awarded_at
+        ?
+        `Certification awarded ${formatDate(
+          programme.certification.awarded_at
+        )}.`
+        :
+        "Programme certification awarded.";
+
+      break;
+
+
+    case "undergoing":
+
+      note =
+        `${programme.completed} of ${programme.total} training requirements completed.`;
+
+      break;
+
+
+    case "locked":
+
+      note =
+        "Required prerequisite training has not yet been completed.";
+
+      break;
+
+
+    default:
+
+      if(programme.total === 0){
+
+        note =
+          "Training syllabus has not yet been assigned.";
+
+      }
+
+      else{
+
+        note =
+          `${programme.total} training requirements available.`;
+
+      }
+
+  }
+
+
+  const image =
+    programme.image_url
+    ?
+    `
+      <img
+        src="${escapeHtml(
+          programme.image_url
+        )}"
+        alt="${escapeHtml(
+          programme.name
+        )}"
+      >
+    `
+    :
+    "";
+
+
+  return `
+
+    <article
+      class="
+        programme-card
+        ${programme.status}
+      "
+      data-code="${escapeHtml(
+        programme.certification_code
+      )}"
+      tabindex="0"
+    >
+
+
+      <div class="card-inner">
+
+
+        <div class="card-art">
+
+          ${image}
+
+          <div class="card-code">
+
+            ${escapeHtml(
+              programme.certification_code
+            )}
+
+          </div>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+          <div class="card-top">
+
+
+            <div>
+
+              <h2 class="card-name">
+
+                ${escapeHtml(
+                  programme.name
+                )}
+
+              </h2>
+
+              <div class="card-sub">
+
+                ${escapeHtml(
+                  programme.certification_code
+                )}
+
+                // ACADEMY PROGRAMME
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="
+                status
+                status-${programme.status}
+              "
+            >
+
+              ${statusMap[
+                programme.status
+              ]}
+
+            </div>
+
+
+          </div>
+
+
+
+          <div class="progress-block">
+
+
+            <div class="progress-line">
+
+              <span>
+                TRAINING PROGRESS
+              </span>
+
+              <span>
+                ${progressText}
+              </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+              <div
+                class="progress-fill"
+                style="
+                  width:${programme.percent}%
+                "
+              ></div>
+
+            </div>
+
+
+          </div>
+
+
+
+          <div class="card-note">
+
+            ${escapeHtml(note)}
+
+          </div>
+
+
+
+          <div class="card-footer">
+
+
+            <span class="card-footer-label">
+
+              VIEW TRAINING RECORD
+
+            </span>
+
+
+            <span class="card-action">
+
+              VIEW DETAILS
+
+              <i
+                class="fa-solid
+                fa-arrow-right"
+              ></i>
+
+            </span>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN PROGRAMME DETAILS
+========================================================= */
+
+function openProgramme(code){
+
+  const programme =
+    programmeData.find(
+      p =>
+        p.certification_code ===
+        code
+    );
+
+
+  if(!programme){
+    return;
+  }
+
+
+  $("#modalCode")
+    .textContent =
+      programme.certification_code;
+
+
+  $("#modalName")
+    .textContent =
+      programme.name;
+
+
+  const statusMap = {
+
+    certified:
+      "CERTIFIED",
+
+    undergoing:
+      "UNDERGOING",
+
+    available:
+      "AVAILABLE",
+
+    locked:
+      "PREREQUISITE NOT MET"
+
+  };
+
+
+  $("#modalStatus").innerHTML = `
+
+    <div
+      class="
+        status
+        status-${programme.status}
+      "
+    >
+
+      ${statusMap[
+        programme.status
+      ]}
+
+    </div>
+
+  `;
+
+
+  $("#modalProgressText")
+    .textContent =
+      programme.total > 0
+      ?
+      `${programme.completed} / ${programme.total}`
+      :
+      "—";
+
+
+  $("#modalProgressBar")
+    .style.width =
+      `${programme.percent}%`;
+
+
+  renderModalRequirements(
+    programme
+  );
+
+
+  renderModalPrerequisites(
+    programme
+  );
+
+
+  const access =
+    $("#modalAccess");
+
+
+  if(
+    programme.status ===
+    "locked"
+  ){
+
+    access.classList
+      .add("locked");
+
+
+    access.removeAttribute(
+      "href"
+    );
+
+
+    access.innerHTML = `
+
+      ACCESS PROGRAMME LOCKED
+
+      <i class="fa-solid fa-lock"></i>
+
+    `;
+
+  }
+
+  else{
+
+    access.classList
+      .remove("locked");
+
+
+    access.href =
+      programmeUrl(
+        programme.certification_code
+      );
+
+
+    access.innerHTML = `
+
+      ${
+        programme.status ===
+        "certified"
+        ?
+        "VIEW PROGRAMME"
+        :
+        programme.status ===
+        "undergoing"
+        ?
+        "CONTINUE PROGRAMME"
+        :
+        "ACCESS PROGRAMME"
+      }
+
+      <i class="fa-solid fa-arrow-right"></i>
+
+    `;
+
+  }
+
+
+  $("#programmeModal")
+    .classList
+    .add("open");
+
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* =========================================================
+   MODAL REQUIREMENTS
+========================================================= */
+
+function renderModalRequirements(
+  programme
+){
+
+  const host =
+    $("#modalRequirements");
+
+
+  if(
+    !programme.requirements.length
+  ){
+
+    host.innerHTML = `
+
+      <div class="no-syllabus">
+
+        TRAINING SYLLABUS HAS NOT YET
+        BEEN ASSIGNED TO THIS PROGRAMME.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    programme.requirements
+
+      .map(requirement=>{
+
+        return `
+
+          <div
+            class="
+              requirement-row
+              ${
+                requirement.completed
+                ?
+                "done"
+                :
+                ""
+              }
+            "
+          >
+
+
+            <div class="requirement-icon">
+
+              <i
+                class="fa-solid
+                ${
+                  requirement.completed
+                  ?
+                  "fa-check"
+                  :
+                  "fa-circle"
+                }
+              "
+              ></i>
+
+            </div>
+
+
+            <div>
+
+              <div class="requirement-name">
+
+                ${escapeHtml(
+                  requirement.title
+                )}
+
+              </div>
+
+
+              <div class="requirement-code">
+
+                ${escapeHtml(
+                  requirement.event_code
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div class="requirement-state">
+
+              ${
+                requirement.completed
+                ?
+                (
+                  requirement.completed_at
+                  ?
+                  `COMPLETED // ${formatDate(
+                    requirement.completed_at
+                  )}`
+                  :
+                  "COMPLETED"
+                )
+                :
+                "TRAINING REQUIRED"
+              }
+
+            </div>
+
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
+
+}
+
+
+/* =========================================================
+   PREREQUISITES
+========================================================= */
+
+function renderModalPrerequisites(
+  programme
+){
+
+  const host =
+    $("#modalPrerequisites");
+
+
+  /*
+    Programme prerequisite records do not exist
+    in the current database yet.
+
+    So do NOT invent prerequisite information.
+  */
+
+  if(
+    programme.prerequisiteMet
+  ){
+
+    host.style.display =
+      "none";
+
+    host.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  host.style.display =
+    "block";
+
+
+  host.innerHTML = `
+
+    <div class="requirements-title">
+
+      PROGRAMME PREREQUISITES
+
+    </div>
+
+
+    <div class="prerequisite-note">
+
+      PREREQUISITE REQUIREMENTS
+      HAVE NOT BEEN MET.
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".filter-button"
+  )
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+
+        document
+          .querySelectorAll(
+            ".filter-button"
+          )
+          .forEach(item=>
+            item.classList
+              .remove("active")
+          );
+
+
+        button.classList
+          .add("active");
+
+
+        currentFilter =
+          button.dataset.filter;
+
+
+        renderProgrammes();
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   MODAL CLOSE
+========================================================= */
+
+function closeProgrammeModal(){
+
+  $("#programmeModal")
+    .classList
+    .remove("open");
+
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+$("#modalClose")
+  .addEventListener(
+    "click",
+    closeProgrammeModal
+  );
+
+
+$("#programmeModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target ===
+        $("#programmeModal")
+      ){
+
+        closeProgrammeModal();
+
+      }
+
+    }
+  );
+
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeProgrammeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+$("#mobileMenu")
+  ?.addEventListener(
+    "click",
+    event=>{
+
+      event.stopPropagation();
+
+      document.body
+        .classList
+        .toggle(
+          "sidebar-open"
+        );
+
+    }
+  );
+
+
+document.addEventListener(
+  "click",
+  event=>{
+
+    if(
+      window.innerWidth > 760
+    ){
+      return;
+    }
+
+
+    if(
+      !document.body
+        .classList
+        .contains(
+          "sidebar-open"
+        )
+    ){
+      return;
+    }
+
+
+    if(
+      $("#academySidebar")
+        .contains(
+          event.target
+        )
+    ){
+      return;
+    }
+
+
+    if(
+      $("#mobileMenu")
+        ?.contains(
+          event.target
+        )
+    ){
+      return;
+    }
+
+
+    document.body
+      .classList
+      .remove(
+        "sidebar-open"
+      );
+
+  }
+);
+
+
+/* =========================================================
+   KEYBOARD CARD ACCESS
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    const card =
+      event.target.closest(
+        ".programme-card"
+      );
+
+
+    if(!card){
+      return;
+    }
+
+
+    if(
+      event.key === "Enter"
+      ||
+      event.key === " "
+    ){
+
+      event.preventDefault();
+
+      openProgramme(
+        card.dataset.code
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async()=>{
+
+    try{
+
+
+      const session =
+        await requireAuth();
+
+
+      if(!session){
+        return;
+      }
+
+
+      sb =
+        getSupabase();
+
+
+      me =
+        session.user.id;
+
+
+      await loadAcademy();
+
+
+    }
+
+    catch(error){
+
+
+      console.error(
+        "Academy programmes failed:",
+        error
+      );
+
+
+      $("#personnelStatus")
+        .textContent =
+          "CONNECTION ERROR";
+
+
+      $("#programmeGrid")
+        .innerHTML = `
+
+          <div class="empty">
+
+            ACADEMY DATABASE CONNECTION FAILED.
+
+            <br><br>
+
+            PLEASE RELOAD THE TRAINING NETWORK.
+
+          </div>
+
+        `;
+
+    }
+
+  }
+);
+
+</script>
+
+
+</body>
+</html>
