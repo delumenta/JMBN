@@ -3,56 +3,53 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#020303">
-<title>JMBN // You Shall Not Pass</title>
+<meta name="theme-color" content="#050504">
+<title>JMBN // Restricted Area</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
 <style>
-:root{--gold:#d8b84e;--gold2:#f4d878;--line:rgba(216,184,78,.68);--text:#f7f0d2;--muted:#b9a86e}
-*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:'Play',sans-serif;background:#000;color:var(--text)}
-body{min-height:100vh;display:grid;place-items:center;padding:28px;overflow:hidden}
-#goldDust{position:fixed;inset:0;width:100%;height:100%;z-index:0;background:#000}
-.grid{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55;background-image:linear-gradient(rgba(255,230,150,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,230,150,.025) 1px,transparent 1px);background-size:96px 96px}
-body:after{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(800px 420px at 50% 45%,rgba(219,183,72,.08),transparent 70%),radial-gradient(1000px 800px at 50% 50%,transparent 20%,rgba(0,0,0,.78) 100%)}
-.wrap{position:relative;z-index:3;width:min(860px,96vw)}
-.brand{display:flex;align-items:center;gap:16px;margin:0 0 22px 4px}.brand img{width:62px;height:62px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(242,214,117,.28))}.brand h2{color:#f0d270;font-size:30px}.brand p{margin-top:5px;color:#bba868;font-size:12px}
-.panel{position:relative;overflow:hidden;border:1px solid rgba(216,184,78,.8);border-radius:14px;background:linear-gradient(100deg,rgba(216,184,78,.055),transparent 35%),rgba(6,7,7,.95);box-shadow:0 20px 55px rgba(0,0,0,.55),0 0 22px rgba(216,184,78,.08)}
-.panel:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,transparent,var(--gold2),transparent)}
-.head{padding:15px 22px;border-bottom:1px solid rgba(216,184,78,.18);display:flex;justify-content:space-between;color:#8f814f;font-size:10px;font-weight:700;letter-spacing:2px}.head b{color:var(--gold2)}
-.main{text-align:center;padding:48px 32px 38px}
-.stop{width:92px;height:92px;margin:0 auto 27px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:14px;background:rgba(216,184,78,.045);box-shadow:0 0 28px rgba(216,184,78,.1);transform:rotate(45deg)}.stop span{transform:rotate(-45deg);font-size:40px;color:var(--gold2)}
-h1{font-size:clamp(32px,6vw,60px);line-height:1;color:var(--gold2);letter-spacing:2px;text-shadow:0 0 22px rgba(242,216,120,.12)}
-.subtitle{margin-top:13px;color:#d7cfb3;font-size:15px}.joke{margin:22px auto 0;max-width:570px;color:#8e8568;font-size:12px;line-height:1.7}
-.status{margin:34px auto 27px;max-width:590px;display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(216,184,78,.3);border-radius:10px;background:#080909;text-align:left}.cell{padding:15px 18px}.cell+ .cell{border-left:1px solid rgba(216,184,78,.16)}.label{color:#746b4c;font-size:9px;letter-spacing:1.5px}.value{margin-top:5px;font-size:11px;font-weight:700}.green{color:#7CFC9A}.amber{color:var(--gold2)}
-button{padding:10px 19px;border:1px solid rgba(216,184,78,.72);border-radius:8px;background:#090a0a;color:var(--gold2);font:700 11px 'Play';cursor:pointer;transition:.2s}button:hover{background:var(--gold2);color:#050505}
-.foot{text-align:center;margin-top:14px;color:#514b38;font-size:9px;letter-spacing:2px}
-@media(max-width:600px){body{padding:14px}.brand img{width:48px;height:48px}.brand h2{font-size:23px}.main{padding:38px 18px 30px}.status{grid-template-columns:1fr}.cell+.cell{border-left:0;border-top:1px solid rgba(216,184,78,.16)}}
+:root{--gold:#d8b84e;--gold2:#f4d878;--yellow:#e9b91f;--black:#050504;--panel:#090a09;--text:#eee9d7;--muted:#9c9788;--red:#ff5b43}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:'Play',sans-serif;background:#030303;color:var(--text)}
+body{min-height:100vh;overflow:hidden;background:radial-gradient(circle at 50% 46%,#17150d 0,#080806 35%,#020202 78%)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.24;background:repeating-linear-gradient(90deg,transparent 0 89px,rgba(255,211,75,.055) 90px),repeating-linear-gradient(0deg,transparent 0 89px,rgba(255,211,75,.035) 90px)}
+.shell{position:relative;z-index:2;min-height:100vh;padding:16px 20px;display:flex;flex-direction:column}
+.hud{border:1px solid rgba(216,184,78,.75);min-height:calc(100vh - 32px);position:relative;display:flex;flex-direction:column;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(10,10,7,.45) 50%,rgba(0,0,0,.78));box-shadow:inset 0 0 70px #000,0 0 35px rgba(216,184,78,.06)}
+.hud:before,.hud:after{content:"";position:absolute;width:60px;height:60px;border-color:var(--gold2);pointer-events:none}.hud:before{left:-1px;top:-1px;border-left:3px solid;border-top:3px solid}.hud:after{right:-1px;bottom:-1px;border-right:3px solid;border-bottom:3px solid}
+.top{height:62px;border-bottom:1px solid rgba(216,184,78,.5);display:flex;align-items:center;justify-content:space-between;padding:0 24px}.brand{display:flex;align-items:center;gap:13px}.brand img{width:42px;height:42px;object-fit:contain}.brand strong{font-size:22px;color:var(--gold2);letter-spacing:2px}.brand small,.motto{color:#8e8877;font-size:9px;letter-spacing:2px}.brand small{display:block;margin-top:2px}
+.stage{position:relative;flex:1;display:grid;place-items:center;overflow:hidden;padding:45px 25px}
+.door{position:absolute;inset:22px 13%;border:1px solid #24231d;background:linear-gradient(90deg,#070707,#11100c 15%,#090909 50%,#11100c 85%,#070707);box-shadow:inset 45px 0 60px #000,inset -45px 0 60px #000}.door:before{content:"WARNING";position:absolute;top:5%;left:0;right:0;text-align:center;font-size:clamp(75px,12vw,190px);font-weight:700;color:rgba(210,164,24,.09);letter-spacing:-5px}
+.stripes{position:absolute;height:58px;width:135%;left:-18%;background:repeating-linear-gradient(135deg,#c79616 0 45px,#15130c 45px 90px);opacity:.34;border-top:1px solid #745d17;border-bottom:1px solid #745d17}.stripes.one{top:22%;transform:rotate(-3deg)}.stripes.two{bottom:14%;transform:rotate(3deg)}
+.tape{position:absolute;z-index:2;height:55px;width:38%;display:flex;align-items:center;justify-content:center;background:#c99d19;color:#080808;font-weight:700;font-size:clamp(16px,2vw,27px);letter-spacing:1px;box-shadow:0 3px 15px #000;overflow:hidden}.tape:before,.tape:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(0,0,0,.17) 42px 48px);pointer-events:none}.tape.tl{left:-5%;top:20%;transform:rotate(13deg)}.tape.tr{right:-5%;top:21%;transform:rotate(-13deg)}.tape.bl{left:-7%;bottom:10%;transform:rotate(14deg)}.tape.br{right:-7%;bottom:9%;transform:rotate(-14deg)}
+.side{position:absolute;top:36%;width:150px;text-align:center;color:#5f5a4d;font-weight:700;font-size:18px;line-height:1.4;z-index:3}.side.left{left:4%}.side.right{right:4%}.redlight{width:7px;height:32px;background:var(--red);margin:22px auto;box-shadow:0 0 13px var(--red)}
+.content{position:relative;z-index:5;width:min(670px,72vw);text-align:center;padding:20px;background:radial-gradient(ellipse at center,rgba(0,0,0,.95) 0,rgba(0,0,0,.84) 58%,transparent 78%)}
+.warning{width:92px;height:80px;margin:0 auto 15px;position:relative;color:#e5b520;font-size:58px;line-height:75px;font-weight:700;text-shadow:0 0 18px rgba(229,181,32,.22)}.warning:before{content:"";position:absolute;inset:0;border-left:46px solid transparent;border-right:46px solid transparent;border-bottom:80px solid #d5a719;z-index:-2}.warning:after{content:"";position:absolute;left:9px;top:15px;border-left:37px solid transparent;border-right:37px solid transparent;border-bottom:64px solid #090909;z-index:-1}
+h1{margin:0;color:#f1d06a;font-size:clamp(32px,5vw,58px);line-height:1;letter-spacing:2px;text-shadow:0 0 16px rgba(242,216,120,.2)}.sub{margin-top:12px;color:#d4a928;font-size:14px;letter-spacing:8px}.copy{margin:24px auto 0;max-width:600px;color:#c5c1b5;font-size:12px;line-height:1.8;letter-spacing:.5px}.copy b{color:var(--gold2)}
+.status{margin:26px auto 22px;max-width:570px;border:1px solid #b58d19;background:rgba(4,4,3,.88);padding:7px 20px}.row{height:45px;display:grid;grid-template-columns:1fr 1fr;align-items:center;text-align:left;font-size:11px;letter-spacing:1px}.row+.row{border-top:1px solid #29271e}.row span:first-child{color:#aaa698}.good{color:#79dc8e}.pending{color:#efbd24}
+button{min-width:300px;padding:13px 25px;border:1px solid var(--gold2);background:linear-gradient(180deg,#241d0c,#100e08);color:#f5d36b;font:700 11px 'Play';letter-spacing:3px;cursor:pointer;box-shadow:inset 0 0 12px rgba(242,216,120,.06)}button:hover{background:#e5bd43;color:#080808}
+.bottom{height:64px;border-top:1px solid rgba(216,184,78,.35);display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:#686355;font-size:8px;letter-spacing:2px}.guest{color:#d8ac27}
+@media(max-width:800px){.shell{padding:8px}.hud{min-height:calc(100vh - 16px)}.motto,.side{display:none}.stage{padding:35px 12px}.door{inset:12px 4%}.content{width:94vw}.tape{width:55%;height:42px;font-size:13px}.top{padding:0 13px}.brand strong{font-size:17px}.status{padding:6px 12px}.row{font-size:9px}.bottom{padding:0 12px}.bottom .right{display:none}button{min-width:240px}}
 </style>
 </head>
 <body>
-<canvas id="goldDust"></canvas><div class="grid"></div>
-<div class="wrap">
-<div class="brand"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"><div><h2>JMBN Manifest System</h2><p>Personnel access control</p></div></div>
-<section class="panel">
-<div class="head"><span>// SECURITY CHECKPOINT</span><b>ACCESS DENIED-ish</b></div>
-<div class="main">
-<div class="stop"><span>✋</span></div>
-<h1>YOU SHALL NOT PASS.</h1>
-<div class="subtitle">Well... not yet, anyway.</div>
-<div class="joke">Your account exists. The computer knows who you are. Unfortunately, the computer also knows you're still a <b style="color:var(--gold2)">Guest</b>.<br>Wait for a JMBN officer to approve your membership before attempting to storm the bridge again.</div>
-<div class="status"><div class="cell"><div class="label">IDENTITY</div><div class="value green">● AUTHENTICATED</div></div><div class="cell"><div class="label">JMBN ACCESS</div><div class="value amber">○ AWAITING THE POWERS THAT BE</div></div></div>
-<button id="logout">RETREAT / LOG OUT</button>
+<div class="shell"><main class="hud">
+<header class="top"><div class="brand"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt=""><div><strong>JMBN</strong><small>MANIFEST SYSTEM · PERSONNEL NETWORK</small></div></div><div class="motto">DISCIPLINE &nbsp;·&nbsp; SKILL &nbsp;·&nbsp; UNITY</div></header>
+<section class="stage">
+<div class="door"><div class="stripes one"></div><div class="stripes two"></div></div>
+<div class="tape tl">RESTRICTED AREA</div><div class="tape tr">RESTRICTED AREA</div><div class="tape bl">RESTRICTED AREA</div><div class="tape br">RESTRICTED AREA</div>
+<div class="side left">AUTHORIZED<br>PERSONNEL<br>ONLY<div class="redlight"></div></div>
+<div class="side right">ACCESS<br>DENIED<div class="redlight"></div></div>
+<div class="content">
+<div class="warning">!</div>
+<h1>YOU SHALL NOT PASS.</h1><div class="sub">WELL... NOT YET, ANYWAY.</div>
+<div class="copy">Your account exists. The computer knows who you are.<br>Unfortunately, the computer also knows you're still a <b>Guest</b>.<br><br>Wait for a JMBN officer to approve your membership<br>before attempting to storm the bridge again.</div>
+<div class="status"><div class="row"><span>● &nbsp; IDENTITY</span><strong class="good">● &nbsp; AUTHENTICATED</strong></div><div class="row"><span>● &nbsp; JMBN ACCESS</span><strong class="pending">● &nbsp; MEMBERSHIP PENDING</strong></div></div>
+<button id="logout">↪ &nbsp; RETREAT / LOG OUT</button>
 </div>
 </section>
-<div class="foot">JMBN // PLEASE DO NOT RAM THE SECURITY DOOR</div>
-</div>
+<footer class="bottom"><div>SECTOR › ORG &nbsp;&nbsp; TERMINAL › WEB &nbsp;&nbsp; STATUS › <span class="guest">GUEST</span></div><div class="right">JMBN // GOOD THINGS COME TO THOSE WHO GET APPROVED</div></footer>
+</main></div>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script><script src="js/auth.js"></script>
-<script>
-(async()=>{const s=await requireAuth({allowGuest:true});if(!s)return;document.getElementById('logout').onclick=()=>signOut()})();
-const c=document.getElementById('goldDust'),x=c.getContext('2d');let stars=[];
-function resize(){c.width=innerWidth;c.height=innerHeight;stars=Array.from({length:Math.min(180,Math.floor(innerWidth*innerHeight/6500))},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+.2,a:Math.random()*.65+.15,p:Math.random()*6.28}))}resize();addEventListener('resize',resize);
-(function draw(t){x.fillStyle='#000';x.fillRect(0,0,c.width,c.height);for(const s of stars){x.beginPath();x.fillStyle='rgba(242,216,120,'+(s.a*(.55+.45*Math.sin(t/1200+s.p)))+')';x.arc(s.x,s.y,s.r,0,6.283);x.fill()}requestAnimationFrame(draw)})(0);
-</script>
+<script>(async()=>{const s=await requireAuth({allowGuest:true});if(!s)return;document.getElementById('logout').onclick=()=>signOut()})();</script>
 </body></html>
