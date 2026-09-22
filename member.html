@@ -1812,85 +1812,29 @@ button{
 
 
 
+
+
 /* =========================================================
-   JMBN SPACE STARFIELD
-   Shared visual treatment with the Manifest system
+   JMBN MANIFEST-STYLE STARFIELD
+   Random canvas stars — no repeating square/grid pattern
 ========================================================= */
 
-body{
-  position:relative;
-  isolation:isolate;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:-90px;
-  z-index:-1;
-  pointer-events:none;
-  opacity:.52;
-
-  background-image:
-    radial-gradient(circle, rgba(244,216,120,.95) 0 1px, transparent 1.45px),
-    radial-gradient(circle, rgba(247,241,208,.60) 0 .8px, transparent 1.25px),
-    radial-gradient(circle, rgba(216,180,76,.45) 0 1.15px, transparent 1.7px);
-
-  background-size:
-    157px 157px,
-    239px 239px,
-    389px 389px;
-
-  background-position:
-    12px 24px,
-    77px 53px,
-    131px 181px;
-
-  animation:jmbnStarDrift 110s linear infinite;
-}
-
-body::after{
-  content:"";
+#jmbnStarfield{
   position:fixed;
   inset:0;
-  z-index:-1;
+  z-index:0;
+  width:100%;
+  height:100%;
   pointer-events:none;
-
-  background:
-    radial-gradient(circle at 12% 18%, rgba(244,216,120,.72) 0 1.2px, transparent 2px),
-    radial-gradient(circle at 29% 72%, rgba(247,241,208,.46) 0 .9px, transparent 1.7px),
-    radial-gradient(circle at 54% 31%, rgba(244,216,120,.62) 0 1.1px, transparent 1.9px),
-    radial-gradient(circle at 73% 81%, rgba(216,180,76,.58) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 88% 24%, rgba(247,241,208,.48) 0 .8px, transparent 1.6px);
-
-  opacity:.58;
-  animation:jmbnStarTwinkle 6.5s ease-in-out infinite alternate;
+  background:#000;
 }
 
-@keyframes jmbnStarDrift{
-  from{
-    background-position:
-      12px 24px,
-      77px 53px,
-      131px 181px;
-  }
-  to{
-    background-position:
-      -145px -133px,
-      -162px -186px,
-      -258px -208px;
-  }
-}
-
-@keyframes jmbnStarTwinkle{
-  from{opacity:.34}
-  to{opacity:.68}
-}
-
-@media (prefers-reduced-motion:reduce){
-  body::before,
-  body::after{
-    animation:none;
-  }
+#header,
+#header-container,
+.shell,
+.ops-page{
+  position:relative;
+  z-index:1;
 }
 
 </style>
@@ -1899,6 +1843,9 @@ body::after{
 
 
 <body>
+
+<canvas id="jmbnStarfield" aria-hidden="true"></canvas>
+
 
 
 <!-- =========================================================
@@ -5253,6 +5200,110 @@ document.addEventListener(
 
 </script>
 
+
+
+<script>
+/* ===== JMBN Manifest-style random starfield ===== */
+(function(){
+  const c = document.getElementById('jmbnStarfield');
+  if(!c) return;
+
+  const ctx = c.getContext('2d', { alpha:true });
+  let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let stars = [];
+
+  const STARCOUNT = 900;
+  const LAYERS = 4;
+  const BASE_SPEED = 0.05;
+  const MAX_SIZE = 1.8;
+  const MIN_SIZE = 0.2;
+
+  function makeStars(){
+    stars = [];
+    for(let i=0;i<STARCOUNT;i++){
+      const layer = Math.floor(Math.random()*LAYERS)+1;
+      const depth = layer/LAYERS;
+
+      stars.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        z:depth,
+        r:(Math.random()*(MAX_SIZE-MIN_SIZE)+MIN_SIZE)*DPR*depth,
+        tw:Math.random()*Math.PI*2,
+        spd:BASE_SPEED*depth
+      });
+    }
+  }
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = c.width = innerWidth * DPR;
+    H = c.height = innerHeight * DPR;
+    c.style.width = innerWidth + 'px';
+    c.style.height = innerHeight + 'px';
+    makeStars();
+  }
+
+  function subtleGlow(t){
+    const g1 = ctx.createRadialGradient(
+      W/2, H*1.16, H*.22,
+      W/2, H, H*1.05
+    );
+    g1.addColorStop(0, 'rgba(14,10,2,.16)');
+    g1.addColorStop(.45, 'rgba(4,3,1,.08)');
+    g1.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g1;
+    ctx.fillRect(0,0,W,H);
+
+    const gy = H*.98;
+    const g2 = ctx.createRadialGradient(W/2,gy,0,W/2,gy,H*.55);
+    const pulse = .018 + .008*Math.sin(t/1100);
+    g2.addColorStop(0, `rgba(255,214,110,${pulse})`);
+    g2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g2;
+    ctx.fillRect(0,0,W,H);
+  }
+
+  function draw(){
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0,0,W,H);
+
+    const t = Date.now()/1000;
+    ctx.globalCompositeOperation = 'lighter';
+
+    const swirlX = Math.sin(t/8)*.5;
+    const swirlY = Math.cos(t/10)*.5;
+
+    for(const s of stars){
+      s.x += Math.cos(t*.08+s.tw+swirlX)*s.spd*1.2;
+      s.y += Math.sin(t*.06+s.tw+swirlY)*s.spd*1.2;
+
+      if(s.x<0) s.x+=W;
+      if(s.x>W) s.x-=W;
+      if(s.y<0) s.y+=H;
+      if(s.y>H) s.y-=H;
+
+      const flicker = .35 + .65*Math.abs(Math.sin(t*3.7+s.tw));
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(45,100%,${58+18*flicker}%,${.32+.42*flicker})`;
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    ctx.globalCompositeOperation = 'screen';
+    subtleGlow(Date.now());
+
+    requestAnimationFrame(draw);
+  }
+
+  addEventListener('resize', resize, {passive:true});
+  resize();
+  draw();
+})();
+</script>
 
 </body>
 
