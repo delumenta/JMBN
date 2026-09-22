@@ -2250,6 +2250,14 @@ body::before{
   .academy-statement{max-width:92%}
 }
 
+
+/* ACADEMY MOTTO // HERO RIGHT */
+.hero-motto-overlay{position:absolute;z-index:3;top:105px;right:48px;width:300px;color:#e9e3d0;font-size:16px;font-weight:400;line-height:1.65;letter-spacing:.16em;text-transform:uppercase;text-align:left;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.hero-motto-overlay::after{content:"";display:block;width:54px;height:2px;margin-top:16px;background:var(--gold)}
+.hero-motto-overlay strong{color:var(--gold);font-weight:700}
+@media(max-width:1150px){.hero-motto-overlay{right:30px;width:245px;font-size:13px}}
+@media(max-width:900px){.hero-motto-overlay{display:none}}
+
 </style>
 
 </head>
@@ -2475,6 +2483,13 @@ body::before{
 
   <div class="hero-body">
 
+
+    <div class="hero-motto-overlay" aria-label="JMBN motto">
+      <strong>HILARITY</strong> &bull; IMMERSION<br>
+      <strong>TEAMWORK</strong> &bull;<br>
+      AND THE SHENANIGANS<br>
+      IN BETWEEN.
+    </div>
 
     <!-- HERO COPY -->
 
