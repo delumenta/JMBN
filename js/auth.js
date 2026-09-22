@@ -97,14 +97,48 @@ window.currentUsername = function currentUsername(session) {
 };
 
 /***** AUTH GUARD (for protected pages) *****/
-window.requireAuth = async function requireAuth() {
+window.requireAuth = async function requireAuth(options = {}) {
   try {
     const { data } = await _sb.auth.getSession();
-    if (!data?.session) {
+    const session = data?.session;
+
+    if (!session) {
       goto("auth.html");
       return null;
     }
-    return data.session;
+
+    // Guest accounts may authenticate, but may only remain on pending.html.
+    // Recruit / Member / Admin continue through the normal portal.
+    const { data: profile, error } = await _sb
+      .from("profiles")
+      .select("role")
+      .eq("user_id", session.user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("[auth] profile role check failed:", error);
+    }
+
+    const role = String(profile?.role || "Guest").trim().toLowerCase();
+    const onPending =
+      location.pathname.endsWith("/pending.html") ||
+      location.pathname.endsWith("pending.html");
+
+    if (role === "guest") {
+      if (!options.allowGuest && !onPending) {
+        goto("pending.html");
+        return null;
+      }
+      return session;
+    }
+
+    // A promoted user should not remain stuck on the pending screen.
+    if (onPending) {
+      goto("index.html");
+      return null;
+    }
+
+    return session;
   } catch (e) {
     console.error("[auth] requireAuth failed:", e);
     goto("auth.html");
