@@ -1,1677 +1,4173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#020302">
-<title>JMBN – Academy</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<title>JMBN // Academy</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+<link
+  rel="icon"
+  type="image/png"
+  href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+  sizes="32x32"
+>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+
 
 <style>
-:root{
-  --bg:#020302;
-  --panel:#080a08;
-  --panel-2:#0c0f0b;
-  --panel-3:#11140f;
-  --gold:#d6b44c;
-  --gold-bright:#f2d675;
-  --gold-dim:#7d6827;
-  --gold-faint:rgba(214,180,76,.13);
-  --line:rgba(214,180,76,.42);
-  --line-soft:rgba(214,180,76,.18);
-  --text:#f7f1d0;
-  --muted:#a59d80;
-  --muted-2:#6f6a58;
-  --green:#37d996;
-  --red:#ff6b6b;
-  --cut:14px;
-}
-*{box-sizing:border-box}
-html,body{min-height:100%}
-body{
-  margin:0;
-  color:var(--text);
-  font-family:"Play",system-ui,sans-serif;
-  background:
-    radial-gradient(circle at 75% -10%,rgba(214,180,76,.08),transparent 28%),
-    linear-gradient(180deg,#050605 0,#010201 72%);
-}
-button{font:inherit}
-button{cursor:pointer}
-[hidden]{display:none!important}
-
-.academy-page{
-  width:90%;
-  max-width:1700px;
-  margin:18px auto 60px;
-}
 
 /* =========================================================
-   JMBN FRAME SYSTEM
+   ROOT
 ========================================================= */
-.jmbn-frame{
-  position:relative;
-  padding:1px;
-  background:linear-gradient(135deg,var(--gold-bright),#7a631d 34%,#3a3013 72%,var(--gold));
-  clip-path:polygon(
-    var(--cut) 0,100% 0,100% calc(100% - var(--cut)),
-    calc(100% - var(--cut)) 100%,0 100%,0 var(--cut)
-  );
+
+:root{
+
+  --bg:#020302;
+
+  --panel:#070906;
+  --panel2:#0a0c08;
+  --panel3:#0e110c;
+
+  --gold:#f0d270;
+  --gold2:#d6b44c;
+  --gold3:#8d7430;
+
+  --text:#f3ecd2;
+  --text2:#d8d1b8;
+
+  --muted:#928c77;
+  --muted2:#646154;
+
+  --green:#70d98c;
+  --red:#ff7474;
+
+  --line:rgba(214,180,76,.54);
+  --line-soft:rgba(214,180,76,.14);
+
+  --sidebar-width:238px;
+
 }
-.jmbn-frame::before,
-.jmbn-frame::after{
-  content:"";
-  position:absolute;
-  z-index:5;
-  width:32px;
-  height:2px;
-  background:var(--gold-bright);
-  box-shadow:0 0 9px rgba(242,214,117,.35);
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
 }
-.jmbn-frame::before{top:0;left:28px}
-.jmbn-frame::after{right:28px;bottom:0}
-.frame-inner{
-  position:relative;
+
+html{
   min-height:100%;
+  background:var(--bg);
+}
+
+body{
+
+  margin:0;
+
+  min-height:100vh;
+
+  color:var(--text);
+
+  font-family:"Play",sans-serif;
+
   background:
-    linear-gradient(135deg,rgba(255,255,255,.018),transparent 24%),
-    linear-gradient(180deg,#0a0c09,#050705);
-  clip-path:polygon(
-    var(--cut) 0,100% 0,100% calc(100% - var(--cut)),
-    calc(100% - var(--cut)) 100%,0 100%,0 var(--cut)
-  );
+
+    radial-gradient(
+      circle at 78% 8%,
+      rgba(177,139,39,.08),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(177,139,39,.035),
+      transparent 35%
+    ),
+
+    #020302;
+
 }
-.frame-inner::before{
+
+a{
+  color:inherit;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+
+/* =========================================================
+   GRID BACKGROUND
+========================================================= */
+
+body::before{
+
   content:"";
-  position:absolute;
-  inset:7px;
+
+  position:fixed;
+  inset:0;
+
   pointer-events:none;
-  border:1px solid rgba(214,180,76,.09);
-  clip-path:polygon(
-    9px 0,100% 0,100% calc(100% - 9px),
-    calc(100% - 9px) 100%,0 100%,0 9px
-  );
+
+  background-image:
+
+    linear-gradient(
+      rgba(240,210,112,.014) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.014) 1px,
+      transparent 1px
+    );
+
+  background-size:52px 52px;
+
 }
-.terminal-head{
-  min-height:39px;
+
+
+/* =========================================================
+   MOBILE TOP BAR
+========================================================= */
+
+.mobile-bar{
+
+  display:none;
+
+  position:sticky;
+  top:0;
+
+  z-index:200;
+
+  height:58px;
+
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    0
+    15px;
+
+  background:
+    rgba(3,4,3,.97);
+
+  border-bottom:
+    1px solid rgba(214,180,76,.45);
+
+  backdrop-filter:
+    blur(10px);
+
+}
+
+.mobile-menu{
+
+  width:40px;
+  height:40px;
+
+  border:0;
+  background:none;
+
+  color:var(--gold);
+
+  font-size:20px;
+
+}
+
+.mobile-title{
+
+  font-size:12px;
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+}
+
+.mobile-manifest{
+
+  text-decoration:none;
+
+  color:#a9a38d;
+
+  font-size:9px;
+
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+}
+
+
+/* =========================================================
+   APPLICATION
+========================================================= */
+
+.academy-app{
+
+  position:relative;
+
+  min-height:100vh;
+
+  display:grid;
+
+  grid-template-columns:
+    var(--sidebar-width)
+    minmax(0,1fr);
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.academy-sidebar{
+
+  position:relative;
+
+  min-height:100vh;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(10,12,9,.99),
+      rgba(3,4,3,.99)
+    );
+
+  border-right:
+    1px solid rgba(214,180,76,.36);
+
+}
+
+.sidebar-inner{
+
+  position:sticky;
+  top:0;
+
+  min-height:100vh;
+
+  padding-bottom:30px;
+
+}
+
+.sidebar-manifest{
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  min-height:52px;
+
+  padding:
+    0
+    21px;
+
+  color:#777365;
+
+  text-decoration:none;
+
+  font-size:10px;
+
+  letter-spacing:.14em;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+.sidebar-manifest:hover{
+  color:var(--gold);
+}
+
+.sidebar-heading{
+
+  padding:
+    25px
+    22px
+    18px;
+
+}
+
+.sidebar-kicker{
+
+  color:#6d695c;
+
+  font-size:8px;
+
+  letter-spacing:.27em;
+
+}
+
+.sidebar-heading strong{
+
+  display:block;
+
+  margin-top:5px;
+
+  color:var(--gold);
+
+  font-size:20px;
+
+  letter-spacing:.13em;
+
+}
+
+.sidebar-network{
+
+  margin-top:6px;
+
+  color:#817c6c;
+
+  font-size:8px;
+
+  letter-spacing:.24em;
+
+}
+
+
+/* =========================================================
+   SIDEBAR NAV
+========================================================= */
+
+.sidebar-section-label{
+
+  padding:
+    10px
+    22px;
+
+  color:#59574e;
+
+  font-size:8px;
+
+  letter-spacing:.25em;
+
+}
+
+.sidebar-nav{
+  padding:0;
+}
+
+.nav-item{
+
+  position:relative;
+
+  min-height:48px;
+
+  padding:
+    0
+    21px;
+
+  display:flex;
+  align-items:center;
+
+  gap:14px;
+
+  color:#a6a18f;
+
+  text-decoration:none;
+
+  font-size:12px;
+
+  letter-spacing:.08em;
+
+  border-left:
+    3px solid transparent;
+
+  transition:.15s ease;
+
+}
+
+.nav-item i{
+
+  width:20px;
+
+  text-align:center;
+
+  font-size:15px;
+
+}
+
+.nav-item:hover{
+
+  color:var(--text);
+
+  background:
+    rgba(240,210,112,.035);
+
+}
+
+.nav-item.active{
+
+  color:var(--gold);
+
+  border-left-color:
+    var(--gold);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.15),
+      rgba(240,210,112,.025)
+    );
+
+}
+
+.nav-item.active::after{
+
+  content:"";
+
+  position:absolute;
+
+  right:0;
+
+  width:2px;
+  height:20px;
+
+  background:var(--gold);
+
+}
+
+.sidebar-divider{
+
+  height:1px;
+
+  margin:
+    12px
+    21px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(214,180,76,.45),
+      transparent
+    );
+
+}
+
+.sidebar-footer{
+
+  padding:
+    25px
+    24px;
+
+  color:#5f5c50;
+
+  font-size:8px;
+
+  line-height:2;
+
+  letter-spacing:.32em;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.academy-main{
+
+  min-width:0;
+
+  padding:
+    28px
+    30px
+    52px;
+
+}
+
+.academy-container{
+
+  width:100%;
+  max-width:1500px;
+
+  margin:0 auto;
+
+}
+
+
+/* =========================================================
+   FANCY FRAME
+========================================================= */
+
+.frame{
+
+  position:relative;
+
+  overflow:hidden;
+
+  border:
+    1px solid rgba(214,180,76,.67);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.025),
+      transparent 16%
+    ),
+
+    linear-gradient(
+      180deg,
+      rgba(8,10,7,.98),
+      rgba(3,5,3,.99)
+    );
+
+  clip-path:
+
+    polygon(
+      18px 0,
+      calc(100% - 18px) 0,
+      100% 18px,
+      100% calc(100% - 18px),
+      calc(100% - 18px) 100%,
+      18px 100%,
+      0 calc(100% - 18px),
+      0 18px
+    );
+
+}
+
+
+/* INNER BORDER */
+
+.frame::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:12px;
+
+  pointer-events:none;
+
+  border:
+    1px solid rgba(214,180,76,.09);
+
+  clip-path:
+
+    polygon(
+      9px 0,
+      100% 0,
+      100% calc(100% - 9px),
+      calc(100% - 9px) 100%,
+      0 100%,
+      0 9px
+    );
+
+}
+
+
+/* TOP GOLD DETAIL */
+
+.frame::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:32px;
+
+  width:100px;
+  height:2px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      var(--gold),
+      rgba(240,210,112,.20),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   FRAME CORNERS
+========================================================= */
+
+.corner{
+
+  position:absolute;
+
+  pointer-events:none;
+
+  z-index:3;
+
+}
+
+.corner-br{
+
+  right:17px;
+  bottom:17px;
+
+  width:18px;
+  height:18px;
+
+  border-right:
+    1px solid var(--gold);
+
+  border-bottom:
+    1px solid var(--gold);
+
+}
+
+.corner-tl{
+
+  top:17px;
+  left:17px;
+
+  width:18px;
+  height:18px;
+
+  border-top:
+    1px solid var(--gold);
+
+  border-left:
+    1px solid var(--gold);
+
+}
+
+
+/* =========================================================
+   FRAME HEADER
+========================================================= */
+
+.frame-header{
+
+  position:relative;
+  z-index:2;
+
+  min-height:56px;
+
+  padding:
+    0
+    26px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:14px;
-  padding:0 16px;
-  border-bottom:1px solid var(--line-soft);
-  background:linear-gradient(90deg,rgba(214,180,76,.08),transparent 55%);
+
+  gap:20px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+
 }
-.terminal-title{
-  color:var(--gold-bright);
-  font-size:10px;
+
+.frame-title{
+
+  color:var(--gold);
+
+  font-size:12px;
   font-weight:700;
-  letter-spacing:.18em;
+
+  letter-spacing:.21em;
+
 }
-.terminal-id{
-  color:var(--muted-2);
-  font-size:8px;
-  letter-spacing:.18em;
+
+.frame-code{
+
+  color:#545248;
+
+  font-size:9px;
+
+  letter-spacing:.24em;
+
 }
-.corner-mark{
-  position:absolute;
-  z-index:4;
-  width:8px;height:8px;
-  border-color:var(--gold);
-}
-.corner-mark.tl{top:9px;left:9px;border-top:1px solid;border-left:1px solid}
-.corner-mark.br{right:9px;bottom:9px;border-right:1px solid;border-bottom:1px solid}
+
 
 /* =========================================================
    HERO
 ========================================================= */
-.hero .frame-inner{min-height:350px}
-.hero-content{
-  position:relative;
-  z-index:2;
-  max-width:1030px;
-  padding:34px 42px 38px;
+
+.hero{
+
+  margin-bottom:20px;
+
 }
-.hero-content::after{
-  content:"ACADEMY // TRAINING NETWORK";
-  position:absolute;
-  right:-470px;
-  top:52px;
-  width:430px;
-  height:210px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:flex-end;
-  padding:20px;
-  color:rgba(214,180,76,.12);
+
+.hero-body{
+
+  position:relative;
+  z-index:1;
+
+  min-height:545px;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.1fr)
+    minmax(320px,.9fr);
+
+}
+
+
+/* =========================================================
+   HERO COPY
+========================================================= */
+
+.hero-copy{
+
+  padding:
+    48px
+    46px
+    48px;
+
+}
+
+.hero-eyebrow{
+
+  color:var(--gold);
+
   font-size:12px;
-  letter-spacing:.18em;
-  background:
-    radial-gradient(ellipse at 70% 70%,rgba(214,180,76,.16),transparent 48%),
-    linear-gradient(150deg,transparent 25%,rgba(255,255,255,.015));
-  border-left:1px solid rgba(214,180,76,.07);
-}
-.kicker{
-  color:var(--gold);
-  font-size:10px;
   font-weight:700;
-  letter-spacing:.23em;
+
+  line-height:1.5;
+
+  letter-spacing:.25em;
+
 }
-.hero h1{
-  margin:8px 0 0;
-  color:var(--gold-bright);
-  font-size:44px;
-  line-height:1;
-  letter-spacing:.14em;
+
+.hero-heading{
+
+  margin:
+    23px
+    0
+    0;
+
+  color:var(--gold);
+
+  font-size:
+    clamp(50px,5.5vw,78px);
+
+  line-height:.9;
+
+  letter-spacing:.055em;
+
 }
+
 .hero-rule{
-  width:170px;height:2px;
-  margin:15px 0 21px;
-  background:linear-gradient(90deg,var(--gold-bright),transparent);
+
+  width:310px;
+  max-width:72%;
+
+  height:3px;
+
+  margin:
+    31px
+    0
+    43px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      var(--gold),
+      rgba(240,210,112,.06)
+    );
+
 }
-.hero-intro{
-  max-width:880px;
-  color:#c4bba0;
-  font-size:13px;
-  line-height:1.72;
+
+.hero-welcome{
+
+  margin:
+    0
+    0
+    40px;
+
+  font-size:21px;
+
 }
-.hero-intro strong{color:#fff1b7}
-.hero-statement{
-  max-width:800px;
-  margin-top:23px;
-  padding:14px 17px;
-  border-left:3px solid var(--gold-bright);
-  border-top:1px solid rgba(214,180,76,.13);
-  border-bottom:1px solid rgba(214,180,76,.13);
-  background:linear-gradient(90deg,rgba(214,180,76,.10),transparent);
-  color:var(--gold-bright);
-  font-size:15px;
-  font-weight:700;
-  letter-spacing:.075em;
-  line-height:1.5;
+
+.hero-copy p{
+
+  max-width:760px;
+
+  margin:
+    0
+    0
+    34px;
+
+  color:#b8b29f;
+
+  font-size:17px;
+
+  line-height:1.8;
+
 }
-.hero-foot{
-  margin-top:19px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.6;
+
+.hero-copy strong{
+  color:var(--text);
 }
-.hero-foot b{color:#ded09d}
+
 
 /* =========================================================
-   KPI CONSOLES
+   HERO STATEMENT
 ========================================================= */
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:13px;
-}
-.kpi{--cut:9px}
-.kpi .frame-inner{padding:16px 18px 17px}
-.kpi-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.kpi-label{
+
+.academy-statement{
+
+  margin:
+    42px
+    0
+    36px;
+
+  padding:
+    24px
+    28px;
+
+  border-left:
+    5px solid var(--gold);
+
+  border-top:
+    1px solid rgba(214,180,76,.15);
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.065),
+      transparent 88%
+    );
+
   color:var(--gold);
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.15em;
-}
-.kpi-index{
-  color:#514a34;
-  font-size:8px;
-}
-.kpi-value{
-  margin-top:6px;
-  color:var(--gold-bright);
-  font-size:29px;
-  font-weight:700;
-  text-shadow:0 0 15px rgba(242,214,117,.12);
-}
-.kpi-note{
-  margin-top:2px;
-  color:var(--muted-2);
-  font-size:9px;
-}
-.kpi-scan{
-  height:2px;
-  margin-top:12px;
-  background:linear-gradient(90deg,var(--gold-dim) 0 35%,rgba(214,180,76,.08) 35%);
-}
 
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
-.academy-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 350px;
-  gap:13px;
-  margin-top:13px;
-}
-.catalog-body{padding:20px}
-.section-head{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:18px;
-  margin-bottom:18px;
-}
-.section-title{
-  margin:0;
-  color:var(--gold-bright);
-  font-size:19px;
-  letter-spacing:.12em;
-}
-.section-sub{
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.5;
-}
-.filters{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-.filter-btn{
-  padding:7px 10px;
-  border:1px solid #45391a;
-  border-radius:2px;
-  background:#070907;
-  color:#847d68;
-  font-size:8px;
+  font-size:
+    clamp(17px,1.7vw,23px);
+
+  font-weight:700;
+
   letter-spacing:.11em;
-}
-.filter-btn:hover{border-color:var(--gold-dim);color:#c7b875}
-.filter-btn.active{
-  border-color:var(--gold);
-  background:rgba(214,180,76,.08);
-  color:var(--gold-bright);
-  box-shadow:inset 0 0 15px rgba(214,180,76,.08);
+
+  line-height:1.6;
+
 }
 
+.hero-journey{
+
+  margin-bottom:0 !important;
+
+  color:#8d8877 !important;
+
+  font-size:14px !important;
+
+}
+
+
 /* =========================================================
-   CERTIFICATION CARDS
+   HERO ART
 ========================================================= */
-.programmes{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-}
-.programme{
-  --cut:10px;
+
+.hero-art{
+
   position:relative;
-  padding:1px;
-  background:linear-gradient(145deg,#9c7f28,#493b14 55%,#2b2411);
-  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
-  transition:.18s ease;
+
+  overflow:hidden;
+
+  border-left:
+    1px solid rgba(214,180,76,.14);
+
+  background:
+
+    radial-gradient(
+      circle at 55% 37%,
+      rgba(240,210,112,.12),
+      transparent 28%
+    ),
+
+    linear-gradient(
+      145deg,
+      #11140e,
+      #030403 72%
+    );
+
 }
-.programme:not(.future):hover{
-  transform:translateY(-2px);
-  background:linear-gradient(145deg,var(--gold-bright),#725a1a 55%,var(--gold));
-  filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));
+
+.hero-art::before{
+
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background-image:
+
+    linear-gradient(
+      rgba(255,255,255,.022) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.022) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    42px
+    42px;
+
 }
-.programme-shell{
-  height:100%;
-  min-height:410px;
-  background:linear-gradient(180deg,#10130e,#060806);
-  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+
+.hero-art::after{
+
+  content:"TRAINING NETWORK";
+
+  position:absolute;
+
+  right:-38px;
+  top:50%;
+
+  transform:
+    rotate(90deg)
+    translateY(-50%);
+
+  color:#4f4d43;
+
+  font-size:9px;
+
+  letter-spacing:.4em;
+
 }
-.programme-topline{
-  height:26px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 10px;
-  border-bottom:1px solid rgba(214,180,76,.14);
-  color:#6f664c;
-  font-size:7px;
-  letter-spacing:.15em;
+
+.academy-emblem{
+
+  position:absolute;
+
+  left:50%;
+  top:45%;
+
+  width:210px;
+  height:210px;
+
+  transform:
+    translate(-50%,-50%)
+    rotate(45deg);
+
+  border:
+    1px solid rgba(240,210,112,.35);
+
 }
-.programme-art{
-  height:205px;
-  position:relative;
+
+.academy-emblem::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:15px;
+
+  border:
+    1px solid rgba(240,210,112,.12);
+
+}
+
+.emblem-content{
+
+  position:absolute;
+
+  inset:0;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
-  border-bottom:1px solid rgba(214,180,76,.22);
-  background:
-    radial-gradient(circle at 50% 45%,rgba(214,180,76,.12),transparent 40%),
-    #080a07;
+
+  transform:
+    rotate(-45deg);
+
+  text-align:center;
+
 }
-.programme-art::after{
-  content:"";
-  position:absolute;
-  left:0;right:0;bottom:0;
-  height:44px;
-  background:linear-gradient(transparent,rgba(0,0,0,.72));
-}
-.programme-art img{
-  width:94%;
-  height:94%;
-  object-fit:contain;
-  display:block;
-  filter:drop-shadow(0 9px 15px rgba(0,0,0,.7));
-}
-.programme-body{padding:14px}
-.programme-code{
-  display:inline-flex;
-  align-items:center;
-  min-height:20px;
-  padding:0 7px;
-  border:1px solid rgba(214,180,76,.45);
-  background:rgba(214,180,76,.08);
-  color:var(--gold-bright);
-  font-size:8px;
+
+.emblem-jmbn{
+
+  color:var(--gold);
+
+  font-size:33px;
   font-weight:700;
-  letter-spacing:.12em;
+
+  letter-spacing:.18em;
+
 }
-.programme h3{
-  min-height:36px;
-  margin:9px 0 6px;
-  color:#ead47f;
-  font-size:14px;
-  line-height:1.25;
-  letter-spacing:.075em;
-}
-.programme-desc{
-  min-height:49px;
-  margin:0;
-  color:#918b76;
+
+.emblem-academy{
+
+  margin-top:8px;
+
+  color:#767262;
+
   font-size:9px;
-  line-height:1.55;
+
+  letter-spacing:.3em;
+
 }
-.progress-meta{
+
+.hero-motto{
+
+  position:absolute;
+
+  right:42px;
+  bottom:45px;
+
+  color:#6d695d;
+
+  font-size:9px;
+
+  line-height:2;
+
+  letter-spacing:.25em;
+
+  text-align:right;
+
+}
+
+.hero-motto strong{
+  color:#b3a468;
+}
+
+
+/* =========================================================
+   TRAINING RECORD
+========================================================= */
+
+.training-record{
+
+  margin-bottom:20px;
+
+}
+
+.record-grid{
+
+  position:relative;
+  z-index:1;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+}
+
+.record-item{
+
+  min-height:132px;
+
+  padding:
+    24px
+    27px;
+
   display:flex;
-  justify-content:space-between;
-  margin-top:12px;
-  color:#aa9d6b;
-  font-size:8px;
-}
-.progress-track{
-  height:5px;
-  margin-top:7px;
-  overflow:hidden;
-  background:#26261e;
-}
-.progress-fill{
-  height:100%;
-  background:linear-gradient(90deg,#a77d18,var(--gold-bright));
-  box-shadow:0 0 7px rgba(242,214,117,.25);
-}
-.programme-status{
-  margin-top:9px;
-  color:var(--green);
-  font-size:8px;
-  font-weight:700;
-  letter-spacing:.08em;
-}
-.programme-status.pending{color:#9e967d}
-.programme-action{
-  width:100%;
-  margin-top:11px;
-  padding:9px 10px;
-  border:1px solid var(--gold-dim);
-  border-radius:0;
-  background:rgba(214,180,76,.025);
-  color:var(--gold-bright);
-  font-size:8px;
-  font-weight:700;
-  letter-spacing:.12em;
-}
-.programme-action:hover{
-  border-color:var(--gold-bright);
-  background:rgba(214,180,76,.09);
+  align-items:center;
+
+  gap:18px;
+
 }
 
-/* FALLBACK ART */
-.cert-fallback{
-  width:112px;height:112px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--gold);
-  color:var(--gold-bright);
-  font-size:14px;
-  font-weight:700;
-  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
-  background:#171910;
+.record-item +
+.record-item{
+
+  border-left:
+    1px solid rgba(214,180,76,.16);
+
 }
 
-/* FUTURE CARDS */
-.programme.future{
-  background:linear-gradient(145deg,#3b3218,#201c10 55%,#15140d);
+.record-icon{
+
+  width:54px;
+  height:54px;
+
+  flex:
+    0 0 54px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.48);
+
+  color:var(--gold);
+
+  font-size:19px;
+
+  background:
+    rgba(240,210,112,.02);
+
 }
-.programme.future .programme-shell{
-  background:linear-gradient(180deg,#0b0d09,#050605);
-}
-.programme.future .programme-art{background:#070907}
-.future-hex{
-  position:relative;
-  width:142px;
-  height:164px;
-  display:grid;
-  place-items:center;
-}
-.future-hex::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
-  background:linear-gradient(180deg,#202119,#10120e);
-}
-.future-hex::after{
-  content:"";
-  position:absolute;
-  inset:-1px;
-  z-index:-1;
-  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
-  background:linear-gradient(180deg,var(--gold-bright) 0 2%,transparent 2% 98%,var(--gold-bright) 98%);
-}
-.future-plus{
-  position:relative;
-  z-index:2;
-  color:var(--gold-bright);
+
+.record-value{
+
+  color:#f7e8aa;
+
   font-size:30px;
   font-weight:700;
-}
-.programme.future .programme-code{color:#8f8565}
-.programme.future h3{color:#aa9f75}
-.programme.future .programme-desc{color:#706b5b}
-.coming-soon{
-  margin-top:18px;
-  padding:10px 0;
-  border-top:1px solid #2d2816;
-  border-bottom:1px solid #19170e;
-  color:#857c60;
-  font-size:8px;
-  font-weight:700;
-  letter-spacing:.17em;
-  text-align:center;
+
+  line-height:1;
+
 }
 
-/* =========================================================
-   UPCOMING TRAINING CONSOLE
-========================================================= */
-.upcoming-body{padding:18px}
-.next-training{
-  position:relative;
-  padding:16px 14px 15px;
-  border:1px solid rgba(214,180,76,.24);
-  background:linear-gradient(135deg,rgba(214,180,76,.075),rgba(214,180,76,.015) 55%,transparent);
-  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
-}
-.next-training::before{content:"";position:absolute;left:0;top:0;width:38px;height:2px;background:var(--gold-bright)}
-.upcoming-kicker{color:#81785d;font-size:7px;font-weight:700;letter-spacing:.18em}
-.upcoming-code{margin-top:12px;color:var(--gold-bright);font-size:9px;font-weight:700;letter-spacing:.11em}
-.upcoming-title{margin:5px 0 0;color:#f0dc91;font-size:16px;line-height:1.15}
-.upcoming-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
-.meta-cell{padding:9px 10px;border-top:1px solid #332d17;background:rgba(255,255,255,.01)}
-.meta-cell small{display:block;color:#6f6958;font-size:7px;letter-spacing:.14em;margin-bottom:4px}
-.meta-cell b{display:block;color:#cdb85f;font-size:9px}
-.upcoming-list-title{margin:20px 0 8px;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em}
-.training-row{position:relative;padding:11px 8px 11px 13px;border-top:1px solid #2e2916}
-.training-row::before{content:"";position:absolute;left:0;top:14px;width:3px;height:3px;background:var(--gold)}
-.training-row .date{color:#8f8565;font-size:7px;letter-spacing:.12em}
-.training-row b{display:block;margin-top:3px;color:#d9c267;font-size:9px}
-.training-row span{display:block;margin-top:3px;color:#77715f;font-size:8px}
-.training-empty{padding:34px 15px;text-align:center;border:1px dashed rgba(214,180,76,.18);background:rgba(214,180,76,.018)}
-.training-empty strong{display:block;color:#bca956;font-size:10px;letter-spacing:.12em}
-.training-empty span{display:block;max-width:240px;margin:8px auto 0;color:#756f5f;font-size:8px;line-height:1.6}
-.training-note{margin-top:14px;padding-top:12px;border-top:1px solid #211e12;color:#5f5b50;font-size:7px;line-height:1.55;letter-spacing:.04em}
-/* =========================================================
-   CERTIFICATION RECORD
-========================================================= */
-.cert-record{margin-top:13px}
-.cert-record-body{padding:20px}
-.cert-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-  margin-top:15px;
-}
-.cert-item{
-  --cut:7px;
-  min-height:108px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px;
-  border:1px solid rgba(214,180,76,.28);
-  background:linear-gradient(145deg,#0b0e0a,#060806);
-  clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);
-}
-.cert-item.unearned{opacity:.38}
-.cert-thumb{
-  width:76px;height:76px;
-  flex:0 0 76px;
-  object-fit:contain;
-}
-.cert-item .cert-fallback{
-  width:66px;height:66px;
-  flex:0 0 66px;
-  font-size:10px;
-}
-.cert-item b{
-  display:block;
-  color:#e7d27d;
-  font-size:10px;
-  line-height:1.3;
-}
-.cert-item small{
-  display:block;
-  margin-top:3px;
-  color:#7c7562;
-  font-size:7px;
-  letter-spacing:.1em;
-}
-.cert-state{
+.record-label{
+
   margin-top:7px;
-  color:var(--green);
-  font-size:7px;
-  font-weight:700;
-  letter-spacing:.08em;
-}
-.cert-item.unearned .cert-state{color:#aaa184}
 
-.loading{
-  grid-column:1/-1;
-  padding:34px;
-  text-align:center;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.12em;
-}
+  color:#98927f;
 
-/* =========================================================
-   PROGRAMME MODAL
-========================================================= */
-body.modal-open{overflow:hidden}
-.programme-modal{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:grid;
-  place-items:center;
-  padding:24px;
-  background:rgba(0,0,0,.82);
-  backdrop-filter:blur(5px);
-}
-.programme-modal[hidden]{display:none!important}
-.modal-frame{
-  --cut:16px;
-  width:min(920px,100%);
-  max-height:min(860px,92vh);
-  padding:1px;
-  background:linear-gradient(135deg,var(--gold-bright),#735b1c 36%,#312912 72%,var(--gold));
-  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
-  filter:drop-shadow(0 24px 60px rgba(0,0,0,.7));
-}
-.modal-shell{
-  position:relative;
-  max-height:min(858px,calc(92vh - 2px));
-  overflow:auto;
-  background:linear-gradient(180deg,#0b0e0a,#050705);
-  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
-}
-.modal-head{
-  position:sticky;
-  top:0;
-  z-index:5;
-  min-height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding:0 14px 0 18px;
-  border-bottom:1px solid var(--line-soft);
-  background:rgba(8,10,8,.97);
-}
-.modal-head-copy{min-width:0}
-.modal-eyebrow{color:#77705c;font-size:7px;letter-spacing:.18em}
-.modal-head-title{margin-top:3px;color:var(--gold-bright);font-size:11px;font-weight:700;letter-spacing:.15em}
-.modal-close{
-  width:34px;height:30px;
-  flex:0 0 auto;
-  border:1px solid #51431c;
-  background:#080a07;
-  color:var(--gold-bright);
-  font-size:15px;
-}
-.modal-close:hover{border-color:var(--gold-bright);background:rgba(214,180,76,.08)}
-.modal-content{padding:24px}
-.modal-intro{display:grid;grid-template-columns:150px minmax(0,1fr);gap:22px;align-items:center}
-.modal-art{
-  min-height:145px;
-  display:grid;
-  place-items:center;
-  border:1px solid rgba(214,180,76,.18);
-  background:radial-gradient(circle,rgba(214,180,76,.1),transparent 58%),#070907;
-}
-.modal-art img{width:135px;height:135px;object-fit:contain;filter:drop-shadow(0 8px 12px #000)}
-.modal-code{color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em}
-.modal-name{margin:7px 0 8px;color:#f0dc91;font-size:25px;line-height:1.1;letter-spacing:.07em}
-.modal-description{margin:0;color:#9d957d;font-size:10px;line-height:1.65}
-.modal-progress{margin-top:15px}
-.modal-progress-meta{display:flex;justify-content:space-between;gap:12px;color:#a99b68;font-size:8px}
-.modal-section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:25px;
-  padding:10px 0 8px;
-  border-bottom:1px solid #3a3218;
-}
-.modal-section-head b{color:var(--gold-bright);font-size:9px;letter-spacing:.17em}
-.modal-section-head span{color:#746c55;font-size:7px;letter-spacing:.12em}
-.requirement-list{margin-top:5px}
-.requirement-row{
-  display:grid;
-  grid-template-columns:42px minmax(0,1fr) auto;
-  gap:13px;
-  align-items:center;
-  padding:14px 9px;
-  border-bottom:1px solid #242113;
-}
-.requirement-number{color:#5e573f;font-size:10px;font-weight:700}
-.requirement-code{color:#81785d;font-size:7px;letter-spacing:.12em}
-.requirement-title{margin-top:3px;color:#d9c66e;font-size:11px;font-weight:700}
-.requirement-desc{margin-top:4px;color:#716c5d;font-size:8px;line-height:1.45}
-.requirement-state{white-space:nowrap;font-size:8px;font-weight:700;letter-spacing:.08em;color:#9c947c}
-.requirement-state.done{color:var(--green)}
-.modal-rule-box{
-  margin-top:20px;
-  padding:13px 14px;
-  border-left:2px solid var(--gold);
-  background:linear-gradient(90deg,rgba(214,180,76,.07),transparent);
-  color:#8d856d;
   font-size:9px;
-  line-height:1.6;
-}
-.modal-rule-box b{color:#d9c66e}
-@media(max-width:650px){
-  .programme-modal{padding:10px}
-  .modal-content{padding:17px 14px 22px}
-  .modal-intro{grid-template-columns:1fr}
-  .modal-art{min-height:120px}
-  .requirement-row{grid-template-columns:30px minmax(0,1fr);gap:9px}
-  .requirement-state{grid-column:2;margin-top:2px}
+
+  line-height:1.55;
+
+  letter-spacing:.14em;
+
 }
 
+
 /* =========================================================
-   RESPONSIVE
+   DASHBOARD GRID
 ========================================================= */
-@media(max-width:1250px){
-  .programmes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .cert-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+.dashboard-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.55fr)
+    minmax(330px,.75fr);
+
+  gap:20px;
+
+  align-items:start;
+
 }
-@media(max-width:920px){
-  .academy-page{width:calc(100% - 22px)}
-  .kpis{grid-template-columns:repeat(2,1fr)}
-  .academy-grid{grid-template-columns:1fr}
-  .section-head{align-items:flex-start;flex-direction:column}
-  .filters{justify-content:flex-start}
-  .hero-content{padding:27px 24px 31px}
-  .hero-content::after{display:none}
-  .hero h1{font-size:35px}
+
+.right-stack{
+
+  display:grid;
+
+  gap:20px;
+
 }
-@media(max-width:620px){
-  .programmes,.cert-grid,.kpis{grid-template-columns:1fr}
-  .hero-statement{font-size:13px}
-  .catalog-body,.record-body,.cert-record-body{padding:14px}
+
+
+/* =========================================================
+   PROGRAMMES
+========================================================= */
+
+.programmes-body{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    8px
+    22px
+    10px;
+
 }
+
+.programme-row{
+
+  display:grid;
+
+  grid-template-columns:
+    180px
+    minmax(0,1fr);
+
+  gap:23px;
+
+  padding:
+    20px
+    0;
+
+}
+
+.programme-row +
+.programme-row{
+
+  border-top:
+    1px solid rgba(214,180,76,.14);
+
+}
+
+
+/* IMAGE */
+
+.programme-image{
+
+  position:relative;
+
+  min-height:145px;
+
+  overflow:hidden;
+
+  border:
+    1px solid rgba(214,180,76,.25);
+
+  background:#080908;
+
+}
+
+.programme-image img{
+
+  width:100%;
+  height:100%;
+
+  position:absolute;
+  inset:0;
+
+  object-fit:cover;
+
+  opacity:.72;
+
+}
+
+.programme-image::after{
+
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.05),
+      rgba(0,0,0,.82)
+    );
+
+}
+
+.programme-image-code{
+
+  position:absolute;
+
+  z-index:2;
+
+  left:14px;
+  bottom:13px;
+
+  color:white;
+
+  font-size:25px;
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+}
+
+
+/* CONTENT */
+
+.programme-head{
+
+  display:flex;
+
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:15px;
+
+}
+
+.programme-title{
+
+  margin:0;
+
+  font-size:20px;
+
+  letter-spacing:.04em;
+
+}
+
+.programme-subtitle{
+
+  margin-top:5px;
+
+  color:#8e8978;
+
+  font-size:10px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+}
+
+.status{
+
+  flex:0 0 auto;
+
+  padding:
+    5px
+    9px;
+
+  border:
+    1px solid rgba(214,180,76,.5);
+
+  color:var(--gold);
+
+  font-size:8px;
+
+  letter-spacing:.15em;
+
+}
+
+.status.not-started{
+
+  color:#aaa89d;
+
+  border-color:#4c4c46;
+
+}
+
+.status.complete{
+
+  color:var(--green);
+
+  border-color:
+    rgba(112,217,140,.45);
+
+}
+
+
+/* PROGRESS */
+
+.progress-info{
+
+  margin-top:18px;
+
+  display:flex;
+  justify-content:space-between;
+
+  color:#8c8777;
+
+  font-size:9px;
+
+  letter-spacing:.1em;
+
+}
+
+.progress-track{
+
+  height:6px;
+
+  margin-top:7px;
+
+  overflow:hidden;
+
+  background:#25251d;
+
+}
+
+.progress-fill{
+
+  height:100%;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #a98b35,
+      var(--gold)
+    );
+
+}
+
+.programme-note{
+
+  margin-top:14px;
+
+  color:#7d796b;
+
+  font-size:11px;
+
+  line-height:1.55;
+
+}
+
+
+/* BUTTON */
+
+.programme-button{
+
+  min-height:42px;
+
+  margin-top:17px;
+
+  padding:
+    0
+    17px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  color:var(--gold);
+
+  text-decoration:none;
+
+  border:
+    1px solid rgba(214,180,76,.58);
+
+  background:
+    rgba(240,210,112,.025);
+
+  font-size:9px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+}
+
+.programme-button:hover{
+
+  background:
+    rgba(240,210,112,.08);
+
+  border-color:var(--gold);
+
+}
+
+.view-all-area{
+
+  position:relative;
+  z-index:2;
+
+  padding:
+    5px
+    22px
+    23px;
+
+}
+
+.view-all-button{
+
+  min-height:46px;
+
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  color:var(--gold);
+
+  text-decoration:none;
+
+  border:
+    1px solid rgba(214,180,76,.50);
+
+  background:
+    rgba(240,210,112,.02);
+
+  font-size:9px;
+
+  letter-spacing:.15em;
+
+}
+
+.view-all-button:hover{
+
+  background:
+    rgba(240,210,112,.07);
+
+}
+
+
+/* =========================================================
+   RECENT TRAINING
+========================================================= */
+
+.training-list{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    8px
+    20px
+    20px;
+
+}
+
+.training-row{
+
+  display:grid;
+
+  grid-template-columns:
+    39px
+    minmax(0,1fr);
+
+  gap:13px;
+
+  align-items:center;
+
+  padding:
+    15px
+    0;
+
+}
+
+.training-row +
+.training-row{
+
+  border-top:
+    1px solid rgba(214,180,76,.11);
+
+}
+
+.training-icon{
+
+  width:36px;
+  height:36px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(112,217,140,.36);
+
+  color:var(--green);
+
+  font-size:12px;
+
+}
+
+.training-title{
+
+  color:#d6d1bc;
+
+  font-size:11px;
+
+  line-height:1.4;
+
+}
+
+.training-meta{
+
+  margin-top:5px;
+
+  color:#69675c;
+
+  font-size:8px;
+
+  letter-spacing:.08em;
+
+}
+
+
+/* =========================================================
+   QUALIFICATIONS
+========================================================= */
+
+.qualification-list{
+
+  position:relative;
+  z-index:1;
+
+  padding:
+    8px
+    20px
+    20px;
+
+}
+
+.qualification{
+
+  display:grid;
+
+  grid-template-columns:
+    39px
+    1fr
+    auto;
+
+  gap:13px;
+
+  align-items:center;
+
+  padding:
+    15px
+    0;
+
+}
+
+.qualification +
+.qualification{
+
+  border-top:
+    1px solid rgba(214,180,76,.11);
+
+}
+
+.qual-icon{
+
+  width:36px;
+  height:36px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid rgba(214,180,76,.40);
+
+  color:var(--gold);
+
+  font-size:12px;
+
+}
+
+.qual-title{
+
+  font-size:11px;
+
+  line-height:1.4;
+
+}
+
+.qual-date{
+
+  margin-top:5px;
+
+  color:#68665c;
+
+  font-size:8px;
+
+}
+
+.qual-code{
+
+  color:#8c8775;
+
+  font-size:9px;
+
+  letter-spacing:.14em;
+
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+.loading,
+.empty-state{
+
+  position:relative;
+  z-index:2;
+
+  padding:
+    35px
+    10px;
+
+  color:#69675c;
+
+  font-size:9px;
+
+  line-height:1.7;
+
+  letter-spacing:.14em;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.academy-footer{
+
+  margin-top:30px;
+
+  display:flex;
+  align-items:center;
+
+  gap:18px;
+
+  color:#56544b;
+
+  font-size:8px;
+
+  letter-spacing:.25em;
+
+}
+
+.footer-line{
+
+  height:1px;
+
+  flex:1;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(214,180,76,.35),
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1150px){
+
+  :root{
+    --sidebar-width:210px;
+  }
+
+  .academy-main{
+
+    padding:
+      22px
+      20px
+      45px;
+
+  }
+
+  .hero-body{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .hero-art{
+
+    min-height:250px;
+
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.13);
+
+  }
+
+  .dashboard-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .record-grid{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+  }
+
+  .record-item:nth-child(3){
+
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.16);
+
+  }
+
+  .record-item:nth-child(4){
+
+    border-top:
+      1px solid rgba(214,180,76,.16);
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  .mobile-bar{
+    display:flex;
+  }
+
+
+  .academy-app{
+    display:block;
+  }
+
+
+  .academy-sidebar{
+
+    position:fixed;
+
+    z-index:300;
+
+    top:0;
+    left:0;
+
+    width:min(300px,84vw);
+
+    height:100vh;
+
+    min-height:0;
+
+    overflow:auto;
+
+    transform:
+      translateX(-105%);
+
+    transition:
+      transform .22s ease;
+
+    box-shadow:
+      25px 0 60px rgba(0,0,0,.7);
+
+  }
+
+
+  body.sidebar-open
+  .academy-sidebar{
+
+    transform:
+      translateX(0);
+
+  }
+
+
+  body.sidebar-open::after{
+
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    z-index:250;
+
+    background:
+      rgba(0,0,0,.65);
+
+  }
+
+
+  .sidebar-inner{
+
+    position:relative;
+
+    min-height:100%;
+
+  }
+
+
+  .academy-main{
+
+    padding:
+      14px
+      13px
+      38px;
+
+  }
+
+
+  /* FRAME */
+
+  .frame{
+
+    clip-path:
+
+      polygon(
+        14px 0,
+        calc(100% - 14px) 0,
+        100% 14px,
+        100% calc(100% - 14px),
+        calc(100% - 14px) 100%,
+        14px 100%,
+        0 calc(100% - 14px),
+        0 14px
+      );
+
+  }
+
+
+  .frame::before{
+
+    inset:11px;
+
+  }
+
+
+  .frame-header{
+
+    min-height:54px;
+
+    padding:
+      0
+      20px;
+
+  }
+
+
+  .frame-title{
+
+    max-width:67%;
+
+    font-size:10px;
+
+    line-height:1.4;
+
+  }
+
+
+  .frame-code{
+
+    font-size:7px;
+
+  }
+
+
+  /* HERO */
+
+  .hero-body{
+
+    min-height:0;
+
+    display:block;
+
+  }
+
+
+  .hero-copy{
+
+    padding:
+      42px
+      32px
+      38px;
+
+  }
+
+
+  .hero-eyebrow{
+
+    font-size:10px;
+
+    line-height:1.45;
+
+  }
+
+
+  .hero-heading{
+
+    font-size:
+      clamp(47px,14vw,64px);
+
+  }
+
+
+  .hero-rule{
+
+    margin:
+      28px
+      0
+      42px;
+
+  }
+
+
+  .hero-welcome{
+
+    margin-bottom:42px;
+
+    font-size:19px;
+
+  }
+
+
+  .hero-copy p{
+
+    font-size:15px;
+
+    line-height:1.82;
+
+  }
+
+
+  .academy-statement{
+
+    margin:
+      40px
+      0
+      34px;
+
+    padding:
+      22px
+      23px;
+
+    font-size:16px;
+
+  }
+
+
+  .hero-art{
+    display:none;
+  }
+
+
+  /* RECORD */
+
+  .record-grid{
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+
+  .record-item{
+
+    min-height:115px;
+
+    padding:
+      18px
+      18px;
+
+    gap:13px;
+
+  }
+
+
+  .record-item:nth-child(3){
+
+    border-left:0;
+
+  }
+
+
+  .record-icon{
+
+    width:43px;
+    height:43px;
+
+    flex-basis:43px;
+
+    font-size:15px;
+
+  }
+
+
+  .record-value{
+
+    font-size:23px;
+
+  }
+
+
+  .record-label{
+
+    font-size:7px;
+
+  }
+
+
+  /* PROGRAMME */
+
+  .programme-row{
+
+    grid-template-columns:1fr;
+
+    gap:13px;
+
+  }
+
+
+  .programme-image{
+
+    min-height:180px;
+
+  }
+
+
+  .programme-image-code{
+
+    font-size:28px;
+
+  }
+
+
+  .programme-head{
+
+    gap:10px;
+
+  }
+
+
+  .programme-title{
+
+    font-size:18px;
+
+  }
+
+
+  .dashboard-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+
+  .academy-footer{
+
+    font-size:6px;
+
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:390px){
+
+  .academy-main{
+
+    padding-left:9px;
+    padding-right:9px;
+
+  }
+
+
+  .hero-copy{
+
+    padding:
+      37px
+      25px;
+
+  }
+
+
+  .record-item{
+
+    padding:
+      16px
+      13px;
+
+  }
+
+
+  .record-icon{
+
+    display:none;
+
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<div id="header"></div>
 
-<main class="academy-page">
+<!-- =========================================================
+     MOBILE BAR
+========================================================= -->
 
-  <!-- =====================================================
-       ACADEMY COMMAND HEADER
-  ====================================================== -->
-  <section class="jmbn-frame hero">
-    <div class="frame-inner">
-      <span class="corner-mark tl"></span>
-      <span class="corner-mark br"></span>
+<header class="mobile-bar">
 
-      <div class="terminal-head">
-        <span class="terminal-title">JMBN // ACADEMY DIVISION</span>
-        <span class="terminal-id">TRAINING NETWORK // ACAD-01</span>
+  <button
+    class="mobile-menu"
+    id="mobileMenu"
+    type="button"
+    aria-label="Open Academy menu"
+  >
+
+    <i class="fa-solid fa-bars"></i>
+
+  </button>
+
+
+  <div class="mobile-title">
+    JMBN // ACADEMY
+  </div>
+
+
+  <a
+    class="mobile-manifest"
+    href="index.html"
+  >
+    MANIFEST ↗
+  </a>
+
+</header>
+
+
+
+<div class="academy-app">
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside
+  class="academy-sidebar"
+  id="academySidebar"
+>
+
+  <div class="sidebar-inner">
+
+
+    <a
+      class="sidebar-manifest"
+      href="index.html"
+    >
+
+      <i class="fa-solid fa-arrow-left"></i>
+
+      BACK TO MANIFEST
+
+    </a>
+
+
+    <div class="sidebar-heading">
+
+      <div class="sidebar-kicker">
+        JMBN //
       </div>
 
-      <div class="hero-content">
-        <div class="kicker">PERSONNEL DEVELOPMENT // CERTIFICATION SYSTEM</div>
-        <h1>ACADEMY</h1>
-        <div class="hero-rule"></div>
+      <strong>
+        ACADEMY
+      </strong>
 
-        <div class="hero-intro">
-          <strong>Welcome to JMBN.</strong><br><br>
-
-          You already know the basics of Star Citizen. You've flown ships, fought battles,
-          completed missions, and learned the game through experience.
-          <br><br>
-
-          <strong>Now, you'll learn how to operate as part of a team.</strong>
-          The JMBN Academy isn't here to teach you how to play the game. It's here to teach
-          you how we operate together — our procedures, communication, formations, roles,
-          and the standards expected when working as a JMBN unit.
-        </div>
-
-        <div class="hero-statement">
-          WE DON'T TEACH YOU HOW TO PLAY STAR CITIZEN.<br>
-          WE TEACH YOU HOW JMBN PLAYS STAR CITIZEN.
-        </div>
-
-        <div class="hero-foot">
-          Your journey begins with <b>Basic Military Training (BMT)</b> and continues into
-          specialised certifications as you develop your role within the organization.
-        </div>
+      <div class="sidebar-network">
+        TRAINING NETWORK
       </div>
-    </div>
-  </section>
 
-
-  <!-- =====================================================
-       KPI CONSOLES
-  ====================================================== -->
-  <section class="kpis">
-
-    <div class="jmbn-frame kpi">
-      <div class="frame-inner">
-        <div class="kpi-top">
-          <span class="kpi-label">AVAILABLE PROGRAMMES</span>
-          <span class="kpi-index">01</span>
-        </div>
-        <div class="kpi-value" id="kpiProgrammes">—</div>
-        <div class="kpi-note">Current certification pathways</div>
-        <div class="kpi-scan"></div>
-      </div>
-    </div>
-
-    <div class="jmbn-frame kpi">
-      <div class="frame-inner">
-        <div class="kpi-top">
-          <span class="kpi-label">CERTIFICATIONS EARNED</span>
-          <span class="kpi-index">02</span>
-        </div>
-        <div class="kpi-value" id="kpiEarned">—</div>
-        <div class="kpi-note">Current qualifications</div>
-        <div class="kpi-scan"></div>
-      </div>
-    </div>
-
-    <div class="jmbn-frame kpi">
-      <div class="frame-inner">
-        <div class="kpi-top">
-          <span class="kpi-label">IN PROGRESS</span>
-          <span class="kpi-index">03</span>
-        </div>
-        <div class="kpi-value" id="kpiProgress">—</div>
-        <div class="kpi-note">Active programmes</div>
-        <div class="kpi-scan"></div>
-      </div>
     </div>
 
-    <div class="jmbn-frame kpi">
-      <div class="frame-inner">
-        <div class="kpi-top">
-          <span class="kpi-label">TRAINING EVENTS PASSED</span>
-          <span class="kpi-index">04</span>
-        </div>
-        <div class="kpi-value" id="kpiEvents">—</div>
-        <div class="kpi-note">Completed requirements</div>
-        <div class="kpi-scan"></div>
-      </div>
+
+    <div class="sidebar-section-label">
+      ACADEMY
     </div>
 
-  </section>
+
+    <nav class="sidebar-nav">
+
+      <a
+        class="nav-item active"
+        href="academy.html"
+      >
+
+        <i class="fa-solid fa-graduation-cap"></i>
+
+        OVERVIEW
+
+      </a>
 
 
-  <!-- =====================================================
-       CATALOGUE + RECORD
-  ====================================================== -->
-  <div class="academy-grid">
+      <a
+        class="nav-item"
+        href="programmes.html"
+      >
 
-    <section class="jmbn-frame">
-      <div class="frame-inner">
-        <span class="corner-mark tl"></span>
-        <span class="corner-mark br"></span>
+        <i class="fa-solid fa-layer-group"></i>
 
-        <div class="terminal-head">
-          <span class="terminal-title">CERTIFICATION PROGRAMMES</span>
-          <span class="terminal-id">CATALOGUE // LIVE</span>
-        </div>
+        PROGRAMMES
 
-        <div class="catalog-body">
+      </a>
 
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">TRAINING PATHWAYS</h2>
-              <p class="section-sub">
-                Each certification contains its own training events, practicals and assessment requirements.
-              </p>
-            </div>
 
-            <div class="filters">
-              <button class="filter-btn active" data-filter="all">ALL</button>
-              <button class="filter-btn" data-filter="foundation">FOUNDATION</button>
-              <button class="filter-btn" data-filter="medical">MEDICAL</button>
-              <button class="filter-btn" data-filter="combat">COMBAT</button>
-              <button class="filter-btn" data-filter="flight">FLIGHT</button>
-              <button class="filter-btn" data-filter="command">COMMAND</button>
-            </div>
-          </div>
+      <a
+        class="nav-item"
+        href="my-training.html"
+      >
 
-          <div class="programmes" id="programmeGrid">
-            <div class="loading">LOADING ACADEMY PROGRAMMES...</div>
-          </div>
+        <i class="fa-solid fa-user-gear"></i>
 
-        </div>
+        MY TRAINING
+
+      </a>
+
+
+      <a
+        class="nav-item"
+        href="training-schedule.html"
+      >
+
+        <i class="fa-regular fa-calendar-days"></i>
+
+        TRAINING SCHEDULE
+
+      </a>
+
+
+      <a
+        class="nav-item"
+        href="qualifications.html"
+      >
+
+        <i class="fa-solid fa-award"></i>
+
+        QUALIFICATIONS
+
+      </a>
+
+
+      <div class="sidebar-divider"></div>
+
+
+      <div class="sidebar-section-label">
+        TRAINING PATHWAYS
       </div>
-    </section>
 
 
-    <aside class="jmbn-frame">
-      <div class="frame-inner">
-        <span class="corner-mark tl"></span>
-        <span class="corner-mark br"></span>
+      <div id="programmeNav">
 
-        <div class="terminal-head">
-          <span class="terminal-title">UPCOMING TRAINING</span>
-          <span class="terminal-id">SCHEDULE // LIVE</span>
+        <div class="nav-item">
+          LOADING...
         </div>
 
-        <div class="upcoming-body" id="upcomingTraining">
-          <div class="loading">LOADING TRAINING SCHEDULE...</div>
-        </div>
       </div>
-    </aside>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+      TRAIN<br>
+      DEVELOP<br>
+      DEPLOY
+
+    </div>
+
+  </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="academy-main">
+
+<div class="academy-container">
+
+
+<!-- =========================================================
+     01 // HERO
+========================================================= -->
+
+<section class="frame hero">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="frame-header">
+
+    <div class="frame-title">
+      JMBN // ACADEMY DIVISION
+    </div>
+
+    <div class="frame-code">
+      TRAINING NETWORK // ACAD-01
+    </div>
 
   </div>
 
 
-  <!-- =====================================================
-       CERTIFICATION RECORD
-  ====================================================== -->
-  <section class="jmbn-frame cert-record">
-    <div class="frame-inner">
-      <span class="corner-mark tl"></span>
-      <span class="corner-mark br"></span>
+  <div class="hero-body">
 
-      <div class="terminal-head">
-        <span class="terminal-title">CERTIFICATION RECORD</span>
-        <span class="terminal-id">QUALIFICATIONS // PERSONNEL FILE</span>
+
+    <div class="hero-copy">
+
+
+      <div class="hero-eyebrow">
+
+        PERSONNEL DEVELOPMENT //
+        CERTIFICATION SYSTEM
+
       </div>
 
-      <div class="cert-record-body">
-        <h2 class="section-title">QUALIFICATIONS</h2>
-        <p class="section-sub">Your earned and available JMBN certifications.</p>
 
-        <div class="cert-grid" id="certRecord">
-          <div class="loading">LOADING CERTIFICATION RECORD...</div>
-        </div>
+      <h1 class="hero-heading">
+        ACADEMY
+      </h1>
+
+
+      <div class="hero-rule"></div>
+
+
+      <h2 class="hero-welcome">
+        Welcome to JMBN.
+      </h2>
+
+
+      <p>
+
+        You already know the basics of Star Citizen.
+        You've flown ships, fought battles, completed
+        missions, and learned the game through experience.
+
+      </p>
+
+
+      <p>
+
+        <strong>
+          Now, you'll learn how to operate as part of a team.
+        </strong>
+
+        <br>
+
+        The JMBN Academy isn't here to teach you how to
+        play the game. It's here to teach you how we
+        operate together — our procedures, communication,
+        formations, roles, and the standards expected when
+        working as a JMBN unit.
+
+      </p>
+
+
+      <div class="academy-statement">
+
+        WE DON'T TEACH YOU HOW TO PLAY STAR CITIZEN.
+
+        <br>
+
+        WE TEACH YOU HOW JMBN PLAYS STAR CITIZEN.
+
       </div>
+
+
+      <p class="hero-journey">
+
+        Your journey begins with
+
+        <strong>
+          Basic Military Training (BMT)
+        </strong>
+
+        and continues into specialised certifications
+        as you develop your role within the organization.
+
+      </p>
+
+
     </div>
-  </section>
-
-</main>
 
 
-<!-- =====================================================
-     PROGRAMME REQUIREMENTS MODAL
-====================================================== -->
-<div class="programme-modal" id="programmeModal" hidden aria-hidden="true">
-  <div class="modal-frame" role="dialog" aria-modal="true" aria-labelledby="programmeModalTitle">
-    <div class="modal-shell">
-      <div class="modal-head">
-        <div class="modal-head-copy">
-          <div class="modal-eyebrow">JMBN // ACADEMY PROGRAMME</div>
-          <div class="modal-head-title" id="programmeModalTitle">PROGRAMME REQUIREMENTS</div>
+
+    <div class="hero-art">
+
+
+      <div class="academy-emblem">
+
+        <div class="emblem-content">
+
+          <div>
+
+            <div class="emblem-jmbn">
+              JMBN
+            </div>
+
+            <div class="emblem-academy">
+              ACADEMY
+            </div>
+
+          </div>
+
         </div>
-        <button class="modal-close" id="programmeModalClose" type="button" aria-label="Close programme">×</button>
+
       </div>
-      <div class="modal-content" id="programmeModalContent"></div>
+
+
+      <div class="hero-motto">
+
+        <strong>
+          TRAIN TODAY.
+          <br>
+          STRONGER TOMORROW.
+        </strong>
+
+        <br><br>
+
+        DISCIPLINE
+        <br>
+        SKILL
+        <br>
+        UNITY
+
+      </div>
+
+
     </div>
+
+
   </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     02 // TRAINING RECORD
+========================================================= -->
+
+<section class="frame training-record">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="frame-header">
+
+    <div class="frame-title">
+      TRAINING RECORD
+    </div>
+
+    <div class="frame-code">
+      PERSONNEL // 02
+    </div>
+
+  </div>
+
+
+  <div class="record-grid">
+
+
+    <!-- AVAILABLE -->
+
+    <div class="record-item">
+
+      <div class="record-icon">
+
+        <i class="fa-solid fa-layer-group"></i>
+
+      </div>
+
+      <div>
+
+        <div
+          class="record-value"
+          id="programmeCount"
+        >
+          —
+        </div>
+
+        <div class="record-label">
+
+          PROGRAMMES
+          <br>
+          AVAILABLE
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- IN TRAINING -->
+
+    <div class="record-item">
+
+      <div class="record-icon">
+
+        <i class="fa-solid fa-person-running"></i>
+
+      </div>
+
+      <div>
+
+        <div
+          class="record-value"
+          id="trainingCount"
+        >
+          —
+        </div>
+
+        <div class="record-label">
+
+          PROGRAMMES
+          <br>
+          IN TRAINING
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- QUALIFICATIONS -->
+
+    <div class="record-item">
+
+      <div class="record-icon">
+
+        <i class="fa-solid fa-award"></i>
+
+      </div>
+
+      <div>
+
+        <div
+          class="record-value"
+          id="qualificationCount"
+        >
+          —
+        </div>
+
+        <div class="record-label">
+
+          QUALIFICATIONS
+          <br>
+          EARNED
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- EVENTS -->
+
+    <div class="record-item">
+
+      <div class="record-icon">
+
+        <i class="fa-solid fa-clipboard-check"></i>
+
+      </div>
+
+      <div>
+
+        <div
+          class="record-value"
+          id="eventCount"
+        >
+          —
+        </div>
+
+        <div class="record-label">
+
+          TRAINING EVENTS
+          <br>
+          COMPLETED
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     LOWER DASHBOARD
+========================================================= -->
+
+<div class="dashboard-grid">
+
+
+<!-- =========================================================
+     03 // CURRENT PROGRAMMES
+========================================================= -->
+
+<section class="frame">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="frame-header">
+
+    <div class="frame-title">
+      CURRENT PROGRAMMES
+    </div>
+
+    <div class="frame-code">
+      TRAINING // 03
+    </div>
+
+  </div>
+
+
+  <div
+    class="programmes-body"
+    id="programmesList"
+  >
+
+    <div class="loading">
+
+      ACCESSING TRAINING RECORD...
+
+    </div>
+
+  </div>
+
+
+  <div class="view-all-area">
+
+    <a
+      class="view-all-button"
+      href="programmes.html"
+    >
+
+      VIEW ALL PROGRAMMES
+
+      <i class="fa-solid fa-arrow-right"></i>
+
+    </a>
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================================
+     RIGHT COLUMN
+========================================================= -->
+
+<div class="right-stack">
+
+
+<!-- =========================================================
+     04 // RECENT TRAINING
+========================================================= -->
+
+<section class="frame">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="frame-header">
+
+    <div class="frame-title">
+      RECENT TRAINING
+    </div>
+
+    <div class="frame-code">
+      LOG // 04
+    </div>
+
+  </div>
+
+
+  <div
+    class="training-list"
+    id="recentTraining"
+  >
+
+    <div class="loading">
+
+      ACCESSING TRAINING LOG...
+
+    </div>
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================================
+     05 // QUALIFICATIONS
+========================================================= -->
+
+<section class="frame">
+
+  <span class="corner corner-tl"></span>
+  <span class="corner corner-br"></span>
+
+
+  <div class="frame-header">
+
+    <div class="frame-title">
+      YOUR QUALIFICATIONS
+    </div>
+
+    <div class="frame-code">
+      RECORD // 05
+    </div>
+
+  </div>
+
+
+  <div
+    class="qualification-list"
+    id="qualificationList"
+  >
+
+    <div class="loading">
+
+      ACCESSING QUALIFICATION RECORD...
+
+    </div>
+
+  </div>
+
+
+  <div class="view-all-area">
+
+    <a
+      class="view-all-button"
+      href="qualifications.html"
+    >
+
+      VIEW ALL QUALIFICATIONS
+
+      <i class="fa-solid fa-arrow-right"></i>
+
+    </a>
+
+  </div>
+
+
+</section>
+
+
+</div>
+
 </div>
 
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="js/auth.js"></script>
-<script src="js/header.js"></script>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="academy-footer">
+
+  <span>
+    JMBN
+  </span>
+
+  <div class="footer-line"></div>
+
+  <span>
+    TRAIN // DEVELOP // DEPLOY
+  </span>
+
+  <div class="footer-line"></div>
+
+  <span>
+    DISCIPLINE · SKILL · UNITY
+  </span>
+
+</footer>
+
+
+</div>
+
+</main>
+
+</div>
+
+
 
 <script>
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const MED_IMAGE_URL =
-  "https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/certification/MED.png";
-
-const FUTURE_CARD_COUNT = 3;
-
-let CERTIFICATIONS = [];
-let USER_CERTS = [];
-let REQUIREMENTS = [];
-let USER_EVENTS = [];
-let TRAINING_EVENTS = [];
-let CURRENT_USER_ID = null;
-let currentFilter = "all";
-
 
 /* =========================================================
-   SHARED HEADER
+   STATE
 ========================================================= */
 
-fetch("header.html", { cache:"no-cache" })
-  .then(response => {
-    if(!response.ok){
-      throw new Error("Header request failed: " + response.status);
-    }
-    return response.text();
-  })
-  .then(html => {
-    const host = document.getElementById("header");
+let sb = null;
+let me = null;
 
-    if(!host){
-      throw new Error("#header was not found.");
-    }
+let certifications = [];
+let requirements = [];
+let trainingEvents = [];
 
-    host.innerHTML = html;
-
-    if(typeof window.initJmbnHeader === "function"){
-      window.initJmbnHeader();
-    }else{
-      console.error("initJmbnHeader() was not found. Check js/header.js.");
-    }
-  })
-  .catch(error => {
-    console.error("Failed to load JMBN header:", error);
-  });
+let myCertifications = [];
+let myEvents = [];
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function esc(value){
+const $ = selector =>
+  document.querySelector(selector);
+
+
+function escapeHtml(value){
+
   return String(value ?? "")
+
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
 }
 
-function norm(value){
-  return String(value ?? "").trim().toLowerCase();
-}
 
-function certCode(cert){
-  return cert.certification_code || cert.code || "";
-}
+function formatDate(value){
 
-function requirementCertCode(row){
-  return row.certification_code || row.cert_code || row.certification || "";
-}
+  if(!value){
+    return "—";
+  }
 
-function requirementEventCode(row){
-  return row.event_code || "";
-}
+  const date =
+    new Date(value);
 
-function userEventCode(row){
-  return row.event_code || "";
-}
-
-function isEventComplete(row){
-  // A row in user_training_events represents a completed training event.
-  // completed_at is populated by default in the current schema.
-  return Boolean(row?.event_code && row?.completed_at);
-}
-
-function userOwnsCertification(code){
-  return USER_CERTS.some(row => {
-    const rowCode = row.certification_code || row.code || row.cert_code;
-
-    if(String(rowCode).toLowerCase() !== String(code).toLowerCase()){
-      return false;
+  return date.toLocaleDateString(
+    "en-SG",
+    {
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
     }
-
-    const status = norm(row.status || row.certification_status);
-
-    if(!status) return true;
-
-    return ["earned","certified","active","completed","passed"].includes(status);
-  });
-}
-
-function requirementsFor(code){
-  return REQUIREMENTS.filter(row =>
-    String(requirementCertCode(row)).toLowerCase() === String(code).toLowerCase()
-  );
-}
-
-function completedRequirementsFor(code){
-  const requirements = requirementsFor(code);
-
-  const completedCodes = new Set(
-    USER_EVENTS
-      .filter(isEventComplete)
-      .map(userEventCode)
-      .filter(Boolean)
-      .map(code => String(code).toLowerCase())
   );
 
-  return requirements.filter(row => {
-    const eventCode = requirementEventCode(row);
-    return eventCode && completedCodes.has(String(eventCode).toLowerCase());
-  }).length;
 }
 
-function isMedicCertification(cert){
-  const text = `${certCode(cert)} ${cert.name || ""}`.toLowerCase();
+
+/* =========================================================
+   PROGRAMME URL
+========================================================= */
+
+function getProgrammeUrl(code){
+
+  /*
+    We use your Access Programme naming convention:
+
+    AP-BMT.html
+    AP-SOC.html
+    AP-MED.html
+  */
 
   return (
-    text.includes("medic") ||
-    text.includes("medical") ||
-    norm(certCode(cert)) === "med"
-  );
-}
-
-function artworkFor(cert){
-  if(cert.image_url) return cert.image_url;
-  if(isMedicCertification(cert)) return MED_IMAGE_URL;
-  return "";
-}
-
-function inferCategory(cert){
-  const hay =
-    `${certCode(cert)} ${cert.name || ""} ${cert.description || ""}`.toLowerCase();
-
-  if(hay.includes("bmt") || hay.includes("basic military")) return "foundation";
-  if(hay.includes("medic") || hay.includes("medical")) return "medical";
-  if(hay.includes("pilot") || hay.includes("flight") || hay.includes("aviation")) return "flight";
-  if(hay.includes("command") || hay.includes("leadership")) return "command";
-
-  if(
-    hay.includes("combat") ||
-    hay.includes("gunnery") ||
-    hay.includes("vbss") ||
-    hay.includes("soc")
-  ){
-    return "combat";
-  }
-
-  return "other";
-}
-
-
-/* =========================================================
-   ARTWORK
-========================================================= */
-
-function renderArtwork(cert){
-  const url = artworkFor(cert);
-  const code = certCode(cert) || "CERT";
-
-  if(url){
-    return `
-      <img
-        src="${esc(url)}"
-        alt="${esc(cert.name || code)}"
-        onerror="
-          this.style.display='none';
-          this.nextElementSibling.hidden=false;
-        "
-      >
-      <div class="cert-fallback" hidden>${esc(code)}</div>
-    `;
-  }
-
-  return `<div class="cert-fallback">${esc(code)}</div>`;
-}
-
-
-/* =========================================================
-   FUTURE CERTIFICATION SLOT
-========================================================= */
-
-function futureCardHTML(index){
-  return `
-    <article class="programme future" data-category="future">
-      <div class="programme-shell">
-
-        <div class="programme-topline">
-          <span>JMBN // EXPANSION SLOT</span>
-          <span>F-${String(index).padStart(2,"0")}</span>
-        </div>
-
-        <div class="programme-art">
-          <div class="future-hex">
-            <span class="future-plus">+</span>
-          </div>
-        </div>
-
-        <div class="programme-body">
-
-          <span class="programme-code">FUTURE PROGRAMME</span>
-
-          <h3>FUTURE CERTIFICATION</h3>
-
-          <p class="programme-desc">
-            Additional JMBN certification programmes will be added as the
-            organization expands its training and operational capabilities.
-          </p>
-
-          <div class="coming-soon">COMING SOON</div>
-
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-
-/* =========================================================
-   PROGRAMME CATALOGUE
-========================================================= */
-
-function renderProgrammes(){
-  const grid = document.getElementById("programmeGrid");
-
-  const realCertifications = CERTIFICATIONS.filter(cert =>
-    currentFilter === "all" || inferCategory(cert) === currentFilter
+    "AP-" +
+    encodeURIComponent(code) +
+    ".html"
   );
 
-  let html = realCertifications.map((cert,index) => {
-    const code = certCode(cert);
-    const requirements = requirementsFor(code);
-    const complete = completedRequirementsFor(code);
-    const earned = userOwnsCertification(code);
+}
+
+
+/* =========================================================
+   PROGRAMME ICON
+========================================================= */
+
+function getProgrammeIcon(code){
+
+  switch(code){
+
+    case "BMT":
+
+      return "fa-shield-halved";
+
+
+    case "SOC":
+
+      return "fa-mountain";
+
+
+    case "MED":
+
+      return "fa-kit-medical";
+
+
+    case "PILOT":
+
+      return "fa-plane";
+
+
+    case "GUNNERY":
+
+      return "fa-crosshairs";
+
+
+    case "ENGINEERING":
+
+      return "fa-screwdriver-wrench";
+
+
+    default:
+
+      return "fa-certificate";
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD SUPABASE
+========================================================= */
+
+async function loadAcademyData(){
+
+  const [
+
+    certResult,
+    requirementResult,
+    eventResult,
+    myCertResult,
+    myEventResult
+
+  ] = await Promise.all([
+
+
+    /* =====================================================
+       CERTIFICATIONS
+    ===================================================== */
+
+    sb
+      .from("certifications")
+      .select(`
+        certification_code,
+        name,
+        image_url,
+        sort_order,
+        is_active
+      `)
+      .eq("is_active",true)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    /* =====================================================
+       REQUIREMENTS
+    ===================================================== */
+
+    sb
+      .from("certification_requirements")
+      .select(`
+        certification_code,
+        event_code,
+        required,
+        sort_order
+      `)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    /* =====================================================
+       TRAINING EVENTS
+    ===================================================== */
+
+    sb
+      .from("training_events")
+      .select(`
+        event_code,
+        title,
+        description,
+        duration_hrs,
+        sort_order
+      `)
+      .order(
+        "sort_order",
+        {ascending:true}
+      ),
+
+
+    /* =====================================================
+       USER QUALIFICATIONS
+    ===================================================== */
+
+    sb
+      .from("user_certifications")
+      .select(`
+        certification_code,
+        awarded_at
+      `)
+      .eq(
+        "user_id",
+        me
+      ),
+
+
+    /* =====================================================
+       USER TRAINING EVENTS
+    ===================================================== */
+
+    sb
+      .from("user_training_events")
+      .select(`
+        event_code,
+        completed_at,
+        approved_at,
+        notes
+      `)
+      .eq(
+        "user_id",
+        me
+      )
+      .order(
+        "completed_at",
+        {ascending:false}
+      )
+
+  ]);
+
+
+  /* =====================================================
+     HANDLE ERRORS
+  ===================================================== */
+
+  const errors = [
+
+    certResult.error,
+    requirementResult.error,
+    eventResult.error,
+    myCertResult.error,
+    myEventResult.error
+
+  ].filter(Boolean);
+
+
+  if(errors.length){
+
+    console.error(
+      "Academy database errors:",
+      errors
+    );
+
+  }
+
+
+  certifications =
+    certResult.data || [];
+
+  requirements =
+    requirementResult.data || [];
+
+  trainingEvents =
+    eventResult.data || [];
+
+  myCertifications =
+    myCertResult.data || [];
+
+  myEvents =
+    myEventResult.data || [];
+
+
+  renderAcademy();
+
+}
+
+
+/* =========================================================
+   BUILD PROGRAMME DATA
+========================================================= */
+
+function buildProgrammeData(){
+
+  const completedCertCodes =
+    new Set(
+      myCertifications.map(
+        row =>
+          row.certification_code
+      )
+    );
+
+
+  const completedEventCodes =
+    new Set(
+      myEvents.map(
+        row =>
+          row.event_code
+      )
+    );
+
+
+  return certifications.map(cert=>{
+
+
+    const certRequirements =
+      requirements.filter(
+        requirement =>
+          requirement.certification_code ===
+          cert.certification_code
+      );
+
+
+    const required =
+      certRequirements.filter(
+        requirement =>
+          requirement.required !== false
+      );
+
+
+    const completedRequirements =
+      required.filter(
+        requirement =>
+          completedEventCodes.has(
+            requirement.event_code
+          )
+      );
+
+
+    const total =
+      required.length;
+
+
+    const completed =
+      completedRequirements.length;
+
+
+    const certified =
+      completedCertCodes.has(
+        cert.certification_code
+      );
+
 
     let percent = 0;
 
-    if(earned){
+
+    if(total > 0){
+
+      percent =
+        Math.round(
+          (
+            completed /
+            total
+          ) * 100
+        );
+
+    }
+
+
+    /*
+      Certification award is authoritative.
+    */
+
+    if(certified){
+
       percent = 100;
-    }else if(requirements.length){
-      percent = Math.round((complete / requirements.length) * 100);
+
     }
 
-    let statusText = "○ NOT STARTED";
-    let statusClass = "pending";
 
-    if(earned){
-      statusText = "✓ CERTIFIED";
-      statusClass = "";
-    }else if(complete > 0){
-      statusText = "◐ IN PROGRESS";
+    let status =
+      "not-started";
+
+
+    if(certified){
+
+      status =
+        "complete";
+
     }
 
-    const description =
-      cert.description ||
-      "JMBN certification programme with dedicated training and assessment requirements.";
+    else if(completed > 0){
 
-    return `
-      <article class="programme" data-category="${esc(inferCategory(cert))}">
-        <div class="programme-shell">
+      status =
+        "progress";
 
-          <div class="programme-topline">
-            <span>JMBN // CERTIFICATION</span>
-            <span>${String(index + 1).padStart(2,"0")}</span>
-          </div>
-
-          <div class="programme-art">
-            ${renderArtwork(cert)}
-          </div>
-
-          <div class="programme-body">
-
-            <span class="programme-code">
-              ${esc(code || "CERTIFICATION")}
-            </span>
-
-            <h3>${esc(cert.name || code || "Certification")}</h3>
-
-            <p class="programme-desc">${esc(description)}</p>
-
-            <div class="progress-meta">
-              <span>${complete} / ${requirements.length} REQUIREMENTS</span>
-              <span>${percent}%</span>
-            </div>
-
-            <div class="progress-track">
-              <div class="progress-fill" style="width:${percent}%"></div>
-            </div>
-
-            <div class="programme-status ${statusClass}">
-              ${statusText}
-            </div>
-
-            <button
-              class="programme-action"
-              onclick="openProgrammeModal('${encodeURIComponent(code)}')"
-            >
-              VIEW PROGRAMME →
-            </button>
-
-          </div>
-        </div>
-      </article>
-    `;
-  }).join("");
-
-  if(currentFilter === "all"){
-    html += Array.from(
-      { length:FUTURE_CARD_COUNT },
-      (_,i) => futureCardHTML(i + 1)
-    ).join("");
-  }
-
-  if(!html){
-    html = `<div class="loading">NO CERTIFICATION PROGRAMMES FOUND.</div>`;
-  }
-
-  grid.innerHTML = html;
-}
+    }
 
 
-/* =========================================================
-   CERTIFICATION RECORD
-========================================================= */
+    return {
 
-function renderCertificationRecord(){
-  const host = document.getElementById("certRecord");
+      ...cert,
 
-  if(!CERTIFICATIONS.length){
-    host.innerHTML = `<div class="loading">NO CERTIFICATIONS FOUND.</div>`;
-    return;
-  }
+      requirements:required,
 
-  host.innerHTML = CERTIFICATIONS.map(cert => {
-    const code = certCode(cert);
-    const earned = userOwnsCertification(code);
-    const image = artworkFor(cert);
+      completedRequirements,
 
-    return `
-      <div class="cert-item ${earned ? "" : "unearned"}">
+      total,
+      completed,
 
-        ${
-          image
-            ? `
-              <img
-                class="cert-thumb"
-                src="${esc(image)}"
-                alt="${esc(cert.name || code)}"
-              >
-            `
-            : `<div class="cert-fallback">${esc(code || "CERT")}</div>`
-        }
+      certified,
 
-        <div>
-          <b>${esc(cert.name || code)}</b>
-          <small>${esc(code)}</small>
+      percent,
 
-          <div class="cert-state">
-            ${earned ? "✓ EARNED" : "NOT EARNED"}
-          </div>
-        </div>
+      status
 
-      </div>
-    `;
-  }).join("");
-}
+    };
 
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function renderSummary(){
-  const total = CERTIFICATIONS.length;
-  const earned = CERTIFICATIONS.filter(cert =>
-    userOwnsCertification(certCode(cert))
-  ).length;
-
-  const completedEventCodes = new Set(
-    USER_EVENTS
-      .filter(isEventComplete)
-      .map(userEventCode)
-      .filter(Boolean)
-      .map(code => String(code).toLowerCase())
-  );
-
-  const inProgress = CERTIFICATIONS.filter(cert => {
-    const code = certCode(cert);
-    if(userOwnsCertification(code)) return false;
-    return completedRequirementsFor(code) > 0;
-  }).length;
-
-  document.getElementById("kpiProgrammes").textContent = total;
-  document.getElementById("kpiEarned").textContent = earned;
-  document.getElementById("kpiProgress").textContent = inProgress;
-  document.getElementById("kpiEvents").textContent = completedEventCodes.size;
-}
-
-function renderUpcomingTraining(){
-  const host = document.getElementById("upcomingTraining");
-  if(!host) return;
-
-  // training_events currently stores Academy module definitions (BMT-CQC,
-  // BMT-FIREMOVE, etc.), not scheduled sessions. Until a training schedule
-  // table/fields are added, show a truthful empty state instead of fake dates.
-  host.innerHTML = `
-    <div class="training-empty">
-      <strong>NO TRAINING SCHEDULED</strong>
-      <span>There are currently no upcoming Academy training sessions on the schedule.</span>
-    </div>
-    <div class="upcoming-list-title">TRAINING MODULES</div>
-    ${TRAINING_EVENTS.slice(0,4).map(event => `
-      <div class="training-row">
-        <div class="date">${esc(event.event_code || "TRAINING")}</div>
-        <b>${esc(event.title || event.event_code || "Academy Training")}</b>
-        <span>Academy module · scheduling not yet assigned</span>
-      </div>
-    `).join("")}
-    <div class="training-note">Upcoming dates will appear here once Academy training sessions are scheduled.</div>
-  `;
-}
-
-/* =========================================================
-   CURRENT OBJECTIVE
-========================================================= */
-
-function renderCurrentObjective(){
-  const bmt = CERTIFICATIONS.find(cert => {
-    const code = norm(certCode(cert));
-    const name = norm(cert.name);
-
-    return code.includes("bmt") || name.includes("basic military");
   });
 
-  if(bmt && !userOwnsCertification(certCode(bmt))){
-    const code = certCode(bmt);
-    const total = requirementsFor(code).length;
-    const complete = completedRequirementsFor(code);
+}
 
-    document.getElementById("currentObjective").textContent =
-      "COMPLETE BASIC MILITARY TRAINING";
 
-    document.getElementById("currentObjectiveNote").textContent =
-      `${complete} of ${total} BMT requirements completed.`;
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderAcademy(){
+
+  const programmes =
+    buildProgrammeData();
+
+
+  renderStats(programmes);
+
+  renderSidebar(programmes);
+
+  renderProgrammes(programmes);
+
+  renderRecentTraining();
+
+  renderQualifications();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderStats(programmes){
+
+  const available =
+    programmes.filter(
+      programme =>
+        !programme.certified
+    ).length;
+
+
+  const inTraining =
+    programmes.filter(
+      programme =>
+        programme.status ===
+        "progress"
+    ).length;
+
+
+  $("#programmeCount").textContent =
+    available;
+
+
+  $("#trainingCount").textContent =
+    inTraining;
+
+
+  $("#qualificationCount").textContent =
+    myCertifications.length;
+
+
+  $("#eventCount").textContent =
+    myEvents.length;
+
+}
+
+
+/* =========================================================
+   SIDEBAR PROGRAMMES
+========================================================= */
+
+function renderSidebar(programmes){
+
+  const host =
+    $("#programmeNav");
+
+
+  if(!programmes.length){
+
+    host.innerHTML = `
+
+      <div class="nav-item">
+
+        NO PROGRAMMES
+
+      </div>
+
+    `;
 
     return;
+
   }
 
-  const next = CERTIFICATIONS.find(cert =>
-    !userOwnsCertification(certCode(cert))
-  );
 
-  if(next){
-    document.getElementById("currentObjective").textContent =
-      String(next.name || certCode(next)).toUpperCase();
+  host.innerHTML =
+    programmes
 
-    document.getElementById("currentObjectiveNote").textContent =
-      "Continue your JMBN qualification pathway.";
-  }else{
-    document.getElementById("currentObjective").textContent =
-      "ALL AVAILABLE CERTIFICATIONS COMPLETE";
+      .map(programme=>{
 
-    document.getElementById("currentObjectiveNote").textContent =
-      "No additional certification programmes are currently outstanding.";
-  }
+        const icon =
+          getProgrammeIcon(
+            programme.certification_code
+          );
+
+
+        return `
+
+          <a
+            class="nav-item"
+            href="${getProgrammeUrl(
+              programme.certification_code
+            )}"
+          >
+
+            <i
+              class="fa-solid ${icon}"
+            ></i>
+
+            ${escapeHtml(
+              programme.certification_code
+            )}
+
+          </a>
+
+        `;
+
+      })
+
+      .join("");
+
 }
 
 
 /* =========================================================
-   PROGRAMME MODAL
+   CURRENT PROGRAMMES
 ========================================================= */
 
-function trainingEventFor(code){
-  return TRAINING_EVENTS.find(event =>
-    norm(event.event_code) === norm(code)
-  );
-}
+function renderProgrammes(programmes){
 
-function isTrainingEventCompleted(code){
-  return USER_EVENTS.some(row =>
-    norm(userEventCode(row)) === norm(code) && isEventComplete(row)
-  );
-}
+  const host =
+    $("#programmesList");
 
-function openProgrammeModal(encodedCode){
-  const code = decodeURIComponent(encodedCode);
-  const cert = CERTIFICATIONS.find(item => norm(certCode(item)) === norm(code));
-  if(!cert) return;
 
-  const modal = document.getElementById("programmeModal");
-  const content = document.getElementById("programmeModalContent");
-  const title = document.getElementById("programmeModalTitle");
-  const requirements = requirementsFor(code);
-  const complete = completedRequirementsFor(code);
-  const earned = userOwnsCertification(code);
-  const percent = earned ? 100 : (requirements.length ? Math.round((complete / requirements.length) * 100) : 0);
-  const art = artworkFor(cert);
+  /*
+    Completed qualifications are deliberately
+    excluded from this section.
 
-  title.textContent = `${code} // ${cert.name || "CERTIFICATION"}`;
+    This section is ONLY:
 
-  const rows = requirements.length
-    ? requirements.map((requirement,index) => {
-        const eventCode = requirementEventCode(requirement);
-        const event = trainingEventFor(eventCode);
-        const done = isTrainingEventCompleted(eventCode);
-        return `
-          <div class="requirement-row">
-            <div class="requirement-number">${String(index + 1).padStart(2,"0")}</div>
-            <div>
-              <div class="requirement-code">${esc(eventCode)}</div>
-              <div class="requirement-title">${esc(event?.title || eventCode || "Training Requirement")}</div>
-              ${event?.description ? `<div class="requirement-desc">${esc(event.description)}</div>` : ""}
-            </div>
-            <div class="requirement-state ${done ? "done" : ""}">${done ? "✓ COMPLETE" : "○ REQUIRED"}</div>
-          </div>
-        `;
-      }).join("")
-    : `<div class="training-empty"><strong>NO REQUIREMENTS ASSIGNED</strong><span>This certification does not currently have training requirements configured.</span></div>`;
+    - in progress
+    - available / not started
 
-  content.innerHTML = `
-    <div class="modal-intro">
-      <div class="modal-art">
-        ${art
-          ? `<img src="${esc(art)}" alt="${esc(cert.name || code)}" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><div class="cert-fallback" hidden>${esc(code)}</div>`
-          : `<div class="cert-fallback">${esc(code)}</div>`
+    Completed programmes belong under
+    Qualifications.
+  */
+
+  const visible =
+    programmes
+
+      .filter(
+        programme =>
+          !programme.certified
+      )
+
+      .sort((a,b)=>{
+
+        const priority = {
+
+          progress:0,
+          "not-started":1
+
+        };
+
+
+        const ap =
+          priority[a.status] ?? 2;
+
+        const bp =
+          priority[b.status] ?? 2;
+
+
+        if(ap !== bp){
+
+          return ap - bp;
+
         }
+
+
+        return (
+          Number(a.sort_order || 999) -
+          Number(b.sort_order || 999)
+        );
+
+      });
+
+
+  if(!visible.length){
+
+    host.innerHTML = `
+
+      <div class="empty-state">
+
+        ALL CURRENT ACADEMY PROGRAMMES
+        HAVE BEEN COMPLETED.
+
+        <br><br>
+
+        YOUR COMPLETED PROGRAMMES ARE
+        AVAILABLE UNDER QUALIFICATIONS.
+
       </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    visible
+      .map(
+        renderProgramme
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   PROGRAMME ROW
+========================================================= */
+
+function renderProgramme(programme){
+
+  let statusText =
+    "AVAILABLE";
+
+
+  if(
+    programme.status ===
+    "progress"
+  ){
+
+    statusText =
+      "IN TRAINING";
+
+  }
+
+
+  let progressText;
+
+
+  if(programme.total > 0){
+
+    progressText =
+      `${programme.completed} / ${programme.total}`;
+
+  }
+
+  else{
+
+    progressText =
+      "—";
+
+  }
+
+
+  let note;
+
+
+  if(programme.total === 0){
+
+    note =
+      "Training syllabus has not yet been assigned.";
+
+  }
+
+  else if(
+    programme.status ===
+    "progress"
+  ){
+
+    note =
+      `${programme.completed} of ${programme.total} required training events completed.`;
+
+  }
+
+  else{
+
+    note =
+      `${programme.total} required training events.`;
+
+  }
+
+
+  const imageMarkup =
+    programme.image_url
+    ?
+    `
+      <img
+        src="${escapeHtml(
+          programme.image_url
+        )}"
+        alt="${escapeHtml(
+          programme.name
+        )}"
+      >
+    `
+    :
+    "";
+
+
+  return `
+
+    <article class="programme-row">
+
+
+      <div class="programme-image">
+
+        ${imageMarkup}
+
+        <div class="programme-image-code">
+
+          ${escapeHtml(
+            programme.certification_code
+          )}
+
+        </div>
+
+      </div>
+
 
       <div>
-        <div class="modal-code">CERTIFICATION // ${esc(code)}</div>
-        <h2 class="modal-name">${esc(cert.name || code)}</h2>
-        <p class="modal-description">${esc(cert.description || "Complete the required JMBN Academy training events below to qualify for this certification.")}</p>
 
-        <div class="modal-progress">
-          <div class="modal-progress-meta">
-            <span>${earned ? "CERTIFICATION EARNED" : `${complete} OF ${requirements.length} REQUIREMENTS COMPLETED`}</span>
-            <span>${percent}%</span>
+
+        <div class="programme-head">
+
+
+          <div>
+
+            <h3 class="programme-title">
+
+              ${escapeHtml(
+                programme.certification_code
+              )}
+
+            </h3>
+
+            <div class="programme-subtitle">
+
+              ${escapeHtml(
+                programme.name
+              )}
+
+            </div>
+
           </div>
-          <div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div>
+
+
+          <div
+            class="status ${programme.status}"
+          >
+
+            ${statusText}
+
+          </div>
+
+
         </div>
+
+
+
+        <div class="progress-info">
+
+          <span>
+            PROGRAMME PROGRESS
+          </span>
+
+          <span>
+            ${progressText}
+          </span>
+
+        </div>
+
+
+        <div class="progress-track">
+
+          <div
+            class="progress-fill"
+            style="
+              width:${programme.percent}%
+            "
+          ></div>
+
+        </div>
+
+
+        <div class="programme-note">
+
+          ${escapeHtml(note)}
+
+        </div>
+
+
+        <a
+          class="programme-button"
+          href="${getProgrammeUrl(
+            programme.certification_code
+          )}"
+        >
+
+          ${
+            programme.status ===
+            "progress"
+            ?
+            "CONTINUE TRAINING"
+            :
+            "ACCESS PROGRAMME"
+          }
+
+          <i
+            class="fa-solid
+                   fa-arrow-right"
+          ></i>
+
+        </a>
+
+
       </div>
-    </div>
 
-    <div class="modal-section-head">
-      <b>REQUIRED TRAINING</b>
-      <span>${requirements.length} ${requirements.length === 1 ? "REQUIREMENT" : "REQUIREMENTS"}</span>
-    </div>
 
-    <div class="requirement-list">${rows}</div>
+    </article>
 
-    <div class="modal-rule-box">
-      <b>CERTIFICATION REQUIREMENT //</b><br>
-      ${requirements.length
-        ? `Complete all ${requirements.length} required training ${requirements.length === 1 ? "event" : "events"} to qualify for ${esc(cert.name || code)}.`
-        : `Training requirements for this certification have not yet been configured.`
-      }
-    </div>
   `;
 
-  modal.hidden = false;
-  modal.setAttribute("aria-hidden","false");
-  document.body.classList.add("modal-open");
 }
 
-function closeProgrammeModal(){
-  const modal = document.getElementById("programmeModal");
-  modal.hidden = true;
-  modal.setAttribute("aria-hidden","true");
-  document.body.classList.remove("modal-open");
-}
 
 /* =========================================================
-   LOAD DATA
+   RECENT TRAINING
 ========================================================= */
 
-async function loadAcademy(){
-  try{
-    if(typeof window.getSupabase !== "function"){
-      throw new Error("getSupabase() not found. Check js/auth.js.");
-    }
+function renderRecentTraining(){
 
-    const sb = window.getSupabase();
+  const host =
+    $("#recentTraining");
 
-    const {
-      data:{ session },
-      error:sessionError
-    } = await sb.auth.getSession();
 
-    if(sessionError) throw sessionError;
+  if(!myEvents.length){
 
-    if(!session?.user){
-      window.location.href = "login.html";
+    host.innerHTML = `
+
+      <div class="empty-state">
+
+        NO COMPLETED TRAINING EVENTS
+        RECORDED.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const eventMap = {};
+
+
+  trainingEvents.forEach(event=>{
+
+    eventMap[
+      event.event_code
+    ] = event;
+
+  });
+
+
+  const recent =
+    myEvents.slice(0,5);
+
+
+  host.innerHTML =
+    recent
+
+      .map(record=>{
+
+
+        const event =
+          eventMap[
+            record.event_code
+          ] || {};
+
+
+        return `
+
+          <div class="training-row">
+
+
+            <div class="training-icon">
+
+              <i
+                class="fa-solid
+                       fa-check"
+              ></i>
+
+            </div>
+
+
+            <div>
+
+              <div class="training-title">
+
+                ${escapeHtml(
+                  event.title ||
+                  record.event_code
+                )}
+
+              </div>
+
+
+              <div class="training-meta">
+
+                ${escapeHtml(
+                  record.event_code
+                )}
+
+                &nbsp; // &nbsp;
+
+                ${formatDate(
+                  record.completed_at
+                )}
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
+
+}
+
+
+/* =========================================================
+   QUALIFICATIONS
+========================================================= */
+
+function renderQualifications(){
+
+  const host =
+    $("#qualificationList");
+
+
+  if(!myCertifications.length){
+
+    host.innerHTML = `
+
+      <div class="empty-state">
+
+        NO ACADEMY QUALIFICATIONS
+        EARNED YET.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const certMap = {};
+
+
+  certifications.forEach(cert=>{
+
+    certMap[
+      cert.certification_code
+    ] = cert;
+
+  });
+
+
+  const sorted =
+    [...myCertifications]
+
+      .sort(
+        (a,b)=>
+
+          new Date(
+            b.awarded_at || 0
+          )
+
+          -
+
+          new Date(
+            a.awarded_at || 0
+          )
+      )
+
+      .slice(0,5);
+
+
+  host.innerHTML =
+    sorted
+
+      .map(record=>{
+
+
+        const cert =
+          certMap[
+            record.certification_code
+          ] || {};
+
+
+        return `
+
+          <div class="qualification">
+
+
+            <div class="qual-icon">
+
+              <i
+                class="fa-solid
+                       fa-award"
+              ></i>
+
+            </div>
+
+
+            <div>
+
+              <div class="qual-title">
+
+                ${escapeHtml(
+                  cert.name ||
+                  record.certification_code
+                )}
+
+              </div>
+
+
+              <div class="qual-date">
+
+                EARNED //
+
+                ${formatDate(
+                  record.awarded_at
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div class="qual-code">
+
+              ${escapeHtml(
+                record.certification_code
+              )}
+
+            </div>
+
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
+
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+const mobileMenu =
+  $("#mobileMenu");
+
+
+mobileMenu?.addEventListener(
+  "click",
+  event=>{
+
+    event.stopPropagation();
+
+    document.body
+      .classList
+      .toggle(
+        "sidebar-open"
+      );
+
+  }
+);
+
+
+document.addEventListener(
+  "click",
+  event=>{
+
+    if(
+      window.innerWidth > 760
+    ){
       return;
     }
 
-    CURRENT_USER_ID = session.user.id;
 
-    const [
-      certResult,
-      requirementResult,
-      userCertResult,
-      userEventResult,
-      trainingEventResult
-    ] = await Promise.all([
-
-      sb
-        .from("certifications")
-        .select("*")
-        .order("sort_order",{ ascending:true }),
-
-      sb
-        .from("certification_requirements")
-        .select("*"),
-
-      sb
-        .from("user_certifications")
-        .select("*")
-        .eq("user_id",CURRENT_USER_ID),
-
-      sb
-        .from("user_training_events")
-        .select("*")
-        .eq("user_id",CURRENT_USER_ID),
-
-      sb
-        .from("training_events")
-        .select("event_code,title,description,duration_hrs,sort_order")
-        .order("sort_order",{ ascending:true })
-
-    ]);
-
-    if(certResult.error) throw certResult.error;
-
-    if(requirementResult.error){
-      console.warn("certification_requirements:",requirementResult.error);
+    if(
+      !document.body
+        .classList
+        .contains(
+          "sidebar-open"
+        )
+    ){
+      return;
     }
 
-    if(userCertResult.error){
-      console.warn("user_certifications:",userCertResult.error);
+
+    const sidebar =
+      $("#academySidebar");
+
+
+    if(
+      sidebar.contains(
+        event.target
+      )
+    ){
+      return;
     }
 
-    if(userEventResult.error){
-      console.warn("user_training_events:",userEventResult.error);
-    }
 
-    if(trainingEventResult.error){
-      console.warn("training_events:",trainingEventResult.error);
-    }
+    document.body
+      .classList
+      .remove(
+        "sidebar-open"
+      );
 
-    CERTIFICATIONS = certResult.data || [];
-    REQUIREMENTS = requirementResult.data || [];
-    USER_CERTS = userCertResult.data || [];
-    USER_EVENTS = userEventResult.data || [];
-    TRAINING_EVENTS = trainingEventResult.data || [];
-
-    renderProgrammes();
-    renderCertificationRecord();
-    renderSummary();
-    renderUpcomingTraining();
-
-  }catch(error){
-    console.error("Academy load failed:",error);
-
-    document.getElementById("programmeGrid").innerHTML =
-      `<div class="loading">ACADEMY DATA COULD NOT BE LOADED.</div>`;
-
-    document.getElementById("certRecord").innerHTML =
-      `<div class="loading">CERTIFICATION RECORD COULD NOT BE LOADED.</div>`;
   }
-}
+);
 
 
 /* =========================================================
-   FILTERS
+   INITIALIZE
 ========================================================= */
 
-document.querySelectorAll(".filter-btn").forEach(button => {
-  button.addEventListener("click",() => {
-    document.querySelectorAll(".filter-btn").forEach(item =>
-      item.classList.remove("active")
-    );
+document.addEventListener(
+  "DOMContentLoaded",
+  async()=>{
 
-    button.classList.add("active");
-    currentFilter = button.dataset.filter || "all";
-    renderProgrammes();
-  });
-});
+    try{
 
 
-document.getElementById("programmeModalClose").addEventListener("click",closeProgrammeModal);
+      /* -----------------------------------------------
+         AUTH
+      ----------------------------------------------- */
 
-document.getElementById("programmeModal").addEventListener("click",event => {
-  if(event.target.id === "programmeModal") closeProgrammeModal();
-});
+      const session =
+        await requireAuth();
 
-document.addEventListener("keydown",event => {
-  if(event.key === "Escape" && !document.getElementById("programmeModal").hidden){
-    closeProgrammeModal();
+
+      if(!session){
+
+        return;
+
+      }
+
+
+      sb =
+        getSupabase();
+
+
+      me =
+        session.user.id;
+
+
+
+      /* -----------------------------------------------
+         LOAD REAL ACADEMY DATA
+      ----------------------------------------------- */
+
+      await loadAcademyData();
+
+
+    }
+
+    catch(error){
+
+
+      console.error(
+        "Academy initialization failed:",
+        error
+      );
+
+
+      $("#programmesList").innerHTML = `
+
+        <div class="empty-state">
+
+          ACADEMY DATABASE CONNECTION FAILED.
+
+          <br><br>
+
+          PLEASE RELOAD THE TRAINING NETWORK.
+
+        </div>
+
+      `;
+
+
+    }
+
   }
-});
+);
 
-
-/* =========================================================
-   START
-========================================================= */
-
-document.addEventListener("DOMContentLoaded",loadAcademy);
 </script>
+
 
 </body>
 </html>
