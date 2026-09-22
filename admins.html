@@ -16,6 +16,11 @@
   --bg:#000;--panel:#0b0b0b;--sub:#0f0f0f;--row:#0a0a0a;
   --border:#d6b44c;--card:#141414;
   --accent:#f2d675;--text:#f7f1d0;--muted:#c9b06a;--bad:#ff6b6b;--ok:#5cd47c;
+  --line:rgba(214,180,76,.62);
+  --line-soft:rgba(214,180,76,.22);
+  --frame-bg:linear-gradient(180deg,rgba(15,15,13,.97),rgba(6,7,7,.98));
+  --clip:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
+  --clip-sm:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
   --fs-base:14px;--fs-small:11px;--fs-h1:clamp(18px,2.2vw,22px);
 }
 *{box-sizing:border-box}
@@ -51,11 +56,28 @@ body{
 
 /* Panels */
 .panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  box-shadow:0 0 18px rgba(214,180,76,.22),inset 0 0 0 1px rgba(214,180,76,.12);
+  position:relative;
+  background:var(--frame-bg);
+  border:0;
+  border-radius:0;
+  clip-path:var(--clip);
+  box-shadow:0 0 22px rgba(214,180,76,.12);
 }
+.panel::before{
+  content:"";
+  position:absolute;inset:0;
+  background:var(--border);
+  clip-path:var(--clip);
+  z-index:0;
+}
+.panel::after{
+  content:"";
+  position:absolute;inset:1px;
+  background:var(--frame-bg);
+  clip-path:var(--clip);
+  z-index:0;
+}
+.panel>*{position:relative;z-index:1}
 .panel .hd{
   display:flex;align-items:center;justify-content:space-between;
   padding:10px 14px;
@@ -83,17 +105,19 @@ body{
 .badge{
   display:inline-block;
   border:1px solid var(--border);
-  border-radius:999px;
-  padding:2px 7px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
+  padding:2px 9px;
   font-size:10px;
   color:var(--muted);
   background:#050505;
 }
 .pill{
   display:inline-block;
-  border-radius:999px;
+  border-radius:0;
   border:1px solid var(--border);
-  padding:4px 10px;
+  clip-path:var(--clip-sm);
+  padding:4px 12px;
   font-size:12px;
   background:#050505;
   color:var(--accent);
@@ -105,7 +129,8 @@ input[type="search"],select{
   width:100%;
   background:#0a0a0a;
   border:1px solid var(--border);
-  border-radius:8px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
   padding:8px 10px;
   color:var(--text);
   font-family:'Play';
@@ -113,7 +138,8 @@ input[type="search"],select{
 }
 button{
   padding:8px 12px;
-  border-radius:10px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
   border:1px solid var(--border);
   background:linear-gradient(180deg,#0c0c0c,#060606);
   color:var(--accent);
@@ -130,7 +156,7 @@ button:hover{
 }
 .btn-danger{border-color:var(--bad);color:var(--bad)}
 .btn-ok{border-color:var(--ok);color:var(--ok)}
-.btn-ghost{background:transparent;border-radius:999px}
+.btn-ghost{background:transparent;border-radius:0;clip-path:var(--clip-sm)}
 
 /* LEFT: Members list */
 .members-col{
@@ -161,9 +187,10 @@ button:hover{
   gap:10px;
   align-items:center;
   padding:8px;
-  border-radius:10px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
   border:1px solid transparent;
-  background:#0a0a0a;
+  background:linear-gradient(90deg,#0a0a09,#080909);
   cursor:pointer;
   box-shadow:inset 0 0 0 1px rgba(214,180,76,.08);
 }
@@ -216,7 +243,8 @@ button:hover{
 
 .kpi{
   background:linear-gradient(180deg,#0b0b0b,#080808);
-  border-radius:10px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
   border:1px solid var(--border);
   padding:8px;
   box-shadow:0 0 14px rgba(214,180,76,.18),inset 0 0 0 1px rgba(214,180,76,.12);
@@ -261,11 +289,19 @@ button:hover{
 
 /* inner subpanels */
 .subpanel{
-  background:var(--sub);
-  border-radius:10px;
+  position:relative;
+  background:linear-gradient(180deg,rgba(15,15,13,.94),rgba(8,9,9,.96));
+  border-radius:0;
   border:1px solid rgba(214,180,76,.55);
-  box-shadow:0 0 12px rgba(214,180,76,.18),inset 0 0 0 1px rgba(214,180,76,.08);
+  clip-path:var(--clip);
+  box-shadow:0 0 12px rgba(214,180,76,.10);
   margin-top:10px;
+}
+.subpanel::before{
+  content:"";
+  position:absolute;top:0;left:0;width:74px;height:2px;
+  background:var(--accent);
+  box-shadow:0 0 8px rgba(242,214,117,.55);
 }
 .subpanel .hd{
   padding:8px 10px;
@@ -308,6 +344,51 @@ button:hover{
   font-size:12px;
 }
 
+
+/* Academy Instructor Authorisation */
+.instructor-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+@media(max-width:780px){.instructor-grid{grid-template-columns:1fr}}
+.instructor-card{
+  border:1px solid rgba(214,180,76,.4);
+  border-radius:0;
+  clip-path:var(--clip-sm);
+  background:#0a0a0a;
+  padding:10px;
+}
+.instructor-card.active{
+  border-color:var(--border);
+  background:rgba(214,180,76,.08);
+}
+.instructor-card .ititle{
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:7px;
+}
+.instructor-options{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.instructor-options label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  color:var(--muted);
+}
+.instructor-options input{accent-color:#d6b44c}
+.instructor-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+
 /* Timeline */
 .timeline{
   position:relative;
@@ -339,13 +420,33 @@ button:hover{
 }
 .item{
   border:1px solid var(--border);
-  border-radius:8px;
+  border-radius:0;
+  clip-path:var(--clip-sm);
   background:#0b0b0b;
   padding:8px 9px;
   box-shadow:0 0 10px rgba(214,180,76,.18),inset 0 0 0 1px rgba(214,180,76,.08);
 }
 .item h4{margin:0 0 4px;color:var(--accent);font-size:13px}
 .item .meta{font-size:12px;color:var(--muted)}
+
+/* New JMBN terminal-frame accents */
+.panel .hd h2::before,
+.subpanel .hd h3::before{
+  content:"//";
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.12em;
+}
+.panel .hd{
+  background:linear-gradient(90deg,rgba(214,180,76,.07),transparent 55%);
+}
+.subpanel .hd{
+  background:linear-gradient(90deg,rgba(214,180,76,.055),transparent 60%);
+}
+.mrow.active{
+  box-shadow:inset 3px 0 0 var(--accent),inset 0 0 0 1px rgba(214,180,76,.16);
+}
+
 </style>
 </head>
 <body>
@@ -716,6 +817,24 @@ async function openMember(userId, rowEl){
 
     <div class="subpanel">
       <div class="hd">
+        <h3>Academy Instructor Authorisation</h3>
+        <span id="instructorBadge" class="badge">Loading…</span>
+      </div>
+      <div class="body">
+        <div class="small" style="margin-bottom:8px">
+          Authorise this member to instruct and/or sign off specific Academy programmes.
+          This does not change their normal JMBN role or rank.
+        </div>
+        <div id="instructorGrid" class="instructor-grid">Loading…</div>
+        <div class="instructor-actions">
+          <button id="btnSaveInstructor" class="btn-ok" type="button">Save Authorisation</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="subpanel">
+      <div class="hd">
         <h3>Certification Timeline</h3>
         <div>
           <select id="certSelect"></select>
@@ -740,6 +859,7 @@ async function openMember(userId, rowEl){
   await Promise.all([
     loadProgress(userId),
     loadCerts(userId),
+    loadInstructorAuthorisations(userId),
     loadMissions(userId)
   ])
 
@@ -879,6 +999,132 @@ async function loadCerts(uid){
 
   $('#btnReloadTL').onclick = () => loadTimeline(uid, select.value)
 }
+
+
+/* ===== Academy Instructor Authorisation ===== */
+async function loadInstructorAuthorisations(uid){
+  const grid = $('#instructorGrid')
+  const badge = $('#instructorBadge')
+  if(!grid) return
+
+  grid.textContent = 'Loading…'
+
+  const [{ data: catalog, error: cErr }, { data: auths, error: aErr }] = await Promise.all([
+    sb.from('certifications')
+      .select('certification_code,name,sort_order,is_active')
+      .eq('is_active', true)
+      .order('sort_order'),
+    sb.from('academy_instructors')
+      .select('certification_code,can_instruct,can_sign_off,is_active')
+      .eq('user_id', uid)
+  ])
+
+  if(cErr || aErr){
+    grid.innerHTML = `<div class="small" style="color:#ff9c9c">
+      Failed to load instructor authorisations: ${esc(cErr?.message || aErr?.message || 'Unknown error')}
+    </div>`
+    if(badge) badge.textContent = 'ERROR'
+    return
+  }
+
+  const map = new Map((auths || []).map(x => [x.certification_code, x]))
+  grid.innerHTML = ''
+
+  ;(catalog || []).forEach(c => {
+    const a = map.get(c.certification_code)
+    const enabled = !!a?.is_active
+    const card = document.createElement('div')
+    card.className = 'instructor-card' + (enabled ? ' active' : '')
+    card.dataset.code = c.certification_code
+    card.innerHTML = `
+      <div class="ititle">${esc(c.certification_code)} — ${esc(c.name || c.certification_code)}</div>
+      <div class="instructor-options">
+        <label>
+          <input class="i-enabled" type="checkbox" ${enabled ? 'checked' : ''}>
+          Instructor authorised
+        </label>
+        <label>
+          <input class="i-instruct" type="checkbox" ${a?.can_instruct ? 'checked' : ''}>
+          Can conduct training
+        </label>
+        <label>
+          <input class="i-signoff" type="checkbox" ${a?.can_sign_off ? 'checked' : ''}>
+          Can sign off practicals
+        </label>
+      </div>`
+
+    const enabledBox = card.querySelector('.i-enabled')
+    const instructBox = card.querySelector('.i-instruct')
+    const signoffBox = card.querySelector('.i-signoff')
+
+    const syncCard = () => {
+      const on = enabledBox.checked
+      card.classList.toggle('active', on)
+      instructBox.disabled = !on
+      signoffBox.disabled = !on
+      if(on && !instructBox.checked && !signoffBox.checked){
+        instructBox.checked = true
+        signoffBox.checked = true
+      }
+    }
+    enabledBox.addEventListener('change', syncCard)
+    syncCard()
+    grid.appendChild(card)
+  })
+
+  const activeCount = (auths || []).filter(x => x.is_active).length
+  if(badge) badge.textContent = activeCount ? `${activeCount} PROGRAMME${activeCount === 1 ? '' : 'S'}` : 'NOT INSTRUCTOR'
+
+  const save = $('#btnSaveInstructor')
+  if(save){
+    save.onclick = () => saveInstructorAuthorisations(uid)
+  }
+}
+
+async function saveInstructorAuthorisations(uid){
+  if(!SELECTED || SELECTED.user_id !== uid) return
+  const btn = $('#btnSaveInstructor')
+  const cards = [...document.querySelectorAll('#instructorGrid .instructor-card')]
+
+  if(!cards.length) return alert('No Academy programmes found.')
+  if(!confirm(`Save Academy instructor permissions for ${SELECTED.handle || SELECTED.display_name || uid.slice(0,8)}?`)) return
+
+  btn.disabled = true
+  btn.textContent = 'Saving…'
+
+  try{
+    for(const card of cards){
+      const certification_code = card.dataset.code
+      const is_active = card.querySelector('.i-enabled').checked
+      const can_instruct = is_active && card.querySelector('.i-instruct').checked
+      const can_sign_off = is_active && card.querySelector('.i-signoff').checked
+
+      const { error } = await sb
+        .from('academy_instructors')
+        .upsert({
+          user_id: uid,
+          certification_code,
+          can_instruct,
+          can_sign_off,
+          is_active,
+          authorised_by: me,
+          authorised_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }, { onConflict:'user_id,certification_code' })
+
+      if(error) throw error
+    }
+
+    alert('Instructor authorisation updated ✓')
+    await loadInstructorAuthorisations(uid)
+  }catch(e){
+    alert('Failed to save instructor authorisation: ' + (e.message || e))
+  }finally{
+    btn.disabled = false
+    btn.textContent = 'Save Authorisation'
+  }
+}
+
 
 /* ===== Timeline ===== */
 async function loadTimeline(uid, certCode){
