@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050605">
+<title>JMBN // Access Pending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<style>
+:root{--bg:#030403;--panel:#090b08;--gold:#d6b44c;--bright:#f2d675;--text:#f7f1d0;--muted:#99917a;--line:rgba(214,180,76,.56)}
+*{box-sizing:border-box}html,body{min-height:100%;margin:0}body{font-family:"Play",sans-serif;color:var(--text);background:radial-gradient(circle at 50% 25%,rgba(214,180,76,.07),transparent 32%),var(--bg);display:grid;place-items:center;padding:24px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(242,214,117,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(242,214,117,.018) 1px,transparent 1px);background-size:46px 46px}
+.wrap{width:min(720px,100%)}.brand{text-align:center;margin-bottom:20px;color:var(--bright);letter-spacing:.24em;font-weight:700}.brand small{display:block;margin-top:7px;color:#706a58;font-size:9px;letter-spacing:.34em}
+.frame{position:relative;border:1px solid var(--line);background:linear-gradient(145deg,rgba(214,180,76,.035),transparent 20%),rgba(7,9,7,.96);clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px);padding:44px 46px;box-shadow:0 0 45px rgba(214,180,76,.035)}
+.frame:before{content:"";position:absolute;inset:10px;border:1px solid rgba(214,180,76,.09);pointer-events:none;clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px)}.frame:after{content:"";position:absolute;top:0;left:42px;width:120px;height:2px;background:linear-gradient(90deg,var(--bright),transparent)}
+.kicker{color:var(--gold);font-size:10px;letter-spacing:.28em}.icon{width:78px;height:78px;border:1px solid var(--gold);margin:25px auto 20px;display:grid;place-items:center;transform:rotate(45deg);background:rgba(214,180,76,.035)}.icon span{transform:rotate(-45deg);font-size:30px;color:var(--bright)}
+h1{text-align:center;margin:0;color:var(--bright);font-size:30px;letter-spacing:.17em}p{text-align:center;max-width:500px;margin:16px auto;color:#aaa28c;line-height:1.65;font-size:13px}
+.status{margin:30px 0 25px;border-top:1px solid rgba(214,180,76,.2);border-bottom:1px solid rgba(214,180,76,.2);padding:18px 4px;display:grid;gap:12px}.row{display:flex;justify-content:space-between;gap:20px;font-size:11px;letter-spacing:.1em}.row span:first-child{color:#827b68}.ok{color:#6bd68b}.wait{color:var(--bright)}
+button{width:100%;padding:13px;border:1px solid var(--gold);background:rgba(214,180,76,.04);color:var(--bright);font:700 11px "Play";letter-spacing:.16em;cursor:pointer}button:hover{background:rgba(214,180,76,.1)}.foot{text-align:center;color:#575348;font-size:8px;letter-spacing:.3em;margin-top:20px}
+@media(max-width:560px){.frame{padding:36px 24px}.row{font-size:10px}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="brand">JMBN // MANIFEST SYSTEM<small>PERSONNEL ACCESS NETWORK</small></div>
+<section class="frame">
+<div class="kicker">// ACCOUNT ACCESS</div>
+<div class="icon"><span>⌛</span></div>
+<h1>ACCESS PENDING</h1>
+<p>Your account has been authenticated, but JMBN membership access has not yet been authorised.</p>
+<div class="status">
+<div class="row"><span>ACCOUNT</span><strong class="ok">● AUTHENTICATED</strong></div>
+<div class="row"><span>MEMBERSHIP</span><strong class="wait">○ PENDING AUTHORISATION</strong></div>
+</div>
+<p>Your Manifest access will become available once your JMBN membership has been approved.</p>
+<button id="logout" type="button">LOG OUT</button>
+</section>
+<div class="foot">JMBN // ACCESS CONTROL</div>
+</div>
+<script>
+(async()=>{const session=await requireAuth({allowGuest:true});if(!session)return;document.getElementById("logout").onclick=()=>signOut();})();
+</script>
+</body>
+</html>
