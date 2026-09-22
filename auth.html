@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>JMBN — Login</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="icon"
+  type="image/png"
+  href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+  sizes="32x32"
+>
+
+<style>
+/* =========================================================
+   JMBN AUTH
+========================================================= */
+
+:root{
+  --bg:#000;
+  --panel:#0b0b0b;
+  --panel-2:#111111;
+
+  --border:#d6b44c;
+  --accent:#f2d675;
+  --accent-soft:#c9b06a;
+
+  --text:#f7f1d0;
+  --muted:#c9b06a;
+
+  --discord:#5865F2;
+  --bad:#ff8f8f;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,
+body{
+  min-height:100%;
+}
+
+body{
+  min-height:100vh;
+
+  display:grid;
+  place-items:center;
+
+  padding:20px;
+
+  background:
+    radial-gradient(
+      1200px 900px at 15% -10%,
+      rgba(242,214,117,.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at 120% 110%,
+      rgba(214,180,76,.05),
+      transparent 60%
+    ),
+    #000;
+
+  color:var(--text);
+
+  font-family:
+    "Play",
+    system-ui,
+    sans-serif;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.auth-card{
+  position:relative;
+
+  width:min(460px, 96vw);
+
+  padding:28px 22px 22px;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.018),
+      transparent 30%
+    ),
+    var(--panel);
+
+  border:1px solid var(--border);
+  border-radius:18px;
+
+  box-shadow:
+    0 0 18px rgba(214,180,76,.22),
+    inset 0 0 0 1px rgba(214,180,76,.10);
+
+  text-align:center;
+}
+
+.auth-card::before{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:14%;
+  right:14%;
+
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(242,214,117,.8),
+      transparent
+    );
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  margin-bottom:4px;
+  padding-bottom:6px;
+}
+
+.brand-logo{
+  width:64px;
+  height:64px;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 0 5px rgba(242,214,117,.35)
+    );
+}
+
+.brand h1{
+  margin:0;
+
+  color:var(--accent);
+
+  font-size:24px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+.subtitle{
+  margin:6px 0 20px;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-area{
+  transition:
+    opacity .2s ease,
+    filter .2s ease;
+}
+
+label{
+  display:block;
+
+  width:85%;
+
+  margin:10px auto 5px;
+
+  color:var(--accent);
+
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.5px;
+
+  text-align:left;
+}
+
+input{
+  display:block;
+
+  width:85%;
+
+  margin:0 auto 8px;
+  padding:11px 12px;
+
+  outline:none;
+
+  border:1px solid rgba(242,214,117,.8);
+  border-radius:8px;
+
+  background:#141414;
+
+  color:var(--text);
+
+  font-family:"Play",sans-serif;
+  font-size:14px;
+
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+}
+
+input:focus{
+  border-color:var(--accent);
+
+  background:#171717;
+
+  box-shadow:
+    0 0 0 2px rgba(242,214,117,.08),
+    0 0 12px rgba(214,180,76,.12);
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:8px;
+
+  width:85%;
+
+  margin:16px auto 0;
+  padding:11px 12px;
+
+  border:1px solid var(--accent);
+  border-radius:999px;
+
+  background:#141414;
+
+  color:var(--text);
+
+  font-family:"Play",sans-serif;
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease,
+    transform .1s ease,
+    opacity .15s ease;
+}
+
+.btn:hover:not(:disabled){
+  transform:translateY(-1px);
+
+  background:var(--accent);
+  color:#000;
+
+  box-shadow:
+    0 0 14px rgba(214,180,76,.35);
+}
+
+.btn:disabled{
+  cursor:wait;
+  opacity:.55;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  width:85%;
+
+  margin:16px auto 5px;
+
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.divider::before,
+.divider::after{
+  content:"";
+
+  flex:1;
+
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(214,180,76,.08),
+      rgba(214,180,76,.45)
+    );
+}
+
+.divider::after{
+  transform:scaleX(-1);
+}
+
+
+/* =========================================================
+   DISCORD
+========================================================= */
+
+.btn-discord{
+  margin-top:11px;
+
+  border-color:var(--discord);
+
+  background:#141622;
+
+  color:#dfe3ff;
+}
+
+.btn-discord:hover:not(:disabled){
+  background:var(--discord);
+  color:#fff;
+
+  border-color:#7180ff;
+
+  box-shadow:
+    0 0 16px rgba(88,101,242,.55);
+}
+
+.discord-icon{
+  width:20px;
+  height:20px;
+
+  display:block;
+
+  fill:currentColor;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+  min-height:18px;
+
+  margin-top:13px;
+
+  color:var(--bad);
+
+  font-size:12px;
+  line-height:1.4;
+}
+
+.status.loading{
+  color:var(--muted);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+  margin-top:9px;
+
+  color:var(--muted);
+
+  font-size:11px;
+  opacity:.85;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.auth-card.busy .form-area{
+  opacity:.65;
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:520px){
+
+  body{
+    padding:14px;
+  }
+
+  .auth-card{
+    width:100%;
+
+    padding:
+      24px
+      16px
+      20px;
+  }
+
+  .brand-logo{
+    width:56px;
+    height:56px;
+  }
+
+  .brand h1{
+    font-size:21px;
+  }
+
+  label,
+  input,
+  .btn,
+  .divider{
+    width:92%;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<main
+  class="auth-card"
+  id="authCard"
+>
+
+  <!-- =========================
+       BRAND
+  ========================== -->
+
+  <div class="brand">
+
+    <img
+      class="brand-logo"
+      src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png/v1/fill/w_66,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/0_New_JMBN_Logo_Gold.png"
+      alt="JMBN Logo"
+    >
+
+    <h1>JMBN Manifest</h1>
+
+  </div>
+
+  <p class="subtitle">
+    Organization Access Portal
+  </p>
+
+
+  <!-- =========================
+       LOGIN
+  ========================== -->
+
+  <div
+    class="form-area"
+    id="formArea"
+  >
+
+    <label for="username">
+      Username
+    </label>
+
+    <input
+      id="username"
+      type="text"
+      placeholder="e.g. ops"
+      autocomplete="username"
+    >
+
+
+    <label for="password">
+      Password
+    </label>
+
+    <input
+      id="password"
+      type="password"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    >
+
+
+    <button
+      id="loginBtn"
+      class="btn"
+      type="button"
+    >
+      Sign in
+    </button>
+
+
+    <div class="divider">
+      OR
+    </div>
+
+
+    <!-- =========================
+         DISCORD LOGIN
+    ========================== -->
+
+    <button
+      id="discordBtn"
+      class="btn btn-discord"
+      type="button"
+    >
+
+      <svg
+        class="discord-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M19.54 5.34A16.3 16.3 0 0 0 15.44 4l-.5 1.03a15.2 15.2 0 0 0-5.88 0L8.55 4a16.4 16.4 0 0 0-4.1 1.35C1.86 9.18 1.16 12.9 1.5 16.57a16.5 16.5 0 0 0 5.03 2.54l1.22-1.67a10.4 10.4 0 0 1-1.92-.92l.47-.36c3.7 1.72 7.72 1.72 11.37 0l.48.36c-.62.36-1.27.67-1.93.92l1.22 1.67a16.4 16.4 0 0 0 5.03-2.54c.4-4.25-.69-7.94-2.93-11.23ZM8.5 14.36c-1.11 0-2.02-1.02-2.02-2.27 0-1.25.89-2.27 2.02-2.27 1.14 0 2.04 1.03 2.02 2.27 0 1.25-.9 2.27-2.02 2.27Zm7 0c-1.11 0-2.02-1.02-2.02-2.27 0-1.25.89-2.27 2.02-2.27 1.14 0 2.04 1.03 2.02 2.27 0 1.25-.88 2.27-2.02 2.27Z"/>
+      </svg>
+
+      <span>
+        Sign in with Discord
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       STATUS
+  ========================== -->
+
+  <div
+    id="msg"
+    class="status"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <footer>
+    Only authorized JMBN personnel may log in.
+  </footer>
+
+</main>
+
+
+<!-- ======================================================
+     SUPABASE
+======================================================= -->
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<!-- IMPORTANT:
+     auth.js handles the PKCE ?code= callback.
+-->
+<script src="js/auth.js"></script>
+
+
+<script>
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const authCard =
+  document.getElementById("authCard");
+
+const usernameInput =
+  document.getElementById("username");
+
+const passwordInput =
+  document.getElementById("password");
+
+const loginBtn =
+  document.getElementById("loginBtn");
+
+const discordBtn =
+  document.getElementById("discordBtn");
+
+const msg =
+  document.getElementById("msg");
+
+
+/* =========================================================
+   STATUS HELPERS
+========================================================= */
+
+function setStatus(
+  text = "",
+  type = "error"
+){
+  msg.textContent = text;
+
+  msg.classList.toggle(
+    "loading",
+    type === "loading"
+  );
+}
+
+
+function setBusy(busy){
+
+  authCard.classList.toggle(
+    "busy",
+    busy
+  );
+
+  loginBtn.disabled = busy;
+  discordBtn.disabled = busy;
+}
+
+
+/* =========================================================
+   EXISTING SESSION
+========================================================= */
+
+(async () => {
+
+  try{
+
+    /*
+      auth.js handles:
+
+      auth.html?code=XXXX
+            ↓
+      exchangeCodeForSession()
+            ↓
+      Supabase session
+            ↓
+      redirect to index.html
+
+      Therefore we DON'T exchange the OAuth
+      code again here.
+    */
+
+    const session =
+      await getSession();
+
+    if(session){
+
+      setStatus(
+        "Authentication successful. Opening Manifest...",
+        "loading"
+      );
+
+      location.replace(
+        getBasePath() + "index.html"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "[auth.html] Session check:",
+      error
+    );
+
+  }
+
+})();
+
+
+/* =========================================================
+   USERNAME / PASSWORD
+========================================================= */
+
+async function handlePasswordLogin(){
+
+  const username =
+    usernameInput.value.trim();
+
+  const password =
+    passwordInput.value;
+
+  setStatus("");
+
+
+  if(!username){
+
+    setStatus(
+      "Enter your username."
+    );
+
+    usernameInput.focus();
+
+    return;
+  }
+
+
+  if(!password){
+
+    setStatus(
+      "Enter your password."
+    );
+
+    passwordInput.focus();
+
+    return;
+  }
+
+
+  setBusy(true);
+
+  setStatus(
+    "Authenticating...",
+    "loading"
+  );
+
+
+  try{
+
+    const { error } =
+      await signIn(
+        username,
+        password
+      );
+
+
+    if(error){
+
+      console.error(
+        "[auth.html] Login failed:",
+        error
+      );
+
+      setStatus(
+        error.message ||
+        "Unable to sign in."
+      );
+
+      return;
+    }
+
+
+    setStatus(
+      "Access granted. Opening Manifest...",
+      "loading"
+    );
+
+
+    location.replace(
+      getBasePath() + "index.html"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "[auth.html] Login error:",
+      error
+    );
+
+    setStatus(
+      "Unable to sign in."
+    );
+
+
+  }finally{
+
+    setBusy(false);
+
+  }
+
+}
+
+
+loginBtn.addEventListener(
+  "click",
+  handlePasswordLogin
+);
+
+
+/* Enter from username/password */
+
+usernameInput.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Enter"){
+
+      passwordInput.focus();
+
+    }
+
+  }
+);
+
+
+passwordInput.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Enter"){
+
+      handlePasswordLogin();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DISCORD
+========================================================= */
+
+discordBtn.addEventListener(
+  "click",
+  async () => {
+
+    setStatus("");
+
+    setBusy(true);
+
+    setStatus(
+      "Connecting to Discord...",
+      "loading"
+    );
+
+
+    try{
+
+      /*
+        Defined in js/auth.js.
+
+        Redirect path:
+
+        Discord
+          ↓
+        Supabase
+          ↓
+        /JMBN/auth.html?code=XXXX
+          ↓
+        auth.js exchanges PKCE code
+          ↓
+        index.html
+      */
+
+      await loginWithDiscord();
+
+
+    }catch(error){
+
+      console.error(
+        "[auth.html] Discord login:",
+        error
+      );
+
+      setStatus(
+        error?.message ||
+        "Discord login failed."
+      );
+
+      setBusy(false);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   OAUTH ERROR
+========================================================= */
+
+try{
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const oauthError =
+    params.get(
+      "error_description"
+    );
+
+  if(oauthError){
+
+    setStatus(
+      "Discord login failed: " +
+      oauthError
+    );
+
+  }
+
+}catch(error){
+
+  console.warn(
+    "[auth.html] OAuth error parser:",
+    error
+  );
+
+}
+</script>
+
+</body>
+</html>
