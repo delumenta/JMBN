@@ -2396,6 +2396,92 @@ tbody tr:hover{
   z-index:1;
 }
 
+
+
+/* =========================================================
+   JMBN SUBTLE HUD GRID
+   Sparse tactical grid + orbital arcs over the starfield
+========================================================= */
+
+#jmbnHudGrid{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+
+  background-image:
+    linear-gradient(rgba(240,210,112,.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,210,112,.026) 1px, transparent 1px);
+
+  background-size:
+    120px 120px,
+    120px 120px;
+
+  background-position:
+    0 0,
+    0 0;
+
+  opacity:.34;
+
+  -webkit-mask-image:
+    radial-gradient(circle at 50% 42%, #000 0 58%, transparent 92%);
+  mask-image:
+    radial-gradient(circle at 50% 42%, #000 0 58%, transparent 92%);
+
+  animation:jmbnHudDrift 120s linear infinite;
+}
+
+#jmbnHudGrid::before{
+  content:"";
+  position:absolute;
+  width:min(78vw,1080px);
+  aspect-ratio:1;
+  left:-24vw;
+  top:10vh;
+
+  border:
+    1px solid rgba(240,210,112,.065);
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 0 140px rgba(240,210,112,.024),
+    0 0 0 280px rgba(240,210,112,.015);
+
+  opacity:.72;
+}
+
+#jmbnHudGrid::after{
+  content:"";
+  position:absolute;
+  width:min(54vw,760px);
+  aspect-ratio:1;
+  right:-18vw;
+  bottom:-22vh;
+
+  border:
+    1px solid rgba(240,210,112,.05);
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 0 110px rgba(240,210,112,.018);
+
+  opacity:.58;
+}
+
+@keyframes jmbnHudDrift{
+  from{ background-position:0 0,0 0; }
+  to{ background-position:-240px -120px,-240px -120px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #jmbnHudGrid{
+    animation:none;
+  }
+}
+
 </style>
 
 </head>
@@ -2404,6 +2490,7 @@ tbody tr:hover{
 <body>
 
 <canvas id="jmbnStarfield" aria-hidden="true"></canvas>
+<div id="jmbnHudGrid" aria-hidden="true"></div>
 
 
 
