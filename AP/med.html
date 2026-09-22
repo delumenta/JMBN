@@ -111,6 +111,26 @@ async function init(){
   try{
     await requireAuth();
     const sb=getSupabase();
+
+    // Programme hero artwork is public programme data and is independent of the member record.
+    const {data:heroRow,error:heroError}=await sb
+      .from("certifications")
+      .select("hero_art_cover")
+      .eq("certification_code","MED")
+      .maybeSingle();
+
+    if(heroError){
+      console.warn("MED hero artwork unavailable:",heroError);
+    }else if(heroRow?.hero_art_cover){
+      const hero=document.querySelector(".hero-art");
+      if(hero){
+        hero.style.backgroundImage =
+          'linear-gradient(90deg,rgba(3,5,3,.88) 0%,rgba(3,5,3,.38) 32%,rgba(3,5,3,.10) 100%),url("' +
+          heroRow.hero_art_cover.replace(/"/g,"%22") +
+          '")';
+      }
+    }
+
     const {data:{user}}=await sb.auth.getUser();
     if(!user) return;
     const [{data:certRows,error:certError},{data:rows,error},{data:eventRows,error:eventError}] = await Promise.all([
