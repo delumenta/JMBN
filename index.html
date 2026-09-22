@@ -1889,23 +1889,24 @@ body::before{
   overflow:hidden;
 
   /*
-    The supplied file is a complete ultra-wide panel.
-    Enlarging it inside this column crops out its centre command-room artwork.
+    Darker command-centre artwork:
+    keeps the JMBN screen visible while only showing part of the armored figure.
   */
   background-image:
     linear-gradient(90deg,
-      rgba(0,0,0,.34) 0%,
-      rgba(0,0,0,0) 15%,
-      rgba(0,0,0,0) 84%,
-      rgba(0,0,0,.36) 100%),
+      rgba(0,0,0,.66) 0%,
+      rgba(0,0,0,.43) 16%,
+      rgba(0,0,0,.36) 48%,
+      rgba(0,0,0,.42) 82%,
+      rgba(0,0,0,.68) 100%),
     url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20Admin.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCBBZG1pbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMDY5NjU4LCJleHAiOjMzMzI2MDY5NjU4fQ.BxG9Yl2cZRzDpMuUzLH6s5O_s2a4HPX6ZvZHnsuWHWw") !important;
 
   background-repeat:no-repeat !important;
   background-size:auto 310% !important;
   background-position:47% 50% !important;
   box-shadow:
-    inset 18px 0 24px rgba(0,0,0,.46),
-    inset -18px 0 24px rgba(0,0,0,.48);
+    inset 22px 0 30px rgba(0,0,0,.68),
+    inset -22px 0 30px rgba(0,0,0,.70);
 }
 
 .admin-panel .admin-art-zone::before{
