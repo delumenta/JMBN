@@ -1712,9 +1712,9 @@ select{
   background:
     linear-gradient(
       180deg,
-      rgba(0,0,0,.05),
-      rgba(0,0,0,.12) 48%,
-      rgba(0,0,0,.18)
+      rgba(0,0,0,.24),
+      rgba(0,0,0,.34) 48%,
+      rgba(0,0,0,.46)
     ),
     url("assets/jmbn-command-bg.svg") center top / cover no-repeat,
     #070806;
@@ -1732,10 +1732,10 @@ select{
     ),
     linear-gradient(
       90deg,
-      rgba(0,0,0,.14),
-      transparent 18%,
-      transparent 82%,
-      rgba(0,0,0,.14)
+      rgba(0,0,0,.24),
+      transparent 20%,
+      transparent 80%,
+      rgba(0,0,0,.24)
     );
 }
 
@@ -1746,11 +1746,25 @@ select{
   background:
     linear-gradient(
       180deg,
-      transparent 0%,
-      rgba(0,0,0,.05) 52%,
-      rgba(0,0,0,.14) 100%
+      rgba(0,0,0,.04) 0%,
+      rgba(0,0,0,.12) 52%,
+      rgba(0,0,0,.24) 100%
     );
   mix-blend-mode:multiply;
+}
+
+#jmbnBgTest .jmbn-bg-logo{
+  position:absolute;
+  width:250px;
+  height:250px;
+  right:78px;
+  top:145px;
+  object-fit:contain;
+  opacity:.075;
+  filter:
+    sepia(1)
+    saturate(.45)
+    brightness(.58);
 }
 
 @media(max-width:900px){
@@ -1825,7 +1839,13 @@ select{
 <!-- =========================================================
      BG TEST — DECORATIVE BACKDROP ONLY
 ========================================================= -->
-<div id="jmbnBgTest" aria-hidden="true"></div>
+<div id="jmbnBgTest" aria-hidden="true">
+  <img
+    class="jmbn-bg-logo"
+    src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+    alt=""
+  >
+</div>
 
 
 <!-- =========================================================
