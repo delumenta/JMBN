@@ -2754,6 +2754,30 @@ body::before{
 
 }
 
+
+
+/* Academy Test — Current Programmes removed.
+   Recent Training now uses the full dashboard width. */
+.dashboard-grid{
+  grid-template-columns:1fr;
+}
+
+.training-list{
+  padding-right:28px;
+}
+
+@media(min-width:900px){
+  .training-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:34px;
+  }
+
+  .training-row:nth-child(2){
+    border-top:0;
+  }
+}
+
 </style>
 
 </head>
@@ -3351,64 +3375,7 @@ body::before{
 
 
 <!-- =========================================================
-     04 // CURRENT PROGRAMMES
-========================================================= -->
-
-<section class="frame">
-
-  <span class="corner corner-tl"></span>
-  <span class="corner corner-br"></span>
-
-
-  <div class="frame-header">
-
-    <div class="frame-title">
-      CURRENT PROGRAMMES
-    </div>
-
-    <div class="frame-code">
-      TRAINING // 04
-    </div>
-
-  </div>
-
-
-  <div
-    class="programmes-body"
-    id="programmesList"
-  >
-
-    <div class="loading">
-
-      ACCESSING TRAINING RECORD...
-
-    </div>
-
-  </div>
-
-
-  <div class="view-all-area">
-
-    <a
-      class="view-all-button"
-      href="programmes.html"
-    >
-
-      VIEW ALL PROGRAMMES
-
-      <i class="fa-solid fa-arrow-right"></i>
-
-    </a>
-
-  </div>
-
-
-</section>
-
-
-
-<!-- =========================================================
-     05 // RECENT TRAINING
+     04 // RECENT TRAINING
 ========================================================= -->
 
 <section class="frame">
@@ -3424,7 +3391,7 @@ body::before{
     </div>
 
     <div class="frame-code">
-      LOG // 05
+      LOG // 04
     </div>
 
   </div>
@@ -4007,8 +3974,6 @@ function renderAcademy(){
   renderTrainingPath(programmes);
 
   renderSidebar(programmes);
-
-  renderProgrammes(programmes);
 
   renderRecentTraining();
 
@@ -4975,19 +4940,26 @@ document.addEventListener(
       );
 
 
-      $("#programmesList").innerHTML = `
+      const programmesHost =
+        $("#programmesList");
 
-        <div class="empty-state">
+      if(programmesHost){
 
-          ACADEMY DATABASE CONNECTION FAILED.
+        programmesHost.innerHTML = `
 
-          <br><br>
+          <div class="empty-state">
 
-          PLEASE RELOAD THE TRAINING NETWORK.
+            ACADEMY DATABASE CONNECTION FAILED.
 
-        </div>
+            <br><br>
 
-      `;
+            PLEASE RELOAD THE TRAINING NETWORK.
+
+          </div>
+
+        `;
+
+      }
 
 
       $("#recentTraining").innerHTML = `
