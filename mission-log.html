@@ -6065,7 +6065,7 @@ async function loadAttendees(){
             ${canEdit ? "" : "disabled"}
           >
             <span class="role-trigger-label">
-              ${esc(a.role_in_mission || "role")}
+              ${esc(a.role_in_mission || "Mission Role")}
             </span>
             <span class="role-chevron">⌄</span>
           </button>
@@ -6121,7 +6121,7 @@ async function loadAttendees(){
             a.role_in_mission || "",
 
           placeholder:
-            "role",
+            "Mission Role",
 
           disabled:
             !canEdit,
@@ -6167,7 +6167,7 @@ async function loadAttendees(){
                 setRoleDropdownValue(
                   roleDrop,
                   a.role_in_mission || "",
-                  "role"
+                  "Mission Role"
                 );
 
                 return;
