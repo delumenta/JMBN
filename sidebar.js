@@ -8,6 +8,8 @@ const fallbackProgrammes=[
   {certification_code:"BMT",name:"Basic Military Training"},
   {certification_code:"SOC",name:"Standard Obstacle Course"},
   {certification_code:"MED",name:"Medical Training Course"},
+  {certification_code:"CAR",name:"Cargo Operations"},
+  {certification_code:"MIN",name:"Mining Operations"},
   {certification_code:"GUNNERY",name:"Gunnery Training"},
   {certification_code:"ENGINEERING",name:"Engineering Training"},
   {certification_code:"PILOT",name:"Pilot Training"}
@@ -17,6 +19,8 @@ const routeByCode={
   BMT:"AP/bmt.html",
   SOC:"AP/soc.html",
   MED:"AP/med.html",
+  CAR:"AP/car.html",
+  MIN:"AP/min.html",
   GUNNERY:"AP/gun.html",
   ENGINEERING:"AP/eng.html",
   PILOT:"AP/pilot.html"
@@ -26,6 +30,8 @@ const shortCode={
   BMT:"BMT",
   SOC:"SOC",
   MED:"MED",
+  CAR:"CAR",
+  MIN:"MIN",
   GUNNERY:"GUN",
   ENGINEERING:"ENG",
   PILOT:"PILOT"
@@ -35,6 +41,8 @@ const iconByCode={
   BMT:"fa-shield-halved",
   SOC:"fa-mountain",
   MED:"fa-kit-medical",
+  CAR:"fa-boxes-stacked",
+  MIN:"fa-gem",
   GUNNERY:"fa-crosshairs",
   ENGINEERING:"fa-screwdriver-wrench",
   PILOT:"fa-plane"
@@ -60,6 +68,8 @@ function currentProgrammeCode(){
     "bmt.html":"BMT",
     "soc.html":"SOC",
     "med.html":"MED",
+    "car.html":"CAR",
+    "min.html":"MIN",
     "gun.html":"GUNNERY",
     "eng.html":"ENGINEERING",
     "pilot.html":"PILOT"
@@ -171,7 +181,17 @@ function programmeState({
       : {state:"AVAILABLE",locked:false,css:""};
   }
 
-  if(["MED","GUNNERY","ENGINEERING"].includes(code)){
+  if(["MED","CAR","MIN"].includes(code)){
+    if(!bmtCertified||!socCertified){
+      return {state:"LOCKED",locked:true,css:"is-locked"};
+    }
+
+    return progress>0
+      ? {state:"IN TRAINING",locked:false,css:"is-training"}
+      : {state:"AVAILABLE",locked:false,css:""};
+  }
+
+  if(["GUNNERY","ENGINEERING"].includes(code)){
     if(!bmtCertified||!socCertified||assignment!==code){
       return {state:"LOCKED",locked:true,css:"is-locked"};
     }
