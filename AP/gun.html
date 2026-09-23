@@ -66,7 +66,7 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
     <a class="crumb" href="../programmes.html">‹ BACK TO CERTIFICATIONS　›　AP-GUNNERY</a>
     <h1>GUN</h1>
     <h2>GUNNERY TRAINING</h2>
-    <p>Instructor-assigned specialisation for weapons operation, fire discipline and JMBN gunnery procedures. Course modules will be built next.</p>
+    <p>Instructor-assigned specialisation for weapons operation, fire discipline and JMBN gunnery procedures. Certification modules are currently pending and will be added next.</p>
   </div>
   <div class="hero-art">
     <div class="hero-icon"><i class="fa-solid fa-crosshairs"></i></div>
@@ -81,14 +81,14 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 
 <section class="frame">
   <div class="section-head">
-    <div class="section-title">TRAINING SYLLABUS</div>
-    <div class="section-code">AP-GUNNERY // LIVE RECORD</div>
+    <div class="section-title">MODULES</div>
+    <div class="section-code">AP-GUNNERY // PENDING</div>
   </div>
   <div class="modules" id="moduleGrid">
     <div class="pending" style="grid-column:1/-1">
-      <i class="fa-solid fa-satellite-dish"></i>
-      <h3>ACCESSING CERTIFICATION RECORD...</h3>
-      <p>Loading Academy requirements and your current training status.</p>
+      <i class="fa-solid fa-screwdriver-wrench"></i>
+      <h3>MODULES PENDING</h3>
+      <p>Training modules for this certification are currently under development and will be added by JMBN Academy.</p>
     </div>
   </div>
 </section>
@@ -155,7 +155,7 @@ async function init(){
     const certified=(myCertResult.data||[]).length>0;
     const completed=certified?reqs.length:reqs.filter(x=>completedSet.has(x.event_code)).length;
 
-    $("#progressText").textContent=reqs.length?completed+" / "+reqs.length+" EVENTS":"SYLLABUS PENDING";
+    $("#progressText").textContent="MODULES PENDING";
 
     if(certified){
       $("#programmeStatus").textContent="✓ CERTIFIED";
@@ -168,38 +168,15 @@ async function init(){
       $("#programmeStatus").textContent="AVAILABLE";
     }
 
-    if(!reqs.length){
-      $("#moduleGrid").innerHTML=`
-        <div class="pending" style="grid-column:1/-1">
-          <i class="fa-solid fa-screwdriver-wrench"></i>
-          <h3>SYLLABUS IN DEVELOPMENT</h3>
-          <p>This certification has been created and your access path is active. Training modules, artwork and assessment requirements will be added next.</p>
-        </div>
-      `;
-      return;
-    }
+    $("#moduleGrid").innerHTML=`
+      <div class="pending" style="grid-column:1/-1">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <h3>MODULES PENDING</h3>
+        <p>Training modules for this certification are currently under development and will be added by JMBN Academy.</p>
+      </div>
+    `;
+    return;
 
-    $("#moduleGrid").innerHTML=reqs.map((r,i)=>{
-      const event=eventMap.get(r.event_code)||{};
-      const done=certified||completedSet.has(r.event_code);
-      const previous=i===0?null:reqs[i-1];
-      const unlocked=done||i===0||completedSet.has(previous.event_code);
-      const state=done?"done":unlocked?"current":"locked";
-      const badge=done?"✓ COMPLETED":unlocked?"◉ AVAILABLE":"🔒 LOCKED";
-      const desc=event.description||"Module details will be expanded by JMBN Academy.";
-      const meta=!unlocked&&previous?"REQUIRES "+previous.event_code+" SIGN-OFF":(event.duration_hrs?event.duration_hrs+" HRS":"ACADEMY MODULE");
-      return `
-        <article class="module ${state}">
-          <div class="module-top">
-            <div class="module-code">${esc(r.event_code)}</div>
-            <div class="badge">${badge}</div>
-          </div>
-          <h3>${esc(event.title||r.event_code)}</h3>
-          <p>${esc(desc)}</p>
-          <div class="module-meta">${esc(meta)}</div>
-        </article>
-      `;
-    }).join("");
 
   }catch(error){
     console.error("AP-"+PROGRAMME_CODE+" load failed:",error);
