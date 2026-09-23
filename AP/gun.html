@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="../js/auth.js"></script>
+<script src="../sidebar.js" defer></script>
 <style>
 :root{--bg:#020302;--gold:#f0d270;--gold2:#d6b44c;--text:#f3ecd2;--muted:#8f8976;--green:#70d98c;--red:#ff7474;--side:238px;--line:rgba(214,180,76,.48)}
 *{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:"Play",sans-serif;background:radial-gradient(circle at 82% 6%,rgba(177,139,39,.08),transparent 32%),#020302}
@@ -52,26 +53,11 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 
 <header class="mobile-bar"><span>JMBN // AP-GUNNERY</span><a href="../academy.html">ACADEMY</a></header>
 <div class="app">
-<aside class="sidebar"><div class="side-inner">
-<a class="manifest" href="../index.html"><i class="fa-solid fa-arrow-left"></i> BACK TO MANIFEST</a>
-<div class="side-head"><small>JMBN //</small><strong>ACADEMY</strong><div class="network">TRAINING NETWORK</div></div>
-<div class="side-label">ACADEMY</div>
-<a class="nav" href="../academy.html"><i class="fa-solid fa-graduation-cap"></i> OVERVIEW</a>
-<a class="nav active" href="../programmes.html"><i class="fa-solid fa-layer-group"></i> PROGRAMMES</a>
-<a class="nav" href="../training-schedule.html"><i class="fa-regular fa-calendar-days"></i> TRAINING SCHEDULE</a>
-<div class="side-divider"></div>
-<a class="nav" href="../instructor.html"><i class="fa-solid fa-user-shield"></i> INSTRUCTOR PANEL</a>
-<a class="nav" href="../academy-log.html"><i class="fa-solid fa-clock-rotate-left"></i> ACADEMY LOG</a>
-<div class="side-divider"></div>
-<div class="side-label">PROGRAMMES</div>
-<a class="nav" href="bmt.html"><i class="fa-solid fa-shield-halved"></i> AP-BMT</a>
-<a class="nav " href="soc.html"><i class="fa-solid fa-person-running"></i> AP-SOC</a>
-<a class="nav " href="med.html"><i class="fa-solid fa-kit-medical"></i> AP-MED</a>
-<a class="nav active" href="gun.html"><i class="fa-solid fa-crosshairs"></i> AP-GUN</a>
-<a class="nav " href="eng.html"><i class="fa-solid fa-screwdriver-wrench"></i> AP-ENG</a>
-<a class="nav" href="pilot.html"><i class="fa-solid fa-jet-fighter-up"></i> AP-PILOT</a>
-<div class="side-foot">TRAIN<br>DEVELOP<br>DEPLOY</div>
-</div></aside>
+<aside
+  class="academy-sidebar sidebar shared-academy-sidebar"
+  id="academySidebar"
+  data-academy-sidebar
+></aside>
 
 <main><div class="container">
 
