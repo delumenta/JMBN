@@ -1745,11 +1745,13 @@ body::before{
    - Supabase still controls whether Admin is visible
 ========================================================= */
 
-/* MEMBER: center the complete Current Rank area within the hero */
+/* MEMBER: center the Current Rank content inside the middle artwork zone */
 .member .member-rank{
   position:relative;
-  transform:none;
-  margin-left:-70px;
+  width:88%;
+  justify-self:center;
+  transform:translateX(-28px);
+  margin-left:0;
   padding-left:18px;
   padding-right:18px;
   z-index:3;
@@ -1765,11 +1767,11 @@ body::before{
 
 /* Pull the rank code and progress line away from the brown right-side frame */
 .member .rank-current{
-  padding-right:58px;
+  padding-right:18px;
 }
 
 .member .rank-rule{
-  width:calc(100% - 58px);
+  width:calc(100% - 18px);
 }
 
 /* =========================================================
@@ -2071,16 +2073,18 @@ body::before{
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:1100px){
   .member .member-rank{
+    width:92%;
+    justify-self:center;
     transform:none;
-    margin-left:-25px;
+    margin-left:0;
   }
 
   .member .rank-current{
-    padding-right:34px;
+    padding-right:18px;
   }
 
   .member .rank-rule{
-    width:calc(100% - 34px);
+    width:calc(100% - 18px);
   }
 
   .admin-panel{
@@ -2156,6 +2160,8 @@ body::before{
 
 @media(max-width:760px){
   .member .member-rank{
+    width:100%;
+    justify-self:stretch;
     transform:none;
     margin-left:0;
     padding-left:20px;
