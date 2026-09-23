@@ -3333,6 +3333,16 @@ a.academy-path-card:hover{
         INSTRUCTOR ACCESS
       </a>
 
+      <a
+        class="nav-item"
+        id="academyLogNav"
+        href="academy-log.html"
+        style="display:none"
+      >
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        ACADEMY LOG
+      </a>
+
 
       <div class="sidebar-divider"></div>
 
@@ -3955,11 +3965,18 @@ async function loadInstructorAccess(){
   const nav =
     $("#instructorAccessNav");
 
+  const logNav =
+    $("#academyLogNav");
+
   if(!nav || !sb || !me){
     return;
   }
 
   nav.style.display = "none";
+
+  if(logNav){
+    logNav.style.display = "none";
+  }
 
   try{
 
@@ -3993,6 +4010,11 @@ async function loadInstructorAccess(){
     if(isAdmin){
 
       nav.style.display = "flex";
+
+      if(logNav){
+        logNav.style.display = "flex";
+      }
+
       return;
 
     }
@@ -4024,6 +4046,10 @@ async function loadInstructorAccess(){
     if(instructor){
 
       nav.style.display = "flex";
+
+      if(logNav){
+        logNav.style.display = "flex";
+      }
 
     }
 
