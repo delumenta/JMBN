@@ -2711,6 +2711,29 @@ function displayCertificationCode(code){
 }
 
 
+function certificationTrackLabel(code){
+
+  const key =
+    String(code || "")
+      .toUpperCase();
+
+  if(["BMT","SOC"].includes(key)){
+    return "CORE TRAINING";
+  }
+
+  if(["MED","LOG","MIN"].includes(key)){
+    return "SUPPORT PATHWAY";
+  }
+
+  if(["GUNNERY","ENGINEERING"].includes(key)){
+    return "SPECIALISATION PATHWAY";
+  }
+
+  return "ACADEMY CERTIFICATION";
+
+}
+
+
 function formatDate(value){
 
   if(!value){
@@ -3127,7 +3150,7 @@ function buildProgrammeData(){
     ).toUpperCase();
 
 
-  const optionalCertifications =
+  const supportPathways =
     new Set([
       "MED",
       "LOG",
@@ -3257,7 +3280,7 @@ function buildProgrammeData(){
 
 
       if(
-        optionalCertifications.has(code)
+        supportPathways.has(code)
       ){
 
         prerequisiteMet =
@@ -3843,7 +3866,20 @@ function renderProgrammeCard(programme){
 
       if(programme.total === 0){
 
+        const trackLabel =
+          certificationTrackLabel(
+            programme.certification_code
+          );
+
         note =
+          trackLabel === "SUPPORT PATHWAY"
+          ?
+          "Support Pathway modules are pending. Instructor sign-off will be required."
+          :
+          trackLabel === "SPECIALISATION PATHWAY"
+          ?
+          "Specialisation modules are pending."
+          :
           "Training syllabus has not yet been assigned.";
 
       }
@@ -3960,7 +3996,9 @@ function renderProgrammeCard(programme){
                   )
                 )}
 
-                // ACADEMY PROGRAMME
+                // ${certificationTrackLabel(
+                  programme.certification_code
+                )}
 
               </div>
 
