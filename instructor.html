@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
+<script src="sidebar.js" defer></script>
 <style>
 :root{--bg:#020302;--panel:#070906;--gold:#f0d270;--gold2:#d6b44c;--text:#f3ecd2;--muted:#928c77;--muted2:#646154;--green:#70d98c;--red:#ff7474;--line:rgba(214,180,76,.54);--sidebar:238px}
 *{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:"Play",sans-serif;background:radial-gradient(circle at 80% 8%,rgba(177,139,39,.08),transparent 32%),#020302}
@@ -365,16 +366,11 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 <body>
 <header class="mobile-bar"><button id="menu"><i class="fa-solid fa-bars"></i></button><b>JMBN // INSTRUCTOR</b><a href="index.html">MANIFEST ↗</a></header>
 <div class="app">
-<aside class="sidebar" id="sidebar"><div class="sidebar-inner">
-<a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> BACK TO MANIFEST</a>
-<div class="heading"><small>JMBN //</small><strong>ACADEMY</strong><div class="network">TRAINING NETWORK</div></div>
-<div class="label">ACADEMY</div>
-<a class="nav" href="academy.html"><i class="fa-solid fa-graduation-cap"></i> OVERVIEW</a>
-<a class="nav" href="programmes.html"><i class="fa-solid fa-layer-group"></i> PROGRAMMES</a>
-<a class="nav" href="training-schedule.html"><i class="fa-regular fa-calendar-days"></i> TRAINING SCHEDULE</a>
-<a class="nav active" href="instructor.html"><i class="fa-solid fa-user-shield"></i> INSTRUCTOR ACCESS</a>\n<a class="nav" href="academy-log.html"><i class="fa-solid fa-clock-rotate-left"></i> ACADEMY LOG</a>
-<div class="divider"></div><div class="label">TRAINING PATHWAYS</div><div class="pathways" id="pathways">LOADING...</div>
-</div></aside>
+<aside
+  class="academy-sidebar sidebar shared-academy-sidebar"
+  id="academySidebar"
+  data-academy-sidebar
+></aside>
 <main><div class="container">
 <section class="frame hero"><div><div class="eyebrow">JMBN ACADEMY</div><h1>INSTRUCTOR PANEL</h1><div class="sub">TRAIN // ASSESS // CERTIFY // STRENGTHEN</div></div><div class="identity"><i class="fa-solid fa-user-shield"></i><div><strong id="instructorName">INSTRUCTOR</strong><span id="instructorRole">VERIFYING AUTHORISATION...</span></div></div></section>
 <!-- =========================================================
@@ -689,33 +685,8 @@ function render(){
  const cutoff=Date.now()-30*86400000;
  $("#recentCount").textContent=signoffs.filter(x=>x.status==="approved"&&new Date(x.signed_off_at).getTime()>=cutoff).length;
  $("#memberCount").textContent=new Set(signoffs.map(x=>x.trainee_id)).size;
- {
-  const pathwayOrder=["BMT","SOC","MED","GUNNERY","ENGINEERING","PILOT"];
-  const pathwayLabels={
-    BMT:"BMT",
-    SOC:"SOC",
-    MED:"MED",
-    GUNNERY:"GUN",
-    ENGINEERING:"ENG",
-    PILOT:"PILOT"
-  };
-  const activeCodes=new Set(
-    certs.map(c=>String(c.certification_code||"").toUpperCase())
-  );
-  const pathwayNames={
-    BMT:"Basic Military Training",
-    SOC:"Standard Obstacle Course",
-    MED:"Medical Training Course",
-    GUNNERY:"Gunnery Training",
-    ENGINEERING:"Engineering Training",
-    PILOT:"Pilot Training"
-  };
 
-  $("#pathways").innerHTML=pathwayOrder
-    .filter(code=>activeCodes.has(code))
-    .map(code=>`<div><b>${pathwayLabels[code]}</b> ${esc(pathwayNames[code]||code)}</div>`)
-    .join("");
- }
+
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
  const memberMap=new Map(members.map(x=>[x.user_id,x]));
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
