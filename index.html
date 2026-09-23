@@ -2088,6 +2088,63 @@ body::before{
   }
 }
 
+
+
+/* =========================================================
+   MEMBER PANEL // RANK LEGIBILITY
+   Local contrast only — preserve the artwork.
+========================================================= */
+.member .member-rank{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2,3,3,.76) 0%,
+      rgba(2,3,3,.58) 38%,
+      rgba(2,3,3,.34) 72%,
+      rgba(2,3,3,.16) 100%
+    ) !important;
+  box-shadow:
+    inset 1px 0 0 rgba(216,184,78,.10),
+    inset -1px 0 0 rgba(216,184,78,.05);
+  backdrop-filter:blur(1.2px);
+}
+
+.member .rank-kicker{
+  color:#d3bd67;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.95),
+    0 0 12px rgba(0,0,0,.72);
+}
+
+.member .rank-current-name{
+  color:#f4edd5;
+  font-weight:700;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.95),
+    0 0 14px rgba(0,0,0,.76);
+}
+
+.member .rank-current-code{
+  color:#f2d675;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.98),
+    0 0 14px rgba(0,0,0,.82);
+}
+
+.member .rank-note{
+  color:#b8b09a;
+  text-shadow:
+    0 2px 7px rgba(0,0,0,.95);
+}
+
+.member .rank-rule{
+  background:rgba(2,3,3,.78);
+  border-color:rgba(242,214,117,.50);
+  box-shadow:
+    0 1px 7px rgba(0,0,0,.85),
+    0 0 9px rgba(216,184,78,.10);
+}
+
 @media(max-width:760px){
   .member .member-rank{
     transform:none;
