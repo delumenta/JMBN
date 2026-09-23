@@ -1,0 +1,106 @@
+/* Shared JMBN Academy sidebar component */
+
+.shared-academy-sidebar .shared-staff-section[hidden]{
+  display:none !important;
+}
+
+.shared-academy-sidebar .nav-logo{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+  display:grid;
+  place-items:center;
+}
+
+.shared-academy-sidebar .nav-logo img{
+  width:20px;
+  height:20px;
+  object-fit:contain;
+}
+
+.shared-academy-sidebar .shared-sidebar-loading{
+  color:#656154;
+  font-size:8px;
+  letter-spacing:.14em;
+}
+
+.shared-academy-sidebar .shared-path-link{
+  min-height:54px;
+  align-items:flex-start;
+  padding-top:9px;
+  padding-bottom:9px;
+}
+
+.shared-academy-sidebar .shared-path-link > i{
+  margin-top:3px;
+}
+
+.shared-academy-sidebar .shared-path-copy{
+  min-width:0;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.shared-academy-sidebar .shared-path-code{
+  color:#d8c16c;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  line-height:1.15;
+}
+
+.shared-academy-sidebar .shared-path-name{
+  color:#777164;
+  font-size:7px;
+  line-height:1.35;
+  letter-spacing:.03em;
+  white-space:normal;
+}
+
+.shared-academy-sidebar .shared-path-state{
+  margin-left:auto;
+  padding-top:3px;
+  color:#676256;
+  font-size:6px;
+  font-weight:700;
+  letter-spacing:.10em;
+  white-space:nowrap;
+}
+
+.shared-academy-sidebar .shared-path-link.is-certified .shared-path-state{
+  color:#70d98c;
+}
+
+.shared-academy-sidebar .shared-path-link.is-assigned .shared-path-state,
+.shared-academy-sidebar .shared-path-link.is-training .shared-path-state{
+  color:#f0d270;
+}
+
+.shared-academy-sidebar .shared-path-link.is-locked{
+  opacity:.52;
+  cursor:not-allowed;
+}
+
+.shared-academy-sidebar .shared-path-link.active{
+  opacity:1;
+}
+
+.shared-academy-sidebar .shared-path-link.active .shared-path-code{
+  color:#f0d270;
+}
+
+.shared-academy-sidebar .shared-pathways-label{
+  margin-top:0;
+}
+
+.shared-academy-sidebar .shared-sidebar-footer{
+  margin-top:auto;
+}
+
+@media(max-width:760px){
+  .shared-academy-sidebar .shared-path-link{
+    min-height:50px;
+  }
+}
