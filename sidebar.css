@@ -384,7 +384,11 @@
   }
 
   body.sidebar-open::after{
+    content:"" !important;
+    position:fixed !important;
+    inset:0 !important;
     z-index:10000 !important;
+    background:rgba(0,0,0,.66) !important;
     pointer-events:none !important;
   }
 
