@@ -220,7 +220,7 @@ async function load(){
     sb.from("certifications").select("certification_code,name,sort_order").order("sort_order"),
     sb.from("training_events").select("event_code,title,sort_order").order("sort_order"),
     sb.from("training_signoffs").select("id,trainee_id,event_code,certification_code,instructor_id,status,notes,signed_off_at").order("signed_off_at",{ascending:false}).limit(500),
-    sb.from("user_certifications").select("user_id,certification_code,awarded_at").order("awarded_at",{ascending:false}).limit(500),
+    sb.from("user_certifications").select("user_id,certification_code,awarded_at,awarded_by").order("awarded_at",{ascending:false}).limit(500),
     sb.from("academy_specialisation_history").select("id,trainee_id,action,specialisation_code,previous_specialisation_code,instructor_id,notes,created_at").order("created_at",{ascending:false}).limit(500)
   ]);
 
@@ -258,7 +258,7 @@ function buildActivities(){
     id:"cert-"+x.user_id+"-"+x.certification_code+"-"+index,
     type:"cert",
     trainee_id:x.user_id,
-    actor_id:null,
+    actor_id:x.awarded_by||null,
     code:x.certification_code,
     timestamp:x.awarded_at,
     title:"CERTIFICATION AWARDED",
