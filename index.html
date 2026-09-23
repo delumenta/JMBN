@@ -1756,13 +1756,14 @@ body::before{
   position:relative;
 }
 
-/* Pull the rank code and progress line away from the brown right-side frame */
+/* Keep the left edge where it is, but extend LTJG-02 and the gold rule farther right */
 .member .rank-current{
-  padding-right:18px;
+  width:calc(100% + 118px);
+  padding-right:22px;
 }
 
 .member .rank-rule{
-  width:calc(100% - 18px);
+  width:calc(100% + 96px);
 }
 
 /* =========================================================
@@ -2071,11 +2072,12 @@ body::before{
   }
 
   .member .rank-current{
+    width:calc(100% + 64px);
     padding-right:18px;
   }
 
   .member .rank-rule{
-    width:calc(100% - 18px);
+    width:calc(100% + 46px);
   }
 
   .admin-panel{
