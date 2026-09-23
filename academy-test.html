@@ -2803,6 +2803,261 @@ body::before{
 }
 
 
+
+
+/* =========================================================
+   ACADEMY TEST — CORE TRAINING + ASSIGNED SPECIALISATION
+========================================================= */
+
+.academy-path{
+  display:block;
+  padding:30px 28px 34px;
+}
+
+.academy-path::before{
+  display:none;
+}
+
+.core-path{
+  width:min(760px,100%);
+  margin:0 auto;
+
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+}
+
+.core-path-label,
+.assignment-label{
+  text-align:center;
+
+  color:#686456;
+
+  font-size:8px;
+  font-weight:700;
+
+  letter-spacing:.22em;
+
+  text-transform:uppercase;
+}
+
+.core-path-label{
+  margin-bottom:14px;
+}
+
+.assignment-label{
+  margin:
+    5px
+    0
+    14px;
+
+  color:#8d7a42;
+}
+
+.core-path-node,
+.specialisation-node{
+  position:relative;
+
+  width:min(520px,100%);
+  margin:0 auto;
+
+  min-height:132px;
+
+  padding:18px 20px;
+
+  border:
+    1px solid rgba(214,180,76,.28);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.025),
+      transparent 34%
+    ),
+    rgba(5,6,5,.90);
+
+  text-decoration:none;
+}
+
+.core-path-node.complete,
+.specialisation-node.complete{
+  border-color:
+    rgba(112,217,140,.34);
+}
+
+.core-path-node.progress,
+.specialisation-node.progress{
+  border-color:
+    rgba(240,210,112,.60);
+}
+
+.core-path-node.unavailable{
+  opacity:.62;
+}
+
+.core-path-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+.path-connector{
+  width:46px;
+  height:54px;
+
+  margin:0 auto;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  color:
+    rgba(214,180,76,.54);
+}
+
+.path-connector span{
+  width:1px;
+  height:31px;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(214,180,76,.55)
+    );
+}
+
+.path-connector i{
+  margin-top:-1px;
+
+  font-size:9px;
+}
+
+.specialisation-connector{
+  height:64px;
+}
+
+.specialisation-connector span{
+  height:38px;
+}
+
+.specialisation-node{
+  text-align:center;
+
+  min-height:156px;
+}
+
+.specialisation-node.waiting{
+  border-style:dashed;
+
+  background:
+    rgba(6,7,5,.76);
+}
+
+.specialisation-node.assigned{
+  border-color:
+    rgba(240,210,112,.54);
+
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(240,210,112,.065),
+      transparent 58%
+    ),
+    rgba(6,7,5,.91);
+}
+
+.specialisation-kicker{
+  color:#817b68;
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:.20em;
+
+  text-transform:uppercase;
+}
+
+.specialisation-icon{
+  width:48px;
+  height:48px;
+
+  margin:
+    13px auto
+    10px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    1px solid rgba(214,180,76,.42);
+
+  color:var(--gold);
+
+  font-size:17px;
+}
+
+.specialisation-title{
+  color:#f2d675;
+
+  font-size:17px;
+  font-weight:700;
+
+  letter-spacing:.06em;
+}
+
+.specialisation-copy{
+  margin-top:6px;
+
+  color:#898371;
+
+  font-size:8px;
+
+  letter-spacing:.13em;
+
+  text-transform:uppercase;
+}
+
+.specialisation-note{
+  margin-top:12px;
+
+  color:#666256;
+
+  font-size:8px;
+
+  line-height:1.5;
+}
+
+.specialisation-node .path-progress-row{
+  max-width:360px;
+
+  margin:
+    15px auto 0;
+}
+
+.specialisation-node .path-track{
+  max-width:360px;
+
+  margin:
+    8px auto 0;
+}
+
+@media(max-width:620px){
+
+  .academy-path{
+    padding:
+      22px 16px 28px;
+  }
+
+  .core-path-node,
+  .specialisation-node{
+    width:100%;
+  }
+
+}
+
 </style>
 
 </head>
@@ -3440,6 +3695,7 @@ let trainingEvents = [];
 
 let myCertifications = [];
 let myEvents = [];
+let mySpecialisation = null;
 
 
 /* =========================================================
@@ -3662,7 +3918,8 @@ async function loadAcademyData(){
     requirementResult,
     eventResult,
     myCertResult,
-    myEventResult
+    myEventResult,
+    mySpecialisationResult
 
   ] = await Promise.all([
 
@@ -3749,7 +4006,25 @@ async function loadAcademyData(){
       .order(
         "completed_at",
         {ascending:false}
+      ),
+
+
+    /* INSTRUCTOR-ASSIGNED SPECIALISATION */
+
+    sb
+      .from("academy_specialisation_assignments")
+      .select(`
+        specialisation_code,
+        assigned_by,
+        notes,
+        assigned_at,
+        updated_at
+      `)
+      .eq(
+        "user_id",
+        me
       )
+      .maybeSingle()
 
   ]);
 
@@ -3760,7 +4035,8 @@ async function loadAcademyData(){
     requirementResult.error,
     eventResult.error,
     myCertResult.error,
-    myEventResult.error
+    myEventResult.error,
+    mySpecialisationResult.error
 
   ].filter(Boolean);
 
@@ -3789,6 +4065,10 @@ async function loadAcademyData(){
 
   myEvents =
     myEventResult.data || [];
+
+
+  mySpecialisation =
+    mySpecialisationResult.data || null;
 
 
   renderAcademy();
@@ -3956,6 +4236,98 @@ function renderAcademy(){
    STATUS FOCUS
 ========================================================= */
 
+function getProgrammeByCode(programmes, code){
+
+  const target =
+    String(code || "")
+      .toUpperCase();
+
+
+  const aliases = {
+
+    GUNNERY:[
+      "GUNNERY",
+      "GUN"
+    ],
+
+    ENGINEERING:[
+      "ENGINEERING",
+      "ENG"
+    ]
+
+  };
+
+
+  const candidates =
+    aliases[target] ||
+    [target];
+
+
+  return programmes.find(
+    programme =>
+      candidates.includes(
+        String(
+          programme.certification_code ||
+          ""
+        ).toUpperCase()
+      )
+  ) || null;
+
+}
+
+
+function specialisationLabel(code){
+
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
+
+    case "MED":
+      return "MEDICAL";
+
+    case "GUNNERY":
+      return "GUNNERY";
+
+    case "ENGINEERING":
+      return "ENGINEERING";
+
+    default:
+      return "UNASSIGNED";
+
+  }
+
+}
+
+
+function specialisationIcon(code){
+
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
+
+    case "MED":
+      return "fa-kit-medical";
+
+    case "GUNNERY":
+      return "fa-crosshairs";
+
+    case "ENGINEERING":
+      return "fa-screwdriver-wrench";
+
+    default:
+      return "fa-user-shield";
+
+  }
+
+}
+
+
+/* =========================================================
+   STATUS FOCUS
+========================================================= */
+
 function renderStatusFocus(programmes){
 
   const completedEventCodes =
@@ -3966,23 +4338,77 @@ function renderStatusFocus(programmes){
     );
 
 
-  const current =
-    programmes.find(
-      programme =>
-        programme.status === "progress"
+  const bmt =
+    getProgrammeByCode(
+      programmes,
+      "BMT"
+    );
+
+
+  const soc =
+    getProgrammeByCode(
+      programmes,
+      "SOC"
+    );
+
+
+  const assignedCode =
+    mySpecialisation
+      ?.specialisation_code ||
+    null;
+
+
+  const assignedProgramme =
+    assignedCode
+    ?
+    getProgrammeByCode(
+      programmes,
+      assignedCode
     )
-    ||
-    programmes.find(
-      programme =>
-        !programme.certified
-    )
-    ||
-    programmes[
-      Math.max(
-        programmes.length - 1,
-        0
-      )
-    ];
+    :
+    null;
+
+
+  let current =
+    null;
+
+
+  if(
+    bmt &&
+    !bmt.certified
+  ){
+
+    current = bmt;
+
+  }
+
+  else if(
+    soc &&
+    !soc.certified
+  ){
+
+    current = soc;
+
+  }
+
+  else if(
+    assignedProgramme &&
+    !assignedProgramme.certified
+  ){
+
+    current =
+      assignedProgramme;
+
+  }
+
+  else{
+
+    current =
+      assignedProgramme ||
+      soc ||
+      bmt;
+
+  }
 
 
   const currentName =
@@ -4001,7 +4427,7 @@ function renderStatusFocus(programmes){
   if(!current){
 
     currentName.textContent =
-      "NO PROGRAMME DATA";
+      "NO CORE PROGRAMME";
 
     currentMeta.textContent =
       "Academy programme record unavailable.";
@@ -4021,33 +4447,23 @@ function renderStatusFocus(programmes){
     current.certification_code;
 
 
-  if(current.certified){
-
-    currentMeta.textContent =
-      current.name +
-      " // CERTIFIED";
-
-  }
-
-  else if(current.total > 0){
-
-    currentMeta.textContent =
-      current.name +
-      " // " +
+  currentMeta.textContent =
+    current.name +
+    " // " +
+    (
+      current.certified
+      ?
+      "CERTIFIED"
+      :
+      current.total > 0
+      ?
       current.completed +
       " OF " +
       current.total +
-      " MODULES COMPLETE";
-
-  }
-
-  else{
-
-    currentMeta.textContent =
-      current.name +
-      " // SYLLABUS PENDING";
-
-  }
+      " MODULES COMPLETE"
+      :
+      "SYLLABUS PENDING"
+    );
 
 
   const nextRequirement =
@@ -4085,35 +4501,45 @@ function renderStatusFocus(programmes){
   }
 
 
-  if(current.certified){
+  if(
+    bmt &&
+    !bmt.certified
+  ){
 
-    const nextProgramme =
-      programmes.find(
-        programme =>
-          !programme.certified
-      );
+    nextTitle.textContent =
+      "COMPLETE BMT";
+
+    nextMeta.textContent =
+      "Core training must be completed before SOC.";
+
+    return;
+
+  }
 
 
-    if(nextProgramme){
+  if(
+    soc &&
+    !soc.certified
+  ){
 
-      nextTitle.textContent =
-        nextProgramme.certification_code;
+    nextTitle.textContent =
+      "SOC";
 
-      nextMeta.textContent =
-        nextProgramme.name +
-        " // AVAILABLE PROGRAMME";
+    nextMeta.textContent =
+      "Continue core training before specialisation assignment.";
 
-    }
+    return;
 
-    else{
+  }
 
-      nextTitle.textContent =
-        "ACADEMY COMPLETE";
 
-      nextMeta.textContent =
-        "All current certification programmes completed.";
+  if(!assignedCode){
 
-    }
+    nextTitle.textContent =
+      "AWAITING INSTRUCTOR ASSIGNMENT";
+
+    nextMeta.textContent =
+      "An Academy instructor will assign MED, GUNNERY or ENGINEERING.";
 
     return;
 
@@ -4121,10 +4547,23 @@ function renderStatusFocus(programmes){
 
 
   nextTitle.textContent =
-    "AWAITING ASSIGNMENT";
+    specialisationLabel(
+      assignedCode
+    );
+
 
   nextMeta.textContent =
-    "No outstanding required module is currently assigned.";
+    assignedProgramme
+    ?
+    (
+      assignedProgramme.certified
+      ?
+      "ASSIGNED SPECIALISATION // CERTIFIED"
+      :
+      "ASSIGNED SPECIALISATION // READY FOR TRAINING"
+    )
+    :
+    "ASSIGNED SPECIALISATION // SYLLABUS PENDING";
 
 }
 
@@ -4144,130 +4583,380 @@ function renderTrainingPath(programmes){
   }
 
 
-  if(!programmes.length){
-
-    host.innerHTML = `
-
-      <div class="empty-state">
-        NO ACADEMY PROGRAMMES AVAILABLE.
-      </div>
-
-    `;
-
-    return;
-
-  }
+  const bmt =
+    getProgrammeByCode(
+      programmes,
+      "BMT"
+    );
 
 
-  const ordered =
-    [...programmes]
-      .sort(
-        (a,b) =>
-          Number(a.sort_order || 999)
-          -
-          Number(b.sort_order || 999)
-      );
+  const soc =
+    getProgrammeByCode(
+      programmes,
+      "SOC"
+    );
 
 
-  host.innerHTML =
-    ordered
-
-      .map(programme=>{
-
-
-        const statusText =
-          programme.certified
-          ?
-          "CERTIFIED"
-          :
-          programme.status === "progress"
-          ?
-          "IN TRAINING"
-          :
-          "AVAILABLE";
+  const assignedCode =
+    mySpecialisation
+      ?.specialisation_code ||
+    null;
 
 
-        const icon =
-          getProgrammeIcon(
-            programme.certification_code
-          );
+  const assignedProgramme =
+    assignedCode
+    ?
+    getProgrammeByCode(
+      programmes,
+      assignedCode
+    )
+    :
+    null;
 
 
-        const progressText =
-          programme.total > 0
-          ?
-          programme.completed +
-          " / " +
-          programme.total
-          :
-          "—";
+  const nodeMarkup =
+    (
+      programme,
+      fallbackCode,
+      fallbackName,
+      icon,
+      extraClass = ""
+    )=>{
 
+
+      if(!programme){
 
         return `
 
-          <a
-            class="path-node ${programme.status}"
-            href="${getProgrammeUrl(
-              programme.certification_code
-            )}"
-          >
+          <div class="core-path-node unavailable ${extraClass}">
 
-            <div class="path-node-head">
+            <div class="core-path-head">
 
               <div class="path-icon">
-
-                <i
-                  class="fa-solid ${icon}"
-                ></i>
-
+                <i class="fa-solid ${icon}"></i>
               </div>
 
               <div class="path-status">
-                ${statusText}
+                NOT CONFIGURED
               </div>
 
             </div>
 
             <div class="path-code">
-              ${escapeHtml(
-                programme.certification_code
-              )}
+              ${escapeHtml(fallbackCode)}
             </div>
 
             <div class="path-name">
-              ${escapeHtml(
-                programme.name
-              )}
+              ${escapeHtml(fallbackName)}
             </div>
 
             <div class="path-progress-row">
-
-              <span>
-                PROGRESS
-              </span>
-
-              <span>
-                ${progressText}
-              </span>
-
+              <span>PROGRESS</span>
+              <span>—</span>
             </div>
 
             <div class="path-track">
-
               <span
                 class="path-fill"
-                style="width:${programme.percent}%"
+                style="width:0%"
               ></span>
-
             </div>
 
-          </a>
+          </div>
 
         `;
 
-      })
+      }
 
-      .join("");
+
+      const statusText =
+        programme.certified
+        ?
+        "CERTIFIED"
+        :
+        programme.status === "progress"
+        ?
+        "IN TRAINING"
+        :
+        "AVAILABLE";
+
+
+      const progressText =
+        programme.total > 0
+        ?
+        programme.completed +
+        " / " +
+        programme.total
+        :
+        "—";
+
+
+      return `
+
+        <a
+          class="core-path-node ${programme.status} ${extraClass}"
+          href="${getProgrammeUrl(
+            programme.certification_code
+          )}"
+        >
+
+          <div class="core-path-head">
+
+            <div class="path-icon">
+              <i class="fa-solid ${icon}"></i>
+            </div>
+
+            <div class="path-status">
+              ${statusText}
+            </div>
+
+          </div>
+
+          <div class="path-code">
+            ${escapeHtml(
+              programme.certification_code
+            )}
+          </div>
+
+          <div class="path-name">
+            ${escapeHtml(
+              programme.name
+            )}
+          </div>
+
+          <div class="path-progress-row">
+
+            <span>PROGRESS</span>
+
+            <span>
+              ${progressText}
+            </span>
+
+          </div>
+
+          <div class="path-track">
+
+            <span
+              class="path-fill"
+              style="width:${programme.percent}%"
+            ></span>
+
+          </div>
+
+        </a>
+
+      `;
+
+    };
+
+
+  let specialisationMarkup;
+
+
+  if(!assignedCode){
+
+    specialisationMarkup = `
+
+      <div class="specialisation-node waiting">
+
+        <div class="specialisation-kicker">
+          SPECIALISATION
+        </div>
+
+        <div class="specialisation-icon">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+
+        <div class="specialisation-title">
+          AWAITING INSTRUCTOR ASSIGNMENT
+        </div>
+
+        <div class="specialisation-copy">
+          MEDICAL · GUNNERY · ENGINEERING
+        </div>
+
+        <div class="specialisation-note">
+          Your specialisation path is assigned by JMBN Academy.
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+  else if(assignedProgramme){
+
+    const statusText =
+      assignedProgramme.certified
+      ?
+      "CERTIFIED"
+      :
+      assignedProgramme.status === "progress"
+      ?
+      "IN TRAINING"
+      :
+      "ASSIGNED";
+
+
+    const progressText =
+      assignedProgramme.total > 0
+      ?
+      assignedProgramme.completed +
+      " / " +
+      assignedProgramme.total
+      :
+      "—";
+
+
+    specialisationMarkup = `
+
+      <a
+        class="specialisation-node assigned ${assignedProgramme.status}"
+        href="${getProgrammeUrl(
+          assignedProgramme.certification_code
+        )}"
+      >
+
+        <div class="specialisation-kicker">
+          ASSIGNED SPECIALISATION
+        </div>
+
+        <div class="specialisation-icon">
+          <i
+            class="fa-solid ${specialisationIcon(
+              assignedCode
+            )}"
+          ></i>
+        </div>
+
+        <div class="specialisation-title">
+          ${escapeHtml(
+            specialisationLabel(
+              assignedCode
+            )
+          )}
+        </div>
+
+        <div class="specialisation-copy">
+          ${escapeHtml(
+            assignedProgramme.name
+          )}
+        </div>
+
+        <div class="path-progress-row">
+
+          <span>
+            ${statusText}
+          </span>
+
+          <span>
+            ${progressText}
+          </span>
+
+        </div>
+
+        <div class="path-track">
+
+          <span
+            class="path-fill"
+            style="width:${assignedProgramme.percent}%"
+          ></span>
+
+        </div>
+
+      </a>
+
+    `;
+
+  }
+
+  else{
+
+    specialisationMarkup = `
+
+      <div class="specialisation-node assigned">
+
+        <div class="specialisation-kicker">
+          ASSIGNED SPECIALISATION
+        </div>
+
+        <div class="specialisation-icon">
+
+          <i
+            class="fa-solid ${specialisationIcon(
+              assignedCode
+            )}"
+          ></i>
+
+        </div>
+
+        <div class="specialisation-title">
+          ${escapeHtml(
+            specialisationLabel(
+              assignedCode
+            )
+          )}
+        </div>
+
+        <div class="specialisation-copy">
+          ASSIGNED BY JMBN ACADEMY
+        </div>
+
+        <div class="specialisation-note">
+          Training syllabus is not yet configured in the Academy database.
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  host.innerHTML = `
+
+    <div class="core-path">
+
+      <div class="core-path-label">
+        CORE TRAINING // REQUIRED FOR ALL MEMBERS
+      </div>
+
+      ${nodeMarkup(
+        bmt,
+        "BMT",
+        "Basic Military Training",
+        "fa-shield-halved",
+        "core-bmt"
+      )}
+
+      <div class="path-connector">
+        <span></span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+
+      ${nodeMarkup(
+        soc,
+        "SOC",
+        "Standard Obstacle Course",
+        "fa-mountain",
+        "core-soc"
+      )}
+
+      <div class="path-connector specialisation-connector">
+        <span></span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+
+      <div class="assignment-label">
+        INSTRUCTOR-ASSIGNED PATH
+      </div>
+
+      ${specialisationMarkup}
+
+    </div>
+
+  `;
 
 }
 
@@ -4278,18 +4967,54 @@ function renderTrainingPath(programmes){
 
 function renderStats(programmes){
 
-  const available =
+  const relevantCodes =
+    new Set([
+      "BMT",
+      "SOC",
+      "MED",
+      "GUN",
+      "GUNNERY",
+      "ENG",
+      "ENGINEERING"
+    ]);
+
+
+  const relevant =
     programmes.filter(
+      programme =>
+        relevantCodes.has(
+          String(
+            programme.certification_code ||
+            ""
+          ).toUpperCase()
+        )
+    );
+
+
+  const available =
+    relevant.filter(
       programme =>
         !programme.certified
     ).length;
 
 
   const inTraining =
-    programmes.filter(
+    relevant.filter(
       programme =>
         programme.status ===
         "progress"
+    ).length;
+
+
+  const earned =
+    myCertifications.filter(
+      row =>
+        relevantCodes.has(
+          String(
+            row.certification_code ||
+            ""
+          ).toUpperCase()
+        )
     ).length;
 
 
@@ -4302,7 +5027,7 @@ function renderStats(programmes){
 
 
   $("#certificationCount").textContent =
-    myCertifications.length;
+    earned;
 
 
   $("#eventCount").textContent =
