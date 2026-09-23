@@ -29,6 +29,12 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1500px;margin:auto}
 .footer{display:flex;align-items:center;gap:18px;margin-top:28px;color:#625f53;font-size:9px;letter-spacing:.25em}.footer-line{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line),transparent)}
 @media(max-width:1100px){.module-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.detail-pane{border-right:0;border-bottom:1px solid var(--soft)}}
 @media(max-width:760px){:root{--side:0}.sidebar{display:none}.app{display:block}.mobile-bar{display:flex;height:58px;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#030403;z-index:20}.mobile-bar a{text-decoration:none;color:var(--gold);font-size:10px}main{padding:15px}.hero{grid-template-columns:1fr}.hero-art{display:none}.hero h1{font-size:56px}.summary{grid-template-columns:1fr}.summary .cell{border-right:0;border-bottom:1px solid var(--line)}.module-grid{grid-template-columns:1fr}.module-card{min-height:350px}.device-grid,.pens{grid-template-columns:1fr 1fr}.detail-head{align-items:flex-start;flex-wrap:wrap}.detail-tag{margin-left:0;width:100%}}
+
+.side-divider{
+  height:1px;
+  margin:12px 21px;
+  background:linear-gradient(90deg,rgba(214,180,76,.45),transparent);
+}
 </style>
 </head>
 <body>
@@ -41,7 +47,10 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1500px;margin:auto}
 <a class="nav" href="../academy.html"><i class="fa-solid fa-shield-halved"></i> OVERVIEW</a>
 <a class="nav active" href="../programmes.html"><i class="fa-solid fa-layer-group"></i> PROGRAMMES</a>
 <a class="nav" href="../training-schedule.html"><i class="fa-regular fa-calendar-days"></i> TRAINING SCHEDULE</a>
-<a class="nav" href="../instructor.html"><i class="fa-solid fa-jet-fighter-up"></i> INSTRUCTOR ACCESS</a>
+<div class="side-divider"></div>
+<a class="nav" href="../instructor.html"><i class="fa-solid fa-user-shield"></i> INSTRUCTOR PANEL</a>
+<a class="nav" href="../academy-log.html"><i class="fa-solid fa-clock-rotate-left"></i> ACADEMY LOG</a>
+<div class="side-divider"></div>
 <div class="side-label">PROGRAMMES</div>
 <a class="nav " href="bmt.html"><i class="fa-solid fa-shield-halved"></i> AP-BMT</a>
 <a class="nav " href="soc.html"><i class="fa-solid fa-person-running"></i> AP-SOC</a>
