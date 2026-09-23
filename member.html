@@ -2744,7 +2744,7 @@ button{
                   class="detail-title"
                   style="margin-top:16px"
                 >
-                  Favourite Role
+                  Favourite Mission Role
                 </div>
 
 
@@ -2777,7 +2777,7 @@ button{
                   class="detail-title"
                   style="margin-top:14px"
                 >
-                  Secondary Role
+                  Secondary Mission Role
                 </div>
 
 
@@ -3069,7 +3069,9 @@ const toTitleCase =
 function normalizeOperationalRoles(r){
 
   const raw =
-    r.ingame_role ?? null;
+    r.operational_role ??
+    r.ingame_role ??
+    null;
 
 
   if (!raw) {
@@ -5443,7 +5445,7 @@ async function loadRoster(){
           current_rank_name,
           current_rank_code,
           current_rank_image_url,
-          ingame_role
+          operational_role
         `),
 
       sb
