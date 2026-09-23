@@ -4339,6 +4339,19 @@ function buildProgrammeData(){
     }
 
     else if(
+      optionalCertifications.has(code) &&
+      (
+        !bmtCertified ||
+        !socCertified
+      )
+    ){
+
+      status =
+        "locked";
+
+    }
+
+    else if(
       specialisations.has(code) &&
       (
         !bmtCertified ||
