@@ -127,14 +127,14 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 
 <script>
 const PROGRAMME_CODE="LOG";
-const PROGRAMME_KIND="specialisation";
+const PROGRAMME_KIND="optional";
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 
 function accessReason(reason,assigned){
   switch(reason){
     case "BMT_REQUIRED":return "Complete BMT before entering SOC.";
-    case "SOC_REQUIRED":return "Complete SOC before entering a specialisation certification.";
+    case "SOC_REQUIRED":return "Complete SOC before entering an optional certification.";
     case "SPECIALISATION_NOT_ASSIGNED":return "Your specialisation has not yet been assigned by a JMBN Academy instructor.";
     case "DIFFERENT_SPECIALISATION_ASSIGNED":return "Your assigned specialisation is "+(assigned||"another pathway")+".";
     default:return "This certification is not currently available to your Academy record.";
