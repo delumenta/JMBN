@@ -2696,6 +2696,21 @@ function escapeHtml(value){
 }
 
 
+function displayCertificationCode(code){
+
+  const key = String(code || "").toUpperCase();
+
+  const aliases = {
+    CAR:"LOG",
+    GUNNERY:"GUN",
+    ENGINEERING:"ENG"
+  };
+
+  return aliases[key] || key;
+
+}
+
+
 function formatDate(value){
 
   if(!value){
@@ -3552,7 +3567,9 @@ function renderSidebar(){
 
           <span>
             ${escapeHtml(
-              programme.certification_code
+              displayCertificationCode(
+                programme.certification_code
+              )
             )}
           </span>
 
@@ -3904,7 +3921,9 @@ function renderProgrammeCard(programme){
           <div class="card-code">
 
             ${escapeHtml(
-              programme.certification_code
+              displayCertificationCode(
+                programme.certification_code
+              )
             )}
 
           </div>
@@ -3936,7 +3955,9 @@ function renderProgrammeCard(programme){
               <div class="card-sub">
 
                 ${escapeHtml(
-                  programme.certification_code
+                  displayCertificationCode(
+                    programme.certification_code
+                  )
                 )}
 
                 // ACADEMY PROGRAMME
