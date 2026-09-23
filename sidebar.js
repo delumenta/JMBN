@@ -7,11 +7,11 @@ const rootUrl=new URL(".",scriptElement?.src||location.href);
 const fallbackProgrammes=[
   {certification_code:"BMT",name:"Basic Military Training"},
   {certification_code:"SOC",name:"Standard Obstacle Course"},
-  {certification_code:"MED",name:"Medical Training Course"},
-  {certification_code:"CAR",name:"Cargo Operations"},
-  {certification_code:"MIN",name:"Mining Operations"},
-  {certification_code:"GUNNERY",name:"Gunnery Training"},
-  {certification_code:"ENGINEERING",name:"Engineering Training"},
+  {certification_code:"MED",name:"Empire Health Medical Responder Certification"},
+  {certification_code:"CAR",name:"Covalex Logistics Support Certification"},
+  {certification_code:"MIN",name:"ArcCorp Mining Consortium Certification"},
+  {certification_code:"GUNNERY",name:"JCS Defensive Matrix Certification"},
+  {certification_code:"ENGINEERING",name:"JCS Fleet Engineer Certification"},
   {certification_code:"PILOT",name:"Pilot Training"}
 ];
 
@@ -47,7 +47,7 @@ const shortCode={
   BMT:"BMT",
   SOC:"SOC",
   MED:"MED",
-  CAR:"CAR",
+  CAR:"LOG",
   MIN:"MIN",
   GUNNERY:"GUN",
   ENGINEERING:"ENG",
