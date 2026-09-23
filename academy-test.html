@@ -4397,6 +4397,7 @@ function buildProgrammeData(){
     else if(
       specialisations.has(code) &&
       (
+        !bmtCertified ||
         !socCertified ||
         assignedCode !== code
       )
