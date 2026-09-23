@@ -2883,8 +2883,18 @@ a.academy-path-card:hover{
     rgba(240,210,112,.54);
 }
 
-.academy-path-card.unavailable{
-  opacity:.62;
+.academy-path-card.unavailable,
+.academy-path-card.locked{
+  opacity:.58;
+}
+
+.academy-path-card.locked{
+  border-style:dashed;
+}
+
+.academy-path-card.assigned{
+  border-color:
+    rgba(240,210,112,.54);
 }
 
 .path-card-head{
@@ -2950,6 +2960,7 @@ a.academy-path-card:hover{
 }
 
 .academy-path-card.progress .path-status,
+.academy-path-card.assigned .path-status,
 .specialisation-assigned .path-status{
   color:var(--gold);
 }
@@ -4247,7 +4258,10 @@ function buildProgrammeData(){
     new Set(
       myCertifications.map(
         row =>
-          row.certification_code
+          String(
+            row.certification_code ||
+            ""
+          ).toUpperCase()
       )
     );
 
@@ -4261,7 +4275,41 @@ function buildProgrammeData(){
     );
 
 
+  const bmtCertified =
+    completedCertCodes.has(
+      "BMT"
+    );
+
+
+  const socCertified =
+    completedCertCodes.has(
+      "SOC"
+    );
+
+
+  const assignedCode =
+    String(
+      mySpecialisation
+        ?.specialisation_code ||
+      ""
+    ).toUpperCase();
+
+
+  const specialisations =
+    new Set([
+      "MED",
+      "GUNNERY",
+      "ENGINEERING"
+    ]);
+
+
   return certifications.map(cert=>{
+
+    const code =
+      String(
+        cert.certification_code ||
+        ""
+      ).toUpperCase();
 
 
     const certRequirements =
@@ -4298,7 +4346,7 @@ function buildProgrammeData(){
 
     const certified =
       completedCertCodes.has(
-        cert.certification_code
+        code
       );
 
 
@@ -4318,10 +4366,6 @@ function buildProgrammeData(){
     }
 
 
-    /*
-      Certification award is authoritative.
-    */
-
     if(certified){
 
       percent = 100;
@@ -4340,10 +4384,43 @@ function buildProgrammeData(){
 
     }
 
+    else if(
+      code === "SOC" &&
+      !bmtCertified
+    ){
+
+      status =
+        "locked";
+
+    }
+
+    else if(
+      specialisations.has(code) &&
+      (
+        !socCertified ||
+        assignedCode !== code
+      )
+    ){
+
+      status =
+        "locked";
+
+    }
+
     else if(completed > 0){
 
       status =
         "progress";
+
+    }
+
+    else if(
+      specialisations.has(code) &&
+      assignedCode === code
+    ){
+
+      status =
+        "assigned";
 
     }
 
@@ -4809,6 +4886,14 @@ function renderTrainingPath(programmes){
         ?
         "IN TRAINING"
         :
+        programme.status === "locked"
+        ?
+        "LOCKED"
+        :
+        programme.status === "assigned"
+        ?
+        "ASSIGNED"
+        :
         "AVAILABLE";
 
 
@@ -4892,7 +4977,10 @@ function renderTrainingPath(programmes){
       `;
 
 
-      if(programme){
+      if(
+        programme &&
+        programme.status !== "locked"
+      ){
 
         return `
 
@@ -4904,6 +4992,22 @@ function renderTrainingPath(programmes){
           >
             ${body}
           </a>
+
+        `;
+
+      }
+
+
+      if(programme){
+
+        return `
+
+          <div
+            class="academy-path-card locked"
+            aria-disabled="true"
+          >
+            ${body}
+          </div>
 
         `;
 
