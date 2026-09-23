@@ -1109,7 +1109,7 @@
         <div class="role">
 
           <span class="label">
-            01 // PRIMARY ROLE
+            01 // PRIMARY MISSION ROLE
           </span>
 
           <br>
@@ -1128,7 +1128,7 @@
         <div class="role">
 
           <span class="label">
-            02 // SECONDARY ROLE
+            02 // SECONDARY MISSION ROLE
           </span>
 
           <br>
@@ -1147,7 +1147,7 @@
         <div class="role">
 
           <span class="label">
-            ASSIGNED SPECIALISATIONS
+            OPERATIONAL ROLE
           </span>
 
           <br>
@@ -1490,11 +1490,12 @@
       };
 
 
-    function normalizeRoles(
+    function normalizeOperationalRoles(
       row
     ){
 
       const raw =
+        row?.operational_role ??
         row?.ingame_role;
 
       if (!raw) {
@@ -1872,7 +1873,7 @@
         );
 
       const roles =
-        normalizeRoles(
+        normalizeOperationalRoles(
           profile
         );
 
