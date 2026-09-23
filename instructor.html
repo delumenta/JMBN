@@ -702,9 +702,18 @@ function render(){
   const activeCodes=new Set(
     certs.map(c=>String(c.certification_code||"").toUpperCase())
   );
+  const pathwayNames={
+    BMT:"Basic Military Training",
+    SOC:"Standard Obstacle Course",
+    MED:"Medical Training Course",
+    GUNNERY:"Gunnery Training",
+    ENGINEERING:"Engineering Training",
+    PILOT:"Pilot Training"
+  };
+
   $("#pathways").innerHTML=pathwayOrder
     .filter(code=>activeCodes.has(code))
-    .map(code=>`<div><b>${pathwayLabels[code]}</b></div>`)
+    .map(code=>`<div><b>${pathwayLabels[code]}</b> ${esc(pathwayNames[code]||code)}</div>`)
     .join("");
  }
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
