@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JMBN // AP-LOG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
+<script src="../sidebar.js" defer></script>
+<style>
+:root{--bg:#020302;--gold:#f0d270;--gold2:#d6b44c;--text:#f3ecd2;--muted:#8f8976;--green:#70d98c;--red:#ff7474;--side:238px;--line:rgba(214,180,76,.48)}
+*{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:"Play",sans-serif;background:radial-gradient(circle at 82% 6%,rgba(177,139,39,.08),transparent 32%),#020302}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(214,180,76,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(214,180,76,.065) 1px,transparent 1px);background-size:52px 52px}
+body.access-pending .app,body.access-pending .mobile-bar{visibility:hidden}
+body.access-pending:after{content:"VERIFYING ACADEMY ACCESS...";position:fixed;inset:0;z-index:999;display:grid;place-items:center;color:var(--gold);font-size:10px;letter-spacing:.2em;background:#020302}
+a{color:inherit}.mobile-bar{display:none}.app{position:relative;z-index:1;display:grid;grid-template-columns:var(--side) minmax(0,1fr);min-height:100vh}
+.sidebar{border-right:1px solid rgba(214,180,76,.34);background:linear-gradient(180deg,rgba(10,12,9,.99),rgba(3,4,3,.99))}.side-inner{position:sticky;top:0}.manifest{height:52px;padding:0 21px;display:flex;align-items:center;gap:10px;text-decoration:none;color:#777365;font-size:10px;letter-spacing:.14em;border-bottom:1px solid rgba(214,180,76,.14)}
+.side-head{padding:25px 22px 18px}.side-head small{color:#6d695c;letter-spacing:.27em}.side-head strong{display:block;margin-top:5px;color:var(--gold);font-size:20px;letter-spacing:.13em}.network{margin-top:6px;color:#817c6c;font-size:8px;letter-spacing:.24em}.side-label{padding:10px 22px;color:#59574e;font-size:8px;letter-spacing:.25em}
+.nav{min-height:46px;padding:0 21px;display:flex;align-items:center;gap:13px;text-decoration:none;color:#a6a18f;font-size:11px;letter-spacing:.08em;border-left:3px solid transparent}.nav i{width:18px;text-align:center}.nav:hover{color:var(--text);background:rgba(240,210,112,.035)}.nav.active{color:var(--gold);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(240,210,112,.14),rgba(240,210,112,.02))}
+.side-foot{padding:30px 22px;color:#4f4c42;font-size:8px;line-height:1.8;letter-spacing:.2em}
+main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}.frame{position:relative;border:1px solid rgba(214,180,76,.66);background:linear-gradient(145deg,rgba(240,210,112,.025),transparent 16%),linear-gradient(180deg,rgba(8,10,7,.97),rgba(3,5,3,.99));clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}.frame:after{content:"";position:absolute;top:0;left:32px;width:95px;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.hero{min-height:340px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1.25fr}
+.hero-copy{padding:30px 34px;position:relative;z-index:2}
+.crumb{font-size:11px;color:#aaa;text-decoration:none}
+.hero h1{font-size:74px;line-height:.85;margin:28px 0 7px;letter-spacing:.05em}
+.hero h2{margin:0;color:var(--gold);letter-spacing:.23em;font-size:23px}
+.hero p{max-width:600px;color:#b9b39f;line-height:1.65}
+.hero-art{
+  position:relative;
+  min-height:340px;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(3,5,3,.96) 0%,
+      rgba(3,5,3,.48) 32%,
+      rgba(3,5,3,.18) 100%
+    ),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/certification/APCargo.png");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat
+}
+.hero-art:before{
+  content:"LOG";
+  position:absolute;
+  right:35px;
+  bottom:-20px;
+  font-size:180px;
+  font-weight:700;
+  color:rgba(240,210,112,.055)
+}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:18px}.cell{padding:20px 24px;border-right:1px solid rgba(214,180,76,.14)}.cell:last-child{border-right:0}.label{color:#706b5d;font-size:7px;letter-spacing:.18em}.value{margin-top:7px;color:#efe2ae;font-size:16px;font-weight:700}.value.green{color:var(--green)}
+.section-head{padding:17px 20px;border-bottom:1px solid rgba(214,180,76,.14);display:flex;justify-content:space-between;gap:12px}.section-title{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.22em}.section-code{color:#5d594e;font-size:8px;letter-spacing:.17em}.modules{padding:18px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.module{min-height:160px;padding:18px;border:1px solid rgba(214,180,76,.2);background:rgba(5,7,5,.72)}.module.done{border-color:rgba(112,217,140,.32)}.module.current{border-color:rgba(240,210,112,.5)}.module.locked{opacity:.55}.module-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.module-code{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.12em}.badge{color:#777164;font-size:7px;letter-spacing:.12em}.module.done .badge{color:var(--green)}.module.current .badge{color:var(--gold)}.module h3{margin:15px 0 7px;font-size:15px}.module p{margin:0;color:#817b6a;font-size:9px;line-height:1.55}.module-meta{margin-top:16px;color:#5f5b50;font-size:7px;letter-spacing:.1em}
+.pending{padding:54px 24px;text-align:center}.pending i{font-size:28px;color:var(--gold)}.pending h3{margin:18px 0 8px;color:#e7d99e;font-size:17px;letter-spacing:.08em}.pending p{max-width:620px;margin:0 auto;color:#777163;font-size:9px;line-height:1.7;letter-spacing:.06em}
+.denied{position:fixed;inset:0;z-index:1000;display:none;place-items:center;padding:22px;background:#020302}.denied.show{display:grid}.denied-card{width:min(620px,100%);padding:34px;border:1px solid rgba(214,180,76,.55);text-align:center;background:#070906}.denied-card i{font-size:34px;color:var(--gold)}.denied-card h2{margin:18px 0 8px;color:#f1dda0;letter-spacing:.08em}.denied-card p{color:#8a8472;font-size:10px;line-height:1.7}.denied-card a{display:inline-flex;margin-top:18px;min-height:42px;padding:0 18px;align-items:center;border:1px solid rgba(214,180,76,.5);text-decoration:none;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.12em}
+.footer{display:flex;align-items:center;gap:18px;margin-top:26px;color:#625f53;font-size:8px;letter-spacing:.24em}.footer-line{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line),transparent)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-art{display:none}.modules{grid-template-columns:1fr}}
+@media(max-width:760px){:root{--side:0}.sidebar{display:none}.app{display:block}.mobile-bar{display:flex;height:58px;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#030403;z-index:20}.mobile-bar a{text-decoration:none;color:var(--gold);font-size:10px}main{padding:15px}.hero-copy{padding:28px 24px}.hero h1{font-size:50px}.summary{grid-template-columns:1fr}.cell{border-right:0;border-bottom:1px solid rgba(214,180,76,.14)}}
+
+.side-divider{
+  height:1px;
+  margin:12px 21px;
+  background:linear-gradient(90deg,rgba(214,180,76,.45),transparent);
+}
+</style>
+</head>
+<body class="access-pending">
+
+<div class="denied" id="accessDenied">
+  <div class="denied-card">
+    <i class="fa-solid fa-lock"></i>
+    <h2>CERTIFICATION ACCESS LOCKED</h2>
+    <p id="accessReason">This certification is not currently available to your Academy record.</p>
+    <a href="../programmes.html">RETURN TO CERTIFICATIONS</a>
+  </div>
+</div>
+
+<header class="mobile-bar"><span>JMBN // AP-LOG</span><a href="../academy.html">ACADEMY</a></header>
+<div class="app">
+<aside
+  class="academy-sidebar sidebar shared-academy-sidebar"
+  id="academySidebar"
+  data-academy-sidebar
+></aside>
+
+<main><div class="container">
+
+<section class="frame hero">
+  <div class="hero-copy">
+    <a class="crumb" href="../programmes.html">‹ BACK TO CERTIFICATIONS　›　AP-LOG</a>
+    <h1>LOG</h1>
+    <h2>COVALEX LOGISTICS SUPPORT CERTIFICATION</h2>
+    <p>Optional logistics pathway covering cargo handling, freight movement and JMBN logistics support procedures. Certification modules are currently pending and will be added next.</p>
+  </div>
+  <div class="hero-art" role="img" aria-label="Covalex Logistics Support Certification"></div>
+</section>
+
+<section class="frame summary">
+  <div class="cell"><div class="label">CERTIFICATION STATUS</div><div class="value" id="programmeStatus">VERIFYING</div></div>
+  <div class="cell"><div class="label">TRAINING PROGRESS</div><div class="value" id="progressText">—</div></div>
+  <div class="cell"><div class="label">ACADEMY PATH</div><div class="value" id="pathStatus">OPTIONAL PATHWAY</div></div>
+</section>
+
+<section class="frame">
+  <div class="section-head">
+    <div class="section-title">MODULES</div>
+    <div class="section-code">AP-LOG // PENDING</div>
+  </div>
+  <div class="modules" id="moduleGrid">
+    <div class="pending" style="grid-column:1/-1">
+      <i class="fa-solid fa-screwdriver-wrench"></i>
+      <h3>MODULES PENDING</h3>
+      <p>Training modules for this certification are currently under development and will be added by JMBN Academy.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><span>JMBN // ACADEMY DIVISION</span><div class="footer-line"></div><span>DISCIPLINE · SKILL · UNITY</span></footer>
+
+</div></main>
+</div>
+
+<script>
+const PROGRAMME_CODE="LOG";
+const PROGRAMME_KIND="specialisation";
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+
+function accessReason(reason,assigned){
+  switch(reason){
+    case "BMT_REQUIRED":return "Complete BMT before entering SOC.";
+    case "SOC_REQUIRED":return "Complete SOC before entering a specialisation certification.";
+    case "SPECIALISATION_NOT_ASSIGNED":return "Your specialisation has not yet been assigned by a JMBN Academy instructor.";
+    case "DIFFERENT_SPECIALISATION_ASSIGNED":return "Your assigned specialisation is "+(assigned||"another pathway")+".";
+    default:return "This certification is not currently available to your Academy record.";
+  }
+}
+
+async function init(){
+  try{
+    const session=await requireAuth();
+    if(!session)return;
+    const sb=getSupabase();
+    const {data:{user}}=await sb.auth.getUser();
+    if(!user)return;
+
+    const {data:access,error:accessError}=await sb.rpc("academy_programme_access",{
+      p_user:user.id,
+      p_programme:PROGRAMME_CODE
+    });
+    if(accessError)throw accessError;
+
+    if(!access?.allowed){
+      document.body.classList.remove("access-pending");
+      $("#accessReason").textContent=accessReason(access?.reason,access?.assigned_specialisation);
+      $("#accessDenied").classList.add("show");
+      return;
+    }
+
+    document.body.classList.remove("access-pending");
+
+    const [certResult,reqResult,myCertResult,myEventsResult]=await Promise.all([
+      sb.from("certifications").select("certification_code,name,image_url,hero_art_cover").eq("certification_code",PROGRAMME_CODE).maybeSingle(),
+      sb.from("certification_requirements").select("event_code,required,sort_order").eq("certification_code",PROGRAMME_CODE).eq("required",true).order("sort_order"),
+      sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",user.id).eq("certification_code",PROGRAMME_CODE),
+      sb.from("user_training_events").select("event_code,approved_at,approved_by,completed_at").eq("user_id",user.id)
+    ]);
+
+    const reqs=reqResult.data||[];
+    const codes=reqs.map(x=>x.event_code);
+    const eventResult=codes.length
+      ? await sb.from("training_events").select("event_code,title,description,duration_hrs,sort_order").in("event_code",codes)
+      : {data:[],error:null};
+
+    const eventMap=new Map((eventResult.data||[]).map(x=>[x.event_code,x]));
+    const completedSet=new Set((myEventsResult.data||[]).filter(x=>x.approved_at&&x.approved_by).map(x=>x.event_code));
+    const certified=(myCertResult.data||[]).length>0;
+    const completed=certified?reqs.length:reqs.filter(x=>completedSet.has(x.event_code)).length;
+
+    $("#progressText").textContent="MODULES PENDING";
+
+    if(certified){
+      $("#programmeStatus").textContent="✓ CERTIFIED";
+      $("#programmeStatus").classList.add("green");
+    }else if(completed>0){
+      $("#programmeStatus").textContent="◉ IN TRAINING";
+    }else if(PROGRAMME_KIND==="specialisation"){
+      $("#programmeStatus").textContent="ASSIGNED";
+    }else{
+      $("#programmeStatus").textContent="AVAILABLE";
+    }
+
+    $("#moduleGrid").innerHTML=`
+      <div class="pending" style="grid-column:1/-1">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <h3>MODULES PENDING</h3>
+        <p>Training modules for this certification are currently under development and will be added by JMBN Academy.</p>
+      </div>
+    `;
+    return;
+
+
+  }catch(error){
+    console.error("AP-"+PROGRAMME_CODE+" load failed:",error);
+    document.body.classList.remove("access-pending");
+    $("#accessReason").textContent="Unable to verify your Academy access. Please return to the certification directory and try again.";
+    $("#accessDenied").classList.add("show");
+  }
+}
+
+init();
+</script>
+</body>
+</html>
