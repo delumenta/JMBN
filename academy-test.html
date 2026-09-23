@@ -2778,6 +2778,31 @@ body::before{
   }
 }
 
+
+
+/* =========================================================
+   ACADEMY TEST — SIMPLIFIED DASHBOARD
+   Hero → Status → Progression Map → Footer
+========================================================= */
+
+.academy-path-frame{
+  margin-bottom:0;
+}
+
+.academy-footer{
+  margin-top:22px;
+}
+
+/* The progression map is now the main Academy action area. */
+.path-node{
+  min-height:142px;
+}
+
+.path-name{
+  min-height:30px;
+}
+
+
 </style>
 
 </head>
@@ -3368,57 +3393,6 @@ body::before{
 
 
 <!-- =========================================================
-     LOWER DASHBOARD
-========================================================= -->
-
-<div class="dashboard-grid">
-
-
-<!-- =========================================================
-     04 // RECENT TRAINING
-========================================================= -->
-
-<section class="frame">
-
-  <span class="corner corner-tl"></span>
-  <span class="corner corner-br"></span>
-
-
-  <div class="frame-header">
-
-    <div class="frame-title">
-      RECENT TRAINING
-    </div>
-
-    <div class="frame-code">
-      LOG // 04
-    </div>
-
-  </div>
-
-
-  <div
-    class="training-list"
-    id="recentTraining"
-  >
-
-    <div class="loading">
-
-      ACCESSING TRAINING LOG...
-
-    </div>
-
-  </div>
-
-
-</section>
-
-
-</div>
-
-
-
-<!-- =========================================================
      FOOTER
 ========================================================= -->
 
@@ -3974,8 +3948,6 @@ function renderAcademy(){
   renderTrainingPath(programmes);
 
   renderSidebar(programmes);
-
-  renderRecentTraining();
 
 }
 
@@ -4962,15 +4934,7 @@ document.addEventListener(
       }
 
 
-      $("#recentTraining").innerHTML = `
-
-        <div class="empty-state">
-
-          TRAINING LOG UNAVAILABLE.
-
-        </div>
-
-      `;
+      /* Academy Test has no Recent Training panel. */
 
     }
 
