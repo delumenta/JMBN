@@ -822,7 +822,7 @@ async function openMember(userId, rowEl){
       </div>
       <div class="body">
         <div class="small" style="margin-bottom:8px">
-          Authorise this member to instruct and/or sign off specific Academy programmes.
+          Authorise this member to instruct and/or sign off specific Academy certifications.
           This does not change their normal JMBN role or rank.
         </div>
         <div id="instructorGrid" class="instructor-grid">Loading…</div>
@@ -1073,7 +1073,7 @@ async function loadInstructorAuthorisations(uid){
   })
 
   const activeCount = (auths || []).filter(x => x.is_active).length
-  if(badge) badge.textContent = activeCount ? `${activeCount} PROGRAMME${activeCount === 1 ? '' : 'S'}` : 'NOT INSTRUCTOR'
+  if(badge) badge.textContent = activeCount ? `${activeCount} CERTIFICATION${activeCount === 1 ? '' : 'S'}` : 'NOT INSTRUCTOR'
 
   const save = $('#btnSaveInstructor')
   if(save){
@@ -1086,7 +1086,7 @@ async function saveInstructorAuthorisations(uid){
   const btn = $('#btnSaveInstructor')
   const cards = [...document.querySelectorAll('#instructorGrid .instructor-card')]
 
-  if(!cards.length) return alert('No Academy programmes found.')
+  if(!cards.length) return alert('No Academy certifications found.')
   if(!confirm(`Save Academy instructor permissions for ${SELECTED.handle || SELECTED.display_name || uid.slice(0,8)}?`)) return
 
   btn.disabled = true
