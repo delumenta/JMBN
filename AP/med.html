@@ -29,9 +29,26 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1500px;margin:auto}
 .footer{display:flex;align-items:center;gap:18px;margin-top:28px;color:#625f53;font-size:9px;letter-spacing:.25em}.footer-line{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line),transparent)}
 @media(max-width:1100px){.module-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.detail-pane{border-right:0;border-bottom:1px solid var(--soft)}}
 @media(max-width:760px){:root{--side:0}.sidebar{display:none}.app{display:block}.mobile-bar{display:flex;height:58px;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#030403;z-index:20}.mobile-bar a{text-decoration:none;color:var(--gold);font-size:10px}main{padding:15px}.hero{grid-template-columns:1fr}.hero-art{display:none}.hero h1{font-size:56px}.summary{grid-template-columns:1fr}.summary .cell{border-right:0;border-bottom:1px solid var(--line)}.module-grid{grid-template-columns:1fr}.module-card{min-height:350px}.device-grid,.pens{grid-template-columns:1fr 1fr}.detail-head{align-items:flex-start;flex-wrap:wrap}.detail-tag{margin-left:0;width:100%}}
+
+body.access-pending .app,
+body.access-pending .mobile-bar{
+  visibility:hidden;
+}
+body.access-pending::after{
+  content:"VERIFYING ACADEMY ACCESS...";
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:grid;
+  place-items:center;
+  color:var(--gold);
+  font-size:10px;
+  letter-spacing:.2em;
+  background:#020302;
+}
 </style>
 </head>
-<body>
+<body class="access-pending">
 <header class="mobile-bar"><span>JMBN // AP-MED</span><a href="../academy.html">ACADEMY</a></header>
 <div class="app">
 <aside class="sidebar"><div class="side-inner">
@@ -136,6 +153,16 @@ async function init(){
 
     const {data:{user}}=await sb.auth.getUser();
     if(!user) return;
+    const {data:access,error:accessError}=await sb.rpc("academy_programme_access",{
+      p_user:user.id,
+      p_programme:"MED"
+    });
+    if(accessError) throw accessError;
+    if(!access?.allowed){
+      location.replace("../programmes.html?locked=MED&reason="+encodeURIComponent(access?.reason||"LOCKED"));
+      return;
+    }
+    document.body.classList.remove("access-pending");
     const [{data:certRows,error:certError},{data:rows,error},{data:eventRows,error:eventError}] = await Promise.all([
       sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",user.id).eq("certification_code","MED"),
       sb.from("user_training_events").select("event_code,approved_at,approved_by").eq("user_id",user.id).in("event_code",MED_EVENTS),
@@ -187,6 +214,7 @@ async function init(){
       else setCard(card,"locked",MED_EVENTS[i-1]);
     });
   }catch(err){
+    document.body.classList.remove("access-pending");
     console.error("AP-MED load failed:",err);
     document.getElementById("programmeStatus").textContent="RECORD UNAVAILABLE";
     document.getElementById("programmeStatusNote").textContent="Unable to load your Academy training record.";
