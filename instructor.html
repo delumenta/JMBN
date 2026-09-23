@@ -380,7 +380,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 <section class="instructor-overview" id="instructorOverview">
 
   <section class="stats">
-    <div class="frame stat"><div class="stat-label">YOUR AUTHORISATIONS</div><div class="stat-value" id="authCount">—</div><div class="stat-meta">PROGRAMMES</div></div>
+    <div class="frame stat"><div class="stat-label">YOUR AUTHORISATIONS</div><div class="stat-value" id="authCount">—</div><div class="stat-meta">CERTIFICATIONS</div></div>
     <div class="frame stat"><div class="stat-label">SIGN-OFFS</div><div class="stat-value" id="signoffCount">—</div><div class="stat-meta">ALL TIME</div></div>
     <div class="frame stat"><div class="stat-label">COMPLETED (30 DAYS)</div><div class="stat-value" id="recentCount">—</div><div class="stat-meta">APPROVED TRAINING</div></div>
     <div class="frame stat"><div class="stat-label">INSTRUCTED MEMBERS</div><div class="stat-value" id="memberCount">—</div><div class="stat-meta">UNIQUE TRAINEES</div></div>
@@ -431,12 +431,12 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
       <div class="panel-head">
         <div>
           <div class="section-title">YOUR AUTHORISATIONS</div>
-          <div class="panel-subtitle">PROGRAMMES YOU MAY CONDUCT AND SIGN OFF.</div>
+          <div class="panel-subtitle">CERTIFICATIONS YOU MAY CONDUCT AND SIGN OFF.</div>
         </div>
       </div>
       <div class="panel-body table-wrap">
         <table class="table">
-          <thead><tr><th>PROGRAMME</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead>
+          <thead><tr><th>CERTIFICATION</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead>
           <tbody id="authRows"></tbody>
         </table>
       </div>
@@ -451,7 +451,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
       </div>
       <div class="panel-body table-wrap">
         <table class="table">
-          <thead><tr><th>MEMBER</th><th>PROGRAMME</th><th>MODULE</th><th>STATUS</th><th>DATE</th></tr></thead>
+          <thead><tr><th>MEMBER</th><th>CERTIFICATION</th><th>MODULE</th><th>STATUS</th><th>DATE</th></tr></thead>
           <tbody id="recentRows"></tbody>
         </table>
       </div>
@@ -509,9 +509,9 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
           <option value="">SELECT TRAINEE</option>
         </select>
 
-        <label>PROGRAMME</label>
+        <label>CERTIFICATION</label>
         <select id="programme" class="control">
-          <option value="">SELECT PROGRAMME</option>
+          <option value="">SELECT CERTIFICATION</option>
         </select>
 
         <label>MODULE / TRAINING EVENT</label>
@@ -657,7 +657,7 @@ async function verifyAccess(){
  authorisations=auths||[];
  $("#instructorName").textContent=profile?.display_name||profile?.handle||"INSTRUCTOR";
  if(!isAdmin && !authorisations.length){location.replace("academy.html");return false}
- $("#instructorRole").textContent=isAdmin?"ACADEMY ADMINISTRATOR":`${authorisations.length} PROGRAMME AUTHORISATION${authorisations.length===1?"":"S"}`;
+ $("#instructorRole").textContent=isAdmin?"ACADEMY ADMINISTRATOR":`${authorisations.length} CERTIFICATION AUTHORISATION${authorisations.length===1?"":"S"}`;
  return true;
 }
 async function load(){
@@ -694,7 +694,7 @@ function render(){
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  updatePathAssignment();
- $("#programme").innerHTML=`<option value="">SELECT PROGRAMME</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
+ $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
 }
 function updateEvents(){
@@ -866,7 +866,7 @@ $("#programme").addEventListener("change",updateEvents);
 async function sign(status){
  const trainee=$("#trainee").value,programme=$("#programme").value,event=$("#event").value,notes=$("#notes").value.trim();
  const msg=$("#message");msg.className="msg";msg.textContent="";
- if(!trainee||!programme||!event){msg.classList.add("bad");msg.textContent="SELECT A MEMBER, PROGRAMME AND MODULE.";return}
+ if(!trainee||!programme||!event){msg.classList.add("bad");msg.textContent="SELECT A MEMBER, CERTIFICATION AND MODULE.";return}
  if(status==="approved" && [...document.querySelectorAll(".criteria")].some(x=>!x.checked)){msg.classList.add("bad");msg.textContent="COMPLETE ALL PRACTICAL ASSESSMENT CHECKS BEFORE SIGN-OFF.";return}
  const button=status==="approved"?$("#approve"):$("#retrain");button.disabled=true;
  const {error}=await sb.rpc("academy_signoff_training",{p_trainee:trainee,p_event_code:event,p_certification_code:programme,p_status:status,p_notes:notes||null});
