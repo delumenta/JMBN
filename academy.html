@@ -2620,7 +2620,7 @@ body::before{
 }
 
 
-/* COMPACT CURRENT PROGRAMMES */
+/* COMPACT CURRENT CERTIFICATIONS */
 
 .programmes-body{
   padding:6px 20px 8px;
@@ -3453,7 +3453,7 @@ a.academy-path-card:hover{
       <div class="status-focus-copy">
 
         <div class="status-focus-label">
-          CURRENT PROGRAMME
+          CURRENT CERTIFICATION
         </div>
 
         <div
@@ -4522,10 +4522,10 @@ function renderStatusFocus(programmes){
   if(!current){
 
     currentName.textContent =
-      "NO CORE PROGRAMME";
+      "NO CORE CERTIFICATION";
 
     currentMeta.textContent =
-      "Academy programme record unavailable.";
+      "Academy certification record unavailable.";
 
     nextTitle.textContent =
       "—";
@@ -5244,7 +5244,7 @@ function renderSidebar(programmes){
     host.innerHTML = `
 
       <div class="nav-item">
-        NO PROGRAMMES
+        NO CERTIFICATIONS
       </div>
 
     `;
@@ -5450,7 +5450,7 @@ function renderSidebar(programmes){
           <div
             class="nav-item"
             aria-disabled="true"
-            title="Programme access is locked by Academy progression."
+            title="Certification access is locked by Academy progression."
             style="opacity:.58;cursor:not-allowed"
           >
             ${inner}
@@ -5474,7 +5474,7 @@ function renderSidebar(programmes){
 
 
 /* =========================================================
-   CURRENT PROGRAMMES
+   CURRENT CERTIFICATIONS
 ========================================================= */
 
 function renderProgrammes(programmes){
@@ -5540,13 +5540,13 @@ function renderProgrammes(programmes){
 
       <div class="empty-state">
 
-        ALL CURRENT ACADEMY PROGRAMMES
+        ALL CURRENT ACADEMY CERTIFICATIONS
         HAVE BEEN COMPLETED.
 
         <br><br>
 
-        VIEW THE PROGRAMME DIRECTORY
-        TO REVIEW YOUR CERTIFIED PROGRAMMES.
+        VIEW THE CERTIFICATION DIRECTORY
+        TO REVIEW YOUR CERTIFICATIONS.
 
       </div>
 
@@ -5717,7 +5717,7 @@ function renderProgramme(programme){
         <div class="progress-info">
 
           <span>
-            PROGRAMME PROGRESS
+            CERTIFICATION PROGRESS
           </span>
 
           <span>
@@ -5759,7 +5759,7 @@ function renderProgramme(programme){
             ?
             "CONTINUE TRAINING"
             :
-            "ACCESS PROGRAMME"
+            "ACCESS CERTIFICATION"
           }
 
           <i
