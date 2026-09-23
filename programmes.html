@@ -2701,7 +2701,7 @@ function displayCertificationCode(code){
   const key = String(code || "").toUpperCase();
 
   const aliases = {
-    CAR:"LOG",
+    LOG:"LOG",
     GUNNERY:"GUN",
     ENGINEERING:"ENG"
   };
@@ -2765,7 +2765,7 @@ function getProgrammeIcon(code){
     case "MED":
       return "fa-kit-medical";
 
-    case "CAR":
+    case "LOG":
       return "fa-boxes-stacked";
 
     case "MIN":
@@ -3130,7 +3130,7 @@ function buildProgrammeData(){
   const optionalCertifications =
     new Set([
       "MED",
-      "CAR",
+      "LOG",
       "MIN"
     ]);
 
