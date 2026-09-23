@@ -1,72 +1,263 @@
-/* Shared JMBN Academy sidebar component */
+/* =========================================================
+   JMBN ACADEMY // SHARED SIDEBAR
+   Self-contained styling for academy.html, programmes.html,
+   instructor.html, academy-log.html and AP/* pages.
+========================================================= */
 
-.shared-academy-sidebar .shared-staff-section[hidden]{
-  display:none !important;
+.shared-academy-sidebar{
+  min-height:100vh;
+  color:#f3ecd2;
+  border-right:1px solid rgba(214,180,76,.36);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,12,9,.99),
+      rgba(3,4,3,.99)
+    );
 }
 
+.shared-academy-sidebar *{
+  box-sizing:border-box;
+}
+
+.shared-academy-sidebar .sidebar-inner{
+  position:sticky;
+  top:0;
+  min-height:100vh;
+  padding-bottom:28px;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Back to manifest */
+.shared-academy-sidebar .back{
+  min-height:52px;
+  padding:0 21px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#777365;
+  text-decoration:none;
+  font-family:"Play",sans-serif;
+  font-size:10px;
+  letter-spacing:.14em;
+  border-bottom:1px solid rgba(214,180,76,.14);
+}
+
+.shared-academy-sidebar .back:hover{
+  color:#f0d270;
+  background:rgba(240,210,112,.025);
+}
+
+.shared-academy-sidebar .back i{
+  width:18px;
+  text-align:center;
+}
+
+/* Academy heading */
+.shared-academy-sidebar .heading{
+  padding:25px 22px 18px;
+}
+
+.shared-academy-sidebar .heading small{
+  display:block;
+  color:#6d695c;
+  font-size:9px;
+  letter-spacing:.27em;
+}
+
+.shared-academy-sidebar .heading strong{
+  display:block;
+  margin-top:5px;
+  color:#f0d270;
+  font-size:20px;
+  line-height:1.05;
+  letter-spacing:.13em;
+}
+
+.shared-academy-sidebar .network{
+  margin-top:6px;
+  color:#817c6c;
+  font-size:8px;
+  letter-spacing:.24em;
+}
+
+/* Section labels */
+.shared-academy-sidebar .label{
+  padding:10px 22px;
+  color:#59574e;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.25em;
+}
+
+/* Main links */
+.shared-academy-sidebar .nav{
+  position:relative;
+  min-height:48px;
+  padding:0 21px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:#a6a18f;
+  text-decoration:none;
+  font-family:"Play",sans-serif;
+  font-size:12px;
+  letter-spacing:.08em;
+  border-left:3px solid transparent;
+  transition:
+    color .15s ease,
+    background .15s ease,
+    border-color .15s ease;
+}
+
+.shared-academy-sidebar .nav > i{
+  width:20px;
+  flex:0 0 20px;
+  text-align:center;
+  font-size:15px;
+}
+
+.shared-academy-sidebar .nav:hover{
+  color:#f3ecd2;
+  background:rgba(240,210,112,.035);
+}
+
+.shared-academy-sidebar .nav.active{
+  color:#f0d270;
+  border-left-color:#f0d270;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.15),
+      rgba(240,210,112,.025)
+    );
+}
+
+.shared-academy-sidebar .nav.active::after{
+  content:"";
+  position:absolute;
+  right:0;
+  width:2px;
+  height:20px;
+  background:#f0d270;
+}
+
+/* JMBN overview icon */
 .shared-academy-sidebar .nav-logo{
   width:20px;
-  height:20px;
+  height:24px;
   flex:0 0 20px;
   display:grid;
   place-items:center;
 }
 
 .shared-academy-sidebar .nav-logo img{
-  width:20px;
-  height:20px;
+  display:block;
+  width:24px;
+  height:24px;
   object-fit:contain;
 }
 
+/* Staff grouping */
+.shared-academy-sidebar .shared-staff-section[hidden]{
+  display:none !important;
+}
+
+.shared-academy-sidebar .divider,
+.shared-academy-sidebar .side-divider,
+.shared-academy-sidebar .sidebar-divider{
+  height:1px;
+  margin:12px 21px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(214,180,76,.45),
+      transparent
+    );
+}
+
+/* Training pathways */
+.shared-academy-sidebar .shared-pathways-label{
+  padding-top:9px;
+}
+
+.shared-academy-sidebar #sharedProgrammeNav{
+  display:block;
+}
+
 .shared-academy-sidebar .shared-sidebar-loading{
-  color:#656154;
-  font-size:8px;
+  min-height:46px;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  color:#5f5b50;
+  font-size:7px;
   letter-spacing:.14em;
 }
 
 .shared-academy-sidebar .shared-path-link{
-  min-height:54px;
-  align-items:flex-start;
-  padding-top:9px;
-  padding-bottom:9px;
+  position:relative;
+  min-height:50px;
+  padding:7px 12px 7px 20px;
+  display:grid;
+  grid-template-columns:
+    20px
+    38px
+    minmax(0,1fr)
+    auto;
+  column-gap:8px;
+  align-items:center;
+  color:#918b78;
+  text-decoration:none;
+  border-left:3px solid transparent;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    opacity .15s ease;
 }
 
 .shared-academy-sidebar .shared-path-link > i{
-  margin-top:3px;
+  width:20px;
+  color:#8a8574;
+  text-align:center;
+  font-size:13px;
 }
 
 .shared-academy-sidebar .shared-path-copy{
-  min-width:0;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+  display:contents;
 }
 
 .shared-academy-sidebar .shared-path-code{
   color:#d8c16c;
-  font-size:10px;
+  font-size:9px;
   font-weight:700;
-  letter-spacing:.08em;
-  line-height:1.15;
+  letter-spacing:.03em;
+  white-space:nowrap;
 }
 
 .shared-academy-sidebar .shared-path-name{
+  min-width:0;
+  overflow:hidden;
   color:#777164;
   font-size:7px;
-  line-height:1.35;
-  letter-spacing:.03em;
-  white-space:normal;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .shared-academy-sidebar .shared-path-state{
-  margin-left:auto;
-  padding-top:3px;
-  color:#676256;
-  font-size:6px;
+  margin:0;
+  padding:0 0 0 3px;
+  color:#666257;
+  font-size:5.5px;
   font-weight:700;
-  letter-spacing:.10em;
+  letter-spacing:.07em;
   white-space:nowrap;
+}
+
+.shared-academy-sidebar .shared-path-link:hover{
+  background:rgba(240,210,112,.025);
 }
 
 .shared-academy-sidebar .shared-path-link.is-certified .shared-path-state{
@@ -79,28 +270,69 @@
 }
 
 .shared-academy-sidebar .shared-path-link.is-locked{
-  opacity:.52;
+  opacity:.50;
   cursor:not-allowed;
 }
 
 .shared-academy-sidebar .shared-path-link.active{
   opacity:1;
+  border-left-color:#f0d270;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(240,210,112,.11),
+      rgba(240,210,112,.018)
+    );
 }
 
 .shared-academy-sidebar .shared-path-link.active .shared-path-code{
   color:#f0d270;
 }
 
-.shared-academy-sidebar .shared-pathways-label{
-  margin-top:0;
+.shared-academy-sidebar .shared-path-link.active::after{
+  content:"";
+  position:absolute;
+  right:0;
+  width:2px;
+  height:18px;
+  background:#f0d270;
 }
 
-.shared-academy-sidebar .shared-sidebar-footer{
+/* Footer */
+.shared-academy-sidebar .shared-sidebar-footer,
+.shared-academy-sidebar .side-foot,
+.shared-academy-sidebar .sidebar-footer{
   margin-top:auto;
+  padding:28px 24px 0;
+  color:#5f5c50;
+  font-size:8px;
+  line-height:2;
+  letter-spacing:.32em;
+}
+
+@media(max-width:1100px){
+  .shared-academy-sidebar .shared-path-link{
+    grid-template-columns:
+      18px
+      34px
+      minmax(0,1fr)
+      auto;
+    column-gap:6px;
+    padding-left:16px;
+    padding-right:9px;
+  }
+
+  .shared-academy-sidebar .shared-path-name{
+    font-size:6.5px;
+  }
+
+  .shared-academy-sidebar .shared-path-state{
+    font-size:5px;
+  }
 }
 
 @media(max-width:760px){
-  .shared-academy-sidebar .shared-path-link{
-    min-height:50px;
+  .shared-academy-sidebar .sidebar-inner{
+    min-height:100%;
   }
 }
