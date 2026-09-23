@@ -1930,6 +1930,118 @@ select{
   }
 }
 
+
+/* =========================================================
+   SPECIALISATION RANK MEMORY
+   Active path drives Current Rank. The other path is retained.
+========================================================= */
+.spec-rank-memory{
+  margin-top:18px;
+  padding:16px 18px;
+  border:1px solid rgba(217,181,62,.22);
+  background:rgba(4,5,4,.54);
+}
+
+.spec-rank-memory-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.spec-rank-memory-title{
+  color:#d8ba55;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.spec-rank-memory-note{
+  color:#696454;
+  font-size:8px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+
+.spec-rank-memory-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.spec-rank-card{
+  min-height:92px;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) auto;
+  gap:11px;
+  align-items:center;
+  padding:12px;
+  border:1px solid rgba(217,181,62,.18);
+  background:rgba(6,7,5,.70);
+}
+
+.spec-rank-card.active{
+  border-color:rgba(240,210,112,.52);
+  box-shadow:inset 3px 0 0 rgba(240,210,112,.74);
+}
+
+.spec-rank-icon{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+}
+
+.spec-rank-icon img{
+  max-width:44px;
+  max-height:44px;
+  object-fit:contain;
+}
+
+.spec-rank-icon i{
+  color:#746d58;
+  font-size:20px;
+}
+
+.spec-rank-copy small{
+  display:block;
+  color:#77705c;
+  font-size:7px;
+  letter-spacing:.14em;
+}
+
+.spec-rank-copy strong{
+  display:block;
+  margin-top:4px;
+  color:#ddd4b7;
+  font-size:12px;
+}
+
+.spec-rank-copy span{
+  display:block;
+  margin-top:3px;
+  color:#8d866f;
+  font-size:8px;
+}
+
+.spec-rank-state{
+  color:#6f6958;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.13em;
+}
+
+.spec-rank-card.active .spec-rank-state{
+  color:var(--gold);
+}
+
+@media(max-width:700px){
+  .spec-rank-memory-grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 
 </head>
@@ -2153,6 +2265,33 @@ select{
 
     </div>
 
+
+
+    <!-- ===================================================
+         SPECIALISATION RANK MEMORY
+    ==================================================== -->
+
+    <div class="spec-rank-memory">
+
+      <div class="spec-rank-memory-head">
+        <div class="spec-rank-memory-title">
+          Specialisation Ranks
+        </div>
+        <div class="spec-rank-memory-note">
+          GUNNERY / ENGINEERING progression is retained separately
+        </div>
+      </div>
+
+      <div
+        id="specialisationRankGrid"
+        class="spec-rank-memory-grid"
+      >
+        <div class="spec-rank-card">
+          Loading specialisation ranks…
+        </div>
+      </div>
+
+    </div>
 
 
     <!-- ===================================================
@@ -2776,6 +2915,88 @@ function applyRailProgress(
 
 
 /* =========================================================
+   SPECIALISATION RANKS
+========================================================= */
+
+function renderSpecialisationRanks(rows){
+
+  const host =
+    $("#specialisationRankGrid");
+
+  if(!host){
+    return;
+  }
+
+  const byCode =
+    new Map(
+      (rows || []).map(
+        row => [
+          String(row.specialisation_code || "").toUpperCase(),
+          row
+        ]
+      )
+    );
+
+  const cards =
+    [
+      ["GUNNERY","GUN","fa-crosshairs"],
+      ["ENGINEERING","ENG","fa-screwdriver-wrench"]
+    ]
+      .map(([code,label,icon])=>{
+
+        const row =
+          byCode.get(code) || {};
+
+        const rankCode =
+          row.rank_code || "";
+
+        const rankName =
+          row.rank_name || "Not started";
+
+        const paygrade =
+          row.paygrade
+            ? "PG: " + row.paygrade
+            : "NO PATH RANK";
+
+        const image =
+          rankCode
+          ? sb.storage
+              .from("Ranks")
+              .getPublicUrl(rankCode + ".png")
+              .data?.publicUrl || ""
+          : "";
+
+        return `
+          <div class="spec-rank-card ${row.is_active ? "active" : ""}">
+            <div class="spec-rank-icon">
+              ${
+                image
+                ? `<img src="${image}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><i class="fa-solid ${icon}" style="display:none"></i>`
+                : `<i class="fa-solid ${icon}"></i>`
+              }
+            </div>
+
+            <div class="spec-rank-copy">
+              <small>${label} // ${row.is_active ? "ACTIVE PATH" : "SAVED PATH"}</small>
+              <strong>${rankName}</strong>
+              <span>${rankCode || "—"} // ${paygrade}</span>
+            </div>
+
+            <div class="spec-rank-state">
+              ${row.is_active ? "CURRENT" : (row.rank_id ? "RETAINED" : "NOT STARTED")}
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+  host.innerHTML =
+    cards;
+
+}
+
+
+/* =========================================================
    MAIN INITIALIZATION
 ========================================================= */
 
@@ -2824,6 +3045,36 @@ document.addEventListener(
             me
           )
           .maybeSingle();
+
+
+
+      const {
+        data:specialisationRanks,
+        error:specialisationRankError
+      } =
+        await sb.rpc(
+          "member_specialisation_ranks",
+          {
+            p_user:me
+          }
+        );
+
+
+      if(specialisationRankError){
+
+        console.warn(
+          "member_specialisation_ranks:",
+          specialisationRankError.message
+        );
+
+      }
+
+
+      renderSpecialisationRanks(
+        specialisationRankError
+          ? []
+          : specialisationRanks || []
+      );
 
 
 
