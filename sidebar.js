@@ -15,6 +15,20 @@ const fallbackProgrammes=[
   {certification_code:"PILOT",name:"Pilot Training"}
 ];
 
+const primaryPathwayOrder=[
+  "BMT",
+  "SOC",
+  "GUNNERY",
+  "ENGINEERING",
+  "PILOT"
+];
+
+const optionalPathwayOrder=[
+  "CAR",
+  "MED",
+  "MIN"
+];
+
 const routeByCode={
   BMT:"AP/bmt.html",
   SOC:"AP/soc.html",
@@ -206,11 +220,19 @@ function programmeState({
     : {state:"AVAILABLE",locked:false,css:""};
 }
 
-function renderProgrammes(programmes,context={}){
-  const host=document.getElementById("sharedProgrammeNav");
+function renderProgrammeGroup(hostId,codes,programmes,context={}){
+  const host=document.getElementById(hostId);
+
   if(!host){
     return;
   }
+
+  const byCode=new Map(
+    programmes.map(programme=>[
+      String(programme.certification_code||"").toUpperCase(),
+      programme
+    ])
+  );
 
   const certifiedCodes=context.certifiedCodes||new Set();
   const approvedEvents=context.approvedEvents||new Set();
@@ -222,60 +244,81 @@ function renderProgrammes(programmes,context={}){
   const bmtCertified=certifiedCodes.has("BMT");
   const socCertified=certifiedCodes.has("SOC");
 
-  host.innerHTML=programmes.map(programme=>{
-    const code=String(programme.certification_code||"").toUpperCase();
-    const requirements=requirementMap.get(code)||[];
-    const progress=requirements.filter(eventCode=>approvedEvents.has(eventCode)).length;
-    const certified=certifiedCodes.has(code);
+  host.innerHTML=codes
+    .map(code=>byCode.get(code))
+    .filter(Boolean)
+    .map(programme=>{
+      const code=String(programme.certification_code||"").toUpperCase();
+      const requirements=requirementMap.get(code)||[];
+      const progress=requirements.filter(eventCode=>approvedEvents.has(eventCode)).length;
+      const certified=certifiedCodes.has(code);
 
-    const status=programmeState({
-      code,
-      certified,
-      progress,
-      bmtCertified,
-      socCertified,
-      assignment
-    });
+      const status=programmeState({
+        code,
+        certified,
+        progress,
+        bmtCertified,
+        socCertified,
+        assignment
+      });
 
-    const isActive=activeCode===code;
-    const classes=[
-      "nav-item",
-      "nav",
-      "shared-path-link",
-      status.css,
-      isActive?"active":""
-    ].filter(Boolean).join(" ");
+      const isActive=activeCode===code;
 
-    const inner=`
-      <i class="fa-solid ${status.locked&&!isStaff?"fa-lock":(iconByCode[code]||"fa-certificate")}"></i>
-      <span class="shared-path-copy">
-        <span class="shared-path-code">${esc(shortCode[code]||code)}</span>
-        <span class="shared-path-name">${esc(programme.name||code)}</span>
-      </span>
-      <small class="shared-path-state">${esc(status.state)}</small>
-    `;
+      const classes=[
+        "nav-item",
+        "nav",
+        "shared-path-link",
+        status.css,
+        isActive?"active":""
+      ].filter(Boolean).join(" ");
 
-    if(status.locked&&!isStaff){
+      const inner=`
+        <i class="fa-solid ${status.locked&&!isStaff?"fa-lock":(iconByCode[code]||"fa-certificate")}"></i>
+        <span class="shared-path-copy">
+          <span class="shared-path-code">${esc(shortCode[code]||code)}</span>
+          <span class="shared-path-name">${esc(programme.name||code)}</span>
+        </span>
+        <small class="shared-path-state">${esc(status.state)}</small>
+      `;
+
+      if(status.locked&&!isStaff){
+        return `
+          <div
+            class="${classes}"
+            aria-disabled="true"
+            title="Certification access is locked by Academy progression."
+          >
+            ${inner}
+          </div>
+        `;
+      }
+
       return `
-        <div
+        <a
           class="${classes}"
-          aria-disabled="true"
-          title="Certification access is locked by Academy progression."
+          href="${new URL(routeByCode[code],rootUrl).href}"
         >
           ${inner}
-        </div>
+        </a>
       `;
-    }
+    })
+    .join("");
+}
 
-    return `
-      <a
-        class="${classes}"
-        href="${new URL(routeByCode[code],rootUrl).href}"
-      >
-        ${inner}
-      </a>
-    `;
-  }).join("");
+function renderProgrammes(programmes,context={}){
+  renderProgrammeGroup(
+    "sharedProgrammeNav",
+    primaryPathwayOrder,
+    programmes,
+    context
+  );
+
+  renderProgrammeGroup(
+    "sharedOptionalProgrammeNav",
+    optionalPathwayOrder,
+    programmes,
+    context
+  );
 }
 
 async function hydrateSidebar(){
