@@ -93,6 +93,12 @@
     const logoutButton =
       root.querySelector("#jmbnLogout");
 
+    const mobileNavButton =
+      root.querySelector("#jmbnMobileNavToggle");
+
+    const primaryNav =
+      root.querySelector("#jmbnPrimaryNav");
+
 
     // =======================================================
     // ACTIVE NAVIGATION
@@ -115,6 +121,87 @@
         );
 
       });
+
+
+    // =======================================================
+    // MOBILE PRIMARY NAVIGATION
+    // =======================================================
+
+    function setMobileNav(open) {
+
+      root.classList.toggle(
+        "mobile-nav-open",
+        !!open
+      );
+
+      if (mobileNavButton) {
+        mobileNavButton.setAttribute(
+          "aria-expanded",
+          open ? "true" : "false"
+        );
+
+        mobileNavButton.setAttribute(
+          "aria-label",
+          open
+            ? "Close navigation"
+            : "Open navigation"
+        );
+      }
+
+    }
+
+
+    function closeMobileNav() {
+      setMobileNav(false);
+    }
+
+
+    if (mobileNavButton) {
+
+      mobileNavButton.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          setMobileNav(
+            !root.classList.contains(
+              "mobile-nav-open"
+            )
+          );
+
+        }
+      );
+
+    }
+
+
+    if (primaryNav) {
+
+      primaryNav
+        .querySelectorAll("a")
+        .forEach(link => {
+
+          link.addEventListener(
+            "click",
+            closeMobileNav
+          );
+
+        });
+
+    }
+
+
+    window.addEventListener(
+      "resize",
+      () => {
+
+        if (window.innerWidth > 760) {
+          closeMobileNav();
+        }
+
+      }
+    );
 
 
     // =======================================================
@@ -185,6 +272,7 @@
 
         if (!root.contains(event.target)) {
           closeMenu();
+          closeMobileNav();
         }
 
       }
@@ -197,6 +285,7 @@
 
         if (event.key === "Escape") {
           closeMenu();
+          closeMobileNav();
         }
 
       }
