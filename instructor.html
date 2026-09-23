@@ -36,6 +36,30 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 
 .assignment-panel{margin-top:18px}.assignment-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(340px,1.1fr);gap:18px}.assignment-current{min-height:126px;padding:18px;border:1px solid rgba(214,180,76,.24);background:linear-gradient(135deg,rgba(240,210,112,.035),transparent 52%),rgba(5,7,5,.78)}.assignment-kicker{color:#716c5d;font-size:8px;letter-spacing:.18em}.assignment-code{margin-top:10px;color:var(--gold);font-size:26px;font-weight:700;letter-spacing:.06em}.assignment-name{margin-top:6px;color:#b6af99;font-size:10px;letter-spacing:.08em}.assignment-meta{margin-top:12px;color:#6f6a5c;font-size:8px;line-height:1.6;letter-spacing:.08em}.assignment-actions{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px;margin-top:16px}.btn.clear-path{color:#aaa38d;border-color:rgba(214,180,76,.34);background:rgba(255,255,255,.018)}@media(max-width:900px){.assignment-layout{grid-template-columns:1fr}.assignment-actions{grid-template-columns:1fr}}
 
+
+.member-overview{margin-bottom:18px}
+.member-overview-grid{
+  display:grid;
+  grid-template-columns:minmax(250px,.65fr) repeat(3,minmax(180px,1fr));
+  gap:14px;
+  padding:18px 20px 20px;
+}
+.overview-select{align-self:stretch}
+.overview-card{
+  min-height:108px;
+  padding:16px 17px;
+  border:1px solid rgba(214,180,76,.24);
+  background:linear-gradient(135deg,rgba(240,210,112,.03),transparent 55%),rgba(5,7,5,.78);
+}
+.overview-card.ok{border-color:rgba(112,217,140,.33)}
+.overview-card.current{border-color:rgba(240,210,112,.5)}
+.overview-kicker{color:#6f6a5d;font-size:7px;font-weight:700;letter-spacing:.18em}
+.overview-value{margin-top:9px;color:#f1df9f;font-size:18px;font-weight:700;letter-spacing:.05em}
+.overview-meta{margin-top:7px;color:#777163;font-size:8px;line-height:1.55;letter-spacing:.08em}
+.overview-card.ok .overview-value{color:var(--green)}
+@media(max-width:1200px){.member-overview-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.member-overview-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -59,6 +83,40 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 <div class="frame stat"><div class="stat-label">COMPLETED (30 DAYS)</div><div class="stat-value" id="recentCount">—</div><div class="stat-meta">APPROVED TRAINING</div></div>
 <div class="frame stat"><div class="stat-label">INSTRUCTED MEMBERS</div><div class="stat-value" id="memberCount">—</div><div class="stat-meta">UNIQUE TRAINEES</div></div>
 </section>
+
+<section class="frame member-overview">
+  <div class="panel-head"><div class="section-title">MEMBER TRAINING OVERVIEW</div></div>
+  <div class="member-overview-grid">
+
+    <div class="overview-select">
+      <label>SELECT MEMBER</label>
+      <select id="overviewTrainee" class="control">
+        <option value="">SELECT MEMBER</option>
+      </select>
+      <div class="msg" id="overviewMessage">SELECT A MEMBER TO REVIEW THEIR ACADEMY PROGRESSION.</div>
+    </div>
+
+    <div class="overview-card" id="overviewBmtCard">
+      <div class="overview-kicker">CORE TRAINING // 01</div>
+      <div class="overview-value" id="overviewBmt">BMT —</div>
+      <div class="overview-meta" id="overviewBmtMeta">NO MEMBER SELECTED</div>
+    </div>
+
+    <div class="overview-card" id="overviewSocCard">
+      <div class="overview-kicker">CORE TRAINING // 02</div>
+      <div class="overview-value" id="overviewSoc">SOC —</div>
+      <div class="overview-meta" id="overviewSocMeta">NO MEMBER SELECTED</div>
+    </div>
+
+    <div class="overview-card" id="overviewSpecCard">
+      <div class="overview-kicker">SPECIALISATION</div>
+      <div class="overview-value" id="overviewSpec">—</div>
+      <div class="overview-meta" id="overviewSpecMeta">AWAITING MEMBER SELECTION</div>
+    </div>
+
+  </div>
+</section>
+
 <div class="grid">
 <div class="stack">
 <section class="frame"><div class="panel-head"><div class="section-title">YOUR AUTHORISATIONS</div></div><div class="panel-body table-wrap"><table class="table"><thead><tr><th>PROGRAMME</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead><tbody id="authRows"></tbody></table></div></section>
@@ -124,7 +182,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
           CLEAR PATH
         </button>
 
-        <button class="btn" id="assignPath">
+        <button class="btn" id="assignPath" disabled>
           <i class="fa-solid fa-route"></i>
           ASSIGN PATH
         </button>
@@ -140,6 +198,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </div></main></div>
 <script>
 let sb=null,me=null,isAdmin=false,authorisations=[],certs=[],reqs=[],events=[],members=[],signoffs=[],assignments=[];
+const overviewCache=new Map();
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 const date=v=>v?new Date(v).toLocaleDateString("en-SG",{day:"2-digit",month:"short",year:"numeric"}):"—";
@@ -166,6 +225,7 @@ async function load(){
   sb.from("academy_specialisation_assignments").select("user_id,specialisation_code,assigned_by,notes,assigned_at,updated_at").order("updated_at",{ascending:false})
  ]);
  certs=c.data||[];reqs=r.data||[];events=e.data||[];members=m.data||[];signoffs=s.data||[];assignments=a.data||[];
+ overviewCache.clear();
  render();
 }
 function allowedCodes(){
@@ -186,6 +246,7 @@ function render(){
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
  $("#trainee").innerHTML=`<option value="">SELECT TRAINEE</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
+ $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  updatePathAssignment();
  $("#programme").innerHTML=`<option value="">SELECT PROGRAMME</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
@@ -205,35 +266,124 @@ function pathLabel(code){
   default: return "UNASSIGNED";
  }
 }
-function updatePathAssignment(){
- const trainee=$("#pathTrainee").value;
- const code=$("#pathCurrentCode"),name=$("#pathCurrentName"),meta=$("#pathCurrentMeta"),select=$("#pathCode"),notes=$("#pathNotes");
- if(!trainee){
-  code.textContent="—";name.textContent="NO MEMBER SELECTED";meta.textContent="SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.";select.value="";notes.value="";return;
+
+async function fetchMemberOverview(trainee,force=false){
+ if(!trainee)return null;
+ if(!force && overviewCache.has(trainee))return overviewCache.get(trainee);
+ const {data,error}=await sb.rpc("academy_member_training_overview",{p_trainee:trainee});
+ if(error)throw error;
+ overviewCache.set(trainee,data||null);
+ return data||null;
+}
+
+function resetOverview(){
+ $("#overviewBmtCard").className="overview-card";
+ $("#overviewSocCard").className="overview-card";
+ $("#overviewSpecCard").className="overview-card";
+ $("#overviewBmt").textContent="BMT —";
+ $("#overviewBmtMeta").textContent="NO MEMBER SELECTED";
+ $("#overviewSoc").textContent="SOC —";
+ $("#overviewSocMeta").textContent="NO MEMBER SELECTED";
+ $("#overviewSpec").textContent="—";
+ $("#overviewSpecMeta").textContent="AWAITING MEMBER SELECTION";
+ $("#overviewMessage").className="msg";
+ $("#overviewMessage").textContent="SELECT A MEMBER TO REVIEW THEIR ACADEMY PROGRESSION.";
+}
+
+function progressText(row){
+ if(!row)return"—";
+ if(row.certified)return"✓ CERTIFIED";
+ return String(row.completed||0)+" / "+String(row.total||0);
+}
+
+async function renderMemberOverview(trainee,force=false){
+ if(!trainee){resetOverview();return null}
+ const msg=$("#overviewMessage");
+ msg.className="msg";
+ msg.textContent="LOADING MEMBER TRAINING RECORD...";
+ try{
+  const o=await fetchMemberOverview(trainee,force);
+  const b=o?.bmt||{},s=o?.soc||{},sp=o?.specialisation||null;
+
+  $("#overviewBmtCard").className="overview-card"+(b.certified?" ok":(b.completed>0?" current":""));
+  $("#overviewBmt").textContent="BMT "+progressText(b);
+  $("#overviewBmtMeta").textContent=b.certified?"CORE STAGE COMPLETE":(b.completed>0?"TRAINING IN PROGRESS":"REQUIRED FIRST");
+
+  $("#overviewSocCard").className="overview-card"+(s.certified?" ok":(s.completed>0?" current":""));
+  $("#overviewSoc").textContent="SOC "+progressText(s);
+  $("#overviewSocMeta").textContent=s.certified?"CORE TRAINING COMPLETE":(!b.certified?"LOCKED // BMT REQUIRED":(s.completed>0?"TRAINING IN PROGRESS":"READY FOR TRAINING"));
+
+  $("#overviewSpecCard").className="overview-card"+(sp?.certified?" ok":(sp?" current":""));
+  if(sp){
+    $("#overviewSpec").textContent=pathLabel(sp.code)+" "+progressText(sp);
+    $("#overviewSpecMeta").textContent=sp.total>0?(sp.certified?"SPECIALISATION CERTIFIED":"ASSIGNED // "+sp.completed+" / "+sp.total+" COMPLETE"):"ASSIGNED // SYLLABUS PENDING";
+  }else{
+    $("#overviewSpec").textContent="UNASSIGNED";
+    $("#overviewSpecMeta").textContent=s.certified?"READY FOR INSTRUCTOR ASSIGNMENT":"LOCKED UNTIL SOC CERTIFIED";
+  }
+
+  msg.textContent=o?.core_complete?"CORE TRAINING COMPLETE.":"CORE TRAINING IN PROGRESS.";
+  if(o?.core_complete)msg.classList.add("ok");
+  return o;
+ }catch(error){
+  console.error("Member overview failed:",error);
+  msg.classList.add("bad");
+  msg.textContent="MEMBER TRAINING OVERVIEW UNAVAILABLE.";
+  return null;
  }
+}
+
+async function updatePathAssignment(){
+ const trainee=$("#pathTrainee").value;
+ const code=$("#pathCurrentCode"),name=$("#pathCurrentName"),meta=$("#pathCurrentMeta"),select=$("#pathCode"),notes=$("#pathNotes"),button=$("#assignPath");
+
+ if(!trainee){
+  code.textContent="—";name.textContent="NO MEMBER SELECTED";meta.textContent="SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.";select.value="";notes.value="";
+  button.disabled=true;
+  button.innerHTML='<i class="fa-solid fa-lock"></i> SELECT MEMBER';
+  return;
+ }
+
  const assignment=assignments.find(x=>x.user_id===trainee);
  if(!assignment){
-  code.textContent="—";name.textContent="AWAITING INSTRUCTOR ASSIGNMENT";meta.textContent="NO SPECIALISATION PATH HAS BEEN ASSIGNED.";select.value="";notes.value="";return;
+  code.textContent="—";name.textContent="AWAITING INSTRUCTOR ASSIGNMENT";meta.textContent="NO SPECIALISATION PATH HAS BEEN ASSIGNED.";select.value="";notes.value="";
+ }else{
+  code.textContent=assignment.specialisation_code;
+  name.textContent=pathLabel(assignment.specialisation_code);
+  meta.textContent="ASSIGNED "+date(assignment.assigned_at)+" // JMBN ACADEMY";
+  select.value=assignment.specialisation_code;
+  notes.value=assignment.notes||"";
  }
- code.textContent=assignment.specialisation_code;
- name.textContent=pathLabel(assignment.specialisation_code);
- meta.textContent="ASSIGNED "+date(assignment.assigned_at)+" // JMBN ACADEMY";
- select.value=assignment.specialisation_code;
- notes.value=assignment.notes||"";
+
+ const overview=await renderMemberOverview(trainee);
+ if($("#overviewTrainee").value!==trainee)$("#overviewTrainee").value=trainee;
+
+ if(!overview?.soc?.certified){
+  button.disabled=true;
+  button.innerHTML='<i class="fa-solid fa-lock"></i> CORE TRAINING INCOMPLETE';
+ }else{
+  button.disabled=false;
+  button.innerHTML='<i class="fa-solid fa-route"></i> ASSIGN PATH';
+ }
 }
+
 async function assignPath(){
  const trainee=$("#pathTrainee").value,code=$("#pathCode").value,notes=$("#pathNotes").value.trim(),msg=$("#pathMessage");
  msg.className="msg";msg.textContent="";
  if(!trainee||!code){msg.classList.add("bad");msg.textContent="SELECT A MEMBER AND SPECIALISATION.";return}
+ const overview=await fetchMemberOverview(trainee,true).catch(()=>null);
+ if(!overview?.soc?.certified){msg.classList.add("bad");msg.textContent="CORE TRAINING INCOMPLETE: SOC CERTIFICATION REQUIRED.";await updatePathAssignment();return}
  const button=$("#assignPath");button.disabled=true;
  const {error}=await sb.rpc("academy_assign_specialisation",{p_trainee:trainee,p_specialisation_code:code,p_notes:notes||null});
- button.disabled=false;
- if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ if(error){button.disabled=false;msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ overviewCache.delete(trainee);
  msg.classList.add("ok");msg.textContent="SPECIALISATION PATH ASSIGNED.";
  await load();
  $("#pathTrainee").value=trainee;
- updatePathAssignment();
+ $("#overviewTrainee").value=trainee;
+ await updatePathAssignment();
 }
+
 async function clearPath(){
  const trainee=$("#pathTrainee").value,msg=$("#pathMessage");
  msg.className="msg";msg.textContent="";
@@ -242,12 +392,27 @@ async function clearPath(){
  const {error}=await sb.rpc("academy_clear_specialisation",{p_trainee:trainee});
  button.disabled=false;
  if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ overviewCache.delete(trainee);
  msg.classList.add("ok");msg.textContent="SPECIALISATION PATH CLEARED.";
  await load();
  $("#pathTrainee").value=trainee;
- updatePathAssignment();
+ $("#overviewTrainee").value=trainee;
+ await updatePathAssignment();
 }
+
 $("#pathTrainee").addEventListener("change",updatePathAssignment);
+$("#overviewTrainee").addEventListener("change",async()=>{
+ const trainee=$("#overviewTrainee").value;
+ if($("#pathTrainee").value!==trainee)$("#pathTrainee").value=trainee;
+ await updatePathAssignment();
+});
+$("#trainee").addEventListener("change",async()=>{
+ const trainee=$("#trainee").value;
+ if(!trainee)return;
+ $("#overviewTrainee").value=trainee;
+ $("#pathTrainee").value=trainee;
+ await updatePathAssignment();
+});
 $("#assignPath").addEventListener("click",assignPath);
 $("#clearPath").addEventListener("click",clearPath);
 
