@@ -2565,6 +2565,17 @@ const $ =
   s => document.querySelector(s);
 
 
+function displayCertificationCode(code){
+  const key = String(code || "").toUpperCase();
+  const aliases = {
+    CAR:"LOG",
+    GUNNERY:"GUN",
+    ENGINEERING:"ENG"
+  };
+  return aliases[key] || key;
+}
+
+
 let sb = null;
 
 let me = null;
@@ -3352,7 +3363,9 @@ document.addEventListener(
                     </div>
 
                     <div class="cert-code">
-                      ${cert.certification_code}
+                      ${displayCertificationCode(
+                        cert.certification_code
+                      )}
                     </div>
 
                   </div>
@@ -3383,7 +3396,7 @@ document.addEventListener(
           .map(
             cert =>
 
-              `<option value="${cert.certification_code}">${cert.certification_code} — ${cert.name}</option>`
+              `<option value="${cert.certification_code}">${displayCertificationCode(cert.certification_code)} — ${cert.name}</option>`
 
           )
 
@@ -3427,7 +3440,7 @@ document.addEventListener(
 
       $("#tlHint").textContent =
         "Training events required for " +
-        code +
+        displayCertificationCode(code) +
         ":";
 
 
