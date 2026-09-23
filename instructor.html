@@ -358,7 +358,7 @@ async function updatePathAssignment(){
  const overview=await renderMemberOverview(trainee);
  if($("#overviewTrainee").value!==trainee)$("#overviewTrainee").value=trainee;
 
- if(!overview?.soc?.certified){
+ if(!overview?.core_complete){
   button.disabled=true;
   button.innerHTML='<i class="fa-solid fa-lock"></i> CORE TRAINING INCOMPLETE';
  }else{
@@ -372,7 +372,7 @@ async function assignPath(){
  msg.className="msg";msg.textContent="";
  if(!trainee||!code){msg.classList.add("bad");msg.textContent="SELECT A MEMBER AND SPECIALISATION.";return}
  const overview=await fetchMemberOverview(trainee,true).catch(()=>null);
- if(!overview?.soc?.certified){msg.classList.add("bad");msg.textContent="CORE TRAINING INCOMPLETE: SOC CERTIFICATION REQUIRED.";await updatePathAssignment();return}
+ if(!overview?.core_complete){msg.classList.add("bad");msg.textContent="CORE TRAINING INCOMPLETE: BMT AND SOC CERTIFICATIONS REQUIRED.";await updatePathAssignment();return}
  const button=$("#assignPath");button.disabled=true;
  const {error}=await sb.rpc("academy_assign_specialisation",{p_trainee:trainee,p_specialisation_code:code,p_notes:notes||null});
  if(error){button.disabled=false;msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
