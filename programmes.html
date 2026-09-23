@@ -3369,9 +3369,19 @@ function buildProgrammeData(){
         prerequisiteMet =
           certified ||
           (
+            bmtCertified &&
             socCertified &&
             assigned
           );
+
+
+        if(!bmtCertified && !certified){
+
+          missingPrerequisites.push(
+            "BMT CERTIFICATION REQUIRED"
+          );
+
+        }
 
 
         if(!socCertified && !certified){
