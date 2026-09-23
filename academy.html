@@ -4589,6 +4589,22 @@ function renderStatusFocus(programmes){
     null;
 
 
+  const activeSupport =
+    ["MED","LOG","MIN"]
+      .map(code =>
+        getProgrammeByCode(
+          programmes,
+          code
+        )
+      )
+      .find(programme =>
+        programme &&
+        !programme.certified &&
+        programme.status === "progress"
+      ) ||
+    null;
+
+
   let current =
     null;
 
@@ -4618,6 +4634,13 @@ function renderStatusFocus(programmes){
 
     current =
       assignedProgramme;
+
+  }
+
+  else if(activeSupport){
+
+    current =
+      activeSupport;
 
   }
 
