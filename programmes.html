@@ -2249,21 +2249,35 @@ button{
       </a>
 
 
-      <!-- INSTRUCTOR ACCESS
+      <!-- ACADEMY STAFF
            Hidden unless the signed-in user is an Admin
            or has an active Academy instructor authorisation. -->
-      <a
-        class="nav-item"
-        id="instructorAccessNav"
-        href="instructor.html"
+      <div
+        id="academyStaffNav"
         style="display:none"
       >
-        <i class="fa-solid fa-user-shield"></i>
-        INSTRUCTOR ACCESS
-      </a>
 
+        <div class="sidebar-divider"></div>
 
-      <div class="sidebar-divider"></div>
+        <a
+          class="nav-item"
+          href="instructor.html"
+        >
+          <i class="fa-solid fa-user-shield"></i>
+          INSTRUCTOR PANEL
+        </a>
+
+        <a
+          class="nav-item"
+          href="academy-log.html"
+        >
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          ACADEMY LOG
+        </a>
+
+        <div class="sidebar-divider"></div>
+
+      </div>
 
 
       <div class="sidebar-section-label">
@@ -2896,23 +2910,21 @@ function getProgrammeIcon(code){
 
 async function loadInstructorAccess(){
 
-  const nav =
-    $("#instructorAccessNav");
+  const staffNav =
+    $("#academyStaffNav");
 
 
-  if(!nav || !sb || !me){
+  if(!staffNav || !sb || !me){
     return;
   }
 
 
-  nav.style.display =
+  staffNav.style.display =
     "none";
 
 
   try{
 
-
-    /* Admins always receive Instructor Access. */
 
     const {
       data: profile,
@@ -2944,19 +2956,13 @@ async function loadInstructorAccess(){
 
     if(isAdmin){
 
-      nav.style.display =
-        "flex";
+      staffNav.style.display =
+        "block";
 
       return;
 
     }
 
-
-    /*
-      Non-admin users need at least one active Academy
-      instructor authorisation with training or sign-off
-      permission.
-    */
 
     const {
       data: instructor,
@@ -2988,8 +2994,8 @@ async function loadInstructorAccess(){
 
     if(instructor){
 
-      nav.style.display =
-        "flex";
+      staffNav.style.display =
+        "block";
 
     }
 
