@@ -2507,12 +2507,229 @@ tbody tr:hover{
   background-image:none !important;
 }
 
+
+
+/* =========================================================
+   JMBN OPERATIONS COMMAND BACKGROUND
+   Navigation / mission plotting variant.
+========================================================= */
+
+body::before{
+  display:none !important;
+}
+
+#jmbnStarfield,
+#jmbnSignatureBackdrop{
+  display:none !important;
+}
+
+#jmbnOpsCommandBg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.16),
+      rgba(0,0,0,.24) 48%,
+      rgba(0,0,0,.34)
+    ),
+    url("assets/jmbn-command-bg-ops.svg") center top / cover no-repeat,
+    #070806;
+}
+
+#jmbnOpsCommandBg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      ellipse at 58% 8%,
+      rgba(217,181,62,.016),
+      transparent 50%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.18),
+      transparent 20%,
+      transparent 80%,
+      rgba(0,0,0,.18)
+    );
+}
+
+#jmbnOpsCommandBg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.04),
+      rgba(0,0,0,.12) 52%,
+      rgba(0,0,0,.24)
+    );
+
+  mix-blend-mode:multiply;
+}
+
+#jmbnOpsCommandBg .jmbn-bg-logo{
+  position:absolute;
+
+  width:250px;
+  height:250px;
+
+  right:82px;
+  top:150px;
+
+  object-fit:contain;
+
+  opacity:.07;
+
+  filter:
+    sepia(1)
+    saturate(.45)
+    brightness(.58);
+
+  user-select:none;
+}
+
+#header,
+#header-container,
+.ops-page{
+  position:relative;
+  z-index:2;
+}
+
+
+/* =========================================================
+   OPERATIONS SURFACE TRANSPARENCY
+   Existing dimensions / borders / spacing are unchanged.
+========================================================= */
+
+.command-hero{
+  background:rgba(3,4,3,.78);
+}
+
+.command-stat{
+  background:rgba(4,5,4,.76) !important;
+}
+
+.command-stats{
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(238,199,66,.08),
+      transparent 52%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(13,13,10,.82),
+      rgba(5,6,5,.76) 62%,
+      rgba(2,3,3,.72)
+    );
+}
+
+.command-grid{
+  background:
+    radial-gradient(
+      ellipse at top left,
+      rgba(217,178,51,.055),
+      transparent 48%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(11,12,9,.82),
+      rgba(5,6,5,.76) 55%,
+      rgba(2,3,3,.72)
+    );
+}
+
+.search-console{
+  background:rgba(12,12,9,.76);
+}
+
+.field-group{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,9,7,.78),
+      rgba(3,4,3,.74)
+    );
+}
+
+.quick-section{
+  background:rgba(7,8,6,.74);
+}
+
+.view-row{
+  background:rgba(2,3,2,.72);
+}
+
+.timeline-header{
+  background:
+    radial-gradient(
+      circle,
+      rgba(238,198,62,.07),
+      rgba(6,7,5,.76)
+    );
+}
+
+.day-group{
+  background:rgba(8,9,6,.74);
+}
+
+.op-card{
+  background:
+    linear-gradient(
+      105deg,
+      rgba(227,188,58,.045),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10,11,9,.80),
+      rgba(5,6,5,.74)
+    ) !important;
+}
+
+.op-main{
+  background:rgba(3,4,3,.74);
+}
+
+@media(max-width:900px){
+  #jmbnOpsCommandBg{
+    background-position:center top;
+    background-size:auto 100%;
+  }
+
+  #jmbnOpsCommandBg .jmbn-bg-logo{
+    width:180px;
+    height:180px;
+    right:18px;
+    top:170px;
+    opacity:.055;
+  }
+}
+
 </style>
 
 </head>
 
 
 <body>
+
+<div id="jmbnOpsCommandBg" aria-hidden="true">
+  <img
+    class="jmbn-bg-logo"
+    src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+    alt=""
+  >
+</div>
 
 <canvas id="jmbnStarfield" aria-hidden="true"></canvas>
 <div id="jmbnSignatureBackdrop" aria-hidden="true"></div>
