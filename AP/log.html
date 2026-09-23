@@ -95,7 +95,7 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
     <a class="crumb" href="../programmes.html">‹ BACK TO CERTIFICATIONS　›　AP-LOG</a>
     <h1>LOG</h1>
     <h2>COVALEX LOGISTICS SUPPORT CERTIFICATION</h2>
-    <p>Optional logistics pathway covering cargo handling, freight movement and JMBN logistics support procedures. Certification modules are currently pending and will be added next.</p>
+    <p>Stackable Support Pathway covering cargo handling, freight movement and JMBN logistics procedures. Modules are currently pending; instructor assessment and sign-off will be required as training is added.</p>
   </div>
   <div class="hero-art" role="img" aria-label="Covalex Logistics Support Certification"></div>
 </section>
@@ -103,7 +103,7 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 <section class="frame summary">
   <div class="cell"><div class="label">CERTIFICATION STATUS</div><div class="value" id="programmeStatus">VERIFYING</div></div>
   <div class="cell"><div class="label">TRAINING PROGRESS</div><div class="value" id="progressText">—</div></div>
-  <div class="cell"><div class="label">ACADEMY PATH</div><div class="value" id="pathStatus">OPTIONAL PATHWAY</div></div>
+  <div class="cell"><div class="label">ACADEMY PATH</div><div class="value" id="pathStatus">SUPPORT PATHWAY</div></div>
 </section>
 
 <section class="frame">
@@ -127,14 +127,14 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 
 <script>
 const PROGRAMME_CODE="LOG";
-const PROGRAMME_KIND="optional";
+const PROGRAMME_KIND="support";
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 
 function accessReason(reason,assigned){
   switch(reason){
     case "BMT_REQUIRED":return "Complete BMT before entering SOC.";
-    case "SOC_REQUIRED":return "Complete SOC before entering an optional certification.";
+    case "SOC_REQUIRED":return "Complete SOC before entering this Support Pathway.";
     case "SPECIALISATION_NOT_ASSIGNED":return "Your specialisation has not yet been assigned by a JMBN Academy instructor.";
     case "DIFFERENT_SPECIALISATION_ASSIGNED":return "Your assigned specialisation is "+(assigned||"another pathway")+".";
     default:return "This certification is not currently available to your Academy record.";
