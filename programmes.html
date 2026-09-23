@@ -34,6 +34,7 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
+<script src="sidebar.js" defer></script>
 
 
 <style>
@@ -2169,146 +2170,10 @@ button{
 ========================================================= -->
 
 <aside
-  class="academy-sidebar"
+  class="academy-sidebar sidebar shared-academy-sidebar"
   id="academySidebar"
->
-
-  <div class="sidebar-inner">
-
-
-    <a
-      class="sidebar-manifest"
-      href="index.html"
-    >
-
-      <i class="fa-solid fa-arrow-left"></i>
-
-      BACK TO MANIFEST
-
-    </a>
-
-
-    <div class="sidebar-heading">
-
-      <div class="sidebar-kicker">
-        JMBN //
-      </div>
-
-      <strong>
-        ACADEMY
-      </strong>
-
-      <div class="sidebar-network">
-        TRAINING NETWORK
-      </div>
-
-    </div>
-
-
-    <div class="sidebar-section-label">
-      ACADEMY
-    </div>
-
-
-    <nav>
-
-
-      <a
-        class="nav-item"
-        href="academy.html"
-      >
-
-        <i class="fa-solid fa-graduation-cap"></i>
-
-        OVERVIEW
-
-      </a>
-
-
-      <a
-        class="nav-item active"
-        href="programmes.html"
-      >
-
-        <i class="fa-solid fa-layer-group"></i>
-
-        PROGRAMMES
-
-      </a>
-
-
-      <a
-        class="nav-item"
-        href="training-schedule.html"
-      >
-
-        <i class="fa-regular fa-calendar-days"></i>
-
-        TRAINING SCHEDULE
-
-      </a>
-
-
-      <!-- ACADEMY STAFF
-           Hidden unless the signed-in user is an Admin
-           or has an active Academy instructor authorisation. -->
-      <div
-        id="academyStaffNav"
-        style="display:none"
-      >
-
-        <div class="sidebar-divider"></div>
-
-        <a
-          class="nav-item"
-          href="instructor.html"
-        >
-          <i class="fa-solid fa-user-shield"></i>
-          INSTRUCTOR PANEL
-        </a>
-
-        <a
-          class="nav-item"
-          href="academy-log.html"
-        >
-          <i class="fa-solid fa-clock-rotate-left"></i>
-          ACADEMY LOG
-        </a>
-
-        <div class="sidebar-divider"></div>
-
-      </div>
-
-
-      <div class="sidebar-section-label">
-        TRAINING PATHWAYS
-      </div>
-
-
-      <div id="programmeNav">
-
-        <div class="nav-item">
-          LOADING...
-        </div>
-
-      </div>
-
-
-    </nav>
-
-
-    <div class="sidebar-footer">
-
-      TRAIN<br>
-      DEVELOP<br>
-      DEPLOY
-
-    </div>
-
-
-  </div>
-
-</aside>
+  data-academy-sidebar
+></aside>
 
 
 
@@ -3527,7 +3392,7 @@ function renderAll(){
 
   renderStats();
 
-  renderSidebar();
+  /* Sidebar is rendered by shared sidebar.js. */
 
   renderProgrammes();
 
@@ -4722,10 +4587,7 @@ document.addEventListener(
         session.user.id;
 
 
-      await Promise.all([
-        loadAcademy(),
-        loadInstructorAccess()
-      ]);
+      await loadAcademy();
 
 
     }
