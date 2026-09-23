@@ -767,7 +767,82 @@
       }
 
     }
-  </style>
+  
+/* =========================================================
+   PROFILE SPECIALISATION RANKS
+========================================================= */
+.spec-rank-profile{
+  margin-top:18px;
+}
+
+.spec-rank-profile-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:16px;
+}
+
+.spec-rank-profile-card{
+  min-height:88px;
+  padding:13px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid rgba(214,180,76,.18);
+  background:rgba(5,6,5,.66);
+}
+
+.spec-rank-profile-card.active{
+  border-color:rgba(240,210,112,.48);
+  box-shadow:inset 3px 0 0 rgba(240,210,112,.72);
+}
+
+.spec-rank-profile-icon{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:grid;
+  place-items:center;
+}
+
+.spec-rank-profile-icon img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+}
+
+.spec-rank-profile-icon i{
+  color:#756e5a;
+  font-size:20px;
+}
+
+.spec-rank-profile-copy small{
+  display:block;
+  color:#746e5d;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+.spec-rank-profile-copy strong{
+  display:block;
+  margin-top:5px;
+  color:#ded6bc;
+  font-size:13px;
+}
+
+.spec-rank-profile-copy span{
+  display:block;
+  margin-top:4px;
+  color:#8d8775;
+  font-size:9px;
+}
+
+@media(max-width:700px){
+  .spec-rank-profile-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -1083,6 +1158,29 @@
 
         </div>
 
+      </div>
+
+    </section>
+
+
+    <section class="card spec-rank-profile">
+
+      <div class="cardhead">
+        <span>
+          SPECIALISATION RANKS
+        </span>
+        <span>
+          ACTIVE + RETAINED
+        </span>
+      </div>
+
+      <div
+        id="profileSpecialisationRanks"
+        class="spec-rank-profile-grid"
+      >
+        <div class="empty">
+          Loading specialisation ranks…
+        </div>
       </div>
 
     </section>
@@ -1662,6 +1760,82 @@
               b[0]
             )
         );
+
+    }
+
+
+    function renderSpecialisationRanks(rows){
+
+      const host =
+        $("#profileSpecialisationRanks");
+
+      if(!host){
+        return;
+      }
+
+      const byCode =
+        new Map(
+          (rows || []).map(
+            row => [
+              String(row.specialisation_code || "").toUpperCase(),
+              row
+            ]
+          )
+        );
+
+      host.innerHTML =
+        [
+          ["GUNNERY","GUN","fa-crosshairs"],
+          ["ENGINEERING","ENG","fa-screwdriver-wrench"]
+        ]
+          .map(([code,label,icon])=>{
+
+            const row =
+              byCode.get(code) || {};
+
+            const rankCode =
+              String(row.rank_code || "").toUpperCase();
+
+            const rankName =
+              titleCase(
+                row.rank_name ||
+                "Not started"
+              );
+
+            const image =
+              row.rank_image_url ||
+              "";
+
+            return `
+              <div class="spec-rank-profile-card ${row.is_active ? "active" : ""}">
+
+                <div class="spec-rank-profile-icon">
+                  ${
+                    image
+                    ? `<img src="${esc(image)}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><i class="fa-solid ${icon}" style="display:none"></i>`
+                    : `<i class="fa-solid ${icon}"></i>`
+                  }
+                </div>
+
+                <div class="spec-rank-profile-copy">
+                  <small>
+                    ${label} // ${row.is_active ? "ACTIVE PATH" : "RETAINED PATH"}
+                  </small>
+
+                  <strong>
+                    ${esc(rankName)}
+                  </strong>
+
+                  <span>
+                    ${esc(rankCode || "—")}
+                    // ${row.paygrade ? "PG: " + esc(row.paygrade) : (row.rank_id ? "RANK SAVED" : "NOT STARTED")}
+                  </span>
+                </div>
+
+              </div>
+            `;
+          })
+          .join("");
 
     }
 
@@ -2434,6 +2608,35 @@
       renderIdentity(
         profile,
         discord
+      );
+
+
+      const {
+        data:specialisationRanks,
+        error:specialisationRankError
+      } =
+        await sb.rpc(
+          "member_specialisation_ranks",
+          {
+            p_user:userId
+          }
+        );
+
+
+      if(specialisationRankError){
+
+        console.warn(
+          "member_specialisation_ranks:",
+          specialisationRankError.message
+        );
+
+      }
+
+
+      renderSpecialisationRanks(
+        specialisationRankError
+          ? []
+          : specialisationRanks || []
       );
 
 
