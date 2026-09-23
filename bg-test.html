@@ -1710,139 +1710,55 @@ select{
   overflow:hidden;
 
   background:
-    radial-gradient(
-      ellipse at 50% -10%,
-      rgba(217,181,62,.025) 0%,
-      rgba(217,181,62,.010) 28%,
-      transparent 58%
-    ),
     linear-gradient(
       180deg,
-      rgba(255,255,255,.010),
-      transparent 20%,
-      rgba(0,0,0,.10) 78%,
+      rgba(0,0,0,.05),
+      rgba(0,0,0,.12) 48%,
       rgba(0,0,0,.18)
     ),
-    repeating-linear-gradient(
-      112deg,
-      rgba(255,255,255,.011) 0px,
-      rgba(255,255,255,.011) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    repeating-linear-gradient(
-      24deg,
-      rgba(0,0,0,.075) 0px,
-      rgba(0,0,0,.075) 1px,
-      transparent 1px,
-      transparent 6px
-    ),
+    url("assets/jmbn-command-bg.svg") center top / cover no-repeat,
     #070806;
 }
 
 #jmbnBgTest::before{
   content:"";
   position:absolute;
-  inset:-8%;
+  inset:0;
   background:
-    linear-gradient(
-      118deg,
-      transparent 7%,
-      rgba(255,255,255,.012) 25%,
-      transparent 39%,
-      rgba(217,181,62,.010) 58%,
-      transparent 76%
+    radial-gradient(
+      ellipse at 50% 12%,
+      rgba(217,181,62,.022),
+      transparent 48%
     ),
-    repeating-linear-gradient(
-      3deg,
-      rgba(255,255,255,.006) 0px,
-      rgba(255,255,255,.006) 1px,
-      transparent 1px,
-      transparent 9px
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.14),
+      transparent 18%,
+      transparent 82%,
+      rgba(0,0,0,.14)
     );
-  opacity:.72;
-  transform:rotate(-1deg);
 }
 
-#jmbnBgTest .jmbn-watermark{
-  position:absolute;
-  display:block;
-  object-fit:contain;
-  user-select:none;
-  filter:
-    sepia(1)
-    saturate(.85)
-    brightness(.72)
-    drop-shadow(0 0 14px rgba(217,181,62,.08));
-}
-
-#jmbnBgTest .jmbn-watermark.main{
-  width:245px;
-  height:245px;
-  right:78px;
-  top:145px;
-  opacity:.095;
-  transform:rotate(-2deg);
-}
-
-#jmbnBgTest .command-lines{
+#jmbnBgTest::after{
+  content:"";
   position:absolute;
   inset:0;
-  width:100%;
-  height:100%;
-  overflow:visible;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0,0,0,.05) 52%,
+      rgba(0,0,0,.14) 100%
+    );
+  mix-blend-mode:multiply;
 }
 
-#jmbnBgTest .command-lines .major{
-  fill:none;
-  stroke:rgba(217,181,62,.22);
-  stroke-width:1;
-  vector-effect:non-scaling-stroke;
-}
-
-#jmbnBgTest .command-lines .minor{
-  fill:none;
-  stroke:rgba(217,181,62,.13);
-  stroke-width:1;
-  vector-effect:non-scaling-stroke;
-}
-
-#jmbnBgTest .command-lines .micro{
-  fill:none;
-  stroke:rgba(217,181,62,.075);
-  stroke-width:1;
-  vector-effect:non-scaling-stroke;
-}
-
-#jmbnBgTest .command-lines .tick{
-  fill:rgba(217,181,62,.23);
-}
-
-#jmbnBgTest .command-lines .cross{
-  fill:none;
-  stroke:rgba(217,181,62,.22);
-  stroke-width:1;
-  vector-effect:non-scaling-stroke;
-}
-
-#jmbnBgTest .command-lines text{
-  fill:rgba(217,181,62,.19);
-  font:9px 'Play', system-ui, sans-serif;
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-
-@media(max-width:650px){
-  #jmbnBgTest .jmbn-watermark.main{
-    width:175px;
-    height:175px;
-    right:-28px;
-    top:215px;
-    opacity:.075;
+@media(max-width:900px){
+  #jmbnBgTest{
+    background-position:center top;
+    background-size:auto 100%;
   }
 }
-
-
 
 /* =========================================================
    BG TEST — TRANSLUCENT CONTENT FILLS
@@ -1909,74 +1825,7 @@ select{
 <!-- =========================================================
      BG TEST — DECORATIVE BACKDROP ONLY
 ========================================================= -->
-<div id="jmbnBgTest" aria-hidden="true">
-  <img
-    class="jmbn-watermark main"
-    src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-    alt=""
-  >
-<svg
-    class="command-lines"
-    viewBox="0 0 1600 1100"
-    preserveAspectRatio="none"
-    aria-hidden="true"
-  >
-    <!-- top-right / header zone -->
-    <path class="major" d="M1118 0 L1118 126 L1286 126 L1454 72 L1600 72"/>
-    <path class="minor" d="M1216 0 L1216 174 L1396 174 L1600 174"/>
-    <path class="micro" d="M1328 0 L1328 116 L1600 116"/>
-    <path class="minor" d="M1388 72 L1388 286 L1600 286"/>
-    <path class="micro" d="M1490 174 L1490 474 L1600 592"/>
-
-    <!-- upper-left perimeter -->
-    <path class="minor" d="M0 118 L76 118 L126 164 L126 378 L0 378"/>
-    <path class="micro" d="M0 176 L54 176 L88 208 L88 332 L0 332"/>
-
-    <!-- left mid / content gap -->
-    <path class="major" d="M0 562 L96 562 L164 626 L164 786 L80 846 L0 846"/>
-    <path class="micro" d="M0 610 L72 610 L118 654 L118 756 L50 808 L0 808"/>
-
-    <!-- upper-right content gap -->
-    <path class="micro" d="M1090 220 L1220 220 L1282 160 L1470 160 L1600 160"/>
-    <path class="minor" d="M1226 220 L1226 430 L1600 430"/>
-
-    <!-- lower-right big frame -->
-    <path class="major" d="M1118 1100 L1118 1014 L1286 916 L1472 916 L1600 996"/>
-    <path class="minor" d="M1338 1100 L1338 1010 L1600 1010"/>
-    <path class="micro" d="M964 858 L1146 858 L1248 786 L1422 786 L1600 900"/>
-
-    <!-- lower-left / footer edge -->
-    <path class="minor" d="M0 982 L86 982 L144 930 L144 820"/>
-    <path class="micro" d="M0 1040 L58 1040 L98 1004 L98 930"/>
-
-    <!-- small ticks -->
-    <rect class="tick" x="1115" y="122" width="7" height="7"/>
-    <rect class="tick" x="1385" y="282" width="7" height="7"/>
-    <rect class="tick" x="160" y="782" width="7" height="7"/>
-    <rect class="tick" x="1223" y="426" width="7" height="7"/>
-    <rect class="tick" x="1246" y="782" width="7" height="7"/>
-    <rect class="tick" x="84" y="842" width="7" height="7"/>
-    <rect class="tick" x="1438" y="912" width="7" height="7"/>
-
-    <!-- crosses -->
-    <path class="cross" d="M1510 300 h16 M1518 292 v16"/>
-    <path class="cross" d="M286 590 h14 M293 583 v14"/>
-    <path class="cross" d="M1190 852 h12 M1196 846 v12"/>
-    <path class="cross" d="M70 1014 h12 M76 1008 v12"/>
-
-    <!-- technical labels -->
-    <text x="1468" y="126">NODE 04</text>
-    <text x="1408" y="318">JMBN-01 // X:74 Y:18</text>
-    <text x="1186" y="238">SECTOR P-03</text>
-    <text x="94" y="516">LINK 07 / STABLE</text>
-    <text x="1260" y="744">SYNC // 97.4</text>
-    <text x="1330" y="1000">NAV // 02</text>
-    <text x="18" y="812">JMBN // PERSONNEL GRID</text>
-    <text x="38" y="1060">INTEGRITY / DISCIPLINE / RESULTS</text>
-  </svg>
-</div>
-
-
+<div id="jmbnBgTest" aria-hidden="true"></div>
 
 
 <!-- =========================================================
