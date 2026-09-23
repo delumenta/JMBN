@@ -3332,20 +3332,35 @@ a.academy-path-card:hover{
       </a>
 
 
-      <!-- INSTRUCTOR ACCESS
-           Hidden by default. Shown only to Admins or active Academy instructors. -->
-      <a
-        class="nav-item"
-        id="instructorAccessNav"
-        href="instructor.html"
+      <!-- ACADEMY STAFF
+           Hidden unless the signed-in user is an Admin
+           or has an active Academy instructor authorisation. -->
+      <div
+        id="academyStaffNav"
         style="display:none"
       >
-        <i class="fa-solid fa-user-shield"></i>
-        INSTRUCTOR ACCESS
-      </a>
 
+        <div class="sidebar-divider"></div>
 
-      <div class="sidebar-divider"></div>
+        <a
+          class="nav-item"
+          href="instructor.html"
+        >
+          <i class="fa-solid fa-user-shield"></i>
+          INSTRUCTOR PANEL
+        </a>
+
+        <a
+          class="nav-item"
+          href="academy-log.html"
+        >
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          ACADEMY LOG
+        </a>
+
+        <div class="sidebar-divider"></div>
+
+      </div>
 
 
       <div class="sidebar-section-label">
@@ -3963,22 +3978,26 @@ function getProgrammeIcon(code){
 
 async function loadInstructorAccess(){
 
-  const nav =
-    $("#instructorAccessNav");
-if(!nav || !sb || !me){
+  const staffNav =
+    $("#academyStaffNav");
+
+
+  if(!staffNav || !sb || !me){
     return;
   }
 
-  nav.style.display = "none";
-try{
 
-    /*
-      Admins always receive Instructor Access.
-      Everyone else must have at least one active
-      Academy instructor authorisation.
-    */
+  staffNav.style.display =
+    "none";
 
-    const { data: profile, error: profileError } =
+
+  try{
+
+
+    const {
+      data: profile,
+      error: profileError
+    } =
       await sb
         .from("profiles")
         .select("role")
@@ -3987,33 +4006,44 @@ try{
 
 
     if(profileError){
+
       console.warn(
         "Instructor profile check failed:",
         profileError.message
       );
+
     }
 
 
     const isAdmin =
-      String(profile?.role || "")
-        .toLowerCase() === "admin";
+      String(
+        profile?.role || ""
+      ).toLowerCase() ===
+      "admin";
 
 
     if(isAdmin){
 
-      nav.style.display = "flex";
-return;
+      staffNav.style.display =
+        "block";
+
+      return;
 
     }
 
 
-    const { data: instructor, error: instructorError } =
+    const {
+      data: instructor,
+      error: instructorError
+    } =
       await sb
         .from("academy_instructors")
         .select("id")
         .eq("user_id", me)
         .eq("is_active", true)
-        .or("can_instruct.eq.true,can_sign_off.eq.true")
+        .or(
+          "can_instruct.eq.true,can_sign_off.eq.true"
+        )
         .limit(1)
         .maybeSingle();
 
@@ -4032,8 +4062,11 @@ return;
 
     if(instructor){
 
-      nav.style.display = "flex";
-}
+      staffNav.style.display =
+        "block";
+
+    }
+
 
   }
 
