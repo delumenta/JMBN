@@ -94,9 +94,9 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1560px;margin:auto}
     </div>
 
     <div class="filter-group">
-      <label>PROGRAMME</label>
+      <label>CERTIFICATION</label>
       <select class="control" id="programmeFilter">
-        <option value="">ALL PROGRAMMES</option>
+        <option value="">ALL CERTIFICATIONS</option>
       </select>
     </div>
 
@@ -129,7 +129,7 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1560px;margin:auto}
           <th>DATE / TIME</th>
           <th>ACTIVITY</th>
           <th>MEMBER</th>
-          <th>PROGRAMME / PATH</th>
+          <th>CERTIFICATION / PATH</th>
           <th>DETAILS</th>
           <th>BY</th>
         </tr>
@@ -292,7 +292,7 @@ function renderProgrammeFilter(){
   ].filter(Boolean))].sort();
 
   $("#programmeFilter").innerHTML=
-    '<option value="">ALL PROGRAMMES</option>'+
+    '<option value="">ALL CERTIFICATIONS</option>'+
     codes.map(code=>'<option value="'+esc(code)+'">'+esc(code)+" — "+esc(certName(code))+"</option>").join("");
 }
 
