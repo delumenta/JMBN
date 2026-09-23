@@ -1685,19 +1685,8 @@ select{
 
 
 /* =========================================================
-   JMBN MANIFEST-STYLE STARFIELD
-   Random canvas stars — no repeating square/grid pattern
+   CONTENT ABOVE BG TEST LAYER
 ========================================================= */
-
-#jmbnStarfield{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  background:#000;
-}
 
 #header,
 #header-container,
@@ -1706,67 +1695,6 @@ select{
   position:relative;
   z-index:1;
 }
-
-
-
-
-
-
-/* =========================================================
-   JMBN SIGNATURE SPACE BACKDROP
-   Random stars + soft nebula dust + subtle planetary horizon
-========================================================= */
-
-#jmbnSignatureBackdrop{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  overflow:hidden;
-
-  background:
-    radial-gradient(ellipse at 16% 18%,
-      rgba(216,180,76,.035) 0%,
-      rgba(216,180,76,.012) 24%,
-      transparent 52%),
-
-    radial-gradient(ellipse at 78% 30%,
-      rgba(205,190,150,.025) 0%,
-      rgba(216,180,76,.010) 28%,
-      transparent 58%),
-
-    linear-gradient(115deg,
-      transparent 12%,
-      rgba(216,180,76,.012) 42%,
-      rgba(255,238,185,.008) 56%,
-      transparent 82%);
-}
-
-#jmbnSignatureBackdrop::before{
-  content:"";
-  position:absolute;
-
-  left:-18vw;
-  top:17vh;
-
-  width:138vw;
-  height:31vh;
-
-  transform:rotate(-12deg);
-
-  background:
-    radial-gradient(ellipse at 50% 50%,
-      rgba(220,196,130,.11) 0%,
-      rgba(137,119,79,.065) 24%,
-      rgba(68,60,45,.028) 48%,
-      transparent 73%);
-
-  filter:blur(46px);
-  opacity:.30;
-}
-
-
-
 
 /* =========================================================
    BG-TEST ONLY — JMBN COMMAND BACKDROP
@@ -1787,8 +1715,12 @@ select{
   position:absolute;
   inset:0;
   background:
-    radial-gradient(circle at 20% 18%,rgba(255,255,255,.018) 0 1px,transparent 1.4px) 0 0/34px 34px,
-    linear-gradient(115deg,transparent 0 48%,rgba(217,181,62,.014) 49%,transparent 50% 100%);
+    linear-gradient(
+      115deg,
+      transparent 0 48%,
+      rgba(217,181,62,.014) 49%,
+      transparent 50% 100%
+    );
   opacity:.42;
 }
 
@@ -1931,9 +1863,6 @@ select{
 
 
 <body>
-
-<canvas id="jmbnStarfield" aria-hidden="true"></canvas>
-<div id="jmbnSignatureBackdrop" aria-hidden="true"></div>
 
 <!-- =========================================================
      BG TEST — DECORATIVE BACKDROP ONLY
@@ -3701,109 +3630,6 @@ document.addEventListener(
 </script>
 
 
-
-<script>
-/* ===== JMBN Manifest-style random starfield ===== */
-(function(){
-  const c = document.getElementById('jmbnStarfield');
-  if(!c) return;
-
-  const ctx = c.getContext('2d', { alpha:true });
-  let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
-  let stars = [];
-
-  const STARCOUNT = 420;
-  const LAYERS = 4;
-  const BASE_SPEED = 0.05;
-  const MAX_SIZE = 1.8;
-  const MIN_SIZE = 0.2;
-
-  function makeStars(){
-    stars = [];
-    for(let i=0;i<STARCOUNT;i++){
-      const layer = Math.floor(Math.random()*LAYERS)+1;
-      const depth = layer/LAYERS;
-
-      stars.push({
-        x:Math.random()*W,
-        y:Math.random()*H,
-        z:depth,
-        r:(Math.random()*(MAX_SIZE-MIN_SIZE)+MIN_SIZE)*DPR*depth,
-        tw:Math.random()*Math.PI*2,
-        spd:BASE_SPEED*depth
-      });
-    }
-  }
-
-  function resize(){
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = c.width = innerWidth * DPR;
-    H = c.height = innerHeight * DPR;
-    c.style.width = innerWidth + 'px';
-    c.style.height = innerHeight + 'px';
-    makeStars();
-  }
-
-  function subtleGlow(t){
-    const g1 = ctx.createRadialGradient(
-      W/2, H*1.16, H*.22,
-      W/2, H, H*1.05
-    );
-    g1.addColorStop(0, 'rgba(14,10,2,.16)');
-    g1.addColorStop(.45, 'rgba(4,3,1,.08)');
-    g1.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g1;
-    ctx.fillRect(0,0,W,H);
-
-    const gy = H*.98;
-    const g2 = ctx.createRadialGradient(W/2,gy,0,W/2,gy,H*.55);
-    const pulse = .018 + .008*Math.sin(t/1100);
-    g2.addColorStop(0, `rgba(255,214,110,${pulse})`);
-    g2.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g2;
-    ctx.fillRect(0,0,W,H);
-  }
-
-  function draw(){
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0,0,W,H);
-
-    const t = Date.now()/1000;
-    ctx.globalCompositeOperation = 'lighter';
-
-    const swirlX = Math.sin(t/8)*.5;
-    const swirlY = Math.cos(t/10)*.5;
-
-    for(const s of stars){
-      s.x += Math.cos(t*.08+s.tw+swirlX)*s.spd*1.2;
-      s.y += Math.sin(t*.06+s.tw+swirlY)*s.spd*1.2;
-
-      if(s.x<0) s.x+=W;
-      if(s.x>W) s.x-=W;
-      if(s.y<0) s.y+=H;
-      if(s.y>H) s.y-=H;
-
-      const flicker = .35 + .65*Math.abs(Math.sin(t*3.7+s.tw));
-
-      ctx.beginPath();
-      ctx.fillStyle = `hsla(45,100%,${58+18*flicker}%,${.32+.42*flicker})`;
-      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fill();
-    }
-
-    ctx.globalCompositeOperation = 'screen';
-    subtleGlow(Date.now());
-
-    requestAnimationFrame(draw);
-  }
-
-  addEventListener('resize', resize, {passive:true});
-  resize();
-  draw();
-})();
-</script>
 
 </body>
 
