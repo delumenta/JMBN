@@ -770,6 +770,32 @@
 
 
 /* =========================================================
+   MOBILE NAV TOGGLE
+========================================================= */
+
+.jmbn-mobile-toggle{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(214,180,76,.34);
+  border-radius:7px;
+  background:rgba(5,6,6,.72);
+  color:var(--jmbn-gold);
+  cursor:pointer;
+  font-size:21px;
+  line-height:1;
+  place-items:center;
+}
+
+.jmbn-mobile-toggle:hover,
+.jmbn-mobile-toggle:focus-visible{
+  border-color:rgba(240,210,112,.68);
+  background:rgba(214,180,76,.055);
+  outline:0;
+}
+
+
+/* =========================================================
    TABLET
 ========================================================= */
 
@@ -929,6 +955,120 @@
 
 }
 
+
+
+/* =========================================================
+   COMPACT MOBILE NAVIGATION
+========================================================= */
+
+@media(max-width:760px){
+
+  .jmbn-header{
+    min-height:0;
+    overflow:visible;
+  }
+
+  .jmbn-top{
+    height:auto;
+    grid-template-columns:minmax(0,1fr) 42px;
+    gap:10px;
+    padding:12px 14px;
+  }
+
+  .jmbn-identity{
+    grid-column:1;
+    grid-row:1;
+    min-width:0;
+  }
+
+  .jmbn-mobile-toggle{
+    display:grid;
+    grid-column:2;
+    grid-row:1;
+    align-self:center;
+    justify-self:end;
+  }
+
+  .jmbn-diagonal{
+    display:none;
+  }
+
+  .jmbn-account-wrap{
+    grid-column:1 / -1;
+    grid-row:2;
+    padding:9px 0 0;
+    margin-top:2px;
+    border-top:1px solid rgba(214,180,76,.15);
+  }
+
+  .jmbn-account{
+    height:44px;
+    padding:4px 2px;
+  }
+
+  .jmbn-dropdown{
+    top:53px;
+    left:0;
+    right:auto;
+    width:min(260px,calc(100vw - 42px));
+  }
+
+  .jmbn-navrow{
+    display:none;
+    height:auto;
+    overflow:visible;
+    padding:5px 8px 8px;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    border-top:1px solid rgba(214,180,76,.17);
+    background:rgba(5,6,6,.985);
+  }
+
+  .jmbn-header.mobile-nav-open .jmbn-navrow{
+    display:flex;
+  }
+
+  .jmbn-navlink{
+    width:100%;
+    height:44px;
+    flex:none;
+    padding:0 13px;
+    border-bottom:1px solid rgba(255,255,255,.035);
+  }
+
+  .jmbn-navlink:last-of-type{
+    border-bottom:0;
+  }
+
+  .jmbn-navlink.active{
+    background:linear-gradient(
+      90deg,
+      rgba(240,210,112,.09),
+      transparent 72%
+    );
+  }
+
+  .jmbn-navlink.active::after{
+    left:0;
+    right:auto;
+    top:8px;
+    bottom:8px;
+    width:2px;
+    height:auto;
+  }
+
+  .jmbn-navlink.active::before{
+    display:none;
+  }
+
+  .jmbn-nav-spacer,
+  .jmbn-node{
+    display:none;
+  }
+
+}
+
 </style>
 
 
@@ -1014,6 +1154,18 @@
 
     </div>
 
+
+
+    <button
+      class="jmbn-mobile-toggle"
+      id="jmbnMobileNavToggle"
+      type="button"
+      aria-label="Open navigation"
+      aria-controls="jmbnPrimaryNav"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
 
 
     <!-- Diagonal divider -->
@@ -1154,6 +1306,7 @@
 
   <nav
     class="jmbn-navrow"
+    id="jmbnPrimaryNav"
     aria-label="JMBN primary navigation"
   >
 
