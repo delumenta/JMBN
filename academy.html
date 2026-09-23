@@ -2262,6 +2262,916 @@ body::before{
 @media(max-width:1150px){.hero-motto-overlay{right:30px;width:245px;font-size:13px}}
 @media(max-width:900px){.hero-motto-overlay{display:none}}
 
+
+
+/* =========================================================
+   ACADEMY TEST — UPDATED INFORMATION HIERARCHY
+   Existing Academy auth/database logic remains in use.
+========================================================= */
+
+.hero-body{
+  min-height:470px;
+}
+
+.hero-copy{
+  padding:36px 42px 34px;
+}
+
+.hero-eyebrow{
+  font-size:10px;
+}
+
+.hero-heading{
+  margin-top:16px;
+  font-size:clamp(46px,5vw,68px);
+}
+
+.hero-rule{
+  margin:22px 0 28px;
+  height:2px;
+}
+
+.hero-welcome{
+  margin-bottom:22px;
+  font-size:18px;
+}
+
+.hero-copy p{
+  margin-bottom:20px;
+  font-size:14px;
+  line-height:1.65;
+}
+
+.academy-statement{
+  margin:26px 0 22px;
+  padding:18px 22px;
+  font-size:13px;
+  line-height:1.65;
+}
+
+.hero-journey{
+  font-size:11px !important;
+  line-height:1.55 !important;
+}
+
+
+/* STATUS FOCUS */
+
+.academy-status{
+  margin-bottom:20px;
+}
+
+.status-focus-grid{
+  position:relative;
+  z-index:1;
+
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+
+  border-bottom:
+    1px solid rgba(214,180,76,.16);
+}
+
+.status-focus-card{
+  min-height:116px;
+
+  padding:22px 28px;
+
+  display:flex;
+  align-items:center;
+  gap:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(240,210,112,.035),
+      transparent 54%
+    );
+}
+
+.status-focus-card + .status-focus-card{
+  border-left:
+    1px solid rgba(214,180,76,.16);
+}
+
+.status-focus-icon{
+  width:50px;
+  height:50px;
+
+  flex:0 0 50px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    1px solid rgba(214,180,76,.48);
+
+  color:var(--gold);
+
+  font-size:17px;
+
+  background:
+    rgba(240,210,112,.025);
+}
+
+.next-module-card .status-focus-icon{
+  color:#f5dda0;
+}
+
+.status-focus-label{
+  color:#817b68;
+
+  font-size:8px;
+  font-weight:700;
+
+  letter-spacing:.20em;
+
+  text-transform:uppercase;
+}
+
+.status-focus-value{
+  margin-top:7px;
+
+  color:#f7e8aa;
+
+  font-size:19px;
+  font-weight:700;
+
+  letter-spacing:.04em;
+}
+
+.status-focus-meta{
+  margin-top:6px;
+
+  color:#888271;
+
+  font-size:9px;
+
+  line-height:1.45;
+
+  letter-spacing:.07em;
+}
+
+.record-grid-compact .record-item{
+  min-height:92px;
+  padding:17px 25px;
+}
+
+.record-grid-compact .record-icon{
+  width:44px;
+  height:44px;
+  flex-basis:44px;
+  font-size:15px;
+}
+
+.record-grid-compact .record-value{
+  font-size:23px;
+}
+
+
+/* ACADEMY PROGRESSION MAP */
+
+.academy-path-frame{
+  margin-bottom:20px;
+}
+
+.academy-path{
+  position:relative;
+  z-index:1;
+
+  padding:26px 30px 30px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(165px,1fr));
+
+  gap:18px;
+}
+
+.academy-path::before{
+  content:"";
+
+  position:absolute;
+
+  left:7%;
+  right:7%;
+  top:59px;
+
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(214,180,76,.28) 8%,
+      rgba(214,180,76,.28) 92%,
+      transparent
+    );
+}
+
+.path-node{
+  position:relative;
+  z-index:2;
+
+  min-height:134px;
+
+  padding:16px;
+
+  border:
+    1px solid rgba(214,180,76,.24);
+
+  background:
+    rgba(5,6,5,.88);
+
+  text-decoration:none;
+
+  transition:
+    border-color .15s ease,
+    transform .15s ease,
+    background .15s ease;
+}
+
+.path-node:hover{
+  transform:translateY(-2px);
+
+  border-color:
+    rgba(240,210,112,.62);
+
+  background:
+    rgba(9,10,7,.94);
+}
+
+.path-node.complete{
+  border-color:
+    rgba(112,217,140,.34);
+}
+
+.path-node.progress{
+  border-color:
+    rgba(240,210,112,.58);
+}
+
+.path-node-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.path-icon{
+  width:34px;
+  height:34px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    1px solid rgba(214,180,76,.36);
+
+  color:var(--gold);
+}
+
+.path-status{
+  color:#777164;
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+}
+
+.path-node.complete .path-status{
+  color:var(--green);
+}
+
+.path-node.progress .path-status{
+  color:var(--gold);
+}
+
+.path-code{
+  margin-top:14px;
+
+  color:#f2d675;
+
+  font-size:16px;
+  font-weight:700;
+
+  letter-spacing:.09em;
+}
+
+.path-name{
+  margin-top:4px;
+
+  min-height:26px;
+
+  color:#8d8776;
+
+  font-size:8px;
+
+  line-height:1.35;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+.path-progress-row{
+  margin-top:12px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:#726d5f;
+
+  font-size:7px;
+
+  letter-spacing:.12em;
+}
+
+.path-track{
+  height:3px;
+
+  margin-top:7px;
+
+  background:#16160f;
+}
+
+.path-fill{
+  display:block;
+
+  height:100%;
+
+  background:var(--gold);
+
+  box-shadow:
+    0 0 8px rgba(240,210,112,.22);
+}
+
+.path-node.complete .path-fill{
+  background:var(--green);
+}
+
+
+/* COMPACT CURRENT PROGRAMMES */
+
+.programmes-body{
+  padding:6px 20px 8px;
+}
+
+.programme-row{
+  grid-template-columns:128px minmax(0,1fr);
+  gap:19px;
+  padding:16px 0;
+}
+
+.programme-image{
+  min-height:112px;
+}
+
+.programme-image-code{
+  left:11px;
+  bottom:9px;
+  font-size:18px;
+}
+
+.programme-title{
+  font-size:17px;
+}
+
+.programme-subtitle{
+  font-size:8px;
+}
+
+.programme-note{
+  margin-top:8px;
+  font-size:8px;
+}
+
+.programme-button{
+  margin-top:11px;
+  min-height:31px;
+  padding:0 11px;
+  font-size:7px;
+}
+
+
+/* RECENT TRAINING TIMELINE */
+
+.training-list{
+  position:relative;
+  padding-left:24px;
+}
+
+.training-list::before{
+  content:"";
+
+  position:absolute;
+
+  left:37px;
+  top:25px;
+  bottom:29px;
+
+  width:1px;
+
+  background:
+    rgba(112,217,140,.18);
+}
+
+.training-row{
+  position:relative;
+  z-index:1;
+
+  grid-template-columns:28px minmax(0,1fr);
+
+  gap:13px;
+
+  padding:14px 0;
+}
+
+.training-icon{
+  width:28px;
+  height:28px;
+
+  background:#070906;
+
+  font-size:9px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1050px){
+
+  .status-focus-grid{
+    grid-template-columns:1fr;
+  }
+
+  .status-focus-card + .status-focus-card{
+    border-left:0;
+    border-top:
+      1px solid rgba(214,180,76,.16);
+  }
+
+  .academy-path::before{
+    display:none;
+  }
+
+}
+
+@media(max-width:760px){
+
+  .hero-body{
+    min-height:auto;
+  }
+
+  .hero-copy{
+    padding:30px 24px;
+  }
+
+  .status-focus-card{
+    padding:18px 20px;
+  }
+
+  .academy-path{
+    grid-template-columns:1fr 1fr;
+    padding:18px;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .academy-path{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+
+/* Academy Test — Current Programmes removed.
+   Recent Training now uses the full dashboard width. */
+.dashboard-grid{
+  grid-template-columns:1fr;
+}
+
+.training-list{
+  padding-right:28px;
+}
+
+@media(min-width:900px){
+  .training-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:34px;
+  }
+
+  .training-row:nth-child(2){
+    border-top:0;
+  }
+}
+
+
+
+/* =========================================================
+   ACADEMY TEST — SIMPLIFIED DASHBOARD
+   Hero → Status → Progression Map → Footer
+========================================================= */
+
+.academy-path-frame{
+  margin-bottom:0;
+}
+
+.academy-footer{
+  margin-top:22px;
+}
+
+/* The progression map is now the main Academy action area. */
+.path-node{
+  min-height:142px;
+}
+
+.path-name{
+  min-height:30px;
+}
+
+
+
+
+/* =========================================================
+   ACADEMY TEST — BMT → SOC → SPECIALISATION PATHWAY
+========================================================= */
+
+.academy-path{
+  display:block;
+  padding:24px 28px 28px;
+}
+
+.academy-path::before{
+  display:none;
+}
+
+.academy-path-sequence{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    46px
+    minmax(0,1fr)
+    46px
+    minmax(0,1fr);
+
+  align-items:stretch;
+
+  gap:0;
+}
+
+.academy-path-card{
+  position:relative;
+
+  min-width:0;
+  min-height:160px;
+
+  padding:17px 18px 15px;
+
+  border:
+    1px solid rgba(214,180,76,.28);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.025),
+      transparent 34%
+    ),
+    rgba(5,6,5,.90);
+
+  color:inherit;
+
+  text-decoration:none;
+
+  transition:
+    border-color .15s ease,
+    transform .15s ease,
+    background .15s ease;
+}
+
+a.academy-path-card:hover{
+  transform:translateY(-2px);
+
+  border-color:
+    rgba(240,210,112,.60);
+
+  background:
+    rgba(8,9,6,.94);
+}
+
+.academy-path-card.complete{
+  border-color:
+    rgba(112,217,140,.34);
+}
+
+.academy-path-card.progress,
+.specialisation-assigned{
+  border-color:
+    rgba(240,210,112,.54);
+}
+
+.academy-path-card.unavailable{
+  opacity:.62;
+}
+
+.path-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:14px;
+
+  min-height:42px;
+}
+
+.path-badge{
+  width:42px;
+  height:42px;
+
+  object-fit:contain;
+
+  opacity:.90;
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(214,180,76,.08)
+    );
+}
+
+.path-badge-fallback{
+  width:38px;
+  height:38px;
+
+  flex:0 0 38px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    1px solid rgba(214,180,76,.42);
+
+  color:var(--gold);
+
+  font-size:15px;
+
+  background:
+    rgba(240,210,112,.025);
+}
+
+.path-status{
+  padding-top:4px;
+
+  color:#777164;
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+}
+
+.academy-path-card.complete .path-status{
+  color:var(--green);
+}
+
+.academy-path-card.progress .path-status,
+.specialisation-assigned .path-status{
+  color:var(--gold);
+}
+
+.path-code{
+  margin-top:11px;
+
+  color:#f2d675;
+
+  font-size:17px;
+  font-weight:700;
+
+  line-height:1.15;
+
+  letter-spacing:.08em;
+}
+
+.specialisation-awaiting-title{
+  max-width:250px;
+
+  font-size:14px;
+
+  line-height:1.3;
+}
+
+.path-name{
+  margin-top:5px;
+
+  min-height:24px;
+
+  color:#8d8776;
+
+  font-size:8px;
+
+  line-height:1.4;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+.path-progress-row{
+  margin-top:20px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:#6f6a5b;
+
+  font-size:7px;
+
+  letter-spacing:.12em;
+}
+
+.path-track{
+  height:3px;
+
+  margin-top:7px;
+
+  background:#16160f;
+}
+
+.path-fill{
+  display:block;
+
+  height:100%;
+
+  background:var(--gold);
+
+  box-shadow:
+    0 0 8px
+    rgba(240,210,112,.22);
+}
+
+.academy-path-card.complete .path-fill{
+  background:var(--green);
+}
+
+.sequence-arrow{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:
+    rgba(214,180,76,.46);
+}
+
+.sequence-arrow span{
+  width:26px;
+  height:1px;
+
+  background:
+    rgba(214,180,76,.32);
+}
+
+.sequence-arrow i{
+  margin-left:-1px;
+
+  font-size:8px;
+}
+
+.specialisation-waiting{
+  border-style:dashed;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(240,210,112,.018),
+      transparent 35%
+    ),
+    rgba(5,6,5,.76);
+}
+
+.specialisation-options{
+  margin-top:20px;
+
+  color:#746f60;
+
+  font-size:7px;
+  font-weight:700;
+
+  line-height:1.5;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+@media(max-width:560px){
+
+  .academy-path-sequence{
+    grid-template-columns:1fr;
+  }
+
+  .sequence-arrow{
+    width:100%;
+    height:42px;
+
+    flex-direction:column;
+  }
+
+  .sequence-arrow span{
+    width:1px;
+    height:24px;
+  }
+
+  .sequence-arrow i{
+    margin:
+      -1px 0 0;
+
+    transform:
+      rotate(90deg);
+  }
+
+}
+
+@media(max-width:620px){
+
+  .academy-path{
+    padding:
+      18px 14px 22px;
+  }
+
+  .academy-path-card{
+    min-height:150px;
+  }
+
+  .path-badge{
+    width:36px;
+    height:36px;
+  }
+
+  .path-badge-fallback{
+    width:36px;
+    height:36px;
+  }
+
+}
+
+
+
+/* Desktop Academy path is intentionally horizontal:
+   BMT → SOC → Instructor-assigned specialisation. */
+@media(min-width:561px){
+  #academyPath .academy-path-sequence{
+    display:grid !important;
+    grid-template-columns:
+      minmax(0,1fr)
+      46px
+      minmax(0,1fr)
+      46px
+      minmax(0,1fr) !important;
+    align-items:stretch !important;
+  }
+
+  #academyPath .sequence-arrow{
+    width:auto !important;
+    height:auto !important;
+    flex-direction:row !important;
+  }
+
+  #academyPath .sequence-arrow span{
+    width:26px !important;
+    height:1px !important;
+  }
+
+  #academyPath .sequence-arrow i{
+    margin-left:-1px !important;
+    transform:none !important;
+  }
+
+  #academyPath .academy-path-card{
+    width:100% !important;
+    margin:0 !important;
+  }
+}
+
 </style>
 
 </head>
@@ -2627,19 +3537,18 @@ body::before{
 
 
 <!-- =========================================================
-     02 // TRAINING RECORD
+     02 // YOUR ACADEMY STATUS
 ========================================================= -->
 
-<section class="frame training-record">
+<section class="frame academy-status">
 
   <span class="corner corner-tl"></span>
   <span class="corner corner-br"></span>
 
-
   <div class="frame-header">
 
     <div class="frame-title">
-      TRAINING RECORD
+      YOUR ACADEMY STATUS
     </div>
 
     <div class="frame-code">
@@ -2649,17 +3558,78 @@ body::before{
   </div>
 
 
-  <div class="record-grid">
+  <div class="status-focus-grid">
+
+    <div class="status-focus-card">
+
+      <div class="status-focus-icon">
+        <i class="fa-solid fa-person-running"></i>
+      </div>
+
+      <div class="status-focus-copy">
+
+        <div class="status-focus-label">
+          CURRENT PROGRAMME
+        </div>
+
+        <div
+          class="status-focus-value"
+          id="currentProgrammeName"
+        >
+          —
+        </div>
+
+        <div
+          class="status-focus-meta"
+          id="currentProgrammeMeta"
+        >
+          ACCESSING TRAINING RECORD...
+        </div>
+
+      </div>
+
+    </div>
 
 
-    <!-- PROGRAMMES AVAILABLE -->
+    <div class="status-focus-card next-module-card">
+
+      <div class="status-focus-icon">
+        <i class="fa-solid fa-forward-step"></i>
+      </div>
+
+      <div class="status-focus-copy">
+
+        <div class="status-focus-label">
+          NEXT MODULE
+        </div>
+
+        <div
+          class="status-focus-value"
+          id="nextModuleTitle"
+        >
+          —
+        </div>
+
+        <div
+          class="status-focus-meta"
+          id="nextModuleMeta"
+        >
+          CHECKING REQUIREMENTS...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="record-grid record-grid-compact">
 
     <div class="record-item">
 
       <div class="record-icon">
-
         <i class="fa-solid fa-layer-group"></i>
-
       </div>
 
       <div>
@@ -2672,11 +3642,7 @@ body::before{
         </div>
 
         <div class="record-label">
-
-          PROGRAMMES
-          <br>
-          AVAILABLE
-
+          PROGRAMMES<br>AVAILABLE
         </div>
 
       </div>
@@ -2684,15 +3650,10 @@ body::before{
     </div>
 
 
-
-    <!-- IN TRAINING -->
-
     <div class="record-item">
 
       <div class="record-icon">
-
         <i class="fa-solid fa-person-running"></i>
-
       </div>
 
       <div>
@@ -2705,11 +3666,7 @@ body::before{
         </div>
 
         <div class="record-label">
-
-          PROGRAMMES
-          <br>
-          IN TRAINING
-
+          PROGRAMMES<br>IN TRAINING
         </div>
 
       </div>
@@ -2717,15 +3674,10 @@ body::before{
     </div>
 
 
-
-    <!-- CERTIFICATIONS -->
-
     <div class="record-item">
 
       <div class="record-icon">
-
         <i class="fa-solid fa-award"></i>
-
       </div>
 
       <div>
@@ -2738,11 +3690,7 @@ body::before{
         </div>
 
         <div class="record-label">
-
-          CERTIFICATIONS
-          <br>
-          EARNED
-
+          CERTIFICATIONS<br>EARNED
         </div>
 
       </div>
@@ -2750,15 +3698,10 @@ body::before{
     </div>
 
 
-
-    <!-- TRAINING EVENTS -->
-
     <div class="record-item">
 
       <div class="record-icon">
-
         <i class="fa-solid fa-clipboard-check"></i>
-
       </div>
 
       <div>
@@ -2771,130 +3714,51 @@ body::before{
         </div>
 
         <div class="record-label">
-
-          TRAINING EVENTS
-          <br>
-          COMPLETED
-
+          TRAINING EVENTS<br>COMPLETED
         </div>
 
       </div>
 
     </div>
 
-
   </div>
 
 </section>
 
 
-
 <!-- =========================================================
-     LOWER DASHBOARD
+     03 // ACADEMY PROGRESSION MAP
 ========================================================= -->
 
-<div class="dashboard-grid">
-
-
-<!-- =========================================================
-     03 // CURRENT PROGRAMMES
-========================================================= -->
-
-<section class="frame">
+<section class="frame academy-path-frame">
 
   <span class="corner corner-tl"></span>
   <span class="corner corner-br"></span>
 
-
   <div class="frame-header">
 
     <div class="frame-title">
-      CURRENT PROGRAMMES
+      ACADEMY PROGRESSION MAP
     </div>
 
     <div class="frame-code">
-      TRAINING // 03
+      TRAINING PATH // 03
     </div>
 
   </div>
 
-
   <div
-    class="programmes-body"
-    id="programmesList"
+    class="academy-path"
+    id="academyPath"
   >
 
     <div class="loading">
-
-      ACCESSING TRAINING RECORD...
-
+      SYNCHRONIZING TRAINING PATH...
     </div>
 
   </div>
-
-
-  <div class="view-all-area">
-
-    <a
-      class="view-all-button"
-      href="programmes.html"
-    >
-
-      VIEW ALL PROGRAMMES
-
-      <i class="fa-solid fa-arrow-right"></i>
-
-    </a>
-
-  </div>
-
 
 </section>
-
-
-
-<!-- =========================================================
-     04 // RECENT TRAINING
-========================================================= -->
-
-<section class="frame">
-
-  <span class="corner corner-tl"></span>
-  <span class="corner corner-br"></span>
-
-
-  <div class="frame-header">
-
-    <div class="frame-title">
-      RECENT TRAINING
-    </div>
-
-    <div class="frame-code">
-      LOG // 04
-    </div>
-
-  </div>
-
-
-  <div
-    class="training-list"
-    id="recentTraining"
-  >
-
-    <div class="loading">
-
-      ACCESSING TRAINING LOG...
-
-    </div>
-
-  </div>
-
-
-</section>
-
-
-</div>
-
 
 
 <!-- =========================================================
@@ -2945,6 +3809,7 @@ let trainingEvents = [];
 
 let myCertifications = [];
 let myEvents = [];
+let mySpecialisation = null;
 
 
 /* =========================================================
@@ -3167,7 +4032,8 @@ async function loadAcademyData(){
     requirementResult,
     eventResult,
     myCertResult,
-    myEventResult
+    myEventResult,
+    mySpecialisationResult
 
   ] = await Promise.all([
 
@@ -3254,7 +4120,25 @@ async function loadAcademyData(){
       .order(
         "completed_at",
         {ascending:false}
+      ),
+
+
+    /* INSTRUCTOR-ASSIGNED SPECIALISATION */
+
+    sb
+      .from("academy_specialisation_assignments")
+      .select(`
+        specialisation_code,
+        assigned_by,
+        notes,
+        assigned_at,
+        updated_at
+      `)
+      .eq(
+        "user_id",
+        me
       )
+      .maybeSingle()
 
   ]);
 
@@ -3265,7 +4149,8 @@ async function loadAcademyData(){
     requirementResult.error,
     eventResult.error,
     myCertResult.error,
-    myEventResult.error
+    myEventResult.error,
+    mySpecialisationResult.error
 
   ].filter(Boolean);
 
@@ -3294,6 +4179,10 @@ async function loadAcademyData(){
 
   myEvents =
     myEventResult.data || [];
+
+
+  mySpecialisation =
+    mySpecialisationResult.data || null;
 
 
   renderAcademy();
@@ -3448,11 +4337,766 @@ function renderAcademy(){
 
   renderStats(programmes);
 
+  renderStatusFocus(programmes);
+
+  renderTrainingPath(programmes);
+
   renderSidebar(programmes);
 
-  renderProgrammes(programmes);
+}
 
-  renderRecentTraining();
+
+/* =========================================================
+   STATUS FOCUS
+========================================================= */
+
+function getProgrammeByCode(programmes, code){
+
+  const target =
+    String(code || "")
+      .toUpperCase();
+
+
+  const aliases = {
+
+    GUNNERY:[
+      "GUNNERY",
+      "GUN"
+    ],
+
+    ENGINEERING:[
+      "ENGINEERING",
+      "ENG"
+    ]
+
+  };
+
+
+  const candidates =
+    aliases[target] ||
+    [target];
+
+
+  return programmes.find(
+    programme =>
+      candidates.includes(
+        String(
+          programme.certification_code ||
+          ""
+        ).toUpperCase()
+      )
+  ) || null;
+
+}
+
+
+function specialisationLabel(code){
+
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
+
+    case "MED":
+      return "MEDICAL";
+
+    case "GUNNERY":
+      return "GUNNERY";
+
+    case "ENGINEERING":
+      return "ENGINEERING";
+
+    default:
+      return "UNASSIGNED";
+
+  }
+
+}
+
+
+function specialisationIcon(code){
+
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
+
+    case "MED":
+      return "fa-kit-medical";
+
+    case "GUNNERY":
+      return "fa-crosshairs";
+
+    case "ENGINEERING":
+      return "fa-screwdriver-wrench";
+
+    default:
+      return "fa-user-shield";
+
+  }
+
+}
+
+
+/* =========================================================
+   STATUS FOCUS
+========================================================= */
+
+function renderStatusFocus(programmes){
+
+  const completedEventCodes =
+    new Set(
+      myEvents.map(
+        row => row.event_code
+      )
+    );
+
+
+  const bmt =
+    getProgrammeByCode(
+      programmes,
+      "BMT"
+    );
+
+
+  const soc =
+    getProgrammeByCode(
+      programmes,
+      "SOC"
+    );
+
+
+  const assignedCode =
+    mySpecialisation
+      ?.specialisation_code ||
+    null;
+
+
+  const assignedProgramme =
+    assignedCode
+    ?
+    getProgrammeByCode(
+      programmes,
+      assignedCode
+    )
+    :
+    null;
+
+
+  let current =
+    null;
+
+
+  if(
+    bmt &&
+    !bmt.certified
+  ){
+
+    current = bmt;
+
+  }
+
+  else if(
+    soc &&
+    !soc.certified
+  ){
+
+    current = soc;
+
+  }
+
+  else if(
+    assignedProgramme &&
+    !assignedProgramme.certified
+  ){
+
+    current =
+      assignedProgramme;
+
+  }
+
+  else{
+
+    current =
+      assignedProgramme ||
+      soc ||
+      bmt;
+
+  }
+
+
+  const currentName =
+    $("#currentProgrammeName");
+
+  const currentMeta =
+    $("#currentProgrammeMeta");
+
+  const nextTitle =
+    $("#nextModuleTitle");
+
+  const nextMeta =
+    $("#nextModuleMeta");
+
+
+  if(!current){
+
+    currentName.textContent =
+      "NO CORE PROGRAMME";
+
+    currentMeta.textContent =
+      "Academy programme record unavailable.";
+
+    nextTitle.textContent =
+      "—";
+
+    nextMeta.textContent =
+      "No training requirement available.";
+
+    return;
+
+  }
+
+
+  currentName.textContent =
+    current.certification_code;
+
+
+  currentMeta.textContent =
+    current.name +
+    " // " +
+    (
+      current.certified
+      ?
+      "CERTIFIED"
+      :
+      current.total > 0
+      ?
+      current.completed +
+      " OF " +
+      current.total +
+      " MODULES COMPLETE"
+      :
+      "SYLLABUS PENDING"
+    );
+
+
+  const nextRequirement =
+    current.requirements.find(
+      requirement =>
+        !completedEventCodes.has(
+          requirement.event_code
+        )
+    );
+
+
+  if(nextRequirement){
+
+    const event =
+      trainingEvents.find(
+        row =>
+          row.event_code ===
+          nextRequirement.event_code
+      );
+
+
+    nextTitle.textContent =
+      event?.title ||
+      nextRequirement.event_code;
+
+
+    nextMeta.textContent =
+      nextRequirement.event_code +
+      " // " +
+      current.certification_code +
+      " REQUIRED MODULE";
+
+    return;
+
+  }
+
+
+  if(
+    bmt &&
+    !bmt.certified
+  ){
+
+    nextTitle.textContent =
+      "COMPLETE BMT";
+
+    nextMeta.textContent =
+      "Core training must be completed before SOC.";
+
+    return;
+
+  }
+
+
+  if(
+    soc &&
+    !soc.certified
+  ){
+
+    nextTitle.textContent =
+      "SOC";
+
+    nextMeta.textContent =
+      "Continue core training before specialisation assignment.";
+
+    return;
+
+  }
+
+
+  if(!assignedCode){
+
+    nextTitle.textContent =
+      "AWAITING INSTRUCTOR ASSIGNMENT";
+
+    nextMeta.textContent =
+      "An Academy instructor will assign MED, GUNNERY or ENGINEERING.";
+
+    return;
+
+  }
+
+
+  nextTitle.textContent =
+    specialisationLabel(
+      assignedCode
+    );
+
+
+  nextMeta.textContent =
+    assignedProgramme
+    ?
+    (
+      assignedProgramme.certified
+      ?
+      "ASSIGNED SPECIALISATION // CERTIFIED"
+      :
+      "ASSIGNED SPECIALISATION // READY FOR TRAINING"
+    )
+    :
+    "ASSIGNED SPECIALISATION // SYLLABUS PENDING";
+
+}
+
+
+/* =========================================================
+   TRAINING PATH
+========================================================= */
+
+function renderTrainingPath(programmes){
+
+  const host =
+    $("#academyPath");
+
+
+  if(!host){
+    return;
+  }
+
+
+  const bmt =
+    getProgrammeByCode(
+      programmes,
+      "BMT"
+    );
+
+
+  const soc =
+    getProgrammeByCode(
+      programmes,
+      "SOC"
+    );
+
+
+  const assignedCode =
+    mySpecialisation
+      ?.specialisation_code ||
+    null;
+
+
+  const assignedProgramme =
+    assignedCode
+    ?
+    getProgrammeByCode(
+      programmes,
+      assignedCode
+    )
+    :
+    null;
+
+
+  const programmeNode =
+    (
+      programme,
+      fallbackCode,
+      fallbackName,
+      fallbackIcon
+    )=>{
+
+
+      const code =
+        programme
+          ?.certification_code ||
+        fallbackCode;
+
+
+      const name =
+        programme
+          ?.name ||
+        fallbackName;
+
+
+      const statusText =
+        !programme
+        ?
+        "NOT CONFIGURED"
+        :
+        programme.certified
+        ?
+        "CERTIFIED"
+        :
+        programme.status === "progress"
+        ?
+        "IN TRAINING"
+        :
+        "AVAILABLE";
+
+
+      const progressText =
+        programme &&
+        programme.total > 0
+        ?
+        programme.completed +
+        " / " +
+        programme.total
+        :
+        "—";
+
+
+      const percent =
+        programme
+          ?.percent ||
+        0;
+
+
+      const badge =
+        programme
+          ?.image_url
+        ?
+        `
+          <img
+            class="path-badge"
+            src="${escapeHtml(
+              programme.image_url
+            )}"
+            alt=""
+          >
+        `
+        :
+        `
+          <div class="path-badge-fallback">
+            <i class="fa-solid ${fallbackIcon}"></i>
+          </div>
+        `;
+
+
+      const body = `
+
+        <div class="path-card-head">
+
+          ${badge}
+
+          <div class="path-status">
+            ${statusText}
+          </div>
+
+        </div>
+
+        <div class="path-code">
+          ${escapeHtml(code)}
+        </div>
+
+        <div class="path-name">
+          ${escapeHtml(name)}
+        </div>
+
+        <div class="path-progress-row">
+
+          <span>PROGRESS</span>
+
+          <span>
+            ${progressText}
+          </span>
+
+        </div>
+
+        <div class="path-track">
+
+          <span
+            class="path-fill"
+            style="width:${percent}%"
+          ></span>
+
+        </div>
+
+      `;
+
+
+      if(programme){
+
+        return `
+
+          <a
+            class="academy-path-card ${programme.status}"
+            href="${getProgrammeUrl(
+              programme.certification_code
+            )}"
+          >
+            ${body}
+          </a>
+
+        `;
+
+      }
+
+
+      return `
+
+        <div class="academy-path-card unavailable">
+          ${body}
+        </div>
+
+      `;
+
+    };
+
+
+  let specialisationMarkup;
+
+
+  if(!assignedCode){
+
+    specialisationMarkup = `
+
+      <div class="academy-path-card specialisation-waiting">
+
+        <div class="path-card-head">
+
+          <div class="path-badge-fallback">
+            <i class="fa-solid fa-route"></i>
+          </div>
+
+          <div class="path-status">
+            PENDING
+          </div>
+
+        </div>
+
+        <div class="path-code specialisation-awaiting-title">
+          AWAITING SPECIALISATION PATHWAY
+        </div>
+
+        <div class="path-name">
+          ASSIGNED BY JMBN ACADEMY INSTRUCTOR
+        </div>
+
+        <div class="specialisation-options">
+          MEDICAL &nbsp;·&nbsp; GUNNERY &nbsp;·&nbsp; ENGINEERING
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+  else{
+
+    const code =
+      assignedProgramme
+        ?.certification_code ||
+      assignedCode;
+
+
+    const name =
+      assignedProgramme
+        ?.name ||
+      specialisationLabel(
+        assignedCode
+      );
+
+
+    const statusText =
+      assignedProgramme
+      ?
+      (
+        assignedProgramme.certified
+        ?
+        "CERTIFIED"
+        :
+        assignedProgramme.status === "progress"
+        ?
+        "IN TRAINING"
+        :
+        "ASSIGNED"
+      )
+      :
+      "ASSIGNED";
+
+
+    const progressText =
+      assignedProgramme &&
+      assignedProgramme.total > 0
+      ?
+      assignedProgramme.completed +
+      " / " +
+      assignedProgramme.total
+      :
+      "—";
+
+
+    const percent =
+      assignedProgramme
+        ?.percent ||
+      0;
+
+
+    const badge =
+      assignedProgramme
+        ?.image_url
+      ?
+      `
+        <img
+          class="path-badge"
+          src="${escapeHtml(
+            assignedProgramme.image_url
+          )}"
+          alt=""
+        >
+      `
+      :
+      `
+        <div class="path-badge-fallback">
+          <i
+            class="fa-solid ${specialisationIcon(
+              assignedCode
+            )}"
+          ></i>
+        </div>
+      `;
+
+
+    const card = `
+
+      <div class="path-card-head">
+
+        ${badge}
+
+        <div class="path-status">
+          ${statusText}
+        </div>
+
+      </div>
+
+      <div class="path-code">
+        ${escapeHtml(code)}
+      </div>
+
+      <div class="path-name">
+        ${escapeHtml(name)}
+      </div>
+
+      <div class="path-progress-row">
+
+        <span>PROGRESS</span>
+
+        <span>
+          ${progressText}
+        </span>
+
+      </div>
+
+      <div class="path-track">
+
+        <span
+          class="path-fill"
+          style="width:${percent}%"
+        ></span>
+
+      </div>
+
+    `;
+
+
+    specialisationMarkup =
+      assignedProgramme
+      ?
+      `
+
+        <a
+          class="academy-path-card specialisation-assigned ${assignedProgramme.status}"
+          href="${getProgrammeUrl(
+            assignedProgramme.certification_code
+          )}"
+        >
+          ${card}
+        </a>
+
+      `
+      :
+      `
+
+        <div class="academy-path-card specialisation-assigned">
+          ${card}
+        </div>
+
+      `;
+
+  }
+
+
+  host.innerHTML = `
+
+    <div class="academy-path-sequence">
+
+      ${programmeNode(
+        bmt,
+        "BMT",
+        "Basic Military Training",
+        "fa-shield-halved"
+      )}
+
+      <div
+        class="sequence-arrow"
+        aria-hidden="true"
+      >
+        <span></span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+
+      ${programmeNode(
+        soc,
+        "SOC",
+        "Standard Obstacle Course",
+        "fa-mountain"
+      )}
+
+      <div
+        class="sequence-arrow"
+        aria-hidden="true"
+      >
+        <span></span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+
+      ${specialisationMarkup}
+
+    </div>
+
+  `;
 
 }
 
@@ -3463,18 +5107,54 @@ function renderAcademy(){
 
 function renderStats(programmes){
 
-  const available =
+  const relevantCodes =
+    new Set([
+      "BMT",
+      "SOC",
+      "MED",
+      "GUN",
+      "GUNNERY",
+      "ENG",
+      "ENGINEERING"
+    ]);
+
+
+  const relevant =
     programmes.filter(
+      programme =>
+        relevantCodes.has(
+          String(
+            programme.certification_code ||
+            ""
+          ).toUpperCase()
+        )
+    );
+
+
+  const available =
+    relevant.filter(
       programme =>
         !programme.certified
     ).length;
 
 
   const inTraining =
-    programmes.filter(
+    relevant.filter(
       programme =>
         programme.status ===
         "progress"
+    ).length;
+
+
+  const earned =
+    myCertifications.filter(
+      row =>
+        relevantCodes.has(
+          String(
+            row.certification_code ||
+            ""
+          ).toUpperCase()
+        )
     ).length;
 
 
@@ -3487,7 +5167,7 @@ function renderStats(programmes){
 
 
   $("#certificationCount").textContent =
-    myCertifications.length;
+    earned;
 
 
   $("#eventCount").textContent =
@@ -4097,30 +5777,29 @@ document.addEventListener(
       );
 
 
-      $("#programmesList").innerHTML = `
+      const programmesHost =
+        $("#programmesList");
 
-        <div class="empty-state">
+      if(programmesHost){
 
-          ACADEMY DATABASE CONNECTION FAILED.
+        programmesHost.innerHTML = `
 
-          <br><br>
+          <div class="empty-state">
 
-          PLEASE RELOAD THE TRAINING NETWORK.
+            ACADEMY DATABASE CONNECTION FAILED.
 
-        </div>
+            <br><br>
 
-      `;
+            PLEASE RELOAD THE TRAINING NETWORK.
+
+          </div>
+
+        `;
+
+      }
 
 
-      $("#recentTraining").innerHTML = `
-
-        <div class="empty-state">
-
-          TRAINING LOG UNAVAILABLE.
-
-        </div>
-
-      `;
+      /* Academy Test has no Recent Training panel. */
 
     }
 
