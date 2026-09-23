@@ -10,7 +10,7 @@
   content="width=device-width, initial-scale=1, viewport-fit=cover"
 >
 
-<title>JMBN // Academy Programmes</title>
+<title>JMBN // Academy Certifications</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2202,23 +2202,23 @@ button{
     <div class="system-line">
 
       JMBN // ACADEMY DIVISION //
-      TRAINING PROGRAMMES
+      TRAINING CERTIFICATIONS
 
     </div>
 
 
     <h1 class="page-title">
 
-      ALL PROGRAMMES
+      ALL CERTIFICATIONS
 
     </h1>
 
 
     <p class="page-description">
 
-      Explore all JMBN Academy training programmes,
+      Explore all JMBN Academy certifications,
       review your current progress, identify outstanding
-      training requirements, and access programmes
+      training requirements, and access certifications
       available to your personnel record.
 
     </p>
@@ -2285,7 +2285,7 @@ button{
         </div>
 
         <div class="summary-label">
-          ALL PROGRAMMES
+          ALL CERTIFICATIONS
         </div>
 
       </div>
@@ -2387,7 +2387,7 @@ button{
   <div class="section-header">
 
     <div class="section-title">
-      PROGRAMME DIRECTORY
+      CERTIFICATION DIRECTORY
     </div>
 
     <div class="section-code">
@@ -2459,7 +2459,7 @@ button{
 
     <div class="loading">
 
-      ACCESSING ACADEMY PROGRAMME DIRECTORY...
+      ACCESSING ACADEMY CERTIFICATION DIRECTORY...
 
     </div>
 
@@ -2561,7 +2561,7 @@ button{
         <div>
 
           <div class="modal-label">
-            PROGRAMME STATUS
+            CERTIFICATION STATUS
           </div>
 
         </div>
@@ -2574,7 +2574,7 @@ button{
 
 
       <div class="modal-label">
-        PROGRAMME PROGRESS
+        CERTIFICATION PROGRESS
       </div>
 
 
@@ -2634,7 +2634,7 @@ button{
           href="#"
         >
 
-          ACCESS PROGRAMME
+          ACCESS CERTIFICATION
 
           <i class="fa-solid fa-arrow-right"></i>
 
@@ -3454,7 +3454,7 @@ function renderSidebar(){
     host.innerHTML = `
 
       <div class="nav-item">
-        NO PROGRAMMES
+        NO CERTIFICATIONS
       </div>
 
     `;
@@ -3644,7 +3644,7 @@ function renderProgrammes(){
 
       <div class="empty">
 
-        NO PROGRAMMES FOUND
+        NO CERTIFICATIONS FOUND
         FOR THIS STATUS.
 
       </div>
@@ -3747,7 +3747,7 @@ function renderProgrammeCard(programme){
           programme.certification.awarded_at
         )}.`
         :
-        "Programme certification awarded.";
+        "Certification awarded.";
 
       break;
 
@@ -4115,7 +4115,7 @@ function openProgramme(code){
 
     access.innerHTML = `
 
-      ACCESS PROGRAMME LOCKED
+      ACCESS CERTIFICATION LOCKED
 
       <i class="fa-solid fa-lock"></i>
 
@@ -4141,14 +4141,14 @@ function openProgramme(code){
         programme.status ===
         "certified"
         ?
-        "VIEW PROGRAMME"
+        "VIEW CERTIFICATION"
         :
         programme.status ===
         "undergoing"
         ?
-        "CONTINUE PROGRAMME"
+        "CONTINUE CERTIFICATION"
         :
-        "ACCESS PROGRAMME"
+        "ACCESS CERTIFICATION"
       }
 
       <i class="fa-solid fa-arrow-right"></i>
@@ -4328,7 +4328,7 @@ function renderModalPrerequisites(
 
     <div class="requirements-title">
 
-      PROGRAMME PREREQUISITES
+      CERTIFICATION PREREQUISITES
 
     </div>
 
