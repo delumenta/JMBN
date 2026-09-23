@@ -689,7 +689,24 @@ function render(){
  const cutoff=Date.now()-30*86400000;
  $("#recentCount").textContent=signoffs.filter(x=>x.status==="approved"&&new Date(x.signed_off_at).getTime()>=cutoff).length;
  $("#memberCount").textContent=new Set(signoffs.map(x=>x.trainee_id)).size;
- $("#pathways").innerHTML=certs.map(c=>`<div><b>${esc(c.certification_code)}</b> ${esc(c.name)}</div>`).join("");
+ {
+  const pathwayOrder=["BMT","SOC","MED","GUNNERY","ENGINEERING","PILOT"];
+  const pathwayLabels={
+    BMT:"BMT",
+    SOC:"SOC",
+    MED:"MED",
+    GUNNERY:"GUN",
+    ENGINEERING:"ENG",
+    PILOT:"PILOT"
+  };
+  const activeCodes=new Set(
+    certs.map(c=>String(c.certification_code||"").toUpperCase())
+  );
+  $("#pathways").innerHTML=pathwayOrder
+    .filter(code=>activeCodes.has(code))
+    .map(code=>`<div><b>${pathwayLabels[code]}</b></div>`)
+    .join("");
+ }
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
  const memberMap=new Map(members.map(x=>[x.user_id,x]));
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
