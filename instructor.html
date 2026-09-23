@@ -60,6 +60,302 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 @media(max-width:1200px){.member-overview-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.member-overview-grid{grid-template-columns:1fr}}
 
+
+
+/* =========================================================
+   INSTRUCTOR PANEL TABS
+========================================================= */
+
+.instructor-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:1px;
+
+  margin-bottom:18px;
+
+  border:
+    1px solid rgba(214,180,76,.46);
+
+  background:
+    rgba(214,180,76,.14);
+}
+
+.instructor-tab{
+  position:relative;
+
+  min-height:72px;
+
+  padding:13px 18px;
+
+  display:grid;
+  grid-template-columns:28px 1fr;
+  grid-template-rows:auto auto;
+
+  column-gap:10px;
+
+  align-items:center;
+
+  border:0;
+
+  background:
+    rgba(5,7,5,.98);
+
+  color:#8a8472;
+
+  font-family:inherit;
+
+  text-align:left;
+
+  cursor:pointer;
+}
+
+.instructor-tab + .instructor-tab{
+  border-left:
+    1px solid rgba(214,180,76,.18);
+}
+
+.instructor-tab i{
+  grid-row:1/3;
+
+  width:28px;
+
+  color:#6b6658;
+
+  font-size:15px;
+
+  text-align:center;
+}
+
+.instructor-tab span{
+  color:#b8b19c;
+
+  font-size:10px;
+  font-weight:700;
+
+  letter-spacing:.14em;
+}
+
+.instructor-tab small{
+  color:#5d594f;
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:.15em;
+}
+
+.instructor-tab:hover{
+  background:
+    rgba(240,210,112,.035);
+}
+
+.instructor-tab.active{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(240,210,112,.075),
+      rgba(240,210,112,.018)
+    ),
+    rgba(5,7,5,.98);
+
+  box-shadow:
+    inset 0 -2px 0 var(--gold);
+}
+
+.instructor-tab.active i,
+.instructor-tab.active span{
+  color:var(--gold);
+}
+
+.instructor-tab.active::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:18px;
+
+  width:64px;
+  height:2px;
+
+  background:
+    var(--gold);
+}
+
+.tab-page{
+  display:none;
+}
+
+.tab-page.active{
+  display:block;
+}
+
+.panel-subtitle{
+  margin-top:5px;
+
+  color:#625e52;
+
+  font-size:7px;
+
+  letter-spacing:.13em;
+}
+
+.overview-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+
+  gap:18px;
+}
+
+.action-page{
+  min-height:520px;
+}
+
+.action-page-head{
+  min-height:86px;
+
+  padding:18px 22px;
+
+  display:grid;
+  grid-template-columns:44px 1fr auto;
+
+  gap:15px;
+
+  align-items:center;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+}
+
+.action-page-icon{
+  width:42px;
+  height:42px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    1px solid rgba(214,180,76,.38);
+
+  color:var(--gold);
+
+  font-size:16px;
+}
+
+.action-page-copy{
+  margin-top:6px;
+
+  color:#777164;
+
+  font-size:8px;
+
+  letter-spacing:.12em;
+}
+
+.action-page-code{
+  color:#5c584d;
+
+  font-size:7px;
+
+  letter-spacing:.17em;
+
+  white-space:nowrap;
+}
+
+.signoff-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(360px,.8fr);
+
+  gap:26px;
+
+  max-width:1180px;
+
+  margin:0 auto;
+
+  padding-top:26px;
+  padding-bottom:30px;
+}
+
+.signoff-form{
+  padding-right:8px;
+}
+
+.assessment-panel{
+  padding:0 0 0 22px;
+
+  border-left:
+    1px solid rgba(214,180,76,.16);
+}
+
+.assessment-note{
+  margin:6px 0 15px;
+
+  color:#666155;
+
+  font-size:7px;
+
+  letter-spacing:.11em;
+}
+
+.assignment-panel.action-page{
+  margin-top:0;
+}
+
+.assignment-panel.action-page .assignment-layout{
+  max-width:1180px;
+
+  margin:0 auto;
+
+  padding-top:26px;
+  padding-bottom:30px;
+}
+
+@media(max-width:1100px){
+
+  .overview-grid{
+    grid-template-columns:1fr;
+  }
+
+  .signoff-layout{
+    grid-template-columns:1fr;
+  }
+
+  .assessment-panel{
+    padding-left:0;
+
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.16);
+
+    padding-top:22px;
+  }
+
+}
+
+@media(max-width:760px){
+
+  .instructor-tabs{
+    grid-template-columns:1fr;
+  }
+
+  .instructor-tab + .instructor-tab{
+    border-left:0;
+
+    border-top:
+      1px solid rgba(214,180,76,.16);
+  }
+
+  .action-page-head{
+    grid-template-columns:42px 1fr;
+  }
+
+  .action-page-code{
+    display:none;
+  }
+
+}
+
 </style>
 </head>
 <body>
@@ -77,121 +373,274 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </div></aside>
 <main><div class="container">
 <section class="frame hero"><div><div class="eyebrow">JMBN ACADEMY</div><h1>INSTRUCTOR PANEL</h1><div class="sub">TRAIN // ASSESS // CERTIFY // STRENGTHEN</div></div><div class="identity"><i class="fa-solid fa-user-shield"></i><div><strong id="instructorName">INSTRUCTOR</strong><span id="instructorRole">VERIFYING AUTHORISATION...</span></div></div></section>
-<section class="stats">
-<div class="frame stat"><div class="stat-label">YOUR AUTHORISATIONS</div><div class="stat-value" id="authCount">—</div><div class="stat-meta">PROGRAMMES</div></div>
-<div class="frame stat"><div class="stat-label">SIGN-OFFS</div><div class="stat-value" id="signoffCount">—</div><div class="stat-meta">ALL TIME</div></div>
-<div class="frame stat"><div class="stat-label">COMPLETED (30 DAYS)</div><div class="stat-value" id="recentCount">—</div><div class="stat-meta">APPROVED TRAINING</div></div>
-<div class="frame stat"><div class="stat-label">INSTRUCTED MEMBERS</div><div class="stat-value" id="memberCount">—</div><div class="stat-meta">UNIQUE TRAINEES</div></div>
-</section>
+<nav class="instructor-tabs" aria-label="Instructor panel sections">
+  <button class="instructor-tab active" type="button" data-tab="overview">
+    <i class="fa-solid fa-chart-line"></i>
+    <span>OVERVIEW</span>
+    <small>COMMAND SUMMARY</small>
+  </button>
 
-<section class="frame member-overview">
-  <div class="panel-head"><div class="section-title">MEMBER TRAINING OVERVIEW</div></div>
-  <div class="member-overview-grid">
+  <button class="instructor-tab" type="button" data-tab="signoff">
+    <i class="fa-solid fa-clipboard-check"></i>
+    <span>MEMBER SIGN-OFF</span>
+    <small>TRAINING APPROVAL</small>
+  </button>
 
-    <div class="overview-select">
-      <label>SELECT MEMBER</label>
-      <select id="overviewTrainee" class="control">
-        <option value="">SELECT MEMBER</option>
-      </select>
-      <div class="msg" id="overviewMessage">SELECT A MEMBER TO REVIEW THEIR ACADEMY PROGRESSION.</div>
+  <button class="instructor-tab" type="button" data-tab="specialisation">
+    <i class="fa-solid fa-route"></i>
+    <span>SPECIALISATION ACCESS</span>
+    <small>ASSIGN PATHWAY</small>
+  </button>
+</nav>
+
+
+<!-- =========================================================
+     TAB // OVERVIEW
+========================================================= -->
+
+<section class="tab-page active" id="tab-overview" data-tab-page="overview">
+
+  <section class="stats">
+    <div class="frame stat"><div class="stat-label">YOUR AUTHORISATIONS</div><div class="stat-value" id="authCount">—</div><div class="stat-meta">PROGRAMMES</div></div>
+    <div class="frame stat"><div class="stat-label">SIGN-OFFS</div><div class="stat-value" id="signoffCount">—</div><div class="stat-meta">ALL TIME</div></div>
+    <div class="frame stat"><div class="stat-label">COMPLETED (30 DAYS)</div><div class="stat-value" id="recentCount">—</div><div class="stat-meta">APPROVED TRAINING</div></div>
+    <div class="frame stat"><div class="stat-label">INSTRUCTED MEMBERS</div><div class="stat-value" id="memberCount">—</div><div class="stat-meta">UNIQUE TRAINEES</div></div>
+  </section>
+
+  <section class="frame member-overview">
+    <div class="panel-head">
+      <div>
+        <div class="section-title">MEMBER TRAINING OVERVIEW</div>
+        <div class="panel-subtitle">SELECT A MEMBER TO REVIEW CORE TRAINING AND ASSIGNED SPECIALISATION.</div>
+      </div>
     </div>
 
-    <div class="overview-card" id="overviewBmtCard">
-      <div class="overview-kicker">CORE TRAINING // 01</div>
-      <div class="overview-value" id="overviewBmt">BMT —</div>
-      <div class="overview-meta" id="overviewBmtMeta">NO MEMBER SELECTED</div>
+    <div class="member-overview-grid">
+
+      <div class="overview-select">
+        <label>SELECT MEMBER</label>
+        <select id="overviewTrainee" class="control">
+          <option value="">SELECT MEMBER</option>
+        </select>
+        <div class="msg" id="overviewMessage">SELECT A MEMBER TO REVIEW THEIR ACADEMY PROGRESSION.</div>
+      </div>
+
+      <div class="overview-card" id="overviewBmtCard">
+        <div class="overview-kicker">CORE TRAINING // 01</div>
+        <div class="overview-value" id="overviewBmt">BMT —</div>
+        <div class="overview-meta" id="overviewBmtMeta">NO MEMBER SELECTED</div>
+      </div>
+
+      <div class="overview-card" id="overviewSocCard">
+        <div class="overview-kicker">CORE TRAINING // 02</div>
+        <div class="overview-value" id="overviewSoc">SOC —</div>
+        <div class="overview-meta" id="overviewSocMeta">NO MEMBER SELECTED</div>
+      </div>
+
+      <div class="overview-card" id="overviewSpecCard">
+        <div class="overview-kicker">SPECIALISATION</div>
+        <div class="overview-value" id="overviewSpec">—</div>
+        <div class="overview-meta" id="overviewSpecMeta">AWAITING MEMBER SELECTION</div>
+      </div>
+
     </div>
+  </section>
 
-    <div class="overview-card" id="overviewSocCard">
-      <div class="overview-kicker">CORE TRAINING // 02</div>
-      <div class="overview-value" id="overviewSoc">SOC —</div>
-      <div class="overview-meta" id="overviewSocMeta">NO MEMBER SELECTED</div>
-    </div>
+  <div class="overview-grid">
 
-    <div class="overview-card" id="overviewSpecCard">
-      <div class="overview-kicker">SPECIALISATION</div>
-      <div class="overview-value" id="overviewSpec">—</div>
-      <div class="overview-meta" id="overviewSpecMeta">AWAITING MEMBER SELECTION</div>
-    </div>
-
-  </div>
-</section>
-
-<div class="grid">
-<div class="stack">
-<section class="frame"><div class="panel-head"><div class="section-title">YOUR AUTHORISATIONS</div></div><div class="panel-body table-wrap"><table class="table"><thead><tr><th>PROGRAMME</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead><tbody id="authRows"></tbody></table></div></section>
-<section class="frame"><div class="panel-head"><div class="section-title">RECENT SIGN-OFFS</div></div><div class="panel-body table-wrap"><table class="table"><thead><tr><th>MEMBER</th><th>PROGRAMME</th><th>MODULE</th><th>STATUS</th><th>DATE</th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
-</div>
-<section class="frame"><div class="panel-head"><div class="section-title">TRAINING SIGN-OFF</div></div><div class="panel-body">
-<label>SELECT MEMBER</label><select id="trainee" class="control"><option value="">SELECT TRAINEE</option></select>
-<label>PROGRAMME</label><select id="programme" class="control"><option value="">SELECT PROGRAMME</option></select>
-<label>MODULE / TRAINING EVENT</label><select id="event" class="control"><option value="">SELECT MODULE</option></select>
-<div class="assessment"><div class="section-title">PRACTICAL ASSESSMENT</div>
-<label class="check"><input type="checkbox" class="criteria"> Required practical objectives demonstrated</label>
-<label class="check"><input type="checkbox" class="criteria"> Correct equipment / loadout / procedure used</label>
-<label class="check"><input type="checkbox" class="criteria"> Instructor questions answered satisfactorily</label>
-<label class="check"><input type="checkbox" class="criteria"> Safety and JMBN operating standards followed</label>
-</div>
-<label>INSTRUCTOR NOTES</label><textarea id="notes" class="control" placeholder="Performance, strengths, retraining points, or assessment notes..."></textarea>
-<div class="actions"><button class="btn red" id="retrain"><i class="fa-solid fa-rotate-right"></i> NEEDS RETRAINING</button><button class="btn" id="approve"><i class="fa-solid fa-check"></i> SIGN OFF TRAINING</button></div>
-<div class="msg" id="message"></div>
-</div></section>
-</div>
-
-<section class="frame assignment-panel">
-  <div class="panel-head">
-    <div class="section-title">SPECIALISATION ASSIGNMENT</div>
-  </div>
-  <div class="panel-body assignment-layout">
-
-    <div>
-      <label>SELECT MEMBER</label>
-      <select id="pathTrainee" class="control">
-        <option value="">SELECT MEMBER</option>
-      </select>
-
-      <div class="assignment-current">
-        <div class="assignment-kicker">CURRENT ASSIGNED PATH</div>
-        <div class="assignment-code" id="pathCurrentCode">—</div>
-        <div class="assignment-name" id="pathCurrentName">NO MEMBER SELECTED</div>
-        <div class="assignment-meta" id="pathCurrentMeta">
-          SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.
+    <section class="frame">
+      <div class="panel-head">
+        <div>
+          <div class="section-title">YOUR AUTHORISATIONS</div>
+          <div class="panel-subtitle">PROGRAMMES YOU MAY CONDUCT AND SIGN OFF.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <label>ASSIGN SPECIALISATION</label>
-      <select id="pathCode" class="control">
-        <option value="">SELECT SPECIALISATION</option>
-        <option value="MED">MED — MEDICAL</option>
-        <option value="GUNNERY">GUNNERY</option>
-        <option value="ENGINEERING">ENGINEERING</option>
-      </select>
-
-      <label>ASSIGNMENT NOTES</label>
-      <textarea
-        id="pathNotes"
-        class="control"
-        placeholder="Optional reason, instructor guidance, or pathway notes..."
-      ></textarea>
-
-      <div class="assignment-actions">
-        <button class="btn clear-path" id="clearPath">
-          <i class="fa-solid fa-xmark"></i>
-          CLEAR PATH
-        </button>
-
-        <button class="btn" id="assignPath" disabled>
-          <i class="fa-solid fa-route"></i>
-          ASSIGN PATH
-        </button>
+      <div class="panel-body table-wrap">
+        <table class="table">
+          <thead><tr><th>PROGRAMME</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead>
+          <tbody id="authRows"></tbody>
+        </table>
       </div>
+    </section>
 
-      <div class="msg" id="pathMessage"></div>
-    </div>
+    <section class="frame">
+      <div class="panel-head">
+        <div>
+          <div class="section-title">RECENT SIGN-OFFS</div>
+          <div class="panel-subtitle">LATEST TRAINING DECISIONS RECORDED BY THIS INSTRUCTOR.</div>
+        </div>
+      </div>
+      <div class="panel-body table-wrap">
+        <table class="table">
+          <thead><tr><th>MEMBER</th><th>PROGRAMME</th><th>MODULE</th><th>STATUS</th><th>DATE</th></tr></thead>
+          <tbody id="recentRows"></tbody>
+        </table>
+      </div>
+    </section>
 
   </div>
+
+</section>
+
+
+<!-- =========================================================
+     TAB // MEMBER SIGN-OFF
+========================================================= -->
+
+<section class="tab-page" id="tab-signoff" data-tab-page="signoff">
+
+  <section class="frame action-page">
+
+    <div class="action-page-head">
+      <div class="action-page-icon">
+        <i class="fa-solid fa-clipboard-check"></i>
+      </div>
+      <div>
+        <div class="section-title">MEMBER TRAINING SIGN-OFF</div>
+        <div class="action-page-copy">
+          RECORD AN APPROVED TRAINING EVENT OR RETURN A MEMBER FOR RETRAINING.
+        </div>
+      </div>
+      <div class="action-page-code">INSTRUCTOR // ASSESSMENT</div>
+    </div>
+
+    <div class="panel-body signoff-layout">
+
+      <div class="signoff-form">
+
+        <label>SELECT MEMBER</label>
+        <select id="trainee" class="control">
+          <option value="">SELECT TRAINEE</option>
+        </select>
+
+        <label>PROGRAMME</label>
+        <select id="programme" class="control">
+          <option value="">SELECT PROGRAMME</option>
+        </select>
+
+        <label>MODULE / TRAINING EVENT</label>
+        <select id="event" class="control">
+          <option value="">SELECT MODULE</option>
+        </select>
+
+        <label>INSTRUCTOR NOTES</label>
+        <textarea id="notes" class="control" placeholder="Performance, strengths, retraining points, or assessment notes..."></textarea>
+
+      </div>
+
+      <div class="assessment-panel">
+
+        <div class="assessment">
+          <div class="section-title">PRACTICAL ASSESSMENT</div>
+          <div class="assessment-note">ALL CHECKS ARE REQUIRED BEFORE AN APPROVED SIGN-OFF.</div>
+
+          <label class="check"><input type="checkbox" class="criteria"> Required practical objectives demonstrated</label>
+          <label class="check"><input type="checkbox" class="criteria"> Correct equipment / loadout / procedure used</label>
+          <label class="check"><input type="checkbox" class="criteria"> Instructor questions answered satisfactorily</label>
+          <label class="check"><input type="checkbox" class="criteria"> Safety and JMBN operating standards followed</label>
+        </div>
+
+        <div class="actions">
+          <button class="btn red" id="retrain">
+            <i class="fa-solid fa-rotate-right"></i>
+            NEEDS RETRAINING
+          </button>
+
+          <button class="btn" id="approve">
+            <i class="fa-solid fa-check"></i>
+            SIGN OFF TRAINING
+          </button>
+        </div>
+
+        <div class="msg" id="message"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- =========================================================
+     TAB // SPECIALISATION ACCESS
+========================================================= -->
+
+<section class="tab-page" id="tab-specialisation" data-tab-page="specialisation">
+
+  <section class="frame assignment-panel action-page">
+
+    <div class="action-page-head">
+      <div class="action-page-icon">
+        <i class="fa-solid fa-route"></i>
+      </div>
+      <div>
+        <div class="section-title">SPECIALISATION ACCESS</div>
+        <div class="action-page-copy">
+          ASSIGN OR CHANGE A MEMBER'S ACADEMY SPECIALISATION AFTER CORE TRAINING.
+        </div>
+      </div>
+      <div class="action-page-code">INSTRUCTOR // PATHWAY CONTROL</div>
+    </div>
+
+    <div class="panel-body assignment-layout">
+
+      <div>
+
+        <label>SELECT MEMBER</label>
+        <select id="pathTrainee" class="control">
+          <option value="">SELECT MEMBER</option>
+        </select>
+
+        <div class="assignment-current">
+          <div class="assignment-kicker">CURRENT ASSIGNED PATH</div>
+          <div class="assignment-code" id="pathCurrentCode">—</div>
+          <div class="assignment-name" id="pathCurrentName">NO MEMBER SELECTED</div>
+          <div class="assignment-meta" id="pathCurrentMeta">
+            SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+
+        <label>ASSIGN SPECIALISATION</label>
+        <select id="pathCode" class="control">
+          <option value="">SELECT SPECIALISATION</option>
+          <option value="MED">MED — MEDICAL</option>
+          <option value="GUNNERY">GUNNERY</option>
+          <option value="ENGINEERING">ENGINEERING</option>
+        </select>
+
+        <label>ASSIGNMENT NOTES</label>
+        <textarea
+          id="pathNotes"
+          class="control"
+          placeholder="Optional reason, instructor guidance, or pathway notes..."
+        ></textarea>
+
+        <div class="assignment-actions">
+          <button class="btn clear-path" id="clearPath">
+            <i class="fa-solid fa-xmark"></i>
+            CLEAR PATH
+          </button>
+
+          <button class="btn" id="assignPath" disabled>
+            <i class="fa-solid fa-route"></i>
+            ASSIGN PATH
+          </button>
+        </div>
+
+        <div class="msg" id="pathMessage"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
 </section>
 
 <footer class="footer"><span>JMBN ACADEMY // INSTRUCTOR PANEL</span><span>● SYSTEMS ONLINE</span></footer>
@@ -432,7 +881,113 @@ async function sign(status){
 }
 $("#approve").addEventListener("click",()=>sign("approved"));$("#retrain").addEventListener("click",()=>sign("retraining"));
 $("#menu").addEventListener("click",()=>document.body.classList.toggle("sidebar-open"));
-document.addEventListener("DOMContentLoaded",async()=>{try{const session=await requireAuth();if(!session)return;sb=getSupabase();me=session.user.id;if(await verifyAccess())await load()}catch(e){console.error(e);$("#message").classList.add("bad");$("#message").textContent="INSTRUCTOR NETWORK CONNECTION FAILED."}});
+
+function activateInstructorTab(name,updateHash=true){
+
+ const valid=
+  ["overview","signoff","specialisation"];
+
+ const next=
+  valid.includes(name)
+  ?
+  name
+  :
+  "overview";
+
+ document
+  .querySelectorAll(".instructor-tab")
+  .forEach(button=>{
+   button.classList.toggle(
+    "active",
+    button.dataset.tab===next
+   );
+  });
+
+ document
+  .querySelectorAll(".tab-page")
+  .forEach(page=>{
+   page.classList.toggle(
+    "active",
+    page.dataset.tabPage===next
+   );
+  });
+
+ if(updateHash){
+  const hash=
+   next==="overview"
+   ?
+   "#overview"
+   :
+   next==="signoff"
+   ?
+   "#member-signoff"
+   :
+   "#specialisation-access";
+
+  if(location.hash!==hash){
+   history.replaceState(
+    null,
+    "",
+    hash
+   );
+  }
+ }
+}
+
+document
+ .querySelectorAll(".instructor-tab")
+ .forEach(button=>{
+  button.addEventListener(
+   "click",
+   ()=>activateInstructorTab(
+    button.dataset.tab
+   )
+  );
+ });
+
+window.addEventListener(
+ "hashchange",
+ ()=>{
+  const hash=
+   location.hash
+    .replace("#","")
+    .toLowerCase();
+
+  activateInstructorTab(
+   hash==="member-signoff"
+   ?
+   "signoff"
+   :
+   hash==="specialisation-access"
+   ?
+   "specialisation"
+   :
+   "overview",
+   false
+  );
+ }
+);
+
+document.addEventListener("DOMContentLoaded",async()=>{
+ const initialHash=
+  location.hash
+   .replace("#","")
+   .toLowerCase();
+
+ activateInstructorTab(
+  initialHash==="member-signoff"
+  ?
+  "signoff"
+  :
+  initialHash==="specialisation-access"
+  ?
+  "specialisation"
+  :
+  "overview",
+  false
+ );
+
+ try{const session=await requireAuth();if(!session)return;sb=getSupabase();me=session.user.id;if(await verifyAccess())await load()}catch(e){console.error(e);$("#message").classList.add("bad");$("#message").textContent="INSTRUCTOR NETWORK CONNECTION FAILED."}});
 </script>
 </body>
 </html>
