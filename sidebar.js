@@ -67,6 +67,27 @@ function currentProgrammeCode(){
   return map[file]||null;
 }
 
+
+function revealStaffSectionForStaffPages(){
+  const file=currentFile();
+
+  if(
+    file!=="instructor.html" &&
+    file!=="academy-log.html"
+  ){
+    return;
+  }
+
+  const staffNav=
+    document.getElementById(
+      "academyStaffNav"
+    );
+
+  if(staffNav){
+    staffNav.hidden=false;
+  }
+}
+
 function setRoutes(){
   document
     .querySelectorAll(".shared-academy-sidebar [data-route]")
@@ -385,6 +406,7 @@ async function init(){
     mount.innerHTML=await response.text();
 
     setRoutes();
+    revealStaffSectionForStaffPages();
     applyActiveNav();
     await hydrateSidebar();
 
