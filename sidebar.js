@@ -20,7 +20,7 @@ const corePathwayOrder=[
   "SOC"
 ];
 
-const optionalPathwayOrder=[
+const supportPathwayOrder=[
   "MED",
   "LOG",
   "MIN"
@@ -28,8 +28,7 @@ const optionalPathwayOrder=[
 
 const specialisationPathwayOrder=[
   "GUNNERY",
-  "ENGINEERING",
-  "PILOT"
+  "ENGINEERING"
 ];
 
 const routeByCode={
@@ -318,7 +317,7 @@ function renderProgrammes(programmes,context={}){
 
   renderProgrammeGroup(
     "sharedOptionalProgrammeNav",
-    optionalPathwayOrder,
+    supportPathwayOrder,
     programmes,
     context
   );
