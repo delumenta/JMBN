@@ -2883,8 +2883,18 @@ a.academy-path-card:hover{
     rgba(240,210,112,.54);
 }
 
-.academy-path-card.unavailable{
-  opacity:.62;
+.academy-path-card.unavailable,
+.academy-path-card.locked{
+  opacity:.58;
+}
+
+.academy-path-card.locked{
+  border-style:dashed;
+}
+
+.academy-path-card.assigned{
+  border-color:
+    rgba(240,210,112,.54);
 }
 
 .path-card-head{
@@ -2950,6 +2960,7 @@ a.academy-path-card:hover{
 }
 
 .academy-path-card.progress .path-status,
+.academy-path-card.assigned .path-status,
 .specialisation-assigned .path-status{
   color:var(--gold);
 }
@@ -3172,6 +3183,12 @@ a.academy-path-card:hover{
   }
 }
 
+
+.record-value-wide{
+  font-size:18px !important;
+  letter-spacing:.04em;
+  line-height:1.1;
+}
 </style>
 
 </head>
@@ -3639,20 +3656,23 @@ a.academy-path-card:hover{
     <div class="record-item">
 
       <div class="record-icon">
-        <i class="fa-solid fa-layer-group"></i>
+        <i class="fa-solid fa-shield-halved"></i>
       </div>
 
       <div>
 
         <div
-          class="record-value"
-          id="programmeCount"
+          class="record-value record-value-wide"
+          id="coreStatusValue"
         >
           —
         </div>
 
-        <div class="record-label">
-          PROGRAMMES<br>AVAILABLE
+        <div
+          class="record-label"
+          id="coreStatusMeta"
+        >
+          CORE STATUS
         </div>
 
       </div>
@@ -3663,20 +3683,23 @@ a.academy-path-card:hover{
     <div class="record-item">
 
       <div class="record-icon">
-        <i class="fa-solid fa-person-running"></i>
+        <i class="fa-solid fa-route"></i>
       </div>
 
       <div>
 
         <div
-          class="record-value"
-          id="trainingCount"
+          class="record-value record-value-wide"
+          id="assignedPathValue"
         >
           —
         </div>
 
-        <div class="record-label">
-          PROGRAMMES<br>IN TRAINING
+        <div
+          class="record-label"
+          id="assignedPathMeta"
+        >
+          ASSIGNED PATH
         </div>
 
       </div>
@@ -3872,13 +3895,22 @@ function formatDate(value){
 
 function getProgrammeUrl(code){
 
-  return (
-    "AP/" +
-    encodeURIComponent(
-      String(code || "").toLowerCase()
-    ) +
-    ".html"
-  );
+  const key =
+    String(code || "")
+      .toUpperCase();
+
+  const aliases = {
+    GUNNERY:"gun",
+    ENGINEERING:"eng"
+  };
+
+  const slug =
+    aliases[key] ||
+    key.toLowerCase();
+
+  return "AP/" +
+    encodeURIComponent(slug) +
+    ".html";
 
 }
 
@@ -4226,7 +4258,10 @@ function buildProgrammeData(){
     new Set(
       myCertifications.map(
         row =>
-          row.certification_code
+          String(
+            row.certification_code ||
+            ""
+          ).toUpperCase()
       )
     );
 
@@ -4240,7 +4275,41 @@ function buildProgrammeData(){
     );
 
 
+  const bmtCertified =
+    completedCertCodes.has(
+      "BMT"
+    );
+
+
+  const socCertified =
+    completedCertCodes.has(
+      "SOC"
+    );
+
+
+  const assignedCode =
+    String(
+      mySpecialisation
+        ?.specialisation_code ||
+      ""
+    ).toUpperCase();
+
+
+  const specialisations =
+    new Set([
+      "MED",
+      "GUNNERY",
+      "ENGINEERING"
+    ]);
+
+
   return certifications.map(cert=>{
+
+    const code =
+      String(
+        cert.certification_code ||
+        ""
+      ).toUpperCase();
 
 
     const certRequirements =
@@ -4277,7 +4346,7 @@ function buildProgrammeData(){
 
     const certified =
       completedCertCodes.has(
-        cert.certification_code
+        code
       );
 
 
@@ -4297,10 +4366,6 @@ function buildProgrammeData(){
     }
 
 
-    /*
-      Certification award is authoritative.
-    */
-
     if(certified){
 
       percent = 100;
@@ -4319,10 +4384,44 @@ function buildProgrammeData(){
 
     }
 
+    else if(
+      code === "SOC" &&
+      !bmtCertified
+    ){
+
+      status =
+        "locked";
+
+    }
+
+    else if(
+      specialisations.has(code) &&
+      (
+        !bmtCertified ||
+        !socCertified ||
+        assignedCode !== code
+      )
+    ){
+
+      status =
+        "locked";
+
+    }
+
     else if(completed > 0){
 
       status =
         "progress";
+
+    }
+
+    else if(
+      specialisations.has(code) &&
+      assignedCode === code
+    ){
+
+      status =
+        "assigned";
 
     }
 
@@ -4788,6 +4887,14 @@ function renderTrainingPath(programmes){
         ?
         "IN TRAINING"
         :
+        programme.status === "locked"
+        ?
+        "LOCKED"
+        :
+        programme.status === "assigned"
+        ?
+        "ASSIGNED"
+        :
         "AVAILABLE";
 
 
@@ -4871,7 +4978,10 @@ function renderTrainingPath(programmes){
       `;
 
 
-      if(programme){
+      if(
+        programme &&
+        programme.status !== "locked"
+      ){
 
         return `
 
@@ -4883,6 +4993,22 @@ function renderTrainingPath(programmes){
           >
             ${body}
           </a>
+
+        `;
+
+      }
+
+
+      if(programme){
+
+        return `
+
+          <div
+            class="academy-path-card locked"
+            aria-disabled="true"
+          >
+            ${body}
+          </div>
 
         `;
 
@@ -5133,67 +5259,112 @@ function renderTrainingPath(programmes){
 
 function renderStats(programmes){
 
-  const relevantCodes =
-    new Set([
-      "BMT",
-      "SOC",
-      "MED",
-      "GUN",
-      "GUNNERY",
-      "ENG",
-      "ENGINEERING"
-    ]);
-
-
-  const relevant =
-    programmes.filter(
-      programme =>
-        relevantCodes.has(
-          String(
-            programme.certification_code ||
-            ""
-          ).toUpperCase()
-        )
+  const bmt =
+    getProgrammeByCode(
+      programmes,
+      "BMT"
     );
 
+  const soc =
+    getProgrammeByCode(
+      programmes,
+      "SOC"
+    );
 
-  const available =
-    relevant.filter(
-      programme =>
-        !programme.certified
-    ).length;
+  const coreValue =
+    $("#coreStatusValue");
+
+  const coreMeta =
+    $("#coreStatusMeta");
+
+  if(
+    bmt?.certified &&
+    soc?.certified
+  ){
+
+    coreValue.textContent =
+      "COMPLETE";
+
+    coreValue.style.color =
+      "var(--green)";
+
+    coreMeta.innerHTML =
+      "BMT ✓ &nbsp;·&nbsp; SOC ✓";
+
+  }
+
+  else if(
+    bmt?.certified
+  ){
+
+    coreValue.textContent =
+      "1 / 2";
+
+    coreValue.style.color =
+      "var(--gold)";
+
+    coreMeta.innerHTML =
+      "BMT ✓ &nbsp;·&nbsp; SOC REQUIRED";
+
+  }
+
+  else{
+
+    coreValue.textContent =
+      "0 / 2";
+
+    coreValue.style.color =
+      "";
+
+    coreMeta.innerHTML =
+      "BMT REQUIRED &nbsp;·&nbsp; SOC LOCKED";
+
+  }
 
 
-  const inTraining =
-    relevant.filter(
-      programme =>
-        programme.status ===
-        "progress"
-    ).length;
+  const pathValue =
+    $("#assignedPathValue");
+
+  const pathMeta =
+    $("#assignedPathMeta");
 
 
-  const earned =
-    myCertifications.filter(
-      row =>
-        relevantCodes.has(
-          String(
-            row.certification_code ||
-            ""
-          ).toUpperCase()
-        )
-    ).length;
+  if(mySpecialisation){
 
+    pathValue.textContent =
+      specialisationLabel(
+        mySpecialisation
+          .specialisation_code
+      );
 
-  $("#programmeCount").textContent =
-    available;
+    pathValue.style.color =
+      "var(--gold)";
 
+    pathMeta.innerHTML =
+      "ASSIGNED SPECIALISATION";
 
-  $("#trainingCount").textContent =
-    inTraining;
+  }
+
+  else{
+
+    pathValue.textContent =
+      "—";
+
+    pathValue.style.color =
+      "";
+
+    pathMeta.innerHTML =
+      soc?.certified
+      ?
+      "AWAITING INSTRUCTOR ASSIGNMENT"
+      :
+      "AVAILABLE AFTER SOC";
+
+  }
 
 
   $("#certificationCount").textContent =
-    earned;
+    myCertifications.length;
 
 
   $("#eventCount").textContent =
@@ -5217,9 +5388,7 @@ function renderSidebar(programmes){
     host.innerHTML = `
 
       <div class="nav-item">
-
         NO PROGRAMMES
-
       </div>
 
     `;
@@ -5229,37 +5398,216 @@ function renderSidebar(programmes){
   }
 
 
+  const bmtCertified =
+    !!getProgrammeByCode(
+      programmes,
+      "BMT"
+    )?.certified;
+
+
+  const socCertified =
+    !!getProgrammeByCode(
+      programmes,
+      "SOC"
+    )?.certified;
+
+
+  const assignment =
+    String(
+      mySpecialisation
+        ?.specialisation_code ||
+      ""
+    ).toUpperCase();
+
+
   host.innerHTML =
     programmes
 
+      .filter(programme=>
+        [
+          "BMT",
+          "SOC",
+          "MED",
+          "GUNNERY",
+          "ENGINEERING",
+          "PILOT"
+        ].includes(
+          String(
+            programme.certification_code ||
+            ""
+          ).toUpperCase()
+        )
+      )
+
       .map(programme=>{
+
+        const code =
+          String(
+            programme.certification_code ||
+            ""
+          ).toUpperCase();
 
 
         const icon =
-          getProgrammeIcon(
-            programme.certification_code
-          );
+          getProgrammeIcon(code);
 
 
-        return `
+        let locked = false;
+        let state = "";
 
+
+        if(code === "BMT"){
+
+          state =
+            programme.certified
+            ?
+            "CERTIFIED"
+            :
+            programme.status === "progress"
+            ?
+            "IN TRAINING"
+            :
+            "AVAILABLE";
+
+        }
+
+        else if(code === "SOC"){
+
+          locked =
+            !bmtCertified &&
+            !programme.certified;
+
+          state =
+            programme.certified
+            ?
+            "CERTIFIED"
+            :
+            locked
+            ?
+            "LOCKED"
+            :
+            programme.status === "progress"
+            ?
+            "IN TRAINING"
+            :
+            "AVAILABLE";
+
+        }
+
+        else if(
+          [
+            "MED",
+            "GUNNERY",
+            "ENGINEERING"
+          ].includes(code)
+        ){
+
+          const assigned =
+            assignment === code;
+
+
+          locked =
+            !programme.certified &&
+            (
+              !socCertified ||
+              !assigned
+            );
+
+
+          state =
+            programme.certified
+            ?
+            "CERTIFIED"
+            :
+            locked
+            ?
+            "LOCKED"
+            :
+            programme.status === "progress"
+            ?
+            "IN TRAINING"
+            :
+            "ASSIGNED";
+
+        }
+
+        else{
+
+          state =
+            programme.certified
+            ?
+            "CERTIFIED"
+            :
+            programme.status === "progress"
+            ?
+            "IN TRAINING"
+            :
+            "AVAILABLE";
+
+        }
+
+
+        const inner = `
+
+          <i
+            class="fa-solid ${
+              locked
+              ?
+              "fa-lock"
+              :
+              icon
+            }"
+          ></i>
+
+          <span>
+            ${escapeHtml(code)}
+          </span>
+
+          <small
+            style="
+              margin-left:auto;
+              color:${
+                state === "CERTIFIED"
+                ?
+                "var(--green)"
+                :
+                state === "ASSIGNED" ||
+                state === "IN TRAINING"
+                ?
+                "var(--gold)"
+                :
+                "#666257"
+              };
+              font-size:7px;
+              letter-spacing:.12em;
+            "
+          >
+            ${state}
+          </small>
+
+        `;
+
+
+        return locked
+        ?
+        `
+          <div
+            class="nav-item"
+            aria-disabled="true"
+            title="Programme access is locked by Academy progression."
+            style="opacity:.58;cursor:not-allowed"
+          >
+            ${inner}
+          </div>
+        `
+        :
+        `
           <a
             class="nav-item"
-            href="${getProgrammeUrl(
-              programme.certification_code
-            )}"
+            href="${getProgrammeUrl(code)}"
           >
-
-            <i
-              class="fa-solid ${icon}"
-            ></i>
-
-            ${escapeHtml(
-              programme.certification_code
-            )}
-
+            ${inner}
           </a>
-
         `;
 
       })
