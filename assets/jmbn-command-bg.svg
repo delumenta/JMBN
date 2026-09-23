@@ -29,16 +29,16 @@
       <path d="M0 7.5H8" stroke="#fff" stroke-opacity=".012" stroke-width=".6"/>
     </pattern>
     <style>
-      .g{fill:none;stroke:#9a8031;stroke-linejoin:miter;stroke-linecap:square}
-      .major{stroke-opacity:.34;stroke-width:1.25}
-      .minor{stroke-opacity:.19;stroke-width:.82}
-      .micro{stroke-opacity:.10;stroke-width:.62}
-      .tick{fill:#9a8031;fill-opacity:.36}
-      .cross{stroke:#9a8031;stroke-opacity:.29;stroke-width:1}
-      .txt{fill:#a48835;font-family:monospace;letter-spacing:3px}
-      .t1{font-size:14px;font-weight:700;fill-opacity:.42}
-      .t2{font-size:10px;font-weight:700;fill-opacity:.33}
-      .t3{font-size:9px;fill-opacity:.25}
+      .g{fill:none;stroke:#776323;stroke-linejoin:miter;stroke-linecap:square}
+      .major{stroke-opacity:.22;stroke-width:1.25}
+      .minor{stroke-opacity:.12;stroke-width:.82}
+      .micro{stroke-opacity:.06;stroke-width:.62}
+      .tick{fill:#776323;fill-opacity:.24}
+      .cross{stroke:#776323;stroke-opacity:.18;stroke-width:1}
+      .txt{fill:#806b29;font-family:monospace;letter-spacing:3px}
+      .t1{font-size:14px;font-weight:700;fill-opacity:.32}
+      .t2{font-size:10px;font-weight:700;fill-opacity:.25}
+      .t3{font-size:9px;fill-opacity:.18}
     </style>
   </defs>
 
