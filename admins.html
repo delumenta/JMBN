@@ -1172,19 +1172,20 @@ async function loadTimeline(uid, certCode){
       </div>
       <div>
         ${ok
-          ? `<button class="btn-danger" data-remove="${r.event_code}" type="button">Remove</button>`
-          : `<button class="btn-ok" data-add="${r.event_code}" type="button">Grant</button>`}
+          ? `<button class="btn-danger" data-remove="${r.event_code}" type="button">Revoke Sign-Off</button>`
+          : `<button class="btn-ok" data-add="${r.event_code}" type="button">Sign Off</button>`}
       </div>`
     tl.appendChild(row)
   })
 
   tl.querySelectorAll('button[data-add]').forEach(b => {
     b.onclick = async () => {
-      const { error } = await sb.rpc('admin_grant_training_event', {
+      const { error } = await sb.rpc('academy_signoff_training', {
         p_trainee: uid,
         p_event_code: b.dataset.add,
         p_certification_code: certCode,
-        p_notes: 'Administrative grant'
+        p_status: 'approved',
+        p_notes: 'Administrative sign-off'
       })
       if(error) return alert('Grant failed: ' + error.message)
       await Promise.all([loadTimeline(uid, certCode), loadProgress(uid)])
