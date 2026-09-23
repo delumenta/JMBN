@@ -66,7 +66,7 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
     <a class="crumb" href="../programmes.html">‹ BACK TO CERTIFICATIONS　›　AP-ENG</a>
     <h1>ENG</h1>
     <h2>JCS FLEET ENGINEER CERTIFICATION</h2>
-    <p>Instructor-assigned specialisation covering fleet engineering, ship systems support and JCS technical procedures. Certification modules are currently pending and will be added next.</p>
+    <p>Exclusive instructor-assigned Specialisation Pathway covering fleet engineering, ship systems support and JCS technical procedures. A member may hold ENGINEERING or GUNNERY as the active specialisation, not both.</p>
   </div>
   <div class="hero-art" role="img" aria-label="JCS Fleet Engineer Certification"></div>
 </section>
@@ -74,7 +74,7 @@ main{min-width:0;padding:28px 30px 48px}.container{max-width:1450px;margin:auto}
 <section class="frame summary">
   <div class="cell"><div class="label">CERTIFICATION STATUS</div><div class="value" id="programmeStatus">VERIFYING</div></div>
   <div class="cell"><div class="label">TRAINING PROGRESS</div><div class="value" id="progressText">—</div></div>
-  <div class="cell"><div class="label">ACADEMY PATH</div><div class="value" id="pathStatus">SPECIALISATION</div></div>
+  <div class="cell"><div class="label">ACADEMY PATH</div><div class="value" id="pathStatus">SPECIALISATION PATHWAY</div></div>
 </section>
 
 <section class="frame">
@@ -105,7 +105,7 @@ const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replac
 function accessReason(reason,assigned){
   switch(reason){
     case "BMT_REQUIRED":return "Complete BMT before entering SOC.";
-    case "SOC_REQUIRED":return "Complete SOC before entering a specialisation certification.";
+    case "SOC_REQUIRED":return "Complete SOC before entering a Specialisation Pathway.";
     case "SPECIALISATION_NOT_ASSIGNED":return "Your specialisation has not yet been assigned by a JMBN Academy instructor.";
     case "DIFFERENT_SPECIALISATION_ASSIGNED":return "Your assigned specialisation is "+(assigned||"another pathway")+".";
     default:return "This certification is not currently available to your Academy record.";
