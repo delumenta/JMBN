@@ -2823,17 +2823,43 @@ body::before{
   display:grid;
 
   grid-template-columns:
-    minmax(0,1fr)
+    minmax(0,.82fr)
     42px
-    minmax(0,1fr)
+    minmax(0,.82fr)
     42px
-    minmax(0,.92fr)
-    42px
-    minmax(0,1fr);
+    minmax(0,1.9fr);
 
   align-items:stretch;
 
   gap:0;
+}
+
+.post-soc-pathways{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  min-width:0;
+}
+
+.pathway-branch{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.branch-label{
+  min-height:14px;
+  color:#6f6a5b;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.pathway-branch .academy-path-card{
+  flex:1;
 }
 
 .academy-path-card{
@@ -3111,6 +3137,14 @@ a.academy-path-card:hover{
   font-weight:700;
   letter-spacing:.12em;
   text-align:center;
+  text-decoration:none;
+  transition:border-color .15s ease,color .15s ease,background .15s ease;
+}
+
+.optional-choice:hover{
+  color:var(--gold);
+  border-color:rgba(240,210,112,.62);
+  background:rgba(240,210,112,.035);
 }
 
 .optional-or{
@@ -3147,10 +3181,21 @@ a.academy-path-card:hover{
   text-transform:uppercase;
 }
 
+@media(max-width:900px) and (min-width:561px){
+  .post-soc-pathways{
+    grid-template-columns:1fr;
+  }
+}
+
 @media(max-width:560px){
 
   .academy-path-sequence{
     grid-template-columns:1fr;
+  }
+
+  .post-soc-pathways{
+    grid-template-columns:1fr;
+    gap:16px;
   }
 
   .sequence-arrow{
@@ -3200,19 +3245,17 @@ a.academy-path-card:hover{
 
 
 
-/* Desktop Academy path is intentionally horizontal:
-   BMT → SOC → Instructor-assigned specialisation. */
+/* Desktop Academy path:
+   BMT → SOC → Support Pathways + one active Specialisation Pathway. */
 @media(min-width:561px){
   #academyPath .academy-path-sequence{
     display:grid !important;
     grid-template-columns:
-      minmax(0,1fr)
+      minmax(0,.82fr)
       42px
-      minmax(0,1fr)
+      minmax(0,.82fr)
       42px
-      minmax(0,.92fr)
-      42px
-      minmax(0,1fr) !important;
+      minmax(0,1.9fr) !important;
     align-items:stretch !important;
   }
 
@@ -4220,7 +4263,7 @@ function buildProgrammeData(){
     ).toUpperCase();
 
 
-  const optionalCertifications =
+  const supportPathways =
     new Set([
       "MED",
       "LOG",
@@ -4326,20 +4369,7 @@ function buildProgrammeData(){
     }
 
     else if(
-      optionalCertifications.has(code) &&
-      (
-        !bmtCertified ||
-        !socCertified
-      )
-    ){
-
-      status =
-        "locked";
-
-    }
-
-    else if(
-      optionalCertifications.has(code) &&
+      supportPathways.has(code) &&
       (
         !bmtCertified ||
         !socCertified
@@ -4479,9 +4509,6 @@ function specialisationLabel(code){
       .toUpperCase()
   ){
 
-    case "MED":
-      return "MEDICAL";
-
     case "GUNNERY":
       return "GUNNERY";
 
@@ -4502,9 +4529,6 @@ function specialisationIcon(code){
     String(code || "")
       .toUpperCase()
   ){
-
-    case "MED":
-      return "fa-kit-medical";
 
     case "GUNNERY":
       return "fa-crosshairs";
@@ -4726,7 +4750,7 @@ function renderStatusFocus(programmes){
       "SOC";
 
     nextMeta.textContent =
-      "Continue core training before specialisation assignment.";
+      "Complete SOC to unlock Support Pathways and Specialisation assignment.";
 
     return;
 
@@ -4736,10 +4760,10 @@ function renderStatusFocus(programmes){
   if(!assignedCode){
 
     nextTitle.textContent =
-      "AWAITING INSTRUCTOR ASSIGNMENT";
+      "POST-SOC PATHWAYS OPEN";
 
     nextMeta.textContent =
-      "Optional certifications are available; an Academy instructor will assign GUNNERY or ENGINEERING.";
+      "MED, LOG and MIN are stackable Support Pathways. GUNNERY or ENGINEERING is the single active Specialisation Pathway.";
 
     return;
 
@@ -5207,37 +5231,72 @@ function renderTrainingPath(programmes){
         <i class="fa-solid fa-chevron-right"></i>
       </div>
 
-      <div class="academy-path-card optional-pathways-card">
-        <div class="optional-pathways-label">
-          OPTIONAL PATHWAYS
+      <div class="post-soc-pathways">
+
+        <div class="pathway-branch support-branch">
+
+          <div class="branch-label">
+            SUPPORT PATHWAYS // STACKABLE
+          </div>
+
+          <div class="academy-path-card optional-pathways-card">
+
+            <div class="optional-pathways-label">
+              SUPPORT PATHWAYS
+            </div>
+
+            <div class="optional-pathways-title">
+              STACK ANY OR ALL
+            </div>
+
+            <div class="optional-pathway-options">
+
+              <a
+                class="optional-choice"
+                href="${getProgrammeUrl("MED")}"
+              >
+                MED
+              </a>
+
+              <span class="optional-or">+</span>
+
+              <a
+                class="optional-choice"
+                href="${getProgrammeUrl("LOG")}"
+              >
+                LOG
+              </a>
+
+              <span class="optional-or">+</span>
+
+              <a
+                class="optional-choice"
+                href="${getProgrammeUrl("MIN")}"
+              >
+                MIN
+              </a>
+
+            </div>
+
+            <div class="path-name">
+              SUPPORT PROGRESSION // INSTRUCTOR SIGN-OFF REQUIRED
+            </div>
+
+          </div>
+
         </div>
 
-        <div class="optional-pathways-title">
-          CHOOSE ANY ONE
+        <div class="pathway-branch specialisation-branch">
+
+          <div class="branch-label">
+            SPECIALISATION PATHWAY // ONE ACTIVE
+          </div>
+
+          ${specialisationMarkup}
+
         </div>
 
-        <div class="optional-pathway-options">
-          <span class="optional-choice">MED</span>
-          <span class="optional-or">OR</span>
-          <span class="optional-choice">LOG</span>
-          <span class="optional-or">OR</span>
-          <span class="optional-choice">MIN</span>
-        </div>
-
-        <div class="path-name">
-          OPTIONAL CERTIFICATION // NOT A CORE REQUIREMENT
-        </div>
       </div>
-
-      <div
-        class="sequence-arrow"
-        aria-hidden="true"
-      >
-        <span></span>
-        <i class="fa-solid fa-chevron-right"></i>
-      </div>
-
-      ${specialisationMarkup}
 
     </div>
 
