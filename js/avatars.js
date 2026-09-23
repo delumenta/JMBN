@@ -111,10 +111,8 @@
     try {
 
       /*
-       * We deliberately use SELECT *
-       *
-       * This means this JS can already be placed on GitHub
-       * even before avatar_url is added to discord_links.
+       * Primary lookup:
+       * exact Supabase user_id -> discord_links row.
        */
 
       const {
@@ -132,8 +130,104 @@
           "JMBN avatar lookup:",
           error.message
         );
+      }
 
-        return null;
+
+      /*
+       * If the exact account already has an avatar, always use it.
+       */
+      if (data && avatarUrl(data)) {
+        return data;
+      }
+
+
+      /*
+       * Legacy duplicate-profile fallback.
+       *
+       * Older JMBN records can contain two Supabase profiles for the
+       * same handle. The Discord link may still belong to the older
+       * profile while the member is signed in through the newer one.
+       *
+       * Member Registry already sees the linked record because it loads
+       * the full Discord-link roster. For Profile + shared Header we
+       * resolve a single Discord-linked alias with the same handle so
+       * the same avatar is shown consistently.
+       */
+
+      const {
+        data: profile,
+        error: profileError
+      } = await sb
+        .from("profiles")
+        .select("handle")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+
+      if (profileError || !profile?.handle) {
+        return data || null;
+      }
+
+
+      const {
+        data: aliases,
+        error: aliasesError
+      } = await sb
+        .from("profiles")
+        .select("user_id,handle")
+        .ilike("handle", profile.handle);
+
+
+      if (aliasesError) {
+        return data || null;
+      }
+
+
+      const aliasIds =
+        (aliases || [])
+          .filter(
+            row =>
+              String(row.handle || "")
+                .trim()
+                .toLowerCase() ===
+              String(profile.handle || "")
+                .trim()
+                .toLowerCase()
+          )
+          .map(row => row.user_id)
+          .filter(Boolean);
+
+
+      if (!aliasIds.length) {
+        return data || null;
+      }
+
+
+      const {
+        data: linkedAliases,
+        error: linkedAliasesError
+      } = await sb
+        .from("discord_links")
+        .select("*")
+        .in("user_id", aliasIds);
+
+
+      if (linkedAliasesError) {
+        return data || null;
+      }
+
+
+      const withAvatar =
+        (linkedAliases || [])
+          .filter(row => !!avatarUrl(row));
+
+
+      /*
+       * Only use the fallback when there is one unambiguous
+       * Discord-linked profile for that handle.
+       */
+      if (withAvatar.length === 1) {
+        return withAvatar[0];
       }
 
 
