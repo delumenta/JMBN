@@ -2750,6 +2750,12 @@ function getProgrammeIcon(code){
     case "MED":
       return "fa-kit-medical";
 
+    case "CAR":
+      return "fa-boxes-stacked";
+
+    case "MIN":
+      return "fa-gem";
+
     case "GUN":
     case "GUNNERY":
       return "fa-crosshairs";
@@ -3106,9 +3112,15 @@ function buildProgrammeData(){
     ).toUpperCase();
 
 
-  const specialisations =
+  const optionalCertifications =
     new Set([
       "MED",
+      "CAR",
+      "MIN"
+    ]);
+
+  const specialisations =
+    new Set([
       "GUNNERY",
       "ENGINEERING"
     ]);
@@ -3224,6 +3236,32 @@ function buildProgrammeData(){
             "BMT CERTIFICATION REQUIRED"
           );
 
+        }
+
+      }
+
+
+      if(
+        optionalCertifications.has(code)
+      ){
+
+        prerequisiteMet =
+          certified ||
+          (
+            bmtCertified &&
+            socCertified
+          );
+
+        if(!bmtCertified && !certified){
+          missingPrerequisites.push(
+            "BMT CERTIFICATION REQUIRED"
+          );
+        }
+
+        if(!socCertified && !certified){
+          missingPrerequisites.push(
+            "SOC CERTIFICATION REQUIRED"
+          );
         }
 
       }
