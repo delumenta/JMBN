@@ -676,9 +676,15 @@ function allowedCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
  return authorisations.filter(x=>x.can_instruct||x.can_sign_off).map(x=>x.certification_code);
 }
+function signoffCodes(){
+ if(isAdmin)return certs.map(x=>x.certification_code);
+ return authorisations.filter(x=>x.can_sign_off).map(x=>x.certification_code);
+}
 function render(){
  const codes=new Set(allowedCodes());
+ const signCodes=new Set(signoffCodes());
  const allowed=certs.filter(c=>codes.has(c.certification_code));
+ const signoffAllowed=certs.filter(c=>signCodes.has(c.certification_code));
  $("#authCount").textContent=allowed.length;
  $("#signoffCount").textContent=signoffs.length;
  const cutoff=Date.now()-30*86400000;
@@ -693,7 +699,7 @@ function render(){
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  updatePathAssignment();
- $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
+ $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+signoffAllowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
 }
 function updateEvents(){
