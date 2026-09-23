@@ -1739,19 +1739,10 @@ select{
 #jmbnBgTest .jmbn-watermark.main{
   width:245px;
   height:245px;
-  right:28px;
+  right:78px;
   top:145px;
   opacity:.095;
   transform:rotate(-2deg);
-}
-
-#jmbnBgTest .jmbn-watermark.secondary{
-  width:170px;
-  height:170px;
-  left:3vw;
-  bottom:78px;
-  opacity:.075;
-  transform:rotate(8deg);
 }
 
 #jmbnBgTest .command-lines{
@@ -1764,33 +1755,41 @@ select{
 
 #jmbnBgTest .command-lines .major{
   fill:none;
-  stroke:rgba(217,181,62,.16);
+  stroke:rgba(217,181,62,.13);
   stroke-width:1;
   vector-effect:non-scaling-stroke;
 }
 
 #jmbnBgTest .command-lines .minor{
   fill:none;
-  stroke:rgba(217,181,62,.09);
+  stroke:rgba(217,181,62,.08);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+
+#jmbnBgTest .command-lines .micro{
+  fill:none;
+  stroke:rgba(217,181,62,.045);
   stroke-width:1;
   vector-effect:non-scaling-stroke;
 }
 
 #jmbnBgTest .command-lines .tick{
-  fill:rgba(217,181,62,.20);
+  fill:rgba(217,181,62,.17);
 }
 
 #jmbnBgTest .command-lines .cross{
   fill:none;
-  stroke:rgba(217,181,62,.18);
+  stroke:rgba(217,181,62,.16);
   stroke-width:1;
   vector-effect:non-scaling-stroke;
 }
 
 #jmbnBgTest .command-lines text{
-  fill:rgba(217,181,62,.17);
-  font:9px 'Play',system-ui,sans-serif;
+  fill:rgba(217,181,62,.14);
+  font:9px 'Play', system-ui, sans-serif;
   letter-spacing:2px;
+  text-transform:uppercase;
 }
 
 @media(max-width:650px){
@@ -1800,10 +1799,6 @@ select{
     right:-28px;
     top:215px;
     opacity:.075;
-  }
-
-  #jmbnBgTest .jmbn-watermark.secondary{
-    display:none;
   }
 }
 
@@ -1880,47 +1875,64 @@ select{
     src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
     alt=""
   >
-
-  <img
-    class="jmbn-watermark secondary"
-    src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-    alt=""
-  >
-
-  <svg
+<svg
     class="command-lines"
     viewBox="0 0 1600 1100"
     preserveAspectRatio="none"
     aria-hidden="true"
   >
-    <path class="major" d="M1170 0 L1170 104 L1304 202 L1600 202"/>
-    <path class="minor" d="M1248 0 L1248 78 L1380 174 L1600 174"/>
-    <path class="minor" d="M1458 58 L1348 138 L1348 344 L1512 464 L1600 464"/>
+    <!-- top-right / header zone -->
+    <path class="major" d="M1118 0 L1118 126 L1286 126 L1454 72 L1600 72"/>
+    <path class="minor" d="M1216 0 L1216 174 L1396 174 L1600 174"/>
+    <path class="micro" d="M1328 0 L1328 116 L1600 116"/>
+    <path class="minor" d="M1388 72 L1388 286 L1600 286"/>
+    <path class="micro" d="M1490 174 L1490 474 L1600 592"/>
 
-    <path class="minor" d="M0 212 L112 212 L180 276 L180 386 L86 470 L0 470"/>
-    <path class="major" d="M0 704 L104 704 L196 638 L340 638"/>
-    <path class="minor" d="M0 760 L76 760 L132 816 L132 1028"/>
+    <!-- upper-left perimeter -->
+    <path class="minor" d="M0 118 L76 118 L126 164 L126 378 L0 378"/>
+    <path class="micro" d="M0 176 L54 176 L88 208 L88 332 L0 332"/>
 
-    <path class="minor" d="M1030 786 L1178 786 L1274 716 L1444 716 L1600 828"/>
-    <path class="major" d="M1124 1100 L1124 1012 L1256 916 L1490 916 L1600 996"/>
+    <!-- left mid / content gap -->
+    <path class="major" d="M0 562 L96 562 L164 626 L164 786 L80 846 L0 846"/>
+    <path class="micro" d="M0 610 L72 610 L118 654 L118 756 L50 808 L0 808"/>
 
-    <rect class="tick" x="1167" y="100" width="7" height="7"/>
-    <rect class="tick" x="1345" y="340" width="7" height="7"/>
-    <rect class="tick" x="177" y="382" width="7" height="7"/>
-    <rect class="tick" x="102" y="700" width="7" height="7"/>
-    <rect class="tick" x="1271" y="712" width="7" height="7"/>
+    <!-- upper-right content gap -->
+    <path class="micro" d="M1090 220 L1220 220 L1282 160 L1470 160 L1600 160"/>
+    <path class="minor" d="M1226 220 L1226 430 L1600 430"/>
 
+    <!-- lower-right big frame -->
+    <path class="major" d="M1118 1100 L1118 1014 L1286 916 L1472 916 L1600 996"/>
+    <path class="minor" d="M1338 1100 L1338 1010 L1600 1010"/>
+    <path class="micro" d="M964 858 L1146 858 L1248 786 L1422 786 L1600 900"/>
+
+    <!-- lower-left / footer edge -->
+    <path class="minor" d="M0 982 L86 982 L144 930 L144 820"/>
+    <path class="micro" d="M0 1040 L58 1040 L98 1004 L98 930"/>
+
+    <!-- small ticks -->
+    <rect class="tick" x="1115" y="122" width="7" height="7"/>
+    <rect class="tick" x="1385" y="282" width="7" height="7"/>
+    <rect class="tick" x="160" y="782" width="7" height="7"/>
+    <rect class="tick" x="1223" y="426" width="7" height="7"/>
+    <rect class="tick" x="1246" y="782" width="7" height="7"/>
+    <rect class="tick" x="84" y="842" width="7" height="7"/>
+    <rect class="tick" x="1438" y="912" width="7" height="7"/>
+
+    <!-- crosses -->
     <path class="cross" d="M1510 300 h16 M1518 292 v16"/>
-    <path class="cross" d="M286 592 h14 M293 585 v14"/>
-    <path class="cross" d="M1188 850 h12 M1194 844 v12"/>
+    <path class="cross" d="M286 590 h14 M293 583 v14"/>
+    <path class="cross" d="M1190 852 h12 M1196 846 v12"/>
+    <path class="cross" d="M70 1014 h12 M76 1008 v12"/>
 
-    <text x="1470" y="190">NODE 04</text>
-    <text x="1424" y="326">JMBN-01 // X:74 Y:18</text>
-    <text x="34" y="692">JMBN // PERSONNEL GRID</text>
-    <text x="1310" y="904">NAV // 02</text>
-    <text x="1185" y="230">SECTOR P-03</text>
-    <text x="98" y="500">LINK 07 / STABLE</text>
-    <text x="1260" y="745">SYNC // 97.4</text>
+    <!-- technical labels -->
+    <text x="1468" y="126">NODE 04</text>
+    <text x="1408" y="318">JMBN-01 // X:74 Y:18</text>
+    <text x="1186" y="238">SECTOR P-03</text>
+    <text x="94" y="516">LINK 07 / STABLE</text>
+    <text x="1260" y="744">SYNC // 97.4</text>
+    <text x="1330" y="1000">NAV // 02</text>
+    <text x="18" y="812">JMBN // PERSONNEL GRID</text>
+    <text x="38" y="1060">INTEGRITY / DISCIPLINE / RESULTS</text>
   </svg>
 </div>
 
