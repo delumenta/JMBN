@@ -2535,6 +2535,14 @@ button{
 
     <button
       class="filter-button"
+      data-filter="assigned"
+      type="button"
+    >
+      ASSIGNED
+    </button>
+
+    <button
+      class="filter-button"
       data-filter="certified"
       type="button"
     >
@@ -2769,6 +2777,7 @@ let trainingEvents = [];
 
 let myCertifications = [];
 let myEvents = [];
+let mySpecialisation = null;
 
 let programmeData = [];
 
@@ -2817,11 +2826,22 @@ function formatDate(value){
 
 function programmeUrl(code){
 
-  return (
-    "AP/" +
-    encodeURIComponent(code).toLowerCase() +
-    ".html"
-  );
+  const key =
+    String(code || "")
+      .toUpperCase();
+
+  const aliases = {
+    GUNNERY:"gun",
+    ENGINEERING:"eng"
+  };
+
+  const slug =
+    aliases[key] ||
+    key.toLowerCase();
+
+  return "AP/" +
+    encodeURIComponent(slug) +
+    ".html";
 
 }
 
@@ -2988,7 +3008,8 @@ async function loadAcademy(){
     reqResult,
     trainingResult,
     myCertResult,
-    myTrainingResult
+    myTrainingResult,
+    mySpecialisationResult
 
   ] = await Promise.all([
 
@@ -3067,7 +3088,20 @@ async function loadAcademy(){
       .order(
         "completed_at",
         {ascending:false}
+      ),
+
+
+    sb
+      .from("academy_specialisation_assignments")
+      .select(`
+        specialisation_code,
+        assigned_at
+      `)
+      .eq(
+        "user_id",
+        me
       )
+      .maybeSingle()
 
 
   ]);
@@ -3079,7 +3113,8 @@ async function loadAcademy(){
     reqResult.error,
     trainingResult.error,
     myCertResult.error,
-    myTrainingResult.error
+    myTrainingResult.error,
+    mySpecialisationResult.error
 
   ].filter(Boolean);
 
@@ -3110,6 +3145,10 @@ async function loadAcademy(){
     myTrainingResult.data || [];
 
 
+  mySpecialisation =
+    mySpecialisationResult.data || null;
+
+
   buildProgrammeData();
 
   renderAll();
@@ -3130,7 +3169,10 @@ function buildProgrammeData(){
   myCertifications.forEach(record=>{
 
     completedCerts.set(
-      record.certification_code,
+      String(
+        record.certification_code ||
+        ""
+      ).toUpperCase(),
       record
     );
 
@@ -3165,8 +3207,39 @@ function buildProgrammeData(){
   });
 
 
+  const bmtCertified =
+    completedCerts.has("BMT");
+
+
+  const socCertified =
+    completedCerts.has("SOC");
+
+
+  const assignedCode =
+    String(
+      mySpecialisation
+        ?.specialisation_code ||
+      ""
+    ).toUpperCase();
+
+
+  const specialisations =
+    new Set([
+      "MED",
+      "GUNNERY",
+      "ENGINEERING"
+    ]);
+
+
   programmeData =
     certifications.map(cert=>{
+
+
+      const code =
+        String(
+          cert.certification_code ||
+          ""
+        ).toUpperCase();
 
 
       const reqs =
@@ -3243,30 +3316,79 @@ function buildProgrammeData(){
 
 
       const certification =
-        completedCerts.get(
-          cert.certification_code
-        );
+        completedCerts.get(code);
 
 
       const certified =
         !!certification;
 
 
-      /*
-        -----------------------------------------------------
-        PROGRAMME PREREQUISITES
-        -----------------------------------------------------
-
-        No programme-to-programme prerequisite table
-        currently exists in this Academy schema.
-
-        Until that table is created, programmes remain
-        accessible when not already certified.
-      */
-
-      const prerequisiteMet = true;
-
+      let prerequisiteMet = true;
+      let assigned = false;
       const missingPrerequisites = [];
+
+
+      if(code === "SOC"){
+
+        prerequisiteMet =
+          bmtCertified ||
+          certified;
+
+
+        if(!prerequisiteMet){
+
+          missingPrerequisites.push(
+            "BMT CERTIFICATION REQUIRED"
+          );
+
+        }
+
+      }
+
+
+      if(
+        specialisations.has(code)
+      ){
+
+        assigned =
+          assignedCode === code;
+
+
+        prerequisiteMet =
+          certified ||
+          (
+            socCertified &&
+            assigned
+          );
+
+
+        if(!socCertified && !certified){
+
+          missingPrerequisites.push(
+            "SOC CERTIFICATION REQUIRED"
+          );
+
+        }
+
+
+        if(
+          socCertified &&
+          !assigned &&
+          !certified
+        ){
+
+          missingPrerequisites.push(
+            assignedCode
+            ?
+            "ASSIGNED TO " +
+              assignedCode
+            :
+            "INSTRUCTOR ASSIGNMENT REQUIRED"
+          );
+
+        }
+
+      }
 
 
       let percent = 0;
@@ -3314,6 +3436,16 @@ function buildProgrammeData(){
 
       }
 
+      else if(
+        specialisations.has(code) &&
+        assigned
+      ){
+
+        status =
+          "assigned";
+
+      }
+
       else{
 
         status =
@@ -3342,6 +3474,8 @@ function buildProgrammeData(){
         prerequisiteMet,
 
         missingPrerequisites,
+
+        assigned,
 
         status
 
@@ -3442,28 +3576,101 @@ function renderSidebar(){
 
       .map(programme=>{
 
-        return `
+        const locked =
+          programme.status ===
+          "locked";
 
+
+        const state =
+          programme.status ===
+          "certified"
+          ?
+          "CERTIFIED"
+          :
+          programme.status ===
+          "undergoing"
+          ?
+          "IN TRAINING"
+          :
+          programme.status ===
+          "assigned"
+          ?
+          "ASSIGNED"
+          :
+          locked
+          ?
+          "LOCKED"
+          :
+          "AVAILABLE";
+
+
+        const inner = `
+
+          <i
+            class="fa-solid
+            ${
+              locked
+              ?
+              "fa-lock"
+              :
+              getProgrammeIcon(
+                programme.certification_code
+              )
+            }"
+          ></i>
+
+          <span>
+            ${escapeHtml(
+              programme.certification_code
+            )}
+          </span>
+
+          <small
+            style="
+              margin-left:auto;
+              font-size:7px;
+              letter-spacing:.1em;
+              color:${
+                programme.status === "certified"
+                ?
+                "var(--green)"
+                :
+                programme.status === "assigned" ||
+                programme.status === "undergoing"
+                ?
+                "var(--gold)"
+                :
+                "#666257"
+              };
+            "
+          >
+            ${state}
+          </small>
+
+        `;
+
+
+        return locked
+        ?
+        `
+          <div
+            class="nav-item"
+            style="opacity:.58;cursor:not-allowed"
+            aria-disabled="true"
+          >
+            ${inner}
+          </div>
+        `
+        :
+        `
           <a
             class="nav-item"
             href="${programmeUrl(
               programme.certification_code
             )}"
           >
-
-            <i
-              class="fa-solid
-              ${getProgrammeIcon(
-                programme.certification_code
-              )}"
-            ></i>
-
-            ${escapeHtml(
-              programme.certification_code
-            )}
-
+            ${inner}
           </a>
-
         `;
 
       })
@@ -3502,9 +3709,10 @@ function renderProgrammes(){
   const priority = {
 
     undergoing:0,
-    available:1,
-    locked:2,
-    certified:3
+    assigned:1,
+    available:2,
+    locked:3,
+    certified:4
 
   };
 
@@ -3604,6 +3812,9 @@ function renderProgrammeCard(programme){
     available:
       "AVAILABLE",
 
+    assigned:
+      "ASSIGNED",
+
     locked:
       "PREREQUISITE NOT MET"
 
@@ -3659,7 +3870,23 @@ function renderProgrammeCard(programme){
     case "locked":
 
       note =
+        programme.missingPrerequisites.length
+        ?
+        programme.missingPrerequisites.join(" // ")
+        :
         "Required prerequisite training has not yet been completed.";
+
+      break;
+
+
+    case "assigned":
+
+      note =
+        programme.total === 0
+        ?
+        "Specialisation assigned. Training syllabus will be added later."
+        :
+        "Specialisation assigned by JMBN Academy. Ready to begin training.";
 
       break;
 
@@ -3923,6 +4150,9 @@ function openProgramme(code){
 
     available:
       "AVAILABLE",
+
+    assigned:
+      "ASSIGNED",
 
     locked:
       "PREREQUISITE NOT MET"
@@ -4212,8 +4442,12 @@ function renderModalPrerequisites(
 
     <div class="prerequisite-note">
 
-      PREREQUISITE REQUIREMENTS
-      HAVE NOT BEEN MET.
+      ${escapeHtml(
+        programme.missingPrerequisites
+          ?.join(" // ")
+        ||
+        "PREREQUISITE REQUIREMENTS HAVE NOT BEEN MET."
+      )}
 
     </div>
 
