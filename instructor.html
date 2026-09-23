@@ -33,6 +33,9 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 .footer{margin-top:20px;display:flex;justify-content:space-between;color:#5d594d;font-size:8px;letter-spacing:.18em}
 @media(max-width:1100px){:root{--sidebar:210px}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
 @media(max-width:760px){.mobile-bar{display:flex;height:58px;position:sticky;top:0;z-index:200;align-items:center;justify-content:space-between;padding:0 15px;background:#030403;border-bottom:1px solid rgba(214,180,76,.45)}.mobile-bar button{border:0;background:none;color:var(--gold);font-size:20px}.app{display:block}.sidebar{position:fixed;z-index:300;top:0;left:0;width:min(300px,84vw);height:100vh;overflow:auto;transform:translateX(-105%);transition:.2s}.sidebar-open .sidebar{transform:none}main{padding:14px 13px 35px}.hero{display:block;padding:25px}.identity{margin-top:20px;min-width:0}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{min-height:90px}.table-wrap{overflow:auto}.actions{grid-template-columns:1fr}.footer{gap:10px;flex-wrap:wrap}}
+
+.assignment-panel{margin-top:18px}.assignment-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(340px,1.1fr);gap:18px}.assignment-current{min-height:126px;padding:18px;border:1px solid rgba(214,180,76,.24);background:linear-gradient(135deg,rgba(240,210,112,.035),transparent 52%),rgba(5,7,5,.78)}.assignment-kicker{color:#716c5d;font-size:8px;letter-spacing:.18em}.assignment-code{margin-top:10px;color:var(--gold);font-size:26px;font-weight:700;letter-spacing:.06em}.assignment-name{margin-top:6px;color:#b6af99;font-size:10px;letter-spacing:.08em}.assignment-meta{margin-top:12px;color:#6f6a5c;font-size:8px;line-height:1.6;letter-spacing:.08em}.assignment-actions{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px;margin-top:16px}.btn.clear-path{color:#aaa38d;border-color:rgba(214,180,76,.34);background:rgba(255,255,255,.018)}@media(max-width:900px){.assignment-layout{grid-template-columns:1fr}.assignment-actions{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -76,10 +79,67 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 <div class="msg" id="message"></div>
 </div></section>
 </div>
+
+<section class="frame assignment-panel">
+  <div class="panel-head">
+    <div class="section-title">SPECIALISATION ASSIGNMENT</div>
+  </div>
+  <div class="panel-body assignment-layout">
+
+    <div>
+      <label>SELECT MEMBER</label>
+      <select id="pathTrainee" class="control">
+        <option value="">SELECT MEMBER</option>
+      </select>
+
+      <div class="assignment-current">
+        <div class="assignment-kicker">CURRENT ASSIGNED PATH</div>
+        <div class="assignment-code" id="pathCurrentCode">—</div>
+        <div class="assignment-name" id="pathCurrentName">NO MEMBER SELECTED</div>
+        <div class="assignment-meta" id="pathCurrentMeta">
+          SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label>ASSIGN SPECIALISATION</label>
+      <select id="pathCode" class="control">
+        <option value="">SELECT SPECIALISATION</option>
+        <option value="MED">MED — MEDICAL</option>
+        <option value="GUNNERY">GUNNERY</option>
+        <option value="ENGINEERING">ENGINEERING</option>
+      </select>
+
+      <label>ASSIGNMENT NOTES</label>
+      <textarea
+        id="pathNotes"
+        class="control"
+        placeholder="Optional reason, instructor guidance, or pathway notes..."
+      ></textarea>
+
+      <div class="assignment-actions">
+        <button class="btn clear-path" id="clearPath">
+          <i class="fa-solid fa-xmark"></i>
+          CLEAR PATH
+        </button>
+
+        <button class="btn" id="assignPath">
+          <i class="fa-solid fa-route"></i>
+          ASSIGN PATH
+        </button>
+      </div>
+
+      <div class="msg" id="pathMessage"></div>
+    </div>
+
+  </div>
+</section>
+
 <footer class="footer"><span>JMBN ACADEMY // INSTRUCTOR PANEL</span><span>● SYSTEMS ONLINE</span></footer>
 </div></main></div>
 <script>
-let sb=null,me=null,isAdmin=false,authorisations=[],certs=[],reqs=[],events=[],members=[],signoffs=[];
+let sb=null,me=null,isAdmin=false,authorisations=[],certs=[],reqs=[],events=[],members=[],signoffs=[],assignments=[];
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 const date=v=>v?new Date(v).toLocaleDateString("en-SG",{day:"2-digit",month:"short",year:"numeric"}):"—";
@@ -97,14 +157,15 @@ async function verifyAccess(){
  return true;
 }
 async function load(){
- const [c,r,e,m,s]=await Promise.all([
+ const [c,r,e,m,s,a]=await Promise.all([
   sb.from("certifications").select("certification_code,name,is_active").eq("is_active",true).order("sort_order"),
   sb.from("certification_requirements").select("certification_code,event_code,required,sort_order").order("sort_order"),
   sb.from("training_events").select("event_code,title,sort_order").order("sort_order"),
   sb.from("v_profiles_detailed").select("user_id,handle,display_name,current_rank_code").order("display_name"),
-  sb.from("training_signoffs").select("id,trainee_id,event_code,certification_code,status,signed_off_at,notes").eq("instructor_id",me).order("signed_off_at",{ascending:false}).limit(100)
+  sb.from("training_signoffs").select("id,trainee_id,event_code,certification_code,status,signed_off_at,notes").eq("instructor_id",me).order("signed_off_at",{ascending:false}).limit(100),
+  sb.from("academy_specialisation_assignments").select("user_id,specialisation_code,assigned_by,notes,assigned_at,updated_at").order("updated_at",{ascending:false})
  ]);
- certs=c.data||[];reqs=r.data||[];events=e.data||[];members=m.data||[];signoffs=s.data||[];
+ certs=c.data||[];reqs=r.data||[];events=e.data||[];members=m.data||[];signoffs=s.data||[];assignments=a.data||[];
  render();
 }
 function allowedCodes(){
@@ -124,6 +185,8 @@ function render(){
  const memberMap=new Map(members.map(x=>[x.user_id,x]));
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
  $("#trainee").innerHTML=`<option value="">SELECT TRAINEE</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
+ $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
+ updatePathAssignment();
  $("#programme").innerHTML=`<option value="">SELECT PROGRAMME</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
 }
@@ -133,6 +196,61 @@ function updateEvents(){
  const rows=reqs.filter(x=>x.certification_code===code);
  $("#event").innerHTML=`<option value="">SELECT MODULE</option>`+rows.map(r=>{const e=eventMap.get(r.event_code);return `<option value="${esc(r.event_code)}">${esc(r.event_code)} — ${esc(e?.title||r.event_code)}</option>`}).join("");
 }
+
+function pathLabel(code){
+ switch(String(code||"").toUpperCase()){
+  case "MED": return "MEDICAL";
+  case "GUNNERY": return "GUNNERY";
+  case "ENGINEERING": return "ENGINEERING";
+  default: return "UNASSIGNED";
+ }
+}
+function updatePathAssignment(){
+ const trainee=$("#pathTrainee").value;
+ const code=$("#pathCurrentCode"),name=$("#pathCurrentName"),meta=$("#pathCurrentMeta"),select=$("#pathCode"),notes=$("#pathNotes");
+ if(!trainee){
+  code.textContent="—";name.textContent="NO MEMBER SELECTED";meta.textContent="SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.";select.value="";notes.value="";return;
+ }
+ const assignment=assignments.find(x=>x.user_id===trainee);
+ if(!assignment){
+  code.textContent="—";name.textContent="AWAITING INSTRUCTOR ASSIGNMENT";meta.textContent="NO SPECIALISATION PATH HAS BEEN ASSIGNED.";select.value="";notes.value="";return;
+ }
+ code.textContent=assignment.specialisation_code;
+ name.textContent=pathLabel(assignment.specialisation_code);
+ meta.textContent="ASSIGNED "+date(assignment.assigned_at)+" // JMBN ACADEMY";
+ select.value=assignment.specialisation_code;
+ notes.value=assignment.notes||"";
+}
+async function assignPath(){
+ const trainee=$("#pathTrainee").value,code=$("#pathCode").value,notes=$("#pathNotes").value.trim(),msg=$("#pathMessage");
+ msg.className="msg";msg.textContent="";
+ if(!trainee||!code){msg.classList.add("bad");msg.textContent="SELECT A MEMBER AND SPECIALISATION.";return}
+ const button=$("#assignPath");button.disabled=true;
+ const {error}=await sb.rpc("academy_assign_specialisation",{p_trainee:trainee,p_specialisation_code:code,p_notes:notes||null});
+ button.disabled=false;
+ if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ msg.classList.add("ok");msg.textContent="SPECIALISATION PATH ASSIGNED.";
+ await load();
+ $("#pathTrainee").value=trainee;
+ updatePathAssignment();
+}
+async function clearPath(){
+ const trainee=$("#pathTrainee").value,msg=$("#pathMessage");
+ msg.className="msg";msg.textContent="";
+ if(!trainee){msg.classList.add("bad");msg.textContent="SELECT A MEMBER FIRST.";return}
+ const button=$("#clearPath");button.disabled=true;
+ const {error}=await sb.rpc("academy_clear_specialisation",{p_trainee:trainee});
+ button.disabled=false;
+ if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ msg.classList.add("ok");msg.textContent="SPECIALISATION PATH CLEARED.";
+ await load();
+ $("#pathTrainee").value=trainee;
+ updatePathAssignment();
+}
+$("#pathTrainee").addEventListener("change",updatePathAssignment);
+$("#assignPath").addEventListener("click",assignPath);
+$("#clearPath").addEventListener("click",clearPath);
+
 $("#programme").addEventListener("change",updateEvents);
 async function sign(status){
  const trainee=$("#trainee").value,programme=$("#programme").value,event=$("#event").value,notes=$("#notes").value.trim();
