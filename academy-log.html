@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
+<script src="sidebar.js" defer></script>
 <style>
 :root{--bg:#020302;--gold:#f0d270;--gold2:#d6b44c;--text:#f3ecd2;--green:#70d98c;--red:#ff7474;--blue:#7fb9df;--sidebar:238px}
 *{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:"Play",sans-serif;background:radial-gradient(circle at 80% 8%,rgba(177,139,39,.08),transparent 32%),#020302}
@@ -42,23 +43,11 @@ main{min-width:0;padding:28px 30px 50px}.container{max-width:1560px;margin:auto}
 </header>
 
 <div class="app">
-<aside class="sidebar" id="sidebar"><div class="sidebar-inner">
-<a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> BACK TO MANIFEST</a>
-<div class="heading"><small>JMBN //</small><strong>ACADEMY</strong><div class="network">TRAINING NETWORK</div></div>
-<div class="label">ACADEMY</div>
-<a class="nav" href="academy.html"><i class="fa-solid fa-graduation-cap"></i> OVERVIEW</a>
-<a class="nav" href="programmes.html"><i class="fa-solid fa-layer-group"></i> PROGRAMMES</a>
-<a class="nav" href="training-schedule.html"><i class="fa-regular fa-calendar-days"></i> TRAINING SCHEDULE</a>
-<a class="nav" href="instructor.html"><i class="fa-solid fa-user-shield"></i> INSTRUCTOR ACCESS</a>
-<a class="nav active" href="academy-log.html"><i class="fa-solid fa-clock-rotate-left"></i> ACADEMY LOG</a>
-<div class="divider"></div>
-<div class="label">LOG INCLUDES</div>
-<div class="pathways">
-  <div><b>SIGN-OFF</b> APPROVED / RETRAINING</div>
-  <div><b>CERT</b> CERTIFICATION AWARDS</div>
-  <div><b>PATH</b> SPECIALISATION CHANGES</div>
-</div>
-</div></aside>
+<aside
+  class="academy-sidebar sidebar shared-academy-sidebar"
+  id="academySidebar"
+  data-academy-sidebar
+></aside>
 
 <main><div class="container">
 
