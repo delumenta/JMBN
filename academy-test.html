@@ -3925,7 +3925,7 @@ function displayCertificationCode(code){
   const key = String(code || "").toUpperCase();
 
   const aliases = {
-    CAR:"LOG",
+    LOG:"LOG",
     GUNNERY:"GUN",
     ENGINEERING:"ENG"
   };
@@ -4367,7 +4367,7 @@ function buildProgrammeData(){
   const optionalCertifications =
     new Set([
       "MED",
-      "CAR",
+      "LOG",
       "MIN"
     ]);
 
@@ -5552,7 +5552,7 @@ function renderSidebar(programmes){
           "BMT",
           "SOC",
           "MED",
-          "CAR",
+          "LOG",
           "MIN",
           "GUNNERY",
           "ENGINEERING",
