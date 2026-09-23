@@ -332,7 +332,46 @@
 }
 
 @media(max-width:760px){
+
+  /*
+    Mobile interaction fix:
+    - keep the shared sidebar above every page overlay
+    - allow taps inside the sidebar
+    - prevent the dimming layer from swallowing link taps
+  */
+  .shared-academy-sidebar{
+    z-index:10010 !important;
+    pointer-events:auto !important;
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+
+  body.sidebar-open .shared-academy-sidebar{
+    z-index:10010 !important;
+    pointer-events:auto !important;
+  }
+
+  body.sidebar-open::after{
+    z-index:10000 !important;
+    pointer-events:none !important;
+  }
+
   .shared-academy-sidebar .sidebar-inner{
+    position:relative !important;
+    z-index:2;
     min-height:100%;
+    pointer-events:auto !important;
+  }
+
+  .shared-academy-sidebar a,
+  .shared-academy-sidebar button,
+  .shared-academy-sidebar .nav,
+  .shared-academy-sidebar .nav-item,
+  .shared-academy-sidebar [data-route]{
+    position:relative;
+    z-index:3;
+    pointer-events:auto !important;
+    touch-action:manipulation;
   }
 }
