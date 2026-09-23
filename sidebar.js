@@ -15,18 +15,21 @@ const fallbackProgrammes=[
   {certification_code:"PILOT",name:"Pilot Training"}
 ];
 
-const primaryPathwayOrder=[
+const corePathwayOrder=[
   "BMT",
-  "SOC",
-  "GUNNERY",
-  "ENGINEERING",
-  "PILOT"
+  "SOC"
 ];
 
 const optionalPathwayOrder=[
-  "CAR",
   "MED",
+  "CAR",
   "MIN"
+];
+
+const specialisationPathwayOrder=[
+  "GUNNERY",
+  "ENGINEERING",
+  "PILOT"
 ];
 
 const routeByCode={
@@ -307,8 +310,8 @@ function renderProgrammeGroup(hostId,codes,programmes,context={}){
 
 function renderProgrammes(programmes,context={}){
   renderProgrammeGroup(
-    "sharedProgrammeNav",
-    primaryPathwayOrder,
+    "sharedCoreProgrammeNav",
+    corePathwayOrder,
     programmes,
     context
   );
@@ -316,6 +319,13 @@ function renderProgrammes(programmes,context={}){
   renderProgrammeGroup(
     "sharedOptionalProgrammeNav",
     optionalPathwayOrder,
+    programmes,
+    context
+  );
+
+  renderProgrammeGroup(
+    "sharedSpecialisationProgrammeNav",
+    specialisationPathwayOrder,
     programmes,
     context
   );
@@ -448,6 +458,91 @@ async function hydrateSidebar(){
   }
 }
 
+
+function ensureMobileSidebarToggle(){
+  const bar=document.querySelector(".mobile-bar");
+
+  if(!bar){
+    return;
+  }
+
+  let button=
+    bar.querySelector("#mobileMenu, #menu, .mobile-menu");
+
+  let created=false;
+
+  if(!button){
+    button=document.createElement("button");
+    button.type="button";
+    button.className="mobile-menu academy-auto-menu";
+    button.id="academyAutoMenu";
+    button.setAttribute("aria-label","Open Academy navigation");
+    button.setAttribute("aria-expanded","false");
+    button.innerHTML='<i class="fa-solid fa-bars"></i>';
+    bar.prepend(button);
+    created=true;
+  }
+
+  if(created){
+    button.addEventListener("click",event=>{
+      event.stopPropagation();
+
+      const open=
+        document.body.classList.toggle("sidebar-open");
+
+      button.setAttribute(
+        "aria-expanded",
+        open ? "true" : "false"
+      );
+    });
+
+    document.addEventListener("click",event=>{
+      if(window.innerWidth>760){
+        return;
+      }
+
+      if(!document.body.classList.contains("sidebar-open")){
+        return;
+      }
+
+      const sidebar=document.getElementById("academySidebar");
+
+      if(
+        sidebar?.contains(event.target) ||
+        button.contains(event.target)
+      ){
+        return;
+      }
+
+      document.body.classList.remove("sidebar-open");
+      button.setAttribute("aria-expanded","false");
+    });
+
+    document.addEventListener("keydown",event=>{
+      if(event.key!=="Escape"){
+        return;
+      }
+
+      document.body.classList.remove("sidebar-open");
+      button.setAttribute("aria-expanded","false");
+    });
+  }
+
+  document.addEventListener("click",event=>{
+    const link=event.target.closest(".shared-academy-sidebar a");
+
+    if(!link || window.innerWidth>760){
+      return;
+    }
+
+    document.body.classList.remove("sidebar-open");
+
+    if(button){
+      button.setAttribute("aria-expanded","false");
+    }
+  });
+}
+
 async function init(){
   const mount=document.querySelector("[data-academy-sidebar]");
   if(!mount){
@@ -455,6 +550,7 @@ async function init(){
   }
 
   injectCss();
+  ensureMobileSidebarToggle();
 
   try{
     const response=await fetch(
