@@ -2092,57 +2092,47 @@ body::before{
 
 /* =========================================================
    MEMBER PANEL // RANK LEGIBILITY
-   Local contrast only — preserve the artwork.
+   No panel overlay — only stronger text shadow so the copy
+   floats cleanly over the artwork.
 ========================================================= */
 .member .member-rank{
-  background:
-    linear-gradient(
-      90deg,
-      rgba(2,3,3,.76) 0%,
-      rgba(2,3,3,.58) 38%,
-      rgba(2,3,3,.34) 72%,
-      rgba(2,3,3,.16) 100%
-    ) !important;
-  box-shadow:
-    inset 1px 0 0 rgba(216,184,78,.10),
-    inset -1px 0 0 rgba(216,184,78,.05);
-  backdrop-filter:blur(1.2px);
+  background:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
 }
 
 .member .rank-kicker{
-  color:#d3bd67;
+  color:#d8c16c;
   text-shadow:
-    0 2px 8px rgba(0,0,0,.95),
-    0 0 12px rgba(0,0,0,.72);
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 4px rgba(0,0,0,.98),
+    0 4px 12px rgba(0,0,0,.92);
 }
 
 .member .rank-current-name{
-  color:#f4edd5;
+  color:#f5efdd;
   font-weight:700;
   text-shadow:
-    0 2px 8px rgba(0,0,0,.95),
-    0 0 14px rgba(0,0,0,.76);
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 5px rgba(0,0,0,1),
+    0 5px 14px rgba(0,0,0,.95);
 }
 
 .member .rank-current-code{
   color:#f2d675;
   text-shadow:
-    0 2px 8px rgba(0,0,0,.98),
-    0 0 14px rgba(0,0,0,.82);
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 5px rgba(0,0,0,1),
+    0 5px 14px rgba(0,0,0,.96);
 }
 
 .member .rank-note{
-  color:#b8b09a;
+  color:#c8c0aa;
   text-shadow:
-    0 2px 7px rgba(0,0,0,.95);
-}
-
-.member .rank-rule{
-  background:rgba(2,3,3,.78);
-  border-color:rgba(242,214,117,.50);
-  box-shadow:
-    0 1px 7px rgba(0,0,0,.85),
-    0 0 9px rgba(216,184,78,.10);
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 4px rgba(0,0,0,.98),
+    0 4px 10px rgba(0,0,0,.90);
 }
 
 @media(max-width:760px){
