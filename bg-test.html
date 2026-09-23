@@ -1868,6 +1868,63 @@ select{
   }
 }
 
+
+
+/* =========================================================
+   BG TEST — TRANSLUCENT CONTENT FILLS
+   Only interior background fills are changed here.
+   Borders, frame geometry, radius, spacing, sizing and
+   existing content opacity remain untouched.
+========================================================= */
+
+.command-hero{
+  background:rgba(3,4,3,.86);
+}
+
+.rank-card{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(11,12,9,.88),
+      rgba(5,6,5,.84) 58%,
+      rgba(2,3,3,.80)
+    );
+}
+
+.rank-box{
+  background:
+    radial-gradient(
+      circle at 12% 0,
+      rgba(240,201,78,.08),
+      transparent 55%
+    ),
+    rgba(5,6,5,.80);
+}
+
+.req{
+  background:rgba(5,6,5,.80);
+}
+
+.panel{
+  background:rgba(7,8,6,.82);
+}
+
+.cert{
+  background:rgba(5,6,5,.78);
+}
+
+.timeline-select{
+  background:rgba(5,6,5,.82);
+}
+
+.track{
+  background:rgba(2,3,2,.82);
+}
+
+.mini{
+  background:rgba(23,22,15,.78);
+}
+
 </style>
 
 </head>
