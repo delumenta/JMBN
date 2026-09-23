@@ -8,7 +8,7 @@ const fallbackProgrammes=[
   {certification_code:"BMT",name:"Basic Military Training"},
   {certification_code:"SOC",name:"Standard Obstacle Course"},
   {certification_code:"MED",name:"Empire Health Medical Responder Certification"},
-  {certification_code:"CAR",name:"Covalex Logistics Support Certification"},
+  {certification_code:"LOG",name:"Covalex Logistics Support Certification"},
   {certification_code:"MIN",name:"ArcCorp Mining Consortium Certification"},
   {certification_code:"GUNNERY",name:"JCS Defensive Matrix Certification"},
   {certification_code:"ENGINEERING",name:"JCS Fleet Engineer Certification"},
@@ -22,7 +22,7 @@ const corePathwayOrder=[
 
 const optionalPathwayOrder=[
   "MED",
-  "CAR",
+  "LOG",
   "MIN"
 ];
 
@@ -36,7 +36,7 @@ const routeByCode={
   BMT:"AP/bmt.html",
   SOC:"AP/soc.html",
   MED:"AP/med.html",
-  CAR:"AP/car.html",
+  LOG:"AP/log.html",
   MIN:"AP/min.html",
   GUNNERY:"AP/gun.html",
   ENGINEERING:"AP/eng.html",
@@ -47,7 +47,7 @@ const shortCode={
   BMT:"BMT",
   SOC:"SOC",
   MED:"MED",
-  CAR:"LOG",
+  LOG:"LOG",
   MIN:"MIN",
   GUNNERY:"GUN",
   ENGINEERING:"ENG",
@@ -58,7 +58,7 @@ const iconByCode={
   BMT:"fa-shield-halved",
   SOC:"fa-mountain",
   MED:"fa-kit-medical",
-  CAR:"fa-boxes-stacked",
+  LOG:"fa-boxes-stacked",
   MIN:"fa-gem",
   GUNNERY:"fa-crosshairs",
   ENGINEERING:"fa-screwdriver-wrench",
@@ -85,7 +85,7 @@ function currentProgrammeCode(){
     "bmt.html":"BMT",
     "soc.html":"SOC",
     "med.html":"MED",
-    "car.html":"CAR",
+    "log.html":"LOG",
     "min.html":"MIN",
     "gun.html":"GUNNERY",
     "eng.html":"ENGINEERING",
@@ -198,7 +198,7 @@ function programmeState({
       : {state:"AVAILABLE",locked:false,css:""};
   }
 
-  if(["MED","CAR","MIN"].includes(code)){
+  if(["MED","LOG","MIN"].includes(code)){
     if(!bmtCertified||!socCertified){
       return {state:"LOCKED",locked:true,css:"is-locked"};
     }
