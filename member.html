@@ -869,7 +869,7 @@ button{
 
 
 /* =========================================================
-   ROLE
+   SPECIALISATION BADGE
 ========================================================= */
 
 .role-chip{
@@ -2712,7 +2712,7 @@ button{
 
 
                 <div class="detail-title">
-                  Specialisation
+                  Operational Role
                 </div>
 
 
@@ -3063,10 +3063,10 @@ const toTitleCase =
 
 
 /* =========================================================
-   NORMALIZE SPECIALISATIONS
+   NORMALIZE OPERATIONAL ROLES
 ========================================================= */
 
-function normalizeRoles(r){
+function normalizeOperationalRoles(r){
 
   const raw =
     r.ingame_role ?? null;
@@ -3102,6 +3102,27 @@ function normalizeRoles(r){
     )
 
     .filter(Boolean);
+
+}
+
+
+function specialisationLabel(code){
+
+  switch(
+    String(code || "")
+      .toUpperCase()
+  ){
+
+    case "GUNNERY":
+      return "GUNNERY";
+
+    case "ENGINEERING":
+      return "ENGINEERING";
+
+    default:
+      return "";
+
+  }
 
 }
 
@@ -3506,13 +3527,17 @@ function populateFilters(){
       .sort();
 
 
-  const roles =
+  const specialisations =
     [
       ...new Set(
         ROWS
-          .flatMap(
-            normalizeRoles
+          .map(
+            r =>
+              specialisationLabel(
+                r.active_specialisation
+              )
           )
+          .filter(Boolean)
       )
     ]
       .sort();
@@ -3544,7 +3569,7 @@ function populateFilters(){
 
     +
 
-    roles
+    specialisations
 
       .map(
         x =>
@@ -3674,8 +3699,8 @@ function filteredRows(){
       r => {
 
 
-        const roles =
-          normalizeRoles(r);
+        const operationalRoles =
+          normalizeOperationalRoles(r);
 
 
         const hay =
@@ -3685,7 +3710,10 @@ function filteredRows(){
             r.current_rank_category,
             r.current_rank_name,
             r.current_rank_code,
-            ...roles
+            specialisationLabel(
+              r.active_specialisation
+            ),
+            ...operationalRoles
           ]
             .join(" ")
             .toLowerCase();
@@ -3718,11 +3746,11 @@ function filteredRows(){
 
         if (
           role &&
-          !roles.some(
-            x =>
-              x.toLowerCase() ===
-              role
+          specialisationLabel(
+            r.active_specialisation
           )
+            .toLowerCase() !==
+            role
         ) {
 
           return false;
@@ -3893,8 +3921,10 @@ function render(){
             );
 
 
-          const roles =
-            normalizeRoles(r);
+          const specialisation =
+            specialisationLabel(
+              r.active_specialisation
+            );
 
 
           const selected =
@@ -3989,11 +4019,11 @@ function render(){
               <div class="role-cell">
 
                 ${
-                  roles.length
+                  specialisation
 
                     ? `
                       <span class="role-chip">
-                        ${esc(roles[0])}${roles.length > 1 ? ` +${roles.length - 1}` : ""}
+                        ${esc(specialisation)}
                       </span>
                     `
 
@@ -5094,8 +5124,8 @@ function viewMember(
       : "Unrated";
 
 
-  const roles =
-    normalizeRoles(r);
+  const operationalRoles =
+    normalizeOperationalRoles(r);
 
 
   const imgUrl =
@@ -5197,9 +5227,9 @@ function viewMember(
 
   $("#vRoles").innerHTML =
 
-    roles.length
+    operationalRoles.length
 
-      ? roles
+      ? operationalRoles
           .map(
             x =>
               `<span class="role-chip">${esc(x)}</span>`
@@ -5393,6 +5423,10 @@ async function loadRoster(){
     {
       data:attendanceRows,
       error:attendanceError
+    },
+    {
+      data:specialisationRows,
+      error:specialisationError
     }
   ] =
     await Promise.all([
@@ -5418,6 +5452,11 @@ async function loadRoster(){
         )
         .select(
           "user_id, mission_id, attendance"
+        ),
+
+      sb
+        .rpc(
+          "member_registry_specialisations"
         )
 
     ]);
@@ -5457,6 +5496,18 @@ async function loadRoster(){
     console.warn(
       "v_mission_attendees_detailed:",
       attendanceError.message
+    );
+
+  }
+
+
+  if (
+    specialisationError
+  ) {
+
+    console.warn(
+      "member_registry_specialisations:",
+      specialisationError.message
     );
 
   }
@@ -5526,12 +5577,33 @@ async function loadRoster(){
     );
 
 
+  const specialisationMap =
+    new Map(
+      (
+        specialisationError
+          ? []
+          : specialisationRows || []
+      )
+        .map(
+          row => [
+            row.user_id,
+            row.specialisation_code
+          ]
+        )
+    );
+
+
   ROWS =
     (profiles || [])
       .map(
         row => ({
 
           ...row,
+
+          active_specialisation:
+            specialisationMap.get(
+              row.user_id
+            ) || null,
 
           missions_attended:
             missionSets
