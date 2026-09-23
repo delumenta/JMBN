@@ -3083,7 +3083,7 @@ a.academy-path-card:hover{
   text-transform:uppercase;
 }
 
-@media(max-width:900px){
+@media(max-width:560px){
 
   .academy-path-sequence{
     grid-template-columns:1fr;
@@ -3132,6 +3132,44 @@ a.academy-path-card:hover{
     height:36px;
   }
 
+}
+
+
+
+/* Desktop Academy path is intentionally horizontal:
+   BMT → SOC → Instructor-assigned specialisation. */
+@media(min-width:561px){
+  #academyPath .academy-path-sequence{
+    display:grid !important;
+    grid-template-columns:
+      minmax(0,1fr)
+      46px
+      minmax(0,1fr)
+      46px
+      minmax(0,1fr) !important;
+    align-items:stretch !important;
+  }
+
+  #academyPath .sequence-arrow{
+    width:auto !important;
+    height:auto !important;
+    flex-direction:row !important;
+  }
+
+  #academyPath .sequence-arrow span{
+    width:26px !important;
+    height:1px !important;
+  }
+
+  #academyPath .sequence-arrow i{
+    margin-left:-1px !important;
+    transform:none !important;
+  }
+
+  #academyPath .academy-path-card{
+    width:100% !important;
+    margin:0 !important;
+  }
 }
 
 </style>
