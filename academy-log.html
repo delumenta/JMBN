@@ -1,1 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JMBN // Academy Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<style>
+:root{--bg:#020302;--gold:#f0d270;--gold2:#d6b44c;--text:#f3ecd2;--green:#70d98c;--red:#ff7474;--blue:#7fb9df;--sidebar:238px}
+*{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:"Play",sans-serif;background:radial-gradient(circle at 80% 8%,rgba(177,139,39,.08),transparent 32%),#020302}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(214,180,76,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(214,180,76,.065) 1px,transparent 1px);background-size:52px 52px}
+a{color:inherit}.mobile-bar{display:none}.app{position:relative;z-index:1;display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);min-height:100vh}
+.sidebar{min-height:100vh;border-right:1px solid rgba(214,180,76,.36);background:linear-gradient(180deg,rgba(10,12,9,.99),rgba(3,4,3,.99))}
+.sidebar-inner{position:sticky;top:0;padding-bottom:30px}.back{height:52px;padding:0 21px;display:flex;align-items:center;gap:10px;text-decoration:none;color:#777365;font-size:10px;letter-spacing:.14em;border-bottom:1px solid rgba(214,180,76,.14)}
+.heading{padding:25px 22px 18px}.heading small{color:#6d695c;letter-spacing:.27em}.heading strong{display:block;margin-top:5px;color:var(--gold);font-size:20px;letter-spacing:.13em}.network{margin-top:6px;color:#817c6c;font-size:8px;letter-spacing:.24em}
+.label{padding:10px 22px;color:#59574e;font-size:8px;letter-spacing:.25em}.nav{min-height:48px;padding:0 21px;display:flex;align-items:center;gap:14px;text-decoration:none;color:#a6a18f;font-size:12px;letter-spacing:.08em;border-left:3px solid transparent}.nav i{width:20px;text-align:center}.nav:hover{color:var(--text);background:rgba(240,210,112,.035)}.nav.active{color:var(--gold);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(240,210,112,.15),rgba(240,210,112,.025))}
+.divider{height:1px;margin:12px 21px;background:linear-gradient(90deg,rgba(214,180,76,.45),transparent)}.pathways{padding:0 22px;color:#918b78;font-size:9px;line-height:2.35}.pathways b{color:var(--gold);display:inline-block;width:74px}
+main{min-width:0;padding:28px 30px 50px}.container{max-width:1560px;margin:auto}.frame{position:relative;border:1px solid rgba(214,180,76,.67);background:linear-gradient(145deg,rgba(240,210,112,.025),transparent 16%),linear-gradient(180deg,rgba(8,10,7,.98),rgba(3,5,3,.99));clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}.frame:after{content:"";position:absolute;top:0;left:32px;width:100px;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.hero{padding:30px 36px;margin-bottom:18px;display:flex;justify-content:space-between;gap:25px;align-items:center}.eyebrow,.section-title{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.23em}.hero h1{margin:8px 0 4px;color:var(--text);font-size:38px;letter-spacing:.07em}.sub{color:#756f5e;font-size:10px;letter-spacing:.25em}.identity{min-width:285px;padding:14px 18px;border:1px solid rgba(214,180,76,.4);display:flex;gap:13px;align-items:center}.identity i{color:var(--gold);font-size:24px}.identity strong{font-size:12px}.identity span{display:block;margin-top:5px;color:#8f8976;font-size:8px;letter-spacing:.16em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.stat{padding:18px 20px;min-height:102px}.stat-label{color:var(--gold);font-size:9px;letter-spacing:.14em}.stat-value{margin-top:11px;font-size:30px;font-weight:700}.stat-meta{color:#777365;font-size:8px;letter-spacing:.11em}
+.panel-head{padding:17px 20px;border-bottom:1px solid rgba(214,180,76,.15)}.panel-body{padding:18px 20px;position:relative;z-index:1}
+.filters{display:grid;grid-template-columns:minmax(220px,1.45fr) repeat(3,minmax(150px,.65fr)) auto;gap:10px;align-items:end}.filter-group label{display:block;margin:0 0 7px;color:#8f8976;font-size:8px;letter-spacing:.17em}.control{width:100%;min-height:42px;border:1px solid rgba(214,180,76,.3);background:#0a0d0b;color:#ddd5bc;padding:9px 11px;font-family:inherit}.control:focus{outline:none;border-color:var(--gold)}.btn{min-height:42px;border:1px solid rgba(214,180,76,.55);background:rgba(240,210,112,.035);color:var(--gold);padding:0 16px;font-family:inherit;font-weight:700;font-size:9px;letter-spacing:.12em;cursor:pointer}.btn:hover{background:rgba(240,210,112,.075)}
+.log-panel{margin-top:18px}.log-summary{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(214,180,76,.12);color:#777365;font-size:8px;letter-spacing:.13em}.log-summary strong{color:var(--gold)}.table-wrap{overflow:auto}.table{width:100%;min-width:1050px;border-collapse:collapse;font-size:10px}.table th{text-align:left;padding:11px 10px;color:#7e7868;background:rgba(255,255,255,.025);font-size:8px;letter-spacing:.14em}.table td{padding:13px 10px;border-bottom:1px solid rgba(214,180,76,.105);color:#bdb6a1;vertical-align:top}.table tbody tr:hover{background:rgba(240,210,112,.018)}.code{color:var(--gold);font-weight:700}.member{color:#e0d9c2;font-weight:700}.detail-title{color:#d4cdb6;line-height:1.35}.detail-note{margin-top:5px;color:#6d685b;font-size:8px;line-height:1.45;max-width:380px}.actor{color:#918b78}.time{color:#8b8573;white-space:nowrap}.time small{display:block;margin-top:4px;color:#5e5b50}
+.activity{display:inline-flex;align-items:center;gap:7px;min-height:25px;padding:0 8px;border:1px solid rgba(214,180,76,.28);color:#aaa28b;font-size:7px;font-weight:700;letter-spacing:.12em;white-space:nowrap}.activity i{width:12px;text-align:center}.activity.cert{color:var(--gold);border-color:rgba(240,210,112,.46)}.activity.approved{color:var(--green);border-color:rgba(112,217,140,.34)}.activity.retraining{color:var(--red);border-color:rgba(255,116,116,.34)}.activity.pathway{color:var(--blue);border-color:rgba(127,185,223,.34)}
+.empty{padding:42px 18px;text-align:center;color:#686458;font-size:9px;letter-spacing:.12em;line-height:1.8}.footer{margin-top:20px;display:flex;justify-content:space-between;color:#5d594d;font-size:8px;letter-spacing:.18em}
+@media(max-width:1150px){:root{--sidebar:210px}.stats{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}.filters .filter-search{grid-column:1/-1}}
+@media(max-width:760px){.mobile-bar{display:flex;height:58px;position:sticky;top:0;z-index:200;align-items:center;justify-content:space-between;padding:0 15px;background:#030403;border-bottom:1px solid rgba(214,180,76,.45)}.mobile-bar button{border:0;background:none;color:var(--gold);font-size:20px}.app{display:block}.sidebar{position:fixed;z-index:300;top:0;left:0;width:min(300px,84vw);height:100vh;overflow:auto;transform:translateX(-105%);transition:.2s}.sidebar-open .sidebar{transform:none}main{padding:14px 13px 35px}.hero{display:block;padding:25px}.identity{margin-top:20px;min-width:0}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{min-height:90px}.filters{grid-template-columns:1fr}.filters .filter-search{grid-column:auto}.footer{gap:10px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
 
+<header class="mobile-bar">
+  <button id="menu"><i class="fa-solid fa-bars"></i></button>
+  <b>JMBN // ACADEMY LOG</b>
+  <a href="index.html">MANIFEST ↗</a>
+</header>
+
+<div class="app">
+<aside class="sidebar" id="sidebar"><div class="sidebar-inner">
+<a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> BACK TO MANIFEST</a>
+<div class="heading"><small>JMBN //</small><strong>ACADEMY</strong><div class="network">TRAINING NETWORK</div></div>
+<div class="label">ACADEMY</div>
+<a class="nav" href="academy.html"><i class="fa-solid fa-graduation-cap"></i> OVERVIEW</a>
+<a class="nav" href="programmes.html"><i class="fa-solid fa-layer-group"></i> PROGRAMMES</a>
+<a class="nav" href="training-schedule.html"><i class="fa-regular fa-calendar-days"></i> TRAINING SCHEDULE</a>
+<a class="nav" href="instructor.html"><i class="fa-solid fa-user-shield"></i> INSTRUCTOR ACCESS</a>
+<a class="nav active" href="academy-log.html"><i class="fa-solid fa-clock-rotate-left"></i> ACADEMY LOG</a>
+<div class="divider"></div>
+<div class="label">LOG INCLUDES</div>
+<div class="pathways">
+  <div><b>SIGN-OFF</b> APPROVED / RETRAINING</div>
+  <div><b>CERT</b> CERTIFICATION AWARDS</div>
+  <div><b>PATH</b> SPECIALISATION CHANGES</div>
+</div>
+</div></aside>
+
+<main><div class="container">
+
+<section class="frame hero">
+  <div>
+    <div class="eyebrow">JMBN ACADEMY</div>
+    <h1>ACADEMY LOG</h1>
+    <div class="sub">TRAINING // CERTIFICATION // PATHWAY AUDIT</div>
+  </div>
+  <div class="identity">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    <div>
+      <strong id="viewerName">ACADEMY STAFF</strong>
+      <span id="viewerRole">VERIFYING AUTHORISATION...</span>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="frame stat"><div class="stat-label">TOTAL LOG ENTRIES</div><div class="stat-value" id="totalCount">—</div><div class="stat-meta">LOADED ACTIVITY</div></div>
+  <div class="frame stat"><div class="stat-label">TRAINING APPROVALS</div><div class="stat-value" id="approvedCount">—</div><div class="stat-meta">APPROVED SIGN-OFFS</div></div>
+  <div class="frame stat"><div class="stat-label">CERTIFICATIONS</div><div class="stat-value" id="certCount">—</div><div class="stat-meta">AWARDED</div></div>
+  <div class="frame stat"><div class="stat-label">PATHWAY CHANGES</div><div class="stat-value" id="pathCount">—</div><div class="stat-meta">ASSIGN / REASSIGN / CLEAR</div></div>
+</section>
+
+<section class="frame">
+  <div class="panel-head"><div class="section-title">LOG FILTERS</div></div>
+  <div class="panel-body filters">
+
+    <div class="filter-group filter-search">
+      <label>SEARCH MEMBER / DETAILS / NOTES</label>
+      <input class="control" id="search" type="search" placeholder="Search the Academy log...">
+    </div>
+
+    <div class="filter-group">
+      <label>ACTIVITY TYPE</label>
+      <select class="control" id="typeFilter">
+        <option value="">ALL ACTIVITY</option>
+        <option value="approved">TRAINING APPROVALS</option>
+        <option value="retraining">RETRAINING</option>
+        <option value="cert">CERTIFICATIONS</option>
+        <option value="pathway">SPECIALISATION</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>PROGRAMME</label>
+      <select class="control" id="programmeFilter">
+        <option value="">ALL PROGRAMMES</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>DATE RANGE</label>
+      <select class="control" id="rangeFilter">
+        <option value="0">ALL TIME</option>
+        <option value="7">LAST 7 DAYS</option>
+        <option value="30">LAST 30 DAYS</option>
+        <option value="90">LAST 90 DAYS</option>
+      </select>
+    </div>
+
+    <button class="btn" id="resetFilters">RESET</button>
+
+  </div>
+</section>
+
+<section class="frame log-panel">
+  <div class="panel-head"><div class="section-title">ACADEMY ACTIVITY</div></div>
+  <div class="log-summary">
+    <span>SHOWING <strong id="visibleCount">—</strong> ENTRIES</span>
+    <span>READ-ONLY AUDIT VIEW</span>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>DATE / TIME</th>
+          <th>ACTIVITY</th>
+          <th>MEMBER</th>
+          <th>PROGRAMME / PATH</th>
+          <th>DETAILS</th>
+          <th>BY</th>
+        </tr>
+      </thead>
+      <tbody id="logRows">
+        <tr><td colspan="6"><div class="empty">ACCESSING ACADEMY AUDIT NETWORK...</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="footer">
+  <span>JMBN ACADEMY // AUDIT LOG</span>
+  <span>● SYSTEMS ONLINE</span>
+</footer>
+
+</div></main>
+</div>
+
+<script>
+let sb=null,me=null,isAdmin=false;
+let members=[],certs=[],events=[],signoffs=[],certifications=[],pathwayHistory=[],activities=[];
+
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+const dateOnly=v=>v?new Date(v).toLocaleDateString("en-SG",{day:"2-digit",month:"short",year:"numeric"}):"—";
+const timeOnly=v=>v?new Date(v).toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"}):"";
+
+function memberName(id){
+  const row=members.find(x=>x.user_id===id);
+  return row?.display_name||row?.handle||"MEMBER";
+}
+
+function certName(code){
+  const row=certs.find(x=>String(x.certification_code||"").toUpperCase()===String(code||"").toUpperCase());
+  if(row?.name)return row.name;
+  switch(String(code||"").toUpperCase()){
+    case "MED":return "Medical";
+    case "GUNNERY":return "Gunnery";
+    case "ENGINEERING":return "Engineering";
+    default:return code||"—";
+  }
+}
+
+function eventName(code){
+  const row=events.find(x=>x.event_code===code);
+  return row?.title||code||"—";
+}
+
+async function verifyAccess(){
+  const [{data:profile},{data:auths}]=await Promise.all([
+    sb.from("profiles").select("role,display_name,handle").eq("user_id",me).maybeSingle(),
+    sb.from("academy_instructors").select("id").eq("user_id",me).eq("is_active",true).or("can_instruct.eq.true,can_sign_off.eq.true").limit(1)
+  ]);
+
+  isAdmin=String(profile?.role||"").toLowerCase()==="admin";
+
+  if(!isAdmin && !(auths||[]).length){
+    location.replace("academy.html");
+    return false;
+  }
+
+  $("#viewerName").textContent=profile?.display_name||profile?.handle||"ACADEMY STAFF";
+  $("#viewerRole").textContent=isAdmin?"ACADEMY ADMINISTRATOR":"ACADEMY INSTRUCTOR // AUDIT ACCESS";
+  return true;
+}
+
+async function load(){
+  const [m,c,e,s,uc,ph]=await Promise.all([
+    sb.from("v_profiles_detailed").select("user_id,handle,display_name,current_rank_code").order("display_name"),
+    sb.from("certifications").select("certification_code,name,sort_order").order("sort_order"),
+    sb.from("training_events").select("event_code,title,sort_order").order("sort_order"),
+    sb.from("training_signoffs").select("id,trainee_id,event_code,certification_code,instructor_id,status,notes,signed_off_at").order("signed_off_at",{ascending:false}).limit(500),
+    sb.from("user_certifications").select("user_id,certification_code,awarded_at").order("awarded_at",{ascending:false}).limit(500),
+    sb.from("academy_specialisation_history").select("id,trainee_id,action,specialisation_code,previous_specialisation_code,instructor_id,notes,created_at").order("created_at",{ascending:false}).limit(500)
+  ]);
+
+  const errors=[m.error,c.error,e.error,s.error,uc.error,ph.error].filter(Boolean);
+  if(errors.length)console.warn("Academy log query warnings:",errors);
+
+  members=m.data||[];
+  certs=c.data||[];
+  events=e.data||[];
+  signoffs=s.data||[];
+  certifications=uc.data||[];
+  pathwayHistory=ph.data||[];
+
+  buildActivities();
+  renderProgrammeFilter();
+  renderStats();
+  renderLog();
+}
+
+function buildActivities(){
+  const signoffActivity=signoffs.map(x=>({
+    id:"signoff-"+x.id,
+    type:x.status==="approved"?"approved":"retraining",
+    trainee_id:x.trainee_id,
+    actor_id:x.instructor_id,
+    code:x.certification_code,
+    timestamp:x.signed_off_at,
+    title:x.status==="approved"?"TRAINING SIGNED OFF":"RETRAINING RECORDED",
+    detail:eventName(x.event_code),
+    subdetail:x.event_code,
+    notes:x.notes||""
+  }));
+
+  const certActivity=certifications.map((x,index)=>({
+    id:"cert-"+x.user_id+"-"+x.certification_code+"-"+index,
+    type:"cert",
+    trainee_id:x.user_id,
+    actor_id:null,
+    code:x.certification_code,
+    timestamp:x.awarded_at,
+    title:"CERTIFICATION AWARDED",
+    detail:certName(x.certification_code),
+    subdetail:"REQUIREMENTS COMPLETED",
+    notes:""
+  }));
+
+  const pathwayActivity=pathwayHistory.map(x=>{
+    let title="SPECIALISATION ASSIGNED",detail=x.specialisation_code||"—";
+    if(x.action==="reassigned"){
+      title="SPECIALISATION REASSIGNED";
+      detail=(x.previous_specialisation_code||"—")+" → "+(x.specialisation_code||"—");
+    }
+    if(x.action==="cleared"){
+      title="SPECIALISATION CLEARED";
+      detail=x.previous_specialisation_code||"—";
+    }
+    return{
+      id:"path-"+x.id,
+      type:"pathway",
+      trainee_id:x.trainee_id,
+      actor_id:x.instructor_id,
+      code:x.specialisation_code||x.previous_specialisation_code||"",
+      timestamp:x.created_at,
+      title,
+      detail,
+      subdetail:"INSTRUCTOR-ASSIGNED PATH",
+      notes:x.notes||""
+    };
+  });
+
+  activities=[...signoffActivity,...certActivity,...pathwayActivity]
+    .sort((a,b)=>new Date(b.timestamp).getTime()-new Date(a.timestamp).getTime());
+}
+
+function renderProgrammeFilter(){
+  const codes=[...new Set([
+    ...certs.map(x=>x.certification_code),
+    ...activities.map(x=>x.code),
+    "MED","GUNNERY","ENGINEERING"
+  ].filter(Boolean))].sort();
+
+  $("#programmeFilter").innerHTML=
+    '<option value="">ALL PROGRAMMES</option>'+
+    codes.map(code=>'<option value="'+esc(code)+'">'+esc(code)+" — "+esc(certName(code))+"</option>").join("");
+}
+
+function renderStats(){
+  $("#totalCount").textContent=activities.length;
+  $("#approvedCount").textContent=activities.filter(x=>x.type==="approved").length;
+  $("#certCount").textContent=activities.filter(x=>x.type==="cert").length;
+  $("#pathCount").textContent=activities.filter(x=>x.type==="pathway").length;
+}
+
+function badge(type){
+  if(type==="approved")return '<span class="activity approved"><i class="fa-solid fa-check"></i> APPROVED</span>';
+  if(type==="retraining")return '<span class="activity retraining"><i class="fa-solid fa-rotate-right"></i> RETRAINING</span>';
+  if(type==="cert")return '<span class="activity cert"><i class="fa-solid fa-award"></i> CERTIFICATION</span>';
+  return '<span class="activity pathway"><i class="fa-solid fa-route"></i> SPECIALISATION</span>';
+}
+
+function filteredActivities(){
+  const q=$("#search").value.trim().toLowerCase();
+  const type=$("#typeFilter").value;
+  const programme=$("#programmeFilter").value;
+  const range=Number($("#rangeFilter").value||0);
+  const cutoff=range>0?Date.now()-(range*86400000):0;
+
+  return activities.filter(x=>{
+    if(type&&x.type!==type)return false;
+    if(programme&&String(x.code||"").toUpperCase()!==String(programme).toUpperCase())return false;
+    if(cutoff&&new Date(x.timestamp).getTime()<cutoff)return false;
+
+    if(q){
+      const haystack=[
+        memberName(x.trainee_id),x.code,certName(x.code),x.title,x.detail,x.subdetail,x.notes,
+        x.actor_id?memberName(x.actor_id):"system"
+      ].join(" ").toLowerCase();
+      if(!haystack.includes(q))return false;
+    }
+    return true;
+  });
+}
+
+function renderLog(){
+  const rows=filteredActivities();
+  $("#visibleCount").textContent=rows.length;
+
+  if(!rows.length){
+    $("#logRows").innerHTML='<tr><td colspan="6"><div class="empty">NO ACADEMY LOG ENTRIES MATCH THE CURRENT FILTERS.</div></td></tr>';
+    return;
+  }
+
+  $("#logRows").innerHTML=rows.map(x=>{
+    const actor=x.actor_id?memberName(x.actor_id):"SYSTEM / CERTIFICATION RECORD";
+    return `
+      <tr>
+        <td class="time">${esc(dateOnly(x.timestamp))}<small>${esc(timeOnly(x.timestamp))}</small></td>
+        <td>${badge(x.type)}</td>
+        <td><div class="member">${esc(memberName(x.trainee_id))}</div></td>
+        <td><span class="code">${esc(x.code||"—")}</span><div class="detail-note">${esc(certName(x.code))}</div></td>
+        <td>
+          <div class="detail-title">${esc(x.title)}</div>
+          <div class="detail-note">${esc(x.detail||"")}${x.subdetail?" // "+esc(x.subdetail):""}</div>
+          ${x.notes?'<div class="detail-note">NOTE: '+esc(x.notes)+'</div>':""}
+        </td>
+        <td class="actor">${esc(actor)}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+["search","typeFilter","programmeFilter","rangeFilter"].forEach(id=>{
+  $("#"+id).addEventListener(id==="search"?"input":"change",renderLog);
+});
+
+$("#resetFilters").addEventListener("click",()=>{
+  $("#search").value="";
+  $("#typeFilter").value="";
+  $("#programmeFilter").value="";
+  $("#rangeFilter").value="0";
+  renderLog();
+});
+
+$("#menu").addEventListener("click",()=>document.body.classList.toggle("sidebar-open"));
+
+document.addEventListener("DOMContentLoaded",async()=>{
+  try{
+    const session=await requireAuth();
+    if(!session)return;
+    sb=getSupabase();
+    me=session.user.id;
+    if(await verifyAccess())await load();
+  }catch(error){
+    console.error("Academy log initialization failed:",error);
+    $("#logRows").innerHTML='<tr><td colspan="6"><div class="empty">ACADEMY AUDIT NETWORK CONNECTION FAILED.</div></td></tr>';
+  }
+});
+</script>
+</body>
+</html>
