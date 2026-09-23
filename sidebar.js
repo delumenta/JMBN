@@ -240,7 +240,7 @@ function renderProgrammes(programmes,context={}){
         <div
           class="${classes}"
           aria-disabled="true"
-          title="Programme access is locked by Academy progression."
+          title="Certification access is locked by Academy progression."
         >
           ${inner}
         </div>
