@@ -66,9 +66,13 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
    INSTRUCTOR PANEL TABS
 ========================================================= */
 
+.action-tabs{
+  margin-top:20px;
+}
+
 .instructor-tabs{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:1px;
 
   margin-bottom:18px;
@@ -373,32 +377,11 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </div></aside>
 <main><div class="container">
 <section class="frame hero"><div><div class="eyebrow">JMBN ACADEMY</div><h1>INSTRUCTOR PANEL</h1><div class="sub">TRAIN // ASSESS // CERTIFY // STRENGTHEN</div></div><div class="identity"><i class="fa-solid fa-user-shield"></i><div><strong id="instructorName">INSTRUCTOR</strong><span id="instructorRole">VERIFYING AUTHORISATION...</span></div></div></section>
-<nav class="instructor-tabs" aria-label="Instructor panel sections">
-  <button class="instructor-tab active" type="button" data-tab="overview">
-    <i class="fa-solid fa-chart-line"></i>
-    <span>OVERVIEW</span>
-    <small>COMMAND SUMMARY</small>
-  </button>
-
-  <button class="instructor-tab" type="button" data-tab="signoff">
-    <i class="fa-solid fa-clipboard-check"></i>
-    <span>MEMBER SIGN-OFF</span>
-    <small>TRAINING APPROVAL</small>
-  </button>
-
-  <button class="instructor-tab" type="button" data-tab="specialisation">
-    <i class="fa-solid fa-route"></i>
-    <span>SPECIALISATION ACCESS</span>
-    <small>ASSIGN PATHWAY</small>
-  </button>
-</nav>
-
-
 <!-- =========================================================
-     TAB // OVERVIEW
+     INSTRUCTOR OVERVIEW // ALWAYS VISIBLE
 ========================================================= -->
 
-<section class="tab-page active" id="tab-overview" data-tab-page="overview">
+<section class="instructor-overview" id="instructorOverview">
 
   <section class="stats">
     <div class="frame stat"><div class="stat-label">YOUR AUTHORISATIONS</div><div class="stat-value" id="authCount">—</div><div class="stat-meta">PROGRAMMES</div></div>
@@ -483,11 +466,28 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </section>
 
 
+<nav class="instructor-tabs action-tabs" aria-label="Instructor actions">
+
+  <button class="instructor-tab active" type="button" data-tab="signoff">
+    <i class="fa-solid fa-clipboard-check"></i>
+    <span>MEMBER SIGN-OFF</span>
+    <small>TRAINING APPROVAL</small>
+  </button>
+
+  <button class="instructor-tab" type="button" data-tab="specialisation">
+    <i class="fa-solid fa-route"></i>
+    <span>SPECIALISATION ACCESS</span>
+    <small>ASSIGN PATHWAY</small>
+  </button>
+
+</nav>
+
+
 <!-- =========================================================
      TAB // MEMBER SIGN-OFF
 ========================================================= -->
 
-<section class="tab-page" id="tab-signoff" data-tab-page="signoff">
+<section class="tab-page active" id="tab-signoff" data-tab-page="signoff">
 
   <section class="frame action-page">
 
@@ -885,14 +885,14 @@ $("#menu").addEventListener("click",()=>document.body.classList.toggle("sidebar-
 function activateInstructorTab(name,updateHash=true){
 
  const valid=
-  ["overview","signoff","specialisation"];
+  ["signoff","specialisation"];
 
  const next=
   valid.includes(name)
   ?
   name
   :
-  "overview";
+  "signoff";
 
  document
   .querySelectorAll(".instructor-tab")
@@ -913,11 +913,8 @@ function activateInstructorTab(name,updateHash=true){
   });
 
  if(updateHash){
+
   const hash=
-   next==="overview"
-   ?
-   "#overview"
-   :
    next==="signoff"
    ?
    "#member-signoff"
@@ -931,42 +928,44 @@ function activateInstructorTab(name,updateHash=true){
     hash
    );
   }
+
  }
 }
 
 document
  .querySelectorAll(".instructor-tab")
  .forEach(button=>{
+
   button.addEventListener(
    "click",
    ()=>activateInstructorTab(
     button.dataset.tab
    )
   );
+
  });
 
 window.addEventListener(
  "hashchange",
  ()=>{
+
   const hash=
    location.hash
     .replace("#","")
     .toLowerCase();
 
   activateInstructorTab(
-   hash==="member-signoff"
-   ?
-   "signoff"
-   :
    hash==="specialisation-access"
    ?
    "specialisation"
    :
-   "overview",
+   "signoff",
    false
   );
+
  }
 );
+
 
 document.addEventListener("DOMContentLoaded",async()=>{
  const initialHash=
@@ -975,15 +974,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
    .toLowerCase();
 
  activateInstructorTab(
-  initialHash==="member-signoff"
-  ?
-  "signoff"
-  :
   initialHash==="specialisation-access"
   ?
   "specialisation"
   :
-  "overview",
+  "signoff",
   false
  );
 
