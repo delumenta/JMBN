@@ -302,6 +302,83 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
   letter-spacing:.11em;
 }
 
+.assessment-state{
+  margin:12px 0 0;
+  padding:10px 12px;
+  border:1px solid rgba(214,180,76,.18);
+  background:rgba(240,210,112,.025);
+  color:#8c866f;
+  font-size:8px;
+  letter-spacing:.12em;
+  line-height:1.45;
+}
+
+.assessment-state.ready{
+  color:var(--gold);
+  border-color:rgba(214,180,76,.42);
+}
+
+.assessment-state.complete{
+  color:var(--green);
+  border-color:rgba(72,216,145,.32);
+}
+
+.training-actions{
+  grid-template-columns:1fr 1fr 1fr;
+}
+
+.support-enrolments{
+  margin-top:16px;
+  padding:15px;
+  border:1px solid rgba(214,180,76,.20);
+  background:rgba(255,255,255,.012);
+}
+
+.support-enrolments-title{
+  color:#8e866e;
+  font-size:8px;
+  letter-spacing:.16em;
+  margin-bottom:10px;
+}
+
+.support-enrolments-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.support-enrolment{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:38px;
+  padding:8px 10px;
+  border:1px solid rgba(214,180,76,.18);
+  color:#9b947f;
+  font-size:8px;
+  letter-spacing:.08em;
+}
+
+.support-enrolment input{
+  accent-color:#d6b44c;
+}
+
+.support-actions{
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.support-actions .btn{
+  min-height:38px;
+  padding:0 16px;
+}
+
+@media(max-width:760px){
+  .training-actions{grid-template-columns:1fr}
+  .support-enrolments-grid{grid-template-columns:1fr}
+}
+
 .assignment-panel.action-page{
   margin-top:0;
 }
@@ -504,11 +581,6 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 
       <div class="signoff-form">
 
-        <label>SELECT MEMBER</label>
-        <select id="trainee" class="control">
-          <option value="">SELECT TRAINEE</option>
-        </select>
-
         <label>CERTIFICATION</label>
         <select id="programme" class="control">
           <option value="">SELECT CERTIFICATION</option>
@@ -517,6 +589,11 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
         <label>MODULE / TRAINING EVENT</label>
         <select id="event" class="control">
           <option value="">SELECT MODULE</option>
+        </select>
+
+        <label>SELECT MEMBER</label>
+        <select id="trainee" class="control">
+          <option value="">SELECT CERTIFICATION + MODULE FIRST</option>
         </select>
 
         <label>INSTRUCTOR NOTES</label>
@@ -528,21 +605,30 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 
         <div class="assessment">
           <div class="section-title">PRACTICAL ASSESSMENT</div>
-          <div class="assessment-note">ALL CHECKS ARE REQUIRED BEFORE AN APPROVED SIGN-OFF.</div>
+          <div class="assessment-note">PROGRESS IS SAVED PER MEMBER + MODULE. 4/4 MOVES TO AWAITING SIGN-OFF.</div>
 
-          <label class="check"><input type="checkbox" class="criteria"> Required practical objectives demonstrated</label>
-          <label class="check"><input type="checkbox" class="criteria"> Correct equipment / loadout / procedure used</label>
-          <label class="check"><input type="checkbox" class="criteria"> Instructor questions answered satisfactorily</label>
-          <label class="check"><input type="checkbox" class="criteria"> Safety and JMBN operating standards followed</label>
+          <label class="check"><input type="checkbox" class="criteria" data-criterion="practical_objectives"> Required practical objectives demonstrated</label>
+          <label class="check"><input type="checkbox" class="criteria" data-criterion="equipment_procedure"> Correct equipment / loadout / procedure used</label>
+          <label class="check"><input type="checkbox" class="criteria" data-criterion="instructor_questions"> Instructor questions answered satisfactorily</label>
+          <label class="check"><input type="checkbox" class="criteria" data-criterion="safety_standards"> Safety and JMBN operating standards followed</label>
+
+          <div id="assessmentState" class="assessment-state">
+            SELECT A CERTIFICATION, MODULE AND MEMBER.
+          </div>
         </div>
 
-        <div class="actions">
-          <button class="btn red" id="retrain">
+        <div class="actions training-actions">
+          <button class="btn" id="saveAssessment" disabled>
+            <i class="fa-solid fa-floppy-disk"></i>
+            SAVE PROGRESS
+          </button>
+
+          <button class="btn red" id="retrain" disabled>
             <i class="fa-solid fa-rotate-right"></i>
             NEEDS RETRAINING
           </button>
 
-          <button class="btn" id="approve">
+          <button class="btn" id="approve" disabled>
             <i class="fa-solid fa-check"></i>
             SIGN OFF TRAINING
           </button>
@@ -598,6 +684,19 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
           </div>
         </div>
 
+        <div class="support-enrolments">
+          <div class="support-enrolments-title">SUPPORT PATHWAYS // STACKABLE STUDENT ENROLMENT</div>
+          <div class="support-enrolments-grid">
+            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MED"> MEDICAL</label>
+            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="LOG"> LOGISTICS / CARGO</label>
+            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MIN"> MINING</label>
+          </div>
+          <div class="support-actions">
+            <button class="btn" id="saveSupportPaths" disabled>UPDATE SUPPORT PATHWAYS</button>
+          </div>
+          <div class="msg" id="supportMessage"></div>
+        </div>
+
       </div>
 
       <div>
@@ -642,6 +741,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </div></main></div>
 <script>
 let sb=null,me=null,isAdmin=false,authorisations=[],certs=[],reqs=[],events=[],members=[],signoffs=[],assignments=[];
+let trainingRoster=[],currentAssessment=null;
 const overviewCache=new Map();
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
@@ -672,19 +772,23 @@ async function load(){
  overviewCache.clear();
  render();
 }
+function permissionFor(code){
+ const key=String(code||"").toUpperCase();
+ if(isAdmin)return {can_instruct:true,can_sign_off:true,is_active:true};
+ return authorisations.find(x=>String(x.certification_code||"").toUpperCase()===key&&x.is_active)
+   || {can_instruct:false,can_sign_off:false,is_active:false};
+}
 function allowedCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
- return authorisations.filter(x=>x.can_instruct||x.can_sign_off).map(x=>x.certification_code);
+ return authorisations.filter(x=>x.is_active&&(x.can_instruct||x.can_sign_off)).map(x=>x.certification_code);
 }
 function signoffCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
- return authorisations.filter(x=>x.can_sign_off).map(x=>x.certification_code);
+ return authorisations.filter(x=>x.is_active&&x.can_sign_off).map(x=>x.certification_code);
 }
 function render(){
  const codes=new Set(allowedCodes());
- const signCodes=new Set(signoffCodes());
  const allowed=certs.filter(c=>codes.has(c.certification_code));
- const signoffAllowed=certs.filter(c=>signCodes.has(c.certification_code));
  $("#authCount").textContent=allowed.length;
  $("#signoffCount").textContent=signoffs.length;
  const cutoff=Date.now()-30*86400000;
@@ -695,18 +799,181 @@ function render(){
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
  const memberMap=new Map(members.map(x=>[x.user_id,x]));
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
- $("#trainee").innerHTML=`<option value="">SELECT TRAINEE</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
+ $("#trainee").innerHTML='<option value="">SELECT CERTIFICATION + MODULE FIRST</option>';
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  updatePathAssignment();
- $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+signoffAllowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
+ $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
+ resetAssessmentPanel();
 }
-function updateEvents(){
+
+function resetAssessmentPanel(){
+ currentAssessment=null;
+ document.querySelectorAll(".criteria").forEach(x=>{x.checked=false;x.disabled=true});
+ $("#notes").value="";
+ $("#notes").disabled=true;
+ $("#saveAssessment").disabled=true;
+ $("#retrain").disabled=true;
+ $("#approve").disabled=true;
+ $("#approve").title="";
+ const state=$("#assessmentState");
+ state.className="assessment-state";
+ state.textContent="SELECT A CERTIFICATION, MODULE AND MEMBER.";
+}
+
+function assessmentDone(){
+ return [...document.querySelectorAll(".criteria")].filter(x=>x.checked).length;
+}
+
+function updateAssessmentControls(){
+ const code=$("#programme").value;
+ const trainee=$("#trainee").value;
+ const event=$("#event").value;
+ const perm=permissionFor(code);
+ const completed=!!currentAssessment?.completed||currentAssessment?.status==="completed";
+ const done=assessmentDone();
+ const hasSelection=!!(code&&event&&trainee);
+
+ document.querySelectorAll(".criteria").forEach(x=>x.disabled=!hasSelection||completed||!perm.can_instruct);
+ $("#notes").disabled=!hasSelection||completed||!perm.can_instruct;
+ $("#saveAssessment").disabled=!hasSelection||completed||!perm.can_instruct;
+ $("#retrain").disabled=!hasSelection||completed||!(perm.can_instruct||perm.can_sign_off);
+ $("#approve").disabled=!hasSelection||completed||!perm.can_sign_off||done<4;
+
+ if(!perm.can_sign_off && hasSelection){
+  $("#approve").title="SIGN-OFF AUTHORITY REQUIRED";
+ }else if(done<4 && hasSelection){
+  $("#approve").title="COMPLETE ALL 4 ASSESSMENT CHECKS FIRST";
+ }else{
+  $("#approve").title="";
+ }
+
+ const state=$("#assessmentState");
+ state.className="assessment-state";
+ if(!hasSelection){
+  state.textContent="SELECT A CERTIFICATION, MODULE AND MEMBER.";
+ }else if(completed){
+  state.classList.add("complete");
+  state.textContent="COMPLETED // MODULE ALREADY SIGNED OFF.";
+ }else if(done===4){
+  state.classList.add("ready");
+  state.textContent="4 / 4 CHECKS COMPLETE // AWAITING SIGN-OFF"+(perm.can_sign_off?"":" // SIGN-OFF AUTHORITY REQUIRED");
+ }else{
+  state.textContent=`${done} / 4 CHECKS COMPLETE // TRAINING IN PROGRESS`;
+ }
+}
+
+async function loadTrainingRoster(){
+ const code=$("#programme").value;
+ const event=$("#event").value;
+ const trainee=$("#trainee");
+ resetAssessmentPanel();
+
+ if(!code){
+  trainee.innerHTML='<option value="">SELECT CERTIFICATION FIRST</option>';
+  return;
+ }
+ if(!event){
+  trainee.innerHTML='<option value="">SELECT MODULE FIRST</option>';
+  return;
+ }
+
+ trainee.innerHTML='<option value="">LOADING STUDENTS...</option>';
+ const {data,error}=await sb.rpc("academy_training_roster",{
+  p_certification_code:code,
+  p_event_code:event
+ });
+ if(error){
+  trainingRoster=[];
+  trainee.innerHTML='<option value="">UNABLE TO LOAD STUDENTS</option>';
+  $("#message").className="msg bad";
+  $("#message").textContent=error.message.toUpperCase();
+  return;
+ }
+
+ trainingRoster=data||[];
+ trainee.innerHTML='<option value="">SELECT TRAINEE</option>'+trainingRoster.map(row=>{
+  const name=row.display_name||row.handle||row.user_id;
+  let progress=`${row.checklist_done||0}/${row.checklist_total||4}`;
+  if(row.completed)progress="COMPLETED";
+  else if(row.assessment_status==="awaiting_signoff")progress="4/4 · AWAITING SIGN-OFF";
+  else if(row.assessment_status==="retraining")progress=`${row.checklist_done||0}/4 · RETRAINING`;
+  return `<option value="${esc(row.user_id)}">${esc(name)} // ${esc(progress)}</option>`;
+ }).join("");
+
+ if(!trainingRoster.length){
+  trainee.innerHTML='<option value="">NO STUDENTS IN THIS PATHWAY</option>';
+ }
+}
+
+async function updateEvents(){
  const code=$("#programme").value;
  const eventMap=new Map(events.map(x=>[x.event_code,x]));
  const rows=reqs.filter(x=>x.certification_code===code);
  $("#event").innerHTML=`<option value="">SELECT MODULE</option>`+rows.map(r=>{const e=eventMap.get(r.event_code);return `<option value="${esc(r.event_code)}">${esc(r.event_code)} — ${esc(e?.title||r.event_code)}</option>`}).join("");
+ await loadTrainingRoster();
+}
+
+async function loadAssessment(){
+ const trainee=$("#trainee").value,code=$("#programme").value,event=$("#event").value;
+ if(!trainee||!code||!event){resetAssessmentPanel();return}
+ $("#message").className="msg";
+ $("#message").textContent="LOADING SAVED ASSESSMENT...";
+ const {data,error}=await sb.rpc("academy_get_training_assessment",{
+  p_trainee:trainee,
+  p_event_code:event,
+  p_certification_code:code
+ });
+ if(error){
+  $("#message").className="msg bad";
+  $("#message").textContent=error.message.toUpperCase();
+  resetAssessmentPanel();
+  return;
+ }
+ currentAssessment=data||{};
+ document.querySelectorAll(".criteria").forEach(input=>{
+  input.checked=!!currentAssessment[input.dataset.criterion];
+ });
+ $("#notes").value=currentAssessment.notes||"";
+ $("#message").className="msg";
+ $("#message").textContent=currentAssessment.last_conducted_by_name
+   ? `LAST UPDATED BY ${String(currentAssessment.last_conducted_by_name).toUpperCase()}`
+   : "ASSESSMENT READY.";
+ updateAssessmentControls();
+}
+
+async function saveAssessment(){
+ const trainee=$("#trainee").value,code=$("#programme").value,event=$("#event").value;
+ const perm=permissionFor(code);
+ const msg=$("#message");
+ msg.className="msg";msg.textContent="";
+ if(!trainee||!code||!event){msg.classList.add("bad");msg.textContent="SELECT A CERTIFICATION, MODULE AND MEMBER.";return}
+ if(!perm.can_instruct){msg.classList.add("bad");msg.textContent="YOU MAY REVIEW THIS ASSESSMENT BUT CANNOT CONDUCT IT.";return}
+
+ const values={};
+ document.querySelectorAll(".criteria").forEach(x=>values[x.dataset.criterion]=x.checked);
+ const button=$("#saveAssessment");button.disabled=true;
+ const {data,error}=await sb.rpc("academy_save_training_assessment",{
+  p_trainee:trainee,
+  p_event_code:event,
+  p_certification_code:code,
+  p_practical_objectives:!!values.practical_objectives,
+  p_equipment_procedure:!!values.equipment_procedure,
+  p_instructor_questions:!!values.instructor_questions,
+  p_safety_standards:!!values.safety_standards,
+  p_notes:$("#notes").value.trim()||null
+ });
+ if(error){
+  msg.classList.add("bad");msg.textContent=error.message.toUpperCase();
+  updateAssessmentControls();
+  return;
+ }
+ msg.classList.add("ok");
+ msg.textContent=data?.status==="awaiting_signoff"?"4 / 4 SAVED // AWAITING SIGN-OFF.":"ASSESSMENT PROGRESS SAVED.";
+ await loadTrainingRoster();
+ $("#trainee").value=trainee;
+ await loadAssessment();
 }
 
 function pathLabel(code){
@@ -784,6 +1051,63 @@ async function renderMemberOverview(trainee,force=false){
  }
 }
 
+async function loadSupportEnrolments(trainee){
+ const checks=[...document.querySelectorAll(".support-path-check")];
+ const save=$("#saveSupportPaths");
+ const msg=$("#supportMessage");
+ msg.className="msg";msg.textContent="";
+
+ if(!trainee){
+  checks.forEach(x=>{x.checked=false;x.disabled=true});
+  save.disabled=true;
+  return;
+ }
+
+ const {data,error}=await sb.rpc("academy_support_enrolments_for_member",{p_trainee:trainee});
+ if(error){
+  checks.forEach(x=>{x.checked=false;x.disabled=true});
+  save.disabled=true;
+  msg.classList.add("bad");msg.textContent="SUPPORT PATHWAYS UNAVAILABLE.";
+  return;
+ }
+
+ const active=new Set((data||[]).filter(x=>x.is_active).map(x=>String(x.certification_code||"").toUpperCase()));
+ let manageable=0;
+ checks.forEach(x=>{
+  const code=String(x.dataset.code||"").toUpperCase();
+  const perm=permissionFor(code);
+  x.checked=active.has(code);
+  x.disabled=!(isAdmin||perm.can_instruct||perm.can_sign_off);
+  if(!x.disabled)manageable++;
+ });
+ save.disabled=manageable===0;
+}
+
+async function saveSupportEnrolments(){
+ const trainee=$("#pathTrainee").value;
+ const msg=$("#supportMessage");
+ msg.className="msg";msg.textContent="";
+ if(!trainee){msg.classList.add("bad");msg.textContent="SELECT A MEMBER FIRST.";return}
+
+ const checks=[...document.querySelectorAll(".support-path-check")].filter(x=>!x.disabled);
+ const button=$("#saveSupportPaths");button.disabled=true;
+ try{
+  for(const x of checks){
+   const {error}=await sb.rpc("academy_set_support_enrolment",{
+    p_trainee:trainee,
+    p_certification_code:String(x.dataset.code||"").toUpperCase(),
+    p_active:x.checked
+   });
+   if(error)throw error;
+  }
+  msg.classList.add("ok");msg.textContent="SUPPORT PATHWAYS UPDATED.";
+ }catch(error){
+  msg.classList.add("bad");msg.textContent=String(error.message||error).toUpperCase();
+ }finally{
+  await loadSupportEnrolments(trainee);
+ }
+}
+
 async function updatePathAssignment(){
  const trainee=$("#pathTrainee").value;
  const code=$("#pathCurrentCode"),name=$("#pathCurrentName"),meta=$("#pathCurrentMeta"),select=$("#pathCode"),notes=$("#pathNotes"),button=$("#assignPath");
@@ -792,6 +1116,7 @@ async function updatePathAssignment(){
   code.textContent="—";name.textContent="NO MEMBER SELECTED";meta.textContent="SELECT A MEMBER TO VIEW THEIR CURRENT SPECIALISATION.";select.value="";notes.value="";
   button.disabled=true;
   button.innerHTML='<i class="fa-solid fa-lock"></i> SELECT MEMBER';
+  await loadSupportEnrolments("");
   return;
  }
 
@@ -807,6 +1132,7 @@ async function updatePathAssignment(){
  }
 
  const overview=await renderMemberOverview(trainee);
+ await loadSupportEnrolments(trainee);
  if($("#overviewTrainee").value!==trainee)$("#overviewTrainee").value=trainee;
 
  if(!overview?.core_complete){
@@ -859,27 +1185,39 @@ $("#overviewTrainee").addEventListener("change",async()=>{
 });
 $("#trainee").addEventListener("change",async()=>{
  const trainee=$("#trainee").value;
- if(!trainee)return;
+ if(!trainee){resetAssessmentPanel();return}
  $("#overviewTrainee").value=trainee;
  $("#pathTrainee").value=trainee;
+ await loadAssessment();
  await updatePathAssignment();
 });
 $("#assignPath").addEventListener("click",assignPath);
 $("#clearPath").addEventListener("click",clearPath);
+$("#saveSupportPaths").addEventListener("click",saveSupportEnrolments);
 
 $("#programme").addEventListener("change",updateEvents);
+$("#event").addEventListener("change",loadTrainingRoster);
+document.querySelectorAll(".criteria").forEach(x=>x.addEventListener("change",updateAssessmentControls));
+$("#saveAssessment").addEventListener("click",saveAssessment);
+
 async function sign(status){
  const trainee=$("#trainee").value,programme=$("#programme").value,event=$("#event").value,notes=$("#notes").value.trim();
  const msg=$("#message");msg.className="msg";msg.textContent="";
- if(!trainee||!programme||!event){msg.classList.add("bad");msg.textContent="SELECT A MEMBER, CERTIFICATION AND MODULE.";return}
- if(status==="approved" && [...document.querySelectorAll(".criteria")].some(x=>!x.checked)){msg.classList.add("bad");msg.textContent="COMPLETE ALL PRACTICAL ASSESSMENT CHECKS BEFORE SIGN-OFF.";return}
+ if(!trainee||!programme||!event){msg.classList.add("bad");msg.textContent="SELECT A CERTIFICATION, MODULE AND MEMBER.";return}
+
+ const perm=permissionFor(programme);
+ if(status==="approved"&&!perm.can_sign_off){msg.classList.add("bad");msg.textContent="SIGN-OFF AUTHORITY REQUIRED.";return}
+ if(status==="approved"&&assessmentDone()<4){msg.classList.add("bad");msg.textContent="COMPLETE ALL 4 PRACTICAL ASSESSMENT CHECKS BEFORE SIGN-OFF.";return}
+ if(status==="retraining"&&!(perm.can_instruct||perm.can_sign_off)){msg.classList.add("bad");msg.textContent="INSTRUCTOR AUTHORISATION REQUIRED.";return}
+
  const button=status==="approved"?$("#approve"):$("#retrain");button.disabled=true;
  const {error}=await sb.rpc("academy_signoff_training",{p_trainee:trainee,p_event_code:event,p_certification_code:programme,p_status:status,p_notes:notes||null});
- button.disabled=false;
- if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();return}
+ if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();updateAssessmentControls();return}
+
  msg.classList.add("ok");msg.textContent=status==="approved"?"TRAINING SIGNED OFF.":"RETRAINING RECORDED.";
- document.querySelectorAll(".criteria").forEach(x=>x.checked=false);$("#notes").value="";
- await load();
+ await loadTrainingRoster();
+ $("#trainee").value=trainee;
+ await loadAssessment();
 }
 $("#approve").addEventListener("click",()=>sign("approved"));$("#retrain").addEventListener("click",()=>sign("retraining"));
 $("#menu").addEventListener("click",()=>document.body.classList.toggle("sidebar-open"));
