@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JMBN – Earnings Admin (Weighted Ledger)</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -286,6 +286,115 @@ hr.sep{
 }
 .modal-body{font-size:12px;}
 .modal-body table{min-width:100%;font-size:12px;}
+</style>
+<style id="jmbn-mobile-app-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:720px){
+  body{
+    padding-left:max(8px,env(safe-area-inset-left));
+    padding-right:max(8px,env(safe-area-inset-right));
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+  }
+
+  input,
+  select,
+  textarea{
+    min-height:44px;
+    font-size:16px !important;
+  }
+
+  button,
+  a{
+    touch-action:manipulation;
+  }
+
+  .controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .controls > *{
+    width:100%;
+    min-width:0 !important;
+  }
+
+  .tableWrap{
+    max-height:none !important;
+    overflow:visible !important;
+    border:0;
+    background:transparent;
+  }
+
+  .tableWrap table{
+    display:block;
+    width:100%;
+    min-width:0 !important;
+  }
+
+  .tableWrap thead{
+    display:none;
+  }
+
+  .tableWrap tbody{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .tableWrap tbody tr{
+    display:block;
+    border:1px solid rgba(214,180,76,.45);
+    border-radius:11px;
+    overflow:hidden;
+    background:linear-gradient(180deg,#0d0d0d,#070707);
+  }
+
+  .tableWrap tbody td{
+    display:grid;
+    grid-template-columns:minmax(106px,38%) minmax(0,1fr);
+    gap:9px;
+    width:100%;
+    padding:9px 10px !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(214,180,76,.14) !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere;
+    text-align:left !important;
+  }
+
+  .tableWrap tbody td:last-child{
+    border-bottom:0 !important;
+  }
+
+  .tableWrap tbody td::before{
+    content:attr(data-mobile-label);
+    color:var(--muted);
+    font-size:9px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .modal-backdrop{
+    padding:10px;
+    align-items:flex-end !important;
+  }
+
+  .modal{
+    width:100% !important;
+    max-width:none !important;
+    max-height:90dvh;
+    overflow:auto;
+    border-radius:14px 14px 8px 8px;
+  }
+}
+
+@media(max-width:430px){
+  .controls{grid-template-columns:1fr}
+  .tableWrap tbody td{grid-template-columns:92px minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
@@ -1103,6 +1212,39 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   await loadPaygradesFromSupabase();
   await loadMissionsFromSupabase();
 });
+</script>
+
+
+<script id="jmbn-mobile-table-labels">
+(() => {
+  function labelTable(table){
+    const labels=[...table.querySelectorAll('thead th')].map(th=>th.textContent.trim());
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      [...tr.children].forEach((td,index)=>{
+        if(td.tagName==='TD'){
+          td.dataset.mobileLabel=labels[index]||'';
+        }
+      });
+    });
+  }
+
+  function initMobileTableLabels(){
+    document.querySelectorAll('.tableWrap table').forEach(table=>{
+      labelTable(table);
+      const body=table.querySelector('tbody');
+      if(body){
+        new MutationObserver(()=>labelTable(table))
+          .observe(body,{childList:true,subtree:true});
+      }
+    });
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initMobileTableLabels,{once:true});
+  }else{
+    initMobileTableLabels();
+  }
+})();
 </script>
 
 </body>
