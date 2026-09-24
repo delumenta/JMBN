@@ -374,6 +374,72 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
   padding:0 16px;
 }
 
+.awaiting-panel{
+  margin-bottom:18px;
+}
+
+.queue-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.queue-count{
+  min-width:30px;
+  height:26px;
+  padding:0 9px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(214,180,76,.35);
+  color:var(--gold);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+
+.queue-review{
+  min-height:30px;
+  padding:0 12px;
+  border:1px solid rgba(214,180,76,.5);
+  background:rgba(240,210,112,.035);
+  color:var(--gold);
+  font-family:inherit;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.12em;
+  cursor:pointer;
+}
+
+.queue-review:hover{
+  background:rgba(240,210,112,.09);
+}
+
+.support-readonly{
+  padding:12px 13px;
+  border:1px solid rgba(214,180,76,.15);
+  background:rgba(255,255,255,.01);
+}
+
+.support-readonly-label{
+  color:#6f6a5d;
+  font-size:7px;
+  letter-spacing:.16em;
+}
+
+.support-readonly-value{
+  margin-top:8px;
+  color:#c2b99f;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.09em;
+}
+
+#tab-specialisation.instructor-pathway-readonly .assignment-layout{
+  grid-template-columns:minmax(0,760px);
+  justify-content:center;
+}
+
 @media(max-width:760px){
   .training-actions{grid-template-columns:1fr}
   .support-enrolments-grid{grid-template-columns:1fr}
@@ -502,6 +568,22 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
     </div>
   </section>
 
+  <section class="frame awaiting-panel" id="pendingSignoffsPanel" hidden>
+    <div class="panel-head queue-head">
+      <div>
+        <div class="section-title">AWAITING SIGN-OFF</div>
+        <div class="panel-subtitle">4 / 4 ASSESSMENTS READY FOR FINAL APPROVAL.</div>
+      </div>
+      <div class="queue-count" id="pendingSignoffCount">0</div>
+    </div>
+    <div class="panel-body table-wrap">
+      <table class="table">
+        <thead><tr><th>MEMBER</th><th>CERTIFICATION</th><th>MODULE</th><th>CONDUCTED BY</th><th>READY</th><th></th></tr></thead>
+        <tbody id="pendingSignoffRows"></tbody>
+      </table>
+    </div>
+  </section>
+
   <div class="overview-grid">
 
     <section class="frame">
@@ -522,13 +604,13 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
     <section class="frame">
       <div class="panel-head">
         <div>
-          <div class="section-title">RECENT SIGN-OFFS</div>
-          <div class="panel-subtitle">LATEST TRAINING DECISIONS RECORDED BY THIS INSTRUCTOR.</div>
+          <div class="section-title">RECENT TRAINING ACTIVITY</div>
+          <div class="panel-subtitle">LATEST ASSESSMENTS, RETRAINING DECISIONS AND FINAL SIGN-OFFS.</div>
         </div>
       </div>
       <div class="panel-body table-wrap">
         <table class="table">
-          <thead><tr><th>MEMBER</th><th>CERTIFICATION</th><th>MODULE</th><th>STATUS</th><th>DATE</th></tr></thead>
+          <thead><tr><th>MEMBER</th><th>CERTIFICATION</th><th>MODULE</th><th>ACTIVITY</th><th>DATE</th></tr></thead>
           <tbody id="recentRows"></tbody>
         </table>
       </div>
@@ -549,8 +631,8 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 
   <button class="instructor-tab" type="button" data-tab="specialisation">
     <i class="fa-solid fa-route"></i>
-    <span>SPECIALISATION ACCESS</span>
-    <small>ASSIGN PATHWAY</small>
+    <span id="pathTabTitle">SPECIALISATION ACCESS</span>
+    <small id="pathTabSub">ASSIGN PATHWAY</small>
   </button>
 
 </nav>
@@ -661,12 +743,12 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
         <i class="fa-solid fa-route"></i>
       </div>
       <div>
-        <div class="section-title">SPECIALISATION ACCESS</div>
-        <div class="action-page-copy">
+        <div class="section-title" id="pathPageTitle">SPECIALISATION ACCESS</div>
+        <div class="action-page-copy" id="pathPageCopy">
           REVIEW MEMBER PATHWAYS. ACADEMY ADMINISTRATORS CONTROL GUNNERY / ENGINEERING ASSIGNMENT AND MED / LOG / MIN ENROLMENT.
         </div>
       </div>
-      <div class="action-page-code">INSTRUCTOR // PATHWAY CONTROL</div>
+      <div class="action-page-code" id="pathPageCode">INSTRUCTOR // PATHWAY CONTROL</div>
     </div>
 
     <div class="panel-body assignment-layout">
@@ -689,20 +771,29 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 
         <div class="support-enrolments">
           <div class="support-enrolments-title">SUPPORT PATHWAYS // STACKABLE // ADMIN MANAGED</div>
-          <div class="support-enrolments-grid">
-            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MED"> MEDICAL</label>
-            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="LOG"> LOGISTICS / CARGO</label>
-            <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MIN"> MINING</label>
+
+          <div id="supportReadOnly" class="support-readonly" hidden>
+            <div class="support-readonly-label">ACTIVE SUPPORT PATHWAYS</div>
+            <div class="support-readonly-value" id="supportPathwaySummary">SELECT MEMBER</div>
           </div>
-          <div class="support-actions">
-            <button class="btn" id="saveSupportPaths" disabled>UPDATE SUPPORT PATHWAYS</button>
+
+          <div id="supportAdminControls">
+            <div class="support-enrolments-grid">
+              <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MED"> MEDICAL</label>
+              <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="LOG"> LOGISTICS / CARGO</label>
+              <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MIN"> MINING</label>
+            </div>
+            <div class="support-actions">
+              <button class="btn" id="saveSupportPaths" disabled>UPDATE SUPPORT PATHWAYS</button>
+            </div>
           </div>
+
           <div class="msg" id="supportMessage"></div>
         </div>
 
       </div>
 
-      <div>
+      <div id="adminSpecialisationControls">
 
         <label>ASSIGN SPECIALISATION</label>
         <select id="pathCode" class="control">
@@ -744,7 +835,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
 </div></main></div>
 <script>
 let sb=null,me=null,isAdmin=false,authorisations=[],certs=[],reqs=[],events=[],members=[],signoffs=[],assignments=[];
-let trainingRoster=[],currentAssessment=null;
+let trainingRoster=[],currentAssessment=null,recentActivity=[],pendingSignoffs=[];
 const overviewCache=new Map();
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
@@ -760,6 +851,7 @@ async function verifyAccess(){
  $("#instructorName").textContent=profile?.display_name||profile?.handle||"INSTRUCTOR";
  if(!isAdmin && !authorisations.length){location.replace("academy.html");return false}
  $("#instructorRole").textContent=isAdmin?"ACADEMY ADMINISTRATOR":`${authorisations.length} CERTIFICATION AUTHORISATION${authorisations.length===1?"":"S"}`;
+ configurePathwayUI();
  return true;
 }
 async function load(){
@@ -778,7 +870,8 @@ async function load(){
  ]);
  certs=c.data||[];reqs=r.data||[];events=e.data||[];members=m.data||[];signoffs=s.data||[];assignments=a.data||[];
  overviewCache.clear();
- render(Number(conducted.data||0));
+ await render(Number(conducted.data||0));
+ await refreshActivityAndQueue();
 }
 function permissionFor(code){
  const key=String(code||"").toUpperCase();
@@ -794,7 +887,37 @@ function signoffCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
  return authorisations.filter(x=>x.is_active&&x.can_sign_off).map(x=>x.certification_code);
 }
-function render(conductedCount=0){
+
+function configurePathwayUI(){
+ const page=$("#tab-specialisation");
+ const adminSpec=$("#adminSpecialisationControls");
+ const supportAdmin=$("#supportAdminControls");
+ const supportReadOnly=$("#supportReadOnly");
+
+ if(isAdmin){
+  $("#pathTabTitle").textContent="SPECIALISATION ACCESS";
+  $("#pathTabSub").textContent="ASSIGN PATHWAY";
+  $("#pathPageTitle").textContent="SPECIALISATION ACCESS";
+  $("#pathPageCopy").textContent="ASSIGN OR CHANGE GUNNERY / ENGINEERING SPECIALISATION AND MANAGE STACKABLE SUPPORT PATHWAY ENROLMENT.";
+  $("#pathPageCode").textContent="ADMIN // PATHWAY CONTROL";
+  page.classList.remove("instructor-pathway-readonly");
+  adminSpec.hidden=false;
+  supportAdmin.hidden=false;
+  supportReadOnly.hidden=true;
+ }else{
+  $("#pathTabTitle").textContent="STUDENT PATHWAY";
+  $("#pathTabSub").textContent="VIEW PATHWAY";
+  $("#pathPageTitle").textContent="STUDENT PATHWAY";
+  $("#pathPageCopy").textContent="READ-ONLY VIEW OF THE SELECTED STUDENT'S ACTIVE SPECIALISATION AND SUPPORT PATHWAYS.";
+  $("#pathPageCode").textContent="INSTRUCTOR // PATHWAY VIEW";
+  page.classList.add("instructor-pathway-readonly");
+  adminSpec.hidden=true;
+  supportAdmin.hidden=true;
+  supportReadOnly.hidden=false;
+ }
+}
+
+async function render(conductedCount=0){
  const codes=new Set(allowedCodes());
  const allowed=certs.filter(c=>codes.has(c.certification_code));
  $("#authCount").textContent=allowed.length;
@@ -805,15 +928,111 @@ function render(conductedCount=0){
 
 
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
- const memberMap=new Map(members.map(x=>[x.user_id,x]));
- $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
+ $("#recentRows").innerHTML=`<tr><td colspan="5">LOADING TRAINING ACTIVITY...</td></tr>`;
  $("#trainee").innerHTML='<option value="">SELECT CERTIFICATION + MODULE FIRST</option>';
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
- updatePathAssignment();
+ await updatePathAssignment();
  $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
- updateEvents();
- resetAssessmentPanel();
+ if(allowed.length===1)$("#programme").value=allowed[0].certification_code;
+ await updateEvents();
+}
+
+async function refreshActivityAndQueue(){
+ const [activityRes,queueRes]=await Promise.all([
+  sb.rpc("academy_instructor_recent_activity"),
+  sb.rpc("academy_awaiting_signoff_queue")
+ ]);
+
+ if(activityRes.error){
+  console.error("Recent training activity failed:",activityRes.error);
+  recentActivity=[];
+ }else{
+  recentActivity=activityRes.data||[];
+ }
+
+ if(queueRes.error){
+  console.error("Awaiting sign-off queue failed:",queueRes.error);
+  pendingSignoffs=[];
+ }else{
+  pendingSignoffs=queueRes.data||[];
+ }
+
+ renderRecentActivity();
+ renderPendingSignoffs();
+}
+
+function renderRecentActivity(){
+ const rows=$("#recentRows");
+ rows.innerHTML=recentActivity.slice(0,10).map(x=>{
+  const name=x.display_name||x.handle||"MEMBER";
+  let activity="ASSESSMENT SAVED";
+  let cls="";
+  if(x.activity_type==="SIGN-OFF"){
+   activity=x.activity_status||"SIGN-OFF";
+   cls=x.activity_status==="SIGNED OFF"?"yes":"";
+  }else if(x.activity_status==="AWAITING SIGN-OFF"){
+   activity="ASSESSMENT // AWAITING SIGN-OFF";
+  }else if(x.activity_status==="RETRAINING"){
+   activity="ASSESSMENT // RETRAINING";
+  }
+  return `<tr><td>${esc(name)}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${cls}">${esc(activity)}</td><td>${date(x.activity_at)}</td></tr>`;
+ }).join("")||`<tr><td colspan="5">NO TRAINING ACTIVITY RECORDED</td></tr>`;
+}
+
+function renderPendingSignoffs(){
+ const panel=$("#pendingSignoffsPanel");
+ const canSign=isAdmin||authorisations.some(x=>x.is_active&&x.can_sign_off);
+ if(!canSign){
+  panel.hidden=true;
+  return;
+ }
+
+ panel.hidden=false;
+ $("#pendingSignoffCount").textContent=String(pendingSignoffs.length);
+ $("#pendingSignoffRows").innerHTML=pendingSignoffs.map((x,index)=>{
+  const name=x.display_name||x.handle||"MEMBER";
+  return `<tr>
+    <td>${esc(name)}</td>
+    <td class="code">${esc(x.certification_code)}</td>
+    <td>${esc(x.event_code)}${x.event_title?` — ${esc(x.event_title)}`:""}</td>
+    <td>${esc(x.conductor_name||"—")}</td>
+    <td>${date(x.last_conducted_at)}</td>
+    <td><button class="queue-review" type="button" data-pending-index="${index}">REVIEW</button></td>
+  </tr>`;
+ }).join("")||`<tr><td colspan="6">NO ASSESSMENTS ARE CURRENTLY AWAITING SIGN-OFF</td></tr>`;
+
+ document.querySelectorAll("[data-pending-index]").forEach(button=>{
+  button.addEventListener("click",()=>{
+   const row=pendingSignoffs[Number(button.dataset.pendingIndex)];
+   if(row)openPendingSignoff(row);
+  });
+ });
+}
+
+async function openPendingSignoff(row){
+ activateInstructorTab("signoff");
+
+ const programme=$("#programme");
+ const event=$("#event");
+ const trainee=$("#trainee");
+
+ if(![...programme.options].some(x=>x.value===row.certification_code))return;
+ programme.value=row.certification_code;
+ await updateEvents();
+
+ if(![...event.options].some(x=>x.value===row.event_code))return;
+ event.value=row.event_code;
+ await loadTrainingRoster();
+
+ if(![...trainee.options].some(x=>x.value===row.trainee_id))return;
+ trainee.value=row.trainee_id;
+ $("#overviewTrainee").value=row.trainee_id;
+ $("#pathTrainee").value=row.trainee_id;
+ await loadAssessment();
+ await updatePathAssignment();
+
+ $("#tab-signoff").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function resetAssessmentPanel(){
@@ -923,6 +1142,7 @@ async function updateEvents(){
  const eventMap=new Map(events.map(x=>[x.event_code,x]));
  const rows=reqs.filter(x=>x.certification_code===code);
  $("#event").innerHTML=`<option value="">SELECT MODULE</option>`+rows.map(r=>{const e=eventMap.get(r.event_code);return `<option value="${esc(r.event_code)}">${esc(r.event_code)} — ${esc(e?.title||r.event_code)}</option>`}).join("");
+ if(rows.length===1)$("#event").value=rows[0].event_code;
  await loadTrainingRoster();
 }
 
@@ -986,6 +1206,7 @@ async function saveAssessment(){
  await loadTrainingRoster();
  $("#trainee").value=trainee;
  await loadAssessment();
+ await refreshActivityAndQueue();
 }
 
 function pathLabel(code){
@@ -1067,11 +1288,13 @@ async function loadSupportEnrolments(trainee){
  const checks=[...document.querySelectorAll(".support-path-check")];
  const save=$("#saveSupportPaths");
  const msg=$("#supportMessage");
+ const summary=$("#supportPathwaySummary");
  msg.className="msg";msg.textContent="";
 
  if(!trainee){
   checks.forEach(x=>{x.checked=false;x.disabled=true});
   save.disabled=true;
+  summary.textContent="SELECT MEMBER";
   return;
  }
 
@@ -1079,11 +1302,18 @@ async function loadSupportEnrolments(trainee){
  if(error){
   checks.forEach(x=>{x.checked=false;x.disabled=true});
   save.disabled=true;
+  summary.textContent="UNAVAILABLE";
   msg.classList.add("bad");msg.textContent="SUPPORT PATHWAYS UNAVAILABLE.";
   return;
  }
 
  const active=new Set((data||[]).filter(x=>x.is_active).map(x=>String(x.certification_code||"").toUpperCase()));
+ const labels=[];
+ if(active.has("MED"))labels.push("MEDICAL");
+ if(active.has("LOG"))labels.push("LOGISTICS / CARGO");
+ if(active.has("MIN"))labels.push("MINING");
+ summary.textContent=labels.length?labels.join(" // "):"NONE";
+
  checks.forEach(x=>{
   const code=String(x.dataset.code||"").toUpperCase();
   x.checked=active.has(code);
@@ -1271,6 +1501,7 @@ async function sign(status){
  await loadTrainingRoster();
  $("#trainee").value=trainee;
  await loadAssessment();
+ await refreshActivityAndQueue();
 }
 $("#approve").addEventListener("click",()=>sign("approved"));$("#retrain").addEventListener("click",()=>sign("retraining"));
 $("#menu").addEventListener("click",()=>document.body.classList.toggle("sidebar-open"));
