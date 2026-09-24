@@ -3133,118 +3133,46 @@ document.addEventListener(
       ==================================================== */
 
       /*
-        Missions intentionally use the same attendance
-        logic as admins.html:
-
-        Count this user's mission attendance rows except
-        attendance = Withdrawn.
-
-        Hours and certifications continue to come from
-        v_user_progress.
+        Mission count, operational hours and certifications
+        all come from v_user_progress so the numbers shown
+        here use the exact same eligibility rules as the
+        backend rank progression check.
       */
 
 
-      const [
-        {
-          data:up
-        },
-        {
-          data:missionRows,
-          error:missionErr
-        }
-      ] =
-        await Promise.all([
-
-
-          sb
-            .from(
-              "v_user_progress"
-            )
-            .select("*")
-            .eq(
-              "user_id",
-              me
-            )
-            .maybeSingle(),
-
-
-          sb
-            .from(
-              "v_mission_attendees_detailed"
-            )
-            .select(
-              "mission_id, attendance"
-            )
-            .eq(
-              "user_id",
-              me
-            )
-
-
-        ]);
+      const {
+        data:up,
+        error:progressStatsError
+      } =
+        await sb
+          .from(
+            "v_user_progress"
+          )
+          .select("*")
+          .eq(
+            "user_id",
+            me
+          )
+          .maybeSingle();
 
 
 
-      if (missionErr) {
+      if (progressStatsError) {
 
         console.warn(
-          "Mission attendance count failed:",
-          missionErr.message
+          "Progress statistics failed:",
+          progressStatsError.message
         );
 
       }
 
 
 
-      const attendedMissionIds =
-        new Set(
-
-
-          (missionRows || [])
-
-
-            .filter(
-              row =>
-
-                row.mission_id &&
-
-                row.attendance &&
-
-                String(
-                  row.attendance
-                )
-                  .toLowerCase() !==
-                  "withdrawn"
-            )
-
-
-            .map(
-              row =>
-                row.mission_id
-            )
-
-
-        );
-
-
-
-      /*
-        Use actual attendance count whenever possible.
-
-        If that query fails, fall back to the existing
-        v_user_progress mission count.
-      */
-
-
       const m =
-        missionErr
-
-          ? Number(
-              up?.missions_attended ||
-              0
-            )
-
-          : attendedMissionIds.size;
+        Number(
+          up?.missions_attended ||
+          0
+        );
 
 
       const h =
