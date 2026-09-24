@@ -4,10 +4,7 @@
 <head>
 <meta charset="utf-8" />
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>JMBN Operations Command</title>
 
@@ -2718,6 +2715,129 @@ body::before{
 
 </style>
 
+<style id="jmbn-mobile-app-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:760px){
+  body{
+    padding-left:max(8px,env(safe-area-inset-left));
+    padding-right:max(8px,env(safe-area-inset-right));
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+  }
+
+  input,
+  select,
+  textarea{
+    font-size:16px !important;
+  }
+
+  button,
+  .btn,
+  .tab,
+  a{
+    touch-action:manipulation;
+  }
+
+  .tableWrap{
+    max-height:none !important;
+    overflow:visible !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+
+  .tableWrap table{
+    display:block;
+    width:100%;
+    min-width:0 !important;
+    border-collapse:separate;
+  }
+
+  .tableWrap thead{
+    display:none;
+  }
+
+  .tableWrap tbody{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .tableWrap tbody tr{
+    display:block;
+    overflow:hidden;
+    border:1px solid rgba(220,182,55,.52);
+    border-radius:12px;
+    background:
+      linear-gradient(180deg,rgba(10,11,9,.96),rgba(4,5,4,.96));
+    box-shadow:
+      0 8px 24px rgba(0,0,0,.34),
+      inset 0 0 0 1px rgba(220,182,55,.04);
+  }
+
+  .tableWrap tbody td{
+    display:grid;
+    grid-template-columns:minmax(104px,36%) minmax(0,1fr);
+    gap:10px;
+    width:100%;
+    padding:9px 10px !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(220,182,55,.13) !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere;
+  }
+
+  .tableWrap tbody td:last-child{
+    border-bottom:0 !important;
+  }
+
+  .tableWrap tbody td::before{
+    color:#9f9367;
+    font-size:8px;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    line-height:1.45;
+  }
+
+  .tableWrap tbody td:nth-child(1)::before{content:"Mission"}
+  .tableWrap tbody td:nth-child(2)::before{content:"Category"}
+  .tableWrap tbody td:nth-child(3)::before{content:"Type"}
+  .tableWrap tbody td:nth-child(4)::before{content:"Status"}
+  .tableWrap tbody td:nth-child(5)::before{content:"Form-up"}
+  .tableWrap tbody td:nth-child(6)::before{content:"Date & Time"}
+  .tableWrap tbody td:nth-child(7)::before{content:"Hours"}
+  .tableWrap tbody td:nth-child(8)::before{content:"Crew"}
+  .tableWrap tbody td:nth-child(9)::before{content:"Payout"}
+  .tableWrap tbody td:nth-child(10)::before{content:"Tags"}
+  .tableWrap tbody td:nth-child(11)::before{content:"Attachments"}
+  .tableWrap tbody td:nth-child(12)::before{content:"Notes"}
+  .tableWrap tbody td:nth-child(13)::before{content:"Attendance"}
+
+  .tableWrap tbody td button{
+    min-height:40px;
+    max-width:100%;
+  }
+
+  .modal-mask{
+    padding:10px;
+    align-items:flex-end !important;
+  }
+
+  .modal-mask .modal{
+    width:100% !important;
+    max-width:none !important;
+    max-height:90dvh;
+    overflow:auto;
+    border-radius:16px 16px 10px 10px;
+  }
+}
+
+@media(max-width:420px){
+  .tableWrap tbody td{
+    grid-template-columns:92px minmax(0,1fr);
+    gap:8px;
+  }
+}
+</style>
 </head>
 
 
