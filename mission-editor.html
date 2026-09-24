@@ -441,11 +441,28 @@ input:focus,select:focus,textarea:focus{
         </div>
       </div>
 
-      <!-- Notes -->
+      <!-- Debrief saved in the existing notes field -->
       <div class="form-grid full">
         <div>
-          <label for="notes">Notes / AAR</label>
-          <textarea id="notes" placeholder="Summary, key events, lessons learned…"></textarea>
+          <label for="debriefOutcome">Outcome</label>
+          <select id="debriefOutcome">
+            <option value="">Select an outcome</option>
+            <option value="Pass">Pass</option>
+            <option value="Partial success">Partial success</option>
+            <option value="Fail">Fail</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid full">
+        <div>
+          <label for="debriefSummary">Summary — what happened and why?</label>
+          <textarea id="debriefSummary" placeholder="What happened? Why did the mission succeed or fail?"></textarea>
+        </div>
+      </div>
+      <div class="form-grid full">
+        <div>
+          <label for="debriefLesson">Lesson learned</label>
+          <textarea id="debriefLesson" placeholder="What should the crew do differently next time?"></textarea>
         </div>
       </div>
 
@@ -528,6 +545,31 @@ function collectAttachments(){
   return out;
 }
 
+function buildDebrief(){
+  const outcome = $('#debriefOutcome').value;
+  const summary = $('#debriefSummary').value.trim();
+  const lesson = $('#debriefLesson').value.trim();
+  if(!outcome && !summary && !lesson) return null;
+  return [
+    outcome && 'Outcome: ' + outcome,
+    summary && 'Summary: ' + summary,
+    lesson && 'Lesson learned: ' + lesson
+  ].filter(Boolean).join('\n\n');
+}
+function parseDebrief(notes){
+  const result = {outcome:'',summary:'',lesson:''};
+  if(!notes) return result;
+  const match = notes.match(/^(?:Outcome: ([^\n]*)\n\n)?(?:Summary: ([\s\S]*?)(?=\n\nLesson learned: |$))?(?:\n\nLesson learned: ([\s\S]*))?$/);
+  if(match && (match[1] || match[2] || match[3])){
+    result.outcome = ['Pass','Partial success','Fail'].includes(match[1]) ? match[1] : '';
+    result.summary = (match[2] || '').trim();
+    result.lesson = (match[3] || '').trim();
+  }else{
+    result.summary = notes;
+  }
+  return result;
+}
+
 /* Form helpers */
 function setModeLabel(){
   const el = $('#modeLabel');
@@ -547,7 +589,9 @@ function clearForm(){
   $('#payout').value = '';
   $('#tags').value = '';
   $('#submittedBy').value = '';
-  $('#notes').value = '';
+  $('#debriefOutcome').value = '';
+  $('#debriefSummary').value = '';
+  $('#debriefLesson').value = '';
   $('#attachList').innerHTML = '';
   addAttachRow();
   setModeLabel();
@@ -563,7 +607,10 @@ function fillForm(m){
   $('#payout').value = m.payout_auec ?? '';
   $('#tags').value = m.tags || '';
   $('#submittedBy').value = m.submitted_by || '';
-  $('#notes').value = m.notes || '';
+  const debrief = parseDebrief(m.notes);
+  $('#debriefOutcome').value = debrief.outcome;
+  $('#debriefSummary').value = debrief.summary;
+  $('#debriefLesson').value = debrief.lesson;
   $('#attachList').innerHTML = '';
   if(Array.isArray(m.attachments) && m.attachments.length){
     m.attachments.forEach(a=>addAttachRow(a.name||'',a.url||''));
@@ -583,7 +630,7 @@ function payloadFromForm(){
     payout_auec: $('#payout').value !== '' ? Number($('#payout').value) : null,
     tags: ($('#tags').value||'').trim() || null,
     submitted_by: ($('#submittedBy').value||'').trim() || null,
-    notes: ($('#notes').value||'').trim() || null,
+    notes: buildDebrief(),
     attachments: collectAttachments()
   };
 }
