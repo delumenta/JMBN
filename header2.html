@@ -1,152 +1,1380 @@
-<!-- header.html -->
+<!-- =========================================================
+     JMBN SHARED HEADER
+     header2.html
+
+     Behaviour is handled by:
+     js/header.js
+
+     Discord avatar is handled by:
+     js/avatars.js
+========================================================= -->
+
 <style>
-/* === Shared Header & Nav Styles === */
-:root {
-  --border:#d6b44c;
-  --accent:#f2d675;
-  --text:#f7f1d0;
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+
+:root{
+  --jmbn-gold:#f0d270;
+  --jmbn-gold2:#b8953e;
+  --jmbn-text:#f3ecd2;
+  --jmbn-muted:#827b65;
 }
 
-/* Brand section */
-.brand {
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-  margin:0 0 8px;
-  padding-bottom:6px;
-  border-bottom:1px solid var(--border);
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
 }
 
-/* Left side: logo + title */
-.brand-main{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.brand-logo {
-  width:44px;
-  height:44px;
-  object-fit:contain;
-  filter:drop-shadow(0 0 4px rgba(242,214,117,.25));
-}
-.brand-title-wrap h1 {
-  font-weight:700;
-  font-size:clamp(18px,2.2vw,22px);
-  color:var(--accent);
-  margin:0;
-  letter-spacing:0.08em;
-}
-.brand-subtitle{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.18em;
-  color:rgba(247,241,208,.75);
-}
 
-/* Right side: sector + status */
-.brand-meta{
-  font-size:11px;
-  text-align:right;
-  color:rgba(247,241,208,.8);
-  line-height:1.4;
-}
-.brand-meta .online{
-  color:var(--accent);
-  font-weight:700;
-  letter-spacing:0.12em;
-}
+/* =========================================================
+   HEADER FRAME
+========================================================= */
 
-/* Navigation pills */
-.nav {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:6px 0 10px;
-}
-.nav-btn {
-  --gold:#f2d675;
-  --gold2:#e7c760;
-  --ring:#d6b44c;
+.jmbn-header{
   position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:7px 14px;
-  border:1px solid var(--ring);
-  border-radius:999px;
-  background:linear-gradient(180deg,#0c0c0c,#060606);
-  color:var(--accent);
-  text-decoration:none;
-  font-weight:700;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.14em;
-  box-shadow:inset 0 0 0 1px rgba(214,180,76,.12);
-  transition:transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
-  overflow:hidden;
-}
-.nav-btn:hover {
-  transform:translateY(-1px);
-  box-shadow:0 0 12px rgba(214,180,76,.25), inset 0 0 0 1px rgba(214,180,76,.18);
-  background:linear-gradient(180deg,#1a1a1a,#0a0a0a);
+
+  width:90%;
+  max-width:1700px;
+
+  margin:0 auto 18px;
+
+  min-height:138px;
+
+  overflow:visible;
+
+  /*
+    Header sits above the page content.
+  */
+  z-index:100;
+
+  border:
+    1px solid rgba(214,180,76,.62);
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(214,180,76,.045),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(9,10,8,.96),
+      rgba(5,5,5,.97)
+    );
+
+  box-shadow:
+    0 0 0 1px rgba(214,180,76,.025),
+    0 8px 35px rgba(0,0,0,.70),
+    inset 0 0 24px rgba(214,180,76,.018);
+
+  color:var(--jmbn-text);
+
+  font-family:
+    'Play',
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
-/* === Active Tab + Shiny Sweep === */
-.nav-btn.active {
-  color:#000;
-  background:linear-gradient(180deg,#f2d675,#e7c760);
-  border-color:#d6b44c;
-  box-shadow:0 0 20px rgba(214,180,76,.45);
-  position:relative;
-  overflow:hidden;
+
+.jmbn-header a{
+  font-family:inherit;
 }
-.nav-btn.active::after {
-  content:"";
+
+
+/* =========================================================
+   FRAME ACCENT POINTS
+========================================================= */
+
+.jmbn-frame-node{
   position:absolute;
-  inset:0;
-  background:linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 30%,
-    rgba(255,255,255,.3) 50%,
-    rgba(255,255,255,0) 70%
-  );
-  border-radius:inherit;
-  transform:translateX(-120%);
-  animation:shine 2.8s ease-in-out infinite;
+
+  z-index:5;
+
+  width:3px;
+  height:3px;
+
+  border-radius:50%;
+
+  background:
+    rgba(240,210,112,.75);
+
+  box-shadow:
+    0 0 5px rgba(240,210,112,.35);
+
+  pointer-events:none;
 }
-@keyframes shine {
-  0% { transform:translateX(-120%); }
-  35%,100% { transform:translateX(120%); }
+
+
+.jmbn-frame-node.n1{
+  left:14px;
+  top:-2px;
 }
+
+
+.jmbn-frame-node.n2{
+  right:22%;
+  top:-2px;
+}
+
+
+.jmbn-frame-node.n3{
+  left:10%;
+  bottom:-2px;
+}
+
+
+.jmbn-frame-node.n4{
+  right:18px;
+  bottom:-2px;
+}
+
+
+/* =========================================================
+   GOLD HAZE
+========================================================= */
+
+.jmbn-haze{
+  position:absolute;
+
+  right:0;
+  top:0;
+
+  width:48%;
+  height:100%;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at 35% 35%,
+      rgba(132,98,27,.15),
+      transparent 67%
+    );
+
+  filter:blur(9px);
+}
+
+
+/* =========================================================
+   TOP SECTION
+========================================================= */
+
+.jmbn-top{
+  height:77px;
+
+  position:relative;
+
+  /*
+    Top section sits above navigation.
+    Dropdown is contained inside this stacking context.
+  */
+  z-index:20;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(430px,1fr)
+    1px
+    360px;
+
+  align-items:center;
+
+  padding:
+    0 28px;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.17);
+}
+
+
+/* =========================================================
+   IDENTITY
+========================================================= */
+
+.jmbn-identity{
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  min-width:0;
+}
+
+
+.jmbn-logo{
+  width:48px;
+  height:48px;
+
+  flex:
+    0 0 48px;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(240,210,112,.22)
+    );
+}
+
+
+.jmbn-eyebrow{
+  color:var(--jmbn-gold2);
+
+  text-transform:uppercase;
+
+  letter-spacing:.22em;
+
+  font-size:9px;
+
+  font-weight:700;
+}
+
+
+.jmbn-title{
+  margin:
+    3px 0 0;
+
+  color:
+    var(--jmbn-gold);
+
+  font-size:24px;
+
+  letter-spacing:.2em;
+
+  line-height:1;
+
+  white-space:nowrap;
+}
+
+
+.jmbn-subtitle{
+  margin-top:5px;
+
+  color:#716c5d;
+
+  font-size:9px;
+
+  text-transform:uppercase;
+
+  letter-spacing:.18em;
+}
+
+
+/* =========================================================
+   DIAGONAL DIVIDER
+========================================================= */
+
+.jmbn-diagonal{
+  height:49px;
+
+  width:1px;
+
+  background:
+    linear-gradient(
+      transparent,
+      var(--jmbn-gold),
+      transparent
+    );
+
+  transform:
+    skewX(-25deg);
+
+  opacity:.8;
+}
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.jmbn-account-wrap{
+  position:relative;
+
+  /*
+    Account area sits above other elements
+    inside the top section.
+  */
+  z-index:30;
+
+  padding-left:28px;
+}
+
+
+.jmbn-account{
+  width:100%;
+  height:51px;
+
+  border:0;
+  outline:0;
+
+  appearance:none;
+
+  background:
+    transparent;
+
+  display:grid;
+
+  grid-template-columns:
+    38px
+    1fr
+    20px;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:
+    6px 10px;
+
+  cursor:pointer;
+
+  text-align:left;
+
+  color:inherit;
+
+  transition:
+    background .18s ease;
+}
+
+
+.jmbn-account:hover,
+.jmbn-account:focus-visible,
+.jmbn-account[aria-expanded="true"]{
+
+  background:
+    rgba(214,180,76,.035);
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.jmbn-avatar{
+  width:34px;
+  height:34px;
+
+  border:
+    1px solid var(--jmbn-gold2);
+
+  border-radius:50%;
+
+  display:grid;
+
+  place-items:center;
+
+  overflow:hidden;
+
+  color:
+    var(--jmbn-gold);
+
+  background:
+    #090909;
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  font-size:12px;
+
+  letter-spacing:.04em;
+
+  box-shadow:
+    0 0 10px rgba(214,180,76,.12);
+}
+
+
+.jmbn-avatar.has-avatar-image{
+  color:transparent;
+
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+}
+
+
+/* =========================================================
+   ACCOUNT TEXT
+========================================================= */
+
+.jmbn-name{
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+  font-size:11px;
+
+  color:
+    var(--jmbn-gold);
+
+  font-weight:700;
+
+  letter-spacing:.13em;
+
+  text-transform:uppercase;
+}
+
+
+.jmbn-rank{
+  margin-top:3px;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+  font-size:8px;
+
+  color:#8c805a;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================================
+   DROPDOWN ARROW
+========================================================= */
+
+.jmbn-chev{
+  color:
+    var(--jmbn-gold);
+
+  font-size:14px;
+
+  text-align:center;
+
+  transition:
+    transform .18s ease;
+}
+
+
+.jmbn-account[aria-expanded="true"]
+.jmbn-chev{
+
+  transform:
+    rotate(180deg);
+
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.jmbn-dropdown{
+  position:absolute;
+
+  right:0;
+
+  top:57px;
+
+  width:205px;
+
+  /*
+    Highest element inside the account area.
+  */
+  z-index:1000;
+
+  border:
+    1px solid rgba(214,180,76,.5);
+
+  border-radius:7px;
+
+  background:
+    rgba(8,9,7,.995);
+
+  box-shadow:
+    0 16px 35px rgba(0,0,0,.9),
+    0 0 20px rgba(214,180,76,.08);
+
+  padding:6px;
+}
+
+
+.jmbn-dropdown[hidden]{
+  display:none !important;
+}
+
+
+/* =========================================================
+   DROPDOWN HEADER
+========================================================= */
+
+.jmbn-drop-head{
+  padding:
+    8px 9px 7px;
+
+  color:#6e6858;
+
+  font-size:8px;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  border-bottom:
+    1px solid rgba(214,180,76,.15);
+}
+
+
+/* =========================================================
+   DROPDOWN ITEMS
+========================================================= */
+
+.jmbn-dropitem{
+  display:block;
+
+  width:100%;
+
+  position:relative;
+
+  z-index:1;
+
+  padding:
+    10px 9px;
+
+  color:#aaa28a;
+
+  text-decoration:none;
+
+  text-transform:uppercase;
+
+  letter-spacing:.12em;
+
+  font-size:9px;
+
+  border:0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.035);
+
+  background:
+    transparent;
+
+  text-align:left;
+
+  cursor:pointer;
+}
+
+
+.jmbn-dropitem:hover,
+.jmbn-dropitem:focus-visible{
+
+  color:
+    var(--jmbn-gold);
+
+  background:
+    rgba(214,180,76,.06);
+
+  outline:0;
+}
+
+
+.jmbn-dropitem.logout{
+  border-bottom:0;
+
+  color:#9a755b;
+}
+
+
+/* =========================================================
+   NAVIGATION ROW
+========================================================= */
+
+.jmbn-navrow{
+  height:60px;
+
+  position:relative;
+
+  /*
+    Navigation remains visible,
+    but stays below the top/account/dropdown layer.
+  */
+  z-index:10;
+
+  display:flex;
+
+  align-items:center;
+
+  padding:
+    0 27px;
+
+  gap:4px;
+}
+
+
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
+.jmbn-navlink{
+  position:relative;
+
+  height:59px;
+
+  padding:
+    0 18px;
+
+  display:flex;
+
+  align-items:center;
+
+  color:#9d9680;
+
+  text-decoration:none;
+
+  text-transform:uppercase;
+
+  letter-spacing:.13em;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  transition:
+    color .18s ease,
+    text-shadow .18s ease;
+}
+
+
+.jmbn-navlink:hover{
+
+  color:#cdbb7b;
+
+}
+
+
+/* =========================================================
+   ACTIVE NAVIGATION TAB
+========================================================= */
+
+.jmbn-navlink.active{
+
+  color:
+    var(--jmbn-gold);
+
+  text-shadow:
+    0 0 10px rgba(240,210,112,.20);
+
+}
+
+
+/* Active underline */
+
+.jmbn-navlink.active::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:16px;
+  right:16px;
+
+  bottom:0;
+
+  height:2px;
+
+  background:
+    var(--jmbn-gold);
+
+  box-shadow:
+    0 -2px 10px rgba(240,210,112,.55),
+    0 0 14px rgba(240,210,112,.20);
+
+}
+
+
+/* Active center notch */
+
+.jmbn-navlink.active::before{
+
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+
+  bottom:0;
+
+  width:20px;
+  height:7px;
+
+  transform:
+    translate(-50%,50%);
+
+  background:
+    var(--jmbn-gold);
+
+  clip-path:
+    polygon(
+      50% 0,
+      100% 100%,
+      0 100%
+    );
+
+  opacity:.82;
+
+  filter:
+    drop-shadow(
+      0 0 4px
+      rgba(240,210,112,.35)
+    );
+}
+
+
+/* =========================================================
+   NAVIGATION SPACER
+========================================================= */
+
+.jmbn-nav-spacer{
+  flex:1;
+}
+
+
+/* =========================================================
+   NETWORK NODE
+========================================================= */
+
+.jmbn-node{
+  font-size:8px;
+
+  letter-spacing:.15em;
+
+  color:#565246;
+
+  text-transform:uppercase;
+
+  white-space:nowrap;
+}
+
+
+.jmbn-node b{
+
+  color:#9b8b58;
+
+  font-weight:400;
+
+}
+
+
+/* =========================================================
+   MOBILE NAV TOGGLE
+========================================================= */
+
+.jmbn-mobile-toggle{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(214,180,76,.34);
+  border-radius:7px;
+  background:rgba(5,6,6,.72);
+  color:var(--jmbn-gold);
+  cursor:pointer;
+  font-size:21px;
+  line-height:1;
+  place-items:center;
+}
+
+.jmbn-mobile-toggle:hover,
+.jmbn-mobile-toggle:focus-visible{
+  border-color:rgba(240,210,112,.68);
+  background:rgba(214,180,76,.055);
+  outline:0;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:900px){
+
+
+  .jmbn-header{
+
+    width:
+      calc(100% - 24px);
+
+    max-width:none;
+
+    margin-bottom:14px;
+
+  }
+
+
+  .jmbn-top{
+
+    height:auto;
+
+    grid-template-columns:
+      1fr;
+
+    padding:
+      14px 18px;
+
+  }
+
+
+  .jmbn-diagonal{
+
+    display:none;
+
+  }
+
+
+  .jmbn-account-wrap{
+
+    padding:
+      12px 0 0;
+
+    margin-top:12px;
+
+    border-top:
+      1px solid rgba(214,180,76,.18);
+
+  }
+
+
+  .jmbn-account{
+
+    padding-left:0;
+
+  }
+
+
+  .jmbn-dropdown{
+
+    top:69px;
+
+    left:0;
+
+    right:auto;
+
+    width:
+      min(
+        260px,
+        calc(100vw - 56px)
+      );
+
+  }
+
+
+  .jmbn-navrow{
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+    padding:
+      0 9px;
+
+  }
+
+
+  .jmbn-navrow::-webkit-scrollbar{
+
+    display:none;
+
+  }
+
+
+  .jmbn-navlink{
+
+    flex:none;
+
+    padding:
+      0 12px;
+
+  }
+
+
+  .jmbn-node{
+
+    display:none;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:560px){
+
+
+  .jmbn-header{
+
+    width:
+      calc(100% - 14px);
+
+    margin-bottom:10px;
+
+  }
+
+
+  .jmbn-title{
+
+    font-size:19px;
+
+    letter-spacing:.15em;
+
+  }
+
+
+  .jmbn-subtitle{
+
+    font-size:8px;
+
+    letter-spacing:.12em;
+
+  }
+
+
+  .jmbn-logo{
+
+    width:42px;
+    height:42px;
+
+    flex-basis:42px;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   COMPACT MOBILE NAVIGATION
+========================================================= */
+
+@media(max-width:760px){
+
+  .jmbn-header{
+    min-height:0;
+    overflow:visible;
+  }
+
+  .jmbn-top{
+    height:auto;
+    grid-template-columns:minmax(0,1fr) 42px;
+    gap:10px;
+    padding:12px 14px;
+  }
+
+  .jmbn-identity{
+    grid-column:1;
+    grid-row:1;
+    min-width:0;
+  }
+
+  .jmbn-mobile-toggle{
+    display:grid;
+    grid-column:2;
+    grid-row:1;
+    align-self:center;
+    justify-self:end;
+  }
+
+  .jmbn-diagonal{
+    display:none;
+  }
+
+  .jmbn-account-wrap{
+    grid-column:1 / -1;
+    grid-row:2;
+    padding:9px 0 0;
+    margin-top:2px;
+    border-top:1px solid rgba(214,180,76,.15);
+  }
+
+  .jmbn-account{
+    height:44px;
+    padding:4px 2px;
+  }
+
+  .jmbn-dropdown{
+    top:53px;
+    left:0;
+    right:auto;
+    width:min(260px,calc(100vw - 42px));
+  }
+
+  .jmbn-navrow{
+    display:none;
+    height:auto;
+    overflow:visible;
+    padding:5px 8px 8px;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    border-top:1px solid rgba(214,180,76,.17);
+    background:rgba(5,6,6,.985);
+  }
+
+  .jmbn-header.mobile-nav-open .jmbn-navrow{
+    display:flex;
+  }
+
+  .jmbn-navlink{
+    width:100%;
+    height:44px;
+    flex:none;
+    padding:0 13px;
+    border-bottom:1px solid rgba(255,255,255,.035);
+  }
+
+  .jmbn-navlink:last-of-type{
+    border-bottom:0;
+  }
+
+  .jmbn-navlink.active{
+    background:linear-gradient(
+      90deg,
+      rgba(240,210,112,.09),
+      transparent 72%
+    );
+  }
+
+  .jmbn-navlink.active::after{
+    left:0;
+    right:auto;
+    top:8px;
+    bottom:8px;
+    width:2px;
+    height:auto;
+  }
+
+  .jmbn-navlink.active::before{
+    display:none;
+  }
+
+  .jmbn-nav-spacer,
+  .jmbn-node{
+    display:none;
+  }
+
+}
+
 </style>
 
-<!-- === Header + Navigation === -->
-<div class="brand">
-  <div class="brand-main">
-    <img
-      class="brand-logo"
-      src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-      alt="JMBN Logo">
-    <div class="brand-title-wrap">
-      <h1>JMBN Admin Panel</h1>
+
+<!-- =========================================================
+     JMBN HEADER
+========================================================= -->
+
+<header
+  class="jmbn-header"
+  id="jmbnHeader"
+>
+
+
+  <!-- Background haze -->
+
+  <div
+    class="jmbn-haze"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- Frame accent nodes -->
+
+  <span
+    class="jmbn-frame-node n1"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n2"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n3"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="jmbn-frame-node n4"
+    aria-hidden="true"
+  ></span>
+
+
+
+  <!-- =====================================================
+       TOP ROW
+  ====================================================== -->
+
+  <div class="jmbn-top">
+
+
+    <!-- JMBN identity -->
+
+    <div class="jmbn-identity">
+
+
+      <img
+        class="jmbn-logo"
+        src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
+        alt="JMBN"
+      >
+
+
+      <div>
+
+        <div class="jmbn-eyebrow">
+          JMBN // Organization Network
+        </div>
+
+
+        <div class="jmbn-title">
+          MANIFEST SYSTEM
+        </div>
+
+
+        <div class="jmbn-subtitle">
+          Personnel · Operations · Advancement · Academy
+        </div>
+
+      </div>
+
+
     </div>
+
+
+
+    <button
+      class="jmbn-mobile-toggle"
+      id="jmbnMobileNavToggle"
+      type="button"
+      aria-label="Open navigation"
+      aria-controls="jmbnPrimaryNav"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+
+
+    <!-- Diagonal divider -->
+
+    <div
+      class="jmbn-diagonal"
+      aria-hidden="true"
+    ></div>
+
+
+
+    <!-- ===================================================
+         MEMBER ACCOUNT
+    ==================================================== -->
+
+    <div class="jmbn-account-wrap">
+
+
+      <button
+        class="jmbn-account"
+        id="jmbnAccountButton"
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-controls="jmbnAccountMenu"
+      >
+
+
+        <div
+          class="jmbn-avatar"
+          id="jmbnAvatar"
+          aria-label="Member avatar"
+        >
+          --
+        </div>
+
+
+        <div>
+
+
+          <div
+            class="jmbn-name"
+            id="jmbnName"
+          >
+            LOADING
+          </div>
+
+
+          <div
+            class="jmbn-rank"
+            id="jmbnRank"
+          >
+            Personnel
+          </div>
+
+
+        </div>
+
+
+        <div
+          class="jmbn-chev"
+          aria-hidden="true"
+        >
+          ⌄
+        </div>
+
+
+      </button>
+
+
+
+      <!-- =================================================
+           ACCOUNT DROPDOWN
+      ================================================== -->
+
+      <div
+        class="jmbn-dropdown"
+        id="jmbnAccountMenu"
+        role="menu"
+        hidden
+      >
+
+
+        <div class="jmbn-drop-head">
+          Personnel Access
+        </div>
+
+
+        <!-- PERSONAL PROFILE -->
+
+        <a
+          class="jmbn-dropitem"
+          href="profile.html"
+          role="menuitem"
+        >
+          View Profile
+        </a>
+
+
+        <!-- ADMIN ONLY -->
+
+        <a
+          class="jmbn-dropitem"
+          id="jmbnAdminLink"
+          href="admins.html"
+          role="menuitem"
+          hidden
+        >
+          Admin Console
+        </a>
+
+
+        <!-- LOGOUT -->
+
+        <button
+          class="jmbn-dropitem logout"
+          id="jmbnLogout"
+          type="button"
+          role="menuitem"
+        >
+          Log Out
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
   </div>
 
-  <div class="brand-meta">
-    <div>Sector: Stanton – ArcCorp – Area 18</div>
-    <div>Org Hub Status: <span class="online">ONLINE</span></div>
-  </div>
-</div>
-
-<nav class="nav">
-  <!-- Personal Module Section -->
-  <a class="nav-btn personal" href="index.html">Manifest</a>
-  <a class="nav-btn personal" href="admins.html">Rank & Progression</a>
-  <a class="nav-btn personal" href="ledger.html">Ledger Tools</a>
-  <a class="nav-btn personal" href="mission-editor.html">Edit a Mission</a>
 
 
+  <!-- =====================================================
+       PRIMARY NAVIGATION
+  ====================================================== -->
 
-</nav>
+  <nav
+    class="jmbn-navrow"
+    id="jmbnPrimaryNav"
+    aria-label="JMBN primary navigation"
+  >
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="index.html"
+      href="index.html"
+    >
+      Home
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="mission-log.html"
+      href="mission-log.html"
+    >
+      Operations
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="member.html"
+      href="member.html"
+    >
+      Members
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="rank-progression.html"
+      href="rank-progression.html"
+    >
+      Rank Progress
+    </a>
+
+
+    <a
+      class="jmbn-navlink"
+      data-page="academy.html"
+      href="academy.html"
+    >
+      Academy
+    </a>
+
+
+
+    <div class="jmbn-nav-spacer"></div>
+
+
+
+    <div class="jmbn-node">
+
+      Network Node&nbsp;
+
+      <b>
+        JMBN-01
+      </b>
+
+    </div>
+
+
+  </nav>
+
+
+</header>
