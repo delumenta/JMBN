@@ -560,7 +560,7 @@ async function mountHeader(){
   const mount = document.getElementById('header')
   if(!mount) return
   try{
-    const res = await fetch('header2.html',{cache:'no-cache'})
+    const res = await fetch('header2.html?v=20260924-adminnav',{cache:'no-store'})
     if(!res.ok) throw new Error('Header request failed: ' + res.status)
     mount.innerHTML = await res.text()
     if(typeof window.initJmbnHeader === 'function'){
