@@ -1287,6 +1287,9 @@ body::before{
   inset:1px;
   z-index:-2;
   border-radius:9px;
+  /* Crop the dark strip baked into the lower edge of the artwork. */
+  transform:scale(1.12);
+  transform-origin:center top;
   background:
     linear-gradient(90deg,
       rgba(0,0,0,.72) 0%,
