@@ -10,8 +10,8 @@ const fallbackProgrammes=[
   {certification_code:"MED",name:"Empire Health Medical Responder Certification"},
   {certification_code:"LOG",name:"Covalex Logistics Support Certification"},
   {certification_code:"MIN",name:"ArcCorp Mining Consortium Certification"},
-  {certification_code:"GUNNERY",name:"JCS Defensive Matrix Certification"},
-  {certification_code:"ENGINEERING",name:"JCS Fleet Engineer Certification"},
+  {certification_code:"GUNNERY",name:"Combat System Operator Certification"},
+  {certification_code:"ENGINEERING",name:"Electronic Technician Certification"},
   {certification_code:"PILOT",name:"Pilot Training"}
 ];
 
