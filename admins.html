@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JMBN – Admin Console</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -462,6 +462,57 @@ button:hover{
   box-shadow:inset 3px 0 0 var(--accent),inset 0 0 0 1px rgba(214,180,76,.16);
 }
 
+</style>
+<style id="jmbn-mobile-app-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:760px){
+  body{
+    padding-left:max(8px,env(safe-area-inset-left));
+    padding-right:max(8px,env(safe-area-inset-right));
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+  }
+
+  .page{
+    width:calc(100% - 8px);
+  }
+
+  input,
+  select,
+  textarea{
+    min-height:44px;
+    font-size:16px !important;
+  }
+
+  button,
+  a{
+    touch-action:manipulation;
+  }
+
+  button{
+    min-height:40px;
+  }
+
+  .panel .hd{
+    gap:8px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .pb{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .kpis{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:430px){
+  .page{width:100%}
+  .kpis{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
