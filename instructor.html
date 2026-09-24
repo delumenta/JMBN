@@ -431,12 +431,12 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
       <div class="panel-head">
         <div>
           <div class="section-title">YOUR AUTHORISATIONS</div>
-          <div class="panel-subtitle">YOUR AUTHORISED ACADEMY CERTIFICATIONS.</div>
+          <div class="panel-subtitle">CERTIFICATIONS YOU MAY CONDUCT AND SIGN OFF.</div>
         </div>
       </div>
       <div class="panel-body table-wrap">
         <table class="table">
-          <thead><tr><th>CERTIFICATION</th><th>AUTHORISATION</th></tr></thead>
+          <thead><tr><th>CERTIFICATION</th><th>CONDUCT</th><th>SIGN OFF</th></tr></thead>
           <tbody id="authRows"></tbody>
         </table>
       </div>
@@ -674,11 +674,17 @@ async function load(){
 }
 function allowedCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
- return authorisations.filter(x=>x.is_active).map(x=>x.certification_code);
+ return authorisations.filter(x=>x.can_instruct||x.can_sign_off).map(x=>x.certification_code);
+}
+function signoffCodes(){
+ if(isAdmin)return certs.map(x=>x.certification_code);
+ return authorisations.filter(x=>x.can_sign_off).map(x=>x.certification_code);
 }
 function render(){
  const codes=new Set(allowedCodes());
+ const signCodes=new Set(signoffCodes());
  const allowed=certs.filter(c=>codes.has(c.certification_code));
+ const signoffAllowed=certs.filter(c=>signCodes.has(c.certification_code));
  $("#authCount").textContent=allowed.length;
  $("#signoffCount").textContent=signoffs.length;
  const cutoff=Date.now()-30*86400000;
@@ -686,14 +692,14 @@ function render(){
  $("#memberCount").textContent=new Set(signoffs.map(x=>x.trainee_id)).size;
 
 
- $("#authRows").innerHTML=allowed.map(c=>`<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="yes">CONDUCT + SIGN OFF</td></tr>`).join("")||`<tr><td colspan="2">NO AUTHORISATIONS</td></tr>`;
+ $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
  const memberMap=new Map(members.map(x=>[x.user_id,x]));
  $("#recentRows").innerHTML=signoffs.slice(0,8).map(x=>{const m=memberMap.get(x.trainee_id);return `<tr><td>${esc(m?.display_name||m?.handle||"MEMBER")}</td><td class="code">${esc(x.certification_code)}</td><td>${esc(x.event_code)}</td><td class="${x.status==="approved"?"yes":""}">${esc(x.status.toUpperCase())}</td><td>${date(x.signed_off_at)}</td></tr>`}).join("")||`<tr><td colspan="5">NO SIGN-OFFS RECORDED</td></tr>`;
  $("#trainee").innerHTML=`<option value="">SELECT TRAINEE</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#pathTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  $("#overviewTrainee").innerHTML=`<option value="">SELECT MEMBER</option>`+members.filter(x=>x.user_id!==me).map(x=>`<option value="${esc(x.user_id)}">${esc(x.display_name||x.handle||x.user_id)}${x.current_rank_code?` // ${esc(x.current_rank_code)}`:""}</option>`).join("");
  updatePathAssignment();
- $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+allowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
+ $("#programme").innerHTML=`<option value="">SELECT CERTIFICATION</option>`+signoffAllowed.map(c=>`<option value="${esc(c.certification_code)}">${esc(c.certification_code)} — ${esc(c.name)}</option>`).join("");
  updateEvents();
 }
 function updateEvents(){
