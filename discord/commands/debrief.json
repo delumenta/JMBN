@@ -1,6 +1,6 @@
 {
   "name": "debrief",
-  "description": "Record an operation outcome, summary and lesson learned",
+  "description": "Record an operation outcome, reason, summary and lesson learned",
   "type": 1,
   "options": [
     {
@@ -28,6 +28,13 @@
           "value": "Fail"
         }
       ]
+    },
+    {
+      "type": 3,
+      "name": "reason",
+      "description": "Why did it pass, partly succeed or fail?",
+      "required": true,
+      "max_length": 1000
     }
   ]
 }
