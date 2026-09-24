@@ -544,21 +544,19 @@ hr.sep{
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
+<script src="js/avatars.js"></script>
+<script src="js/header.js"></script>
 
-<!-- Mount shared header2.html -->
+<!-- Mount the same shared header design used across JMBN -->
 <script>
 async function mountHeader2(){
   const mount = document.getElementById('header2-mount');
   if(!mount) return;
   try{
-    const res = await fetch('header2.html'); // adjust path if needed
-    const html = await res.text();
-    mount.innerHTML = html;
-
-    // auto-activate nav link for this file
-    const here = (location.pathname.split('/').pop() || 'index.html');
-    const active = mount.querySelector(`.nav-btn[href="${here}"]`);
-    if(active) active.classList.add('active');
+    const res = await fetch('header2.html',{cache:'no-cache'});
+    if(!res.ok) throw new Error('Header request failed: ' + res.status);
+    mount.innerHTML = await res.text();
+    if(typeof window.initJmbnHeader === 'function') await window.initJmbnHeader();
   }catch(err){
     console.error('Failed to mount header2:', err);
   }
