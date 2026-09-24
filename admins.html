@@ -466,7 +466,7 @@ button:hover{
 </head>
 <body>
 
-<!-- Same shared header used by member.html -->
+<!-- header2.html matches the shared member header -->
 <div id="header"></div>
 
 <div class="page">
@@ -560,7 +560,7 @@ async function mountHeader(){
   const mount = document.getElementById('header')
   if(!mount) return
   try{
-    const res = await fetch('header.html',{cache:'no-cache'})
+    const res = await fetch('header2.html',{cache:'no-cache'})
     if(!res.ok) throw new Error('Header request failed: ' + res.status)
     mount.innerHTML = await res.text()
     if(typeof window.initJmbnHeader === 'function'){
