@@ -490,6 +490,8 @@ input:focus,select:focus,textarea:focus{
 <!-- Supabase + auth -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
+<script src="js/avatars.js"></script>
+<script src="js/header.js"></script>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -786,23 +788,17 @@ async function deleteCurrent(){
 
 /* Init */
 document.addEventListener('DOMContentLoaded', async ()=>{
-  // 1) Inject shared header
+  // 1) Load the shared admin header and initialise its account menu.
   try{
     const host = document.getElementById('header');
     if(host){
-      const res = await fetch('header.html');
+      const res = await fetch('header2.html',{cache:'no-cache'});
+      if(!res.ok) throw new Error('Header request failed: ' + res.status);
       host.innerHTML = await res.text();
-
-      // highlight current page if it exists in nav
-      const here = location.pathname.split('/').pop() || 'mission-editor.html';
-      host.querySelectorAll('.nav-btn').forEach(a=>{
-        if(a.getAttribute('href')===here){
-          a.classList.add('active');
-        }
-      });
+      if(typeof window.initJmbnHeader === 'function') await window.initJmbnHeader();
     }
   }catch(e){
-    console.error('Failed to load header.html', e);
+    console.error('Failed to load header2.html', e);
   }
 
   // 2) Auth
