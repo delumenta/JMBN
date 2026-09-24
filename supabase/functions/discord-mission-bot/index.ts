@@ -279,7 +279,7 @@ async function isAdminByDiscordId(discordId: string) {
 // ---------- Mission debrief (stored in missions.notes) ----------
 const debriefCommand = {
   name: "debrief",
-  description: "Record an operation outcome, summary and lesson learned",
+  description: "Record an operation outcome, reason, summary and lesson learned",
   type: 1,
   options: [
     { type: 3, name: "id", description: "Operation ID from /operations View", required: true },
@@ -289,23 +289,31 @@ const debriefCommand = {
         { name: "Partial success", value: "Partial success" },
         { name: "Fail", value: "Fail" }
       ]
-    }
+    },
+    { type: 3, name: "reason", description: "Why did it pass, partly succeed or fail?", required: true, max_length: 1000 }
   ]
+};
+const helpCommand = {
+  name: "help",
+  description: "Show what each JMBN bot command does",
+  type: 1
 };
 let debriefRegistrationAttempted = false;
 async function registerDebriefCommand(applicationId: string) {
   if (!applicationId || !DISCORD_BOT_TOKEN || debriefRegistrationAttempted) return;
   debriefRegistrationAttempted = true;
   try {
-    const response = await fetch(
-      `https://discord.com/api/v10/applications/${applicationId}/commands`,
-      { method: "POST",
-        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify(debriefCommand) }
-    );
-    if (!response.ok) {
-      console.error("Debrief command registration failed", response.status, await response.text());
-      debriefRegistrationAttempted = false;
+    for (const command of [debriefCommand, helpCommand]) {
+      const response = await fetch(
+        `https://discord.com/api/v10/applications/${applicationId}/commands`,
+        { method: "POST",
+          headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify(command) }
+      );
+      if (!response.ok) {
+        console.error("Command registration failed", command.name, response.status, await response.text());
+        debriefRegistrationAttempted = false;
+      }
     }
   } catch (error) {
     console.error("Debrief command registration failed", error);
@@ -314,11 +322,11 @@ async function registerDebriefCommand(applicationId: string) {
 }
 function parseDebriefNotes(notes: string) {
   const raw = String(notes || "");
-  const match = raw.match(/^(?:Outcome: ([^\n]*)\n\n)?(?:Summary: ([\s\S]*?)(?=\n\nLesson learned: |$))?(?:\n\nLesson learned: ([\s\S]*))?$/);
-  if (!match || !(match[1] || match[2] || match[3])) {
-    return { summary: raw, lesson: "" };
+  const match = raw.match(/^(?:Outcome: ([^\n]*)\n\n)?(?:Summary: ([\s\S]*?)(?=\n\n(?:Reason|Lesson learned): |$))?(?:\n\nReason: ([\s\S]*?)(?=\n\nLesson learned: |$))?(?:\n\nLesson learned: ([\s\S]*))?$/);
+  if (!match || !(match[1] || match[2] || match[3] || match[4])) {
+    return { summary: raw, reason: "", lesson: "" };
   }
-  return { summary: (match[2] || "").trim(), lesson: (match[3] || "").trim() };
+  return { summary: (match[2] || "").trim(), reason: (match[3] || "").trim(), lesson: (match[4] || "").trim() };
 }
 async function handleDebriefCommand(interaction: any) {
   const discordId = interaction.member?.user?.id || interaction.user?.id;
@@ -328,6 +336,7 @@ async function handleDebriefCommand(interaction: any) {
   const options = interaction.data?.options || [];
   const missionId = String(options.find((o: any) => o.name === "id")?.value || "");
   const outcome = String(options.find((o: any) => o.name === "outcome")?.value || "");
+  const suppliedReason = String(options.find((o: any) => o.name === "reason")?.value || "").trim();
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(missionId) ||
       !["Pass", "Partial success", "Fail"].includes(outcome)) {
     return jsonResponse({ type: 4, data: { content: "Choose an outcome and enter a valid Operation ID.", flags: 64 } });
@@ -341,8 +350,11 @@ async function handleDebriefCommand(interaction: any) {
       custom_id: `debrief:${missionId}:${outcome === "Pass" ? "pass" : outcome === "Fail" ? "fail" : "partial"}`,
       title: "Operation debrief",
       components: [
-        { type: 1, components: [{ type: 4, custom_id: "summary", label: "What happened and why?", style: 2,
+        { type: 1, components: [{ type: 4, custom_id: "summary", label: "What happened?", style: 2,
           min_length: 1, max_length: 1800, required: true, value: previous.summary.slice(0, 1800) }] },
+        { type: 1, components: [{ type: 4, custom_id: "reason", label: "Reason for the outcome", style: 2,
+          min_length: 1, max_length: 1000, required: true, value: (suppliedReason || previous.reason).slice(0, 1000),
+          placeholder: "Why did it pass, partly succeed or fail?" }] },
         { type: 1, components: [{ type: 4, custom_id: "lesson", label: "Lesson learned", style: 2,
           max_length: 1000, required: false, value: previous.lesson.slice(0, 1000),
           placeholder: "What should we prepare or do differently?" }] }
@@ -363,13 +375,15 @@ async function handleDebriefSubmit(interaction: any) {
   }
   const fields = (interaction.data?.components || []).flatMap((row: any) => row.components || []);
   const summary = String(fields.find((field: any) => field.custom_id === "summary")?.value || "").trim();
+  const reason = String(fields.find((field: any) => field.custom_id === "reason")?.value || "").trim();
   const lesson = String(fields.find((field: any) => field.custom_id === "lesson")?.value || "").trim();
-  if (!summary || summary.length > 1800 || lesson.length > 1000) {
-    return jsonResponse({ type: 4, data: { content: "Add a summary before submitting the debrief.", flags: 64 } });
+  if (!summary || !reason || summary.length > 1800 || reason.length > 1000 || lesson.length > 1000) {
+    return jsonResponse({ type: 4, data: { content: "Add what happened and the reason for the outcome.", flags: 64 } });
   }
   const notes = [
     `Outcome: ${outcome}`,
     `Summary: ${summary}`,
+    `Reason: ${reason}`,
     lesson && `Lesson learned: ${lesson}`
   ].filter(Boolean).join("\n\n");
   const { data, error } = await sb.from("missions")
@@ -377,7 +391,7 @@ async function handleDebriefSubmit(interaction: any) {
   if (error) throw error;
   if (!data) return jsonResponse({ type: 4, data: { content: "Operation not found or could not be updated.", flags: 64 } });
   return jsonResponse({ type: 4, data: {
-    content: `Debrief saved for **${String(data.title || "Operation").replace(/[*_`~|]/g, "")}**. The outcome, summary and lesson are now in the Mission Log's Notes field.`,
+    content: `Debrief saved for **${String(data.title || "Operation").replace(/[*_`~|]/g, "")}**. The outcome, summary, reason and lesson are now in the Mission Log's Notes field.`,
     flags: 64
   } });
 }
@@ -1549,6 +1563,28 @@ async function processPublishButtonDeferred(interaction: any) {
 // ---------- Main interaction router ----------
 async function handleInteraction(interaction: any) {
   if (interaction.data?.name === "ping") return pong();
+
+  if (interaction.type === 2 && interaction.data?.name === "help") {
+    return jsonResponse({ type: 4, data: {
+      embeds: [{
+        color: GOLD,
+        title: "JMBN Bot Commands",
+        description: [
+          "**/link code:** Connect your Discord account to your JMBN member profile.",
+          "**/profile:** View your linked member profile and rank.",
+          "**/progression:** Check your rank progress and requirements.",
+          "**/certifications:** See the certifications you have earned.",
+          "**/status duty:** Set your duty status to Active or AWOL.",
+          "**/operations action:List:** See upcoming operations.",
+          "**/operations action:View id:** Preview an operation and RSVP.",
+          "**/operations action:Latest:** Publish the next operation (Admin only).",
+          "**/debrief id outcome reason:** Record the outcome and reason, then add a summary and lesson in the form (Admin only).",
+          "**/help:** Show this command guide."
+        ].join("\n")
+      }],
+      flags: 64
+    }});
+  }
 
   if (interaction.type === 2 && interaction.data?.name === "debrief") {
     return await handleDebriefCommand(interaction);
