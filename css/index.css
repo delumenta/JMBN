@@ -1,0 +1,2332 @@
+/* ===== Original style layer 1 — preserve cascade ===== */
+:root{
+  --bg:#020303;
+  --panel:#080a0b;
+  --panel-2:#0d1011;
+  --gold:#d8b84e;
+  --gold-2:#f4d878;
+  --gold-soft:rgba(216,184,78,.16);
+  --gold-line:rgba(216,184,78,.52);
+  --text:#f7f0d2;
+  --muted:#b9a86e;
+  --muted-2:#81764f;
+  --white:#f7f5eb;
+  --shadow:0 18px 55px rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  min-height:100%;
+  overflow-x:hidden;
+  font-family:'Play',sans-serif;
+  background:#000;
+  color:var(--text);
+}
+
+body{
+  opacity:0;
+  min-height:100vh;
+  padding-bottom:64px;
+  transition:opacity .6s ease;
+}
+
+button,a{font:inherit}
+button{appearance:none}
+a{color:inherit}
+
+#goldDust{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  background:#000;
+}
+
+.hud-grid{
+  display:none;
+}
+
+@keyframes gridDrift{
+  from{background-position:0 0}
+  to{background-position:-240px -240px}
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 440px at 50% 16%,rgba(219,183,72,.055),transparent 70%),
+    radial-gradient(1100px 800px at 50% 48%,transparent 25%,rgba(0,0,0,.38) 72%,rgba(0,0,0,.72) 100%);
+}
+
+.wrapper{
+  position:relative;
+  z-index:3;
+  width:100%;
+  min-height:100vh;
+  padding:34px 28px 42px;
+}
+
+.center{
+  width:min(1380px,96vw);
+  margin:0 auto;
+}
+
+/* =========================================================
+   ANNOUNCEMENT / COMMAND STRIP
+========================================================= */
+.annc-ticket{
+  position:relative;
+  margin:0 0 28px;
+  padding:10px 14px;
+  overflow:hidden;
+  border:1px solid rgba(216,184,78,.68);
+  border-radius:10px;
+  background:
+    linear-gradient(90deg,rgba(216,184,78,.05),transparent 26%),
+    rgba(4,5,5,.88);
+  box-shadow:
+    0 0 24px rgba(216,184,78,.08),
+    inset 0 1px 0 rgba(255,255,255,.025);
+  backdrop-filter:blur(10px);
+}
+
+.annc-ticket::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,transparent,var(--gold-2),transparent);
+}
+
+.annc-ticket .row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.annc-ticket .left{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.annc-chip{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  height:24px;
+  padding:0 9px;
+  border:1px solid var(--gold-line);
+  border-radius:6px;
+  color:var(--gold-2);
+  background:#070808;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.annc-title{
+  color:var(--white);
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.annc-meta{
+  margin-top:2px;
+  color:var(--muted-2);
+  font-size:10px;
+}
+
+.annc-body{
+  margin-top:6px;
+  padding-left:94px;
+  color:#cfc6a4;
+  font-size:11px;
+  line-height:1.45;
+}
+
+.annc-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.annc-btn,#postAnnc{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:24px;
+  padding:0 9px;
+  border:1px solid rgba(216,184,78,.55);
+  border-radius:6px;
+  background:rgba(0,0,0,.25);
+  color:var(--gold-2);
+  text-decoration:none;
+  cursor:pointer;
+  font-size:10px;
+  font-weight:700;
+  transition:.2s ease;
+}
+
+.annc-btn:hover,#postAnnc:hover{
+  background:var(--gold-2);
+  border-color:var(--gold-2);
+  color:#080808;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:0 0 22px;
+  padding:0 4px;
+}
+
+.brand-logo{
+  width:62px;
+  height:62px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 12px rgba(242,214,117,.28));
+}
+
+.brand-text h1{
+  color:#f0d270;
+  font-size:clamp(27px,3.2vw,42px);
+  line-height:1;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+.brand-text .tagline{
+  margin-top:7px;
+  color:#bba868;
+  font-size:clamp(11px,1.25vw,14px);
+  letter-spacing:.25px;
+}
+
+/* =========================================================
+   MEMBER HERO
+========================================================= */
+.member{
+  position:relative;
+  min-height:220px;
+  margin-bottom:22px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(280px,.9fr) minmax(300px,1.05fr) 230px;
+  align-items:stretch;
+  border:1px solid rgba(216,184,78,.8);
+  border-radius:14px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5,6,6,.96) 0%,
+      rgba(5,6,6,.88) 32%,
+      rgba(6,7,7,.60) 62%,
+      rgba(7,8,8,.72) 100%
+    ),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/tryagain.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy90cnlhZ2Fpbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMTY3MDY2LCJleHAiOjMzMzI2MTY3MDY2fQ.3Q6h5lsAakro4lSXGH-7-bMTQNxj0i9drflIeZ_OelM") center 45%/cover no-repeat;
+  box-shadow:
+    0 20px 55px rgba(0,0,0,.48),
+    0 0 22px rgba(216,184,78,.08),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.member::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(115deg,transparent 0 34%,rgba(216,184,78,.06) 34.2% 49%,transparent 49.2%),
+    radial-gradient(420px 220px at 82% 50%,rgba(216,184,78,.12),transparent 72%);
+}
+
+.member-ident{
+  position:relative;
+  z-index:2;
+  padding:32px 28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.member .name{
+  color:#f2d576;
+  font-size:clamp(27px,3vw,38px);
+  line-height:1;
+  font-weight:700;
+}
+
+.rankline{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  color:#eee8d1;
+  font-size:14px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:25px;
+  padding:2px 10px;
+  border:1px solid rgba(216,184,78,.72);
+  border-radius:999px;
+  background:rgba(0,0,0,.35);
+  color:var(--gold-2);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+}
+
+.member-welcome{
+  margin-top:13px;
+  color:#d9d2b8;
+  font-size:13px;
+}
+
+.member-status{
+  margin-top:5px;
+  color:#756d50;
+  font-size:10px;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+}
+
+.member-presence{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.member-presence-label{
+  color:#77705c;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.availability-toggle{
+  min-width:92px;
+  min-height:30px;
+  padding:6px 12px;
+  border:1px solid rgba(112,217,140,.5);
+  border-radius:999px;
+  background:rgba(112,217,140,.08);
+  color:#70d98c;
+  font:700 10px "Play",sans-serif;
+  letter-spacing:1.3px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.availability-toggle:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.1);
+}
+
+.availability-toggle.awol{
+  border-color:rgba(255,116,116,.55);
+  background:rgba(255,116,116,.08);
+  color:#ff8b84;
+}
+
+.availability-note{
+  width:100%;
+  color:#6e6753;
+  font-size:9px;
+  line-height:1.45;
+}
+
+.link-chip{
+  width:fit-content;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-top:17px;
+  padding:7px 11px;
+  border:1px solid rgba(216,184,78,.68);
+  border-radius:8px;
+  background:rgba(0,0,0,.32);
+  color:var(--gold-2);
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  user-select:none;
+  transition:.2s ease;
+}
+
+.link-chip:hover{
+  background:var(--gold-2);
+  color:#070707;
+  box-shadow:0 0 16px rgba(216,184,78,.18);
+}
+
+.link-code-box{
+  display:none;
+  margin-top:8px;
+  color:var(--text);
+  font-size:11px;
+}
+
+.link-code{
+  display:inline-block;
+  margin-top:5px;
+  padding:6px 10px;
+  border:1px solid var(--gold-line);
+  border-radius:7px;
+  background:#050606;
+  color:var(--gold-2);
+  font-weight:700;
+  letter-spacing:.8px;
+  cursor:pointer;
+}
+
+.link-code:hover{
+  background:var(--gold-2);
+  color:#050505;
+}
+
+.member-rank{
+  position:relative;
+  z-index:2;
+  padding:34px 28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border-left:1px solid rgba(216,184,78,.08);
+}
+
+.rank-kicker{
+  color:#8f814f;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.rank-current{
+  margin-top:13px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.rank-current-name{
+  color:#e7dfc4;
+  font-size:15px;
+  line-height:1.3;
+}
+
+.rank-current-code{
+  flex:0 0 auto;
+  color:var(--gold-2);
+  font-size:18px;
+  font-weight:700;
+}
+
+.rank-rule{
+  position:relative;
+  height:5px;
+  margin-top:13px;
+  overflow:hidden;
+  border:1px solid rgba(216,184,78,.35);
+  border-radius:999px;
+  background:#090a0a;
+}
+
+.rank-rule::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:44%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#b79437,#f1d16b);
+  box-shadow:0 0 12px rgba(242,214,117,.35);
+}
+
+.rank-note{
+  margin-top:24px;
+  color:#77705c;
+  font-size:11px;
+  font-style:italic;
+}
+
+.member-emblem{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-left:1px solid rgba(216,184,78,.13);
+  background:
+    linear-gradient(135deg,rgba(216,184,78,.02),rgba(216,184,78,.1)),
+    repeating-linear-gradient(120deg,transparent 0 18px,rgba(255,255,255,.015) 18px 19px);
+}
+
+.member-emblem::after{
+  content:"";
+  position:absolute;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(216,184,78,.16),transparent 66%);
+  filter:blur(5px);
+}
+
+.rankimg{
+  position:relative;
+  z-index:2;
+  width:155px;
+  height:155px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 16px rgba(242,214,117,.25));
+}
+
+/* =========================================================
+   THREE CINEMATIC ACTION CARDS
+========================================================= */
+.actions-wrap{margin-top:0}
+
+.actions-3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+.card.action{
+  position:relative;
+  isolation:isolate;
+  min-height:330px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:26px 25px 22px;
+  border:1px solid rgba(216,184,78,.66);
+  border-radius:14px;
+  background-color:#090a0a;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.42),
+    0 0 16px rgba(216,184,78,.06);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.card.action::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.12) 32%,rgba(0,0,0,.82) 72%,rgba(0,0,0,.98) 100%),
+    linear-gradient(90deg,rgba(0,0,0,.16),transparent 55%);
+}
+
+.card.action::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:2px;
+  opacity:0;
+  background:linear-gradient(90deg,transparent,var(--gold-2),transparent);
+  transition:opacity .25s ease;
+}
+
+.card.action:hover{
+  transform:translateY(-4px);
+  border-color:rgba(242,214,117,.95);
+  box-shadow:
+    0 24px 50px rgba(0,0,0,.55),
+    0 0 24px rgba(216,184,78,.13);
+}
+
+.card.action:hover::after{opacity:1}
+
+.card.action.grow-bg{
+  background-image:
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/frontpage/grow.png");
+  background-repeat:no-repeat;
+  background-size:auto 118%;
+  background-position:center bottom;
+}
+
+.card.action.missions{
+  background:
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/frontpage/mission-1.png")
+    center/cover no-repeat;
+}
+
+.home-mission-list{
+  display:grid;
+  gap:7px;
+  margin:0 0 14px;
+}
+
+.home-mission-empty{
+  padding:12px 13px;
+  border:1px solid rgba(216,184,78,.2);
+  border-radius:9px;
+  background:rgba(2,3,3,.72);
+  color:#8b8368;
+  font-size:10px;
+  letter-spacing:.7px;
+}
+
+.home-mission{
+  position:relative;
+  padding:10px 11px;
+  border:1px solid rgba(216,184,78,.26);
+  border-radius:9px;
+  background:rgba(3,4,4,.78);
+  cursor:pointer;
+  backdrop-filter:blur(5px);
+  transition:.18s ease;
+}
+
+.home-mission:hover,
+.home-mission.open{
+  border-color:rgba(242,214,117,.62);
+  background:rgba(7,8,7,.9);
+}
+
+.home-mission-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.home-mission-title{
+  min-width:0;
+  color:#f0df9d;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.home-mission-state{
+  flex:0 0 auto;
+  padding:3px 7px;
+  border:1px solid rgba(216,184,78,.28);
+  border-radius:999px;
+  color:#a59b78;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.home-mission-state.going{
+  border-color:rgba(112,217,140,.38);
+  color:#70d98c;
+}
+
+.home-mission-state.not_going{
+  border-color:rgba(255,116,116,.38);
+  color:#ff8b84;
+}
+
+.home-mission-meta{
+  margin-top:5px;
+  color:#8e866d;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.home-mission-rsvp{
+  display:none;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid rgba(216,184,78,.14);
+}
+
+.home-mission.open .home-mission-rsvp{
+  display:grid;
+}
+
+.home-rsvp-btn{
+  min-height:30px;
+  padding:5px 6px;
+  border:1px solid rgba(216,184,78,.32);
+  border-radius:7px;
+  background:#070808;
+  color:#aaa181;
+  font:700 8px "Play",sans-serif;
+  letter-spacing:.7px;
+  cursor:pointer;
+}
+
+.home-rsvp-btn:hover{
+  border-color:rgba(242,214,117,.72);
+  color:#f0d270;
+}
+
+.home-rsvp-btn.current{
+  border-color:#d8b84e;
+  background:rgba(216,184,78,.12);
+  color:#f0d270;
+}
+
+.home-rsvp-btn.going.current{
+  border-color:rgba(112,217,140,.55);
+  background:rgba(112,217,140,.1);
+  color:#70d98c;
+}
+
+.home-rsvp-btn.not-going.current{
+  border-color:rgba(255,116,116,.55);
+  background:rgba(255,116,116,.09);
+  color:#ff8b84;
+}
+
+.home-rsvp-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.home-mission-hint{
+  margin-top:5px;
+  color:#645e4c;
+  font-size:8px;
+  letter-spacing:.6px;
+}
+
+.card.action.jmbn-bg{
+  background:
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/frontpage/Academy.png")
+    center/cover no-repeat;
+}
+
+.action-top{
+  position:absolute;
+  top:18px;
+  left:18px;
+  right:18px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  pointer-events:none;
+}
+
+.action-icon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(216,184,78,.65);
+  border-radius:9px;
+  background:rgba(4,5,5,.7);
+  color:var(--gold-2);
+  font-size:20px;
+  backdrop-filter:blur(5px);
+}
+
+.action-no{
+  color:rgba(238,224,175,.48);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.action-kicker{
+  margin-bottom:7px;
+  color:#d5b952;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.action h3{
+  margin:0;
+  color:#f1d371;
+  font-size:26px;
+  line-height:1.05;
+  font-weight:700;
+}
+
+.action p{
+  max-width:360px;
+  min-height:42px;
+  margin:9px 0 18px;
+  color:#d1c9ab;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.action a{
+  width:fit-content;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:10px 15px;
+  border:1px solid #e4c85e;
+  border-radius:8px;
+  background:linear-gradient(180deg,#f4da78,#d7b64d);
+  color:#090909;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+  box-shadow:0 5px 18px rgba(0,0,0,.25);
+  transition:.2s ease;
+}
+
+.action a:hover{
+  transform:translateX(3px);
+  filter:brightness(1.07);
+  box-shadow:0 6px 22px rgba(216,184,78,.2);
+}
+
+/* =========================================================
+   OFFICER ACCESS
+========================================================= */
+.admin-panel{
+  position:relative;
+  margin-top:22px;
+  overflow:hidden;
+  display:none;
+  grid-template-columns:minmax(260px,.75fr) minmax(400px,1.25fr);
+  min-height:138px;
+  border:1px solid rgba(216,184,78,.72);
+  border-radius:13px;
+  background:
+    linear-gradient(100deg,rgba(216,184,78,.055),transparent 35%),
+    rgba(6,7,7,.94);
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.45),
+    0 0 20px rgba(216,184,78,.07);
+}
+
+.admin-panel::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:linear-gradient(180deg,transparent,var(--gold-2),transparent);
+}
+
+.admin-left{
+  padding:23px 26px;
+  border-right:1px solid rgba(216,184,78,.1);
+  background:
+    repeating-linear-gradient(125deg,transparent 0 22px,rgba(216,184,78,.015) 22px 23px);
+}
+
+.admin-eyebrow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--gold-2);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+}
+
+.admin-title{
+  margin-top:11px;
+  color:#f1d371;
+  font-size:21px;
+  font-weight:700;
+}
+
+.admin-sub{
+  margin-top:5px;
+  color:#9d9166;
+  font-size:11px;
+}
+
+.admin-right{
+  padding:22px 26px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.admin-body{
+  color:#d3ccb3;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.admin-cta-row{
+  margin-top:13px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.admin-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 13px;
+  border:1px solid rgba(216,184,78,.72);
+  border-radius:8px;
+  background:#090a0a;
+  color:var(--gold-2);
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.admin-cta:hover{
+  background:var(--gold-2);
+  color:#050505;
+}
+
+.admin-links{
+  color:#776e51;
+  font-size:10px;
+}
+
+.admin-links a{
+  color:#b8a45e;
+  text-decoration:none;
+}
+
+.admin-links a:hover{color:var(--gold-2)}
+
+.admin-pill{
+  display:none;
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+.boot{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#000;
+  transition:opacity .5s ease,visibility .5s ease;
+}
+
+.boot.hidden{opacity:0;visibility:hidden}
+
+.bootCard{
+  width:min(720px,90vw);
+  padding:16px;
+  border:1px solid var(--gold);
+  border-radius:12px;
+  background:#060606;
+  box-shadow:0 0 22px rgba(214,180,76,.28),inset 0 0 0 1px rgba(214,180,76,.12);
+}
+
+.bootHead{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  color:var(--gold-2);
+  font-size:14px;
+  font-weight:700;
+}
+
+.bootLog{
+  height:200px;
+  overflow:auto;
+  padding:10px;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  background:#090909;
+  color:#e8e3c8;
+  font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+.boot .ok{color:#7CFC9A}
+
+.bootCtrl{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:10px;
+}
+
+.bootBtn{
+  padding:6px 10px;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+}
+
+.bootBtn:hover{background:var(--gold-2);color:#000}
+
+/* =========================================================
+   OPS TICKER — KEPT
+========================================================= */
+.ops-ticker{
+  position:fixed;
+  left:8px;
+  right:8px;
+  bottom:calc(8px + env(safe-area-inset-bottom));
+  z-index:100;
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 9px;
+  border:1px solid rgba(216,184,78,.85);
+  border-radius:9px;
+  background:rgba(5,6,6,.96);
+  box-shadow:
+    0 0 18px rgba(216,184,78,.18),
+    inset 0 1px 0 rgba(255,255,255,.025);
+  backdrop-filter:blur(8px);
+}
+
+.ops-chip{
+  flex:0 0 auto;
+  padding:3px 8px;
+  border:1px solid var(--gold);
+  border-radius:6px;
+  background:var(--gold-2);
+  color:#000;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.4px;
+}
+
+.ops-msg{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  color:#e9e1c5;
+  font-size:11px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  opacity:1;
+  transition:opacity .35s ease;
+}
+
+.ops-ctrl{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.ops-btn{
+  min-width:26px;
+  height:26px;
+  padding:0 7px;
+  border:1px solid rgba(216,184,78,.75);
+  border-radius:6px;
+  background:transparent;
+  color:#f7f1d0;
+  cursor:pointer;
+  font-size:10px;
+}
+
+.ops-btn:hover{
+  background:var(--gold-2);
+  color:#000;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media(max-width:1050px){
+  .center{width:min(900px,96vw)}
+
+  .member{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .member-emblem{
+    grid-column:1/-1;
+    min-height:150px;
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.1);
+  }
+
+  .rankimg{
+    width:125px;
+    height:125px;
+  }
+
+  .actions-3{
+    grid-template-columns:1fr;
+  }
+
+  .card.action{
+    min-height:290px;
+  }
+
+  .admin-panel{
+    grid-template-columns:1fr;
+  }
+
+  .admin-left{
+    border-right:0;
+    border-bottom:1px solid rgba(216,184,78,.1);
+  }
+}
+
+@media(max-width:700px){
+  body{padding-bottom:70px}
+
+  .wrapper{
+    padding:18px 12px 32px;
+  }
+
+  .center{width:100%}
+
+  .annc-ticket{
+    margin-bottom:20px;
+    padding:10px;
+  }
+
+  .annc-ticket .row{
+    align-items:flex-start;
+  }
+
+  .annc-ticket .left{
+    align-items:flex-start;
+  }
+
+  .annc-chip{
+    display:none;
+  }
+
+  .annc-body{
+    padding-left:0;
+  }
+
+  .annc-actions{
+    gap:4px;
+  }
+
+  .annc-btn,#postAnnc{
+    padding:0 7px;
+    font-size:9px;
+  }
+
+  .brand{
+    gap:11px;
+    margin-bottom:17px;
+  }
+
+  .brand-logo{
+    width:46px;
+    height:46px;
+  }
+
+  .brand-text h1{
+    font-size:25px;
+  }
+
+  .brand-text .tagline{
+    margin-top:4px;
+    font-size:10px;
+    line-height:1.35;
+  }
+
+  .member{
+    min-height:0;
+    grid-template-columns:1fr;
+  }
+
+  .member-ident{
+    padding:25px 20px 20px;
+  }
+
+  .member-rank{
+    padding:20px;
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.08);
+  }
+
+  .member-emblem{
+    min-height:125px;
+  }
+
+  .member .name{
+    font-size:29px;
+  }
+
+  .rankimg{
+    width:105px;
+    height:105px;
+  }
+
+  .card.action{
+    min-height:310px;
+    padding:23px 20px 20px;
+  }
+
+  .action h3{
+    font-size:24px;
+  }
+
+  .admin-left,.admin-right{
+    padding:20px;
+  }
+
+  .admin-cta-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .ops-ticker{
+    left:6px;
+    right:6px;
+    bottom:calc(6px + env(safe-area-inset-bottom));
+    gap:6px;
+    padding:6px;
+  }
+
+  .ops-msg{
+    font-size:10px;
+  }
+
+  .ops-btn{
+    min-width:24px;
+    height:24px;
+    padding:0 5px;
+    font-size:9px;
+  }
+}
+
+@media(max-width:480px){
+  .ops-ctrl #opsPrev,
+  .ops-ctrl #opsNext{
+    display:none;
+  }
+
+  .annc-title{
+    white-space:normal;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+}
+
+/* =========================================================
+   2026-09-21 IMAGE-UI PANEL REFINEMENT
+   Member frame now matches the Announcement visual language.
+   Admin gets a stronger command-console frame.
+   ========================================================= */
+
+.member {
+  position:relative;
+  isolation:isolate;
+  min-height:220px;
+  margin-bottom:22px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(280px,.9fr) minmax(300px,1.05fr) 230px;
+  align-items:stretch;
+
+  /* Announcement-style shell */
+  border:1px solid rgba(216,184,78,.68);
+  border-radius:10px;
+  background:#050606;
+  box-shadow:
+    0 0 24px rgba(216,184,78,.08),
+    0 18px 55px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+/* Artwork lives INSIDE the CSS frame */
+.member::after {
+  content:"";
+  position:absolute;
+  inset:1px;
+  z-index:-2;
+  border-radius:9px;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.72) 0%,
+      rgba(0,0,0,.48) 29%,
+      rgba(0,0,0,.14) 49%,
+      rgba(0,0,0,.18) 70%,
+      rgba(0,0,0,.55) 100%),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/tryagain.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy90cnlhZ2Fpbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMTY3MDY2LCJleHAiOjMzMzI2MTY3MDY2fQ.3Q6h5lsAakro4lSXGH-7-bMTQNxj0i9drflIeZ_OelM") center / cover no-repeat;
+}
+
+/* Same slim illuminated rail as the Announcement ticket */
+.member::before {
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent,var(--gold-2),transparent);
+  box-shadow:0 0 14px rgba(244,216,120,.34);
+}
+
+/* Keep the live content readable over the artwork */
+.member-ident,
+.member-rank,
+.member-emblem {
+  background:transparent;
+}
+
+.member-rank {
+  border-left:1px solid rgba(216,184,78,.10);
+}
+
+.member-emblem {
+  border-left:1px solid rgba(216,184,78,.10);
+}
+
+.member-emblem::after {
+  opacity:.72;
+}
+
+/* ---------------------------------------------------------
+   ADMIN / OFFICER CONSOLE
+   --------------------------------------------------------- */
+.admin-panel {
+  position:relative;
+  isolation:isolate;
+  margin-top:22px;
+  min-height:152px;
+  overflow:hidden;
+  display:none;
+  grid-template-columns:minmax(320px,.78fr) minmax(460px,1.22fr);
+
+  border:1px solid rgba(244,216,120,.86);
+  border-radius:12px;
+  background:#050606;
+  box-shadow:
+    0 20px 52px rgba(0,0,0,.58),
+    0 0 28px rgba(216,184,78,.11),
+    inset 0 0 0 1px rgba(255,232,154,.045);
+}
+
+/* Command-centre artwork, contained by the CSS frame */
+/* Historical full-panel image layer removed; current artwork lives in .admin-art-zone. */
+
+/* More substantial illuminated left rail */
+.admin-panel::before {
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:0;
+  top:13px;
+  bottom:13px;
+  width:4px;
+  border-radius:0 4px 4px 0;
+  background:linear-gradient(
+    180deg,
+    rgba(244,216,120,.12),
+    var(--gold-2) 18%,
+    #fff0aa 50%,
+    var(--gold-2) 82%,
+    rgba(244,216,120,.12)
+  );
+  box-shadow:
+    0 0 8px rgba(244,216,120,.80),
+    0 0 20px rgba(216,184,78,.30);
+}
+
+/* Inner HUD line gives the admin panel a more premium frame */
+.admin-left::before {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:8px;
+  z-index:-1;
+  border-top:1px solid rgba(244,216,120,.16);
+  border-bottom:1px solid rgba(244,216,120,.10);
+  clip-path:polygon(0 0,96% 0,100% 22%,100% 78%,96% 100%,0 100%);
+}
+
+.admin-left {
+  position:relative;
+  padding:25px 28px;
+  border-right:1px solid rgba(216,184,78,.12);
+  background:
+    linear-gradient(110deg,rgba(216,184,78,.08),transparent 58%);
+}
+
+.admin-right {
+  position:relative;
+  padding:24px 28px;
+  background:linear-gradient(90deg,rgba(0,0,0,.10),rgba(0,0,0,.34));
+}
+
+.admin-eyebrow {
+  color:#f4d878;
+  text-shadow:0 0 12px rgba(244,216,120,.20);
+}
+
+.admin-title {
+  color:#f3d675;
+  text-shadow:0 0 14px rgba(216,184,78,.12);
+}
+
+.admin-cta {
+  border-color:rgba(244,216,120,.84);
+  background:rgba(5,6,6,.76);
+  box-shadow:
+    inset 0 0 0 1px rgba(244,216,120,.06),
+    0 0 14px rgba(216,184,78,.06);
+  backdrop-filter:blur(5px);
+}
+
+/* Gold corner cuts without baking them into the image */
+.admin-panel .admin-right::after {
+  content:"";
+  position:absolute;
+  right:9px;
+  top:9px;
+  width:44px;
+  height:16px;
+  pointer-events:none;
+  border-top:2px solid rgba(244,216,120,.75);
+  border-right:2px solid rgba(244,216,120,.75);
+  clip-path:polygon(18% 0,100% 0,100% 100%,88% 100%,88% 30%,0 30%);
+  filter:drop-shadow(0 0 5px rgba(244,216,120,.28));
+}
+
+@media(max-width:1050px){
+  .member{
+    grid-template-columns:1fr 1fr;
+  }
+  .member-emblem{
+    grid-column:1/-1;
+    min-height:145px;
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.10);
+  }
+  .admin-panel{
+    grid-template-columns:1fr;
+  }
+  .admin-left{
+    border-right:0;
+    border-bottom:1px solid rgba(216,184,78,.12);
+  }
+}
+
+@media(max-width:700px){
+  .member{
+    grid-template-columns:1fr;
+    min-height:0;
+  }
+  .member::after{
+    background-position:58% center;
+  }
+  .member-rank{
+    border-left:0;
+    border-top:1px solid rgba(216,184,78,.10);
+    background:rgba(0,0,0,.24);
+  }
+  .member-emblem{
+    min-height:125px;
+    background:rgba(0,0,0,.18);
+  }
+  .admin-panel::after{
+    background-position:center;
+  }
+  .admin-left,
+  .admin-right{
+    background:rgba(2,3,3,.66);
+    backdrop-filter:blur(2px);
+  }
+}
+
+/* ===== Original style layer 2 — preserve cascade ===== */
+/* =========================================================
+   OFFICER ACCESS — matches the supplied reference composition
+   Left copy | central JMBN command artwork | right actions
+========================================================= */
+
+.admin-panel{
+  position:relative;
+  isolation:isolate;
+  display:none; /* existing Supabase JS reveals elevated users */
+  width:100%;
+  min-height:176px;
+  margin-top:22px;
+  overflow:hidden;
+
+  grid-template-columns:31% 27% 42%;
+  align-items:stretch;
+
+  border:1px solid rgba(231,197,82,.82);
+  border-radius:10px;
+  background:#030404;
+
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.58),
+    0 0 22px rgba(216,184,78,.10),
+    inset 0 1px 0 rgba(255,238,170,.05);
+}
+
+/* The supplied admin art spans the whole panel.
+   Black/faded sides in the image naturally sit behind the text zones. */
+/* Historical full-panel image layer removed; current artwork lives in .admin-art-zone. */
+
+/* Gold illuminated left rail, matching the reference frame */
+.admin-panel::before{
+  content:"";
+  position:absolute;
+  z-index:6;
+  left:0;
+  top:14px;
+  bottom:14px;
+  width:4px;
+
+  border-radius:0 3px 3px 0;
+  background:linear-gradient(
+    180deg,
+    rgba(255,221,107,.18),
+    #f4d66c 18%,
+    #fff0a5 50%,
+    #e7c452 82%,
+    rgba(255,221,107,.18)
+  );
+
+  box-shadow:
+    0 0 8px rgba(255,224,119,.75),
+    0 0 19px rgba(216,184,78,.30);
+}
+
+/* LEFT --------------------------------------------------- */
+
+.admin-left{
+  position:relative;
+  z-index:2;
+
+  padding:25px 18px 24px 30px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  border-right:0;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.82),
+      rgba(0,0,0,.55) 70%,
+      rgba(0,0,0,.08));
+}
+
+.admin-left::before{
+  content:"";
+  position:absolute;
+  inset:8px auto 8px 8px;
+  width:18px;
+  pointer-events:none;
+
+  border-left:1px solid rgba(241,207,93,.35);
+  border-top:1px solid rgba(241,207,93,.18);
+  border-bottom:1px solid rgba(241,207,93,.18);
+}
+
+.admin-eyebrow{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  color:#f0ce62;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.35px;
+  text-transform:uppercase;
+  text-shadow:0 0 11px rgba(240,206,98,.20);
+}
+
+.admin-lock{
+  font-size:13px;
+  color:#f4d46b;
+}
+
+.admin-stripes{
+  width:60px;
+  height:10px;
+  margin-left:2px;
+  opacity:.30;
+
+  background:
+    repeating-linear-gradient(
+      125deg,
+      #bda451 0 7px,
+      transparent 7px 14px
+    );
+}
+
+.admin-title{
+  margin-top:15px;
+  max-width:430px;
+
+  color:#f2d16b;
+  font-size:clamp(20px,1.8vw,27px);
+  line-height:1.05;
+  font-weight:800;
+
+  text-shadow:
+    0 1px 3px #000,
+    0 0 14px rgba(216,184,78,.11);
+}
+
+.admin-sub{
+  margin-top:11px;
+
+  color:#d7d2c5;
+  font-size:11px;
+  line-height:1.35;
+
+  text-shadow:0 1px 4px #000;
+}
+
+/* CENTRE ART --------------------------------------------- */
+
+.admin-art-zone{
+  position:relative;
+  z-index:1;
+  min-width:0;
+  pointer-events:none;
+}
+
+/* Subtle angled fades keep the center art separate from copy */
+.admin-art-zone::before,
+.admin-art-zone::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:45px;
+  pointer-events:none;
+}
+
+.admin-art-zone::before{
+  left:-1px;
+  background:linear-gradient(90deg,rgba(0,0,0,.35),transparent);
+}
+
+.admin-art-zone::after{
+  right:-1px;
+  background:linear-gradient(270deg,rgba(0,0,0,.40),transparent);
+}
+
+/* RIGHT -------------------------------------------------- */
+
+.admin-right{
+  position:relative;
+  z-index:2;
+
+  padding:25px 28px 20px 24px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  border-left:0;
+
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.12),
+      rgba(0,0,0,.62) 17%,
+      rgba(0,0,0,.83) 100%);
+}
+
+.admin-body{
+  max-width:620px;
+
+  color:#e7e4dc;
+  font-size:12px;
+  line-height:1.55;
+
+  text-shadow:0 1px 5px #000;
+}
+
+.admin-actions{
+  margin-top:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.admin-cta{
+  flex:0 0 auto;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  min-height:42px;
+  padding:0 19px;
+
+  border:1px solid rgba(236,202,82,.90);
+  border-radius:8px;
+
+  color:#f2d16b;
+  background:rgba(3,4,4,.82);
+
+  font-size:11px;
+  font-weight:800;
+  text-decoration:none;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,231,145,.04),
+    0 0 15px rgba(216,184,78,.07);
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease,
+    box-shadow .15s ease;
+}
+
+.admin-cta:hover{
+  transform:translateY(-1px);
+  color:#fff0aa;
+  border-color:#ffe58a;
+  background:rgba(30,25,8,.92);
+
+  box-shadow:
+    0 0 18px rgba(216,184,78,.14),
+    inset 0 0 0 1px rgba(255,231,145,.07);
+}
+
+.admin-tool{
+  color:#f5d56a;
+  font-size:18px;
+  line-height:1;
+}
+
+.admin-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  white-space:nowrap;
+
+  color:#c9c3b5;
+  font-size:10px;
+}
+
+.admin-links a{
+  color:#d0cabd;
+  text-decoration:none;
+}
+
+.admin-links a:hover{
+  color:#f2d16b;
+}
+
+.admin-links span{
+  color:#d6b94e;
+}
+
+/* Existing audit hint retained for JS, but hidden to match reference */
+.admin-pill{
+  display:none!important;
+}
+
+/* Small HUD corner detail */
+.admin-right::after{
+  content:"";
+  position:absolute;
+  right:9px;
+  bottom:9px;
+
+  width:28px;
+  height:16px;
+
+  border-right:1px solid rgba(239,205,87,.60);
+  border-bottom:1px solid rgba(239,205,87,.60);
+
+  pointer-events:none;
+}
+
+/* RESPONSIVE --------------------------------------------- */
+
+@media(max-width:1100px){
+  .admin-panel{
+    grid-template-columns:35% 25% 40%;
+  }
+
+  .admin-title{
+    font-size:20px;
+  }
+
+  .admin-body{
+    font-size:10px;
+  }
+
+  .admin-actions{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .admin-links{
+    justify-content:flex-start;
+    white-space:normal;
+    flex-wrap:wrap;
+  }
+}
+
+@media(max-width:760px){
+  .admin-panel{
+    grid-template-columns:1fr;
+    min-height:420px;
+  }
+
+  .admin-panel::after{
+    background-position:center;
+    background-size:cover;
+  }
+
+  .admin-left{
+    min-height:145px;
+    padding:24px 22px 18px;
+    background:linear-gradient(180deg,rgba(0,0,0,.90),rgba(0,0,0,.55));
+  }
+
+  .admin-art-zone{
+    min-height:130px;
+  }
+
+  .admin-right{
+    min-height:145px;
+    padding:18px 22px 24px;
+    background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,.90));
+  }
+
+  .admin-title{
+    font-size:22px;
+  }
+
+  .admin-sub,
+  .admin-body{
+    font-size:10px;
+  }
+
+  .admin-actions{
+    margin-top:14px;
+  }
+}
+
+/* ===== Original style layer 3 — preserve cascade ===== */
+/* =========================================================
+   FINAL DASHBOARD LAYOUT FIX
+   - Member Current Rank moved left as a complete unit
+   - Admin panel is a TRUE left / artwork / right grid
+   - Supabase still controls whether Admin is visible
+========================================================= */
+
+/* MEMBER: center the Current Rank content inside the middle artwork zone */
+.member .member-rank{
+  position:relative;
+  width:88%;
+  justify-self:center;
+  transform:translateX(-172px);
+  margin-left:0;
+  padding-left:18px;
+  padding-right:18px;
+  z-index:3;
+}
+
+/* Keep the rank content comfortably away from the emblem */
+.member .rank-current,
+.member .rank-kicker,
+.member .rank-rule,
+.member .rank-note{
+  position:relative;
+}
+
+/* Keep the left edge where it is, but extend LTJG-02 and the gold rule farther right */
+.member .rank-current{
+  width:calc(100% + 118px);
+  padding-right:22px;
+}
+
+.member .rank-rule{
+  width:calc(100% + 96px);
+}
+
+/* =========================================================
+   OFFICER ACCESS PANEL
+========================================================= */
+.admin-panel{
+  position:relative !important;
+  isolation:isolate;
+  width:100%;
+  min-height:174px;
+  margin-top:22px;
+  overflow:hidden;
+
+  /* JS changes display:none -> display:grid for elevated users */
+  grid-template-columns:31% 31% 38% !important;
+  align-items:stretch;
+
+  border:1px solid rgba(229,194,70,.86) !important;
+  border-radius:10px !important;
+  background:#030404 !important;
+
+  box-shadow:
+    0 18px 46px rgba(0,0,0,.58),
+    0 0 22px rgba(216,184,78,.08),
+    inset 0 1px 0 rgba(255,238,170,.045) !important;
+}
+
+/* IMPORTANT: no full-width artwork behind the panel anymore */
+.admin-panel::after{
+  display:none !important;
+}
+
+/* Slim illuminated rail, same family as Announcement/Member */
+.admin-panel::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  z-index:8 !important;
+  left:0 !important;
+  top:12px !important;
+  bottom:12px !important;
+  width:3px !important;
+  border-radius:0 3px 3px 0 !important;
+  background:linear-gradient(
+    180deg,
+    transparent,
+    #e7c452 18%,
+    #fff0a4 50%,
+    #e7c452 82%,
+    transparent
+  ) !important;
+  box-shadow:
+    0 0 8px rgba(255,226,124,.72),
+    0 0 18px rgba(216,184,78,.28) !important;
+}
+
+/* ---------- LEFT ---------- */
+.admin-panel .admin-left{
+  position:relative !important;
+  z-index:3;
+  min-width:0;
+  padding:25px 20px 24px 29px !important;
+
+  display:flex !important;
+  flex-direction:column;
+  justify-content:center;
+
+  border:0 !important;
+  background:
+    linear-gradient(90deg,
+      rgba(2,3,3,.98) 0%,
+      rgba(3,4,4,.95) 66%,
+      rgba(3,4,4,.72) 100%) !important;
+}
+
+.admin-panel .admin-left::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:8px auto 8px 8px !important;
+  width:18px !important;
+  z-index:-1 !important;
+  border-left:1px solid rgba(238,202,78,.30) !important;
+  border-top:1px solid rgba(238,202,78,.14) !important;
+  border-bottom:1px solid rgba(238,202,78,.14) !important;
+  clip-path:none !important;
+}
+
+.admin-panel .admin-eyebrow{
+  display:flex !important;
+  align-items:center;
+  gap:8px;
+  color:#f1cf63 !important;
+  font-size:10px !important;
+  font-weight:800;
+  letter-spacing:1.25px;
+  text-transform:uppercase;
+  text-shadow:0 1px 5px #000;
+}
+
+.admin-panel .admin-stripes{
+  display:inline-block;
+  width:58px;
+  height:9px;
+  margin-left:2px;
+  opacity:.28;
+  background:repeating-linear-gradient(
+    125deg,
+    #c1a74f 0 7px,
+    transparent 7px 14px
+  );
+}
+
+.admin-panel .admin-title{
+  margin-top:13px !important;
+  color:#f2d16b !important;
+  font-size:clamp(18px,1.65vw,25px) !important;
+  line-height:1.08;
+  font-weight:800;
+  text-shadow:0 1px 4px #000;
+}
+
+.admin-panel .admin-sub{
+  margin-top:9px !important;
+  color:#cbc5b8 !important;
+  font-size:10px !important;
+  line-height:1.4;
+  text-shadow:0 1px 4px #000;
+}
+
+/* ---------- TRUE CENTRE ART COLUMN ---------- */
+.admin-panel .admin-art-zone{
+  position:relative !important;
+  z-index:2;
+  min-width:0;
+  overflow:hidden;
+
+  /*
+    Darker command-centre artwork:
+    keeps the JMBN screen visible while only showing part of the armored figure.
+  */
+  background-image:
+    linear-gradient(90deg,
+      rgba(0,0,0,.66) 0%,
+      rgba(0,0,0,.43) 16%,
+      rgba(0,0,0,.36) 48%,
+      rgba(0,0,0,.42) 82%,
+      rgba(0,0,0,.68) 100%),
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20Admin.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCBBZG1pbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMDY5NjU4LCJleHAiOjMzMzI2MDY5NjU4fQ.BxG9Yl2cZRzDpMuUzLH6s5O_s2a4HPX6ZvZHnsuWHWw") !important;
+
+  background-repeat:no-repeat !important;
+  background-size:auto 310% !important;
+  background-position:47% 50% !important;
+  box-shadow:
+    inset 22px 0 30px rgba(0,0,0,.68),
+    inset -22px 0 30px rgba(0,0,0,.70);
+}
+
+.admin-panel .admin-art-zone::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:36px;
+  background:linear-gradient(90deg,rgba(2,3,3,.92),transparent);
+  pointer-events:none;
+}
+
+.admin-panel .admin-art-zone::after{
+  content:"";
+  position:absolute;
+  inset:0 0 0 auto;
+  width:40px;
+  background:linear-gradient(270deg,rgba(2,3,3,.94),transparent);
+  pointer-events:none;
+}
+
+/* ---------- RIGHT ---------- */
+.admin-panel .admin-right{
+  position:relative !important;
+  z-index:3;
+  min-width:0;
+  padding:24px 27px 21px 24px !important;
+
+  display:flex !important;
+  flex-direction:column;
+  justify-content:center;
+
+  border:0 !important;
+  background:
+    linear-gradient(90deg,
+      rgba(3,4,4,.78) 0%,
+      rgba(3,4,4,.95) 22%,
+      rgba(3,4,4,.99) 100%) !important;
+}
+
+.admin-panel .admin-body{
+  max-width:590px;
+  color:#e4e0d6 !important;
+  font-size:11px !important;
+  line-height:1.55 !important;
+  text-shadow:0 1px 5px #000;
+}
+
+.admin-panel .admin-actions{
+  width:100%;
+  margin-top:17px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+}
+
+.admin-panel .admin-cta{
+  flex:0 0 auto;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+
+  min-height:39px;
+  padding:0 17px !important;
+
+  border:1px solid rgba(237,201,78,.90) !important;
+  border-radius:7px !important;
+  background:rgba(2,3,3,.88) !important;
+  color:#f2d16b !important;
+
+  font-size:10px !important;
+  font-weight:800;
+  text-decoration:none;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,236,164,.035),
+    0 0 13px rgba(216,184,78,.06);
+}
+
+.admin-panel .admin-cta:hover{
+  transform:translateY(-1px);
+  border-color:#ffe487 !important;
+  color:#fff0aa !important;
+  background:rgba(25,21,7,.94) !important;
+}
+
+.admin-panel .admin-tool{
+  color:#f3d36a;
+  font-size:16px;
+  line-height:1;
+}
+
+.admin-panel .admin-links{
+  display:flex !important;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:7px !important;
+
+  color:#c5bfae !important;
+  font-size:9px !important;
+  white-space:nowrap;
+}
+
+.admin-panel .admin-links a{
+  color:#cbc5b6 !important;
+  text-decoration:none;
+}
+
+.admin-panel .admin-links a:hover{
+  color:#f2d16b !important;
+}
+
+.admin-panel .admin-links span{
+  color:#d3b64b !important;
+}
+
+/* JS still has this ID; hide it visually to match the reference */
+.admin-panel .admin-pill{
+  display:none !important;
+}
+
+/* Small bottom-right HUD corner */
+.admin-panel .admin-right::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  right:9px !important;
+  bottom:9px !important;
+  top:auto !important;
+
+  width:27px !important;
+  height:14px !important;
+
+  border:0 !important;
+  border-right:1px solid rgba(239,205,87,.58) !important;
+  border-bottom:1px solid rgba(239,205,87,.58) !important;
+  clip-path:none !important;
+  filter:none !important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:1100px){
+  .member .member-rank{
+    width:92%;
+    justify-self:center;
+    transform:translateX(-72px);
+    margin-left:0;
+  }
+
+  .member .rank-current{
+    width:calc(100% + 64px);
+    padding-right:18px;
+  }
+
+  .member .rank-rule{
+    width:calc(100% + 46px);
+  }
+
+  .admin-panel{
+    grid-template-columns:34% 27% 39% !important;
+  }
+
+  .admin-panel .admin-title{
+    font-size:18px !important;
+  }
+
+  .admin-panel .admin-body{
+    font-size:10px !important;
+  }
+
+  .admin-panel .admin-actions{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:10px !important;
+  }
+
+  .admin-panel .admin-links{
+    justify-content:flex-start !important;
+    white-space:normal;
+  }
+}
+
+
+
+/* =========================================================
+   MEMBER PANEL // RANK LEGIBILITY
+   No panel overlay — only stronger text shadow so the copy
+   floats cleanly over the artwork.
+========================================================= */
+.member .member-rank{
+  background:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.member .rank-kicker{
+  color:#d8c16c;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 4px rgba(0,0,0,.98),
+    0 4px 12px rgba(0,0,0,.92);
+}
+
+.member .rank-current-name{
+  color:#f5efdd;
+  font-weight:700;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 5px rgba(0,0,0,1),
+    0 5px 14px rgba(0,0,0,.95);
+}
+
+.member .rank-current-code{
+  color:#f2d675;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 5px rgba(0,0,0,1),
+    0 5px 14px rgba(0,0,0,.96);
+}
+
+.member .rank-note{
+  color:#c8c0aa;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,1),
+    0 2px 4px rgba(0,0,0,.98),
+    0 4px 10px rgba(0,0,0,.90);
+}
+
+@media(max-width:760px){
+  .member .member-rank{
+    width:100%;
+    justify-self:stretch;
+    transform:none;
+    margin-left:0;
+    padding-left:20px;
+  }
+
+  .member .rank-current{
+    padding-right:0;
+  }
+
+  .member .rank-rule{
+    width:100%;
+  }
+
+  .admin-panel{
+    grid-template-columns:1fr !important;
+    min-height:0;
+  }
+
+  .admin-panel .admin-left{
+    min-height:138px;
+    padding:23px 22px 18px !important;
+  }
+
+  .admin-panel .admin-art-zone{
+    min-height:150px;
+    background-size:auto 230% !important;
+    background-position:47% 50% !important;
+  }
+
+  .admin-panel .admin-right{
+    min-height:165px;
+    padding:19px 22px 24px !important;
+  }
+
+  .admin-panel .admin-title{
+    font-size:21px !important;
+  }
+
+  .admin-panel .admin-actions{
+    margin-top:14px !important;
+  }
+}
