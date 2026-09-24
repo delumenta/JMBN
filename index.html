@@ -2570,7 +2570,7 @@ window.addEventListener('error', () => {
           </div>
 
           <div class="action-kicker">Operations</div>
-          <h3>Your Missions</h3>
+          <h3>Next Available Mission</h3>
           <p id="missionsBlurb">
             Loading your next available operations…
           </p>
@@ -3080,7 +3080,7 @@ skip.onclick=finishBoot; if(sessionStorage.getItem('seenBoot')!=='1'){runBoot()}
         .in('status',['planned','active'])
         .gte('start_time',new Date().toISOString())
         .order('start_time',{ascending:true})
-        .limit(3);
+        .limit(1);
 
       if(missionError) throw missionError;
 
