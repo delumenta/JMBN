@@ -330,6 +330,54 @@ body::before{
   text-transform:uppercase;
 }
 
+.member-presence{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.member-presence-label{
+  color:#77705c;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.availability-toggle{
+  min-width:92px;
+  min-height:30px;
+  padding:6px 12px;
+  border:1px solid rgba(112,217,140,.5);
+  border-radius:999px;
+  background:rgba(112,217,140,.08);
+  color:#70d98c;
+  font:700 10px "Play",sans-serif;
+  letter-spacing:1.3px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.availability-toggle:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.1);
+}
+
+.availability-toggle.awol{
+  border-color:rgba(255,116,116,.55);
+  background:rgba(255,116,116,.08);
+  color:#ff8b84;
+}
+
+.availability-note{
+  width:100%;
+  color:#6e6753;
+  font-size:9px;
+  line-height:1.45;
+}
+
 .link-chip{
   width:fit-content;
   display:inline-flex;
@@ -554,6 +602,143 @@ body::before{
   background:
     url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/frontpage/mission-1.png")
     center/cover no-repeat;
+}
+
+.home-mission-list{
+  display:grid;
+  gap:7px;
+  margin:0 0 14px;
+}
+
+.home-mission-empty{
+  padding:12px 13px;
+  border:1px solid rgba(216,184,78,.2);
+  border-radius:9px;
+  background:rgba(2,3,3,.72);
+  color:#8b8368;
+  font-size:10px;
+  letter-spacing:.7px;
+}
+
+.home-mission{
+  position:relative;
+  padding:10px 11px;
+  border:1px solid rgba(216,184,78,.26);
+  border-radius:9px;
+  background:rgba(3,4,4,.78);
+  cursor:pointer;
+  backdrop-filter:blur(5px);
+  transition:.18s ease;
+}
+
+.home-mission:hover,
+.home-mission.open{
+  border-color:rgba(242,214,117,.62);
+  background:rgba(7,8,7,.9);
+}
+
+.home-mission-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.home-mission-title{
+  min-width:0;
+  color:#f0df9d;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.home-mission-state{
+  flex:0 0 auto;
+  padding:3px 7px;
+  border:1px solid rgba(216,184,78,.28);
+  border-radius:999px;
+  color:#a59b78;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.home-mission-state.going{
+  border-color:rgba(112,217,140,.38);
+  color:#70d98c;
+}
+
+.home-mission-state.not_going{
+  border-color:rgba(255,116,116,.38);
+  color:#ff8b84;
+}
+
+.home-mission-meta{
+  margin-top:5px;
+  color:#8e866d;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.home-mission-rsvp{
+  display:none;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid rgba(216,184,78,.14);
+}
+
+.home-mission.open .home-mission-rsvp{
+  display:grid;
+}
+
+.home-rsvp-btn{
+  min-height:30px;
+  padding:5px 6px;
+  border:1px solid rgba(216,184,78,.32);
+  border-radius:7px;
+  background:#070808;
+  color:#aaa181;
+  font:700 8px "Play",sans-serif;
+  letter-spacing:.7px;
+  cursor:pointer;
+}
+
+.home-rsvp-btn:hover{
+  border-color:rgba(242,214,117,.72);
+  color:#f0d270;
+}
+
+.home-rsvp-btn.current{
+  border-color:#d8b84e;
+  background:rgba(216,184,78,.12);
+  color:#f0d270;
+}
+
+.home-rsvp-btn.going.current{
+  border-color:rgba(112,217,140,.55);
+  background:rgba(112,217,140,.1);
+  color:#70d98c;
+}
+
+.home-rsvp-btn.not-going.current{
+  border-color:rgba(255,116,116,.55);
+  background:rgba(255,116,116,.09);
+  color:#ff8b84;
+}
+
+.home-rsvp-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.home-mission-hint{
+  margin-top:5px;
+  color:#645e4c;
+  font-size:8px;
+  letter-spacing:.6px;
 }
 
 .card.action.jmbn-bg{
@@ -2292,6 +2477,14 @@ window.addEventListener('error', () => {
           JMBN PERSONNEL RECORD • ACTIVE SESSION
         </div>
 
+        <div class="member-presence">
+          <span class="member-presence-label">Duty Status</span>
+          <button class="availability-toggle" id="availabilityToggle" type="button">ACTIVE</button>
+          <div class="availability-note" id="availabilityNote">
+            ACTIVE // Set AWOL to mark upcoming missions as Not Going.
+          </div>
+        </div>
+
         <div>
           <span class="link-chip" id="genDiscordLinkCode">
             ◉ Link Discord
@@ -2379,11 +2572,16 @@ window.addEventListener('error', () => {
           <div class="action-kicker">Operations</div>
           <h3>Your Missions</h3>
           <p id="missionsBlurb">
-            Track your operations and see how far you’ve come.
+            Loading your next available operations…
           </p>
+
+          <div class="home-mission-list" id="homeMissionList">
+            <div class="home-mission-empty">LOADING UPCOMING MISSIONS…</div>
+          </div>
+
           <a href="mission-log.html">
             <span>➜</span>
-            View missions
+            View full mission log
           </a>
         </article>
 
@@ -2613,6 +2811,24 @@ skip.onclick=finishBoot; if(sessionStorage.getItem('seenBoot')!=='1'){runBoot()}
     return 'just now';
   };
 
+  const fmtMissionDate = (iso) => {
+    if(!iso) return 'TBA';
+    const d = new Date(iso);
+    return d.toLocaleString('en-SG',{
+      day:'2-digit',
+      month:'short',
+      hour:'numeric',
+      minute:'2-digit',
+      hour12:true
+    });
+  };
+
+  const prettyAttendance = (status) => {
+    if(status==='going') return 'GOING';
+    if(status==='not_going') return 'NOT GOING';
+    return 'NO RESPONSE';
+  };
+
   const session = await requireAuth();
   if (!session) return;
   const sb = getSupabase();
@@ -2661,20 +2877,244 @@ skip.onclick=finishBoot; if(sessionStorage.getItem('seenBoot')!=='1'){runBoot()}
     }
   }
 
-  /* ---- Missions count only (for CTA blurb) ---- */
-  try {
-    let { data, error } = await sb
-      .from('mission_attendees')
-      .select('mission_id, joined_at')
-      .eq('user_id', session.user.id)
-      .order('joined_at', { ascending:false });
-    if (error) throw error;
-    const count = data?.length ?? 0;
-    const recent = data?.[0]?.joined_at ? ` • last joined ${timeAgo(data[0].joined_at)}` : '';
-    out('#missionsBlurb', `You’ve attended ${count} mission${count===1?'':'s'}${recent}.`);
-  } catch (e) {
-    console.warn('missions count:', e.message);
+  /* ---- Duty status: ACTIVE / AWOL ---- */
+  let availabilityStatus = 'active';
+  const availabilityToggle = $('#availabilityToggle');
+  const availabilityNote = $('#availabilityNote');
+
+  function renderAvailability(){
+    const awol = availabilityStatus === 'awol';
+    if(availabilityToggle){
+      availabilityToggle.textContent = awol ? 'AWOL' : 'ACTIVE';
+      availabilityToggle.classList.toggle('awol', awol);
+      availabilityToggle.setAttribute('aria-pressed', awol ? 'true' : 'false');
+      availabilityToggle.title = awol
+        ? 'Click to return to Active duty'
+        : 'Click to mark yourself AWOL';
+    }
+    if(availabilityNote){
+      availabilityNote.textContent = awol
+        ? 'AWOL // Upcoming missions are automatically marked Not Going.'
+        : 'ACTIVE // You can RSVP to upcoming missions below.';
+    }
   }
+
+  try{
+    const {data:availabilityRow,error:availabilityError} = await sb
+      .from('profiles')
+      .select('availability_status')
+      .eq('user_id',session.user.id)
+      .maybeSingle();
+
+    if(availabilityError) throw availabilityError;
+    availabilityStatus = String(availabilityRow?.availability_status || 'active').toLowerCase();
+  }catch(e){
+    console.warn('availability status:',e.message);
+  }
+  renderAvailability();
+
+  async function setAvailability(nextStatus){
+    if(!availabilityToggle) return;
+
+    availabilityToggle.disabled = true;
+    try{
+      const {data,error} = await sb.rpc('set_member_availability',{
+        p_status:nextStatus
+      });
+      if(error) throw error;
+
+      availabilityStatus = String(data?.status || nextStatus).toLowerCase();
+      renderAvailability();
+      await loadHomeMissions();
+    }catch(e){
+      alert('Status update failed: '+e.message);
+    }finally{
+      availabilityToggle.disabled = false;
+    }
+  }
+
+  if(availabilityToggle){
+    availabilityToggle.addEventListener('click',()=>{
+      setAvailability(availabilityStatus==='awol' ? 'active' : 'awol');
+    });
+  }
+
+  /* ---- Mission history summary uses backend rank-progress rules ---- */
+  async function loadMissionSummary(){
+    try{
+      const {data,error} = await sb
+        .from('v_user_progress')
+        .select('missions_attended,hours_total')
+        .eq('user_id',session.user.id)
+        .maybeSingle();
+
+      if(error) throw error;
+
+      const count = Number(data?.missions_attended || 0);
+      const hours = Number(data?.hours_total || 0);
+      out(
+        '#missionsBlurb',
+        `Attended ${count} mission${count===1?'':'s'} • ${hours.toLocaleString()} operational hour${hours===1?'':'s'}.`
+      );
+    }catch(e){
+      console.warn('mission summary:',e.message);
+      out('#missionsBlurb','Your next available operations are listed below.');
+    }
+  }
+
+  let homeMissions = [];
+  let homeAttendance = new Map();
+
+  async function setHomeAttendance(missionId,status){
+    if(status==='going' && availabilityStatus==='awol'){
+      alert('Set your Duty Status to ACTIVE before marking yourself Going.');
+      return;
+    }
+
+    try{
+      if(status==='withdraw'){
+        const {error} = await sb
+          .from('mission_attendees')
+          .delete()
+          .eq('mission_id',missionId)
+          .eq('user_id',session.user.id);
+        if(error) throw error;
+      }else{
+        const {error} = await sb
+          .from('mission_attendees')
+          .upsert({
+            mission_id:missionId,
+            user_id:session.user.id,
+            attendance:status
+          },{onConflict:'mission_id,user_id'});
+        if(error) throw error;
+      }
+
+      await Promise.all([
+        loadHomeMissions(),
+        loadMissionSummary()
+      ]);
+    }catch(e){
+      alert('Attendance update failed: '+e.message);
+    }
+  }
+
+  function renderHomeMissions(){
+    const list = $('#homeMissionList');
+    if(!list) return;
+
+    if(!homeMissions.length){
+      list.innerHTML = '<div class="home-mission-empty">NO UPCOMING MISSIONS AVAILABLE</div>';
+      return;
+    }
+
+    list.innerHTML = homeMissions.map(m=>{
+      const attendance = homeAttendance.get(m.id) || '';
+      const stateClass = attendance ? attendance : '';
+      return `
+        <div class="home-mission" data-home-mission="${esc(m.id)}">
+          <div class="home-mission-head">
+            <div class="home-mission-title">${esc(m.title || 'UNTITLED MISSION')}</div>
+            <span class="home-mission-state ${esc(stateClass)}">
+              ${esc(prettyAttendance(attendance))}
+            </span>
+          </div>
+          <div class="home-mission-meta">
+            ${esc(fmtMissionDate(m.start_time))} • FORM-UP: ${esc(m.origin || 'TBA')}
+            ${m.hours!=null ? ` • ${esc(m.hours)} HRS` : ''}
+          </div>
+
+          <div class="home-mission-rsvp">
+            <button class="home-rsvp-btn going ${attendance==='going'?'current':''}" type="button" data-rsvp="going" ${availabilityStatus==='awol'?'disabled':''}>
+              GOING
+            </button>
+            <button class="home-rsvp-btn not-going ${attendance==='not_going'?'current':''}" type="button" data-rsvp="not_going">
+              NOT GOING
+            </button>
+            <button class="home-rsvp-btn" type="button" data-rsvp="withdraw">
+              WITHDRAW
+            </button>
+          </div>
+
+          <div class="home-mission-hint">
+            CLICK MISSION TO UPDATE ATTENDANCE
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.home-mission').forEach(card=>{
+      card.addEventListener('click',(ev)=>{
+        if(ev.target.closest('.home-rsvp-btn')) return;
+        list.querySelectorAll('.home-mission').forEach(other=>{
+          if(other!==card) other.classList.remove('open');
+        });
+        card.classList.toggle('open');
+      });
+
+      card.querySelectorAll('.home-rsvp-btn').forEach(button=>{
+        button.addEventListener('click',async(ev)=>{
+          ev.stopPropagation();
+          if(button.disabled) return;
+
+          const status = button.dataset.rsvp;
+          const missionId = card.dataset.homeMission;
+
+          button.disabled = true;
+          await setHomeAttendance(missionId,status);
+        });
+      });
+    });
+  }
+
+  async function loadHomeMissions(){
+    const list = $('#homeMissionList');
+    if(list){
+      list.innerHTML = '<div class="home-mission-empty">LOADING UPCOMING MISSIONS…</div>';
+    }
+
+    try{
+      const {data:missions,error:missionError} = await sb
+        .from('missions')
+        .select('id,title,type,status,origin,start_time,hours')
+        .in('status',['planned','active'])
+        .gte('start_time',new Date().toISOString())
+        .order('start_time',{ascending:true})
+        .limit(3);
+
+      if(missionError) throw missionError;
+
+      homeMissions = missions || [];
+      homeAttendance = new Map();
+
+      if(homeMissions.length){
+        const ids = homeMissions.map(m=>m.id);
+        const {data:attendanceRows,error:attendanceError} = await sb
+          .from('mission_attendees')
+          .select('mission_id,attendance')
+          .eq('user_id',session.user.id)
+          .in('mission_id',ids);
+
+        if(attendanceError) throw attendanceError;
+
+        (attendanceRows || []).forEach(a=>{
+          homeAttendance.set(a.mission_id,a.attendance);
+        });
+      }
+
+      renderHomeMissions();
+    }catch(e){
+      console.warn('home missions:',e.message);
+      if(list){
+        list.innerHTML = '<div class="home-mission-empty">UPCOMING MISSIONS UNAVAILABLE</div>';
+      }
+    }
+  }
+
+  await Promise.all([
+    loadMissionSummary(),
+    loadHomeMissions()
+  ]);
 
   /* ---- Elevation: reuse same RPC as Admin Console ---- */
   let elevated = false;
