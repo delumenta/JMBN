@@ -5,10 +5,7 @@
 
 <meta charset="utf-8"/>
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>JMBN – Progression</title>
 
@@ -2044,6 +2041,43 @@ select{
 }
 </style>
 
+<style id="jmbn-mobile-app-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:650px){
+  body{
+    padding:
+      max(7px,env(safe-area-inset-top))
+      max(7px,env(safe-area-inset-right))
+      calc(18px + env(safe-area-inset-bottom))
+      max(7px,env(safe-area-inset-left));
+    overflow-x:hidden;
+  }
+
+  .shell{
+    width:100%;
+    max-width:100%;
+  }
+
+  button,
+  a{
+    touch-action:manipulation;
+  }
+
+  input,
+  select,
+  textarea{
+    min-height:44px;
+    font-size:16px !important;
+  }
+
+  .command-hero,
+  .panel,
+  .track,
+  .mini{
+    max-width:100%;
+  }
+}
+</style>
 </head>
 
 
