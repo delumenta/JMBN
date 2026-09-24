@@ -1072,6 +1072,119 @@
 }
 
 </style>
+<style id="jmbn-mobile-header-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:760px){
+  .jmbn-header{
+    width:calc(100% - 12px);
+    margin:
+      max(6px,env(safe-area-inset-top))
+      auto
+      10px;
+    border-radius:10px;
+  }
+
+  .jmbn-top{
+    grid-template-columns:minmax(0,1fr) 44px;
+    gap:9px;
+    padding:10px 11px;
+  }
+
+  .jmbn-identity{
+    gap:10px;
+    min-width:0;
+  }
+
+  .jmbn-logo{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+  }
+
+  .jmbn-eyebrow{
+    display:none;
+  }
+
+  .jmbn-title{
+    font-size:17px;
+    line-height:1.08;
+    letter-spacing:.11em;
+    white-space:normal;
+  }
+
+  .jmbn-subtitle{
+    margin-top:3px;
+    font-size:7px;
+    line-height:1.25;
+    letter-spacing:.10em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .jmbn-mobile-toggle{
+    width:44px;
+    height:44px;
+    min-width:44px;
+    min-height:44px;
+  }
+
+  .jmbn-account-wrap{
+    padding-top:7px;
+    margin-top:1px;
+  }
+
+  .jmbn-account{
+    min-height:44px;
+    height:44px;
+    padding:4px 2px;
+  }
+
+  .jmbn-avatar{
+    width:34px;
+    height:34px;
+  }
+
+  .jmbn-name{font-size:10px}
+  .jmbn-rank{font-size:7px}
+
+  .jmbn-dropdown{
+    top:51px;
+    width:min(280px,calc(100vw - 28px));
+  }
+
+  .jmbn-navrow{
+    padding:5px 7px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .jmbn-navlink{
+    min-height:48px;
+    height:48px;
+    padding:0 14px;
+    font-size:11px;
+  }
+
+  input,
+  select,
+  textarea{
+    font-size:16px !important;
+  }
+
+  button,
+  a{
+    touch-action:manipulation;
+  }
+}
+
+@media(max-width:390px){
+  .jmbn-header{width:calc(100% - 8px)}
+  .jmbn-top{padding:9px 9px}
+  .jmbn-logo{width:37px;height:37px;flex-basis:37px}
+  .jmbn-title{font-size:15px;letter-spacing:.09em}
+  .jmbn-subtitle{display:none}
+}
+</style>
+
 
 
 <!-- =========================================================
