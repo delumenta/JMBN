@@ -461,6 +461,12 @@ input:focus,select:focus,textarea:focus{
       </div>
       <div class="form-grid full">
         <div>
+          <label for="debriefReason">Reason for the outcome</label>
+          <textarea id="debriefReason" placeholder="Why did the mission pass, partly succeed or fail?"></textarea>
+        </div>
+      </div>
+      <div class="form-grid full">
+        <div>
           <label for="debriefLesson">Lesson learned</label>
           <textarea id="debriefLesson" placeholder="What should the crew do differently next time?"></textarea>
         </div>
@@ -548,22 +554,25 @@ function collectAttachments(){
 function buildDebrief(){
   const outcome = $('#debriefOutcome').value;
   const summary = $('#debriefSummary').value.trim();
+  const reason = $('#debriefReason').value.trim();
   const lesson = $('#debriefLesson').value.trim();
-  if(!outcome && !summary && !lesson) return null;
+  if(!outcome && !summary && !reason && !lesson) return null;
   return [
     outcome && 'Outcome: ' + outcome,
     summary && 'Summary: ' + summary,
+    reason && 'Reason: ' + reason,
     lesson && 'Lesson learned: ' + lesson
   ].filter(Boolean).join('\n\n');
 }
 function parseDebrief(notes){
-  const result = {outcome:'',summary:'',lesson:''};
+  const result = {outcome:'',summary:'',reason:'',lesson:''};
   if(!notes) return result;
-  const match = notes.match(/^(?:Outcome: ([^\n]*)\n\n)?(?:Summary: ([\s\S]*?)(?=\n\nLesson learned: |$))?(?:\n\nLesson learned: ([\s\S]*))?$/);
-  if(match && (match[1] || match[2] || match[3])){
+  const match = notes.match(/^(?:Outcome: ([^\n]*)\n\n)?(?:Summary: ([\s\S]*?)(?=\n\n(?:Reason|Lesson learned): |$))?(?:\n\nReason: ([\s\S]*?)(?=\n\nLesson learned: |$))?(?:\n\nLesson learned: ([\s\S]*))?$/);
+  if(match && (match[1] || match[2] || match[3] || match[4])){
     result.outcome = ['Pass','Partial success','Fail'].includes(match[1]) ? match[1] : '';
     result.summary = (match[2] || '').trim();
-    result.lesson = (match[3] || '').trim();
+    result.reason = (match[3] || '').trim();
+    result.lesson = (match[4] || '').trim();
   }else{
     result.summary = notes;
   }
@@ -591,6 +600,7 @@ function clearForm(){
   $('#submittedBy').value = '';
   $('#debriefOutcome').value = '';
   $('#debriefSummary').value = '';
+  $('#debriefReason').value = '';
   $('#debriefLesson').value = '';
   $('#attachList').innerHTML = '';
   addAttachRow();
@@ -610,6 +620,7 @@ function fillForm(m){
   const debrief = parseDebrief(m.notes);
   $('#debriefOutcome').value = debrief.outcome;
   $('#debriefSummary').value = debrief.summary;
+  $('#debriefReason').value = debrief.reason;
   $('#debriefLesson').value = debrief.lesson;
   $('#attachList').innerHTML = '';
   if(Array.isArray(m.attachments) && m.attachments.length){
