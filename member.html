@@ -649,6 +649,7 @@ button{
     minmax(170px,1.35fr)
     minmax(125px,.85fr)
     minmax(120px,.75fr)
+    82px
     70px
     40px;
 
@@ -904,6 +905,33 @@ button{
   overflow:hidden;
 
   text-overflow:ellipsis;
+}
+
+.status-cell{
+  display:flex;
+  align-items:center;
+}
+
+.status-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:58px;
+  padding:4px 8px;
+  border:1px solid rgba(112,217,140,.38);
+  border-radius:999px;
+  background:rgba(112,217,140,.06);
+  color:#70d98c;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.status-chip.awol{
+  border-color:rgba(255,116,116,.42);
+  background:rgba(255,116,116,.06);
+  color:#ff8177;
 }
 
 .missions-cell{
@@ -1374,6 +1402,7 @@ button{
       minmax(150px,1.25fr)
       minmax(110px,.8fr)
       minmax(100px,.7fr)
+      72px
       58px
       36px;
   }
@@ -1744,6 +1773,7 @@ button{
   }
 
   .member-row > .role-cell,
+  .member-row > .status-cell,
   .member-row > .missions-cell{
     display:none;
   }
@@ -2456,6 +2486,8 @@ button{
 
         <div>Specialisation</div>
 
+        <div>Status</div>
+
         <div>Missions</div>
 
         <div></div>
@@ -2660,6 +2692,19 @@ button{
 
                   <span id="vRankCode">
                     —
+                  </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                  <span>
+                    Duty Status
+                  </span>
+
+                  <span id="vDutyStatus">
+                    ACTIVE
                   </span>
 
                 </div>
@@ -4040,6 +4085,16 @@ function render(){
 
 
 
+              <div class="status-cell">
+
+                <span class="status-chip ${String(r.availability_status || "active").toLowerCase()==="awol" ? "awol" : ""}">
+                  ${String(r.availability_status || "active").toLowerCase()==="awol" ? "AWOL" : "ACTIVE"}
+                </span>
+
+              </div>
+
+
+
               <div class="missions-cell">
 
                 ${Number(r.missions_attended) || 0}
@@ -5190,6 +5245,23 @@ function viewMember(
     "—";
 
 
+  const dutyStatus =
+    String(
+      r.availability_status ||
+      "active"
+    ).toLowerCase()==="awol"
+      ? "AWOL"
+      : "ACTIVE";
+
+  $("#vDutyStatus").textContent =
+    dutyStatus;
+
+  $("#vDutyStatus").style.color =
+    dutyStatus==="AWOL"
+      ? "var(--bad)"
+      : "var(--good)";
+
+
   $("#vAttended").textContent =
     attended;
 
@@ -5429,6 +5501,10 @@ async function loadRoster(){
     {
       data:specialisationRows,
       error:specialisationError
+    },
+    {
+      data:availabilityRows,
+      error:availabilityError
     }
   ] =
     await Promise.all([
@@ -5459,6 +5535,14 @@ async function loadRoster(){
       sb
         .rpc(
           "member_registry_specialisations"
+        ),
+
+      sb
+        .from(
+          "profiles"
+        )
+        .select(
+          "user_id, availability_status"
         )
 
     ]);
@@ -5510,6 +5594,18 @@ async function loadRoster(){
     console.warn(
       "member_registry_specialisations:",
       specialisationError.message
+    );
+
+  }
+
+
+  if (
+    availabilityError
+  ) {
+
+    console.warn(
+      "profiles availability_status:",
+      availabilityError.message
     );
 
   }
@@ -5595,6 +5691,22 @@ async function loadRoster(){
     );
 
 
+  const availabilityMap =
+    new Map(
+      (
+        availabilityError
+          ? []
+          : availabilityRows || []
+      )
+        .map(
+          row => [
+            row.user_id,
+            String(row.availability_status || "active").toLowerCase()
+          ]
+        )
+    );
+
+
   ROWS =
     (profiles || [])
       .map(
@@ -5606,6 +5718,11 @@ async function loadRoster(){
             specialisationMap.get(
               row.user_id
             ) || null,
+
+          availability_status:
+            availabilityMap.get(
+              row.user_id
+            ) || "active",
 
           missions_attended:
             missionSets
