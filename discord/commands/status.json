@@ -1,0 +1,17 @@
+{
+  "name": "status",
+  "description": "Set your JMBN duty status",
+  "type": 1,
+  "options": [
+    {
+      "type": 1,
+      "name": "active",
+      "description": "Return to Active duty"
+    },
+    {
+      "type": 1,
+      "name": "awol",
+      "description": "Set AWOL and mark upcoming operations Not Going"
+    }
+  ]
+}
