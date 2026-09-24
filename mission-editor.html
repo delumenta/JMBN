@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JMBN Mission Editor</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
@@ -315,6 +315,104 @@ input:focus,select:focus,textarea:focus{
 
 /* Helper */
 .nowrap{white-space:nowrap}
+</style>
+<style id="jmbn-mobile-app-polish">
+/* JMBN MOBILE APP POLISH — 2026-09-24 */
+@media(max-width:760px){
+  body{
+    padding:
+      max(8px,env(safe-area-inset-top))
+      max(8px,env(safe-area-inset-right))
+      calc(18px + env(safe-area-inset-bottom))
+      max(8px,env(safe-area-inset-left));
+    overflow-x:hidden;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .panel{
+    padding:12px;
+    border-radius:13px;
+  }
+
+  .list{
+    max-height:40dvh;
+  }
+
+  .item{
+    align-items:flex-start;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:9px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="datetime-local"],
+  input[type="search"],
+  select,
+  textarea{
+    min-height:44px;
+    font-size:16px !important;
+  }
+
+  textarea{
+    min-height:110px;
+  }
+
+  button,
+  a{
+    touch-action:manipulation;
+  }
+
+  .actions{
+    position:sticky;
+    bottom:0;
+    z-index:30;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    padding:
+      10px
+      0
+      calc(6px + env(safe-area-inset-bottom));
+    background:
+      linear-gradient(
+        180deg,
+        rgba(5,5,5,.05),
+        rgba(5,5,5,.96) 28%
+      );
+  }
+
+  .actions button{
+    width:100%;
+    min-height:46px;
+  }
+
+  .attach-item{
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+    padding:9px;
+    border:1px solid rgba(214,180,76,.25);
+    border-radius:10px;
+  }
+
+  .attach-item button{
+    width:100%;
+    min-height:42px;
+  }
+}
+
+@media(max-width:430px){
+  .actions{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
