@@ -792,7 +792,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   try{
     const host = document.getElementById('header');
     if(host){
-      const res = await fetch('header2.html',{cache:'no-cache'});
+      const res = await fetch('header2.html?v=20260924-adminnav',{cache:'no-store'});
       if(!res.ok) throw new Error('Header request failed: ' + res.status);
       host.innerHTML = await res.text();
       if(typeof window.initJmbnHeader === 'function') await window.initJmbnHeader();
