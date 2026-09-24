@@ -37,22 +37,11 @@ body{
   letter-spacing:.25px;
 }
 
-/* Brand fallback (header2.html may overwrite) */
-.brand{
-  display:flex;align-items:center;gap:10px;
-  margin:0 0 8px;padding-bottom:6px;
-  border-bottom:1px solid var(--border);
-}
-.brand-logo{
-  width:44px;height:44px;object-fit:contain;
-  filter:drop-shadow(0 0 4px rgba(242,214,117,.25));
-}
-.brand h1{
-  margin:0;font-size:var(--fs-h1);font-weight:700;color:var(--accent);
-}
-
 /* Layout */
-.page{width:100%;max-width:1700px;margin:0 auto;min-width:0}
+.admin-header-fallback{width:90%;max-width:1700px;margin:0 auto 18px;padding:16px;color:var(--accent);border:1px solid var(--border)}
+.page{width:90%;max-width:1700px;margin:0 auto;min-width:0}
+@media(max-width:900px){.page{width:calc(100% - 24px)}}
+@media(max-width:560px){.page{width:calc(100% - 14px)}}
 
 /* Panels */
 .panel{
@@ -477,16 +466,8 @@ button:hover{
 </head>
 <body>
 
-<!-- Shared header mount (header2.html) -->
-<div id="header2-mount">
-  <!-- Fallback if header2.html fails -->
-  <div class="brand">
-    <img class="brand-logo"
-         src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png"
-         alt="JMBN">
-    <h1>JMBN Admin Console</h1>
-  </div>
-</div>
+<!-- Same shared header used by member.html -->
+<div id="header"></div>
 
 <div class="page">
   <!-- Big unified panel -->
@@ -545,6 +526,10 @@ button:hover{
   </section>
 </div>
 
+<!-- Shared header controller and avatar support -->
+<script src="js/avatars.js"></script>
+<script src="js/header.js"></script>
+
 <!-- Supabase JS (ESM) -->
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -554,6 +539,7 @@ const SUPABASE_URL  = 'https://fcegavhipeaeihxegsnw.supabase.co'
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8'
 
 const sb  = createClient(SUPABASE_URL, SUPABASE_ANON)
+window.getSupabase = () => sb
 
 const $   = s => document.querySelector(s)
 const esc = s => { const d=document.createElement('div'); d.textContent=s ?? ''; return d.innerHTML }
@@ -569,21 +555,20 @@ let MEMBERS   = []
 let SELECTED  = null
 let RANKS     = []
 
-/* ===== Shared header mount ===== */
-async function mountHeader2(){
-  const mount = document.getElementById('header2-mount')
+/* ===== Shared member header ===== */
+async function mountHeader(){
+  const mount = document.getElementById('header')
   if(!mount) return
   try{
-    const res = await fetch('header2.html',{cache:'no-cache'})
-    if(!res.ok) return
-    const html = await res.text()
-    mount.innerHTML = html
-
-    const here = (location.pathname.split('/').pop() || 'index.html')
-    const active = mount.querySelector(`.nav-btn[href="${here}"]`)
-    if(active) active.classList.add('active')
+    const res = await fetch('header.html',{cache:'no-cache'})
+    if(!res.ok) throw new Error('Header request failed: ' + res.status)
+    mount.innerHTML = await res.text()
+    if(typeof window.initJmbnHeader === 'function'){
+      await window.initJmbnHeader()
+    }
   }catch(err){
-    console.error('Failed to mount header2:', err)
+    console.error('Failed to mount shared header:', err)
+    mount.innerHTML = '<div class="admin-header-fallback">JMBN Admin Panel</div>'
   }
 }
 
@@ -619,7 +604,7 @@ async function runSyncProfiles(quiet = false){
 document.addEventListener('DOMContentLoaded', boot)
 
 async function boot(){
-  await mountHeader2()
+  await mountHeader()
 
   // Get current auth session
   const { data: { session }, error: sErr } = await sb.auth.getSession()
