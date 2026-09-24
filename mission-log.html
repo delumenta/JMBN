@@ -4487,7 +4487,7 @@ function missionCardHtml(m){
         `
           <div
             class="subtle"
-            style="margin-top:7px"
+            style="margin-top:7px;white-space:pre-wrap"
           >
             ${esc(m.notes)}
           </div>
@@ -4768,7 +4768,7 @@ function rowHtml(r){
         )}
       </td>
 
-      <td>
+      <td style="white-space:pre-wrap">
         ${esc(
           r.notes || ""
         )}
