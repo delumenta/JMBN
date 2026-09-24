@@ -4,14 +4,14 @@
   "type": 1,
   "options": [
     {
-      "type": 1,
-      "name": "active",
-      "description": "Return to Active duty"
-    },
-    {
-      "type": 1,
-      "name": "awol",
-      "description": "Set AWOL and mark upcoming operations Not Going"
+      "type": 3,
+      "name": "duty",
+      "description": "Choose your duty status",
+      "required": true,
+      "choices": [
+        { "name": "Active", "value": "active" },
+        { "name": "AWOL", "value": "awol" }
+      ]
     }
   ]
 }
