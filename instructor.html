@@ -596,8 +596,11 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
           <option value="">SELECT CERTIFICATION + MODULE FIRST</option>
         </select>
 
-        <label>INSTRUCTOR NOTES</label>
-        <textarea id="notes" class="control" placeholder="Performance, strengths, retraining points, or assessment notes..."></textarea>
+        <label>TRAINING NOTES</label>
+        <textarea id="notes" class="control" placeholder="Training observations, strengths, retraining points, or assessment notes..."></textarea>
+
+        <label>SIGN-OFF NOTES</label>
+        <textarea id="signoffNotes" class="control" placeholder="Final approval or retraining decision notes..."></textarea>
 
       </div>
 
@@ -660,7 +663,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
       <div>
         <div class="section-title">SPECIALISATION ACCESS</div>
         <div class="action-page-copy">
-          ASSIGN OR CHANGE A MEMBER'S ACADEMY SPECIALISATION AFTER CORE TRAINING. GUNNERY AND ENGINEERING ARE EXCLUSIVE: ONLY ONE MAY BE ACTIVE. MED, LOG AND MIN ARE STACKABLE SUPPORT PATHWAYS AND DO NOT USE THIS SLOT.
+          REVIEW MEMBER PATHWAYS. ACADEMY ADMINISTRATORS CONTROL GUNNERY / ENGINEERING ASSIGNMENT AND MED / LOG / MIN ENROLMENT.
         </div>
       </div>
       <div class="action-page-code">INSTRUCTOR // PATHWAY CONTROL</div>
@@ -685,7 +688,7 @@ label{display:block;margin:15px 0 7px;color:#8f8976;font-size:8px;letter-spacing
         </div>
 
         <div class="support-enrolments">
-          <div class="support-enrolments-title">SUPPORT PATHWAYS // STACKABLE STUDENT ENROLMENT</div>
+          <div class="support-enrolments-title">SUPPORT PATHWAYS // STACKABLE // ADMIN MANAGED</div>
           <div class="support-enrolments-grid">
             <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="MED"> MEDICAL</label>
             <label class="support-enrolment"><input type="checkbox" class="support-path-check" data-code="LOG"> LOGISTICS / CARGO</label>
@@ -760,17 +763,22 @@ async function verifyAccess(){
  return true;
 }
 async function load(){
- const [c,r,e,m,s,a]=await Promise.all([
+ const assignmentRequest=isAdmin
+  ? sb.from("academy_specialisation_assignments").select("user_id,specialisation_code,assigned_by,notes,assigned_at,updated_at").order("updated_at",{ascending:false})
+  : Promise.resolve({data:[],error:null});
+
+ const [c,r,e,m,s,a,conducted]=await Promise.all([
   sb.from("certifications").select("certification_code,name,is_active").eq("is_active",true).order("sort_order"),
   sb.from("certification_requirements").select("certification_code,event_code,required,sort_order").order("sort_order"),
   sb.from("training_events").select("event_code,title,sort_order").order("sort_order"),
-  sb.from("v_profiles_detailed").select("user_id,handle,display_name,current_rank_code").order("display_name"),
+  sb.rpc("academy_instructor_member_roster"),
   sb.from("training_signoffs").select("id,trainee_id,event_code,certification_code,status,signed_off_at,notes").eq("instructor_id",me).order("signed_off_at",{ascending:false}).limit(100),
-  sb.from("academy_specialisation_assignments").select("user_id,specialisation_code,assigned_by,notes,assigned_at,updated_at").order("updated_at",{ascending:false})
+  assignmentRequest,
+  sb.rpc("academy_instructor_conducted_count")
  ]);
  certs=c.data||[];reqs=r.data||[];events=e.data||[];members=m.data||[];signoffs=s.data||[];assignments=a.data||[];
  overviewCache.clear();
- render();
+ render(Number(conducted.data||0));
 }
 function permissionFor(code){
  const key=String(code||"").toUpperCase();
@@ -786,14 +794,14 @@ function signoffCodes(){
  if(isAdmin)return certs.map(x=>x.certification_code);
  return authorisations.filter(x=>x.is_active&&x.can_sign_off).map(x=>x.certification_code);
 }
-function render(){
+function render(conductedCount=0){
  const codes=new Set(allowedCodes());
  const allowed=certs.filter(c=>codes.has(c.certification_code));
  $("#authCount").textContent=allowed.length;
  $("#signoffCount").textContent=signoffs.length;
  const cutoff=Date.now()-30*86400000;
  $("#recentCount").textContent=signoffs.filter(x=>x.status==="approved"&&new Date(x.signed_off_at).getTime()>=cutoff).length;
- $("#memberCount").textContent=new Set(signoffs.map(x=>x.trainee_id)).size;
+ $("#memberCount").textContent=String(conductedCount);
 
 
  $("#authRows").innerHTML=allowed.map(c=>{const a=authorisations.find(x=>x.certification_code===c.certification_code);return `<tr><td><span class="code">${esc(c.certification_code)}</span> &nbsp; ${esc(c.name)}</td><td class="${isAdmin||a?.can_instruct?"yes":"no"}">${isAdmin||a?.can_instruct?"YES":"—"}</td><td class="${isAdmin||a?.can_sign_off?"yes":"no"}">${isAdmin||a?.can_sign_off?"YES":"—"}</td></tr>`}).join("")||`<tr><td colspan="3">NO AUTHORISATIONS</td></tr>`;
@@ -813,6 +821,8 @@ function resetAssessmentPanel(){
  document.querySelectorAll(".criteria").forEach(x=>{x.checked=false;x.disabled=true});
  $("#notes").value="";
  $("#notes").disabled=true;
+ $("#signoffNotes").value="";
+ $("#signoffNotes").disabled=true;
  $("#saveAssessment").disabled=true;
  $("#retrain").disabled=true;
  $("#approve").disabled=true;
@@ -837,6 +847,7 @@ function updateAssessmentControls(){
 
  document.querySelectorAll(".criteria").forEach(x=>x.disabled=!hasSelection||completed||!perm.can_instruct);
  $("#notes").disabled=!hasSelection||completed||!perm.can_instruct;
+ $("#signoffNotes").disabled=!hasSelection||completed||!perm.can_sign_off;
  $("#saveAssessment").disabled=!hasSelection||completed||!perm.can_instruct;
  $("#retrain").disabled=!hasSelection||completed||!(perm.can_instruct||perm.can_sign_off);
  $("#approve").disabled=!hasSelection||completed||!perm.can_sign_off||done<4;
@@ -935,7 +946,8 @@ async function loadAssessment(){
  document.querySelectorAll(".criteria").forEach(input=>{
   input.checked=!!currentAssessment[input.dataset.criterion];
  });
- $("#notes").value=currentAssessment.notes||"";
+ $("#notes").value=currentAssessment.training_notes||"";
+ $("#signoffNotes").value=currentAssessment.signoff_notes||"";
  $("#message").className="msg";
  $("#message").textContent=currentAssessment.last_conducted_by_name
    ? `LAST UPDATED BY ${String(currentAssessment.last_conducted_by_name).toUpperCase()}`
@@ -1072,21 +1084,19 @@ async function loadSupportEnrolments(trainee){
  }
 
  const active=new Set((data||[]).filter(x=>x.is_active).map(x=>String(x.certification_code||"").toUpperCase()));
- let manageable=0;
  checks.forEach(x=>{
   const code=String(x.dataset.code||"").toUpperCase();
-  const perm=permissionFor(code);
   x.checked=active.has(code);
-  x.disabled=!(isAdmin||perm.can_instruct||perm.can_sign_off);
-  if(!x.disabled)manageable++;
+  x.disabled=!isAdmin;
  });
- save.disabled=manageable===0;
+ save.disabled=!isAdmin;
 }
 
 async function saveSupportEnrolments(){
  const trainee=$("#pathTrainee").value;
  const msg=$("#supportMessage");
  msg.className="msg";msg.textContent="";
+ if(!isAdmin){msg.classList.add("bad");msg.textContent="ADMIN ACCESS REQUIRED.";return}
  if(!trainee){msg.classList.add("bad");msg.textContent="SELECT A MEMBER FIRST.";return}
 
  const checks=[...document.querySelectorAll(".support-path-check")].filter(x=>!x.disabled);
@@ -1120,9 +1130,19 @@ async function updatePathAssignment(){
   return;
  }
 
- const assignment=assignments.find(x=>x.user_id===trainee);
+ const overview=await renderMemberOverview(trainee);
+ const assignment=isAdmin
+  ? assignments.find(x=>x.user_id===trainee)
+  : (overview?.specialisation
+      ? {
+          specialisation_code:overview.specialisation.code,
+          assigned_at:overview.specialisation.assigned_at,
+          notes:""
+        }
+      : null);
+
  if(!assignment){
-  code.textContent="—";name.textContent="AWAITING INSTRUCTOR ASSIGNMENT";meta.textContent="NO SPECIALISATION PATH HAS BEEN ASSIGNED.";select.value="";notes.value="";
+  code.textContent="—";name.textContent="AWAITING ADMIN ASSIGNMENT";meta.textContent="NO SPECIALISATION PATH HAS BEEN ASSIGNED.";select.value="";notes.value="";
  }else{
   code.textContent=assignment.specialisation_code;
   name.textContent=pathLabel(assignment.specialisation_code);
@@ -1131,11 +1151,17 @@ async function updatePathAssignment(){
   notes.value=assignment.notes||"";
  }
 
- const overview=await renderMemberOverview(trainee);
  await loadSupportEnrolments(trainee);
  if($("#overviewTrainee").value!==trainee)$("#overviewTrainee").value=trainee;
 
- if(!overview?.core_complete){
+ select.disabled=!isAdmin;
+ notes.disabled=!isAdmin;
+ $("#clearPath").disabled=!isAdmin;
+
+ if(!isAdmin){
+  button.disabled=true;
+  button.innerHTML='<i class="fa-solid fa-lock"></i> ADMIN CONTROL';
+ }else if(!overview?.core_complete){
   button.disabled=true;
   button.innerHTML='<i class="fa-solid fa-lock"></i> CORE TRAINING INCOMPLETE';
  }else{
@@ -1147,6 +1173,7 @@ async function updatePathAssignment(){
 async function assignPath(){
  const trainee=$("#pathTrainee").value,code=$("#pathCode").value,notes=$("#pathNotes").value.trim(),msg=$("#pathMessage");
  msg.className="msg";msg.textContent="";
+ if(!isAdmin){msg.classList.add("bad");msg.textContent="ADMIN ACCESS REQUIRED.";return}
  if(!trainee||!code){msg.classList.add("bad");msg.textContent="SELECT A MEMBER AND SPECIALISATION.";return}
  const overview=await fetchMemberOverview(trainee,true).catch(()=>null);
  if(!overview?.core_complete){msg.classList.add("bad");msg.textContent="CORE TRAINING INCOMPLETE: BMT AND SOC CERTIFICATIONS REQUIRED.";await updatePathAssignment();return}
@@ -1164,6 +1191,7 @@ async function assignPath(){
 async function clearPath(){
  const trainee=$("#pathTrainee").value,msg=$("#pathMessage");
  msg.className="msg";msg.textContent="";
+ if(!isAdmin){msg.classList.add("bad");msg.textContent="ADMIN ACCESS REQUIRED.";return}
  if(!trainee){msg.classList.add("bad");msg.textContent="SELECT A MEMBER FIRST.";return}
  const button=$("#clearPath");button.disabled=true;
  const {error}=await sb.rpc("academy_clear_specialisation",{p_trainee:trainee});
@@ -1201,7 +1229,9 @@ document.querySelectorAll(".criteria").forEach(x=>x.addEventListener("change",up
 $("#saveAssessment").addEventListener("click",saveAssessment);
 
 async function sign(status){
- const trainee=$("#trainee").value,programme=$("#programme").value,event=$("#event").value,notes=$("#notes").value.trim();
+ const trainee=$("#trainee").value,programme=$("#programme").value,event=$("#event").value;
+ const trainingNotes=$("#notes").value.trim();
+ const signoffNotes=$("#signoffNotes").value.trim();
  const msg=$("#message");msg.className="msg";msg.textContent="";
  if(!trainee||!programme||!event){msg.classList.add("bad");msg.textContent="SELECT A CERTIFICATION, MODULE AND MEMBER.";return}
 
@@ -1211,10 +1241,33 @@ async function sign(status){
  if(status==="retraining"&&!(perm.can_instruct||perm.can_sign_off)){msg.classList.add("bad");msg.textContent="INSTRUCTOR AUTHORISATION REQUIRED.";return}
 
  const button=status==="approved"?$("#approve"):$("#retrain");button.disabled=true;
- const {error}=await sb.rpc("academy_signoff_training",{p_trainee:trainee,p_event_code:event,p_certification_code:programme,p_status:status,p_notes:notes||null});
- if(error){msg.classList.add("bad");msg.textContent=error.message.toUpperCase();updateAssessmentControls();return}
 
- msg.classList.add("ok");msg.textContent=status==="approved"?"TRAINING SIGNED OFF.":"RETRAINING RECORDED.";
+ if(status==="retraining"&&permissionFor(programme).can_instruct){
+  const values={};
+  document.querySelectorAll(".criteria").forEach(x=>values[x.dataset.criterion]=x.checked);
+  const {error:saveError}=await sb.rpc("academy_save_training_assessment",{
+   p_trainee:trainee,
+   p_event_code:event,
+   p_certification_code:programme,
+   p_practical_objectives:!!values.practical_objectives,
+   p_equipment_procedure:!!values.equipment_procedure,
+   p_instructor_questions:!!values.instructor_questions,
+   p_safety_standards:!!values.safety_standards,
+   p_notes:trainingNotes||null
+  });
+  if(saveError){button.disabled=false;msg.classList.add("bad");msg.textContent=saveError.message.toUpperCase();updateAssessmentControls();return}
+ }
+
+ const {error}=await sb.rpc("academy_signoff_training",{
+  p_trainee:trainee,
+  p_event_code:event,
+  p_certification_code:programme,
+  p_status:status,
+  p_notes:signoffNotes||null
+ });
+ if(error){button.disabled=false;msg.classList.add("bad");msg.textContent=error.message.toUpperCase();updateAssessmentControls();return}
+
+ msg.classList.add("ok");msg.textContent=status==="approved"?"TRAINING SIGNED OFF.":"RETRAINING RECORDED // CHECKLIST RESET TO 0 / 4.";
  await loadTrainingRoster();
  $("#trainee").value=trainee;
  await loadAssessment();
