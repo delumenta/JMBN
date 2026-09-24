@@ -1,0 +1,33 @@
+{
+  "name": "debrief",
+  "description": "Record an operation outcome, summary and lesson learned",
+  "type": 1,
+  "options": [
+    {
+      "type": 3,
+      "name": "id",
+      "description": "Operation ID from /operations View",
+      "required": true
+    },
+    {
+      "type": 3,
+      "name": "outcome",
+      "description": "How the operation went",
+      "required": true,
+      "choices": [
+        {
+          "name": "Pass",
+          "value": "Pass"
+        },
+        {
+          "name": "Partial success",
+          "value": "Partial success"
+        },
+        {
+          "name": "Fail",
+          "value": "Fail"
+        }
+      ]
+    }
+  ]
+}
