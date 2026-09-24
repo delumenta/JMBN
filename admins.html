@@ -822,8 +822,8 @@ async function openMember(userId, rowEl){
       </div>
       <div class="body">
         <div class="small" style="margin-bottom:8px">
-          Authorise this member for specific Academy certifications.
-          Authorisation includes both conducting training and signing off modules.
+          Authorise this member to instruct and/or sign off specific Academy certifications.
+          This does not change their normal JMBN role or rank.
         </div>
         <div id="instructorGrid" class="instructor-grid">Loading…</div>
         <div class="instructor-actions">
@@ -1041,14 +1041,31 @@ async function loadInstructorAuthorisations(uid){
       <div class="instructor-options">
         <label>
           <input class="i-enabled" type="checkbox" ${enabled ? 'checked' : ''}>
-          Authorised Instructor
+          Instructor authorised
+        </label>
+        <label>
+          <input class="i-instruct" type="checkbox" ${a?.can_instruct ? 'checked' : ''}>
+          Can conduct training
+        </label>
+        <label>
+          <input class="i-signoff" type="checkbox" ${a?.can_sign_off ? 'checked' : ''}>
+          Can sign off practicals
         </label>
       </div>`
 
     const enabledBox = card.querySelector('.i-enabled')
+    const instructBox = card.querySelector('.i-instruct')
+    const signoffBox = card.querySelector('.i-signoff')
 
     const syncCard = () => {
-      card.classList.toggle('active', enabledBox.checked)
+      const on = enabledBox.checked
+      card.classList.toggle('active', on)
+      instructBox.disabled = !on
+      signoffBox.disabled = !on
+      if(on && !instructBox.checked && !signoffBox.checked){
+        instructBox.checked = true
+        signoffBox.checked = true
+      }
     }
     enabledBox.addEventListener('change', syncCard)
     syncCard()
@@ -1079,14 +1096,16 @@ async function saveInstructorAuthorisations(uid){
     for(const card of cards){
       const certification_code = card.dataset.code
       const is_active = card.querySelector('.i-enabled').checked
+      const can_instruct = is_active && card.querySelector('.i-instruct').checked
+      const can_sign_off = is_active && card.querySelector('.i-signoff').checked
 
       const { error } = await sb
         .from('academy_instructors')
         .upsert({
           user_id: uid,
           certification_code,
-          can_instruct: is_active,
-          can_sign_off: is_active,
+          can_instruct,
+          can_sign_off,
           is_active,
           authorised_by: me,
           authorised_at: new Date().toISOString(),
