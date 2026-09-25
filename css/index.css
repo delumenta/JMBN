@@ -2450,3 +2450,34 @@ body::before{
   .member .member-duty-row{gap:6px;flex-wrap:wrap}
   .member .member-duty-row .link-chip{margin-left:0}
 }
+
+
+/* Two-column member hero with uninterrupted artwork on the right. */
+.member{
+  grid-template-columns:minmax(340px,30%) minmax(0,1fr);
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.48) 0%,rgba(0,0,0,.20) 35%,rgba(0,0,0,.08) 65%,transparent 100%),
+    url("../assets/member-hero.svg") center / cover no-repeat;
+}
+.member::after{
+  transform:none;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.30),rgba(0,0,0,.10) 40%,transparent 75%),
+    url("../assets/member-hero.svg") center / cover no-repeat;
+}
+.member .member-rank{
+  width:min(100%,660px);
+  justify-self:start;
+  transform:none;
+  padding-left:18px;
+  padding-right:18px;
+}
+.member .rank-current,
+.member .rank-rule{width:100%}
+@media(max-width:700px){
+  .member{grid-template-columns:minmax(0,1fr)}
+  .member .member-rank{
+    width:100%;
+    padding:20px;
+  }
+}
