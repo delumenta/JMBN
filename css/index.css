@@ -2430,6 +2430,7 @@ body::before{
   background-repeat:no-repeat;
 }
 .member .member-duty-row .availability-toggle{min-width:76px}
+.member .member-duty-separator{color:rgba(216,184,78,.55);font-size:16px;line-height:1}
 .member .member-duty-row .link-chip{
   margin:0 0 0 2px;
   padding:7px 10px;
