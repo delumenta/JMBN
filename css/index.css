@@ -2457,13 +2457,13 @@ body::before{
   grid-template-columns:minmax(340px,30%) minmax(0,1fr);
   background:
     linear-gradient(90deg,rgba(0,0,0,.48) 0%,rgba(0,0,0,.20) 35%,rgba(0,0,0,.08) 65%,transparent 100%),
-    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Member%20Panel2.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9NZW1iZXIgUGFuZWwyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTAyOTkyOTksImV4cCI6MzMzMjYyOTkyOTl9.wO42In2QWwAv9Pi5pW0MBBf9P4ibQXOzttOvyr-Uyf8") center / cover no-repeat;
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Member%20Panel3.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9NZW1iZXIgUGFuZWwzLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTAyOTk3NzksImV4cCI6MzMzMjYyOTk3Nzl9.bx36PCb3KfCJTGUFd442lsZLkZ7MVQiECeinvRG9rjY") center / cover no-repeat;
 }
 .member::after{
   transform:none;
   background:
     linear-gradient(90deg,rgba(0,0,0,.30),rgba(0,0,0,.10) 40%,transparent 75%),
-    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Member%20Panel2.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9NZW1iZXIgUGFuZWwyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTAyOTkyOTksImV4cCI6MzMzMjYyOTkyOTl9.wO42In2QWwAv9Pi5pW0MBBf9P4ibQXOzttOvyr-Uyf8") center / cover no-repeat;
+    url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Member%20Panel3.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9NZW1iZXIgUGFuZWwzLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTAyOTk3NzksImV4cCI6MzMzMjYyOTk3Nzl9.bx36PCb3KfCJTGUFd442lsZLkZ7MVQiECeinvRG9rjY") center / cover no-repeat;
 }
 .member .member-rank{
   width:min(660px,calc(100% - clamp(30px,5vw,80px)));
@@ -2488,7 +2488,7 @@ body::before{
 /* Operations follows the same bottom-aligned title layout as its neighbours. */
 .card.action.missions::before{
   background:
-    linear-gradient(to bottom,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 36%,rgba(0,0,0,.65) 69%,rgba(0,0,0,.92) 100%),
+    linear-gradient(to bottom,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 36%,rgba(0,0,0,.43) 69%,rgba(0,0,0,.78) 100%),
     linear-gradient(90deg,rgba(0,0,0,.10),transparent 60%);
 }
 .card.action.missions .home-mission-list{
@@ -2505,10 +2505,25 @@ body::before{
   scrollbar-color:rgba(216,184,78,.45) transparent;
 }
 .card.action.missions .home-mission{
-  background:rgba(3,4,4,.65);
+  background:rgba(3,4,4,.36);
+  backdrop-filter:none;
+}
+.card.action.missions .home-mission:hover,
+.card.action.missions .home-mission.open{
+  background:rgba(3,4,4,.66);
+}
+.card.action.missions .home-mission-head{
+  justify-content:flex-start;
+  align-items:center;
+  gap:8px;
+}
+.card.action.missions .home-mission-title{flex:0 1 auto}
+.card.action.missions .home-mission-title,
+.card.action.missions .home-mission-meta{
+  text-shadow:0 1px 4px #000,0 1px 8px #000;
 }
 .card.action.missions .home-mission-empty{
-  background:rgba(3,4,4,.64);
+  background:rgba(3,4,4,.38);
 }
 @media(max-width:700px){
   .card.action.missions .home-mission-list{
