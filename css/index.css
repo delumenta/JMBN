@@ -2466,9 +2466,10 @@ body::before{
     url("https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Member%20Panel2.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9NZW1iZXIgUGFuZWwyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTAyOTkyOTksImV4cCI6MzMzMjYyOTkyOTl9.wO42In2QWwAv9Pi5pW0MBBf9P4ibQXOzttOvyr-Uyf8") center / cover no-repeat;
 }
 .member .member-rank{
-  width:min(100%,660px);
+  width:min(660px,calc(100% - clamp(30px,5vw,80px)));
   justify-self:start;
   transform:none;
+  margin-left:clamp(30px,5vw,80px);
   padding-left:18px;
   padding-right:18px;
 }
@@ -2478,6 +2479,7 @@ body::before{
   .member{grid-template-columns:minmax(0,1fr)}
   .member .member-rank{
     width:100%;
+    margin-left:0;
     padding:20px;
   }
 }
