@@ -2419,9 +2419,10 @@ body::before{
 .member .member-duty-row{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:7px;
+  width:min(100%,360px);
   min-width:0;
-  padding:8px 0;
+  padding:6px 0;
   background-image:
     linear-gradient(to right,rgba(216,184,78,.20) 0%,rgba(216,184,78,.13) 55%,transparent 82%),
     linear-gradient(to right,rgba(216,184,78,.20) 0%,rgba(216,184,78,.13) 55%,transparent 82%);
@@ -2429,17 +2430,22 @@ body::before{
   background-position:left top,left bottom;
   background-repeat:no-repeat;
 }
-.member .member-duty-row .availability-toggle{min-width:76px}
-.member .member-duty-separator{color:rgba(216,184,78,.55);font-size:16px;line-height:1}
+.member .member-duty-row .availability-toggle{
+  min-width:66px;
+  min-height:27px;
+  padding:5px 9px;
+  font-size:9px;
+}
 .member .member-duty-row .link-chip{
-  margin:0 0 0 2px;
-  padding:7px 10px;
+  margin:0;
+  padding:5px 8px;
+  font-size:10px;
   white-space:nowrap;
   font-family:inherit;
   line-height:1.2;
 }
 .member .availability-note{margin-top:7px}
 @media(max-width:500px){
-  .member .member-duty-row{gap:8px;flex-wrap:wrap}
+  .member .member-duty-row{gap:7px;flex-wrap:wrap}
   .member .member-duty-row .link-chip{margin-left:0}
 }
