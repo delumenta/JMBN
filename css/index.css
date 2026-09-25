@@ -2427,7 +2427,7 @@ body::before{
 }
 .member .member-duty-row .availability-toggle{min-width:76px}
 .member .member-duty-row .link-chip{
-  margin:0 0 0 auto;
+  margin:0 0 0 2px;
   padding:7px 10px;
   white-space:nowrap;
   font-family:inherit;
@@ -2435,6 +2435,6 @@ body::before{
 }
 .member .availability-note{margin-top:7px}
 @media(max-width:500px){
-  .member .member-duty-row{flex-wrap:wrap}
-  .member .member-duty-row .link-chip{margin-left:auto}
+  .member .member-duty-row{gap:8px;flex-wrap:wrap}
+  .member .member-duty-row .link-chip{margin-left:0}
 }
