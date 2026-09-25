@@ -2422,8 +2422,12 @@ body::before{
   gap:10px;
   min-width:0;
   padding:8px 0;
-  border-top:1px solid rgba(216,184,78,.16);
-  border-bottom:1px solid rgba(216,184,78,.16);
+  background-image:
+    linear-gradient(to right,rgba(216,184,78,.20) 0%,rgba(216,184,78,.13) 55%,transparent 82%),
+    linear-gradient(to right,rgba(216,184,78,.20) 0%,rgba(216,184,78,.13) 55%,transparent 82%);
+  background-size:100% 1px,100% 1px;
+  background-position:left top,left bottom;
+  background-repeat:no-repeat;
 }
 .member .member-duty-row .availability-toggle{min-width:76px}
 .member .member-duty-row .link-chip{
