@@ -2532,3 +2532,9 @@ body::before{
     max-height:64px;
   }
 }
+
+/* Let Current Rank sit directly on the artwork without a section frame. */
+.member .member-rank{
+  border:0 !important;
+  outline:0;
+}
