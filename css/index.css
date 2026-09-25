@@ -2496,7 +2496,7 @@ body::before{
   top:78px;
   left:25px;
   right:25px;
-  max-height:102px;
+  max-height:88px;
   overflow-y:auto;
   margin:0;
   align-content:start;
@@ -2514,6 +2514,6 @@ body::before{
   .card.action.missions .home-mission-list{
     left:20px;
     right:20px;
-    max-height:92px;
+    max-height:64px;
   }
 }
