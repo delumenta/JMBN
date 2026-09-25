@@ -2402,15 +2402,15 @@ body::before{
   width:78px;
   height:78px;
   object-fit:contain;
-  padding:7px;
-  border:1px solid rgba(216,184,78,.6);
-  border-radius:9px;
-  background:rgba(3,4,4,.7);
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
   filter:drop-shadow(0 0 8px rgba(242,214,117,.18));
 }
 @media(max-width:560px){
   .member .member-identity-row{gap:12px}
-  .member .member-identity-row .rankimg{width:58px;height:58px;padding:5px}
+  .member .member-identity-row .rankimg{width:58px;height:58px;padding:0}
   .member .member-identity-row .name{font-size:clamp(22px,6vw,29px)}
 }
 
