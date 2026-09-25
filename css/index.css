@@ -2483,3 +2483,37 @@ body::before{
     padding:20px;
   }
 }
+
+
+/* Operations follows the same bottom-aligned title layout as its neighbours. */
+.card.action.missions::before{
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 36%,rgba(0,0,0,.65) 69%,rgba(0,0,0,.92) 100%),
+    linear-gradient(90deg,rgba(0,0,0,.10),transparent 60%);
+}
+.card.action.missions .home-mission-list{
+  position:absolute;
+  top:78px;
+  left:25px;
+  right:25px;
+  max-height:102px;
+  overflow-y:auto;
+  margin:0;
+  align-content:start;
+  z-index:1;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(216,184,78,.45) transparent;
+}
+.card.action.missions .home-mission{
+  background:rgba(3,4,4,.65);
+}
+.card.action.missions .home-mission-empty{
+  background:rgba(3,4,4,.64);
+}
+@media(max-width:700px){
+  .card.action.missions .home-mission-list{
+    left:20px;
+    right:20px;
+    max-height:92px;
+  }
+}
