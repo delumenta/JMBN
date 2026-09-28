@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101010" />
+  <title>OnTheGo — Find your next thing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="logo" href="#"><span class="logo-mark">✦</span><span>on<span>the</span>go</span></a>
+      <div class="top-actions">
+        <button class="location-pill" id="locationBtn">⌖ <span id="locationLabel">Use my location</span></button>
+        <button class="icon-button" id="themeBtn" aria-label="Toggle theme">◐</button>
+        <button class="avatar">D</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">YOUR SPARE TIME, SORTED</p>
+          <h1>What do you feel like<br><em>doing now?</em></h1>
+          <p class="hero-sub">A few good ideas around you—without opening ten tabs or planning the whole trip.</p>
+        </div>
+        <div class="hero-orbit"><span>GO</span><span>MAYBE</span><span>SKIP</span><div class="orbit-pin">✦</div></div>
+      </section>
+
+      <section class="context-bar">
+        <div class="context-main"><span class="live-dot"></span><div><strong id="contextTitle">Near you</strong><small id="contextSub">Use your location or choose a place</small></div></div>
+        <button class="change-link" id="changePlaceBtn">Change place</button>
+      </section>
+
+      <section class="modes">
+        <button class="mode-card active" data-mode="all"><span class="mode-icon coral">✦</span><b>Surprise me</b><small>One good next move</small></button>
+        <button class="mode-card" data-mode="place"><span class="mode-icon green">⌖</span><b>Places nearby</b><small>Sights, nature & culture</small></button>
+        <button class="mode-card" data-mode="food"><span class="mode-icon yellow">◒</span><b>Find food</b><small>Good restaurants close by</small></button>
+      </section>
+
+      <section class="section-head">
+        <div><p class="eyebrow">RIGHT NOW</p><h2 id="resultsHeading">A little inspiration</h2></div>
+        <div class="result-actions"><button class="filter-button active" data-filter="all">All</button><button class="filter-button" data-filter="quick">Quick wins</button><button class="filter-button" data-filter="saved">Saved</button></div>
+      </section>
+
+      <section id="results" class="results-grid"></section>
+      <div id="emptyState" class="empty-state hidden"><div>⌁</div><h3>Nothing here yet</h3><p>Allow location or search for a place to find ideas.</p></div>
+
+      <section class="nearby-strip">
+        <div><p class="eyebrow">THE POINT</p><h2>Not another itinerary.</h2><p>OnTheGo is for the moment between plans—the afternoon that opened up, the neighbourhood you just reached, or the question: “What’s good around here?”</p></div>
+        <button class="outline-button" id="exploreBtn">Explore the area ↗</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav"><button class="nav-item active"><span>⌂</span>Now</button><button class="nav-item" id="savedNav"><span>♡</span>Saved</button><button class="nav-item" id="mapNav"><span>⌖</span>Map</button><button class="nav-item" id="moreNav"><span>≡</span>More</button></nav>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
