@@ -1,0 +1,8159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#05090c">
+
+<title>Plan · Travel</title>
+
+
+<style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root{
+  --bg:#05090c;
+
+  --surface:#0b1217;
+  --surface-2:#0f171d;
+  --surface-3:#141d24;
+
+  --line:#28323a;
+  --line-soft:rgba(255,255,255,.06);
+
+  --text:#f5f2ed;
+  --muted:#909aa1;
+  --muted-2:#69757d;
+
+  --red:#e96d6b;
+  --red-bright:#ff625f;
+  --red-soft:rgba(255,98,95,.08);
+  --red-line:rgba(255,98,95,.32);
+
+  --green:#79c995;
+  --gold:#e4bd69;
+  --blue:#78a9ef;
+}
+
+
+*{
+  box-sizing:border-box;
+}
+
+
+html{
+  scroll-behavior:smooth;
+}
+
+
+body{
+  margin:0;
+
+  min-height:100vh;
+
+  color:var(--text);
+
+  background:
+    radial-gradient(
+      circle at 50% -5%,
+      rgba(48,61,70,.20),
+      transparent 30%
+    ),
+    #030608;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing:antialiased;
+}
+
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+
+button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+
+
+/* =========================================================
+   APP SHELL
+========================================================= */
+
+.plan-shell{
+  width:calc(100% - 24px);
+
+  max-width:720px;
+
+  margin:
+    calc(14px + env(safe-area-inset-top))
+    auto
+    105px;
+
+  overflow:hidden;
+
+  border:1px solid #273139;
+
+  border-radius:27px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0a1116,
+      #070d11
+    );
+
+  box-shadow:
+    0 24px 65px rgba(0,0,0,.40);
+}
+
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      rgba(255,98,95,.065),
+      transparent 27%
+    ),
+    linear-gradient(
+      145deg,
+      #10181e,
+      #081015 65%,
+      #070c10
+    );
+}
+
+
+.header-inner{
+  position:relative;
+  z-index:2;
+
+  padding:
+    26px
+    20px
+    0;
+}
+
+
+
+/* =========================================================
+   JAPANESE WATERMARK
+========================================================= */
+
+.plan-kanji{
+  position:absolute;
+
+  z-index:0;
+
+  right:6px;
+  top:7px;
+
+  font-family:
+    "Yu Mincho",
+    "Hiragino Mincho ProN",
+    "Noto Serif JP",
+    Georgia,
+    serif;
+
+  font-size:126px;
+  font-weight:700;
+
+  line-height:1;
+
+  color:var(--red-bright);
+
+  opacity:.042;
+
+  pointer-events:none;
+  user-select:none;
+}
+
+
+
+/* =========================================================
+   HEADER TITLE
+========================================================= */
+
+.title-row{
+  position:relative;
+
+  display:flex;
+
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+
+.title-row > div:first-child{
+  min-width:0;
+}
+
+
+.eyebrow{
+  margin-bottom:14px;
+
+  color:#df7775;
+
+  font-size:8px;
+  font-weight:900;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+}
+
+
+.plan-hero{
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+}
+
+
+.plan-icon-wrap{
+  width:65px;
+  height:65px;
+
+  flex:0 0 65px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid rgba(255,98,95,.30);
+
+  border-radius:50%;
+
+  /* clean dark circle — no red haze behind the logo */
+  background:#0b1217;
+}
+
+
+.plan-page-title-icon{
+  width:45px;
+  height:45px;
+
+  display:block;
+
+  object-fit:contain;
+  opacity:.88;
+}
+
+
+.plan-page-title{
+  margin:0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  line-height:1;
+}
+
+
+.plan-page-title span{
+  color:#f7f4ee;
+
+  font-size:41px;
+  font-weight:700;
+
+  letter-spacing:-.03em;
+}
+
+
+.trip-name{
+  margin-top:8px;
+
+  max-width:350px;
+
+  color:#89949c;
+
+  font-size:9px;
+  font-weight:500;
+
+  line-height:1.4;
+}
+
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.header-actions{
+  position:absolute;
+
+  right:0;
+  top:0;
+
+  display:flex;
+
+  gap:5px;
+}
+
+
+.edit-btn{
+  width:29px;
+  height:29px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:1px solid rgba(255,98,95,.24);
+
+  border-radius:9px;
+
+  background:
+    rgba(255,98,95,.045);
+
+  color:#efaaa6;
+
+  font-size:11px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+.edit-btn.active{
+  border-color:
+    rgba(121,201,149,.30);
+
+  background:
+    rgba(121,201,149,.06);
+
+  color:#9ed5b0;
+}
+
+
+.add-top-btn{
+  border-color:
+    rgba(255,98,95,.32);
+
+  background:
+    rgba(255,98,95,.07);
+}
+
+
+
+/* =========================================================
+   DATE TIMELINE
+========================================================= */
+
+.date-scroller{
+  position:relative;
+  display:flex;
+  gap:5px;
+  margin-top:23px;
+  padding:0 0 16px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+
+.date-scroller::-webkit-scrollbar{display:none;}
+
+.date-btn{
+  position:relative;
+  flex:0 0 52px;
+  min-height:52px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:3px 2px 9px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+.date-btn::after{
+  content:"";
+  position:absolute;
+  left:5px;
+  right:5px;
+  bottom:0;
+  height:1px;
+  border-radius:999px;
+  background:#263139;
+}
+
+.date-weekday{
+  color:#687780;
+  font-size:5.5px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+.date-number{
+  margin:4px 0 2px;
+  color:#eeeae4;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:19px;
+  font-weight:700;
+  line-height:1;
+}
+
+.date-month{
+  color:#64727b;
+  font-size:5px;
+  font-weight:900;
+}
+
+.date-btn.active .date-weekday,
+.date-btn.active .date-month{color:#e18b88;}
+
+.date-btn.active .date-number{color:#fff5f1;}
+
+.date-btn.active::after{
+  height:2px;
+  background:var(--red-bright);
+  box-shadow:0 0 9px rgba(255,98,95,.22);
+}
+
+.date-btn.has-plan:not(.active)::after{background:#34414a;}
+
+.date-btn.today:not(.active) .date-number{color:#b9d1eb;}
+
+.date-btn.today:not(.active)::after{background:rgba(120,169,239,.55);}
+
+.date-day-label{
+  position:absolute;
+  bottom:5px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#ef8b87;
+  font-size:4.5px;
+  font-weight:900;
+  letter-spacing:.06em;
+  white-space:nowrap;
+}
+
+.date-btn.active .date-day-label + .date-month{visibility:hidden;}
+
+/* =========================================================
+   PLAN MODE SWITCH
+========================================================= */
+
+.plan-mode-switch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px;
+  margin:0 0 13px;
+  padding:3px;
+  border:1px solid #28343c;
+  border-radius:12px;
+  background:#080e12;
+}
+
+.plan-mode-btn{
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#6f7b83;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.10em;
+  text-decoration:none;
+}
+
+.plan-mode-btn.active{
+  border:1px solid rgba(255,98,95,.24);
+  background:rgba(255,98,95,.065);
+  color:#efaaa6;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main{
+  width:100%;
+
+  padding:
+    0
+    17px
+    22px;
+}
+
+
+
+/* =========================================================
+   DAY CARD
+========================================================= */
+
+.day-card{
+  position:relative;
+
+  overflow:hidden;
+
+  border:1px solid #28343c;
+
+  border-radius:20px;
+
+  background:
+    radial-gradient(
+      circle at 85% 0%,
+      rgba(255,255,255,.016),
+      transparent 28%
+    ),
+    linear-gradient(
+      150deg,
+      #111a20,
+      #0a1116
+    );
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.18);
+}
+
+
+
+/* =========================================================
+   DAY HEADER
+========================================================= */
+
+.day-card-header{
+  position:relative;
+
+  min-height:103px;
+
+  padding:
+    17px
+    18px
+    15px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.06);
+}
+
+
+.day-meta-row{
+  display:flex;
+
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+
+.day-number{
+  color:#dc7774;
+
+  font-size:7px;
+  font-weight:900;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+}
+
+
+.day-date-side{
+  color:#768188;
+
+  font-size:7px;
+
+  line-height:1.4;
+
+  text-align:right;
+
+  text-transform:uppercase;
+}
+
+
+.day-route-title{
+  position:relative;
+
+  z-index:2;
+
+  max-width:78%;
+
+  margin-top:8px;
+
+  color:#f4f0e9;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:24px;
+  font-weight:700;
+
+  line-height:1.05;
+
+  letter-spacing:-.02em;
+}
+
+
+.day-stamp{
+  position:absolute;
+
+  right:16px;
+  bottom:10px;
+
+  width:58px;
+  height:58px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1.5px solid
+    rgba(255,98,95,.13);
+
+  border-radius:50%;
+
+  color:
+    rgba(255,98,95,.18);
+
+  font-family:
+    "Yu Mincho",
+    "Hiragino Mincho ProN",
+    "Noto Serif JP",
+    serif;
+
+  font-size:19px;
+
+  transform:rotate(-7deg);
+
+  pointer-events:none;
+}
+
+
+
+/* =========================================================
+   TIMELINE
+   Continuous route line aligned exactly through each marker
+========================================================= */
+
+.timeline{
+  padding:5px 11px 8px;
+}
+
+.timeline-row{
+  position:relative;
+
+  display:grid;
+
+  grid-template-columns:
+    56px
+    12px
+    minmax(0,1fr)
+    auto;
+
+  gap:4px;
+
+  min-height:49px;
+
+  padding:8px 0;
+
+  border-bottom:0;
+}
+
+/* remove the old row-positioned line */
+.timeline-row::after{
+  display:none !important;
+}
+
+/* TIME */
+.timeline-time{
+  padding-top:1px;
+
+  color:#a5bdcf;
+
+  font-size:7.5px;
+  font-weight:900;
+
+  line-height:1.25;
+}
+
+/* MARKER */
+.marker{
+  position:relative;
+
+  z-index:3;
+
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+/*
+   The line is anchored to the marker column itself, so it stays
+   exactly centred through every dot even when a row becomes taller.
+*/
+.timeline-row:not(:last-child) .marker::after{
+  content:"";
+
+  position:absolute;
+
+  z-index:0;
+
+  left:50%;
+  top:6px;
+  bottom:-22px;
+
+  width:1px;
+
+  transform:translateX(-50%);
+
+  background:#35414a;
+
+  pointer-events:none;
+}
+
+/* subtle coral start fading into the normal route line */
+.timeline-row:first-child:not(:last-child) .marker::after{
+  background:linear-gradient(
+    180deg,
+    rgba(255,98,95,.72) 0%,
+    rgba(255,98,95,.38) 28%,
+    #35414a 72%,
+    #35414a 100%
+  );
+}
+
+.dot{
+  position:relative;
+
+  z-index:2;
+
+  width:8px;
+  height:8px;
+
+  margin-top:2px;
+
+  border:1.5px solid #e97975;
+
+  border-radius:50%;
+
+  background:#0b1217;
+
+  box-shadow:
+    0 0 0 3px #0b1217,
+    0 0 0 4px rgba(255,98,95,.14);
+}
+
+/* first / active stop */
+.timeline-row:first-child .dot{
+  border-color:#ff8b87;
+
+  background:var(--red-bright);
+
+  box-shadow:
+    0 0 0 3px #0b1217,
+    0 0 0 4px rgba(255,98,95,.18),
+    0 0 9px rgba(255,98,95,.14);
+}
+
+
+/* =========================================================
+   TIMELINE TEXT
+========================================================= */
+
+.item-main{
+  min-width:0;
+}
+
+
+.item-title{
+  color:#f5f3ef;
+
+  font-size:9px;
+  font-weight:900;
+
+  line-height:1.35;
+}
+
+
+.item-title a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+.item-location{
+  margin-top:2px;
+
+  color:#77848d;
+
+  font-size:7px;
+
+  line-height:1.35;
+}
+
+
+.item-note{
+  margin-top:4px;
+
+  color:#98a2a8;
+
+  font-size:7px;
+
+  line-height:1.45;
+}
+
+
+/* =========================================================
+   OPTIONAL / LOCKED
+========================================================= */
+
+.optional,
+.locked{
+  display:inline-block;
+
+  margin-left:4px;
+
+  padding:
+    1px
+    4px;
+
+  border-radius:999px;
+
+  font-size:5px;
+  font-weight:900;
+
+  vertical-align:1px;
+}
+
+
+.optional{
+  border:
+    1px solid
+    rgba(228,189,105,.22);
+
+  background:
+    rgba(228,189,105,.045);
+
+  color:var(--gold);
+}
+
+
+.locked{
+  border:
+    1px solid
+    rgba(121,201,149,.22);
+
+  background:
+    rgba(121,201,149,.045);
+
+  color:#a2d8b3;
+}
+
+
+
+/* =========================================================
+   EDIT ROW
+========================================================= */
+
+.row-edit{
+  display:none;
+
+  width:26px;
+  height:26px;
+
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid var(--line);
+
+  border-radius:8px;
+
+  background:#11191f;
+
+  color:#bbc3c8;
+
+  cursor:pointer;
+}
+
+
+.editing .row-edit{
+  display:flex;
+}
+
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+.state{
+  padding:
+    32px
+    18px;
+
+  border:
+    1px dashed
+    #303b43;
+
+  border-radius:16px;
+
+  background:
+    rgba(255,255,255,.012);
+
+  color:#77838b;
+
+  font-size:8px;
+
+  line-height:1.6;
+
+  text-align:center;
+}
+
+
+.state strong{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:#e8e7e3;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:15px;
+
+  font-weight:700;
+}
+
+
+
+/* =========================================================
+   FIRST-USE PLAN STATE
+========================================================= */
+
+.first-use-state{
+  padding:24px 18px 20px;
+}
+
+.first-use-kicker{
+  margin-bottom:6px;
+  color:#d98984;
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+
+.first-use-copy{
+  max-width:360px;
+  margin:0 auto;
+  color:#7f8b93;
+  font-size:8px;
+  line-height:1.6;
+}
+
+.first-use-primary{
+  width:100%;
+  max-width:330px;
+  min-height:42px;
+  margin-top:16px;
+  border:1px solid rgba(255,98,95,.48);
+  border-radius:11px;
+  background:rgba(255,98,95,.09);
+  color:#efaaa5;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+.first-use-types{
+  max-width:330px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin:8px auto 0;
+}
+
+.first-use-type{
+  min-height:34px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:9px;
+  background:rgba(255,255,255,.018);
+  color:#9ca7ad;
+  font-size:6.5px;
+  font-weight:850;
+}
+
+.first-use-assist{
+  margin-top:11px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#9ab9df;
+  font-size:7px;
+  font-weight:850;
+}
+
+/* =========================================================
+   SHEET
+========================================================= */
+
+.sheet-backdrop{
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  display:none;
+
+  align-items:flex-end;
+
+  background:
+    rgba(0,0,0,.72);
+
+  backdrop-filter:blur(5px);
+
+  -webkit-backdrop-filter:blur(5px);
+}
+
+
+.sheet-backdrop.open{
+  display:flex;
+}
+
+
+.sheet{
+  width:100%;
+
+  max-height:
+    calc(
+      92vh -
+      env(safe-area-inset-top)
+    );
+
+  overflow-y:auto;
+
+  padding:
+    8px
+    14px
+    calc(
+      18px +
+      env(safe-area-inset-bottom)
+    );
+
+  border:1px solid var(--line);
+
+  border-radius:
+    20px
+    20px
+    0
+    0;
+
+  background:#0c1217;
+
+  box-shadow:
+    0 -20px 50px rgba(0,0,0,.35);
+}
+
+
+.sheet-handle{
+  width:36px;
+  height:4px;
+
+  margin:
+    2px
+    auto
+    13px;
+
+  border-radius:999px;
+
+  background:#35414a;
+}
+
+
+.sheet-head{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-bottom:13px;
+}
+
+
+.sheet-title{
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:19px;
+}
+
+
+.close-btn{
+  width:34px;
+  height:34px;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#131b21;
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+
+
+/* =========================================================
+   TYPE BUTTONS
+========================================================= */
+
+.type-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:5px;
+
+  margin-bottom:10px;
+}
+
+
+.type-btn{
+  min-height:35px;
+
+  padding:6px;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#0f161c;
+
+  color:#87929a;
+
+  font-size:7px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+.type-btn.active{
+  border-color:var(--red-line);
+
+  background:var(--red-soft);
+
+  color:#f0c0bc;
+}
+
+
+
+/* =========================================================
+   ENTITY PICKER
+========================================================= */
+
+.entity-picker{
+  grid-column:1/-1;
+
+  padding:10px;
+
+  border:
+    1px solid
+    rgba(120,169,239,.17);
+
+  border-radius:11px;
+
+  background:
+    rgba(120,169,239,.03);
+}
+
+
+.entity-picker-title{
+  margin-bottom:3px;
+
+  color:#c5d6e5;
+
+  font-size:7px;
+  font-weight:900;
+}
+
+
+.entity-picker-sub{
+  margin-bottom:7px;
+
+  color:#6f7c85;
+
+  font-size:6.5px;
+
+  line-height:1.4;
+}
+
+
+.entity-search-wrap{
+  position:relative;
+}
+
+
+.entity-search{
+  width:100%;
+
+  min-height:40px;
+
+  padding:
+    8px
+    36px
+    8px
+    9px;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  outline:0;
+
+  background:#0f161c;
+
+  color:#fff;
+
+  font-size:9px;
+}
+
+
+.entity-search:focus{
+  border-color:
+    rgba(120,169,239,.45);
+}
+
+
+.search-icon{
+  position:absolute;
+
+  right:11px;
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  color:#65717a;
+
+  pointer-events:none;
+}
+
+
+.entity-results{
+  display:none;
+
+  margin-top:6px;
+
+  overflow:hidden;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#0d1419;
+}
+
+
+.entity-results.show{
+  display:block;
+}
+
+
+.entity-result{
+  width:100%;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:9px;
+
+  border:0;
+
+  border-bottom:
+    1px solid
+    var(--line-soft);
+
+  background:transparent;
+
+  color:#fff;
+
+  text-align:left;
+
+  cursor:pointer;
+}
+
+
+.entity-result:last-child{
+  border-bottom:0;
+}
+
+
+.entity-result-icon{
+  flex:0 0 28px;
+
+  width:28px;
+  height:28px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+
+  background:#151d23;
+
+  font-size:14px;
+}
+
+
+.entity-result-main{
+  min-width:0;
+
+  flex:1;
+}
+
+
+.entity-result-name{
+  font-size:8px;
+  font-weight:900;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+.entity-result-japanese{
+  margin-top:1px;
+
+  color:#89949b;
+
+  font-size:7px;
+}
+
+
+.entity-result-meta{
+  margin-top:2px;
+
+  color:#65717a;
+
+  font-size:6.5px;
+}
+
+
+.entity-result-arrow{
+  color:#77858e;
+
+  font-size:12px;
+}
+
+
+.entity-empty{
+  padding:
+    14px
+    10px;
+
+  color:#7d8992;
+
+  text-align:center;
+
+  font-size:8px;
+
+  line-height:1.5;
+}
+
+
+
+/* =========================================================
+   SELECTED ENTITY
+========================================================= */
+
+.selected-entity{
+  display:none;
+
+  grid-column:1/-1;
+
+  align-items:center;
+
+  gap:9px;
+
+  padding:
+    9px
+    10px;
+
+  border:
+    1px solid
+    rgba(121,201,149,.20);
+
+  border-radius:10px;
+
+  background:
+    rgba(121,201,149,.045);
+}
+
+
+.selected-entity.show{
+  display:flex;
+}
+
+
+.selected-icon{
+  flex:0 0 28px;
+
+  width:28px;
+  height:28px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+
+  background:
+    rgba(121,201,149,.06);
+
+  font-size:15px;
+}
+
+
+.selected-main{
+  min-width:0;
+
+  flex:1;
+}
+
+
+.selected-label{
+  color:#71847a;
+
+  font-size:5.5px;
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+
+.selected-name{
+  margin-top:1px;
+
+  color:#a9ddb9;
+
+  font-size:8px;
+  font-weight:900;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+.selected-meta{
+  margin-top:2px;
+
+  color:#718078;
+
+  font-size:6.5px;
+}
+
+
+.change-entity{
+  min-height:28px;
+
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    rgba(121,201,149,.18);
+
+  border-radius:8px;
+
+  background:
+    rgba(121,201,149,.035);
+
+  color:#96cda8;
+
+  font-size:6.5px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+
+/* =========================================================
+   MASTER HELP
+========================================================= */
+
+.master-help{
+  display:none;
+
+  grid-column:1/-1;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:8px;
+
+  padding:
+    8px
+    9px;
+
+  border:
+    1px dashed
+    #303b43;
+
+  border-radius:9px;
+
+  color:#77838b;
+
+  font-size:7px;
+}
+
+
+.master-help.show{
+  display:flex;
+}
+
+
+.master-help button{
+  min-height:29px;
+
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    rgba(120,169,239,.20);
+
+  border-radius:8px;
+
+  background:
+    rgba(120,169,239,.04);
+
+  color:#94b8e9;
+
+  font-size:6.5px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+
+/* =========================================================
+   GOOGLE PLACES
+========================================================= */
+
+.google-add-box{
+  display:none;
+
+  grid-column:1/-1;
+
+  padding:10px;
+
+  border:
+    1px solid
+    rgba(120,169,239,.17);
+
+  border-radius:11px;
+
+  background:
+    rgba(120,169,239,.03);
+}
+
+
+.google-add-box.show{
+  display:block;
+}
+
+
+.google-add-title{
+  margin-bottom:3px;
+
+  color:#9fbce4;
+
+  font-size:7px;
+  font-weight:900;
+
+  letter-spacing:.05em;
+}
+
+
+.google-add-sub{
+  margin-bottom:7px;
+
+  color:#6f7c85;
+
+  font-size:6.5px;
+
+  line-height:1.4;
+}
+
+
+#googlePlaceSearch{
+  width:100%;
+}
+
+
+#googlePlaceSearch gmp-place-autocomplete,
+gmp-place-autocomplete{
+  width:100%;
+
+  min-height:40px;
+
+  color-scheme:dark;
+}
+
+
+.place-status{
+  margin-top:6px;
+
+  color:#6f7d86;
+
+  font-size:7px;
+
+  line-height:1.4;
+}
+
+
+.place-status.success{
+  color:#96d4ab;
+}
+
+
+.place-status.error{
+  color:#f2a4a0;
+}
+
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:9px;
+}
+
+
+.field.full{
+  grid-column:1/-1;
+}
+
+
+.field label{
+  display:block;
+
+  margin-bottom:4px;
+
+  color:#8d989f;
+
+  font-size:6.5px;
+  font-weight:900;
+
+  letter-spacing:.04em;
+}
+
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+
+  min-height:40px;
+
+  padding:
+    8px
+    9px;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  outline:0;
+
+  background:#0f161c;
+
+  color:#fff;
+
+  font-size:9px;
+}
+
+
+.field textarea{
+  min-height:72px;
+
+  resize:vertical;
+}
+
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--red-line);
+}
+
+
+.check-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  min-height:38px;
+
+  margin-top:9px;
+
+  padding:
+    7px
+    9px;
+
+  border:1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#10171d;
+
+  color:#aab3b9;
+
+  font-size:7px;
+  font-weight:800;
+}
+
+
+.check-row input{
+  width:14px;
+  height:14px;
+
+  accent-color:var(--red);
+}
+
+
+.sheet-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    2fr;
+
+  gap:6px;
+
+  margin-top:10px;
+}
+
+
+.delete-btn,
+.save-btn{
+  min-height:42px;
+
+  border-radius:10px;
+
+  font-size:7px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+.delete-btn{
+  border:
+    1px solid
+    rgba(255,98,95,.20);
+
+  background:
+    rgba(255,98,95,.04);
+
+  color:#d98a83;
+}
+
+
+.save-btn{
+  border:
+    1px solid
+    rgba(121,201,149,.24);
+
+  background:
+    rgba(121,201,149,.07);
+
+  color:#a7dbb8;
+}
+
+
+.save-btn:disabled,
+.delete-btn:disabled{
+  opacity:.5;
+}
+
+
+.form-message{
+  display:none;
+
+  margin-top:8px;
+
+  padding:8px;
+
+  border-radius:8px;
+
+  font-size:8px;
+}
+
+
+.form-message.error{
+  display:block;
+
+  border:
+    1px solid
+    rgba(255,98,95,.20);
+
+  background:
+    rgba(255,98,95,.055);
+
+  color:#f3aaa6;
+}
+
+
+.form-message.success{
+  display:block;
+
+  border:
+    1px solid
+    rgba(121,201,149,.20);
+
+  background:
+    rgba(121,201,149,.055);
+
+  color:#9dd8b2;
+}
+
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media(max-width:390px){
+
+  .plan-shell{
+    width:calc(100% - 18px);
+  }
+
+
+  .header-inner{
+    padding-left:17px;
+    padding-right:17px;
+  }
+
+
+  .plan-page-title span{
+    font-size:38px;
+  }
+
+
+  .plan-icon-wrap{
+    width:60px;
+    height:60px;
+
+    flex-basis:60px;
+  }
+
+
+  .plan-page-title-icon{
+    width:42px;
+    height:42px;
+  }
+
+
+  .date-btn{
+    flex-basis:48px;
+  }
+
+
+  main{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+
+  .timeline{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+
+  .timeline-row{
+    grid-template-columns:
+      52px
+      11px
+      minmax(0,1fr)
+      auto;
+
+    gap:4px;
+  }
+
+
+}
+
+
+@media(min-width:700px){
+
+  .sheet{
+    max-width:620px;
+
+    margin:auto;
+  }
+
+}
+
+
+/* =========================================================
+   ASSIST — PLANNING / LIVE MODE
+========================================================= */
+.assist-mode-area{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 10px 0;
+}
+.assist-mode-switch{
+  flex:0 0 190px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px;
+  padding:3px;
+  border:1px solid #29363e;
+  border-radius:11px;
+  background:#070d11;
+}
+.assist-mode-btn{
+  min-height:32px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:#71808a;
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.09em;
+  cursor:pointer;
+}
+.assist-mode-btn.active{
+  border:1px solid rgba(120,169,239,.24);
+  background:rgba(120,169,239,.065);
+  color:#b7d0ef;
+}
+.assist-mode-context{
+  flex:1;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#74818a;
+  font-size:6.2px;
+  line-height:1.35;
+}
+.assist-mode-context strong{
+  color:#dfe5e8;
+  font-size:6.5px;
+}
+.assist-mode-context .live-dot{
+  display:inline-block;
+  width:5px;
+  height:5px;
+  margin-right:5px;
+  border-radius:50%;
+  background:var(--red-bright);
+  vertical-align:1px;
+}
+@media(max-width:480px){
+  .assist-mode-switch{flex-basis:165px}
+  .assist-mode-context{font-size:5.7px}
+}
+.assist-launch{
+  width:100%;
+  margin:0 0 13px;
+  padding:9px 10px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  border:1px solid #2b3942;
+  border-radius:14px;
+  background:linear-gradient(145deg,#0f181e,#091116);
+  color:var(--text);
+  appearance:none;
+  -webkit-appearance:none;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:none;
+}
+.assist-launch:hover{
+  border-color:rgba(120,169,239,.28);
+  background:linear-gradient(145deg,#111c22,#0a1217);
+}
+.assist-launch:focus{
+  outline:none;
+  border-color:rgba(120,169,239,.38);
+}
+.assist-launch-modes{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid #29363e;
+  border-radius:9px;
+  background:#070d11;
+}
+.assist-launch-mode{
+  min-width:58px;
+  min-height:27px;
+  padding:0 8px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#6f7e87;
+  appearance:none;
+  -webkit-appearance:none;
+  font-size:5.6px;
+  font-weight:900;
+  letter-spacing:.07em;
+  cursor:pointer;
+}
+.assist-launch-mode.active{
+  border:1px solid rgba(120,169,239,.24);
+  background:rgba(120,169,239,.07);
+  color:#b7d0ef;
+}
+.assist-launch-icon{
+  width:34px;height:34px;flex:0 0 34px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(120,169,239,.20);border-radius:10px;
+  background:rgba(120,169,239,.055);font-size:15px;
+}
+.assist-launch-main{min-width:0;flex:1}
+.assist-launch-title{color:#eef1f2;font-family:Georgia,"Times New Roman",serif;font-size:10px;font-weight:700;line-height:1.1}
+.assist-launch-sub{margin-top:2px;color:#74818a;font-size:5.8px;line-height:1.35}
+.assist-launch-arrow{color:#86a9d7;font-size:12px}
+.assist-panel{
+  display:none;margin:0 0 13px;overflow:hidden;
+  border:1px solid #2b3942;border-radius:16px;background:#091116;
+}
+.assist-panel.open{display:block}
+.assist-panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 12px;border-bottom:1px solid var(--line-soft);
+}
+.assist-panel-title{font-family:Georgia,"Times New Roman",serif;font-size:15px;font-weight:700}
+.assist-panel-sub{margin-top:2px;color:#75828a;font-size:6px}
+.assist-close{
+  width:28px;height:28px;border:1px solid #2b363e;border-radius:8px;
+  background:#10181d;color:#aeb7bc;cursor:pointer
+}
+.assist-suggestions{
+  display:flex;gap:6px;padding:9px 10px 0;overflow-x:auto;scrollbar-width:none
+}
+.assist-suggestions::-webkit-scrollbar{display:none}
+.assist-chip{
+  flex:0 0 auto;padding:6px 8px;border:1px solid #29363e;border-radius:999px;
+  background:#0e171c;color:#8998a2;font-size:6px;font-weight:900;cursor:pointer
+}
+.assist-messages{
+  min-height:105px;max-height:310px;overflow-y:auto;padding:10px;
+  display:flex;flex-direction:column;gap:7px
+}
+.assist-welcome{
+  padding:13px;border:1px dashed #2b373f;border-radius:11px;color:#7f8b93;
+  font-size:7px;line-height:1.55
+}
+.assist-welcome strong{display:block;margin-bottom:3px;color:#e7e9e7;font-size:9px}
+.assist-msg{display:flex}.assist-msg.user{justify-content:flex-end}
+.assist-bubble{
+  max-width:84%;padding:8px 10px;border:1px solid #29353d;border-radius:12px;
+  background:#10181d;color:#e9ecea;font-size:7.5px;line-height:1.5;white-space:pre-wrap
+}
+.assist-msg.user .assist-bubble{
+  border-color:rgba(255,98,95,.27);background:rgba(255,98,95,.065);color:#fff0ee
+}
+.assist-source{margin-top:4px;color:#64727b;font-size:5px;font-weight:900;letter-spacing:.08em}
+.assist-compose{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;padding:9px;
+  border-top:1px solid var(--line-soft)
+}
+.assist-input{
+  min-height:38px;max-height:95px;resize:none;padding:9px 10px;border:1px solid #2a353d;
+  border-radius:10px;outline:0;background:#070d11;color:#fff;font-size:8px
+}
+.assist-input:focus{border-color:rgba(120,169,239,.38)}
+.assist-send{
+  min-width:52px;border:1px solid rgba(120,169,239,.25);border-radius:10px;
+  background:rgba(120,169,239,.065);color:#a9c5e9;font-size:6.5px;font-weight:900;cursor:pointer
+}
+.assist-send:disabled{opacity:.45}
+
+.assist-starters{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:7px;
+  padding:10px 10px 0;
+}
+.assist-starters.hidden{display:none}
+.assist-starter{
+  width:100%;
+  min-width:0;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  text-align:left;
+  padding:9px 9px;
+  border:1px solid #29363e;
+  border-radius:11px;
+  background:#0e171c;
+  color:#dfe5e8;
+  cursor:pointer;
+}
+.assist-starter:hover{border-color:rgba(120,169,239,.32);background:#101b21}
+.assist-starter-icon{
+  width:26px;height:26px;flex:0 0 26px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(120,169,239,.16);border-radius:8px;background:rgba(120,169,239,.045);
+  color:#9ab9df;font-size:11px
+}
+.assist-starter-text{display:block;font-size:6.6px;font-weight:900;line-height:1.3}
+.assist-starter-sub{display:block;margin-top:3px;color:#687781;font-size:5.2px;font-weight:600;line-height:1.35}
+.assist-action-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.assist-action-btn{
+  padding:6px 8px;border:1px solid rgba(120,169,239,.25);border-radius:8px;
+  background:rgba(120,169,239,.055);color:#a9c5e9;font-size:5.8px;font-weight:900;cursor:pointer
+}
+.assist-action-btn.confirm{
+  border-color:rgba(121,201,149,.28);background:rgba(121,201,149,.06);color:#9bd7af
+}
+.assist-action-btn:disabled{opacity:.45;cursor:default}
+.assist-action-btn.danger{
+  border-color:rgba(255,98,95,.28);background:rgba(255,98,95,.055);color:#ff8a87
+}
+.assist-action-btn.neutral{
+  border-color:#2b363e;background:#10171c;color:#9aa6ae
+}
+.assist-action-btn.confirm-danger{
+  border-color:rgba(255,98,95,.34);background:rgba(255,98,95,.075);color:#ff9a97
+}
+.assist-confirm{
+  margin-top:7px;padding:8px;border:1px solid rgba(121,201,149,.18);
+  border-radius:9px;background:rgba(121,201,149,.035);color:#aeb9b3;font-size:6.3px;line-height:1.45
+}
+
+
+@media(max-width:480px){
+  .assist-launch{gap:7px;padding:8px}
+  .assist-launch-sub{display:none}
+  .assist-launch-mode{min-width:46px;padding:0 5px;font-size:5.1px}
+  .assist-launch-icon{width:30px;height:30px;flex-basis:30px}
+}
+
+
+@media(max-width:700px){
+  .assist-starters{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .assist-starters::-webkit-scrollbar{display:none}
+  .assist-starter{
+    flex:0 0 185px;
+    min-height:68px;
+  }
+}
+
+
+/* =========================================================
+   ASSIST — COMPACT FINAL OVERRIDES
+========================================================= */
+.assist-mode-area{
+  gap:7px;
+  padding:8px 10px 0;
+}
+.assist-mode-switch{
+  flex:0 0 145px;
+  gap:2px;
+  padding:2px;
+  border-radius:9px;
+}
+.assist-mode-btn{
+  min-height:25px;
+  padding:0 7px;
+  border-radius:7px;
+  font-size:5.6px;
+  letter-spacing:.07em;
+}
+.assist-mode-context{
+  font-size:5.6px;
+  line-height:1.3;
+}
+.assist-mode-context strong{
+  font-size:5.8px;
+}
+.assist-starter{
+  min-height:48px;
+  gap:7px;
+  padding:7px 8px;
+  border-radius:10px;
+}
+.assist-starter-icon{
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+  border-radius:7px;
+  font-size:10px;
+}
+.assist-starter-text{
+  font-size:6.2px;
+  line-height:1.25;
+}
+.assist-starter-sub{
+  display:none !important;
+}
+@media(max-width:480px){
+  .assist-mode-switch{flex-basis:125px}
+  .assist-mode-context{font-size:5.1px}
+}
+@media(max-width:700px){
+  .assist-starter{
+    flex:0 0 150px;
+    min-height:46px;
+  }
+}
+
+
+/* =========================================================
+   ASSIST — MODE SWITCH BESIDE TITLE
+========================================================= */
+.assist-panel-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.assist-panel-heading{
+  flex:1;
+  min-width:0;
+}
+.assist-header-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+.assist-mode-switch-header{
+  flex:0 0 auto !important;
+  width:142px;
+  margin:0;
+  padding:2px;
+  border-radius:9px;
+}
+.assist-mode-switch-header .assist-mode-btn{
+  min-height:25px;
+  padding:0 7px;
+  font-size:5.5px;
+}
+.assist-mode-context-header{
+  margin-top:2px;
+  padding:0;
+  border:0;
+  background:transparent;
+  font-size:5.2px;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media(max-width:480px){
+  .assist-panel-head{gap:6px}
+  .assist-header-actions{gap:5px}
+  .assist-mode-switch-header{width:108px}
+  .assist-mode-switch-header .assist-mode-btn{
+    min-height:23px;
+    padding:0 4px;
+    font-size:4.7px;
+    letter-spacing:.035em;
+  }
+  .assist-mode-context-header{display:none}
+  .assist-close{
+    width:27px;
+    height:27px;
+    flex-basis:27px;
+  }
+}
+
+
+
+/* =========================================================
+   PLAN BACKGROUND — CINEMATIC / SEAMLESS
+   Strong image at the top, dark readable left side, then a
+   long soft fade into the normal app background before the
+   itinerary content. No visible horizontal cut-off.
+========================================================= */
+
+.plan-shell{
+  position:relative;
+  isolation:isolate;
+  background:#070d11;
+}
+
+/* Main photo layer */
+.plan-shell::before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  inset:0 0 auto 0;
+  height:390px;
+  pointer-events:none;
+
+  background-image:
+    /* edge vignette — subtle, not crushed */
+    radial-gradient(
+      ellipse 115% 105% at 67% 22%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,.02) 48%,
+      rgba(0,0,0,.16) 76%,
+      rgba(0,0,0,.34) 100%
+    ),
+
+    /* left-side darkness for logo / Plan text */
+    linear-gradient(
+      90deg,
+      rgba(2,5,7,.82) 0%,
+      rgba(2,5,7,.68) 14%,
+      rgba(2,5,7,.43) 29%,
+      rgba(2,5,7,.16) 48%,
+      rgba(2,5,7,.03) 68%,
+      rgba(2,5,7,0) 100%
+    ),
+
+    /* long bottom fade — this is what removes the visible change */
+    linear-gradient(
+      180deg,
+      rgba(7,13,17,.02) 0%,
+      rgba(7,13,17,.03) 42%,
+      rgba(7,13,17,.12) 55%,
+      rgba(7,13,17,.34) 68%,
+      rgba(7,13,17,.67) 82%,
+      rgba(7,13,17,.91) 94%,
+      #070d11 100%
+    ),
+
+    url("https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/244e17e1-70ca-45c9-a3c7-c893a56e70c7.jpg?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvMjQ0ZTE3ZTEtNzBjYS00NWM5LWEzYzctYzg5M2E1NmU3MGM3LmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODk3MjMxODMsImV4cCI6MzMzMjU3MjMxODN9.y8iKSm_UiONEu05o3uq2fSJbG5-vmgOm5udOX-C2Zjt6vNmF_w015sJnEuP3y64vbWapYX8le1eof2bdKBhYug");
+
+  background-size:cover;
+  background-position:center 82%;
+  background-repeat:no-repeat;
+}
+
+/* Second feathered wash: overlaps the photo fade so there is no
+   point where the eye can detect image -> solid background. */
+.plan-shell::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:205px;
+  left:0;
+  right:0;
+  height:205px;
+  pointer-events:none;
+  background:linear-gradient(
+    180deg,
+    rgba(7,13,17,0) 0%,
+    rgba(7,13,17,.08) 22%,
+    rgba(7,13,17,.27) 46%,
+    rgba(7,13,17,.58) 68%,
+    rgba(7,13,17,.86) 86%,
+    #070d11 100%
+  );
+}
+
+/* The header no longer owns the image */
+header{
+  position:relative;
+  overflow:visible;
+  z-index:1;
+  background:transparent;
+  border-top:3px solid var(--red-bright);
+}
+
+header::after{display:none;}
+
+/* Main is transparent so Travel Assist sits inside the same fade */
+main{
+  position:relative;
+  z-index:1;
+  background:transparent;
+}
+
+.header-inner{padding:25px 20px 0;}
+.plan-kanji{right:8px;top:8px;color:#ff625f;opacity:.07;font-size:116px;}
+.eyebrow{margin-bottom:10px;color:#ef8580;font-size:7px;letter-spacing:.22em;}
+.plan-hero{gap:13px;}
+.plan-icon-wrap{
+  width:58px;height:58px;flex-basis:58px;
+  background:rgba(6,12,16,.78);
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+}
+.plan-page-title-icon{width:40px;height:40px;}
+.plan-page-title span{font-size:38px;text-shadow:0 2px 12px rgba(0,0,0,.45);}
+.trip-name{margin-top:6px;color:#aab2b6;font-size:8px;text-shadow:0 1px 8px rgba(0,0,0,.65);}
+.header-actions{right:0;top:0;gap:6px;}
+.edit-btn{
+  width:31px;height:31px;
+  border-color:rgba(255,98,95,.42);
+  background:rgba(25,11,14,.46);
+  color:#ff9b97;
+  -webkit-backdrop-filter:blur(4px);
+  backdrop-filter:blur(4px);
+}
+
+/* Date cards remain readable while still showing the photo around them */
+.date-scroller{gap:7px;margin-top:18px;padding:0 0 15px;}
+.date-btn{
+  flex:0 0 58px;
+  min-height:64px;
+  justify-content:center;
+  padding:7px 3px;
+  border:1px solid rgba(111,128,139,.42);
+  border-radius:14px;
+  background:rgba(7,14,18,.78);
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+.date-btn::after{display:none;}
+.date-weekday{font-size:5.8px;color:#8c9aa3;}
+.date-number{margin:4px 0 3px;font-size:20px;color:#f5f1eb;}
+.date-month{font-size:5.3px;color:#74828b;}
+.date-btn.active{
+  border-color:rgba(255,98,95,.62);
+  background:rgba(37,17,20,.80);
+  box-shadow:inset 0 0 0 1px rgba(255,98,95,.08);
+}
+.date-btn.active .date-weekday,
+.date-btn.active .date-month{color:#ff8f8b;}
+.date-btn.active .date-number{color:#fff7f2;}
+.date-btn.has-plan:not(.active){border-color:rgba(87,103,113,.45);}
+.date-btn.today:not(.active){border-color:rgba(120,169,239,.45);}
+.date-day-label{bottom:5px;font-size:4.5px;}
+
+/* Assist gets the same floating-card feel as the Bookings stat/filter area */
+.assist-launch{
+  background:rgba(11,19,24,.91);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 24px rgba(0,0,0,.10);
+}
+
+@media(max-width:390px){
+  .plan-shell::before{height:420px;background-position:58% 78%;}
+  .plan-shell::after{top:215px;height:225px;}
+  .header-inner{padding-left:17px;padding-right:17px;}
+  .plan-page-title span{font-size:35px;}
+  .plan-icon-wrap{width:54px;height:54px;flex-basis:54px;}
+  .plan-page-title-icon{width:37px;height:37px;}
+  .date-btn{flex-basis:54px;min-height:60px;border-radius:13px;}
+  .date-number{font-size:18px;}
+}
+
+</style>
+
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+
+
+<body>
+
+
+<div class="plan-shell">
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+  <div class="plan-kanji">
+    旅
+  </div>
+
+
+  <div class="header-inner">
+
+
+    <div class="title-row">
+
+
+      <div>
+
+        <div
+          id="tripEyebrow"
+          class="eyebrow"
+        >
+          JAPAN · AUTUMN 2026
+        </div>
+
+
+        <div class="plan-hero">
+
+
+          <div class="plan-icon-wrap">
+
+  <img
+    class="plan-page-title-icon"
+    src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/Travel3Logo.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvVHJhdmVsM0xvZ28ucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4OTcwNDUwMiwiZXhwIjozMzMyNTcwNDUwMn0.ciD2sShYC95aeLTucRmbI-AvrtletO259ymPAGCURr4FXltkLRmqiKd_yzkwrLl_q4XGahAWzevvfVkWyGOlZg"
+    alt=""
+    aria-hidden="true"
+  >
+
+          </div>
+
+
+          <div>
+
+            <h1 class="plan-page-title">
+              <span>Plan</span>
+            </h1>
+
+
+            <div
+              id="tripName"
+              class="trip-name"
+            >
+              Loading trip…
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <div class="header-actions">
+
+        <button
+          id="addButton"
+          class="edit-btn add-top-btn"
+          type="button"
+          aria-label="Add schedule item"
+        >
+          ＋
+        </button>
+
+
+        <button
+          id="editButton"
+          class="edit-btn"
+          type="button"
+          aria-label="Edit schedule"
+        >
+          ✎
+        </button>
+
+      </div>
+
+
+    </div>
+
+
+
+    <div
+      id="dateScroller"
+      class="date-scroller"
+    ></div>
+
+
+  </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main id="main">
+
+  <div id="assistLaunch" class="assist-launch" role="button" tabindex="0" aria-expanded="false">
+    <div class="assist-launch-icon">✦</div>
+    <div class="assist-launch-main">
+      <div class="assist-launch-title">Travel Assist</div>
+      <div class="assist-launch-sub">Plan ahead or preview your live travel assistant.</div>
+    </div>
+    <div class="assist-launch-modes">
+      <button id="assistLaunchPlanning" class="assist-launch-mode active" type="button">PLANNING</button>
+      <button id="assistLaunchLive" class="assist-launch-mode" type="button">LIVE</button>
+    </div>
+    <div class="assist-launch-arrow">›</div>
+  </div>
+
+  <section id="assistPanel" class="assist-panel" aria-hidden="true">
+    <div class="assist-panel-head">
+      <div class="assist-panel-heading">
+        <div class="assist-panel-title">Travel Assist</div>
+        <div id="assistStatus" class="assist-panel-sub">Ask anything about this trip.</div>
+        <div id="assistModeContext" class="assist-mode-context assist-mode-context-header">Planning your trip.</div>
+      </div>
+
+      <div class="assist-header-actions">
+        <div class="assist-mode-switch assist-mode-switch-header" role="tablist" aria-label="Travel Assist mode">
+          <button id="assistPlanningMode" class="assist-mode-btn active" type="button">PLANNING</button>
+          <button id="assistLiveMode" class="assist-mode-btn" type="button">LIVE</button>
+        </div>
+        <button id="assistClose" class="assist-close" type="button" aria-label="Close Assist">✕</button>
+      </div>
+    </div>
+    <div id="assistStarters" class="assist-starters"></div>
+    <div id="assistMessages" class="assist-messages">
+      <div id="assistWelcome" class="assist-welcome"><strong>How can I help?</strong>Pick a question above or type your own. Assist knows which trip and itinerary day you're viewing.</div>
+    </div>
+    <div class="assist-compose">
+      <textarea id="assistInput" class="assist-input" rows="1" placeholder="Ask about your trip…"></textarea>
+      <button id="assistSend" class="assist-send" type="button">SEND</button>
+    </div>
+  </section>
+
+  <div id="dayContent">
+    <div class="state">
+
+    <strong>
+      Loading plan…
+    </strong>
+
+    Getting your itinerary from Supabase.
+
+    </div>
+  </div>
+
+</main>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     EDIT SHEET
+========================================================= -->
+
+<div
+  id="editSheet"
+  class="sheet-backdrop"
+>
+
+  <div class="sheet">
+
+
+    <div class="sheet-handle"></div>
+
+
+    <div class="sheet-head">
+
+      <div
+        id="sheetTitle"
+        class="sheet-title"
+      >
+        Edit Schedule
+      </div>
+
+
+      <button
+        id="closeSheet"
+        class="close-btn"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+
+    <div
+      id="typeGrid"
+      class="type-grid"
+    >
+
+      <button
+        class="type-btn active"
+        type="button"
+        data-type="place"
+      >
+        📍 PLACE
+      </button>
+
+
+      <button
+        class="type-btn"
+        type="button"
+        data-type="restaurant"
+      >
+        🍽 FOOD
+      </button>
+
+
+      <button
+        class="type-btn"
+        type="button"
+        data-type="custom"
+      >
+        ✏️ CUSTOM
+      </button>
+
+    </div>
+
+
+
+    <form id="editForm">
+
+
+      <div class="form-grid">
+
+
+        <div
+          id="entityPicker"
+          class="entity-picker"
+        >
+
+          <div
+            id="entityPickerTitle"
+            class="entity-picker-title"
+          >
+            📍 MY SAVED PLACES
+          </div>
+
+
+          <div
+            id="entityPickerSub"
+            class="entity-picker-sub"
+          >
+            Search your saved places.
+          </div>
+
+
+          <div class="entity-search-wrap">
+
+            <input
+              id="entitySearch"
+              class="entity-search"
+              type="search"
+              placeholder="Search places..."
+              autocomplete="off"
+            >
+
+
+            <span class="search-icon">
+              🔎
+            </span>
+
+          </div>
+
+
+          <div
+            id="entityResults"
+            class="entity-results"
+          ></div>
+
+        </div>
+
+
+
+        <div
+          id="selectedEntity"
+          class="selected-entity"
+        >
+
+          <div
+            id="selectedEntityIcon"
+            class="selected-icon"
+          >
+            📍
+          </div>
+
+
+          <div class="selected-main">
+
+            <div
+              id="selectedEntityLabel"
+              class="selected-label"
+            >
+              SELECTED PLACE
+            </div>
+
+
+            <div
+              id="selectedEntityName"
+              class="selected-name"
+            ></div>
+
+
+            <div
+              id="selectedEntityMeta"
+              class="selected-meta"
+            ></div>
+
+          </div>
+
+
+          <button
+            id="changeEntityButton"
+            class="change-entity"
+            type="button"
+          >
+            CHANGE
+          </button>
+
+        </div>
+
+
+
+        <div
+          id="masterHelp"
+          class="master-help"
+        >
+
+          <span id="masterHelpText">
+            Can't find the place?
+          </span>
+
+
+          <button
+            id="masterHelpButton"
+            type="button"
+          >
+            ＋ ADD NEW PLACE
+          </button>
+
+        </div>
+
+
+
+        <div
+          id="googleAddBox"
+          class="google-add-box"
+        >
+
+          <div class="google-add-title">
+            🔎 GOOGLE PLACES AUTOFILL
+          </div>
+
+
+          <div class="google-add-sub">
+            Search Google only when the place is not already in your saved Places.
+          </div>
+
+
+          <div id="googlePlaceSearch"></div>
+
+
+          <div
+            id="googlePlaceStatus"
+            class="place-status"
+          >
+            Search a place, then choose the correct Google result.
+          </div>
+
+        </div>
+
+
+
+        <div class="field">
+
+          <label>
+            DATE
+          </label>
+
+          <input
+            id="fieldDate"
+            type="date"
+            required
+          >
+
+        </div>
+
+
+
+        <div class="field">
+
+          <label>
+            TIME
+          </label>
+
+          <input
+            id="fieldTime"
+            type="time"
+          >
+
+        </div>
+
+
+
+        <div class="field full">
+
+          <label>
+            FLEXIBLE TIME LABEL
+          </label>
+
+          <input
+            id="fieldTimeLabel"
+            placeholder="e.g. Morning, ~3 PM, After lunch"
+          >
+
+        </div>
+
+
+
+        <div class="field full">
+
+          <label>
+            TITLE
+          </label>
+
+          <input
+            id="fieldTitle"
+            required
+            placeholder="Schedule item"
+          >
+
+        </div>
+
+
+
+        <div class="field full">
+
+          <label>
+            LOCATION
+          </label>
+
+          <input
+            id="fieldLocation"
+            placeholder="Optional location"
+          >
+
+        </div>
+
+
+
+        <div class="field full">
+
+          <label>
+            NOTES
+          </label>
+
+          <textarea
+            id="fieldNotes"
+            placeholder="Optional notes"
+          ></textarea>
+
+        </div>
+
+
+      </div>
+
+
+
+      <label class="check-row">
+
+        <input
+          id="fieldOptional"
+          type="checkbox"
+        >
+
+        OPTIONAL
+
+      </label>
+
+
+
+      <div class="sheet-actions">
+
+        <button
+          id="deleteButton"
+          class="delete-btn"
+          type="button"
+        >
+          🗑 DELETE
+        </button>
+
+
+        <button
+          id="saveButton"
+          class="save-btn"
+          type="submit"
+        >
+          SAVE
+        </button>
+
+      </div>
+
+
+
+      <div
+        id="formMessage"
+        class="form-message"
+      ></div>
+
+
+    </form>
+
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<div id="footer"></div>
+
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="countries.js"></script>
+<script src="google-maps.js"></script>
+
+
+
+<script>
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const requestedTripId =
+  Number(
+    params.get("trip")
+  ) || null;
+
+
+const savedTripId =
+  Number(
+    localStorage.getItem(
+      "current_trip_id"
+    )
+  ) || null;
+
+
+let TRIP_ID =
+  requestedTripId ||
+  savedTripId ||
+  1;
+
+
+let currentUser = null;
+
+let trip = null;
+
+let accessibleTrips = [];
+
+let schedule = [];
+
+let places = [];
+
+let restaurants = [];
+
+let placeCountryFallback = false;
+
+let restaurantCountryFallback = false;
+
+let groupedDays = {};
+
+let selectedDate = null;
+
+let editing = false;
+
+let editingId = null;
+
+let formType = "place";
+
+let selectedPlaceId = null;
+
+let selectedRestaurantId = null;
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const main =
+  document.getElementById(
+    "main"
+  );
+
+const dayContent =
+  document.getElementById(
+    "dayContent"
+  );
+
+const tripName =
+  document.getElementById(
+    "tripName"
+  );
+
+
+const tripEyebrow =
+  document.getElementById(
+    "tripEyebrow"
+  );
+
+
+const dateScroller =
+  document.getElementById(
+    "dateScroller"
+  );
+
+
+const addButton =
+  document.getElementById(
+    "addButton"
+  );
+
+
+const editButton =
+  document.getElementById(
+    "editButton"
+  );
+
+
+const editSheet =
+  document.getElementById(
+    "editSheet"
+  );
+
+
+const sheetTitle =
+  document.getElementById(
+    "sheetTitle"
+  );
+
+
+const typeGrid =
+  document.getElementById(
+    "typeGrid"
+  );
+
+
+const entityPicker =
+  document.getElementById(
+    "entityPicker"
+  );
+
+
+const entityPickerTitle =
+  document.getElementById(
+    "entityPickerTitle"
+  );
+
+
+const entityPickerSub =
+  document.getElementById(
+    "entityPickerSub"
+  );
+
+
+const entitySearch =
+  document.getElementById(
+    "entitySearch"
+  );
+
+
+const entityResults =
+  document.getElementById(
+    "entityResults"
+  );
+
+
+const selectedEntity =
+  document.getElementById(
+    "selectedEntity"
+  );
+
+
+const selectedEntityIcon =
+  document.getElementById(
+    "selectedEntityIcon"
+  );
+
+
+const selectedEntityLabel =
+  document.getElementById(
+    "selectedEntityLabel"
+  );
+
+
+const selectedEntityName =
+  document.getElementById(
+    "selectedEntityName"
+  );
+
+
+const selectedEntityMeta =
+  document.getElementById(
+    "selectedEntityMeta"
+  );
+
+
+const masterHelp =
+  document.getElementById(
+    "masterHelp"
+  );
+
+
+const masterHelpText =
+  document.getElementById(
+    "masterHelpText"
+  );
+
+
+const masterHelpButton =
+  document.getElementById(
+    "masterHelpButton"
+  );
+
+
+const googleAddBox =
+  document.getElementById(
+    "googleAddBox"
+  );
+
+
+const fieldDate =
+  document.getElementById(
+    "fieldDate"
+  );
+
+
+const fieldTime =
+  document.getElementById(
+    "fieldTime"
+  );
+
+
+const fieldTimeLabel =
+  document.getElementById(
+    "fieldTimeLabel"
+  );
+
+
+const fieldTitle =
+  document.getElementById(
+    "fieldTitle"
+  );
+
+
+const fieldLocation =
+  document.getElementById(
+    "fieldLocation"
+  );
+
+
+const fieldNotes =
+  document.getElementById(
+    "fieldNotes"
+  );
+
+
+const fieldOptional =
+  document.getElementById(
+    "fieldOptional"
+  );
+
+
+const deleteButton =
+  document.getElementById(
+    "deleteButton"
+  );
+
+
+const saveButton =
+  document.getElementById(
+    "saveButton"
+  );
+
+
+const formMessage =
+  document.getElementById(
+    "formMessage"
+  );
+
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function text(value){
+  return String(
+    value ?? ""
+  );
+}
+
+
+function esc(value){
+
+  return text(value)
+
+    .replaceAll("&","&amp;")
+
+    .replaceAll("<","&lt;")
+
+    .replaceAll(">","&gt;")
+
+    .replaceAll('"',"&quot;")
+
+    .replaceAll("'","&#039;");
+
+}
+
+
+function norm(value){
+
+  return text(value)
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function parseDate(value){
+
+  return new Date(
+    value + "T12:00:00"
+  );
+
+}
+
+
+function localDateString(){
+
+  const d =
+    new Date();
+
+
+  return [
+
+    d.getFullYear(),
+
+    String(
+      d.getMonth()+1
+    )
+    .padStart(
+      2,
+      "0"
+    ),
+
+    String(
+      d.getDate()
+    )
+    .padStart(
+      2,
+      "0"
+    )
+
+  ].join("-");
+
+}
+
+
+function dateParts(value){
+
+  const d =
+    parseDate(
+      value
+    );
+
+
+  return {
+
+    weekday:
+
+      new Intl.DateTimeFormat(
+        "en-SG",
+        {
+          weekday:"short"
+        }
+      )
+      .format(d)
+      .toUpperCase(),
+
+    weekdayLong:
+
+      new Intl.DateTimeFormat(
+        "en-SG",
+        {
+          weekday:"long"
+        }
+      )
+      .format(d)
+      .toUpperCase(),
+
+    day:
+
+      new Intl.DateTimeFormat(
+        "en-SG",
+        {
+          day:"numeric"
+        }
+      )
+      .format(d),
+
+    month:
+
+      new Intl.DateTimeFormat(
+        "en-SG",
+        {
+          month:"short"
+        }
+      )
+      .format(d)
+      .toUpperCase()
+
+  };
+
+}
+
+
+function entityMeta(item){
+
+  return [
+
+    item.area,
+
+    item.city,
+
+    item.prefecture
+
+  ]
+  .filter(Boolean)
+  .join(" · ");
+
+}
+
+
+
+/* =========================================================
+   ACCESSIBLE TRIPS
+========================================================= */
+
+async function getAccessibleTrips(){
+
+  if(!currentUser){
+    return [];
+  }
+
+
+  const [
+    ownResult,
+    memberResult
+  ] =
+    await Promise.all([
+
+      db
+        .from("trips")
+        .select("*")
+        .eq(
+          "owner_id",
+          currentUser.id
+        )
+        .order(
+          "start_date",
+          {
+            ascending:true
+          }
+        ),
+
+      db
+        .from("trip_members")
+        .select("trip_id")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+
+    ]);
+
+
+  if(ownResult.error){
+    throw ownResult.error;
+  }
+
+
+  if(memberResult.error){
+    throw memberResult.error;
+  }
+
+
+  const ownTrips =
+    (ownResult.data || [])
+      .map(
+        row => ({
+          ...row,
+          access_type:"owner"
+        })
+      );
+
+
+  const sharedIds =
+    [
+      ...new Set(
+        (memberResult.data || [])
+          .map(
+            row =>
+              Number(
+                row.trip_id
+              )
+          )
+          .filter(Boolean)
+      )
+    ];
+
+
+  let sharedTrips = [];
+
+
+  if(sharedIds.length){
+
+    const sharedResult =
+      await db
+        .from("trips")
+        .select("*")
+        .in(
+          "id",
+          sharedIds
+        )
+        .order(
+          "start_date",
+          {
+            ascending:true
+          }
+        );
+
+
+    if(sharedResult.error){
+      throw sharedResult.error;
+    }
+
+
+    sharedTrips =
+      (sharedResult.data || [])
+        .map(
+          row => ({
+            ...row,
+
+            access_type:
+              row.owner_id ===
+              currentUser.id
+              ?
+              "owner"
+              :
+              "shared"
+          })
+        );
+
+  }
+
+
+  const map =
+    new Map();
+
+
+  [
+    ...ownTrips,
+    ...sharedTrips
+  ]
+  .forEach(
+    row => {
+
+      const id =
+        Number(
+          row.id
+        );
+
+
+      if(
+        !map.has(id) ||
+        row.access_type === "owner"
+      ){
+
+        map.set(
+          id,
+          row
+        );
+
+      }
+
+    }
+  );
+
+
+  return [
+    ...map.values()
+  ]
+  .sort(
+    (a,b) => {
+
+      const ad =
+        a.start_date || "";
+
+
+      const bd =
+        b.start_date || "";
+
+
+      return ad.localeCompare(
+        bd
+      );
+
+    }
+  );
+
+}
+
+
+
+/* =========================================================
+   RESOLVE CURRENT TRIP
+========================================================= */
+
+async function resolveTrip(){
+
+  const authResult =
+    await db.auth.getUser();
+
+
+  if(authResult.error){
+    throw authResult.error;
+  }
+
+
+  currentUser =
+    authResult.data?.user ||
+    null;
+
+
+  if(!currentUser){
+
+    if(!TRIP_ID){
+      throw new Error("Open this itinerary with a trip link.");
+    }
+
+    const publicResult = await db.from("trips").select("*").eq("id", TRIP_ID).maybeSingle();
+    if(publicResult.error) throw publicResult.error;
+    if(publicResult.data){
+      accessibleTrips = [publicResult.data];
+      syncPlanModeLinks();
+      return;
+    }
+
+    throw new Error("This itinerary is not publicly available.");
+
+  }
+
+
+  accessibleTrips =
+    await getAccessibleTrips();
+
+
+  if(!accessibleTrips.length){
+
+    throw new Error(
+      "You do not have any accessible trips yet."
+    );
+
+  }
+
+
+  let resolved =
+    accessibleTrips.find(
+      row =>
+        Number(row.id) ===
+        Number(TRIP_ID)
+    );
+
+
+  if(!resolved){
+
+    resolved =
+      accessibleTrips[0];
+
+  }
+
+
+  TRIP_ID =
+    Number(
+      resolved.id
+    );
+
+
+  localStorage.setItem(
+    "current_trip_id",
+    String(TRIP_ID)
+  );
+
+
+  const hash =
+    window.location.hash ||
+    "";
+
+
+  history.replaceState(
+    null,
+    "",
+    `?trip=${TRIP_ID}${hash}`
+  );
+
+  syncPlanModeLinks();
+
+}
+
+
+
+
+/* =========================================================
+   PLAN MODE LINKS
+========================================================= */
+
+function syncPlanModeLinks(){
+  /* Assist now lives inside Plan, so there are no separate mode links to sync. */
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData(){
+
+  try{
+
+    await resolveTrip();
+
+
+    const tripResult =
+      await db
+        .from("trips")
+        .select("*")
+        .eq(
+          "id",
+          TRIP_ID
+        )
+        .single();
+
+
+    if(tripResult.error){
+      throw tripResult.error;
+    }
+
+
+    trip =
+      tripResult.data;
+
+
+    if(!trip){
+
+      throw new Error(
+        "Trip not found."
+      );
+
+    }
+
+
+
+    /* HEADER */
+
+    tripEyebrow.textContent =
+      trip.country
+      ?
+      `${trip.country.toUpperCase()} · AUTUMN 2026`
+      :
+      "TRIP · AUTUMN 2026";
+
+
+    if(
+      trip.start_date &&
+      trip.end_date
+    ){
+
+      const start =
+        parseDate(
+          trip.start_date
+        );
+
+
+      const end =
+        parseDate(
+          trip.end_date
+        );
+
+
+      const startDay =
+        start.getDate();
+
+
+      const endDay =
+        end.getDate();
+
+
+      const month =
+        new Intl.DateTimeFormat(
+          "en-SG",
+          {
+            month:"short"
+          }
+        )
+        .format(start);
+
+
+      tripName.textContent =
+        `${startDay}–${endDay} ${month} · ${trip.name || "My Trip"}`;
+
+    }
+
+    else{
+
+      tripName.textContent =
+        trip.name ||
+        "My Trip";
+
+    }
+
+
+    document.title =
+      `Plan · ${trip.name || "Travel"}`;
+
+
+
+    /* MASTER LISTS */
+
+    const canonicalTripCountry =
+      (
+        typeof canonicalCountryName
+        ===
+        "function"
+      )
+      ?
+      canonicalCountryName(
+        trip.country
+      )
+      :
+      (
+        trip.country
+        ||
+        null
+      );
+
+
+    const invalidTripCountry =
+      Boolean(
+        trip.country
+        &&
+        !canonicalTripCountry
+      );
+
+
+    let placesQuery =
+      db
+        .from("places")
+        .select("*")
+        .order(
+          "name",
+          {
+            ascending:true
+          }
+        );
+
+
+    let restaurantsQuery =
+      db
+        .from("restaurants")
+        .select("*")
+        .order(
+          "name",
+          {
+            ascending:true
+          }
+        );
+
+
+    /*
+      Only filter the reusable master libraries when the trip country
+      is recognised. Legacy values such as "D" should never make the
+      user's saved Places or restaurants appear to have vanished.
+    */
+
+
+    if(canonicalTripCountry){
+
+      placesQuery =
+        placesQuery.ilike(
+          "country",
+          canonicalTripCountry
+        );
+
+
+      restaurantsQuery =
+        restaurantsQuery.ilike(
+          "country",
+          canonicalTripCountry
+        );
+
+    }
+
+
+    const [
+      scheduleResult,
+      placeResult,
+      restaurantResult
+    ] =
+      await Promise.all([
+
+        loadScheduleQuery(),
+
+        placesQuery,
+
+        restaurantsQuery
+
+      ]);
+
+
+    if(scheduleResult.error){
+      throw scheduleResult.error;
+    }
+
+
+    if(placeResult.error){
+      throw placeResult.error;
+    }
+
+
+    if(restaurantResult.error){
+      throw restaurantResult.error;
+    }
+
+
+    schedule =
+      scheduleResult.data ||
+      [];
+
+
+    places =
+      placeResult.data ||
+      [];
+
+
+    restaurants =
+      restaurantResult.data ||
+      [];
+
+
+    placeCountryFallback =
+      invalidTripCountry;
+
+
+    restaurantCountryFallback =
+      invalidTripCountry;
+
+
+    /*
+      If an older trip has a typo or a country value that does not
+      match the master library, do not make saved data appear lost.
+      Fall back to the full reusable library instead.
+    */
+
+
+    if(
+      trip.country
+      &&
+      !places.length
+    ){
+
+      const fallbackPlaces =
+        await db
+          .from("places")
+          .select("*")
+          .order(
+            "name",
+            {
+              ascending:true
+            }
+          );
+
+
+      if(fallbackPlaces.error){
+        throw fallbackPlaces.error;
+      }
+
+
+      places =
+        fallbackPlaces.data ||
+        [];
+
+
+      placeCountryFallback =
+        true;
+
+    }
+
+
+    if(
+      trip.country
+      &&
+      !restaurants.length
+    ){
+
+      const fallbackRestaurants =
+        await db
+          .from("restaurants")
+          .select("*")
+          .order(
+            "name",
+            {
+              ascending:true
+            }
+          );
+
+
+      if(fallbackRestaurants.error){
+        throw fallbackRestaurants.error;
+      }
+
+
+      restaurants =
+        fallbackRestaurants.data ||
+        [];
+
+
+      restaurantCountryFallback =
+        true;
+
+    }
+
+
+    buildDays();
+
+    chooseDate();
+
+    syncPlanModeLinks();
+
+    renderDates();
+
+    renderDay();
+
+    if(!assistModeManuallyChosen)assistMode=automaticAssistMode();
+    renderAssistMode();
+
+  }
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    tripName.textContent =
+      "Unable to load trip";
+
+
+    dayContent.innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          Couldn't load Plan
+        </strong>
+
+        ${esc(
+          error.message ||
+          "Unknown database error."
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   SCHEDULE QUERY
+========================================================= */
+
+function loadScheduleQuery(){
+
+  return db
+    .from("schedule")
+    .select(`
+      id,
+      trip_id,
+      schedule_date,
+      start_time,
+      end_time,
+      time_label,
+      sort_order,
+      title,
+      item_type,
+      description,
+      notes,
+      restaurant_id,
+      place_id,
+      location_name,
+      address,
+      latitude,
+      longitude,
+      maps_url,
+      is_optional,
+      is_locked,
+
+      place:places(
+        id,
+        name,
+        name_japanese,
+        country,
+        prefecture,
+        city,
+        area,
+        address,
+        latitude,
+        longitude,
+        maps_url
+      ),
+
+      restaurant:restaurants(
+        id,
+        name,
+        name_japanese,
+        country,
+        prefecture,
+        city,
+        area,
+        location,
+        address,
+        latitude,
+        longitude,
+        maps_url
+      )
+    `)
+    .eq(
+      "trip_id",
+      TRIP_ID
+    )
+    .order(
+      "schedule_date",
+      {
+        ascending:true
+      }
+    )
+    .order(
+      "sort_order",
+      {
+        ascending:true
+      }
+    );
+
+}
+
+
+
+/* =========================================================
+   SORT SCHEDULE
+========================================================= */
+
+function timeToMinutes(value){
+
+  if(!value){
+    return null;
+  }
+
+
+  const parts =
+    String(value)
+      .slice(0,5)
+      .split(":");
+
+
+  const hour =
+    Number(
+      parts[0]
+    );
+
+
+  const minute =
+    Number(
+      parts[1]
+    );
+
+
+  if(
+    Number.isNaN(hour) ||
+    Number.isNaN(minute)
+  ){
+
+    return null;
+
+  }
+
+
+  return (
+    hour * 60
+  ) + minute;
+
+}
+
+
+function labelToMinutes(value){
+
+  const label =
+    String(
+      value || ""
+    )
+    .trim();
+
+
+  if(!label){
+    return null;
+  }
+
+
+  const match =
+    label.match(
+      /(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i
+    );
+
+
+  if(!match){
+    return null;
+  }
+
+
+  let hour =
+    Number(
+      match[1]
+    );
+
+
+  const minute =
+    Number(
+      match[2] ||
+      0
+    );
+
+
+  const suffix =
+    match[3]
+      .toUpperCase();
+
+
+  if(hour === 12){
+    hour = 0;
+  }
+
+
+  if(suffix === "PM"){
+    hour += 12;
+  }
+
+
+  return (
+    hour * 60
+  ) + minute;
+
+}
+
+
+function scheduleSortKey(item){
+
+  const exact =
+    timeToMinutes(
+      item.start_time
+    );
+
+
+  if(exact !== null){
+    return exact;
+  }
+
+
+  const flexible =
+    labelToMinutes(
+      item.time_label
+    );
+
+
+  if(flexible !== null){
+    return flexible;
+  }
+
+
+  const label =
+    norm(
+      item.time_label
+    );
+
+
+  if(
+    label.includes("afterward") ||
+    label.includes("afterwards") ||
+    label.startsWith("after ")
+  ){
+    return 2000;
+  }
+
+
+  if(
+    label.includes("evening")
+  ){
+    return 18 * 60;
+  }
+
+
+  if(
+    label.includes("afternoon")
+  ){
+    return 15 * 60;
+  }
+
+
+  if(
+    label.includes("lunch")
+  ){
+    return 12 * 60;
+  }
+
+
+  if(
+    label.includes("morning")
+  ){
+    return 8 * 60;
+  }
+
+
+  return 1900;
+
+}
+
+
+function compareScheduleItems(
+  a,
+  b
+){
+
+  const aKey =
+    scheduleSortKey(a);
+
+
+  const bKey =
+    scheduleSortKey(b);
+
+
+  if(aKey !== bKey){
+    return aKey - bKey;
+  }
+
+
+  const aSort =
+    Number(
+      a.sort_order ||
+      0
+    );
+
+
+  const bSort =
+    Number(
+      b.sort_order ||
+      0
+    );
+
+
+  if(aSort !== bSort){
+    return aSort - bSort;
+  }
+
+
+  return (
+    Number(a.id || 0) -
+    Number(b.id || 0)
+  );
+
+}
+
+
+function buildDays(){
+
+  groupedDays = {};
+
+
+  schedule.forEach(
+    item => {
+
+      if(
+        !groupedDays[
+          item.schedule_date
+        ]
+      ){
+
+        groupedDays[
+          item.schedule_date
+        ] = [];
+
+      }
+
+
+      groupedDays[
+        item.schedule_date
+      ]
+      .push(
+        item
+      );
+
+    }
+  );
+
+
+  Object
+    .values(
+      groupedDays
+    )
+    .forEach(
+      items =>
+        items.sort(
+          compareScheduleItems
+        )
+    );
+
+}
+
+
+
+/* =========================================================
+   CHOOSE DATE
+========================================================= */
+
+function chooseDate(){
+
+  const hash =
+    window.location.hash
+      .replace(
+        "#",
+        ""
+      );
+
+
+  if(
+    hash &&
+    trip.start_date &&
+    trip.end_date &&
+    hash >= trip.start_date &&
+    hash <= trip.end_date
+  ){
+
+    selectedDate =
+      hash;
+
+    return;
+
+  }
+
+
+  const today =
+    localDateString();
+
+
+  if(
+    trip.start_date &&
+    trip.end_date &&
+    today >= trip.start_date &&
+    today <= trip.end_date
+  ){
+
+    selectedDate =
+      today;
+
+    return;
+
+  }
+
+
+  if(
+    trip.start_date &&
+    today < trip.start_date
+  ){
+
+    selectedDate =
+      trip.start_date;
+
+    return;
+
+  }
+
+
+  if(trip.end_date){
+
+    selectedDate =
+      trip.end_date;
+
+    return;
+
+  }
+
+
+  const dates =
+    Object
+      .keys(
+        groupedDays
+      )
+      .sort();
+
+
+  selectedDate =
+    dates[0] ||
+    today;
+
+}
+
+
+
+/* =========================================================
+   DATE SCROLLER
+========================================================= */
+
+function renderDates(){
+
+  if(
+    !trip.start_date ||
+    !trip.end_date
+  ){
+
+    dateScroller.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  const dates = [];
+
+
+  let cursor =
+    parseDate(
+      trip.start_date
+    );
+
+
+  const end =
+    parseDate(
+      trip.end_date
+    );
+
+
+  while(
+    cursor <= end
+  ){
+
+    const value = [
+
+      cursor.getFullYear(),
+
+      String(
+        cursor.getMonth()+1
+      )
+      .padStart(
+        2,
+        "0"
+      ),
+
+      String(
+        cursor.getDate()
+      )
+      .padStart(
+        2,
+        "0"
+      )
+
+    ].join("-");
+
+
+    dates.push(
+      value
+    );
+
+
+    cursor.setDate(
+      cursor.getDate()+1
+    );
+
+  }
+
+
+  dateScroller.innerHTML =
+    dates
+      .map(
+        date => {
+
+          const parts =
+            dateParts(
+              date
+            );
+
+
+          return `
+
+            <button
+              class="date-btn${date === selectedDate ? " active" : ""}${(groupedDays[date] || []).length ? " has-plan" : ""}${date === localDateString() ? " today" : ""}"
+              type="button"
+              data-date="${date}"
+            >
+
+              <span class="date-weekday">
+                ${esc(parts.weekday)}
+              </span>
+
+              <span class="date-number">
+                ${esc(parts.day)}
+              </span>
+
+              ${date === selectedDate ? `<span class="date-day-label">DAY ${dayNumber(date)}</span>` : `<span class="date-month">${esc(parts.month)}</span>`}
+
+            </button>
+
+          `;
+
+        }
+      )
+      .join("");
+
+
+  dateScroller
+    .querySelectorAll(
+      ".date-btn"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            selectedDate =
+              button.dataset.date;
+
+
+            history.replaceState(
+              null,
+              "",
+              `?trip=${TRIP_ID}#${selectedDate}`
+            );
+
+
+            syncPlanModeLinks();
+
+            renderDates();
+
+            renderDay();
+
+            if(assistMode)renderAssistMode();
+
+          };
+
+      }
+    );
+
+
+  requestAnimationFrame(
+    () => {
+
+      const active =
+        dateScroller.querySelector(
+          ".date-btn.active"
+        );
+
+
+      active?.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest",
+        inline:"center"
+      });
+
+    }
+  );
+
+}
+
+
+
+/* =========================================================
+   ITEM HELPERS
+========================================================= */
+
+function itemTime(item){
+
+  if(item.time_label){
+    return item.time_label;
+  }
+
+
+  if(item.start_time){
+
+    const parts =
+      item.start_time
+        .split(":");
+
+
+    let hour =
+      Number(
+        parts[0]
+      );
+
+
+    const minute =
+      parts[1] ||
+      "00";
+
+
+    const suffix =
+      hour >= 12
+      ?
+      "PM"
+      :
+      "AM";
+
+
+    hour =
+      hour % 12 ||
+      12;
+
+
+    return `${hour}:${minute} ${suffix}`;
+
+  }
+
+
+  return "Flexible";
+
+}
+
+
+function itemLocation(item){
+
+  return (
+    item.restaurant?.name ||
+    item.place?.name ||
+    item.location_name ||
+    ""
+  );
+
+}
+
+
+function itemMap(item){
+
+  return (
+    item.restaurant?.maps_url ||
+    item.place?.maps_url ||
+    item.maps_url ||
+    null
+  );
+
+}
+
+
+function itemIcon(item){
+
+  const type =
+    norm(item.item_type);
+
+
+  const title =
+    norm(item.title);
+
+
+  if(
+    item.restaurant_id ||
+    type.includes("food") ||
+    type.includes("restaurant") ||
+    title.includes("lunch") ||
+    title.includes("dinner") ||
+    title.includes("breakfast") ||
+    title.includes("snack")
+  ){
+    return "🍽️";
+  }
+
+
+  if(
+    type.includes("hotel") ||
+    title.includes("hotel") ||
+    title.includes("check-in") ||
+    title.includes("check in") ||
+    title.includes("ryokan")
+  ){
+    return "🏨";
+  }
+
+
+  if(
+    type.includes("transport") ||
+    title.includes("train") ||
+    title.includes("drive") ||
+    title.includes("travel") ||
+    title.includes("arrive") ||
+    title.includes("depart") ||
+    title.includes("head to") ||
+    title.includes("leave")
+  ){
+    return "🚆";
+  }
+
+
+  if(
+    title.includes("shrine") ||
+    title.includes("temple") ||
+    title.includes("taisha") ||
+    title.includes("pagoda")
+  ){
+    return "⛩️";
+  }
+
+
+  if(
+    title.includes("waterfall") ||
+    title.includes("falls")
+  ){
+    return "💧";
+  }
+
+
+  if(
+    title.includes("mount") ||
+    title.includes("mountain") ||
+    title.includes("highland") ||
+    title.includes("viewpoint")
+  ){
+    return "🏔️";
+  }
+
+
+  if(
+    title.includes("market")
+  ){
+    return "🛍️";
+  }
+
+
+  return "📍";
+
+}
+
+
+
+/* =========================================================
+   DAY AREA / TITLE
+========================================================= */
+
+function meaningfulArea(item){
+
+  return (
+    item.place?.area ||
+    item.restaurant?.area ||
+    item.place?.city ||
+    item.restaurant?.city ||
+    null
+  );
+
+}
+
+
+function dayRouteTitle(date){
+
+  const items =
+    groupedDays[date] ||
+    [];
+
+
+  const areas = [];
+
+
+  items.forEach(
+    item => {
+
+      const type =
+        norm(
+          item.item_type
+        );
+
+
+      const title =
+        norm(
+          item.title
+        );
+
+
+      const ignore =
+        type.includes("transport") ||
+        type.includes("hotel") ||
+        title.includes("arrive") ||
+        title.includes("depart") ||
+        title.includes("check-in") ||
+        title.includes("check in");
+
+
+      if(ignore){
+        return;
+      }
+
+
+      const area =
+        meaningfulArea(
+          item
+        );
+
+
+      if(
+        area &&
+        !areas.some(
+          current =>
+            norm(current) ===
+            norm(area)
+        )
+      ){
+
+        areas.push(
+          area
+        );
+
+      }
+
+    }
+  );
+
+
+  if(areas.length >= 2){
+
+    return `${areas[0]} to ${areas[areas.length - 1]}`;
+
+  }
+
+
+  if(areas.length === 1){
+
+    return areas[0];
+
+  }
+
+
+  const locations = [];
+
+
+  items.forEach(
+    item => {
+
+      const value =
+        item.location_name;
+
+
+      if(
+        value &&
+        !locations.some(
+          existing =>
+            norm(existing) ===
+            norm(value)
+        )
+      ){
+
+        locations.push(
+          value
+        );
+
+      }
+
+    }
+  );
+
+
+  if(
+    locations.length >= 2
+  ){
+
+    return `${locations[0]} to ${locations[locations.length - 1]}`;
+
+  }
+
+
+  if(
+    locations.length === 1
+  ){
+
+    return locations[0];
+
+  }
+
+
+  if(items.length){
+
+    return items[0].title;
+
+  }
+
+
+  return "Trip Day";
+
+}
+
+
+
+/* =========================================================
+   DAY CITY
+========================================================= */
+
+function dayCity(date){
+
+  const items =
+    groupedDays[date] ||
+    [];
+
+
+  for(
+    const item of items
+  ){
+
+    const city =
+      item.place?.city ||
+      item.restaurant?.city;
+
+
+    if(city){
+      return city;
+    }
+
+  }
+
+
+  return (
+    trip?.country ||
+    ""
+  );
+
+}
+
+
+
+/* =========================================================
+   STAMP
+========================================================= */
+
+function cityStamp(city){
+
+  const value =
+    norm(
+      city
+    );
+
+
+  if(
+    value.includes("kyoto")
+  ){
+    return "京都";
+  }
+
+
+  if(
+    value.includes("osaka")
+  ){
+    return "大阪";
+  }
+
+
+  if(
+    value.includes("nara")
+  ){
+    return "奈良";
+  }
+
+
+  if(
+    value.includes("nagoya")
+  ){
+    return "名古屋";
+  }
+
+
+  if(
+    value.includes("wakayama")
+  ){
+    return "和歌山";
+  }
+
+
+  if(
+    value.includes("tanabe")
+  ){
+    return "田辺";
+  }
+
+
+  if(
+    value.includes("koya")
+  ){
+    return "高野";
+  }
+
+
+  if(
+    value.includes("nachi")
+  ){
+    return "那智";
+  }
+
+
+  return "旅";
+
+}
+
+
+
+/* =========================================================
+   DAY NUMBER
+========================================================= */
+
+function dayNumber(date){
+
+  if(
+    !trip?.start_date
+  ){
+    return 1;
+  }
+
+
+  const start =
+    parseDate(
+      trip.start_date
+    );
+
+
+  const current =
+    parseDate(
+      date
+    );
+
+
+  const diff =
+    Math.round(
+      (
+        current -
+        start
+      )
+      /
+      86400000
+    );
+
+
+  return diff + 1;
+
+}
+
+
+
+/* =========================================================
+   RENDER DAY
+========================================================= */
+
+function renderDay(){
+
+  const items =
+    groupedDays[
+      selectedDate
+    ] ||
+    [];
+
+
+  const parts =
+    dateParts(
+      selectedDate
+    );
+
+
+  const city =
+    dayCity(
+      selectedDate
+    );
+
+
+  main.classList.toggle(
+    "editing",
+    editing
+  );
+
+
+  if(!items.length){
+
+    dayContent.innerHTML = `
+
+      <div class="state first-use-state">
+
+        <div class="first-use-kicker">
+          DAY ${String(
+            dayNumber(
+              selectedDate
+            )
+          ).padStart(2,"0")} · ${esc(parts.weekdayLong.toUpperCase())}
+        </div>
+
+        <strong>
+          Start building this day
+        </strong>
+
+        <div class="first-use-copy">
+          Add a place you want to visit, a meal, or anything else you already know you want to do.
+        </div>
+
+        <button
+          class="first-use-primary"
+          type="button"
+          onclick="openNewItem()"
+        >
+          ＋ ADD YOUR FIRST STOP
+        </button>
+
+        <div class="first-use-types">
+
+          <button
+            class="first-use-type"
+            type="button"
+            onclick="openNewItem();setFormType('place')"
+          >
+            📍 PLACE
+          </button>
+
+          <button
+            class="first-use-type"
+            type="button"
+            onclick="openNewItem();setFormType('restaurant')"
+          >
+            🍽 FOOD
+          </button>
+
+          <button
+            class="first-use-type"
+            type="button"
+            onclick="openNewItem();setFormType('custom')"
+          >
+            ✏️ CUSTOM
+          </button>
+
+        </div>
+
+        <button
+          class="first-use-assist"
+          type="button"
+          onclick="setAssistMode('planning');setAssistOpen(true)"
+        >
+          ✦ NEED IDEAS? ASK TRAVEL ASSIST
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  dayContent.innerHTML = `
+
+    <section class="day-card">
+
+
+      <div class="day-card-header">
+
+
+        <div class="day-meta-row">
+
+
+          <div class="day-number">
+
+            DAY
+            ${String(
+              dayNumber(
+                selectedDate
+              )
+            ).padStart(2,"0")}
+
+            ${
+              city
+              ?
+              ` · ${esc(city.toUpperCase())}`
+              :
+              ""
+            }
+
+          </div>
+
+
+          <div class="day-date-side">
+
+            ${esc(parts.weekdayLong)}
+
+            <br>
+
+            ${esc(parts.day)}
+            ${esc(parts.month)}
+
+          </div>
+
+
+        </div>
+
+
+        <div class="day-route-title">
+
+          ${esc(
+            dayRouteTitle(
+              selectedDate
+            )
+          )}
+
+        </div>
+
+
+        <div class="day-stamp">
+
+          ${esc(
+            cityStamp(
+              city
+            )
+          )}
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="timeline">
+
+        ${
+          items
+            .map(
+              timelineHTML
+            )
+            .join("")
+        }
+
+      </div>
+
+
+    </section>
+
+  `;
+
+}
+
+
+
+/* =========================================================
+   TIMELINE HTML
+========================================================= */
+
+function timelineHTML(item){
+
+  const map =
+    itemMap(
+      item
+    );
+
+
+  const location =
+    itemLocation(
+      item
+    );
+
+
+  return `
+
+    <div class="timeline-row">
+
+
+      <div class="timeline-time">
+
+        ${esc(
+          itemTime(
+            item
+          )
+        )}
+
+      </div>
+
+
+      <div class="marker">
+
+        <span class="dot"></span>
+
+      </div>
+
+
+      <div class="item-main">
+
+
+        <div class="item-title">
+
+          ${
+            map
+
+            ?
+
+            `
+              <a
+                href="${esc(map)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${esc(item.title)}
+              </a>
+            `
+
+            :
+
+            esc(item.title)
+          }
+
+
+          ${
+            item.is_optional
+
+            ?
+
+            `
+              <span class="optional">
+                OPTIONAL
+              </span>
+            `
+
+            :
+
+            ""
+          }
+
+
+          ${
+            item.is_locked
+
+            ?
+
+            `
+              <span class="locked">
+                LOCKED
+              </span>
+            `
+
+            :
+
+            ""
+          }
+
+        </div>
+
+
+        ${
+          location &&
+          norm(location) !==
+          norm(item.title)
+
+          ?
+
+          `
+            <div class="item-location">
+
+              📍 ${esc(location)}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          item.notes ||
+          item.description
+
+          ?
+
+          `
+            <div class="item-note">
+
+              ${esc(
+                item.notes ||
+                item.description
+              )}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+      </div>
+
+
+      <button
+        class="row-edit"
+        type="button"
+        onclick="openEditItem(${Number(item.id)})"
+        aria-label="Edit"
+      >
+        ✎
+      </button>
+
+
+    </div>
+
+  `;
+
+}
+
+
+
+/* =========================================================
+   ADD / EDIT MODE
+========================================================= */
+
+addButton.onclick =
+  openNewItem;
+
+
+editButton.onclick =
+  () => {
+
+    editing =
+      !editing;
+
+
+    editButton.classList.toggle(
+      "active",
+      editing
+    );
+
+
+    editButton.textContent =
+      editing
+      ?
+      "✓"
+      :
+      "✎";
+
+
+    renderDay();
+
+  };
+
+
+
+/* =========================================================
+   EDIT SHEET
+========================================================= */
+
+document
+  .getElementById(
+    "closeSheet"
+  )
+  .onclick =
+    closeEditSheet;
+
+
+editSheet.onclick =
+  event => {
+
+    if(
+      event.target ===
+      editSheet
+    ){
+
+      closeEditSheet();
+
+    }
+
+  };
+
+
+function closeEditSheet(){
+
+  editSheet.classList.remove(
+    "open"
+  );
+
+
+  entityResults.classList.remove(
+    "show"
+  );
+
+}
+
+
+
+/* =========================================================
+   TYPE SELECTOR
+========================================================= */
+
+typeGrid
+  .querySelectorAll(
+    "[data-type]"
+  )
+  .forEach(
+    button => {
+
+      button.onclick =
+        () => {
+
+          setFormType(
+            button.dataset.type
+          );
+
+        };
+
+    }
+  );
+
+
+function setFormType(type){
+
+  formType =
+    type;
+
+
+  typeGrid
+    .querySelectorAll(
+      "[data-type]"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.type ===
+          type
+        );
+
+      }
+    );
+
+
+  entityResults.classList.remove(
+    "show"
+  );
+
+
+  googleAddBox.classList.remove(
+    "show"
+  );
+
+
+  if(
+    type === "custom"
+  ){
+
+    selectedPlaceId =
+      null;
+
+
+    selectedRestaurantId =
+      null;
+
+
+    entityPicker.style.display =
+      "none";
+
+
+    selectedEntity.classList.remove(
+      "show"
+    );
+
+
+    masterHelp.classList.remove(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  entityPicker.style.display =
+    "block";
+
+
+  masterHelp.classList.add(
+    "show"
+  );
+
+
+  if(
+    type === "place"
+  ){
+
+    selectedRestaurantId =
+      null;
+
+
+    entityPickerTitle.textContent =
+      "📍 MY SAVED PLACES";
+
+
+    entityPickerSub.textContent =
+      placeCountryFallback
+      ?
+      `No saved places matched "${trip?.country || ""}" — showing all saved places.`
+      :
+      trip?.country
+      ?
+      `Showing saved places for ${trip.country}.`
+      :
+      "Search your saved places.";
+
+
+    entitySearch.placeholder =
+      "Search places...";
+
+
+    masterHelpText.textContent =
+      "Can't find the place?";
+
+
+    masterHelpButton.textContent =
+      "＋ ADD NEW PLACE";
+
+  }
+
+
+  else{
+
+    selectedPlaceId =
+      null;
+
+
+    entityPickerTitle.textContent =
+      "🍽 CHOOSE FROM SAVED RESTAURANTS";
+
+
+    entityPickerSub.textContent =
+      restaurantCountryFallback
+      ?
+      `No restaurants matched "${trip?.country || ""}" — showing all saved restaurants.`
+      :
+      trip?.country
+      ?
+      `Showing restaurants for ${trip.country}.`
+      :
+      "Search your saved restaurants.";
+
+
+    entitySearch.placeholder =
+      "Search restaurants...";
+
+
+    masterHelpText.textContent =
+      "Can't find the restaurant?";
+
+
+    masterHelpButton.textContent =
+      "＋ ADD RESTAURANT";
+
+  }
+
+
+  updateSelectedEntity();
+
+}
+
+
+
+/* =========================================================
+   MASTER HELP
+========================================================= */
+
+masterHelpButton.onclick =
+  async () => {
+
+    if(
+      formType === "place"
+    ){
+
+      googleAddBox.classList.add(
+        "show"
+      );
+
+
+      await initGooglePlaceAutocomplete();
+
+    }
+
+
+    else if(
+      formType === "restaurant"
+    ){
+
+      location.href =
+        `food.html?trip=${TRIP_ID}`;
+
+    }
+
+  };
+
+
+
+/* =========================================================
+   GOOGLE PLACES
+========================================================= */
+
+let googlePlaceAutocomplete =
+  null;
+
+
+function setGooglePlaceStatus(
+  message,
+  type=""
+){
+
+  const el =
+    document.getElementById(
+      "googlePlaceStatus"
+    );
+
+
+  if(!el){
+    return;
+  }
+
+
+  el.textContent =
+    message;
+
+
+  el.className =
+    `place-status ${type}`
+      .trim();
+
+}
+
+
+function addressPart(
+  components,
+  wantedTypes
+){
+
+  const item =
+    (components || [])
+      .find(
+        component =>
+          wantedTypes.some(
+            type =>
+              component.types?.includes(
+                type
+              )
+          )
+      );
+
+
+  return (
+    item?.longText ||
+    item?.shortText ||
+    ""
+  );
+
+}
+
+
+async function initGooglePlaceAutocomplete(){
+
+  const host =
+    document.getElementById(
+      "googlePlaceSearch"
+    );
+
+
+  if(!host){
+    return;
+  }
+
+
+  if(
+    googlePlaceAutocomplete &&
+    host.contains(
+      googlePlaceAutocomplete
+    )
+  ){
+
+    return;
+
+  }
+
+
+  googlePlaceAutocomplete =
+    null;
+
+
+  try{
+
+    setGooglePlaceStatus(
+      "Loading Google Places…"
+    );
+
+
+    if(
+      typeof window.loadGoogleMaps !== "function" ||
+      typeof window.getGooglePlaces !== "function" ||
+      typeof window.createGooglePlaceAutocomplete !== "function" ||
+      typeof window.getGooglePlaceDetails !== "function" ||
+      typeof window.normalizeGooglePlace !== "function"
+    ){
+
+      throw new Error(
+        "The Google Maps helper functions were not found."
+      );
+
+    }
+
+
+    await window.loadGoogleMaps();
+
+
+    await window.getGooglePlaces();
+
+
+    googlePlaceAutocomplete =
+      await window.createGooglePlaceAutocomplete(
+        host,
+        {
+          placeholder:
+            `Search place${
+              trip?.country
+              ?
+              " in " +
+              trip.country
+              :
+              ""
+            }...`
+        }
+      );
+
+
+    googlePlaceAutocomplete
+      .addEventListener(
+        "gmp-select",
+        async event => {
+
+          try{
+
+            setGooglePlaceStatus(
+              "Getting place details…"
+            );
+
+
+            const place =
+              await window.getGooglePlaceDetails(
+                event
+              );
+
+
+            const data =
+              window.normalizeGooglePlace(
+                place
+              );
+
+
+            const components =
+              place.addressComponents ||
+              [];
+
+
+            const prefecture =
+              data.prefecture ||
+              addressPart(
+                components,
+                [
+                  "administrative_area_level_1"
+                ]
+              ) ||
+              null;
+
+
+            const city =
+              data.city ||
+              addressPart(
+                components,
+                [
+                  "locality",
+                  "postal_town",
+                  "administrative_area_level_2"
+                ]
+              ) ||
+              null;
+
+
+            const area =
+              data.area ||
+              addressPart(
+                components,
+                [
+                  "sublocality_level_1",
+                  "sublocality",
+                  "administrative_area_level_3"
+                ]
+              ) ||
+              null;
+
+
+            const country =
+              data.country ||
+              addressPart(
+                components,
+                [
+                  "country"
+                ]
+              ) ||
+              trip?.country ||
+              null;
+
+
+            const providerPlaceId =
+              data.provider_place_id ||
+              data.google_place_id ||
+              place.id ||
+              null;
+
+
+            if(
+              !providerPlaceId
+            ){
+
+              throw new Error(
+                "Google did not return a Place ID."
+              );
+
+            }
+
+
+            const existing =
+              await db
+                .from(
+                  "places"
+                )
+                .select("*")
+                .eq(
+                  "provider",
+                  "google"
+                )
+                .eq(
+                  "provider_place_id",
+                  providerPlaceId
+                )
+                .maybeSingle();
+
+
+            if(
+              existing.error
+            ){
+
+              throw existing.error;
+
+            }
+
+
+            let savedPlace =
+              existing.data ||
+              null;
+
+
+            if(
+              !savedPlace
+            ){
+
+              const payload = {
+
+                name:
+                  data.name ||
+                  place.displayName ||
+                  "Unnamed place",
+
+                country:
+                  country,
+
+                prefecture:
+                  prefecture,
+
+                city:
+                  city,
+
+                area:
+                  area,
+
+                address:
+                  data.address ||
+                  place.formattedAddress ||
+                  null,
+
+                latitude:
+                  data.latitude ??
+                  null,
+
+                longitude:
+                  data.longitude ??
+                  null,
+
+                maps_url:
+                  data.maps_url ||
+                  place.googleMapsURI ||
+                  null,
+
+                provider:
+                  "google",
+
+                provider_place_id:
+                  providerPlaceId,
+
+                updated_at:
+                  new Date().toISOString()
+
+              };
+
+
+              const created =
+                await db
+                  .from(
+                    "places"
+                  )
+                  .insert(
+                    payload
+                  )
+                  .select()
+                  .single();
+
+
+              if(
+                created.error
+              ){
+
+                if(
+                  created.error.code ===
+                  "23505"
+                ){
+
+                  const duplicate =
+                    await db
+                      .from(
+                        "places"
+                      )
+                      .select("*")
+                      .eq(
+                        "provider",
+                        "google"
+                      )
+                      .eq(
+                        "provider_place_id",
+                        providerPlaceId
+                      )
+                      .single();
+
+
+                  if(
+                    duplicate.error
+                  ){
+
+                    throw duplicate.error;
+
+                  }
+
+
+                  savedPlace =
+                    duplicate.data;
+
+                }
+
+
+                else{
+
+                  throw created.error;
+
+                }
+
+              }
+
+
+              else{
+
+                savedPlace =
+                  created.data;
+
+              }
+
+            }
+
+
+            const index =
+              places.findIndex(
+                row =>
+                  Number(row.id) ===
+                  Number(savedPlace.id)
+              );
+
+
+            if(
+              index >= 0
+            ){
+
+              places[index] =
+                savedPlace;
+
+            }
+
+
+            else{
+
+              places.push(
+                savedPlace
+              );
+
+
+              places.sort(
+                (a,b) =>
+                  String(
+                    a.name ||
+                    ""
+                  )
+                  .localeCompare(
+                    String(
+                      b.name ||
+                      ""
+                    )
+                  )
+              );
+
+            }
+
+
+            selectedPlaceId =
+              savedPlace.id;
+
+
+            selectedRestaurantId =
+              null;
+
+
+            entitySearch.value =
+              savedPlace.name ||
+              "";
+
+
+            fieldTitle.value =
+              savedPlace.name ||
+              "";
+
+
+            fieldLocation.value =
+              [
+                savedPlace.area,
+                savedPlace.city,
+                savedPlace.prefecture
+              ]
+              .filter(Boolean)
+              .join(", ")
+              ||
+              savedPlace.address
+              ||
+              "";
+
+
+            entityResults.classList.remove(
+              "show"
+            );
+
+
+            googleAddBox.classList.remove(
+              "show"
+            );
+
+
+            updateSelectedEntity();
+
+
+            setGooglePlaceStatus(
+              `✓ ${savedPlace.name} saved to Places.`,
+              "success"
+            );
+
+
+            formMessage.textContent =
+              "Google verified ✓ Place saved and selected.";
+
+
+            formMessage.className =
+              "form-message success";
+
+          }
+
+
+          catch(error){
+
+            console.error(
+              "Google Places selection:",
+              error
+            );
+
+
+            setGooglePlaceStatus(
+              "Google place error: " +
+              (
+                error.message ||
+                String(error)
+              ),
+              "error"
+            );
+
+          }
+
+        }
+      );
+
+
+    setGooglePlaceStatus(
+      "Search for a place and select the correct Google result."
+    );
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "Google Places init:",
+      error
+    );
+
+
+    setGooglePlaceStatus(
+      "Google Places error: " +
+      (
+        error.message ||
+        String(error)
+      ),
+      "error"
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   OPEN NEW ITEM
+========================================================= */
+
+function openNewItem(){
+
+  editingId =
+    null;
+
+
+  selectedPlaceId =
+    null;
+
+
+  selectedRestaurantId =
+    null;
+
+
+  sheetTitle.textContent =
+    "＋ Add Schedule Item";
+
+
+  deleteButton.style.display =
+    "none";
+
+
+  fieldDate.value =
+    selectedDate;
+
+
+  fieldTime.value =
+    "";
+
+
+  fieldTimeLabel.value =
+    "";
+
+
+  fieldTitle.value =
+    "";
+
+
+  fieldLocation.value =
+    "";
+
+
+  fieldNotes.value =
+    "";
+
+
+  fieldOptional.checked =
+    false;
+
+
+  entitySearch.value =
+    "";
+
+
+  googleAddBox.classList.remove(
+    "show"
+  );
+
+
+  setFormType(
+    "place"
+  );
+
+
+  updateSelectedEntity();
+
+
+  formMessage.className =
+    "form-message";
+
+
+  editSheet.classList.add(
+    "open"
+  );
+
+
+  renderEntityResults(
+    ""
+  );
+
+}
+
+
+
+/* =========================================================
+   OPEN EDIT ITEM
+========================================================= */
+
+function openEditItem(id){
+
+  const item =
+    schedule.find(
+      row =>
+        Number(row.id) ===
+        Number(id)
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  editingId =
+    item.id;
+
+
+  selectedPlaceId =
+    item.place_id ||
+    null;
+
+
+  selectedRestaurantId =
+    item.restaurant_id ||
+    null;
+
+
+  sheetTitle.textContent =
+    "Edit Schedule Item";
+
+
+  deleteButton.style.display =
+    "block";
+
+
+  fieldDate.value =
+    item.schedule_date;
+
+
+  fieldTime.value =
+    item.start_time
+    ?
+    item.start_time.slice(
+      0,
+      5
+    )
+    :
+    "";
+
+
+  fieldTimeLabel.value =
+    item.time_label ||
+    "";
+
+
+  fieldTitle.value =
+    item.title ||
+    "";
+
+
+  fieldLocation.value =
+    item.location_name ||
+    "";
+
+
+  fieldNotes.value =
+    item.notes ||
+    item.description ||
+    "";
+
+
+  fieldOptional.checked =
+    Boolean(
+      item.is_optional
+    );
+
+
+  if(
+    item.restaurant_id
+  ){
+
+    setFormType(
+      "restaurant"
+    );
+
+
+    entitySearch.value =
+      item.restaurant?.name ||
+      "";
+
+  }
+
+
+  else if(
+    item.place_id
+  ){
+
+    setFormType(
+      "place"
+    );
+
+
+    entitySearch.value =
+      item.place?.name ||
+      "";
+
+  }
+
+
+  else{
+
+    setFormType(
+      "custom"
+    );
+
+
+    entitySearch.value =
+      "";
+
+  }
+
+
+  updateSelectedEntity();
+
+
+  formMessage.className =
+    "form-message";
+
+
+  editSheet.classList.add(
+    "open"
+  );
+
+}
+
+
+
+/* =========================================================
+   ENTITY SEARCH
+========================================================= */
+
+entitySearch.addEventListener(
+  "focus",
+  () => {
+
+    if(
+      formType !== "custom" &&
+      entitySearch.value.trim()
+    ){
+
+      renderEntityResults(
+        entitySearch.value
+      );
+
+    }
+
+  }
+);
+
+
+entitySearch.addEventListener(
+  "input",
+  () => {
+
+    if(
+      formType === "custom"
+    ){
+      return;
+    }
+
+
+    if(
+      formType === "place"
+    ){
+
+      selectedPlaceId =
+        null;
+
+    }
+
+
+    else if(
+      formType === "restaurant"
+    ){
+
+      selectedRestaurantId =
+        null;
+
+    }
+
+
+    updateSelectedEntity();
+
+
+    renderEntityResults(
+      entitySearch.value
+    );
+
+  }
+);
+
+
+
+/* =========================================================
+   ENTITY RESULTS
+========================================================= */
+
+function renderEntityResults(
+  queryValue
+){
+
+  const query =
+    norm(
+      queryValue
+    );
+
+
+  if(!query){
+
+    entityResults.innerHTML =
+      "";
+
+
+    entityResults.classList.remove(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  const source =
+    formType === "restaurant"
+    ?
+    restaurants
+    :
+    places;
+
+
+  let matches =
+    source.filter(
+      item => {
+
+        const haystack =
+          norm(
+            [
+              item.name,
+              item.name_japanese,
+              item.country,
+              item.prefecture,
+              item.city,
+              item.area,
+              item.location,
+              item.address
+            ]
+            .join(" ")
+          );
+
+
+        return haystack.includes(
+          query
+        );
+
+      }
+    );
+
+
+  matches =
+    matches.slice(
+      0,
+      12
+    );
+
+
+  if(
+    !matches.length
+  ){
+
+    entityResults.innerHTML = `
+
+      <div class="entity-empty">
+
+        No ${
+          formType === "restaurant"
+          ?
+          "restaurants"
+          :
+          "places"
+        } found.
+
+        <br><br>
+
+        ${
+          formType === "place"
+          ?
+          "Use “ADD NEW PLACE” below."
+          :
+          "Add it to your saved restaurants first."
+        }
+
+      </div>
+
+    `;
+
+
+    entityResults.classList.add(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  entityResults.innerHTML =
+    matches
+      .map(
+        item => {
+
+          const meta =
+            entityMeta(
+              item
+            );
+
+
+          return `
+
+            <button
+              class="entity-result"
+              type="button"
+              data-id="${Number(item.id)}"
+            >
+
+              <div class="entity-result-icon">
+
+                ${
+                  formType === "restaurant"
+                  ?
+                  "🍽️"
+                  :
+                  "📍"
+                }
+
+              </div>
+
+
+              <div class="entity-result-main">
+
+                <div class="entity-result-name">
+
+                  ${esc(item.name)}
+
+                </div>
+
+
+                ${
+                  item.name_japanese
+
+                  ?
+
+                  `
+                    <div class="entity-result-japanese">
+                      ${esc(item.name_japanese)}
+                    </div>
+                  `
+
+                  :
+
+                  ""
+                }
+
+
+                ${
+                  meta
+
+                  ?
+
+                  `
+                    <div class="entity-result-meta">
+                      ${esc(meta)}
+                    </div>
+                  `
+
+                  :
+
+                  ""
+                }
+
+              </div>
+
+
+              <div class="entity-result-arrow">
+                ＋
+              </div>
+
+            </button>
+
+          `;
+
+        }
+      )
+      .join("");
+
+
+  entityResults.classList.add(
+    "show"
+  );
+
+
+  entityResults
+    .querySelectorAll(
+      "[data-id]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            chooseEntity(
+              Number(
+                button.dataset.id
+              )
+            );
+
+          };
+
+      }
+    );
+
+}
+
+
+
+/* =========================================================
+   CHOOSE ENTITY
+========================================================= */
+
+function chooseEntity(id){
+
+  const source =
+    formType === "restaurant"
+    ?
+    restaurants
+    :
+    places;
+
+
+  const item =
+    source.find(
+      row =>
+        Number(row.id) ===
+        Number(id)
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  if(
+    formType === "restaurant"
+  ){
+
+    selectedRestaurantId =
+      item.id;
+
+
+    selectedPlaceId =
+      null;
+
+  }
+
+
+  else{
+
+    selectedPlaceId =
+      item.id;
+
+
+    selectedRestaurantId =
+      null;
+
+  }
+
+
+  entitySearch.value =
+    item.name ||
+    "";
+
+
+  fieldTitle.value =
+    item.name ||
+    "";
+
+
+  fieldLocation.value =
+    [
+      item.area,
+      item.city
+    ]
+    .filter(Boolean)
+    .join(", ");
+
+
+  entityResults.classList.remove(
+    "show"
+  );
+
+
+  updateSelectedEntity();
+
+}
+
+
+
+/* =========================================================
+   SELECTED ENTITY
+========================================================= */
+
+function updateSelectedEntity(){
+
+  let item =
+    null;
+
+
+  if(
+    formType === "place" &&
+    selectedPlaceId
+  ){
+
+    item =
+      places.find(
+        row =>
+          Number(row.id) ===
+          Number(selectedPlaceId)
+      );
+
+  }
+
+
+  else if(
+    formType === "restaurant" &&
+    selectedRestaurantId
+  ){
+
+    item =
+      restaurants.find(
+        row =>
+          Number(row.id) ===
+          Number(selectedRestaurantId)
+      );
+
+  }
+
+
+  if(!item){
+
+    selectedEntity.classList.remove(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  selectedEntityIcon.textContent =
+    formType === "restaurant"
+    ?
+    "🍽️"
+    :
+    "📍";
+
+
+  selectedEntityLabel.textContent =
+    formType === "restaurant"
+    ?
+    "SELECTED RESTAURANT"
+    :
+    "SELECTED PLACE";
+
+
+  selectedEntityName.textContent =
+    item.name ||
+    "";
+
+
+  selectedEntityMeta.textContent =
+    entityMeta(
+      item
+    );
+
+
+  selectedEntity.classList.add(
+    "show"
+  );
+
+}
+
+
+
+/* =========================================================
+   CHANGE ENTITY
+========================================================= */
+
+document
+  .getElementById(
+    "changeEntityButton"
+  )
+  .onclick =
+    () => {
+
+      if(
+        formType === "place"
+      ){
+
+        selectedPlaceId =
+          null;
+
+      }
+
+
+      else if(
+        formType === "restaurant"
+      ){
+
+        selectedRestaurantId =
+          null;
+
+      }
+
+
+      entitySearch.value =
+        "";
+
+
+      updateSelectedEntity();
+
+
+      renderEntityResults(
+        ""
+      );
+
+
+      entitySearch.focus();
+
+    };
+
+
+
+/* =========================================================
+   TIME INPUT
+========================================================= */
+
+fieldTime.addEventListener(
+  "input",
+  () => {
+
+    if(
+      fieldTime.value
+    ){
+
+      fieldTimeLabel.value =
+        "";
+
+    }
+
+  }
+);
+
+
+fieldTimeLabel.addEventListener(
+  "input",
+  () => {
+
+    if(
+      fieldTimeLabel.value.trim()
+    ){
+
+      fieldTime.value =
+        "";
+
+    }
+
+  }
+);
+
+
+
+/* =========================================================
+   SORT ORDER
+========================================================= */
+
+function nextSortOrder(date){
+
+  const rows =
+    groupedDays[
+      date
+    ] ||
+    [];
+
+
+  if(
+    !rows.length
+  ){
+
+    return 10;
+
+  }
+
+
+  const max =
+    Math.max(
+      ...rows.map(
+        row =>
+          Number(
+            row.sort_order ||
+            0
+          )
+      )
+    );
+
+
+  return max + 10;
+
+}
+
+
+
+/* =========================================================
+   SAVE ITEM
+========================================================= */
+
+document
+  .getElementById(
+    "editForm"
+  )
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+
+      saveButton.disabled =
+        true;
+
+
+      saveButton.textContent =
+        "SAVING…";
+
+
+      formMessage.className =
+        "form-message";
+
+
+      try{
+
+        const date =
+          fieldDate.value;
+
+
+        const time =
+          fieldTime.value;
+
+
+        const timeLabel =
+          fieldTimeLabel
+            .value
+            .trim();
+
+
+        const title =
+          fieldTitle
+            .value
+            .trim();
+
+
+        const locationName =
+          fieldLocation
+            .value
+            .trim();
+
+
+        const notes =
+          fieldNotes
+            .value
+            .trim();
+
+
+        if(!date){
+
+          throw new Error(
+            "Please choose a date."
+          );
+
+        }
+
+
+        if(!title){
+
+          throw new Error(
+            "Please enter a title."
+          );
+
+        }
+
+
+        if(
+          formType === "place" &&
+          !selectedPlaceId
+        ){
+
+          throw new Error(
+            "Please choose a saved place."
+          );
+
+        }
+
+
+        if(
+          formType === "restaurant" &&
+          !selectedRestaurantId
+        ){
+
+          throw new Error(
+            "Please choose a saved restaurant."
+          );
+
+        }
+
+
+        const payload = {
+
+          trip_id:
+            TRIP_ID,
+
+          schedule_date:
+            date,
+
+          start_time:
+            time
+            ?
+            `${time}:00`
+            :
+            null,
+
+          time_label:
+            time
+            ?
+            null
+            :
+            (
+              timeLabel ||
+              null
+            ),
+
+          title:
+            title,
+
+          item_type:
+            formType === "restaurant"
+            ?
+            "restaurant"
+            :
+            formType === "place"
+            ?
+            "attraction"
+            :
+            "custom",
+
+          notes:
+            notes ||
+            null,
+
+          location_name:
+            locationName ||
+            null,
+
+          place_id:
+            formType === "place"
+            ?
+            selectedPlaceId
+            :
+            null,
+
+          restaurant_id:
+            formType === "restaurant"
+            ?
+            selectedRestaurantId
+            :
+            null,
+
+          is_optional:
+            fieldOptional.checked
+
+        };
+
+
+        if(
+          editingId === null
+        ){
+
+          payload.sort_order =
+            nextSortOrder(
+              date
+            );
+
+
+          const result =
+            await db
+              .from(
+                "schedule"
+              )
+              .insert(
+                payload
+              )
+              .select()
+              .single();
+
+
+          if(
+            result.error
+          ){
+
+            throw result.error;
+
+          }
+
+        }
+
+
+        else{
+
+          const result =
+            await db
+              .from(
+                "schedule"
+              )
+              .update(
+                payload
+              )
+              .eq(
+                "id",
+                editingId
+              )
+              .eq(
+                "trip_id",
+                TRIP_ID
+              )
+              .select();
+
+
+          if(
+            result.error
+          ){
+
+            throw result.error;
+
+          }
+
+
+          if(
+            !result.data ||
+            !result.data.length
+          ){
+
+            throw new Error(
+              "The item was not updated. Check your editing permission."
+            );
+
+          }
+
+        }
+
+
+        selectedDate =
+          date;
+
+
+        closeEditSheet();
+
+
+        await reloadSchedule();
+
+      }
+
+
+      catch(error){
+
+        console.error(
+          error
+        );
+
+
+        formMessage.textContent =
+          error.message ||
+          "Couldn't save schedule item.";
+
+
+        formMessage.className =
+          "form-message error";
+
+      }
+
+
+      finally{
+
+        saveButton.disabled =
+          false;
+
+
+        saveButton.textContent =
+          "SAVE";
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================================
+   DELETE ITEM
+========================================================= */
+
+deleteButton.onclick =
+  async () => {
+
+    if(
+      editingId === null
+    ){
+
+      return;
+
+    }
+
+
+    const item =
+      schedule.find(
+        row =>
+          Number(row.id) ===
+          Number(editingId)
+      );
+
+
+    if(!item){
+      return;
+    }
+
+
+    const okay =
+      confirm(
+        `Delete "${item.title}" from the schedule?`
+      );
+
+
+    if(!okay){
+      return;
+    }
+
+
+    deleteButton.disabled =
+      true;
+
+
+    try{
+
+      const result =
+        await db
+          .from(
+            "schedule"
+          )
+          .delete()
+          .eq(
+            "id",
+            editingId
+          )
+          .eq(
+            "trip_id",
+            TRIP_ID
+          );
+
+
+      if(
+        result.error
+      ){
+
+        throw result.error;
+
+      }
+
+
+      closeEditSheet();
+
+
+      await reloadSchedule();
+
+    }
+
+
+    catch(error){
+
+      console.error(
+        error
+      );
+
+
+      formMessage.textContent =
+        error.message ||
+        "Couldn't delete item.";
+
+
+      formMessage.className =
+        "form-message error";
+
+    }
+
+
+    finally{
+
+      deleteButton.disabled =
+        false;
+
+    }
+
+  };
+
+
+
+/* =========================================================
+   RELOAD
+========================================================= */
+
+async function reloadSchedule(){
+
+  const result =
+    await loadScheduleQuery();
+
+
+  if(
+    result.error
+  ){
+
+    throw result.error;
+
+  }
+
+
+  schedule =
+    result.data ||
+    [];
+
+
+  buildDays();
+
+  syncPlanModeLinks();
+
+  renderDates();
+
+  renderDay();
+
+}
+
+
+
+
+/* =========================================================
+   ASSIST CHAT
+========================================================= */
+const assistLaunch=document.getElementById("assistLaunch");
+const assistPanel=document.getElementById("assistPanel");
+const assistClose=document.getElementById("assistClose");
+const assistMessages=document.getElementById("assistMessages");
+const assistInput=document.getElementById("assistInput");
+const assistSend=document.getElementById("assistSend");
+const assistStatus=document.getElementById("assistStatus");
+const assistStarters=document.getElementById("assistStarters");
+const assistPlanningMode=document.getElementById("assistPlanningMode");
+const assistLiveMode=document.getElementById("assistLiveMode");
+const assistModeContext=document.getElementById("assistModeContext");
+const assistLaunchPlanning=document.getElementById("assistLaunchPlanning");
+const assistLaunchLive=document.getElementById("assistLaunchLive");
+let assistBusy=false;
+let assistMode=null;
+let assistModeManuallyChosen=false;
+
+function automaticAssistMode(){
+  const today=localDateString();
+  if(trip?.start_date&&trip?.end_date&&today>=trip.start_date&&today<=trip.end_date)return "live";
+  return "planning";
+}
+function isLivePreview(){return assistMode==="live"&&automaticAssistMode()!=="live"}
+function daysUntilTrip(){
+  if(!trip?.start_date)return null;
+  return Math.ceil((parseDate(trip.start_date)-parseDate(localDateString()))/86400000);
+}
+function assistSelectedDayLabel(){
+  if(!selectedDate)return "selected day";
+  const p=dateParts(selectedDate); return `${p.day} ${p.month}`;
+}
+function getAssistStarters(){
+  if(!schedule.length)return [
+    {icon:"✦",title:"Help me build this trip",sub:"Start from the trip dates and shape a sensible itinerary.",prompt:"I have just created this trip and my itinerary is empty. Help me decide how to start building it. Ask only for information you actually need, and use my trip dates and destination data where available."},
+    {icon:"1",title:"Plan my first day",sub:"Create a sensible starting point for the selected day.",prompt:`Help me plan my first itinerary day for ${selectedDate}. Suggest a simple, realistic structure and useful places, but do not add anything until I confirm.`},
+    {icon:"⌖",title:"I know where I'm going",sub:"Help me organise places I already have in mind.",prompt:"I already know some places I want to visit. Help me organise them into sensible trip days and routes. Do not change my schedule until I confirm."},
+    {icon:"▣",title:"What should I add first?",sub:"Explain the easiest order for plans, bookings and food.",prompt:"My trip is new and empty. Tell me the easiest order to add my itinerary, bookings and food so I can get set up without over-planning."}
+  ];
+  if(assistMode==="live")return [
+    {icon:"✦",title:"How's this day looking?",sub:"Check timing, pacing and possible problems.",prompt:`Review my plan for ${selectedDate}. In Live mode, tell me how the day is looking, what is next, and flag any timing or pacing problems.`},
+    {icon:"☔",title:"Will weather affect this day?",sub:"Check outdoor plans and suggest sensible alternatives.",prompt:`Check whether weather could affect my itinerary for ${selectedDate}. Only use live weather if it is actually available; do not invent weather.`},
+    {icon:"⌖",title:"What's around this itinerary?",sub:"Find useful places around the route I'm viewing.",prompt:`What useful or interesting places are near my itinerary for ${selectedDate}? Prioritise places that fit naturally around my route.`},
+    {icon:"🍽",title:"Where should I eat?",sub:"Find food that fits this day's route and timing.",prompt:`Help me choose where to eat around my itinerary for ${selectedDate}. Use my saved food and trip data where available.`},
+    {icon:"⏱",title:"I'm running late",sub:"Work out what to keep, move or skip.",prompt:`Pretend I am running late on ${selectedDate}. Review the itinerary and help me adjust the rest of the day without changing anything until I confirm.`}
+  ];
+  return [
+    {icon:"✦",title:"Review my itinerary",sub:"Check pacing, gaps and possible problems.",prompt:"Review my full itinerary. Look for pacing problems, unrealistic days, gaps, unnecessary backtracking and anything I should consider changing."},
+    {icon:"▣",title:"Check my bookings",sub:"See what's booked and what may still need reserving.",prompt:"Check my trip bookings and itinerary. Tell me what is already booked and what itinerary items may still need a reservation."},
+    {icon:"🍽",title:"Plan my food",sub:"Fit restaurants naturally around the itinerary.",prompt:`Help me plan food around my itinerary, especially the selected day ${selectedDate}. Use my saved restaurants and trip data.`},
+    {icon:"⌖",title:`Improve ${assistSelectedDayLabel()}`,sub:"Analyse the itinerary day currently selected above.",prompt:`Review my plan for ${selectedDate}. Suggest improvements to timing, route, pacing and useful additions, but do not change the schedule unless I confirm.`},
+    {icon:"$",title:"Review my spending",sub:"Check expenses, bookings and the trip budget.",prompt:"Review my trip spending, expenses and booking costs. Summarise how my spending looks using only the trip data you actually have."}
+  ];
+}
+function renderAssistMode(){
+  if(!assistMode)assistMode=automaticAssistMode();
+  assistPlanningMode.classList.toggle("active",assistMode==="planning");
+  assistLiveMode.classList.toggle("active",assistMode==="live");
+  assistLaunchPlanning?.classList.toggle("active",assistMode==="planning");
+  assistLaunchLive?.classList.toggle("active",assistMode==="live");
+  const auto=automaticAssistMode(), preview=isLivePreview(), until=daysUntilTrip();
+  if(assistMode==="live"){
+    assistModeContext.innerHTML=preview
+      ? `<span class="live-dot"></span><strong>Live preview</strong> · Testing ${esc(assistSelectedDayLabel())} as a travel day. Your real trip has not started yet.`
+      : `<span class="live-dot"></span><strong>Live trip</strong> · Using ${esc(assistSelectedDayLabel())} as the active itinerary day.`;
+  }else{
+    let detail="Preparing and reviewing this trip.";
+    if(auto==="live")detail="Planning view while your trip is currently in progress.";
+    else if(until!==null&&until>0)detail=`Trip starts in ${until} day${until===1?"":"s"}.`;
+    else if(until===0)detail="Trip starts today.";
+    else if(trip?.end_date&&localDateString()>trip.end_date)detail="Reviewing a completed trip.";
+    assistModeContext.innerHTML=`<strong>Planning mode</strong> · ${esc(detail)}`;
+  }
+  assistStarters.innerHTML=getAssistStarters().map((item,index)=>`<button class="assist-starter" type="button" data-assist-index="${index}"><span class="assist-starter-icon">${esc(item.icon)}</span><span><span class="assist-starter-text">${esc(item.title)}</span></span></button>`).join("");
+  assistStarters.classList.remove("hidden");
+  assistStarters.querySelectorAll("[data-assist-index]").forEach(button=>{button.onclick=()=>{const item=getAssistStarters()[Number(button.dataset.assistIndex)];if(item)askAssist(item.prompt)}});
+  assistStatus.textContent=assistMode==="live"?(preview?"Live Preview uses the itinerary day selected above.":"Live mode is focused on the active trip day."):"Planning mode is focused on preparing and improving your trip.";
+}
+function setAssistMode(mode,manual=true){if(mode!=="planning"&&mode!=="live")return;assistMode=mode;if(manual)assistModeManuallyChosen=true;renderAssistMode()}
+assistPlanningMode.onclick=()=>setAssistMode("planning");
+assistLiveMode.onclick=()=>setAssistMode("live");
+let assistThreadId=null;
+
+function setAssistOpen(open){
+  assistPanel.classList.toggle("open",open);
+  assistPanel.setAttribute("aria-hidden",String(!open));
+  assistLaunch.setAttribute("aria-expanded",String(open));
+  assistLaunch.style.display=open?"none":"flex";
+  if(open) setTimeout(()=>assistInput.focus(),50);
+}
+assistLaunch.onclick=event=>{
+  if(event.target.closest(".assist-launch-mode"))return;
+  setAssistOpen(true);
+};
+assistLaunch.onkeydown=event=>{
+  if(event.key==="Enter"||event.key===" "){
+    event.preventDefault();
+    setAssistOpen(true);
+  }
+};
+assistLaunchPlanning.onclick=event=>{
+  event.stopPropagation();
+  setAssistMode("planning");
+  setAssistOpen(true);
+};
+assistLaunchLive.onclick=event=>{
+  event.stopPropagation();
+  setAssistMode("live");
+  setAssistOpen(true);
+};
+assistClose.onclick=()=>setAssistOpen(false);
+
+function assistMessage(role,message,source=""){
+  document.getElementById("assistWelcome")?.remove();
+  if(role==="user") assistStarters?.classList.add("hidden");
+  const row=document.createElement("div"); row.className=`assist-msg ${role}`;
+  const bubble=document.createElement("div"); bubble.className="assist-bubble"; bubble.textContent=message;
+  if(source){
+    const meta=document.createElement("div"); meta.className="assist-source";
+    meta.textContent=source==="supabase"?"TRIP DATA":source==="gemini"?"AI ASSIST":source.toUpperCase();
+    bubble.appendChild(meta);
+  }
+  row.appendChild(bubble); assistMessages.appendChild(row);
+  assistMessages.scrollTop=assistMessages.scrollHeight;
+  return row;
+}
+
+function addAssistActions(row,data){
+  const bubble=row?.querySelector(".assist-bubble");
+  if(!bubble)return;
+
+  const actions=Array.isArray(data?.actions)
+    ? data.actions
+    : (data?.action ? [data.action] : []);
+
+  if(!actions.length)return;
+
+  const wrap=document.createElement("div");
+  wrap.className="assist-action-row";
+  bubble.appendChild(wrap);
+
+  const renderActions=()=>{
+    wrap.innerHTML="";
+
+    for(const action of actions){
+      const kind=text(action?.kind||action?.type||"").toLowerCase();
+      const button=document.createElement("button");
+      button.type="button";
+      button.className="assist-action-btn";
+      if(kind.includes("remove")||kind.includes("delete"))button.classList.add("danger");
+      button.textContent=text(action?.label||action?.title||defaultAssistActionLabel(kind)).toUpperCase();
+
+      button.onclick=async()=>{
+        if(kind==="map"&&action?.url){
+          window.open(action.url,"_blank","noopener");
+          return;
+        }
+
+        // If the backend gives us an existing master place/restaurant without a
+        // proposal yet, use the normal schedule editor as the confirmation UI.
+        if((kind==="add_schedule"||kind==="schedule_add") &&
+           !action?.proposal_id &&
+           (action?.place_id||action?.restaurant_id)){
+          openNewItem();
+          fieldDate.value=action.schedule_date||selectedDate||fieldDate.value;
+          if(action.start_time)fieldTime.value=String(action.start_time).slice(0,5);
+          if(action.title)fieldTitle.value=action.title;
+          if(action.location_name)fieldLocation.value=action.location_name;
+
+          if(action.restaurant_id){
+            setFormType("restaurant");
+            selectedRestaurantId=Number(action.restaurant_id);
+            selectedPlaceId=null;
+            entitySearch.value=action.title||"";
+          }else{
+            setFormType("place");
+            selectedPlaceId=Number(action.place_id);
+            selectedRestaurantId=null;
+            entitySearch.value=action.title||"";
+          }
+          updateSelectedEntity();
+          return;
+        }
+
+        // All writes from Assist go through a proposal. The HTML only renders
+        // confirmation; the Edge Function owns the actual database operation.
+        if(action?.proposal_id){
+          showAssistConfirmation(wrap,action,renderActions);
+          return;
+        }
+
+        // MOVE can also open the existing editor if the backend returned a
+        // concrete schedule row but has not created a proposal.
+        if((kind==="move_schedule"||kind==="update_schedule") && action?.schedule_id){
+          const item=schedule.find(x=>Number(x.id)===Number(action.schedule_id));
+          if(item){
+            openEditItem(item.id);
+            if(action.schedule_date)fieldDate.value=action.schedule_date;
+            if(action.start_time)fieldTime.value=String(action.start_time).slice(0,5);
+          }
+          return;
+        }
+      };
+
+      wrap.appendChild(button);
+    }
+  };
+
+  renderActions();
+}
+
+function defaultAssistActionLabel(kind){
+  if(kind==="add_schedule"||kind==="schedule_add")return "ADD TO SCHEDULE";
+  if(kind==="move_schedule"||kind==="update_schedule")return "MOVE";
+  if(kind==="remove_schedule"||kind==="delete_schedule")return "REMOVE FROM PLAN";
+  if(kind==="save_restaurant")return "SAVE FOOD";
+  if(kind==="add_booking")return "ADD BOOKING";
+  if(kind==="add_expense")return "ADD EXPENSE";
+  if(kind==="map")return "MAP";
+  return "CONFIRM";
+}
+
+function assistActionVerb(kind){
+  if(kind.includes("remove")||kind.includes("delete"))return "REMOVE";
+  if(kind.includes("move")||kind.includes("update"))return "MOVE";
+  if(kind==="save_restaurant")return "SAVE";
+  if(kind==="add_booking")return "ADD BOOKING";
+  if(kind==="add_expense")return "ADD EXPENSE";
+  return "ADD";
+}
+
+function assistConfirmationSummary(action){
+  if(action?.confirmation_text)return text(action.confirmation_text);
+
+  const bits=[];
+  if(action?.title)bits.push(text(action.title));
+
+  const date=text(action?.schedule_date||action?.date||"");
+  const from=text(action?.from_time||"");
+  const to=text(action?.to_time||action?.start_time||"");
+
+  if(date)bits.push(formatDisplayDate(date));
+  if(from&&to)bits.push(`${formatTime(from)} → ${formatTime(to)}`);
+  else if(to)bits.push(formatTime(to));
+
+  if(action?.amount){
+    bits.push(`${text(action.currency||"")} ${Number(action.amount).toLocaleString()}`.trim());
+  }
+  return bits.join(" · ")||"Confirm this change?";
+}
+
+function showAssistConfirmation(wrap,action,onCancel){
+  wrap.innerHTML="";
+  const kind=text(action?.kind||action?.type||"").toLowerCase();
+
+  const box=document.createElement("div");
+  box.className="assist-confirm";
+  box.style.width="100%";
+
+  const summary=document.createElement("div");
+  summary.textContent=assistConfirmationSummary(action);
+  box.appendChild(summary);
+
+  const buttons=document.createElement("div");
+  buttons.className="assist-action-row";
+
+  const confirm=document.createElement("button");
+  confirm.type="button";
+  confirm.className="assist-action-btn confirm";
+  if(kind.includes("remove")||kind.includes("delete")){
+    confirm.classList.remove("confirm");
+    confirm.classList.add("confirm-danger");
+  }
+  confirm.textContent=`CONFIRM ${assistActionVerb(kind)}`;
+
+  const cancel=document.createElement("button");
+  cancel.type="button";
+  cancel.className="assist-action-btn neutral";
+  cancel.textContent="CANCEL";
+  cancel.onclick=()=>onCancel();
+
+  confirm.onclick=async()=>{
+    confirm.disabled=true;
+    cancel.disabled=true;
+    confirm.textContent="WORKING…";
+
+    try{
+      const sessionResult=await db.auth.getSession();
+      const token=sessionResult.data?.session?.access_token;
+      if(!token)throw new Error("Your session expired.");
+
+      const {data:applied,error}=await db.functions.invoke("travel-assist",{
+        body:{
+          action:"apply",
+          trip_id:TRIP_ID,
+          proposal_id:action.proposal_id,
+          selected_date:selectedDate||null
+        },
+        headers:{Authorization:`Bearer ${token}`}
+      });
+
+      if(error)throw new Error(await invokeErrorText(error));
+      if(applied?.error)throw new Error(applied.error);
+
+      box.innerHTML="";
+      const done=document.createElement("div");
+      done.style.fontWeight="900";
+      done.style.color="var(--green)";
+      done.textContent=text(applied?.message||action?.success_message||"✓ Done");
+      box.appendChild(done);
+
+      await loadData();
+    }catch(error){
+      confirm.disabled=false;
+      cancel.disabled=false;
+      confirm.textContent=`CONFIRM ${assistActionVerb(kind)}`;
+      assistMessage("assistant",error.message||"I couldn't make that change yet.");
+    }
+  };
+
+  buttons.appendChild(confirm);
+  buttons.appendChild(cancel);
+  box.appendChild(buttons);
+  wrap.appendChild(box);
+}
+async function invokeErrorText(error){
+  let msg=error?.message||"Travel Assist request failed.";
+  try{
+    const ctx=error?.context;
+    if(ctx&&typeof ctx.json==="function"){
+      const body=await ctx.json();
+      msg=body?.error||body?.message||body?.details||msg;
+    }
+  }catch(_){}
+  return msg;
+}
+
+async function askAssist(forced=null){
+  if(assistBusy)return;
+  let message=text(forced??assistInput.value).trim();
+  if(!message)return;
+  if(!TRIP_ID){assistStatus.textContent="No trip selected.";return}
+
+  setAssistOpen(true);
+  assistBusy=true; assistSend.disabled=true; assistInput.disabled=true; assistInput.value="";
+  assistMessage("user",message);
+  const waiting=assistMessage("assistant","Checking your trip…");
+  assistStatus.textContent="Working…";
+
+  try{
+    const sessionResult=await db.auth.getSession();
+    if(sessionResult.error)throw sessionResult.error;
+    const token=sessionResult.data?.session?.access_token;
+    if(!token)throw new Error("Your session expired. Please sign in again.");
+
+    const body={
+      action:"chat",
+      trip_id:TRIP_ID,
+      message,
+      selected_date:selectedDate||null,
+      entry_point:"schedule",
+      assist_mode:assistMode||automaticAssistMode(),
+      live_preview:isLivePreview(),
+      context:{
+        selected_date:selectedDate||null,
+        page:"schedule",
+        assist_mode:assistMode||automaticAssistMode(),
+        live_preview:isLivePreview(),
+        selected_day_item_ids:schedule
+          .filter(x=>x.schedule_date===selectedDate)
+          .map(x=>x.id)
+      }
+    };
+    if(assistThreadId)body.thread_id=assistThreadId;
+
+    const {data,error}=await db.functions.invoke("travel-assist",{
+      body,
+      headers:{Authorization:`Bearer ${token}`}
+    });
+    if(error)throw new Error(await invokeErrorText(error));
+    if(data?.error)throw new Error(data.error);
+
+    const reply=text(data?.reply??data?.message).trim();
+    if(!reply)throw new Error("Travel Assist returned an empty response.");
+    if(data?.thread_id)assistThreadId=data.thread_id;
+
+    waiting.remove();
+    const answerRow=assistMessage("assistant",reply,data?.source||"");
+    addAssistActions(answerRow,data);
+    assistStatus.textContent=data?.ai_used?"Assist used your trip data to work this out.":"Answered from your trip data.";
+  }catch(error){
+    console.error("travel-assist",error);
+    waiting.remove();
+    assistMessage("assistant",`I couldn't answer that yet.\n\n${error.message||"Unknown error."}`);
+    assistStatus.textContent="Assist connection needs attention.";
+  }finally{
+    assistBusy=false; assistSend.disabled=false; assistInput.disabled=false; assistInput.focus();
+  }
+}
+
+assistSend.onclick=()=>askAssist();
+assistInput.addEventListener("keydown",event=>{
+  if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();askAssist()}
+});
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadData();
+
+</script>
+
+
+
+<script src="footer.js"></script>
+
+
+
+<script src="pwa.js"></script>
+</body>
+
+</html>

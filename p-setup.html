@@ -1,0 +1,3394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>Places Setup · Japan Trip</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="google-maps.js"></script>
+
+  <style>
+    :root{
+      --bg:#070c10;
+      --panel:#10161c;
+      --panel2:#151c23;
+      --line:#29323b;
+      --text:#f5f5f3;
+      --muted:#8f9aa4;
+      --red:#c96f68;
+      --blue:#5c9dff;
+      --green:#67c587;
+      --orange:#f4a34d;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,body{
+      margin:0;
+      min-height:100%;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    body{
+      padding-bottom:50px;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    .app{
+      width:min(100%,1080px);
+      margin:auto;
+      padding:22px 16px 50px;
+    }
+
+    .eyebrow{
+      color:var(--orange);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1.4px;
+      text-transform:uppercase;
+    }
+
+    h1{
+      font-family:Georgia,serif;
+      font-size:32px;
+      margin:6px 0;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    /* SUMMARY */
+
+    .summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .summary-card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .summary-label{
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+    }
+
+    .summary-number{
+      font-family:Georgia,serif;
+      font-size:27px;
+      margin-top:4px;
+    }
+
+    .summary-number.green{
+      color:var(--green);
+    }
+
+    .summary-number.orange{
+      color:var(--orange);
+    }
+
+    /* PROGRESS */
+
+    .progress{
+      height:8px;
+      margin-top:12px;
+      background:var(--panel);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0%;
+      background:var(--green);
+      transition:.25s ease;
+    }
+
+    /* TOOLBAR */
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      margin:18px 0;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:13px 16px;
+      background:var(--panel2);
+      color:var(--text);
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .btn.green{
+      flex:1;
+      color:#9cf6ba;
+      border-color:rgba(103,197,135,.45);
+      background:rgba(103,197,135,.10);
+    }
+
+    .btn.blue{
+      color:#a9cbff;
+      border-color:rgba(92,157,255,.45);
+      background:rgba(92,157,255,.10);
+    }
+
+    /* MAIN CARD */
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:var(--panel);
+      margin-bottom:20px;
+    }
+
+    .card-head{
+      padding:20px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .place-number{
+      color:var(--orange);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1px;
+    }
+
+    .place-title{
+      font-family:Georgia,serif;
+      font-size:28px;
+      margin-top:5px;
+    }
+
+    .jp{
+      color:#bcd5ff;
+      margin-top:4px;
+      font-size:13px;
+    }
+
+    .location{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:9px;
+    }
+
+    /* EDIT */
+
+    .block{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .block-title{
+      color:#8eb6d8;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1px;
+      margin-bottom:12px;
+    }
+
+    label{
+      display:block;
+      color:#7991a3;
+      font-size:9px;
+      font-weight:900;
+      margin:11px 0 6px;
+    }
+
+    input{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:15px;
+      background:#080d11;
+      color:var(--text);
+      outline:none;
+    }
+
+    input:focus{
+      border-color:var(--blue);
+    }
+
+    .save-name{
+      width:100%;
+      margin-top:12px;
+      padding:14px;
+      border-radius:13px;
+      border:1px solid rgba(103,197,135,.45);
+      background:rgba(103,197,135,.10);
+      color:#8ff0b0;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    /* SEARCH */
+
+    .search-row{
+      display:grid;
+      grid-template-columns:1fr 120px;
+      gap:9px;
+    }
+
+    .search-button{
+      border:1px solid rgba(92,157,255,.5);
+      background:rgba(92,157,255,.10);
+      color:#a9cbff;
+      border-radius:13px;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .hint{
+      color:#65737e;
+      font-size:10px;
+      margin-top:-5px;
+      margin-bottom:12px;
+    }
+
+    /* MATCHES */
+
+    .matches{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .match{
+      border:1px solid var(--line);
+      border-radius:17px;
+      padding:15px;
+      background:#0d1419;
+    }
+
+    .match.top{
+      border-color:rgba(103,197,135,.55);
+      background:linear-gradient(
+        135deg,
+        rgba(103,197,135,.08),
+        #0d1419 55%
+      );
+    }
+
+    .top-badge{
+      display:inline-block;
+      padding:5px 8px;
+      border-radius:999px;
+      background:rgba(103,197,135,.12);
+      color:#7af3a5;
+      font-size:8px;
+      font-weight:900;
+      margin-bottom:9px;
+    }
+
+    .match-name{
+      font-family:Georgia,serif;
+      font-weight:700;
+      font-size:17px;
+    }
+
+    .match-address{
+      color:#9aa7b1;
+      font-size:11px;
+      margin-top:6px;
+      line-height:1.5;
+    }
+
+    .coords{
+      color:#607481;
+      font-size:9px;
+      margin-top:6px;
+    }
+
+    .match-actions{
+      display:grid;
+      grid-template-columns:1fr 110px;
+      gap:9px;
+      margin-top:12px;
+    }
+
+    .use{
+      padding:13px;
+      border-radius:12px;
+      border:1px solid rgba(103,197,135,.5);
+      background:rgba(103,197,135,.10);
+      color:#83f3a9;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .map-link{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(92,157,255,.45);
+      border-radius:12px;
+      color:#a9cbff;
+      text-decoration:none;
+      background:rgba(92,157,255,.08);
+      font-size:10px;
+      font-weight:900;
+    }
+
+    /* NAV */
+
+    .next-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      padding:16px;
+    }
+
+    /* LIST */
+
+    .list-title{
+      color:#8eb6d8;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1px;
+      margin:25px 0 10px;
+    }
+
+    .place-list{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+
+    .list-search{
+      margin:0 0 10px;
+    }
+
+    .list-search input{
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:11px;
+    }
+
+    .list-item{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:12px 14px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
+    .list-name{
+      font-weight:750;
+      font-size:12px;
+    }
+
+    .list-meta{
+      color:var(--muted);
+      font-size:9px;
+      margin-top:3px;
+    }
+
+    .ready{
+      color:var(--green);
+      font-size:9px;
+      font-weight:900;
+    }
+
+    .missing{
+      color:var(--orange);
+      font-size:9px;
+      font-weight:900;
+    }
+
+    .review{
+      border:1px solid var(--line);
+      border-radius:9px;
+      padding:8px 10px;
+      color:var(--text);
+      background:var(--panel2);
+      font-size:9px;
+      font-weight:900;
+    }
+
+    /* MESSAGE */
+
+    .message{
+      display:none;
+      padding:12px 14px;
+      border-radius:12px;
+      margin-bottom:14px;
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .message.show{
+      display:block;
+    }
+
+    .message.good{
+      background:rgba(103,197,135,.10);
+      border:1px solid rgba(103,197,135,.4);
+      color:#9bf4b9;
+    }
+
+    .message.bad{
+      background:rgba(201,111,104,.10);
+      border:1px solid rgba(201,111,104,.4);
+      color:#f0a09a;
+    }
+
+    .empty{
+      border:1px dashed var(--line);
+      border-radius:15px;
+      padding:25px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+
+    /* ADMIN NAV */
+
+    .admin-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .admin-nav a{
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:9px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:var(--panel2);
+      color:var(--text);
+      text-decoration:none;
+      font-size:9px;
+      font-weight:900;
+    }
+
+    .admin-nav a.active{
+      border-color:rgba(92,157,255,.42);
+      background:rgba(92,157,255,.09);
+      color:#a9cbff;
+    }
+
+    @media(max-width:600px){
+      .app{
+        padding:16px 10px 40px;
+      }
+
+      .search-row{
+        grid-template-columns:1fr 95px;
+      }
+
+      .match-actions{
+        grid-template-columns:1fr 90px;
+      }
+
+      .summary-card{
+        padding:11px;
+      }
+
+      .summary-number{
+        font-size:23px;
+      }
+    }
+  </style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="eyebrow">Admin · Location Setup <span style="opacity:.45;font-size:8px">BUILD ec-auto-v2</span></div>
+  <h1>Places Setup</h1>
+
+  <div class="sub">
+    Match your attractions, shrines, museums, hotels and other
+    trip places with Google so your map can use exact coordinates.
+  </div>
+
+
+  <div class="admin-nav">
+    <a href="Admin.html">← ADMIN PANEL</a>
+    <a class="active" href="p-setup.html">📍 PLACES</a>
+    <a href="r-setup.html">🍽️ RESTAURANTS →</a>
+  </div>
+
+
+  <div class="summary">
+
+    <div class="summary-card">
+      <div class="summary-label">TOTAL</div>
+      <div class="summary-number" id="totalCount">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">READY</div>
+      <div class="summary-number green" id="readyCount">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">MISSING</div>
+      <div class="summary-number orange" id="missingCount">0</div>
+    </div>
+
+  </div>
+
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+
+  <div class="toolbar">
+
+    <button
+      class="btn green"
+      onclick="findNextMissing()">
+      FIND NEXT MISSING →
+    </button>
+
+    <button
+      class="btn blue"
+      onclick="loadPlaces()">
+      REFRESH
+    </button>
+
+    <button
+      class="btn"
+      id="autoMatchButton"
+      onclick="toggleAutoMatch()">
+      AUTO MATCH SAFE
+    </button>
+
+  </div>
+
+
+  <div id="message" class="message"></div>
+
+
+  <div class="card" id="placeCard" style="display:none">
+
+    <div class="card-head">
+
+      <div class="place-number" id="placeNumber">
+        PLACE
+      </div>
+
+      <div class="place-title" id="placeTitle"></div>
+
+      <div class="jp" id="placeLocal"></div>
+
+      <div class="location" id="placeLocation"></div>
+
+    </div>
+
+
+    <!-- EDIT PLACE -->
+
+    <div class="block">
+
+      <div class="block-title">
+        EDIT PLACE
+      </div>
+
+      <label>PLACE NAME</label>
+
+      <input
+        id="editName"
+        type="text">
+
+
+      <label>LOCAL NAME</label>
+      <div class="hint">Native name for the place — e.g. 日本語, 中文, 한국어.</div>
+
+      <input
+        id="editLocal"
+        type="text">
+
+
+      <button
+        class="save-name"
+        onclick="saveName()">
+        SAVE NAME
+      </button>
+
+      <label>MANUAL COORDINATES</label>
+      <div class="hint">Paste latitude, longitude from a pin you choose yourself. Example: 39.9845369, 116.493148</div>
+
+      <input
+        id="manualCoordinates"
+        type="text"
+        inputmode="decimal"
+        placeholder="39.9845369, 116.493148">
+
+      <div class="match-actions">
+        <button
+          class="use"
+          onclick="saveManualCoordinates()">
+          USE MY COORDINATES
+        </button>
+
+        <a
+          id="manualMapLink"
+          class="map-link"
+          target="_blank"
+          rel="noopener"
+          style="opacity:.45;pointer-events:none">
+          OPEN MAP
+        </a>
+      </div>
+
+    </div>
+
+
+    <!-- PUBLIC DATA -->
+
+    <div class="block">
+
+      <div class="block-title">
+        WIKIPEDIA / WIKIDATA
+      </div>
+
+      <div class="hint">
+        Tries free public data first. Use Google below only if this match is missing or wrong.
+      </div>
+
+      <div id="publicMatches" class="matches">
+        <div class="empty">
+          Checking Wikipedia / Wikidata...
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- GOOGLE SEARCH -->
+
+    <div class="block">
+
+      <div class="block-title">
+        GOOGLE SEARCH
+      </div>
+
+      <div class="hint">
+        Google searches automatically and returns the place name, address and coordinates.
+      </div>
+
+      <div class="search-row">
+
+        <input
+          id="googleSearch"
+          type="text"
+          placeholder="Search Google...">
+
+        <button
+          class="search-button"
+          onclick="searchGoogle()">
+          SEARCH
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- MATCHES -->
+
+    <div class="block">
+
+      <div class="block-title">
+        GOOGLE MATCHES
+      </div>
+
+      <div id="matches" class="matches">
+
+        <div class="empty">
+          Search Google to find this place.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="next-row">
+
+      <button
+        class="btn"
+        onclick="skipPlace()">
+        SKIP
+      </button>
+
+      <button
+        class="btn green"
+        onclick="findNextMissing()">
+        NEXT MISSING →
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="list-title">
+    YOUR PLACES
+  </div>
+
+  <div class="list-search">
+    <input
+      id="placeNameSearch"
+      type="search"
+      placeholder="Search place name..."
+      autocomplete="off">
+  </div>
+
+  <div id="placeList" class="place-list"></div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   STATE
+============================================================ */
+
+let places = [];
+let currentPlace = null;
+let googleResults = [];
+let googleCandidateIds = [];
+let publicResults = [];
+let autoMatchRunning = false;
+let autoMatchStats = {matched:0,review:0,processed:0};
+
+
+/* ============================================================
+   ESCAPE
+============================================================ */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* ============================================================
+   COORDINATE CHECK
+
+   IMPORTANT:
+   null must NOT become Number(null) = 0
+============================================================ */
+
+function hasCoordinates(place){
+
+  if(
+    place.latitude === null ||
+    place.latitude === undefined ||
+    place.latitude === "" ||
+    place.longitude === null ||
+    place.longitude === undefined ||
+    place.longitude === ""
+  ){
+    return false;
+  }
+
+  const lat = Number(place.latitude);
+  const lng = Number(place.longitude);
+
+  if(
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng)
+  ){
+    return false;
+  }
+
+  if(
+    lat < -90 ||
+    lat > 90 ||
+    lng < -180 ||
+    lng > 180
+  ){
+    return false;
+  }
+
+  if(lat === 0 && lng === 0){
+    return false;
+  }
+
+  return true;
+}
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showMessage(text,type="good"){
+
+  const box =
+    document.getElementById("message");
+
+  box.textContent = text;
+
+  box.className =
+    `message show ${type}`;
+
+  clearTimeout(
+    window.__messageTimer
+  );
+
+  window.__messageTimer =
+    setTimeout(() => {
+
+      box.className =
+        "message";
+
+    },5000);
+}
+
+
+/* ============================================================
+   LOAD PLACES
+============================================================ */
+
+async function loadPlaces(){
+
+  try{
+
+    const {
+      data:{
+        user
+      }
+    } = await db.auth.getUser();
+
+
+    if(!user){
+
+      throw new Error(
+        "You are not logged in. Please log in first."
+      );
+
+    }
+
+
+    const {
+      data,
+      error
+    } = await db
+      .from("places")
+      .select("*")
+      .order("id",{
+        ascending:true
+      });
+
+
+    if(error){
+      throw error;
+    }
+
+
+    places =
+      data || [];
+
+
+    updateSummary();
+    renderPlaceList();
+
+
+    if(currentPlace){
+
+      const refreshed =
+        places.find(
+          p => p.id === currentPlace.id
+        );
+
+      if(refreshed){
+        currentPlace = refreshed;
+        showPlace(currentPlace,false);
+      }
+
+    }
+
+
+    if(!currentPlace && places.length){
+      findNextMissing();
+    }
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not load places.",
+      "bad"
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+function updateSummary(){
+
+  const ready =
+    places.filter(
+      hasCoordinates
+    ).length;
+
+  const missing =
+    places.length - ready;
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    places.length;
+
+
+  document.getElementById(
+    "readyCount"
+  ).textContent =
+    ready;
+
+
+  document.getElementById(
+    "missingCount"
+  ).textContent =
+    missing;
+
+
+  const percent =
+    places.length
+      ? (ready / places.length) * 100
+      : 0;
+
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    `${percent}%`;
+}
+
+
+/* ============================================================
+   PLACE LIST
+============================================================ */
+
+function renderPlaceList(){
+
+  const container =
+    document.getElementById(
+      "placeList"
+    );
+
+  const searchBox =
+    document.getElementById("placeNameSearch");
+
+  const query =
+    String(searchBox?.value || "")
+      .trim()
+      .toLowerCase();
+
+  const visiblePlaces =
+    query
+      ? places.filter(place =>
+          [
+            place.name,
+            place.name_japanese,
+            place.area,
+            place.city,
+            place.prefecture
+          ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(query)
+        )
+      : places;
+
+
+  if(!places.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No places found in your places table.
+       </div>`;
+
+    return;
+  }
+
+
+  if(!visiblePlaces.length){
+    container.innerHTML =
+      `<div class="empty">
+        No places match "${escapeHtml(query)}".
+       </div>`;
+    return;
+  }
+
+  container.innerHTML =
+    visiblePlaces.map(place => {
+
+      const ready =
+        hasCoordinates(place);
+
+      const meta = [
+        place.area,
+        place.city,
+        place.prefecture
+      ]
+      .filter(Boolean)
+      .join(" · ");
+
+
+      return `
+        <div class="list-item">
+
+          <div>
+
+            <div class="list-name">
+              ${escapeHtml(place.name)}
+            </div>
+
+            <div class="list-meta">
+
+              ${
+                escapeHtml(meta)
+              }
+
+              ${
+                ready
+                ? `<span class="ready">
+                     · READY
+                   </span>`
+                : `<span class="missing">
+                     · MISSING
+                   </span>`
+              }
+
+            </div>
+
+          </div>
+
+          <button
+            class="review"
+            onclick="selectPlace(${Number(place.id)})">
+
+            ${ready ? "REVIEW" : "FIND"}
+
+          </button>
+
+        </div>
+      `;
+
+    }).join("");
+}
+
+
+document.getElementById("placeNameSearch")
+  ?.addEventListener("input",renderPlaceList);
+
+
+/* ============================================================
+   SELECT PLACE
+============================================================ */
+
+function selectPlace(id){
+
+  const place =
+    places.find(
+      p => Number(p.id) === Number(id)
+    );
+
+
+  if(!place){
+    return;
+  }
+
+
+  currentPlace = place;
+
+  showPlace(place,true);
+
+
+  document.getElementById(
+    "placeCard"
+  ).scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+
+/* ============================================================
+   SHOW PLACE
+============================================================ */
+
+function showPlace(
+  place,
+  autoSearch=true
+){
+
+  document.getElementById(
+    "placeCard"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "placeNumber"
+  ).textContent =
+    `PLACE #${place.id}`;
+
+
+  document.getElementById(
+    "placeTitle"
+  ).textContent =
+    place.name || "Unnamed Place";
+
+
+  const localName =
+    document.getElementById(
+      "placeLocal"
+    );
+
+  localName.textContent =
+    place.name_japanese || "";
+
+  localName.style.display =
+    place.name_japanese
+      ? "block"
+      : "none";
+
+
+  const location = [
+    place.area,
+    place.city,
+    place.prefecture
+  ]
+  .filter(Boolean)
+  .join(" · ");
+
+
+  document.getElementById(
+    "placeLocation"
+  ).textContent =
+    location
+      ? `📍 ${location}`
+      : `📍 ${place.country || "Location"}`;
+
+
+  document.getElementById(
+    "editName"
+  ).value =
+    place.name || "";
+
+
+  document.getElementById(
+    "editLocal"
+  ).value =
+    place.name_japanese || "";
+
+  const manualInput =
+    document.getElementById("manualCoordinates");
+
+  if(manualInput){
+    manualInput.value =
+      hasCoordinates(place)
+        ? `${place.latitude}, ${place.longitude}`
+        : "";
+    updateManualMapLink();
+  }
+
+
+  document.getElementById(
+    "googleSearch"
+  ).value =
+    buildSearchQuery(place);
+
+
+  document.getElementById(
+    "matches"
+  ).innerHTML =
+    `<div class="empty">
+      Google searches automatically. Choose the correct match to save its coordinates.
+     </div>`;
+
+  const publicBox =
+    document.getElementById(
+      "publicMatches"
+    );
+
+  if(publicBox){
+    publicBox.innerHTML =
+      `<div class="empty">
+        Checking Wikipedia / Wikidata...
+       </div>`;
+  }
+
+  googleResults = [];
+  googleCandidateIds = [];
+  publicResults = [];
+
+
+  if(autoSearch){
+    searchGoogle();
+  }
+}
+
+
+/* ============================================================
+   BUILD GOOGLE QUERY
+============================================================ */
+
+function buildSearchQuery(place){
+
+  const parts = [
+    place.name,
+    place.name_japanese,
+    place.area,
+    place.city,
+    place.prefecture,
+    place.country
+  ];
+
+
+  const seen =
+    new Set();
+
+
+  return parts
+    .map(x =>
+      String(x || "").trim()
+    )
+    .filter(Boolean)
+    .filter(value => {
+
+      const key =
+        value.toLowerCase();
+
+      if(seen.has(key)){
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+
+    })
+    .join(" ");
+}
+
+
+/* ============================================================
+   SAVE NAME
+============================================================ */
+
+async function saveName(){
+
+  if(!currentPlace){
+    return;
+  }
+
+
+  const name =
+    document.getElementById(
+      "editName"
+    ).value.trim();
+
+
+  const localName =
+    document.getElementById(
+      "editLocal"
+    ).value.trim();
+
+
+  if(!name){
+
+    showMessage(
+      "Place name cannot be empty.",
+      "bad"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    const {
+      data,
+      error
+    } = await db
+      .from("places")
+      .update({
+        name:name,
+        name_japanese:
+          localName || null,
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq(
+        "id",
+        currentPlace.id
+      )
+      .select();
+
+
+    if(error){
+      throw error;
+    }
+
+
+    if(!data || !data.length){
+
+      throw new Error(
+        "Supabase did not update the row. Check your places UPDATE RLS policy."
+      );
+
+    }
+
+
+    currentPlace =
+      data[0];
+
+
+    const index =
+      places.findIndex(
+        p => p.id === currentPlace.id
+      );
+
+
+    if(index >= 0){
+      places[index] = currentPlace;
+    }
+
+
+    showPlace(
+      currentPlace,
+      false
+    );
+
+    renderPlaceList();
+
+    showMessage(
+      "Place name saved."
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not save place name.",
+      "bad"
+    );
+
+  }
+
+}
+
+
+
+
+/* ============================================================
+   MANUAL COORDINATES
+============================================================ */
+
+function parseManualCoordinates(){
+  const raw =
+    document.getElementById("manualCoordinates")
+      ?.value.trim() || "";
+
+  const parts =
+    raw.split(/[\s,]+/)
+      .filter(Boolean);
+
+  if(parts.length !== 2){
+    return null;
+  }
+
+  const lat = Number(parts[0]);
+  const lng = Number(parts[1]);
+
+  if(
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng) ||
+    lat < -90 || lat > 90 ||
+    lng < -180 || lng > 180
+  ){
+    return null;
+  }
+
+  return {lat,lng};
+}
+
+function updateManualMapLink(){
+  const link =
+    document.getElementById("manualMapLink");
+
+  if(!link){
+    return;
+  }
+
+  const coords =
+    parseManualCoordinates();
+
+  if(!coords){
+    link.removeAttribute("href");
+    link.style.opacity = ".45";
+    link.style.pointerEvents = "none";
+    return;
+  }
+
+  link.href =
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(coords.lat + "," + coords.lng);
+
+  link.style.opacity = "1";
+  link.style.pointerEvents = "auto";
+}
+
+document.getElementById("manualCoordinates")
+  ?.addEventListener("input",updateManualMapLink);
+
+async function saveManualCoordinates(){
+  if(!currentPlace){
+    return;
+  }
+
+  const coords =
+    parseManualCoordinates();
+
+  if(!coords){
+    showMessage(
+      "Enter coordinates as latitude, longitude.",
+      "bad"
+    );
+    return;
+  }
+
+  try{
+    const payload = {
+      latitude:coords.lat,
+      longitude:coords.lng,
+      coordinate_status:"done",
+      coordinate_source:"manual",
+      coordinate_checked_at:new Date().toISOString(),
+      coordinate_review_reason:"Manually verified",
+      updated_at:new Date().toISOString()
+    };
+
+    const {data,error} =
+      await db
+        .from("places")
+        .update(payload)
+        .eq("id",currentPlace.id)
+        .select();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data || !data.length){
+      throw new Error(
+        "Supabase did not update the row. Check your places UPDATE RLS policy."
+      );
+    }
+
+    currentPlace = data[0];
+
+    const index =
+      places.findIndex(
+        p => p.id === currentPlace.id
+      );
+
+    if(index >= 0){
+      places[index] = currentPlace;
+    }
+
+    updateSummary();
+    renderPlaceList();
+    showPlace(currentPlace,false);
+
+    showMessage(
+      "Manual coordinates saved and marked as verified."
+    );
+
+  }catch(error){
+    console.error(error);
+    showMessage(
+      error.message ||
+      "Could not save manual coordinates.",
+      "bad"
+    );
+  }
+}
+
+
+/* ============================================================
+   CHEAP LOOKUP FLOW
+============================================================ */
+
+async function searchGoogleIdsOnly(){
+
+  if(!currentPlace){
+    return [];
+  }
+
+  const query =
+    document.getElementById("googleSearch").value.trim();
+
+  if(!query){
+    return [];
+  }
+
+  const library =
+    await window.getGooglePlaces();
+
+  const PlaceClass =
+    library.Place;
+
+  if(
+    !PlaceClass ||
+    typeof PlaceClass.searchByText !== "function"
+  ){
+    throw new Error(
+      "Google Place text search is unavailable."
+    );
+  }
+
+  const response =
+    await PlaceClass.searchByText({
+      textQuery:query,
+      fields:["id"],
+      maxResultCount:5
+    });
+
+  googleCandidateIds =
+    (response.places || [])
+    .map(place => place.id)
+    .filter(Boolean);
+
+  return googleCandidateIds;
+}
+
+
+async function runCheapLocationLookup(){
+
+  const matches =
+    document.getElementById("matches");
+
+  if(matches){
+    matches.innerHTML =
+      '<div class="empty">Checking Google IDs and public data...</div>';
+  }
+
+  try{
+    await searchGoogleIdsOnly();
+  }catch(error){
+    console.error("Google IDs-only search failed",error);
+    googleCandidateIds = [];
+  }
+
+  await searchPublicData();
+
+  if(matches){
+
+    if(googleCandidateIds.length){
+      matches.innerHTML =
+        `<div class="empty">
+          Google found ${googleCandidateIds.length} candidate place${googleCandidateIds.length===1?"":"s"} using ID-only search.
+          <br><br>
+          If the Wikipedia / Wikidata match above is wrong, press SEARCH to load Google details.
+         </div>`;
+    }else{
+      matches.innerHTML =
+        `<div class="empty">
+          No Google ID-only candidate was found automatically.
+          <br><br>
+          You can still press SEARCH below for a full Google lookup.
+         </div>`;
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   AUTO NAME SUGGESTIONS
+============================================================ */
+
+function localLanguageCode(place){
+
+  const country =
+    String(place?.country || "").trim().toLowerCase();
+
+  const map = {
+    "japan":"ja",
+    "china":"zh",
+    "people's republic of china":"zh",
+    "prc":"zh",
+    "south korea":"ko",
+    "korea":"ko",
+    "republic of korea":"ko",
+    "italy":"it",
+    "vatican city":"it",
+    "holy see":"it",
+    "france":"fr",
+    "germany":"de",
+    "austria":"de",
+    "spain":"es",
+    "portugal":"pt",
+    "thailand":"th",
+    "vietnam":"vi",
+    "indonesia":"id",
+    "malaysia":"ms",
+    "singapore":"en",
+    "taiwan":"zh",
+    "hong kong":"zh",
+    "macau":"zh"
+  };
+
+  return map[country] || null;
+}
+
+
+async function suggestNamesFromGoogle(googlePlace){
+
+  if(!googlePlace || !currentPlace){
+    return {name:null,localName:null};
+  }
+
+  const googleName =
+    typeof googlePlace.displayName === "string"
+      ? googlePlace.displayName
+      : googlePlace.displayName?.text;
+
+  let localLabel = "";
+
+  const editName =
+    document.getElementById("editName");
+
+  if(editName && googleName){
+    editName.value = googleName;
+  }
+
+  const localLang =
+    localLanguageCode(currentPlace);
+
+  if(localLang){
+
+    try{
+
+      const query =
+        googleName ||
+        currentPlace.name ||
+        "";
+
+      if(query){
+
+        const searchUrl =
+          "https://www.wikidata.org/w/api.php" +
+          "?action=wbsearchentities" +
+          "&format=json" +
+          "&origin=*" +
+          "&language=en" +
+          "&uselang=en" +
+          "&limit=5" +
+          "&search=" +
+          encodeURIComponent(query);
+
+        const searchResponse =
+          await fetch(searchUrl);
+
+        if(searchResponse.ok){
+
+          const searchData =
+            await searchResponse.json();
+
+          const ids =
+            (searchData.search || [])
+            .map(item => item.id)
+            .filter(Boolean)
+            .slice(0,5);
+
+          if(ids.length){
+
+            const languages =
+              ["en",localLang]
+              .filter(Boolean)
+              .join("|");
+
+            const entityUrl =
+              "https://www.wikidata.org/w/api.php" +
+              "?action=wbgetentities" +
+              "&format=json" +
+              "&origin=*" +
+              "&props=labels|descriptions|claims" +
+              "&languages=" +
+              encodeURIComponent(languages) +
+              "&ids=" +
+              encodeURIComponent(ids.join("|"));
+
+            const entityResponse =
+              await fetch(entityUrl);
+
+            if(entityResponse.ok){
+
+              const entityData =
+                await entityResponse.json();
+
+              const entities =
+                ids
+                .map(id => entityData.entities?.[id])
+                .filter(Boolean);
+
+              const normalize = value =>
+                String(value || "")
+                .toLowerCase()
+                .normalize("NFKD")
+                .replace(/[^\p{L}\p{N}]+/gu,"")
+                .trim();
+
+              const googleKey =
+                normalize(googleName);
+
+              const entity =
+                entities.find(item => {
+                  const english =
+                    item.labels?.en?.value || "";
+                  const key =
+                    normalize(english);
+                  return (
+                    key &&
+                    googleKey &&
+                    (
+                      key === googleKey ||
+                      key.includes(googleKey) ||
+                      googleKey.includes(key)
+                    )
+                  );
+                }) ||
+                entities[0];
+
+              localLabel =
+                entity?.labels?.[localLang]?.value || "";
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }catch(error){
+
+      console.error(
+        "Could not suggest local name",
+        error
+      );
+
+    }
+
+  }
+
+  const editLocal =
+    document.getElementById("editLocal");
+
+  if(editLocal && localLabel){
+    editLocal.value = localLabel;
+  }
+
+  return {
+    name:googleName || null,
+    localName:localLabel || null
+  };
+}
+
+/* ============================================================
+   PUBLIC DATA SEARCH
+============================================================ */
+
+function readWikiCoord(entity){
+  const value =
+    entity?.claims?.P625?.[0]?.mainsnak?.datavalue?.value;
+
+  if(
+    !value ||
+    !Number.isFinite(Number(value.latitude)) ||
+    !Number.isFinite(Number(value.longitude))
+  ){
+    return null;
+  }
+
+  return {
+    latitude:Number(value.latitude),
+    longitude:Number(value.longitude)
+  };
+}
+
+
+async function searchPublicData(){
+
+  if(!currentPlace){
+    return;
+  }
+
+  const box =
+    document.getElementById("publicMatches");
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML =
+    '<div class="empty">Checking Wikipedia / Wikidata...</div>';
+
+  publicResults = [];
+
+  try{
+
+    /*
+      Wikidata search works better with short, focused queries than
+      one long Google-style query. Try the exact name first, then
+      progressively add location context only when needed.
+    */
+
+    const rawQueries = [
+      currentPlace.name,
+      currentPlace.name_japanese,
+      [currentPlace.name,currentPlace.city].filter(Boolean).join(" "),
+      [currentPlace.name,currentPlace.area].filter(Boolean).join(" "),
+      [currentPlace.name,currentPlace.prefecture].filter(Boolean).join(" "),
+      [currentPlace.name,currentPlace.country].filter(Boolean).join(" "),
+      [currentPlace.name,currentPlace.city,currentPlace.country].filter(Boolean).join(" ")
+    ];
+
+    const seenQueries = new Set();
+
+    const queries =
+      rawQueries
+      .map(value => String(value || "").trim())
+      .filter(Boolean)
+      .filter(value => {
+        const key = value.toLocaleLowerCase();
+        if(seenQueries.has(key)){
+          return false;
+        }
+        seenQueries.add(key);
+        return true;
+      });
+
+    const rankedIds = [];
+    const seenIds = new Set();
+
+    for(const query of queries){
+
+      const searchUrl =
+        "https://www.wikidata.org/w/api.php" +
+        "?action=wbsearchentities" +
+        "&format=json" +
+        "&origin=*" +
+        "&language=en" +
+        "&uselang=en" +
+        "&limit=8" +
+        "&search=" +
+        encodeURIComponent(query);
+
+      const searchResponse =
+        await fetch(searchUrl);
+
+      if(!searchResponse.ok){
+        continue;
+      }
+
+      const searchData =
+        await searchResponse.json();
+
+      for(const item of (searchData.search || [])){
+
+        if(
+          item?.id &&
+          !seenIds.has(item.id)
+        ){
+          seenIds.add(item.id);
+          rankedIds.push(item.id);
+        }
+
+      }
+
+      /*
+        If exact-name search already returns a useful pool,
+        there is no need to keep widening aggressively.
+      */
+      if(
+        query === String(currentPlace.name || "").trim() &&
+        rankedIds.length >= 5
+      ){
+        break;
+      }
+
+      if(rankedIds.length >= 16){
+        break;
+      }
+
+    }
+
+    const ids =
+      rankedIds.slice(0,16);
+
+    if(!ids.length){
+      box.innerHTML =
+        '<div class="empty">No public-data match found. Use Google Search below.</div>';
+      return;
+    }
+
+    const entityUrl =
+      "https://www.wikidata.org/w/api.php" +
+      "?action=wbgetentities" +
+      "&format=json" +
+      "&origin=*" +
+      "&props=claims|sitelinks|labels|descriptions" +
+      "&languages=en" +
+      "&ids=" +
+      encodeURIComponent(ids.join("|"));
+
+    const entityResponse =
+      await fetch(entityUrl);
+
+    if(!entityResponse.ok){
+      throw new Error("Wikidata details failed.");
+    }
+
+    const entityData =
+      await entityResponse.json();
+
+    publicResults =
+      ids
+      .map(id => entityData.entities?.[id])
+      .filter(Boolean)
+      .map(entity => {
+        const coord = readWikiCoord(entity);
+
+        return {
+          id:entity.id,
+          name:
+            entity.labels?.en?.value ||
+            entity.sitelinks?.enwiki?.title ||
+            currentPlace.name,
+          description:
+            entity.descriptions?.en?.value ||
+            "",
+          wikipedia_title:
+            entity.sitelinks?.enwiki?.title ||
+            "",
+          latitude:
+            coord?.latitude ?? null,
+          longitude:
+            coord?.longitude ?? null
+        };
+      })
+      .filter(item =>
+        Number.isFinite(Number(item.latitude)) &&
+        Number.isFinite(Number(item.longitude))
+      )
+      .slice(0,5);
+
+    renderPublicResults();
+
+  }catch(error){
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="empty">Public-data lookup failed. Use Google Search below.</div>';
+
+  }
+
+}
+
+function renderPublicResults(){
+
+  const box =
+    document.getElementById("publicMatches");
+
+  if(!box){
+    return;
+  }
+
+  if(!publicResults.length){
+
+    box.innerHTML =
+      '<div class="empty">No coordinate-bearing Wikipedia / Wikidata match found. Use Google Search below.</div>';
+
+    return;
+  }
+
+  box.innerHTML =
+    publicResults
+    .map((item,index) => {
+
+      const wikiUrl =
+        item.wikipedia_title
+          ? "https://en.wikipedia.org/wiki/" +
+            encodeURIComponent(
+              item.wikipedia_title.replaceAll(" ","_")
+            )
+          : "";
+
+      return `
+        <div class="match ${index === 0 ? "top" : ""}">
+
+          ${index === 0
+            ? '<div class="top-badge">TOP PUBLIC MATCH</div>'
+            : ''
+          }
+
+          <div class="match-name">
+            ${escapeHtml(item.name)}
+          </div>
+
+          <div class="match-address">
+            ${escapeHtml(item.description || "Wikidata place")}
+          </div>
+
+          <div class="coords">
+            ${Number(item.latitude).toFixed(6)},
+            ${Number(item.longitude).toFixed(6)}
+          </div>
+
+          <div class="match-actions">
+
+            <button
+              class="use"
+              onclick="usePublicLocation(${index})">
+              ✓ USE THIS LOCATION
+            </button>
+
+            ${wikiUrl
+              ? `
+                <a
+                  class="map-link"
+                  href="${escapeHtml(wikiUrl)}"
+                  target="_blank"
+                  rel="noopener">
+                  WIKI ↗
+                </a>
+              `
+              : '<div></div>'
+            }
+
+          </div>
+
+        </div>
+      `;
+
+    })
+    .join("");
+
+}
+
+
+async function usePublicLocation(index){
+
+  if(!currentPlace){
+    return;
+  }
+
+  const item =
+    publicResults[index];
+
+  if(!item){
+    showMessage(
+      "Public-data place was not found.",
+      "bad"
+    );
+    return;
+  }
+
+  try{
+
+    const update = {
+      latitude:Number(item.latitude),
+      longitude:Number(item.longitude),
+      coordinate_status:"done",
+      coordinate_source:"wikidata",
+      coordinate_source_id:item.id || null,
+      coordinate_checked_at:new Date().toISOString(),
+      coordinate_review_reason:null,
+      updated_at:new Date().toISOString()
+    };
+
+    const {
+      data,
+      error
+    } = await db
+      .from("places")
+      .update(update)
+      .eq("id",currentPlace.id)
+      .select();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data || !data.length){
+      throw new Error(
+        "Supabase returned 0 updated rows."
+      );
+    }
+
+    currentPlace = data[0];
+
+    const localIndex =
+      places.findIndex(
+        p => p.id === currentPlace.id
+      );
+
+    if(localIndex >= 0){
+      places[localIndex] =
+        currentPlace;
+    }
+
+    updateSummary();
+    renderPlaceList();
+    showPlace(
+      currentPlace,
+      false
+    );
+
+    showMessage(
+      `Saved Wikidata coordinates for ${currentPlace.name}.`
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Could not save public-data location.",
+      "bad"
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   SEARCH GOOGLE
+============================================================ */
+
+async function searchGoogle(){
+
+  if(!currentPlace){
+    return;
+  }
+
+  const query =
+    document.getElementById(
+      "googleSearch"
+    ).value.trim();
+
+  if(!query){
+
+    showMessage(
+      "Enter a Google search.",
+      "bad"
+    );
+
+    return;
+  }
+
+  const matches =
+    document.getElementById(
+      "matches"
+    );
+
+  matches.innerHTML =
+    `<div class="empty">
+      Searching Google...
+     </div>`;
+
+  try{
+
+    const library =
+      await window.getGooglePlaces();
+
+    const PlaceClass =
+      library.Place;
+
+    if(
+      !PlaceClass ||
+      typeof PlaceClass.searchByText !== "function"
+    ){
+
+      throw new Error(
+        "Google Place text search is unavailable."
+      );
+
+    }
+
+    const response =
+      await PlaceClass.searchByText({
+
+        textQuery:query,
+
+        fields:[
+          "id",
+          "displayName",
+          "formattedAddress",
+          "location",
+          "googleMapsURI"
+        ],
+
+        maxResultCount:5
+
+      });
+
+    googleResults =
+      response.places || [];
+
+    googleCandidateIds =
+      googleResults
+      .map(place => place.id)
+      .filter(Boolean);
+
+    renderGoogleResults();
+
+    if(googleResults[0]){
+      suggestNamesFromGoogle(googleResults[0]);
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    matches.innerHTML =
+      `<div class="empty">
+        Google search failed.<br><br>
+        ${escapeHtml(
+          error.message ||
+          "Unknown Google Maps error."
+        )}
+       </div>`;
+
+  }
+
+}
+
+/* ============================================================
+   GOOGLE RESULTS
+============================================================ */
+
+function readLat(place){
+
+  if(!place.location){
+    return null;
+  }
+
+  return typeof place.location.lat === "function"
+    ? place.location.lat()
+    : place.location.lat;
+}
+
+
+function readLng(place){
+
+  if(!place.location){
+    return null;
+  }
+
+  return typeof place.location.lng === "function"
+    ? place.location.lng()
+    : place.location.lng;
+}
+
+
+function renderGoogleResults(){
+
+  const container =
+    document.getElementById(
+      "matches"
+    );
+
+
+  if(!googleResults.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No Google matches found.<br><br>
+        Try editing the search above.
+       </div>`;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    googleResults.map(
+      (place,index) => {
+
+        const lat =
+          readLat(place);
+
+        const lng =
+          readLng(place);
+
+
+        const overSpecific =
+          isOverSpecificGoogleResult(currentPlace,place);
+
+        return `
+          <div class="match
+                      ${index === 0 ? "top" : ""}">
+
+            ${
+              index === 0
+                ? `<div class="top-badge">
+                     TOP GOOGLE MATCH
+                   </div>`
+                : ""
+            }
+
+            <div class="match-name">
+              ${escapeHtml(
+                place.displayName ||
+                "Unnamed Google Place"
+              )}
+            </div>
+
+            <div class="match-address">
+              📍 ${escapeHtml(
+                place.formattedAddress ||
+                "Address unavailable"
+              )}
+            </div>
+
+            <div class="coords">
+              ${
+                lat !== null
+                  ? Number(lat).toFixed(6)
+                  : "?"
+              },
+              ${
+                lng !== null
+                  ? Number(lng).toFixed(6)
+                  : "?"
+              }
+            </div>
+
+
+            <div class="match-actions">
+
+              <button
+                class="use"
+                onclick="useGoogleLocation(${index})">
+                ✓ USE THIS LOCATION
+              </button>
+
+
+              ${
+                place.googleMapsURI
+                  ? `
+                    <a
+                      class="map-link"
+                      href="${escapeHtml(
+                        place.googleMapsURI
+                      )}"
+                      target="_blank"
+                      rel="noopener">
+                      MAP ↗
+                    </a>
+                  `
+                  : `
+                    <div></div>
+                  `
+              }
+
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("");
+}
+
+
+/* ============================================================
+   OSM-FIRST COORDINATE SAVE
+============================================================ */
+
+function distanceMetres(lat1,lng1,lat2,lng2){
+  const R=6371000;
+  const toRad=v=>v*Math.PI/180;
+  const a1=toRad(Number(lat1));
+  const a2=toRad(Number(lat2));
+  const da=toRad(Number(lat2)-Number(lat1));
+  const dl=toRad(Number(lng2)-Number(lng1));
+  const a=Math.sin(da/2)**2+
+    Math.cos(a1)*Math.cos(a2)*Math.sin(dl/2)**2;
+  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+async function findOsmCoordinateForGoogle(place,googlePlace){
+  const gLat=readLat(googlePlace);
+  const gLng=readLng(googlePlace);
+  if(gLat===null||gLng===null)return null;
+
+  const queries=[
+    [place?.name,place?.city,place?.country].filter(Boolean).join(" "),
+    [place?.name,place?.country].filter(Boolean).join(" "),
+    place?.name
+  ].map(v=>String(v||"").trim()).filter(Boolean);
+
+  const seen=new Set();
+  let candidates=[];
+
+  for(const query of queries){
+    if(seen.has(query.toLowerCase()))continue;
+    seen.add(query.toLowerCase());
+    try{
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),7000);
+      const url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&addressdetails=1&q="+encodeURIComponent(query);
+      const response=await fetch(url,{
+        signal:controller.signal,
+        headers:{"Accept":"application/json"}
+      });
+      clearTimeout(timer);
+      if(!response.ok)continue;
+      const rows=await response.json();
+      candidates.push(...rows);
+    }catch(error){
+      console.warn("OSM lookup failed",error);
+    }
+    if(candidates.length>=8)break;
+  }
+
+  const deduped=[];
+  const ids=new Set();
+  for(const row of candidates){
+    const key=String(row.osm_type||"")+"-"+String(row.osm_id||"");
+    if(ids.has(key))continue;
+    ids.add(key);
+    const lat=Number(row.lat),lng=Number(row.lon);
+    if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+    const candidateName=
+      row.name ||
+      String(row.display_name||"").split(",")[0] ||
+      "";
+    const score=nameMatchScore(place?.name,candidateName);
+    const distance=distanceMetres(gLat,gLng,lat,lng);
+    // Require a credible name and proximity to the selected Google POI.
+    if(score>=70 && distance<=500){
+      deduped.push({row,lat,lng,score,distance,candidateName});
+    }
+  }
+
+  deduped.sort((a,b)=>
+    (b.score-a.score) || (a.distance-b.distance)
+  );
+  return deduped[0]||null;
+}
+
+async function buildCoordinatePayload(place,googlePlace){
+  const gLat=readLat(googlePlace);
+  const gLng=readLng(googlePlace);
+  if(gLat===null||gLng===null){
+    throw new Error("Google did not return coordinates.");
+  }
+
+  const osm=await findOsmCoordinateForGoogle(place,googlePlace);
+  const now=new Date().toISOString();
+
+  if(osm){
+    return {
+      latitude:osm.lat,
+      longitude:osm.lng,
+      coordinate_status:"done",
+      coordinate_source:"OpenStreetMap",
+      coordinate_source_id:osm.row.osm_id!=null?String(osm.row.osm_id):null,
+      coordinate_checked_at:now,
+      coordinate_review_reason:null,
+      osm_latitude:osm.lat,
+      osm_longitude:osm.lng,
+      osm_type:osm.row.osm_type||null,
+      osm_id:osm.row.osm_id!=null?String(osm.row.osm_id):null,
+      osm_name:osm.candidateName||null,
+      osm_distance_m:Math.round(osm.distance),
+      osm_match_status:"confirmed",
+      osm_checked_at:now
+    };
+  }
+
+  // Google is only the fallback. Mark it for review rather than
+  // treating it as a permanent independently sourced coordinate.
+  return {
+    latitude:Number(gLat),
+    longitude:Number(gLng),
+    coordinate_status:"review",
+    coordinate_source:"google",
+    coordinate_source_id:googlePlace.id||null,
+    coordinate_checked_at:now,
+    coordinate_review_reason:"Google fallback — no confident OSM match; review required"
+  };
+}
+
+/* ============================================================
+   SAVE GOOGLE LOCATION
+============================================================ */
+
+async function useGoogleLocation(index){
+
+  if(!currentPlace){
+    return;
+  }
+
+
+  const googlePlace =
+    googleResults[index];
+
+
+  if(!googlePlace){
+
+    showMessage(
+      "Google place was not found.",
+      "bad"
+    );
+
+    return;
+  }
+
+  const suggestedNames =
+    await suggestNamesFromGoogle(googlePlace);
+
+
+  const lat =
+    readLat(googlePlace);
+
+  const lng =
+    readLng(googlePlace);
+
+
+  if(
+    lat === null ||
+    lng === null
+  ){
+
+    showMessage(
+      "Google did not return coordinates for this place.",
+      "bad"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    /*
+      Uses your existing provider /
+      provider_place_id architecture.
+
+      We do NOT create a separate
+      google_place_id column.
+    */
+
+    const coordinatePayload =
+      await buildCoordinatePayload(currentPlace,googlePlace);
+
+    const update = {
+      name:
+        suggestedNames?.name ||
+        currentPlace.name,
+      name_japanese:
+        suggestedNames?.localName ||
+        currentPlace.name_japanese ||
+        null,
+      provider:"google",
+      provider_place_id:
+        googlePlace.id || null,
+      ...coordinatePayload,
+      updated_at:
+        new Date().toISOString()
+    };
+
+
+    const {
+      data,
+      error
+    } = await db
+      .from("places")
+      .update(update)
+      .eq(
+        "id",
+        currentPlace.id
+      )
+      .select();
+
+
+    if(error){
+      throw error;
+    }
+
+
+    if(!data || !data.length){
+
+      throw new Error(
+        "Supabase returned 0 updated rows. Check your places UPDATE RLS policy."
+      );
+
+    }
+
+
+    currentPlace =
+      data[0];
+
+
+    const localIndex =
+      places.findIndex(
+        p => p.id === currentPlace.id
+      );
+
+
+    if(localIndex >= 0){
+      places[localIndex] =
+        currentPlace;
+    }
+
+
+    updateSummary();
+    renderPlaceList();
+    showPlace(
+      currentPlace,
+      false
+    );
+
+
+    showMessage(
+      `Saved ${currentPlace.coordinate_source === "OpenStreetMap" ? "OSM coordinates" : "Google fallback for review"} for ${currentPlace.name}.`
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    let message =
+      error.message ||
+      "Could not save Google location.";
+
+
+    if(
+      error.code === "23505"
+    ){
+
+      message =
+        "That Google place is already linked to another place in your database.";
+
+    }
+
+
+    showMessage(
+      message,
+      "bad"
+    );
+
+  }
+
+}
+
+
+
+/* ============================================================
+   SAFE AUTO MATCH
+============================================================ */
+
+function normalizeMatchName(value){
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/&/g,"and")
+    .replace(/\b(the|of|at|in|city|station|temple|shrine|museum|park|market)\b/g," ")
+    .replace(/[^\p{L}\p{N}]+/gu,"")
+    .trim();
+}
+
+function levenshteinDistance(a,b){
+  const x=String(a||"");
+  const y=String(b||"");
+  const rows=y.length+1;
+  const cols=x.length+1;
+  const dp=Array.from({length:rows},()=>Array(cols).fill(0));
+
+  for(let i=0;i<rows;i++)dp[i][0]=i;
+  for(let j=0;j<cols;j++)dp[0][j]=j;
+
+  for(let i=1;i<rows;i++){
+    for(let j=1;j<cols;j++){
+      const cost=y[i-1]===x[j-1]?0:1;
+      dp[i][j]=Math.min(
+        dp[i-1][j]+1,
+        dp[i][j-1]+1,
+        dp[i-1][j-1]+cost
+      );
+    }
+  }
+
+  return dp[y.length][x.length];
+}
+
+function nameMatchScore(a,b){
+  const x=normalizeMatchName(a);
+  const y=normalizeMatchName(b);
+
+  if(!x||!y)return 0;
+  if(x===y)return 100;
+  if(x.includes(y)||y.includes(x))return 94;
+
+  const maxLen=Math.max(x.length,y.length);
+  const editDistance=levenshteinDistance(x,y);
+  const similarity=maxLen
+    ? 1-(editDistance/maxLen)
+    : 0;
+
+  // Small spelling variations such as Benjasiri / Benchasiri
+  // should still count as a strong match.
+  let score=Math.round(similarity*100);
+
+  const aTokens=String(a||"")
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean);
+
+  const bTokens=String(b||"")
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean);
+
+  const common=aTokens.filter(token=>bTokens.includes(token)).length;
+  const tokenRatio=common/Math.max(Math.min(aTokens.length,bTokens.length),1);
+
+  if(tokenRatio>=0.8)score=Math.max(score,90);
+  else if(tokenRatio>=0.5)score=Math.max(score,82);
+
+  return Math.min(score,100);
+}
+
+function isSuspiciousSubLocation(originalName,googleName){
+  const original=String(originalName||"").toLowerCase();
+  const candidate=String(googleName||"").toLowerCase();
+
+  const suspiciousTerms=[
+    "parking lot",
+    "car park",
+    "parking",
+    "ticket office",
+    "ticket center",
+    "ticket centre",
+    "west gate",
+    "east gate",
+    "north gate",
+    "south gate",
+    "main gate",
+    "entrance",
+    "exit",
+    "bus stop",
+    "bus station",
+    "visitor center",
+    "visitor centre",
+    "information center",
+    "information centre"
+  ];
+
+  return suspiciousTerms.some(term =>
+    candidate.includes(term) &&
+    !original.includes(term)
+  );
+}
+
+
+function isOverSpecificGoogleResult(place,googlePlace){
+
+  const original =
+    String(place?.name || "").toLowerCase();
+
+  const googleName =
+    String(
+      typeof googlePlace?.displayName==="string"
+        ? googlePlace.displayName
+        : googlePlace?.displayName?.text || ""
+    ).toLowerCase();
+
+  const blocked = [
+    "parking lot",
+    "car park",
+    "ticket office",
+    "ticket center",
+    "ticket centre",
+    "entrance",
+    "entry gate",
+    "west gate",
+    "east gate",
+    "north gate",
+    "south gate",
+    "gate 1",
+    "gate 2",
+    "bus stop"
+  ];
+
+  return blocked.some(term =>
+    googleName.includes(term) &&
+    !original.includes(term)
+  );
+}
+
+
+function autoMatchConfidence(place,googlePlace,index=0){
+  const googleName =
+    typeof googlePlace?.displayName==="string"
+      ? googlePlace.displayName
+      : googlePlace?.displayName?.text || "";
+
+  const nameScore=
+    nameMatchScore(place?.name,googleName);
+
+  const address=
+    String(googlePlace?.formattedAddress||"").toLowerCase();
+
+  const city=
+    String(place?.city||"").trim().toLowerCase();
+
+  const country=
+    String(place?.country||"").trim().toLowerCase();
+
+  const cityMatch=
+    !!city && address.includes(city);
+
+  const countryMatch=
+    !!country && address.includes(country);
+
+  let score=nameScore;
+
+  if(cityMatch)score+=7;
+  if(countryMatch)score+=5;
+
+  // Google's first result is a useful ranking signal.
+  if(index===0)score+=3;
+
+  return {
+    score:Math.min(score,100),
+    nameScore,
+    cityMatch,
+    countryMatch,
+    googleName,
+    suspiciousSubLocation:
+      isSuspiciousSubLocation(
+        place?.name,
+        googleName
+      )
+  };
+}
+
+async function saveGoogleLocationDirect(place,googlePlace){
+
+  const lat=readLat(googlePlace);
+  const lng=readLng(googlePlace);
+
+  if(lat===null||lng===null){
+    throw new Error("Google did not return coordinates.");
+  }
+
+  const suggestedNames=
+    await suggestNamesFromGoogle(googlePlace);
+
+  const coordinatePayload=
+    await buildCoordinatePayload(place,googlePlace);
+
+  const update={
+    name:
+      suggestedNames?.name ||
+      place.name,
+    name_japanese:
+      suggestedNames?.localName ||
+      place.name_japanese ||
+      null,
+    provider:"google",
+    provider_place_id:
+      googlePlace.id || null,
+    ...coordinatePayload,
+    updated_at:
+      new Date().toISOString()
+  };
+
+  const {data,error}=await db
+    .from("places")
+    .update(update)
+    .eq("id",place.id)
+    .select();
+
+  if(error)throw error;
+  if(!data||!data.length)throw new Error("Supabase returned 0 updated rows.");
+
+  const saved=data[0];
+  const index=places.findIndex(p=>p.id===saved.id);
+  if(index>=0)places[index]=saved;
+  return saved;
+}
+
+async function autoMatchOne(place){
+
+  currentPlace=place;
+  showPlace(place,false);
+
+  const query=buildSearchQuery(place);
+
+  const library=await window.getGooglePlaces();
+  const PlaceClass=library.Place;
+
+  const response=await PlaceClass.searchByText({
+    textQuery:query,
+    fields:[
+      "id",
+      "displayName",
+      "formattedAddress",
+      "location",
+      "googleMapsURI"
+    ],
+    maxResultCount:5
+  });
+
+  const results=response.places||[];
+
+  if(!results.length){
+    return {status:"review",reason:"No Google result"};
+  }
+
+  const ranked=results
+    .map((result,index)=>({
+      result,
+      index,
+      overSpecific:isOverSpecificGoogleResult(place,result),
+      ...autoMatchConfidence(place,result,index)
+    }))
+    .filter(item=>!item.overSpecific)
+    .sort((a,b)=>b.score-a.score);
+
+  if(!ranked.length){
+    return {
+      status:"review",
+      reason:"Google only returned a gate, entrance, ticket office, parking lot or other sub-location."
+    };
+  }
+
+  const best=ranked[0];
+  const second=ranked[1];
+
+  if(best?.suspiciousSubLocation){
+    return {
+      status:"review",
+      score:best.score,
+      nameScore:best.nameScore,
+      reason:
+        `Needs review: Google matched a sub-location ("${best.googleName}") rather than the main attraction.`
+    };
+  }
+
+  if(best.suspiciousSubLocation){
+    return {
+      status:"review",
+      score:best.score,
+      nameScore:best.nameScore,
+      reason:
+        `Needs review: Google matched a sub-location ("${best.googleName}") rather than the main attraction.`
+    };
+  }
+
+  /*
+    Auto-save when:
+    - the name is exact / almost exact; or
+    - the name is very close and the address confirms the city/country.
+    A near-tie no longer blocks an exact match.
+  */
+  const exactish=
+    best.nameScore>=95;
+
+  const strongWithLocation=
+    best.nameScore>=76 &&
+    (best.cityMatch || best.countryMatch);
+
+  const clearLead=
+    !second ||
+    (best.score-second.score)>=2;
+
+  const topRankLocationMatch=
+    best.index===0 &&
+    best.nameScore>=65 &&
+    (best.cityMatch || best.countryMatch);
+
+  const veryStrongLocationMatch=
+    best.index===0 &&
+    best.nameScore>=55 &&
+    best.cityMatch &&
+    best.countryMatch;
+
+  if(
+    exactish ||
+    (strongWithLocation && clearLead) ||
+    topRankLocationMatch ||
+    veryStrongLocationMatch
+  ){
+    const saved=await saveGoogleLocationDirect(place,best.result);
+    return {
+      status:String(saved.coordinate_status||"")==="review" ? "review" : "matched",
+      score:best.score,
+      nameScore:best.nameScore,
+      reason:String(saved.coordinate_status||"")==="review"
+        ? "Google fallback — no confident OSM match; review required"
+        : null
+    };
+  }
+
+  return {
+    status:"review",
+    score:best.score,
+    nameScore:best.nameScore,
+    reason:
+      `Needs review: "${best.googleName}" · name ${best.nameScore}% · city ${best.cityMatch?"yes":"no"} · country ${best.countryMatch?"yes":"no"}`
+  };
+}
+
+async function toggleAutoMatch(){
+
+  const button=document.getElementById("autoMatchButton");
+
+  if(autoMatchRunning){
+    autoMatchRunning=false;
+    if(button)button.textContent="AUTO MATCH SAFE";
+    showMessage("Auto match stopping after the current place...");
+    return;
+  }
+
+  autoMatchRunning=true;
+  autoMatchStats={matched:0,review:0,processed:0,lastReview:""};
+
+  if(button)button.textContent="STOP AUTO MATCH";
+
+  const missing=
+    places.filter(place=>!hasCoordinates(place));
+
+  for(let i=0;i<missing.length;i++){
+
+    if(!autoMatchRunning){
+      break;
+    }
+
+    const place=missing[i];
+
+    try{
+
+      const result=
+        await autoMatchOne(place);
+
+      autoMatchStats.processed++;
+
+      if(result.status==="matched"){
+        autoMatchStats.matched++;
+      }else{
+        autoMatchStats.review++;
+        autoMatchStats.lastReview=result.reason||"Needs manual confirmation";
+      }
+
+    }catch(error){
+
+      console.error(
+        "Auto match failed",
+        place?.name,
+        error
+      );
+
+      autoMatchStats.processed++;
+      autoMatchStats.review++;
+
+    }
+
+    updateSummary();
+    renderPlaceList();
+
+    showMessage(
+      `Auto match: ${autoMatchStats.processed}/${missing.length} · saved ${autoMatchStats.matched} · review ${autoMatchStats.review}${autoMatchStats.lastReview?` · ${autoMatchStats.lastReview}`:""}`
+    );
+
+    /*
+      Give the browser and Google Places a little breathing room.
+      A longer pause also reduces bursty request errors on mobile.
+    */
+    await new Promise(
+      resolve=>setTimeout(resolve,650)
+    );
+
+  }
+
+  const stoppedEarly=
+    autoMatchStats.processed < missing.length;
+
+  autoMatchRunning=false;
+
+  const finalButton=
+    document.getElementById("autoMatchButton");
+
+  if(finalButton){
+    finalButton.textContent="AUTO MATCH SAFE";
+  }
+
+  showMessage(
+    stoppedEarly
+      ? `Auto match stopped at ${autoMatchStats.processed}/${missing.length}. Saved ${autoMatchStats.matched}. Needs review ${autoMatchStats.review}.`
+      : `Auto match finished. Saved ${autoMatchStats.matched}. Needs review ${autoMatchStats.review}.`
+  );
+
+  updateSummary();
+  renderPlaceList();
+}
+
+/* ============================================================
+   NEXT MISSING
+============================================================ */
+
+function findNextMissing(){
+
+  if(!places.length){
+    return;
+  }
+
+
+  let startIndex = -1;
+
+
+  if(currentPlace){
+
+    startIndex =
+      places.findIndex(
+        p => p.id === currentPlace.id
+      );
+
+  }
+
+
+  /*
+    Look after the current place first.
+  */
+
+  for(
+    let i = startIndex + 1;
+    i < places.length;
+    i++
+  ){
+
+    if(!hasCoordinates(places[i])){
+
+      currentPlace =
+        places[i];
+
+      showPlace(
+        currentPlace,
+        true
+      );
+
+      scrollToCard();
+
+      return;
+    }
+
+  }
+
+
+  /*
+    Wrap back to beginning.
+  */
+
+  for(
+    let i = 0;
+    i <= startIndex;
+    i++
+  ){
+
+    if(!hasCoordinates(places[i])){
+
+      currentPlace =
+        places[i];
+
+      showPlace(
+        currentPlace,
+        true
+      );
+
+      scrollToCard();
+
+      return;
+    }
+
+  }
+
+
+  showMessage(
+    "All places have coordinates! 🎉"
+  );
+
+}
+
+
+/* ============================================================
+   SKIP
+============================================================ */
+
+function skipPlace(){
+
+  if(!places.length){
+    return;
+  }
+
+
+  let index =
+    places.findIndex(
+      p =>
+        currentPlace &&
+        p.id === currentPlace.id
+    );
+
+
+  index++;
+
+  if(index >= places.length){
+    index = 0;
+  }
+
+
+  currentPlace =
+    places[index];
+
+
+  showPlace(
+    currentPlace,
+    true
+  );
+
+  scrollToCard();
+}
+
+
+/* ============================================================
+   SCROLL
+============================================================ */
+
+function scrollToCard(){
+
+  setTimeout(() => {
+
+    document.getElementById(
+      "placeCard"
+    ).scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  },100);
+}
+
+
+/* ============================================================
+   ENTER TO SEARCH
+============================================================ */
+
+document
+  .getElementById("googleSearch")
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if(event.key === "Enter"){
+
+        event.preventDefault();
+        searchGoogle();
+
+      }
+
+    }
+  );
+
+
+/* ============================================================
+   START
+============================================================ */
+
+loadPlaces();
+
+</script>
+
+
+<script src="pwa.js"></script>
+</body>
+</html>

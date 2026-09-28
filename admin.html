@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070c10">
+<title>Admin Panel · Travel Planner</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+:root{
+  --bg:#070c10; --panel:#10161c; --panel2:#151c23; --line:#29323b;
+  --text:#f5f5f3; --muted:#8f9aa4; --red:#c96f68; --blue:#5c9dff;
+  --green:#67c587; --orange:#f4a34d;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:radial-gradient(circle at 50% -10%,#17212a 0%,transparent 38%),var(--bg)}
+button,a{font:inherit}
+button{cursor:pointer}
+
+.guard{
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:24px; color:var(--muted); font-size:12px; text-align:center;
+}
+.app{display:none;width:min(100%,900px);margin:auto;padding:28px 16px 55px}
+.app.ready{display:block}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px}
+.eyebrow{color:var(--orange);font-size:9px;font-weight:950;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:34px;margin:5px 0 0}
+.sub{color:var(--muted);font-size:11px;line-height:1.55;margin-top:7px}
+.back{
+  flex:0 0 auto;padding:10px 13px;border:1px solid var(--line);border-radius:11px;
+  background:var(--panel2);color:var(--text);text-decoration:none;font-size:9px;font-weight:900
+}
+
+.admin-card{
+  border:1px solid rgba(244,163,77,.28);border-radius:18px;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(244,163,77,.08),var(--panel) 55%);
+  margin-bottom:23px
+}
+.admin-label{color:var(--orange);font-size:7px;font-weight:950;letter-spacing:1px}
+.admin-name{font-family:Georgia,serif;font-size:18px;margin-top:4px}
+.admin-email{color:var(--muted);font-size:8px;margin-top:3px}
+
+.section-label{color:#8eb6d8;font-size:8px;font-weight:950;letter-spacing:1.3px;margin:0 2px 9px}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tool{
+  min-height:180px;display:flex;flex-direction:column;padding:19px;border:1px solid var(--line);
+  border-radius:20px;background:var(--panel);color:var(--text);text-decoration:none;
+  transition:transform .12s ease,border-color .12s ease
+}
+.tool:hover{transform:translateY(-2px);border-color:#44515c}
+.tool-icon{font-size:30px}
+.tool-tag{margin-top:17px;font-size:7px;font-weight:950;letter-spacing:1px;color:var(--muted)}
+.tool-name{font-family:Georgia,serif;font-size:22px;margin-top:4px}
+.tool-desc{color:var(--muted);font-size:9px;line-height:1.5;margin-top:7px;flex:1}
+.tool-go{font-size:9px;font-weight:950;margin-top:15px}
+.tool.places{border-color:rgba(92,157,255,.28)}
+.tool.places .tool-go{color:#a9cbff}
+.tool.restaurants{border-color:rgba(103,197,135,.28)}
+.tool.restaurants .tool-go{color:#9cf6ba}
+
+.note{
+  margin-top:22px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.018);color:#75828b;font-size:8px;line-height:1.6
+}
+.note strong{color:#b8c0c5}
+
+@media(max-width:600px){
+  .app{padding:20px 11px 40px}
+  h1{font-size:29px}
+  .tools{grid-template-columns:1fr}
+  .tool{min-height:155px}
+}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+<body>
+
+<div id="guard" class="guard">Checking administrator access…</div>
+
+<div id="app" class="app">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Admin · Travel Planner</div>
+      <h1>Admin Panel</h1>
+      <div class="sub">Private tools for maintaining your master travel database.</div>
+    </div>
+    <a class="back" href="index.html">← BACK TO APP</a>
+  </div>
+
+  <div class="admin-card">
+    <div class="admin-label">SIGNED IN AS ADMIN</div>
+    <div id="adminName" class="admin-name">Administrator</div>
+    <div id="adminEmail" class="admin-email"></div>
+  </div>
+
+  <div class="section-label">DATABASE TOOLS</div>
+
+  <div class="tools">
+    <a class="tool places" href="p-setup.html">
+      <div class="tool-icon">📍</div>
+      <div class="tool-tag">PLACES DATABASE</div>
+      <div class="tool-name">Places Verification</div>
+      <div class="tool-desc">
+        Verify attractions, shrines, museums, hotels and other places against Google.
+        Maintain coordinates, addresses and Google place IDs.
+      </div>
+      <div class="tool-go">OPEN P-SETUP →</div>
+    </a>
+
+    <a class="tool restaurants" href="r-setup.html">
+      <div class="tool-icon">🍽️</div>
+      <div class="tool-tag">RESTAURANT DATABASE</div>
+      <div class="tool-name">Restaurant Verification</div>
+      <div class="tool-desc">
+        Review and maintain restaurant records, Google locations and restaurant
+        information used throughout the travel planner.
+      </div>
+      <div class="tool-go">OPEN R-SETUP →</div>
+    </a>
+  </div>
+
+  <div class="note">
+    <strong>Admin only.</strong> This page checks <code>profiles.role</code> before showing
+    the tools. Non-admin users are redirected to the main app.
+  </div>
+</div>
+
+<script>
+async function startAdminPanel(){
+  try{
+    const {data:{user},error:authError}=await db.auth.getUser();
+    if(authError) throw authError;
+
+    if(!user){
+      location.replace("login.html");
+      return;
+    }
+
+    const {data:profile,error:profileError}=await db
+      .from("profiles")
+      .select("display_name, role")
+      .eq("id",user.id)
+      .maybeSingle();
+
+    if(profileError) throw profileError;
+
+    if(String(profile?.role || "").toLowerCase() !== "admin"){
+      location.replace("index.html");
+      return;
+    }
+
+    document.getElementById("adminName").textContent =
+      profile?.display_name || "Administrator";
+
+    document.getElementById("adminEmail").textContent =
+      user.email || "";
+
+    document.getElementById("guard").style.display="none";
+    document.getElementById("app").classList.add("ready");
+  }catch(error){
+    console.error("Admin access check failed:",error);
+    // Fail closed: don't expose the admin UI if the check itself fails.
+    location.replace("index.html");
+  }
+}
+
+startAdminPanel();
+</script>
+
+
+<script src="pwa.js"></script>
+</body>
+</html>

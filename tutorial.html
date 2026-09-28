@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05090c">
+<title>Plan Guide · Travel</title>
+
+<style>
+:root{
+  --bg:#030608;
+  --line:#29343c;
+  --line-soft:rgba(255,255,255,.065);
+  --text:#f5f2ed;
+  --red:#ff625f;
+  --red-soft:rgba(255,98,95,.09);
+  --red-line:rgba(255,98,95,.34);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  min-height:100svh;
+  overflow:hidden;
+  color:var(--text);
+  background:#030608;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+button{
+  font:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* =========================================================
+   STAGE
+========================================================= */
+
+.tutorial-page{
+  min-height:100svh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.tutorial-shell{
+  position:relative;
+  width:min(100vw,720px);
+  height:100svh;
+  overflow:hidden;
+  background:#070d11;
+}
+
+/*
+  IMPORTANT:
+  The screenshot uses object-fit:cover.
+  The spotlight is mapped in JavaScript from the ORIGINAL
+  screenshot coordinates, so it stays aligned even when
+  the browser crops the top/bottom of the image.
+*/
+.screen-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center center;
+  user-select:none;
+  pointer-events:none;
+}
+
+/* =========================================================
+   SKIP
+========================================================= */
+
+.skip-btn{
+  position:absolute;
+  z-index:60;
+  top:18px;
+  right:14px;
+
+  min-height:30px;
+  padding:0 10px;
+
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:9px;
+
+  background:rgba(10,17,22,.92);
+  color:#aab3b9;
+
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.06em;
+
+  cursor:pointer;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+/* =========================================================
+   SPOTLIGHT
+========================================================= */
+
+.focus-ring{
+  position:absolute;
+  z-index:25;
+
+  border:1.5px solid rgba(255,115,111,.98);
+  border-radius:16px;
+
+  box-shadow:
+    0 0 0 9999px rgba(1,4,6,.72),
+    inset 0 0 0 1px rgba(255,255,255,.025),
+    0 0 0 4px rgba(255,98,95,.07),
+    0 0 24px rgba(255,98,95,.28);
+
+  pointer-events:none;
+
+  transition:
+    left .34s cubic-bezier(.2,.82,.2,1),
+    top .34s cubic-bezier(.2,.82,.2,1),
+    width .34s cubic-bezier(.2,.82,.2,1),
+    height .34s cubic-bezier(.2,.82,.2,1),
+    border-radius .22s ease;
+}
+
+.tap-hint{
+  position:absolute;
+  z-index:30;
+
+  width:22px;
+  height:22px;
+
+  border:1px solid rgba(255,98,95,.78);
+  border-radius:50%;
+
+  background:rgba(20,8,10,.78);
+
+  box-shadow:
+    0 0 0 4px rgba(255,98,95,.07),
+    0 0 18px rgba(255,98,95,.25);
+
+  transform:translate(-50%,-50%);
+
+  pointer-events:none;
+
+  animation:tapPulse 1.35s ease-in-out infinite;
+}
+
+.tap-hint::after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border-radius:50%;
+  background:#ff7b77;
+}
+
+@keyframes tapPulse{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(.90);
+    opacity:.82;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.12);
+    opacity:1;
+  }
+}
+
+/* =========================================================
+   GUIDE CARD
+========================================================= */
+
+.guide-card{
+  position:absolute;
+  z-index:50;
+
+  left:14px;
+  right:14px;
+
+  padding:11px 13px 10px;
+
+  overflow:hidden;
+
+  border:1px solid #2b3740;
+  border-radius:17px;
+
+  background:
+    radial-gradient(
+      circle at 92% 0%,
+      rgba(255,98,95,.055),
+      transparent 28%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(17,26,32,.98),
+      rgba(9,16,21,.985)
+    );
+
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.50);
+
+  backdrop-filter:blur(16px) saturate(115%);
+  -webkit-backdrop-filter:blur(16px) saturate(115%);
+}
+
+.guide-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:2px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ff746f,
+      rgba(255,98,95,.40)
+    );
+}
+
+.guide-card::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,98,95,.46),
+      rgba(255,98,95,.11),
+      transparent 75%
+    );
+}
+
+.guide-number{
+  color:#df7775;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.guide-title{
+  margin:5px 0 0;
+
+  color:#f6f2ec;
+
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:17px;
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+
+.guide-text{
+  margin:6px 0 0;
+
+  color:#949fa6;
+
+  font-size:7px;
+  line-height:1.55;
+}
+
+.guide-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  margin-top:10px;
+  padding-top:8px;
+
+  border-top:1px solid var(--line-soft);
+}
+
+.progress-dots{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.progress-dot{
+  width:5px;
+  height:5px;
+  border-radius:999px;
+  background:#39454d;
+}
+
+.progress-dot.active{
+  width:17px;
+  background:var(--red);
+  box-shadow:0 0 9px rgba(255,98,95,.20);
+}
+
+.guide-buttons{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.guide-btn{
+  min-height:29px;
+  padding:0 10px;
+
+  border:1px solid #2b363e;
+  border-radius:8px;
+
+  background:#10181d;
+  color:#9ca7ad;
+
+  font-size:6.3px;
+  font-weight:900;
+  letter-spacing:.05em;
+
+  cursor:pointer;
+}
+
+.guide-btn.primary{
+  border-color:var(--red-line);
+  background:var(--red-soft);
+  color:#ffb0ab;
+}
+
+.guide-btn:active{
+  transform:scale(.96);
+}
+
+.guide-btn[hidden]{
+  display:none;
+}
+
+@media(min-width:700px){
+  .tutorial-shell{
+    max-width:720px;
+    border-left:1px solid #273139;
+    border-right:1px solid #273139;
+  }
+}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+<body>
+
+<div class="tutorial-page">
+
+  <div id="tutorialStage" class="tutorial-shell">
+
+    <img
+      id="screenImage"
+      class="screen-image"
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/tutorial-plan.jpg?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvdHV0b3JpYWwtcGxhbi5qcGciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5ODA5NTM0LCJleHAiOjMzMzI1ODA5NTM0fQ.TmnSq5EWfXWu5J_t0L-RZRu5RvTVEIu6N1VubUk-eCnM5yVF4d-bJQU_z-Whd7Q5w4VkMAMXfWpqw8PiMU-aKA"
+      alt="Plan page tutorial"
+    >
+
+    <button
+      id="skipBtn"
+      class="skip-btn"
+      type="button"
+    >
+      SKIP
+    </button>
+
+    <div
+      id="focusRing"
+      class="focus-ring"
+    ></div>
+
+    <div
+      id="tapHint"
+      class="tap-hint"
+    ></div>
+
+    <section
+      id="guideCard"
+      class="guide-card"
+      aria-live="polite"
+    >
+
+      <div
+        id="guideNumber"
+        class="guide-number"
+      ></div>
+
+      <h1
+        id="guideTitle"
+        class="guide-title"
+      ></h1>
+
+      <p
+        id="guideText"
+        class="guide-text"
+      ></p>
+
+      <div class="guide-actions">
+
+        <div
+          id="progressDots"
+          class="progress-dots"
+        ></div>
+
+        <div class="guide-buttons">
+
+          <button
+            id="backBtn"
+            class="guide-btn"
+            type="button"
+          >
+            BACK
+          </button>
+
+          <button
+            id="nextBtn"
+            class="guide-btn primary"
+            type="button"
+          >
+            NEXT →
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SOURCE IMAGE COORDINATES
+
+   These are measured against the original Plan screenshot:
+   709 × 1536.
+
+   JavaScript converts them to the cropped on-screen position.
+========================================================= */
+
+const SOURCE_WIDTH  = 709;
+const SOURCE_HEIGHT = 1536;
+
+
+const tutorialSteps = [
+
+  {
+    title:"Choose a day",
+    text:"Tap a date to view that day’s itinerary.",
+
+    rect:{
+      x:44,
+      y:397,
+      w:622,
+      h:123,
+      radius:16
+    },
+
+    tap:{
+      x:99,
+      y:462
+    },
+
+    card:"bottom"
+  },
+
+
+  {
+    title:"Travel Assist",
+    text:"Use Planning before your trip and Live while travelling.",
+
+    rect:{
+      x:43,
+      y:541,
+      w:622,
+      h:100,
+      radius:16
+    },
+
+    tap:{
+      x:486,
+      y:589
+    },
+
+    card:"bottom"
+  },
+
+
+  {
+    title:"Your itinerary",
+    text:"Your stops appear in time order with locations and notes.",
+
+    rect:{
+      x:43,
+      y:666,
+      w:622,
+      h:688,
+      radius:20
+    },
+
+    tap:{
+      x:177,
+      y:904
+    },
+
+    card:"top"
+  },
+
+
+  {
+    title:"Add or edit",
+    text:"Use + ADD for a new stop and EDIT to change your plan.",
+
+    rect:{
+      x:530,
+      y:232,
+      w:135,
+      h:70,
+      radius:12
+    },
+
+    tap:{
+      x:563,
+      y:267
+    },
+
+    card:"bottom"
+  },
+
+
+  {
+    title:"Quick navigation",
+    text:"Use the centre menu to open Home, Trips, Plan, Food and More.",
+
+    rect:{
+      x:309,
+      y:1334,
+      w:91,
+      h:94,
+      radius:48
+    },
+
+    tap:{
+      x:354,
+      y:1380
+    },
+
+    card:"top"
+  }
+
+];
+
+
+let currentStep = 0;
+
+
+const stage =
+  document.getElementById(
+    "tutorialStage"
+  );
+
+const screenImage =
+  document.getElementById(
+    "screenImage"
+  );
+
+const focusRing =
+  document.getElementById(
+    "focusRing"
+  );
+
+const tapHint =
+  document.getElementById(
+    "tapHint"
+  );
+
+const guideCard =
+  document.getElementById(
+    "guideCard"
+  );
+
+const guideNumber =
+  document.getElementById(
+    "guideNumber"
+  );
+
+const guideTitle =
+  document.getElementById(
+    "guideTitle"
+  );
+
+const guideText =
+  document.getElementById(
+    "guideText"
+  );
+
+const progressDots =
+  document.getElementById(
+    "progressDots"
+  );
+
+const backBtn =
+  document.getElementById(
+    "backBtn"
+  );
+
+const nextBtn =
+  document.getElementById(
+    "nextBtn"
+  );
+
+const skipBtn =
+  document.getElementById(
+    "skipBtn"
+  );
+
+
+/* =========================================================
+   OBJECT-FIT:COVER MAPPING
+========================================================= */
+
+function imageMetrics(){
+
+  const stageWidth =
+    stage.clientWidth;
+
+  const stageHeight =
+    stage.clientHeight;
+
+
+  const sourceWidth =
+    screenImage.naturalWidth
+    ||
+    SOURCE_WIDTH;
+
+
+  const sourceHeight =
+    screenImage.naturalHeight
+    ||
+    SOURCE_HEIGHT;
+
+
+  const scale =
+    Math.max(
+      stageWidth / sourceWidth,
+      stageHeight / sourceHeight
+    );
+
+
+  const renderedWidth =
+    sourceWidth * scale;
+
+
+  const renderedHeight =
+    sourceHeight * scale;
+
+
+  return{
+
+    scale,
+
+    offsetX:
+      (
+        stageWidth -
+        renderedWidth
+      )
+      / 2,
+
+    offsetY:
+      (
+        stageHeight -
+        renderedHeight
+      )
+      / 2
+
+  };
+
+}
+
+
+function mapRect(rect){
+
+  const metrics =
+    imageMetrics();
+
+
+  return{
+
+    left:
+      metrics.offsetX +
+      rect.x *
+      metrics.scale,
+
+    top:
+      metrics.offsetY +
+      rect.y *
+      metrics.scale,
+
+    width:
+      rect.w *
+      metrics.scale,
+
+    height:
+      rect.h *
+      metrics.scale,
+
+    radius:
+      rect.radius *
+      metrics.scale
+
+  };
+
+}
+
+
+function mapPoint(point){
+
+  const metrics =
+    imageMetrics();
+
+
+  return{
+
+    x:
+      metrics.offsetX +
+      point.x *
+      metrics.scale,
+
+    y:
+      metrics.offsetY +
+      point.y *
+      metrics.scale
+
+  };
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function renderDots(){
+
+  progressDots.innerHTML =
+    tutorialSteps
+      .map(
+        (_,index) => `
+
+          <span
+            class="progress-dot ${
+              index === currentStep
+              ?
+              "active"
+              :
+              ""
+            }"
+          ></span>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   GUIDE CARD POSITION
+========================================================= */
+
+function positionGuideCard(position){
+
+  guideCard.style.top =
+    "";
+
+  guideCard.style.bottom =
+    "";
+
+
+  if(
+    position ===
+    "top"
+  ){
+
+    guideCard.style.top =
+      "112px";
+
+  }
+
+  else{
+
+    guideCard.style.bottom =
+      "54px";
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderStep(){
+
+  const step =
+    tutorialSteps[
+      currentStep
+    ];
+
+
+  const rect =
+    mapRect(
+      step.rect
+    );
+
+
+  const point =
+    mapPoint(
+      step.tap
+    );
+
+
+  focusRing.style.left =
+    rect.left +
+    "px";
+
+
+  focusRing.style.top =
+    rect.top +
+    "px";
+
+
+  focusRing.style.width =
+    rect.width +
+    "px";
+
+
+  focusRing.style.height =
+    rect.height +
+    "px";
+
+
+  focusRing.style.borderRadius =
+    Math.max(
+      10,
+      rect.radius
+    )
+    +
+    "px";
+
+
+  tapHint.style.left =
+    point.x +
+    "px";
+
+
+  tapHint.style.top =
+    point.y +
+    "px";
+
+
+  guideNumber.textContent =
+    `STEP ${
+      currentStep + 1
+    } OF ${
+      tutorialSteps.length
+    }`;
+
+
+  guideTitle.textContent =
+    step.title;
+
+
+  guideText.textContent =
+    step.text;
+
+
+  backBtn.hidden =
+    currentStep ===
+    0;
+
+
+  nextBtn.textContent =
+    currentStep ===
+    tutorialSteps.length - 1
+
+    ?
+
+    "DONE ✓"
+
+    :
+
+    "NEXT →";
+
+
+  positionGuideCard(
+    step.card
+  );
+
+
+  renderDots();
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishTutorial(){
+
+  localStorage.setItem(
+    "plan_tutorial_seen",
+    "1"
+  );
+
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const returnTo =
+    params.get(
+      "return"
+    );
+
+
+  const tripId =
+    params.get(
+      "trip"
+    )
+    ||
+    localStorage.getItem(
+      "current_trip_id"
+    );
+
+
+  if(returnTo){
+
+    window.location.href =
+      returnTo;
+
+    return;
+
+  }
+
+
+  if(tripId){
+
+    window.location.href =
+      `schedule.html?trip=${
+        encodeURIComponent(
+          tripId
+        )
+      }`;
+
+    return;
+
+  }
+
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+backBtn.onclick =
+  () => {
+
+    if(
+      currentStep > 0
+    ){
+
+      currentStep -= 1;
+
+      renderStep();
+
+    }
+
+  };
+
+
+nextBtn.onclick =
+  () => {
+
+    if(
+      currentStep <
+      tutorialSteps.length - 1
+    ){
+
+      currentStep += 1;
+
+      renderStep();
+
+      return;
+
+    }
+
+
+    finishTutorial();
+
+  };
+
+
+skipBtn.onclick =
+  finishTutorial;
+
+
+/* =========================================================
+   RESIZE / IMAGE LOAD
+========================================================= */
+
+screenImage.addEventListener(
+  "load",
+  renderStep
+);
+
+
+window.addEventListener(
+  "resize",
+  renderStep
+);
+
+
+window.addEventListener(
+  "orientationchange",
+  () => {
+
+    setTimeout(
+      renderStep,
+      150
+    );
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+if(
+  screenImage.complete
+){
+
+  renderStep();
+
+}
+
+</script>
+
+
+<script src="pwa.js"></script>
+</body>
+</html>

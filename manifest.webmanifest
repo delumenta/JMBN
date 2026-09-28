@@ -1,0 +1,53 @@
+{
+  "id": "/onthego/",
+  "name": "Travel",
+  "short_name": "Travel",
+  "description": "Plan trips, itineraries, food, bookings, places and expenses.",
+  "start_url": "/onthego/index.html",
+  "scope": "/onthego/",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "portrait-primary",
+  "background_color": "#070c10",
+  "theme_color": "#070c10",
+  "lang": "en",
+  "categories": ["travel", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/onthego/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/onthego/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/onthego/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Plan",
+      "short_name": "Plan",
+      "url": "/onthego/schedule.html"
+    },
+    {
+      "name": "Food",
+      "short_name": "Food",
+      "url": "/onthego/food.html"
+    },
+    {
+      "name": "Bookings",
+      "short_name": "Bookings",
+      "url": "/onthego/bookings.html"
+    }
+  ]
+}

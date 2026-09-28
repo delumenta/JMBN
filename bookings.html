@@ -1,0 +1,4787 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#070c10">
+
+<title>Bookings · Japan Trip</title>
+
+<style>
+/* Shared visual system with food.html + schedule.html */
+:root{
+  --bg:#070c10;
+  --surface:#0d1318;
+  --surface-2:#11181e;
+  --surface-3:#151d24;
+  --line:#263039;
+  --line-soft:rgba(255,255,255,.065);
+  --text:#f5f3ef;
+  --muted:#929ca4;
+  --muted-2:#66727b;
+  --red:#ff625f;
+  --red-soft:rgba(255,98,95,.09);
+  --red-line:rgba(255,98,95,.30);
+  --green:#79c995;
+  --orange:#efa875;
+  --blue:#78a9ef;
+  --gold:#e4bd69;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 50% -8%,rgba(42,56,68,.30),transparent 28%),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,input,textarea,select{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
+
+/* =========================================================
+   HEADER — MATCHES FOOD / PLAN
+========================================================= */
+header{
+  position:sticky;
+  top:0;
+  z-index:40;
+  border-bottom:1px solid var(--line-soft);
+  background:rgba(7,12,16,.965);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.header-inner{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px 0;
+}
+
+.title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.title-row>div:first-child{min-width:0}
+
+.eyebrow{
+  margin-bottom:2px;
+  color:var(--red);
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+
+.booking-page-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0;
+}
+
+.booking-page-title-icon{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:block;
+  object-fit:contain;
+}
+
+.booking-page-title span{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:27px;
+  font-weight:700;
+  line-height:1;
+}
+
+.trip-name{
+  margin:3px 0 0 53px;
+  overflow:hidden;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:600;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.add-btn{
+  flex:0 0 auto;
+  min-height:36px;
+  padding:7px 11px;
+  border:1px solid var(--red-line);
+  border-radius:10px;
+  background:var(--red-soft);
+  color:#f3b7b3;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.04em;
+  cursor:pointer;
+}
+
+.add-btn:active{transform:scale(.95)}
+
+/* =========================================================
+   MAIN
+========================================================= */
+main{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:14px 14px 100px;
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-bottom:10px;
+}
+
+.summary-card{
+  min-width:0;
+  padding:10px 7px;
+  border:1px solid #252f37;
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(20,28,34,.97),rgba(12,18,23,.98));
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.10);
+}
+
+.summary-number{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:21px;
+  font-weight:800;
+  line-height:1;
+}
+
+.summary-label{
+  margin-top:4px;
+  color:#748089;
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.summary-card.action .summary-number{color:var(--orange)}
+.summary-card.booked .summary-number{color:var(--green)}
+
+/* =========================================================
+   STATUS FILTERS — SAME CHIP LANGUAGE AS FOOD
+========================================================= */
+.filters,
+.type-filters{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  width:100%;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+
+.filters::-webkit-scrollbar,
+.type-filters::-webkit-scrollbar{display:none}
+
+.filters{margin-bottom:6px}
+.type-filters{
+  margin-bottom:15px;
+  padding-bottom:1px;
+}
+
+.filter-btn,
+.type-filter{
+  flex:0 0 auto;
+  min-height:27px;
+  padding:4px 9px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(17,24,30,.80);
+  color:#8d979e;
+  font-size:7px;
+  font-weight:850;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.filter-btn.active{
+  border-color:var(--red-line);
+  background:var(--red-soft);
+  color:#f0c0bc;
+}
+
+.type-filter{
+  min-height:26px;
+  background:#0f161c;
+  color:#77838b;
+}
+
+.type-filter.active{
+  border-color:rgba(120,169,239,.25);
+  background:rgba(120,169,239,.055);
+  color:#a7c7f3;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+.section{margin-bottom:20px}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:2px 1px 8px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--line-soft);
+}
+
+.section-title{
+  color:#bfc5c9;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.07em;
+}
+
+.section-title.action{color:var(--orange)}
+.section-title.booked{color:var(--green)}
+
+.section-count{
+  color:#626e76;
+  font-size:7px;
+  font-weight:900;
+}
+
+/* =========================================================
+   DATE GROUP
+========================================================= */
+.date-group{margin-bottom:12px}
+
+.date-label{
+  margin:0 2px 6px;
+  color:#78858d;
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+/* =========================================================
+   BOOKING CARD
+========================================================= */
+.booking-card{
+  position:relative;
+  margin-bottom:8px;
+  padding:11px 11px 9px;
+  overflow:hidden;
+  border:1px solid #252f37;
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(20,28,34,.97),rgba(12,18,23,.98));
+  box-shadow:0 6px 18px rgba(0,0,0,.13);
+  cursor:pointer;
+  transition:border-color .18s ease,transform .18s ease;
+}
+
+.booking-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:13px;
+  right:13px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+}
+
+.booking-top{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+}
+
+.booking-icon{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,98,95,.16);
+  border-radius:10px;
+  background:rgba(255,98,95,.055);
+  font-size:16px;
+}
+
+.booking-main{
+  flex:1;
+  min-width:0;
+}
+
+.booking-title{
+  color:#f8f7f4;
+  font-size:10px;
+  font-weight:900;
+  line-height:1.3;
+}
+
+.booking-meta{
+  margin-top:3px;
+  color:#919ba2;
+  font-size:7.5px;
+  line-height:1.4;
+}
+
+.booking-note{
+  margin-top:6px;
+  color:#8f999f;
+  font-size:7.5px;
+  line-height:1.5;
+}
+
+/* STATUS */
+.status-badge{
+  flex:0 0 auto;
+  padding:2px 5px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:999px;
+  background:rgba(255,255,255,.025);
+  font-size:6px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.status-badge.planned{
+  border-color:rgba(238,168,117,.22);
+  background:rgba(238,168,117,.055);
+  color:#efb07d;
+}
+
+.status-badge.booked{
+  border-color:rgba(121,201,149,.22);
+  background:rgba(121,201,149,.055);
+  color:#9edab3;
+}
+
+.status-badge.cancelled{
+  color:#7f8990;
+}
+
+/* DETAILS */
+.detail-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:8px;
+}
+
+.detail-pill{
+  display:inline-flex;
+  align-items:center;
+  min-height:22px;
+  padding:3px 6px;
+  border:0;
+  border-radius:6px;
+  background:rgba(255,255,255,.035);
+  color:#aab3b9;
+  font-size:6.5px;
+  font-weight:800;
+}
+
+.detail-pill.link{
+  border:1px solid rgba(120,169,239,.16);
+  background:rgba(120,169,239,.035);
+  color:#91b9ef;
+  text-decoration:none;
+}
+
+/* QUICK BOOK */
+.quick-book{
+  width:100%;
+  min-height:29px;
+  margin-top:9px;
+  padding:5px 8px;
+  border:1px solid rgba(121,201,149,.18);
+  border-radius:8px;
+  background:rgba(121,201,149,.035);
+  color:#8fd0a6;
+  font-size:6.5px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* =========================================================
+   EMPTY / STATE
+========================================================= */
+.empty,
+.state{
+  padding:36px 18px;
+  border:1px dashed #303b43;
+  border-radius:14px;
+  background:rgba(255,255,255,.012);
+  color:#77838b;
+  font-size:8px;
+  line-height:1.6;
+  text-align:center;
+}
+
+.empty strong,
+.state strong{
+  display:block;
+  margin-bottom:5px;
+  color:#e8e7e3;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:14px;
+  font-weight:700;
+}
+
+/* =========================================================
+   FIRST BOOKING STATE
+========================================================= */
+
+.booking-first-use{
+  padding:28px 18px 22px;
+  border:1px dashed #303b43;
+  border-radius:16px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,98,95,.07),transparent 38%),
+    rgba(255,255,255,.012);
+  text-align:center;
+}
+
+.booking-first-icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 11px;
+  border:1px solid rgba(255,98,95,.20);
+  border-radius:15px;
+  background:rgba(255,98,95,.05);
+  font-size:23px;
+}
+
+.booking-first-use strong{
+  display:block;
+  color:#f0ede8;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:17px;
+  font-weight:700;
+}
+
+.booking-first-copy{
+  max-width:410px;
+  margin:7px auto 0;
+  color:#7d8992;
+  font-size:8px;
+  line-height:1.6;
+}
+
+.booking-first-primary{
+  width:100%;
+  max-width:330px;
+  min-height:42px;
+  margin-top:15px;
+  border:1px solid rgba(255,98,95,.48);
+  border-radius:11px;
+  background:rgba(255,98,95,.09);
+  color:#efaaa5;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+.booking-quick-label{
+  margin-top:15px;
+  color:#66737b;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+
+.booking-quick-grid{
+  max-width:360px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin:7px auto 0;
+}
+
+.booking-quick{
+  min-height:42px;
+  padding:6px 3px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:9px;
+  background:rgba(255,255,255,.018);
+  color:#9aa5ac;
+  font-size:6.2px;
+  font-weight:850;
+}
+
+@media(max-width:420px){
+  .booking-quick-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+/* =========================================================
+   ADD / EDIT SHEET — SAME AS FOOD / PLAN
+========================================================= */
+.sheet-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:150;
+  display:none;
+  align-items:flex-end;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+
+.sheet-backdrop.open{display:flex}
+
+.sheet{
+  width:100%;
+  max-width:620px;
+  max-height:calc(92vh - env(safe-area-inset-top));
+  margin:0 auto;
+  padding:8px 14px calc(18px + env(safe-area-inset-bottom));
+  overflow-y:auto;
+  border:1px solid var(--line);
+  border-radius:20px 20px 0 0;
+  background:#0c1217;
+  box-shadow:0 -20px 50px rgba(0,0,0,.35);
+}
+
+.sheet-handle{
+  width:36px;
+  height:4px;
+  margin:2px auto 13px;
+  border-radius:999px;
+  background:#35414a;
+}
+
+.sheet-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.sheet-title{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:19px;
+}
+
+.close-btn{
+  width:34px;
+  height:34px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#131b21;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* FORM */
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.field.full{grid-column:1/-1}
+
+.field label{
+  display:block;
+  margin-bottom:4px;
+  color:#8d989f;
+  font-size:6.5px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  min-height:40px;
+  padding:8px 9px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:0;
+  background:#0f161c;
+  color:#fff;
+  font-size:9px;
+}
+
+.field textarea{
+  min-height:76px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--red-line);
+}
+
+.sheet-actions{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:6px;
+  margin-top:11px;
+}
+
+.delete-btn,
+.save-btn{
+  min-height:43px;
+  border-radius:10px;
+  font-size:8px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.delete-btn{
+  border:1px solid rgba(255,98,95,.20);
+  background:rgba(255,98,95,.04);
+  color:#d98a83;
+}
+
+.save-btn{
+  border:1px solid rgba(121,201,149,.24);
+  background:rgba(121,201,149,.07);
+  color:#a7dbb8;
+}
+
+.save-btn:disabled,
+.delete-btn:disabled{opacity:.5}
+
+.form-message{
+  display:none;
+  margin-top:8px;
+  padding:8px;
+  border-radius:8px;
+  font-size:8px;
+}
+
+.form-message.error{
+  display:block;
+  border:1px solid rgba(255,98,95,.20);
+  background:rgba(255,98,95,.055);
+  color:#f3aaa6;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+@media(max-width:480px){
+  .header-inner{padding-left:12px;padding-right:12px}
+  main{padding-left:12px;padding-right:12px}
+
+  .booking-page-title-icon{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+  }
+
+  .booking-page-title span{font-size:25px}
+  .trip-name{margin-left:49px}
+
+  .booking-card{padding:10px}
+}
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+@media(min-width:700px){
+  .booking-card:hover{
+    border-color:#35414a;
+    transform:translateY(-1px);
+  }
+}
+
+/* =========================================================
+   PLAN-MATCHED BOOKINGS — SAFE VISUAL OVERRIDE
+========================================================= */
+body{padding-top:14px}
+
+header{
+  position:relative;
+  top:auto;
+  width:calc(100% - 24px);
+  max-width:720px;
+  margin:0 auto;
+  overflow:hidden;
+  border:1px solid #273139;
+  border-bottom:0;
+  border-radius:27px 27px 0 0;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,98,95,.055),transparent 34%),
+    linear-gradient(180deg,#0a1116,#070d11);
+  box-shadow:0 24px 65px rgba(0,0,0,.24);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+header::before{
+  content:"予";
+  position:absolute;
+  z-index:0;
+  right:6px;
+  top:7px;
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",Georgia,serif;
+  font-size:126px;
+  font-weight:700;
+  line-height:1;
+  color:var(--red);
+  opacity:.042;
+  pointer-events:none;
+}
+.header-inner{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:26px 20px 18px;
+}
+.title-row{align-items:flex-start;gap:12px}
+.eyebrow{
+  margin-bottom:14px;
+  color:#df7775;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.18em;
+}
+.booking-page-title{gap:15px}
+.booking-page-title-icon{
+  width:65px;
+  height:65px;
+  flex:0 0 65px;
+  padding:10px;
+  border:1px solid rgba(255,98,95,.30);
+  border-radius:50%;
+  background:#0b1217;
+  object-fit:contain;
+  opacity:.88;
+}
+.booking-page-title span{
+  color:#f7f4ee;
+  font-size:41px;
+  letter-spacing:-.03em;
+}
+.trip-name{
+  margin:8px 0 0 80px;
+  max-width:350px;
+  color:#89949c;
+  font-size:9px;
+  font-weight:500;
+}
+.add-btn{
+  min-height:29px;
+  padding:0 10px;
+  border-radius:9px;
+  font-size:7px;
+}
+
+/* Main framed surface */
+main{
+  width:calc(100% - 24px);
+  max-width:720px;
+  margin:0 auto 105px;
+  padding:10px 17px 22px;
+  border:1px solid #273139;
+  border-top:0;
+  border-radius:0 0 27px 27px;
+  background:linear-gradient(180deg,#0a1116,#070d11);
+}
+
+/* Compact summary */
+.summary{
+  gap:5px;
+  margin-bottom:7px;
+}
+.summary-card{
+  padding:7px 6px;
+  border-radius:9px;
+}
+.summary-number{font-size:17px}
+.summary-label{margin-top:3px;font-size:6px}
+
+/* Compact filters */
+.filters{gap:4px;margin-bottom:4px}
+.type-filters{gap:4px;margin-bottom:10px}
+.filter-btn,.type-filter{
+  min-height:25px;
+  padding:3px 7px;
+  border-radius:8px;
+  font-size:6.4px;
+}
+
+/* Tighter sections */
+.section{margin-bottom:13px}
+.section-head{
+  margin:1px 1px 5px;
+  padding-bottom:4px;
+}
+.section-title{font-size:7px}
+.section-count{font-size:6px}
+.date-group{margin-bottom:8px}
+.date-label{margin:0 2px 4px;font-size:6px}
+
+/* Compact booking cards */
+.booking-card{
+  margin-bottom:5px;
+  padding:8px 9px 7px;
+  border-radius:11px;
+}
+.booking-top{gap:7px}
+.booking-icon{
+  width:29px;
+  height:29px;
+  flex-basis:29px;
+  border-radius:8px;
+  font-size:14px;
+}
+.booking-title{
+  font-size:10px;
+  line-height:1.2;
+}
+.booking-meta{
+  margin-top:2px;
+  font-size:6.7px;
+  line-height:1.3;
+}
+.booking-note{
+  margin-top:4px;
+  font-size:6.6px;
+  line-height:1.35;
+}
+.status-badge{
+  padding:2px 4px;
+  font-size:5.8px;
+}
+.detail-row{
+  gap:3px;
+  margin-top:5px;
+}
+.detail-pill{
+  min-height:18px;
+  padding:2px 5px;
+  border-radius:5px;
+  font-size:6px;
+}
+.quick-book{
+  min-height:24px;
+  margin-top:6px;
+  padding:3px 6px;
+  border-radius:6px;
+  font-size:6px;
+}
+.empty,.state{
+  padding:24px 14px;
+  border-radius:11px;
+}
+
+/* Sheets remain functional and above shell */
+.sheet-backdrop{z-index:150}
+
+@media(max-width:480px){
+  body{padding-top:9px}
+  header,main{width:calc(100% - 18px)}
+  .header-inner{padding:22px 17px 15px}
+  .booking-page-title-icon{
+    width:60px;
+    height:60px;
+    flex-basis:60px;
+    padding:9px;
+  }
+  .booking-page-title span{font-size:38px}
+  .trip-name{margin-left:75px}
+  main{padding-left:14px;padding-right:14px}
+}
+
+
+/* =========================================================
+   FINAL SCHEDULE-STYLE BOOKINGS SHELL
+   Same Bookings structure + Schedule layout + photographic hero
+========================================================= */
+
+:root{
+  --booking-hero-image:url("https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/bookart.jpg?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvYm9va2FydC5qcGciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NzMzNzc1LCJleHAiOjMzMzI1NzMzNzc1fQ.r0775o1zqohFokcirnsP0bGuvN0im_qG_83LAvcUqlPDaHJ7bMMNyK_8TamDEcLQTp_lzyvlRl_E-VPeMtJOIw");
+}
+
+body{
+  padding-top:14px;
+}
+
+/* One continuous Schedule-style framed surface */
+.booking-shell{
+  position:relative;
+  width:calc(100% - 24px);
+  max-width:720px;
+  margin:0 auto 105px;
+  overflow:hidden;
+  border:1px solid #273139;
+  border-radius:27px;
+  background:linear-gradient(180deg,#0a1116,#070d11);
+  box-shadow:0 24px 65px rgba(0,0,0,.40);
+}
+
+/* Thin coral-red line across the top */
+.booking-shell::before{
+  content:"";
+  position:absolute;
+  z-index:90;
+  left:20px;
+  right:20px;
+  top:-1px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    #ff625f 0%,
+    #ff827e 52%,
+    rgba(255,98,95,.68) 100%
+  );
+  box-shadow:0 0 14px rgba(255,98,95,.24);
+  pointer-events:none;
+}
+
+/* =========================================================
+   HERO / HEADER
+========================================================= */
+
+header{
+  position:relative;
+  top:auto;
+  z-index:40;
+  isolation:isolate;
+
+  width:100%;
+  max-width:none;
+  margin:0;
+
+  overflow:hidden;
+
+  border:0;
+  border-radius:26px 26px 0 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2,5,8,.24) 0%,
+      rgba(4,8,11,.38) 34%,
+      rgba(5,10,14,.67) 67%,
+      rgba(7,13,17,.94) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.34) 0%,
+      rgba(0,0,0,.10) 47%,
+      rgba(0,0,0,.23) 100%
+    ),
+    var(--booking-hero-image) center 50% / cover no-repeat;
+
+  box-shadow:none;
+
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+/* Subtle booking watermark */
+header::before{
+  content:"予";
+  position:absolute;
+  z-index:1;
+
+  right:10px;
+  top:7px;
+
+  font-family:
+    "Yu Mincho",
+    "Hiragino Mincho ProN",
+    "Noto Serif JP",
+    Georgia,
+    serif;
+
+  font-size:126px;
+  font-weight:700;
+  line-height:1;
+
+  color:#ff625f;
+  opacity:.070;
+
+  text-shadow:0 0 28px rgba(255,98,95,.14);
+
+  pointer-events:none;
+  user-select:none;
+}
+
+/* Photo vignette / red glow */
+header::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+
+  background:
+    radial-gradient(
+      circle at 84% 13%,
+      rgba(255,98,95,.08),
+      transparent 30%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(2,6,9,.16),
+      transparent 44%,
+      rgba(2,6,9,.12)
+    );
+
+  pointer-events:none;
+}
+
+.header-inner{
+  position:relative;
+  z-index:2;
+
+  width:100%;
+  max-width:none;
+  margin:0;
+
+  padding:26px 20px 18px;
+}
+
+.title-row{
+  position:relative;
+  z-index:3;
+
+  align-items:flex-start;
+  gap:12px;
+}
+
+.eyebrow{
+  margin-bottom:14px;
+
+  color:#ef7d79;
+
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.18em;
+
+  text-shadow:0 1px 12px rgba(0,0,0,.70);
+}
+
+.booking-page-title{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin:0;
+}
+
+.booking-page-title-icon{
+  width:65px;
+  height:65px;
+  flex:0 0 65px;
+
+  display:block;
+
+  padding:10px;
+
+  border:1px solid rgba(255,98,95,.34);
+  border-radius:50%;
+
+  background:rgba(7,13,17,.80);
+
+  object-fit:contain;
+  opacity:.92;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.012),
+    0 8px 24px rgba(0,0,0,.25);
+}
+
+.booking-page-title span{
+  color:#f8f4ee;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:41px;
+  font-weight:700;
+  line-height:1;
+
+  letter-spacing:-.03em;
+
+  text-shadow:0 2px 18px rgba(0,0,0,.68);
+}
+
+.trip-name{
+  margin:8px 0 0 80px;
+
+  max-width:350px;
+
+  overflow:hidden;
+
+  color:#9ba4aa;
+
+  font-size:9px;
+  font-weight:500;
+  line-height:1.4;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  text-shadow:0 1px 10px rgba(0,0,0,.66);
+}
+
+.add-btn{
+  min-height:29px;
+
+  padding:0 10px;
+
+  border:1px solid rgba(255,98,95,.38);
+  border-radius:9px;
+
+  background:rgba(255,98,95,.09);
+
+  color:#ffb3ae;
+
+  font-size:7px;
+  font-weight:900;
+
+  box-shadow:
+    inset 0 0 16px rgba(255,98,95,.025),
+    0 3px 14px rgba(0,0,0,.18);
+
+  text-shadow:0 1px 8px rgba(0,0,0,.45);
+}
+
+/* =========================================================
+   MAIN — CONTINUE SAME SCHEDULE SHELL
+========================================================= */
+
+main{
+  width:100%;
+  max-width:none;
+
+  margin:0;
+
+  padding:
+    10px
+    17px
+    22px;
+
+  border:0;
+  border-radius:0 0 26px 26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #091015,
+      #070d11
+    );
+}
+
+/* Keep compact summary / filters */
+.summary{
+  gap:5px;
+  margin-bottom:7px;
+}
+
+.summary-card{
+  padding:7px 6px;
+  border-radius:9px;
+}
+
+.summary-number{
+  font-size:17px;
+}
+
+.summary-label{
+  margin-top:3px;
+  font-size:6px;
+}
+
+.filters{
+  gap:4px;
+  margin-bottom:4px;
+}
+
+.type-filters{
+  gap:4px;
+  margin-bottom:10px;
+}
+
+.filter-btn,
+.type-filter{
+  min-height:25px;
+  padding:3px 7px;
+  border-radius:8px;
+  font-size:6.4px;
+}
+
+/* Keep cards compact */
+.section{
+  margin-bottom:13px;
+}
+
+.section-head{
+  margin:1px 1px 5px;
+  padding-bottom:4px;
+}
+
+.section-title{
+  font-size:7px;
+}
+
+.section-count{
+  font-size:6px;
+}
+
+.date-group{
+  margin-bottom:8px;
+}
+
+.date-label{
+  margin:0 2px 4px;
+  font-size:6px;
+}
+
+.booking-card{
+  margin-bottom:5px;
+  padding:8px 9px 7px;
+  border-radius:11px;
+}
+
+.booking-top{
+  gap:7px;
+}
+
+.booking-icon{
+  width:29px;
+  height:29px;
+  flex-basis:29px;
+  border-radius:8px;
+  font-size:14px;
+}
+
+.booking-title{
+  font-size:10px;
+  line-height:1.2;
+}
+
+.booking-meta{
+  margin-top:2px;
+  font-size:6.7px;
+  line-height:1.3;
+}
+
+.booking-note{
+  margin-top:4px;
+  font-size:6.6px;
+  line-height:1.35;
+}
+
+.status-badge{
+  padding:2px 4px;
+  font-size:5.8px;
+}
+
+.detail-row{
+  gap:3px;
+  margin-top:5px;
+}
+
+.detail-pill{
+  min-height:18px;
+  padding:2px 5px;
+  border-radius:5px;
+  font-size:6px;
+}
+
+.quick-book{
+  min-height:24px;
+  margin-top:6px;
+  padding:3px 6px;
+  border-radius:6px;
+  font-size:6px;
+}
+
+.empty,
+.state{
+  padding:24px 14px;
+  border-radius:11px;
+}
+
+/* Sheets stay above framed app surface */
+.sheet-backdrop{
+  z-index:150;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:480px){
+
+  body{
+    padding-top:9px;
+  }
+
+  .booking-shell{
+    width:calc(100% - 18px);
+  }
+
+  .booking-shell::before{
+    left:12px;
+    right:12px;
+  }
+
+  header{
+    background-position:center 50%;
+  }
+
+  .header-inner{
+    padding:
+      22px
+      17px
+      15px;
+  }
+
+  .booking-page-title-icon{
+    width:60px;
+    height:60px;
+    flex-basis:60px;
+
+    padding:9px;
+  }
+
+  .booking-page-title span{
+    font-size:38px;
+  }
+
+  .trip-name{
+    margin-left:75px;
+  }
+
+  main{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+}
+
+
+
+/* =========================================================
+   SEAMLESS HERO BLEND
+   Removes the visible join between the photo header and body.
+========================================================= */
+
+/*
+  The photograph now belongs to the whole outer shell rather
+  than ending exactly at the bottom of <header>.
+*/
+.booking-shell{
+  background:
+    var(--booking-hero-image)
+    center top / 100% 330px
+    no-repeat,
+    linear-gradient(180deg,#0a1116,#070d11);
+}
+
+/*
+  Header is transparent so the same shell artwork continues
+  naturally underneath it.
+*/
+header{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2,5,8,.22) 0%,
+      rgba(4,8,11,.32) 36%,
+      rgba(5,10,14,.56) 70%,
+      rgba(7,13,17,.77) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.34) 0%,
+      rgba(0,0,0,.08) 47%,
+      rgba(0,0,0,.20) 100%
+    );
+}
+
+/*
+  Fade the photograph gradually into the normal page surface.
+  No hard horizontal boundary.
+*/
+main{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7,13,17,.78) 0px,
+      rgba(8,15,20,.92) 34px,
+      #091015 76px,
+      #070d11 210px
+    );
+}
+
+/*
+  Soft overlap that hides any sub-pixel / browser seam.
+*/
+main::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:0;
+  right:0;
+  top:-26px;
+  height:56px;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7,13,17,0) 0%,
+      rgba(7,13,17,.48) 42%,
+      rgba(7,13,17,.90) 78%,
+      #091015 100%
+    );
+}
+
+main > *{
+  position:relative;
+  z-index:1;
+}
+
+/*
+  Keep only the outer frame. No internal horizontal border.
+*/
+header,
+main{
+  border-top:0 !important;
+  border-bottom:0 !important;
+}
+
+/* Keep the red accent sitting cleanly on the rounded outer edge. */
+.booking-shell::before{
+  left:18px;
+  right:18px;
+  top:0;
+  height:3px;
+}
+
+@media(max-width:480px){
+  .booking-shell{
+    background-size:auto 300px;
+    background-position:center top;
+  }
+
+  .booking-shell::before{
+    left:11px;
+    right:11px;
+  }
+
+  main::before{
+    top:-22px;
+    height:50px;
+  }
+}
+
+
+/* =========================================================
+   BOOKING CONTENT — DAY TIMELINE STYLE
+   Outer Bookings page remains unchanged.
+========================================================= */
+
+/* The filtered result is now a date card, so don't add another status card header. */
+.section{
+  margin-bottom:12px !important;
+}
+
+.section-head{
+  display:none !important;
+}
+
+/* One rounded card for each date */
+.date-group{
+  position:relative;
+  margin:0 0 12px !important;
+  overflow:hidden;
+
+  border:1px solid #2a363f;
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(11,18,23,.985),
+      rgba(7,14,18,.995)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 7px 20px rgba(0,0,0,.10);
+}
+
+.date-label{
+  display:none !important;
+}
+
+/* Date-card heading */
+.day-booking-head{
+  position:relative;
+
+  min-height:87px;
+
+  padding:
+    16px
+    96px
+    13px
+    17px;
+
+  border-bottom:1px solid rgba(255,255,255,.075);
+}
+
+.day-route{
+  overflow:hidden;
+
+  color:#ff6d69;
+
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.13em;
+  line-height:1.35;
+
+  text-transform:uppercase;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.day-count{
+  margin-top:7px;
+
+  color:#f8f4ee;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:23px;
+  font-weight:700;
+  line-height:1;
+
+  letter-spacing:-.025em;
+}
+
+/* Stamp in the upper-right */
+.day-stamp{
+  position:absolute;
+
+  top:13px;
+  right:17px;
+
+  width:58px;
+  min-height:58px;
+
+  padding:5px 4px;
+
+  border:1px solid rgba(255,98,95,.47);
+  border-radius:7px;
+
+  background:rgba(255,98,95,.025);
+
+  transform:rotate(-7deg);
+
+  text-align:center;
+
+  box-shadow:
+    inset 0 0 14px rgba(255,98,95,.025);
+}
+
+.day-stamp-weekday{
+  color:#7f8b92;
+
+  font-size:5.4px;
+  font-weight:800;
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+.day-stamp-date{
+  margin-top:1px;
+
+  color:#aab2b7;
+
+  font-size:6.1px;
+  font-weight:900;
+
+  text-transform:uppercase;
+}
+
+.day-stamp-kanji{
+  margin-top:2px;
+
+  color:#df6c68;
+
+  font-family:
+    "Yu Mincho",
+    "Hiragino Mincho ProN",
+    "Noto Serif JP",
+    Georgia,
+    serif;
+
+  font-size:16px;
+  line-height:1;
+}
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline-list{
+  --time-col:68px;
+
+  position:relative;
+
+  padding:
+    14px
+    14px
+    8px;
+}
+
+/* one continuous vertical line */
+.timeline-list::before{
+  content:"";
+
+  position:absolute;
+  z-index:0;
+
+  top:21px;
+  bottom:22px;
+
+  left:
+    calc(
+      14px +
+      var(--time-col) +
+      8px
+    );
+
+  width:1px;
+
+  background:#2a363e;
+
+  pointer-events:none;
+}
+
+/* Each booking becomes a timeline row, not a separate boxed card */
+.booking-card{
+  position:relative !important;
+  z-index:1;
+
+  display:grid !important;
+
+  grid-template-columns:
+    var(--time-col)
+    17px
+    minmax(0,1fr);
+
+  column-gap:0;
+
+  align-items:start;
+
+  margin:0 !important;
+
+  padding:
+    0
+    0
+    18px !important;
+
+  overflow:visible !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+
+  background:transparent !important;
+
+  box-shadow:none !important;
+
+  cursor:pointer;
+}
+
+.booking-card:last-child{
+  padding-bottom:8px !important;
+}
+
+.booking-card::before{
+  display:none !important;
+}
+
+/* time on the left */
+.timeline-time{
+  padding:
+    2px
+    9px
+    0
+    0;
+
+  color:#9fc9f4;
+
+  font-size:7.4px;
+  font-weight:900;
+  line-height:1.2;
+
+  white-space:nowrap;
+}
+
+/* dot sits on the vertical line */
+.timeline-marker{
+  position:relative;
+
+  min-height:20px;
+}
+
+.timeline-dot{
+  position:absolute;
+  z-index:2;
+
+  top:3px;
+  left:50%;
+
+  width:9px;
+  height:9px;
+
+  border:2px solid rgba(255,98,95,.23);
+  border-radius:50%;
+
+  background:#ff625f;
+
+  transform:translateX(-50%);
+
+  box-shadow:
+    0 0 0 3px rgba(255,98,95,.10);
+}
+
+/* actual booking content */
+.timeline-content{
+  min-width:0;
+
+  padding-left:4px;
+}
+
+.booking-title-line{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+
+  gap:5px;
+}
+
+.booking-title{
+  color:#f8f4ef !important;
+
+  font-size:10.4px !important;
+  font-weight:900 !important;
+  line-height:1.22 !important;
+}
+
+.status-badge{
+  flex:0 0 auto;
+
+  padding:2px 5px !important;
+
+  border-radius:999px !important;
+
+  font-size:5.8px !important;
+  line-height:1.1;
+}
+
+.status-badge.booked{
+  border-color:rgba(121,201,149,.22) !important;
+
+  background:rgba(121,201,149,.035) !important;
+
+  color:#7ed59c !important;
+}
+
+.status-badge.planned{
+  border-color:rgba(228,189,105,.24) !important;
+
+  background:rgba(228,189,105,.035) !important;
+
+  color:#e6c16e !important;
+}
+
+.status-badge.cancelled{
+  color:#818b92 !important;
+}
+
+/* type + location under the title */
+.timeline-kind{
+  margin-top:5px;
+
+  color:#9fb1c2;
+
+  font-size:7.2px;
+  line-height:1.35;
+}
+
+.booking-note{
+  margin-top:7px !important;
+
+  color:#9ba4aa !important;
+
+  font-size:7.2px !important;
+  line-height:1.5 !important;
+}
+
+.detail-row{
+  display:flex !important;
+  flex-wrap:wrap !important;
+
+  gap:4px !important;
+
+  margin-top:7px !important;
+}
+
+.detail-pill{
+  min-height:21px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+
+  padding:
+    3px
+    7px !important;
+
+  border:1px solid #2a353d !important;
+  border-radius:999px !important;
+
+  background:rgba(255,255,255,.018) !important;
+
+  color:#9eabb3 !important;
+
+  font-size:6.3px !important;
+  font-weight:800 !important;
+}
+
+/* booking link becomes a text action below the pills */
+.detail-pill.link{
+  display:none !important;
+}
+
+.timeline-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+
+  gap:12px;
+
+  margin-top:8px;
+}
+
+.timeline-link,
+.timeline-edit,
+.timeline-book{
+  min-height:22px;
+
+  padding:0;
+
+  border:0;
+
+  background:transparent;
+
+  font-size:7px;
+  font-weight:700;
+}
+
+.timeline-link{
+  color:#ff7772;
+
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+
+.timeline-edit{
+  color:#aab2b8;
+}
+
+.timeline-book{
+  color:#82d39f;
+}
+
+/* old full-width quick action is replaced by the small text action */
+.quick-book{
+  display:none !important;
+}
+
+/* old icon/card layout isn't used in the timeline markup */
+.booking-top,
+.booking-icon,
+.booking-main{
+  display:contents;
+}
+
+@media(max-width:480px){
+
+  .day-booking-head{
+    min-height:81px;
+
+    padding:
+      14px
+      84px
+      12px
+      14px;
+  }
+
+  .day-stamp{
+    top:12px;
+    right:13px;
+
+    width:53px;
+    min-height:54px;
+  }
+
+  .day-count{
+    font-size:21px;
+  }
+
+  .timeline-list{
+    --time-col:61px;
+
+    padding:
+      13px
+      11px
+      7px;
+  }
+
+  .timeline-list::before{
+    left:
+      calc(
+        11px +
+        var(--time-col) +
+        8px
+      );
+  }
+
+  .timeline-time{
+    font-size:7px;
+  }
+
+  .booking-title{
+    font-size:10px !important;
+  }
+
+}
+
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+
+<body>
+
+
+<div class="booking-shell">
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+  <div class="header-inner">
+
+    <div class="title-row">
+
+      <div>
+
+        <div id="tripEyebrow" class="eyebrow">
+          LOADING TRIP…
+        </div>
+
+        <h1 class="booking-page-title">
+          <img class="booking-page-title-icon" src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/Travel3Logo.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvVHJhdmVsM0xvZ28ucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4OTcwNDUwMiwiZXhwIjozMzMyNTcwNDUwMn0.ciD2sShYC95aeLTucRmbI-AvrtletO259ymPAGCURr4FXltkLRmqiKd_yzkwrLl_q4XGahAWzevvfVkWyGOlZg" alt="" aria-hidden="true">
+          <span>Bookings</span>
+        </h1>
+
+        <div
+          id="tripName"
+          class="trip-name"
+        >
+          Loading trip…
+        </div>
+
+      </div>
+
+
+      <button
+        id="addButton"
+        class="add-btn"
+        type="button"
+      >
+        ＋ ADD
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+  <div
+    id="content"
+    class="state"
+  >
+
+    <strong>
+      Loading bookings…
+    </strong>
+
+    Getting your booking list from Supabase.
+
+  </div>
+
+</main>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     EDIT SHEET
+========================================================= -->
+
+<div
+  id="bookingSheet"
+  class="sheet-backdrop"
+>
+
+  <div class="sheet">
+
+    <div class="sheet-handle"></div>
+
+
+    <div class="sheet-head">
+
+      <div
+        id="sheetTitle"
+        class="sheet-title"
+      >
+        Add Booking
+      </div>
+
+
+      <button
+        id="closeSheet"
+        class="close-btn"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <form id="bookingForm">
+
+      <div class="form-grid">
+
+
+        <!-- STATUS -->
+
+        <div class="field">
+
+          <label>
+            STATUS
+          </label>
+
+          <select id="fieldStatus">
+
+            <option value="planned">
+              ⏳ To Book
+            </option>
+
+            <option value="booked">
+              ✅ Booked
+            </option>
+
+            <option value="cancelled">
+              ❌ Cancelled
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- TYPE -->
+
+        <div class="field">
+
+          <label>
+            TYPE
+          </label>
+
+          <select id="fieldType">
+
+            <option value="accommodation">
+              🏨 Accommodation
+            </option>
+
+            <option value="restaurant">
+              🍽 Restaurant
+            </option>
+
+            <option value="ticket">
+              🎟 Ticket
+            </option>
+
+            <option value="transport">
+              🚆 Transport
+            </option>
+
+            <option value="car">
+              🚗 Car
+            </option>
+
+            <option value="activity">
+              🎡 Activity
+            </option>
+
+            <option value="other">
+              📌 Other
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <div class="field full">
+
+          <label>
+            TITLE
+          </label>
+
+          <input
+            id="fieldTitle"
+            required
+            placeholder="e.g. teamLab Biovortex"
+          >
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="field">
+
+          <label>
+            DATE
+          </label>
+
+          <input
+            id="fieldDate"
+            type="date"
+          >
+
+        </div>
+
+
+        <!-- TIME -->
+
+        <div class="field">
+
+          <label>
+            TIME
+          </label>
+
+          <input
+            id="fieldTime"
+            type="time"
+          >
+
+        </div>
+
+
+        <!-- PROVIDER -->
+
+        <div class="field full">
+
+          <label>
+            PROVIDER
+          </label>
+
+          <input
+            id="fieldProvider"
+            placeholder="e.g. Agoda, Klook, JR West"
+          >
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="field full">
+
+          <label>
+            LOCATION
+          </label>
+
+          <input
+            id="fieldLocation"
+            placeholder="e.g. Kyoto"
+          >
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="field full">
+
+          <label>
+            ADDRESS
+          </label>
+
+          <input
+            id="fieldAddress"
+            placeholder="Optional"
+          >
+
+        </div>
+
+
+        <!-- CONFIRMATION -->
+
+        <div class="field full">
+
+          <label>
+            CONFIRMATION NUMBER
+          </label>
+
+          <input
+            id="fieldConfirmation"
+            placeholder="Optional"
+          >
+
+        </div>
+
+
+        <!-- BOOKING URL -->
+
+        <div class="field full">
+
+          <label>
+            BOOKING / TICKET LINK
+          </label>
+
+          <input
+            id="fieldUrl"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="field">
+
+          <label>
+            AMOUNT
+          </label>
+
+          <input
+            id="fieldAmount"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          >
+
+        </div>
+
+
+        <!-- CURRENCY -->
+
+        <div class="field">
+
+          <label>
+            CURRENCY
+          </label>
+
+          <select id="fieldCurrency">
+
+            <option value="JPY">
+              JPY
+            </option>
+
+            <option value="SGD">
+              SGD
+            </option>
+
+            <option value="USD">
+              USD
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- NOTES -->
+
+        <div class="field full">
+
+          <label>
+            NOTES
+          </label>
+
+          <textarea
+            id="fieldNotes"
+            placeholder="Anything you need to remember..."
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="sheet-actions">
+
+        <button
+          id="deleteButton"
+          class="delete-btn"
+          type="button"
+        >
+          🗑 DELETE
+        </button>
+
+
+        <button
+          id="saveButton"
+          class="save-btn"
+          type="submit"
+        >
+          SAVE
+        </button>
+
+      </div>
+
+
+      <div
+        id="formMessage"
+        class="form-message"
+      ></div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SHARED FOOTER
+========================================================= -->
+
+<div id="footer"></div>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+/* =========================================================
+   TRIP
+========================================================= */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const TRIP_ID =
+  Number(
+    params.get("trip") || 1
+  );
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let trip = null;
+
+let bookings = [];
+
+let statusFilter = "all";
+
+let typeFilter = "all";
+
+let editingId = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const content =
+  document.getElementById(
+    "content"
+  );
+
+const tripName =
+  document.getElementById(
+    "tripName"
+  );
+
+const tripEyebrow =
+  document.getElementById(
+    "tripEyebrow"
+  );
+
+const bookingSheet =
+  document.getElementById(
+    "bookingSheet"
+  );
+
+const sheetTitle =
+  document.getElementById(
+    "sheetTitle"
+  );
+
+const fieldStatus =
+  document.getElementById(
+    "fieldStatus"
+  );
+
+const fieldType =
+  document.getElementById(
+    "fieldType"
+  );
+
+const fieldTitle =
+  document.getElementById(
+    "fieldTitle"
+  );
+
+const fieldDate =
+  document.getElementById(
+    "fieldDate"
+  );
+
+const fieldTime =
+  document.getElementById(
+    "fieldTime"
+  );
+
+const fieldProvider =
+  document.getElementById(
+    "fieldProvider"
+  );
+
+const fieldLocation =
+  document.getElementById(
+    "fieldLocation"
+  );
+
+const fieldAddress =
+  document.getElementById(
+    "fieldAddress"
+  );
+
+const fieldConfirmation =
+  document.getElementById(
+    "fieldConfirmation"
+  );
+
+const fieldUrl =
+  document.getElementById(
+    "fieldUrl"
+  );
+
+const fieldAmount =
+  document.getElementById(
+    "fieldAmount"
+  );
+
+const fieldCurrency =
+  document.getElementById(
+    "fieldCurrency"
+  );
+
+const fieldNotes =
+  document.getElementById(
+    "fieldNotes"
+  );
+
+const deleteButton =
+  document.getElementById(
+    "deleteButton"
+  );
+
+const saveButton =
+  document.getElementById(
+    "saveButton"
+  );
+
+const formMessage =
+  document.getElementById(
+    "formMessage"
+  );
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function text(value){
+
+  return String(
+    value ?? ""
+  );
+
+}
+
+
+function esc(value){
+
+  return text(value)
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function parseDate(value){
+
+  return new Date(
+    value +
+    "T12:00:00"
+  );
+
+}
+
+
+function prettyDate(value){
+
+  if(!value){
+    return "NO DATE";
+  }
+
+
+  return new Intl.DateTimeFormat(
+    "en-SG",
+    {
+      weekday:"short",
+      day:"numeric",
+      month:"short"
+    }
+  )
+  .format(
+    parseDate(value)
+  )
+  .toUpperCase();
+
+}
+
+
+function prettyTime(value){
+
+  if(!value){
+    return "";
+  }
+
+
+  const parts =
+    value.split(":");
+
+
+  let hour =
+    Number(
+      parts[0]
+    );
+
+
+  const minute =
+    parts[1] || "00";
+
+
+  const suffix =
+    hour >= 12
+    ?
+    "PM"
+    :
+    "AM";
+
+
+  hour =
+    hour % 12 || 12;
+
+
+  return `${hour}:${minute} ${suffix}`;
+
+}
+
+
+function bookingIcon(type){
+
+  switch(type){
+
+    case "accommodation":
+      return "🏨";
+
+    case "restaurant":
+      return "🍽️";
+
+    case "ticket":
+      return "🎟️";
+
+    case "transport":
+      return "🚆";
+
+    case "car":
+      return "🚗";
+
+    case "activity":
+      return "🎡";
+
+    default:
+      return "📌";
+
+  }
+
+}
+
+
+function typeLabel(type){
+
+  switch(type){
+
+    case "accommodation":
+      return "STAY";
+
+    case "restaurant":
+      return "FOOD";
+
+    case "ticket":
+      return "TICKET";
+
+    case "transport":
+      return "TRANSPORT";
+
+    case "car":
+      return "CAR";
+
+    case "activity":
+      return "ACTIVITY";
+
+    default:
+      return "OTHER";
+
+  }
+
+}
+
+
+function statusLabel(status){
+
+  if(status === "booked"){
+    return "BOOKED";
+  }
+
+  if(status === "cancelled"){
+    return "CANCELLED";
+  }
+
+  return "TO BOOK";
+
+}
+
+
+function money(amount,currency){
+
+  if(
+    amount === null ||
+    amount === undefined ||
+    amount === ""
+  ){
+    return "";
+  }
+
+
+  const value =
+    Number(amount);
+
+
+  if(
+    Number.isNaN(value)
+  ){
+    return "";
+  }
+
+
+  return (
+    `${currency || "JPY"} ` +
+    value.toLocaleString(
+      "en-SG",
+      {
+        maximumFractionDigits:2
+      }
+    )
+  );
+
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadData(){
+
+  try{
+
+
+    const [
+      tripResult,
+      bookingResult
+    ] =
+      await Promise.all([
+
+
+        db
+          .from("trips")
+          .select(`
+            id,
+            name,
+            country,
+            start_date,
+            end_date
+          `)
+          .eq(
+            "id",
+            TRIP_ID
+          )
+          .single(),
+
+
+        db
+          .from("bookings")
+          .select(`
+            id,
+            trip_id,
+            booking_type,
+            title,
+            provider,
+            booking_date,
+            start_time,
+            status,
+            confirmation_number,
+            restaurant_id,
+            place_id,
+            location_name,
+            address,
+            booking_url,
+            amount,
+            currency,
+            notes,
+            created_at,
+            updated_at
+          `)
+          .eq(
+            "trip_id",
+            TRIP_ID
+          )
+          .order(
+            "booking_date",
+            {
+              ascending:true,
+              nullsFirst:false
+            }
+          )
+          .order(
+            "start_time",
+            {
+              ascending:true,
+              nullsFirst:false
+            }
+          )
+
+      ]);
+
+
+    if(tripResult.error){
+      throw tripResult.error;
+    }
+
+
+    if(bookingResult.error){
+      throw bookingResult.error;
+    }
+
+
+    trip =
+      tripResult.data;
+
+
+    bookings =
+      bookingResult.data || [];
+
+
+    tripName.textContent =
+      trip.name || "My Trip";
+
+
+    tripEyebrow.textContent =
+      trip.country
+      ?
+      `${trip.country.toUpperCase()} · TRIP BOOKINGS`
+      :
+      "TRIP BOOKINGS";
+
+
+    document.title =
+      `Bookings · ${trip.name || "My Trip"}`;
+
+
+    render();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    content.className =
+      "state";
+
+
+    content.innerHTML = `
+
+      <strong>
+        Couldn't load bookings
+      </strong>
+
+      ${esc(
+        error.message ||
+        "Unknown database error."
+      )}
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function filteredBookings(){
+
+  return bookings.filter(
+    item => {
+
+      const statusMatch =
+        statusFilter === "all" ||
+        item.status === statusFilter;
+
+
+      const typeMatch =
+        typeFilter === "all" ||
+        item.booking_type === typeFilter;
+
+
+      return (
+        statusMatch &&
+        typeMatch
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  const planned =
+    bookings.filter(
+      item =>
+        item.status === "planned"
+    );
+
+
+  const booked =
+    bookings.filter(
+      item =>
+        item.status === "booked"
+    );
+
+
+  const filtered =
+    filteredBookings();
+
+
+  content.className = "";
+
+
+  if(!bookings.length){
+
+    content.innerHTML = `
+
+      <div class="booking-first-use">
+
+        <div class="booking-first-icon">
+          🧳
+        </div>
+
+        <strong>
+          Keep all your reservations together
+        </strong>
+
+        <div class="booking-first-copy">
+          Add hotels, flights, trains, restaurant reservations and attraction tickets. We’ll organise them by date as your trip fills up.
+        </div>
+
+        <button
+          class="booking-first-primary"
+          type="button"
+          onclick="openAdd()"
+        >
+          ＋ ADD FIRST BOOKING
+        </button>
+
+        <div class="booking-quick-label">
+          QUICK ADD
+        </div>
+
+        <div class="booking-quick-grid">
+
+          <button
+            class="booking-quick"
+            type="button"
+            onclick="openQuickAdd('accommodation','Hotel')"
+          >
+            🏨 HOTEL
+          </button>
+
+          <button
+            class="booking-quick"
+            type="button"
+            onclick="openQuickAdd('transport','Flight')"
+          >
+            ✈️ FLIGHT
+          </button>
+
+          <button
+            class="booking-quick"
+            type="button"
+            onclick="openQuickAdd('transport','Train')"
+          >
+            🚆 TRAIN
+          </button>
+
+          <button
+            class="booking-quick"
+            type="button"
+            onclick="openQuickAdd('ticket','Ticket')"
+          >
+            🎟 TICKET
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="summary">
+
+      <div class="summary-card">
+
+        <div class="summary-number">
+          ${bookings.length}
+        </div>
+
+        <div class="summary-label">
+          TOTAL
+        </div>
+
+      </div>
+
+
+      <div class="summary-card action">
+
+        <div class="summary-number">
+          ${planned.length}
+        </div>
+
+        <div class="summary-label">
+          TO BOOK
+        </div>
+
+      </div>
+
+
+      <div class="summary-card booked">
+
+        <div class="summary-number">
+          ${booked.length}
+        </div>
+
+        <div class="summary-label">
+          BOOKED
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="filters">
+
+      ${statusFilterHTML(
+        "all",
+        "ALL"
+      )}
+
+      ${statusFilterHTML(
+        "planned",
+        "⏳ TO BOOK"
+      )}
+
+      ${statusFilterHTML(
+        "booked",
+        "✅ BOOKED"
+      )}
+
+      ${statusFilterHTML(
+        "cancelled",
+        "❌ CANCELLED"
+      )}
+
+    </div>
+
+
+    <div class="type-filters">
+
+      ${typeFilterHTML(
+        "all",
+        "ALL TYPES"
+      )}
+
+      ${typeFilterHTML(
+        "accommodation",
+        "🏨 STAYS"
+      )}
+
+      ${typeFilterHTML(
+        "restaurant",
+        "🍽 FOOD"
+      )}
+
+      ${typeFilterHTML(
+        "ticket",
+        "🎟 TICKETS"
+      )}
+
+      ${typeFilterHTML(
+        "transport",
+        "🚆 TRANSPORT"
+      )}
+
+      ${typeFilterHTML(
+        "car",
+        "🚗 CAR"
+      )}
+
+      ${typeFilterHTML(
+        "activity",
+        "🎡 ACTIVITY"
+      )}
+
+    </div>
+
+
+    ${
+      filtered.length
+
+      ?
+
+      renderFiltered(
+        filtered
+      )
+
+      :
+
+      `
+
+        <div class="empty">
+
+          <strong>
+            Nothing here
+          </strong>
+
+          No bookings match
+          these filters.
+
+        </div>
+
+      `
+    }
+
+  `;
+
+
+  bindFilters();
+
+  bindCards();
+
+}
+
+
+/* =========================================================
+   FILTER HTML
+========================================================= */
+
+function statusFilterHTML(
+  value,
+  label
+){
+
+  return `
+
+    <button
+      class="
+        filter-btn
+        ${
+          statusFilter === value
+          ?
+          "active"
+          :
+          ""
+        }
+      "
+      type="button"
+      data-status-filter="${value}"
+    >
+      ${label}
+    </button>
+
+  `;
+
+}
+
+
+function typeFilterHTML(
+  value,
+  label
+){
+
+  return `
+
+    <button
+      class="
+        type-filter
+        ${
+          typeFilter === value
+          ?
+          "active"
+          :
+          ""
+        }
+      "
+      type="button"
+      data-type-filter="${value}"
+    >
+      ${label}
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   RENDER FILTERED
+========================================================= */
+
+function renderFiltered(items){
+
+  /*
+    Keep all matching bookings together by date.
+    Status is shown on each timeline item, so a single day's
+    booked + planned items stay inside the same day card.
+  */
+
+  return renderDateGroups(items);
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+function renderSection(
+  title,
+  cssClass,
+  items
+){
+
+  return `
+
+    <section class="section">
+
+      <div class="section-head">
+
+        <div
+          class="
+            section-title
+            ${cssClass}
+          "
+        >
+          ${title}
+        </div>
+
+
+        <div class="section-count">
+
+          ${items.length}
+
+        </div>
+
+      </div>
+
+
+      ${renderDateGroups(items)}
+
+    </section>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DATE GROUPS
+========================================================= */
+
+function tripDayNumber(dateValue, fallback){
+
+  if(
+    !dateValue ||
+    dateValue === "undated" ||
+    !trip?.start_date
+  ){
+    return fallback;
+  }
+
+
+  const start =
+    new Date(
+      trip.start_date +
+      "T12:00:00"
+    );
+
+
+  const current =
+    new Date(
+      dateValue +
+      "T12:00:00"
+    );
+
+
+  const diff =
+    Math.round(
+      (
+        current -
+        start
+      )
+      /
+      86400000
+    );
+
+
+  return (
+    Number.isFinite(diff)
+    ?
+    diff + 1
+    :
+    fallback
+  );
+
+}
+
+
+function dayRouteSummary(items){
+
+  const locations =
+    items
+      .map(
+        item =>
+          text(
+            item.location_name
+          ).trim()
+      )
+      .filter(Boolean);
+
+
+  const explicitRoute =
+    locations.find(
+      value =>
+        value.includes("→")
+        ||
+        value.includes("->")
+    );
+
+
+  if(explicitRoute){
+    return explicitRoute;
+  }
+
+
+  const uniqueLocations =
+    [
+      ...new Set(
+        locations
+      )
+    ];
+
+
+  if(uniqueLocations.length >= 2){
+
+    return (
+      uniqueLocations[0] +
+      " → " +
+      uniqueLocations[
+        uniqueLocations.length - 1
+      ]
+    );
+
+  }
+
+
+  if(uniqueLocations.length === 1){
+    return uniqueLocations[0];
+  }
+
+
+  return "Bookings";
+
+}
+
+
+function bookingStampKanji(items){
+
+  const value =
+    norm(
+      items
+        .map(
+          item =>
+            [
+              item.location_name,
+              item.address,
+              item.title
+            ]
+            .filter(Boolean)
+            .join(" ")
+        )
+        .join(" ")
+    );
+
+
+  if(
+    value.includes("osaka") ||
+    value.includes("namba") ||
+    value.includes("dotonbori") ||
+    value.includes("kix")
+  ){
+    return "大阪";
+  }
+
+
+  if(
+    value.includes("kyoto") ||
+    value.includes("gion") ||
+    value.includes("arashiyama")
+  ){
+    return "京都";
+  }
+
+
+  if(value.includes("nara")){
+    return "奈良";
+  }
+
+
+  if(value.includes("nagoya")){
+    return "名古屋";
+  }
+
+
+  if(
+    value.includes("koya") ||
+    value.includes("koyasan")
+  ){
+    return "高野";
+  }
+
+
+  if(value.includes("wakayama")){
+    return "和歌山";
+  }
+
+
+  if(value.includes("nachi")){
+    return "那智";
+  }
+
+
+  if(value.includes("kumano")){
+    return "熊野";
+  }
+
+
+  if(value.includes("tokyo")){
+    return "東京";
+  }
+
+
+  return "予約";
+
+}
+
+
+function timelineTypeLabel(type){
+
+  switch(type){
+
+    case "accommodation":
+      return "Stay";
+
+    case "restaurant":
+      return "Food";
+
+    case "ticket":
+      return "Ticket";
+
+    case "transport":
+      return "Transport";
+
+    case "car":
+      return "Car";
+
+    case "activity":
+      return "Activity";
+
+    default:
+      return "Booking";
+
+  }
+
+}
+
+
+function renderDateGroups(items){
+
+  const groups = {};
+
+
+  items.forEach(
+    item => {
+
+      const key =
+        item.booking_date ||
+        "undated";
+
+
+      if(!groups[key]){
+        groups[key] = [];
+      }
+
+
+      groups[key].push(item);
+
+    }
+  );
+
+
+  const dates =
+    Object.keys(groups)
+      .sort(
+        (a,b) => {
+
+          if(a === "undated"){
+            return 1;
+          }
+
+          if(b === "undated"){
+            return -1;
+          }
+
+          return a.localeCompare(b);
+
+        }
+      );
+
+
+  return dates
+    .map(
+      (date,index) => {
+
+        const dayItems =
+          groups[date];
+
+
+        const dayNumber =
+          tripDayNumber(
+            date,
+            index + 1
+          );
+
+
+        const route =
+          dayRouteSummary(
+            dayItems
+          );
+
+
+        let weekday =
+          "UNDATED";
+
+        let stampDate =
+          "NO DATE";
+
+
+        if(date !== "undated"){
+
+          const d =
+            parseDate(date);
+
+
+          weekday =
+            new Intl.DateTimeFormat(
+              "en-SG",
+              {
+                weekday:"long"
+              }
+            )
+            .format(d)
+            .toUpperCase();
+
+
+          stampDate =
+            new Intl.DateTimeFormat(
+              "en-SG",
+              {
+                day:"numeric",
+                month:"short"
+              }
+            )
+            .format(d)
+            .toUpperCase();
+
+        }
+
+
+        const countText =
+          `${dayItems.length} ${
+            dayItems.length === 1
+            ?
+            "booking"
+            :
+            "bookings"
+          }`;
+
+
+        return `
+
+          <div class="date-group">
+
+            <div class="day-booking-head">
+
+              <div class="day-route">
+
+                ${
+                  date === "undated"
+                  ?
+                  "UNDATED"
+                  :
+                  `DAY ${String(dayNumber).padStart(2,"0")} · ${esc(route)}`
+                }
+
+              </div>
+
+
+              <div class="day-count">
+
+                ${esc(countText)}
+
+              </div>
+
+
+              <div class="day-stamp">
+
+                <div class="day-stamp-weekday">
+                  ${esc(weekday)}
+                </div>
+
+                <div class="day-stamp-date">
+                  ${esc(stampDate)}
+                </div>
+
+                <div class="day-stamp-kanji">
+                  ${bookingStampKanji(dayItems)}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="timeline-list">
+
+              ${
+                dayItems
+                  .map(
+                    bookingHTML
+                  )
+                  .join("")
+              }
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+/* =========================================================
+   BOOKING TIMELINE ITEM
+========================================================= */
+
+function bookingHTML(item){
+
+  const details = [];
+
+
+  if(item.provider){
+
+    details.push(
+      `
+        <span class="detail-pill">
+          ${esc(item.provider)}
+        </span>
+      `
+    );
+
+  }
+
+
+  if(item.confirmation_number){
+
+    details.push(
+      `
+        <span class="detail-pill">
+          # ${esc(
+            item.confirmation_number
+          )}
+        </span>
+      `
+    );
+
+  }
+
+
+  const amount =
+    money(
+      item.amount,
+      item.currency
+    );
+
+
+  if(amount){
+
+    details.push(
+      `
+        <span class="detail-pill">
+          ${esc(amount)}
+        </span>
+      `
+    );
+
+  }
+
+
+  const kind =
+    timelineTypeLabel(
+      item.booking_type
+    );
+
+
+  const location =
+    item.location_name
+    ?
+    ` · ${esc(item.location_name)}`
+    :
+    "";
+
+
+  const time =
+    item.start_time
+    ?
+    prettyTime(
+      item.start_time
+    )
+    :
+    "—";
+
+
+  return `
+
+    <article
+      class="booking-card"
+      data-booking-id="${Number(item.id)}"
+    >
+
+      <div class="timeline-time">
+
+        ${esc(time)}
+
+      </div>
+
+
+      <div class="timeline-marker">
+
+        <span class="timeline-dot"></span>
+
+      </div>
+
+
+      <div class="timeline-content">
+
+
+        <div class="booking-title-line">
+
+          <div class="booking-title">
+
+            ${esc(item.title)}
+
+          </div>
+
+
+          <span
+            class="
+              status-badge
+              ${esc(item.status)}
+            "
+          >
+
+            ${statusLabel(
+              item.status
+            )}
+
+          </span>
+
+        </div>
+
+
+        <div class="timeline-kind">
+
+          ${esc(kind)}${location}
+
+        </div>
+
+
+        ${
+          item.notes
+
+          ?
+
+          `
+            <div class="booking-note">
+
+              ${esc(item.notes)}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          details.length
+
+          ?
+
+          `
+            <div class="detail-row">
+
+              ${details.join("")}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        <div class="timeline-actions">
+
+          ${
+            item.booking_url
+
+            ?
+
+            `
+              <a
+                class="timeline-link"
+                href="${esc(item.booking_url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                onclick="event.stopPropagation()"
+              >
+                Open link
+              </a>
+            `
+
+            :
+
+            ""
+          }
+
+
+          <button
+            class="timeline-edit"
+            type="button"
+            onclick="
+              event.stopPropagation();
+              openEdit(${Number(item.id)});
+            "
+          >
+            Edit
+          </button>
+
+
+          ${
+            item.status === "planned"
+
+            ?
+
+            `
+              <button
+                class="timeline-book"
+                type="button"
+                data-mark-booked="${Number(item.id)}"
+              >
+                Mark booked
+              </button>
+            `
+
+            :
+
+            ""
+          }
+
+        </div>
+
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   BIND FILTERS
+========================================================= */
+
+function bindFilters(){
+
+  document
+    .querySelectorAll(
+      "[data-status-filter]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            statusFilter =
+              button.dataset
+                .statusFilter;
+
+
+            render();
+
+          };
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      "[data-type-filter]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            typeFilter =
+              button.dataset
+                .typeFilter;
+
+
+            render();
+
+          };
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   BIND CARDS
+========================================================= */
+
+function bindCards(){
+
+  document
+    .querySelectorAll(
+      "[data-booking-id]"
+    )
+    .forEach(
+      card => {
+
+        card.onclick =
+          event => {
+
+            if(
+              event.target.closest(
+                "[data-mark-booked]"
+              )
+            ){
+              return;
+            }
+
+
+            if(
+              event.target.closest(
+                "a"
+              )
+            ){
+              return;
+            }
+
+
+            openEdit(
+              Number(
+                card.dataset.bookingId
+              )
+            );
+
+          };
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      "[data-mark-booked]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          async event => {
+
+            event.stopPropagation();
+
+
+            await markBooked(
+              Number(
+                button.dataset
+                  .markBooked
+              )
+            );
+
+          };
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   QUICK MARK BOOKED
+========================================================= */
+
+async function markBooked(id){
+
+  const result =
+    await db
+      .from("bookings")
+      .update({
+        status:"booked"
+      })
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "trip_id",
+        TRIP_ID
+      );
+
+
+  if(result.error){
+
+    alert(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  await reloadBookings();
+
+}
+
+
+/* =========================================================
+   OPEN ADD
+========================================================= */
+
+document.getElementById(
+  "addButton"
+).onclick =
+  openAdd;
+
+
+function openQuickAdd(
+  type,
+  title=""
+){
+
+  openAdd();
+
+
+  fieldType.value =
+    type;
+
+
+  if(title){
+
+    fieldTitle.value =
+      title;
+
+  }
+
+
+  fieldTitle.focus();
+
+}
+
+
+function openAdd(){
+
+  editingId =
+    null;
+
+
+  sheetTitle.textContent =
+    "＋ Add Booking";
+
+
+  deleteButton.style.display =
+    "none";
+
+
+  fieldStatus.value =
+    "planned";
+
+
+  fieldType.value =
+    "ticket";
+
+
+  fieldTitle.value =
+    "";
+
+
+  fieldDate.value =
+    "";
+
+
+  fieldTime.value =
+    "";
+
+
+  fieldProvider.value =
+    "";
+
+
+  fieldLocation.value =
+    "";
+
+
+  fieldAddress.value =
+    "";
+
+
+  fieldConfirmation.value =
+    "";
+
+
+  fieldUrl.value =
+    "";
+
+
+  fieldAmount.value =
+    "";
+
+
+  fieldCurrency.value =
+    "JPY";
+
+
+  fieldNotes.value =
+    "";
+
+
+  formMessage.className =
+    "form-message";
+
+
+  bookingSheet.classList
+    .add(
+      "open"
+    );
+
+}
+
+
+/* =========================================================
+   OPEN EDIT
+========================================================= */
+
+function openEdit(id){
+
+  const item =
+    bookings.find(
+      row =>
+        Number(row.id) ===
+        Number(id)
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  editingId =
+    item.id;
+
+
+  sheetTitle.textContent =
+    "Edit Booking";
+
+
+  deleteButton.style.display =
+    "block";
+
+
+  fieldStatus.value =
+    item.status ||
+    "planned";
+
+
+  fieldType.value =
+    item.booking_type ||
+    "other";
+
+
+  fieldTitle.value =
+    item.title ||
+    "";
+
+
+  fieldDate.value =
+    item.booking_date ||
+    "";
+
+
+  fieldTime.value =
+    item.start_time
+    ?
+    item.start_time.slice(0,5)
+    :
+    "";
+
+
+  fieldProvider.value =
+    item.provider ||
+    "";
+
+
+  fieldLocation.value =
+    item.location_name ||
+    "";
+
+
+  fieldAddress.value =
+    item.address ||
+    "";
+
+
+  fieldConfirmation.value =
+    item.confirmation_number ||
+    "";
+
+
+  fieldUrl.value =
+    item.booking_url ||
+    "";
+
+
+  fieldAmount.value =
+    item.amount ??
+    "";
+
+
+  fieldCurrency.value =
+    item.currency ||
+    "JPY";
+
+
+  fieldNotes.value =
+    item.notes ||
+    "";
+
+
+  formMessage.className =
+    "form-message";
+
+
+  bookingSheet.classList
+    .add(
+      "open"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE SHEET
+========================================================= */
+
+document.getElementById(
+  "closeSheet"
+).onclick =
+  closeSheet;
+
+
+bookingSheet.onclick =
+  event => {
+
+    if(
+      event.target ===
+      bookingSheet
+    ){
+
+      closeSheet();
+
+    }
+
+  };
+
+
+function closeSheet(){
+
+  bookingSheet.classList
+    .remove(
+      "open"
+    );
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+document.getElementById(
+  "bookingForm"
+).addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    saveButton.disabled =
+      true;
+
+
+    saveButton.textContent =
+      "SAVING…";
+
+
+    formMessage.className =
+      "form-message";
+
+
+    try{
+
+
+      const title =
+        fieldTitle.value.trim();
+
+
+      if(!title){
+
+        throw new Error(
+          "Please enter a title."
+        );
+
+      }
+
+
+      const payload = {
+
+        trip_id:
+          TRIP_ID,
+
+        booking_type:
+          fieldType.value,
+
+        title:
+          title,
+
+        provider:
+          fieldProvider.value
+            .trim() ||
+          null,
+
+        booking_date:
+          fieldDate.value ||
+          null,
+
+        start_time:
+          fieldTime.value
+          ?
+          `${fieldTime.value}:00`
+          :
+          null,
+
+        status:
+          fieldStatus.value,
+
+        confirmation_number:
+          fieldConfirmation.value
+            .trim() ||
+          null,
+
+        location_name:
+          fieldLocation.value
+            .trim() ||
+          null,
+
+        address:
+          fieldAddress.value
+            .trim() ||
+          null,
+
+        booking_url:
+          fieldUrl.value
+            .trim() ||
+          null,
+
+        amount:
+          fieldAmount.value !== ""
+          ?
+          Number(
+            fieldAmount.value
+          )
+          :
+          null,
+
+        currency:
+          fieldCurrency.value,
+
+        notes:
+          fieldNotes.value
+            .trim() ||
+          null
+
+      };
+
+
+      /*
+        ADD
+      */
+
+      if(
+        editingId === null
+      ){
+
+        const result =
+          await db
+            .from("bookings")
+            .insert(
+              payload
+            );
+
+
+        if(result.error){
+          throw result.error;
+        }
+
+      }
+
+
+      /*
+        EDIT
+      */
+
+      else{
+
+        const result =
+          await db
+            .from("bookings")
+            .update(
+              payload
+            )
+            .eq(
+              "id",
+              editingId
+            )
+            .eq(
+              "trip_id",
+              TRIP_ID
+            );
+
+
+        if(result.error){
+          throw result.error;
+        }
+
+      }
+
+
+      closeSheet();
+
+
+      await reloadBookings();
+
+    }
+
+    catch(error){
+
+      console.error(error);
+
+
+      formMessage.textContent =
+        error.message ||
+        "Couldn't save booking.";
+
+
+      formMessage.className =
+        "form-message error";
+
+    }
+
+    finally{
+
+      saveButton.disabled =
+        false;
+
+
+      saveButton.textContent =
+        "SAVE";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+deleteButton.onclick =
+  async () => {
+
+    if(
+      editingId === null
+    ){
+      return;
+    }
+
+
+    const item =
+      bookings.find(
+        row =>
+          Number(row.id) ===
+          Number(editingId)
+      );
+
+
+    if(!item){
+      return;
+    }
+
+
+    const okay =
+      confirm(
+        `Delete "${item.title}"?`
+      );
+
+
+    if(!okay){
+      return;
+    }
+
+
+    deleteButton.disabled =
+      true;
+
+
+    try{
+
+
+      const result =
+        await db
+          .from("bookings")
+          .delete()
+          .eq(
+            "id",
+            editingId
+          )
+          .eq(
+            "trip_id",
+            TRIP_ID
+          );
+
+
+      if(result.error){
+        throw result.error;
+      }
+
+
+      closeSheet();
+
+
+      await reloadBookings();
+
+    }
+
+    catch(error){
+
+      console.error(error);
+
+
+      formMessage.textContent =
+        error.message ||
+        "Couldn't delete booking.";
+
+
+      formMessage.className =
+        "form-message error";
+
+    }
+
+    finally{
+
+      deleteButton.disabled =
+        false;
+
+    }
+
+  };
+
+
+/* =========================================================
+   RELOAD
+========================================================= */
+
+async function reloadBookings(){
+
+  const result =
+    await db
+      .from("bookings")
+      .select(`
+        id,
+        trip_id,
+        booking_type,
+        title,
+        provider,
+        booking_date,
+        start_time,
+        status,
+        confirmation_number,
+        restaurant_id,
+        place_id,
+        location_name,
+        address,
+        booking_url,
+        amount,
+        currency,
+        notes,
+        created_at,
+        updated_at
+      `)
+      .eq(
+        "trip_id",
+        TRIP_ID
+      )
+      .order(
+        "booking_date",
+        {
+          ascending:true,
+          nullsFirst:false
+        }
+      )
+      .order(
+        "start_time",
+        {
+          ascending:true,
+          nullsFirst:false
+        }
+      );
+
+
+  if(result.error){
+    throw result.error;
+  }
+
+
+  bookings =
+    result.data || [];
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadData();
+
+</script>
+
+<!-- Shared footer logic -->
+<script src="footer.js"></script>
+
+
+<script src="pwa.js"></script>
+</body>
+</html>

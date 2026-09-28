@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070c10">
+<title>Food Guide</title>
+
+<style>
+:root{
+  --bg:#070c10;
+  --surface:#0d1419;
+  --surface-2:#11191f;
+  --line:#2a353d;
+  --text:#f5f3ef;
+  --muted:#98a1a8;
+  --red:#ff625f;
+  --red-soft:rgba(255,98,95,.10);
+  --red-line:rgba(255,98,95,.38);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg)}
+body{
+  overflow:hidden;
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;-webkit-tap-highlight-color:transparent}
+
+.tutorial{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:#05090c;
+}
+
+/* Keep the supplied screenshot at its real 509:1000 ratio so
+   every spotlight percentage stays accurate on any phone. */
+.shot-wrap{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:min(100vw,50.9dvh);
+  transform:translateX(-50%);
+  overflow:visible;
+}
+
+.shot{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  user-select:none;
+  pointer-events:none;
+}
+
+.spotlight{
+  position:absolute;
+  z-index:4;
+  border:2px solid #ff726e;
+  border-radius:18px;
+  box-shadow:
+    0 0 0 9999px rgba(0,5,8,.78),
+    0 0 18px rgba(255,98,95,.28),
+    inset 0 0 16px rgba(255,98,95,.05);
+  transition:
+    left .24s ease,
+    top .24s ease,
+    width .24s ease,
+    height .24s ease,
+    border-radius .24s ease;
+  pointer-events:none;
+}
+
+.tap-dot{
+  position:absolute;
+  z-index:5;
+  width:19px;
+  height:19px;
+  border:5px solid rgba(16,21,25,.88);
+  border-radius:50%;
+  background:var(--red);
+  box-shadow:
+    0 0 0 2px #ff7773,
+    0 0 17px rgba(255,98,95,.65);
+  transform:translate(-50%,-50%);
+  transition:left .24s ease, top .24s ease;
+  pointer-events:none;
+}
+
+.skip{
+  position:fixed;
+  z-index:20;
+  top:calc(16px + env(safe-area-inset-top));
+  right:16px;
+  min-width:64px;
+  height:46px;
+  padding:0 16px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(12,19,24,.94);
+  color:#aab2b8;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.05em;
+  cursor:pointer;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);
+}
+
+.guide-card{
+  position:fixed;
+  z-index:20;
+  left:50%;
+  width:min(calc(100% - 28px),660px);
+  padding:21px 22px 18px;
+  transform:translateX(-50%);
+  border:1px solid #33404a;
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,rgba(23,27,31,.98),rgba(10,17,22,.99));
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.48),
+    inset 0 1px 0 rgba(255,255,255,.025);
+  transition:top .25s ease,bottom .25s ease;
+}
+
+.guide-card::before{
+  content:"";
+  position:absolute;
+  top:16px;
+  bottom:16px;
+  left:0;
+  width:3px;
+  border-radius:0 5px 5px 0;
+  background:linear-gradient(180deg,#ff6e69,rgba(255,98,95,.35));
+}
+
+.guide-card.bottom{
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  top:auto;
+}
+
+.guide-card.top{
+  top:calc(92px + env(safe-area-inset-top));
+  bottom:auto;
+}
+
+.step-label{
+  margin-bottom:8px;
+  color:#f08b86;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+
+.guide-title{
+  margin:0;
+  color:#f8f5ef;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:31px;
+  font-weight:700;
+  line-height:1.06;
+}
+
+.guide-text{
+  margin:11px 0 18px;
+  color:#9aa4aa;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.guide-divider{
+  height:1px;
+  margin:0 0 16px;
+  background:linear-gradient(90deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+}
+
+.guide-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.dots{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:100px;
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  border-radius:999px;
+  background:#3d4850;
+}
+
+.dot.active{
+  width:30px;
+  background:var(--red);
+  box-shadow:0 0 10px rgba(255,98,95,.22);
+}
+
+.actions{
+  display:flex;
+  gap:9px;
+}
+
+.btn{
+  min-height:48px;
+  padding:0 19px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#10181e;
+  color:#aeb6bc;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.btn.primary{
+  border-color:var(--red-line);
+  background:var(--red-soft);
+  color:#ffc0bc;
+}
+
+.btn[hidden]{display:none}
+
+@media(max-width:430px){
+  .guide-card{
+    width:calc(100% - 26px);
+    padding:18px 19px 16px;
+    border-radius:24px;
+  }
+  .guide-title{font-size:27px}
+  .guide-text{font-size:11px;margin-top:9px;margin-bottom:15px}
+  .step-label{font-size:9px}
+  .btn{min-height:44px;padding:0 16px;font-size:10px}
+  .guide-card.top{top:calc(80px + env(safe-area-inset-top))}
+  .skip{right:13px;top:calc(13px + env(safe-area-inset-top));height:43px}
+}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+<body>
+<div class="tutorial">
+
+  <div class="shot-wrap" id="shotWrap">
+    <img
+      class="shot"
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/Screenshot_20260919_210222_Chrome.jpg?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvU2NyZWVuc2hvdF8yMDI2MDkxOV8yMTAyMjJfQ2hyb21lLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODk4MjMwMjcsImV4cCI6MjY1MzgyMzAyN30.rpFgzkKpXteDwXqkyefMQyEmTVPUWKKc95Cm0oxScR3itNOXpIwvQKKBWQJPrtWA17ZFb6cBzCnjFvfHEjuG-w"
+      alt="Food page tutorial preview"
+    >
+
+    <div id="spotlight" class="spotlight"></div>
+    <div id="tapDot" class="tap-dot"></div>
+  </div>
+
+  <button id="skipBtn" class="skip" type="button">SKIP</button>
+
+  <section id="guideCard" class="guide-card bottom">
+    <div id="stepLabel" class="step-label">STEP 1 OF 5</div>
+    <h1 id="guideTitle" class="guide-title">My Food &amp; All Food</h1>
+    <p id="guideText" class="guide-text"></p>
+    <div class="guide-divider"></div>
+
+    <div class="guide-bottom">
+      <div id="dots" class="dots"></div>
+
+      <div class="actions">
+        <button id="backBtn" class="btn" type="button">BACK</button>
+        <button id="nextBtn" class="btn primary" type="button">NEXT →</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const tutorialSteps = [
+  {
+    title:"My Food & All Food",
+    text:"My Food is your trip list. All Food is the complete restaurant list.",
+    box:{left:14.5,top:20.7,width:73.5,height:6.2,radius:17},
+    dot:{left:49.5,top:23.4},
+    card:"bottom"
+  },
+  {
+    title:"Filter your food",
+    text:"Use city, Picks, Flexible, Scheduled, area, food type or search to narrow the list.",
+    box:{left:5.8,top:27.1,width:87.0,height:13.9,radius:17},
+    dot:{left:52.0,top:36.7},
+    card:"bottom"
+  },
+  {
+    title:"Organise My Food",
+    text:"Use Pick, Flex and Eaten on each restaurant to organise your trip food list.",
+    box:{left:6.8,top:44.8,width:86.3,height:14.8,radius:17},
+    dot:{left:46.0,top:56.4},
+    card:"top"
+  },
+  {
+    title:"Add a new restaurant",
+    text:"Tap + ADD FOOD when a restaurant is missing. It is added to All Food and automatically saved to My Food.",
+    box:{left:75.2,top:4.4,width:18.5,height:4.7,radius:15},
+    dot:{left:84.4,top:6.7},
+    card:"bottom"
+  },
+  {
+    title:"Browse All Food",
+    text:"Open All Food to browse the master list. Restaurants not saved to this trip will show + My Food.",
+    box:{left:59.0,top:20.7,width:29.5,height:6.2,radius:17},
+    dot:{left:73.0,top:23.5},
+    card:"bottom"
+  }
+];
+
+let currentStep = 0;
+
+const spotlight = document.getElementById("spotlight");
+const tapDot = document.getElementById("tapDot");
+const guideCard = document.getElementById("guideCard");
+const stepLabel = document.getElementById("stepLabel");
+const guideTitle = document.getElementById("guideTitle");
+const guideText = document.getElementById("guideText");
+const dots = document.getElementById("dots");
+const backBtn = document.getElementById("backBtn");
+const nextBtn = document.getElementById("nextBtn");
+const skipBtn = document.getElementById("skipBtn");
+
+function renderDots(){
+  dots.innerHTML = tutorialSteps.map((_,index) =>
+    `<span class="dot ${index === currentStep ? "active" : ""}"></span>`
+  ).join("");
+}
+
+function renderStep(){
+  const step = tutorialSteps[currentStep];
+  const box = step.box;
+
+  spotlight.style.left = box.left + "%";
+  spotlight.style.top = box.top + "%";
+  spotlight.style.width = box.width + "%";
+  spotlight.style.height = box.height + "%";
+  spotlight.style.borderRadius = (box.radius || 18) + "px";
+
+  tapDot.style.left = step.dot.left + "%";
+  tapDot.style.top = step.dot.top + "%";
+
+  guideCard.classList.remove("top","bottom");
+  guideCard.classList.add(step.card || "bottom");
+
+  stepLabel.textContent = `STEP ${currentStep + 1} OF ${tutorialSteps.length}`;
+  guideTitle.textContent = step.title;
+  guideText.textContent = step.text;
+
+  backBtn.hidden = currentStep === 0;
+  nextBtn.textContent = currentStep === tutorialSteps.length - 1 ? "DONE ✓" : "NEXT →";
+
+  renderDots();
+}
+
+function finishTutorial(){
+  localStorage.setItem("food_tutorial_seen","1");
+
+  const params = new URLSearchParams(location.search);
+  const returnURL = params.get("return");
+  const tripId = params.get("trip");
+
+  if(returnURL){
+    location.href = returnURL;
+    return;
+  }
+
+  if(tripId){
+    location.href = `food.html?trip=${encodeURIComponent(tripId)}`;
+    return;
+  }
+
+  if(document.referrer){
+    history.back();
+    return;
+  }
+
+  location.href = "food.html";
+}
+
+backBtn.addEventListener("click",() => {
+  if(currentStep > 0){
+    currentStep--;
+    renderStep();
+  }
+});
+
+nextBtn.addEventListener("click",() => {
+  if(currentStep < tutorialSteps.length - 1){
+    currentStep++;
+    renderStep();
+  }else{
+    finishTutorial();
+  }
+});
+
+skipBtn.addEventListener("click",finishTutorial);
+
+renderStep();
+</script>
+
+<script src="pwa.js"></script>
+</body>
+</html>

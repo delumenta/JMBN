@@ -1,0 +1,1858 @@
+<!-- =========================================================
+     SHARED FOOTER
+     MAIN ARC:
+     HOME · TRIPS · PLAN · FOOD · MORE
+
+     MORE ARC:
+     BOOKING · PROFILE · EXPENSES · PLACES · MAP · LOG OUT
+========================================================= -->
+
+<style>
+
+:root{
+  --footer-bg:#070c10;
+  --footer-panel:#10161c;
+  --footer-line:#29323b;
+  --footer-text:#f5f5f3;
+  --footer-muted:#aeb5bc;
+  --footer-red:#ff625f;
+  --footer-blue:#5c9dff;
+
+  --arc-red:#ff625f;
+  --arc-red-2:#ff8b88;
+  --arc-ink:#f5f2ed;
+  --arc-muted:#8b959c;
+  --arc-line:#2a343c;
+  --arc-panel:#121a20;
+}
+
+
+body{
+  padding-bottom:
+    calc(
+      88px +
+      env(safe-area-inset-bottom)
+    );
+}
+
+
+/* =========================================================
+   SCRIM
+========================================================= */
+
+.arc-scrim{
+  position:fixed;
+
+  inset:0;
+
+  z-index:190;
+
+  display:none;
+
+  background:
+    rgba(0,0,0,.48);
+
+  backdrop-filter:
+    blur(6px);
+
+  -webkit-backdrop-filter:
+    blur(6px);
+}
+
+
+.arc-scrim.open{
+  display:block;
+}
+
+
+
+/* =========================================================
+   ARC CONTAINER
+========================================================= */
+
+.arc-nav{
+  position:fixed;
+
+  z-index:200;
+
+  left:50%;
+
+  bottom:
+    calc(
+      16px +
+      env(safe-area-inset-bottom)
+    );
+
+  width:360px;
+  height:250px;
+
+  transform:
+    translateX(-50%);
+
+  pointer-events:none;
+}
+
+
+.arc-nav a,
+.arc-nav button{
+  pointer-events:auto;
+
+  font:inherit;
+}
+
+
+
+/* =========================================================
+   ARC ITEMS
+========================================================= */
+
+.arc-item,
+.arc-more-item{
+  position:absolute;
+
+  left:50%;
+  bottom:8px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid
+    var(--arc-line);
+
+  border-radius:50%;
+
+  background:
+    var(--arc-panel);
+
+  color:
+    var(--arc-ink);
+
+  text-decoration:none;
+
+  box-shadow:
+    0 10px 22px
+    rgba(0,0,0,.32);
+
+  opacity:0;
+
+  transform:
+    translate(0,8px)
+    scale(.55);
+
+  pointer-events:none;
+
+  transition:
+    transform
+    .45s
+    cubic-bezier(.2,.85,.2,1),
+    opacity
+    .22s
+    ease;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+.arc-item{
+  width:52px;
+  height:52px;
+
+  margin-left:-26px;
+}
+
+
+.arc-more-item{
+  width:46px;
+  height:46px;
+
+  margin-left:-23px;
+
+  z-index:1;
+}
+
+
+
+/* =========================================================
+   ICONS
+========================================================= */
+
+.arc-item img,
+.arc-more-item img{
+  display:block;
+
+  width:34px;
+  height:34px;
+
+  object-fit:contain;
+  object-position:center;
+}
+
+
+.arc-more-item img{
+  width:22px;
+  height:22px;
+}
+
+
+#sharedNavHub img{
+  width:28px;
+  height:28px;
+}
+
+
+/* Trips fallback icon */
+.arc-trips-icon{
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  width:34px;
+  height:34px;
+
+  font-size:21px;
+
+  line-height:1;
+}
+
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.arc-item .arc-label,
+.arc-more-item .arc-label{
+  position:absolute;
+
+  top:-16px;
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+  color:
+    var(--arc-muted);
+
+  font-size:6.5px;
+  font-weight:800;
+
+  letter-spacing:.08em;
+
+  white-space:nowrap;
+
+  opacity:0;
+
+  transition:
+    opacity
+    .2s
+    ease
+    .05s;
+}
+
+
+.arc-nav.open
+.arc-item{
+  opacity:1;
+
+  pointer-events:auto;
+}
+
+
+.arc-nav.open
+.arc-item
+.arc-label{
+  opacity:1;
+}
+
+
+
+/* =========================================================
+   MAIN ARC
+
+   HTML ORDER:
+   1 HOME
+   2 TRIPS
+   3 PLAN
+   4 FOOD
+   5 MORE
+========================================================= */
+
+.arc-nav.open
+.arc-item:nth-child(1){
+  transform:
+    translate(-108px,-22px)
+    scale(1);
+
+  transition-delay:.02s;
+}
+
+
+.arc-nav.open
+.arc-item:nth-child(2){
+  transform:
+    translate(-66px,-74px)
+    scale(1);
+
+  transition-delay:.07s;
+}
+
+
+.arc-nav.open
+.arc-item:nth-child(3){
+  transform:
+    translate(0,-96px)
+    scale(1);
+
+  transition-delay:.12s;
+}
+
+
+.arc-nav.open
+.arc-item:nth-child(4){
+  transform:
+    translate(66px,-74px)
+    scale(1);
+
+  transition-delay:.17s;
+}
+
+
+.arc-nav.open
+.arc-item:nth-child(5){
+  transform:
+    translate(108px,-22px)
+    scale(1);
+
+  transition-delay:.22s;
+}
+
+
+
+/* =========================================================
+   SECOND ARC
+========================================================= */
+
+.arc-nav.more-open
+.arc-more-item{
+  opacity:1;
+
+  pointer-events:auto;
+}
+
+
+.arc-nav.more-open
+.arc-more-item
+.arc-label{
+  opacity:1;
+}
+
+
+/*
+  Main arc uses children 1–5.
+  More arc therefore starts at child 6.
+*/
+
+.arc-nav.more-open
+.arc-more-item:nth-child(6){
+  transform:
+    translate(-150px,-52px)
+    scale(1);
+
+  transition-delay:.04s;
+}
+
+
+.arc-nav.more-open
+.arc-more-item:nth-child(7){
+  transform:
+    translate(-100px,-112px)
+    scale(1);
+
+  transition-delay:.08s;
+}
+
+
+.arc-nav.more-open
+.arc-more-item:nth-child(8){
+  transform:
+    translate(-38px,-150px)
+    scale(1);
+
+  transition-delay:.12s;
+}
+
+
+.arc-nav.more-open
+.arc-more-item:nth-child(9){
+  transform:
+    translate(38px,-150px)
+    scale(1);
+
+  transition-delay:.16s;
+}
+
+
+.arc-nav.more-open
+.arc-more-item:nth-child(10){
+  transform:
+    translate(100px,-112px)
+    scale(1);
+
+  transition-delay:.20s;
+}
+
+
+.arc-nav.more-open
+.arc-more-item:nth-child(11){
+  transform:
+    translate(150px,-52px)
+    scale(1);
+
+  transition-delay:.24s;
+}
+
+
+
+/* Dim main ring when MORE opens */
+
+.arc-nav.more-open
+.arc-item{
+  opacity:.42;
+}
+
+
+.arc-nav.more-open
+.arc-item#arcMoreBtn{
+  opacity:1;
+
+  border-color:
+    rgba(255,98,95,.42);
+
+  background:
+    rgba(255,98,95,.12);
+}
+
+
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.arc-item.active,
+.arc-more-item.active{
+  border-color:
+    rgba(255,98,95,.42);
+
+  background:
+    rgba(255,98,95,.12);
+}
+
+
+.arc-item.active
+.arc-label,
+
+.arc-more-item.active
+.arc-label,
+
+.arc-nav.more-open
+.arc-item#arcMoreBtn
+.arc-label{
+  color:
+    var(--arc-red-2);
+}
+
+
+
+/* =========================================================
+   MAIN + BUTTON
+========================================================= */
+
+.arc-toggle{
+  position:absolute;
+
+  z-index:3;
+
+  left:50%;
+  bottom:0;
+
+  width:44px;
+  height:44px;
+
+  margin-left:-22px;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:#1a1012;
+
+  color:
+    var(--arc-red-2);
+
+  box-shadow:
+    0 0 0 1px
+    rgba(255,98,95,.35),
+
+    0 0 16px
+    rgba(255,98,95,.24),
+
+    0 10px 22px
+    rgba(0,0,0,.42);
+
+  cursor:pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+.arc-toggle
+.arc-plus{
+  position:relative;
+
+  display:block;
+
+  width:16px;
+  height:16px;
+
+  margin:0 auto;
+}
+
+
+.arc-toggle
+.arc-plus::before,
+
+.arc-toggle
+.arc-plus::after{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  background:
+    currentColor;
+
+  border-radius:2px;
+
+  transform:
+    translate(-50%,-50%);
+
+  transition:
+    transform
+    .28s
+    ease;
+}
+
+
+.arc-toggle
+.arc-plus::before{
+  width:16px;
+  height:2px;
+}
+
+
+.arc-toggle
+.arc-plus::after{
+  width:2px;
+  height:16px;
+}
+
+
+.arc-nav.open
+.arc-toggle{
+  background:
+    #ff625f;
+
+  color:
+    #1a0c0c;
+}
+
+
+.arc-nav.open
+.arc-toggle
+.arc-plus::before,
+
+.arc-nav.open
+.arc-toggle
+.arc-plus::after{
+  transform:
+    translate(-50%,-50%)
+    rotate(45deg);
+}
+
+
+
+/* =========================================================
+   MORE SHEET
+========================================================= */
+
+.footer-sheet-backdrop{
+  position:fixed;
+
+  inset:0;
+
+  z-index:150;
+
+  display:none;
+
+  align-items:flex-end;
+
+  background:
+    rgba(0,0,0,.68);
+
+  backdrop-filter:
+    blur(4px);
+
+  -webkit-backdrop-filter:
+    blur(4px);
+}
+
+
+.footer-sheet-backdrop.open{
+  display:flex;
+}
+
+
+.footer-sheet{
+  width:100%;
+
+  max-width:760px;
+
+  max-height:
+    calc(
+      92vh -
+      env(safe-area-inset-top)
+    );
+
+  overflow-y:auto;
+
+  margin:
+    0 auto;
+
+  padding:
+    8px
+    14px
+    calc(
+      18px +
+      env(safe-area-inset-bottom)
+    );
+
+  border:
+    1px solid
+    var(--footer-line);
+
+  border-radius:
+    20px
+    20px
+    0
+    0;
+
+  background:#0d1318;
+
+  color:
+    var(--footer-text);
+}
+
+
+.footer-sheet-handle{
+  width:38px;
+  height:4px;
+
+  margin:
+    2px
+    auto
+    12px;
+
+  border-radius:999px;
+
+  background:#39454d;
+}
+
+
+.footer-sheet-head{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-bottom:12px;
+}
+
+
+.footer-sheet-title{
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:19px;
+}
+
+
+.footer-sheet-close{
+  width:34px;
+  height:34px;
+
+  border:
+    1px solid
+    var(--footer-line);
+
+  border-radius:9px;
+
+  background:#151c22;
+
+  color:#fff;
+
+  font:inherit;
+
+  cursor:pointer;
+}
+
+
+
+/* =========================================================
+   MORE LINKS
+========================================================= */
+
+.footer-more-link{
+  width:100%;
+
+  min-height:58px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:
+    9px
+    10px;
+
+  margin-bottom:6px;
+
+  border:
+    1px solid
+    var(--footer-line);
+
+  border-radius:11px;
+
+  background:#11181e;
+
+  color:#fff;
+
+  text-decoration:none;
+
+  text-align:left;
+
+  font:inherit;
+
+  cursor:pointer;
+}
+
+
+.footer-more-link:hover{
+  border-color:#39454d;
+
+  background:#141c22;
+}
+
+
+.footer-more-link.current{
+  border-color:
+    rgba(255,98,95,.30);
+
+  background:
+    rgba(255,98,95,.065);
+}
+
+
+.footer-more-icon{
+  flex:0 0 31px;
+
+  font-size:18px;
+
+  text-align:center;
+}
+
+
+.footer-more-main{
+  flex:1;
+
+  min-width:0;
+}
+
+
+.footer-more-title{
+  font-size:9px;
+
+  font-weight:900;
+}
+
+
+.footer-more-sub{
+  margin-top:2px;
+
+  color:#7f8b93;
+
+  font-size:6.5px;
+
+  line-height:1.4;
+}
+
+
+.footer-more-arrow{
+  color:#8d9aa2;
+
+  font-size:12px;
+}
+
+
+.footer-more-separator{
+  height:1px;
+
+  margin:
+    11px
+    2px;
+
+  background:
+    var(--footer-line);
+}
+
+
+.footer-more-link.logout{
+  border-color:
+    rgba(201,111,104,.28);
+
+  background:
+    rgba(201,111,104,.055);
+}
+
+
+.footer-more-link.logout
+.footer-more-title{
+  color:#efa39d;
+}
+
+
+.footer-more-link.logout:disabled{
+  opacity:.55;
+
+  cursor:wait;
+}
+
+
+
+/* =========================================================
+   COMPATIBILITY TRIP SHEET
+========================================================= */
+
+.footer-trip-list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:7px;
+}
+
+
+.footer-trip-card{
+  width:100%;
+
+  min-height:70px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:10px;
+
+  border:
+    1px solid
+    var(--footer-line);
+
+  border-radius:12px;
+
+  background:#11181e;
+
+  color:#fff;
+
+  text-decoration:none;
+}
+
+
+.footer-trip-card.current{
+  border-color:
+    rgba(201,111,104,.55);
+
+  background:
+    rgba(201,111,104,.09);
+}
+
+
+.footer-trip-icon{
+  flex:0 0 36px;
+
+  font-size:21px;
+
+  text-align:center;
+}
+
+
+.footer-trip-main{
+  flex:1;
+
+  min-width:0;
+}
+
+
+.footer-trip-name{
+  font-size:9px;
+
+  font-weight:900;
+
+  line-height:1.3;
+}
+
+
+.footer-trip-meta{
+  margin-top:3px;
+
+  color:#87949c;
+
+  font-size:6.5px;
+
+  line-height:1.4;
+}
+
+
+.footer-trip-role{
+  display:inline-block;
+
+  margin-top:4px;
+
+  padding:
+    2px
+    5px;
+
+  border:
+    1px solid
+    rgba(92,157,255,.22);
+
+  border-radius:999px;
+
+  color:#8ab9ff;
+
+  font-size:5.5px;
+
+  font-weight:900;
+}
+
+
+.footer-trip-card.current
+.footer-trip-role{
+  border-color:
+    rgba(201,111,104,.28);
+
+  color:#e7aaa5;
+}
+
+
+.footer-trip-arrow{
+  color:#7f8b93;
+
+  font-size:13px;
+}
+
+
+.footer-trip-message{
+  padding:
+    18px
+    10px;
+
+  color:#7f8b93;
+
+  font-size:8px;
+
+  text-align:center;
+
+  line-height:1.5;
+}
+
+
+.footer-trip-message.error{
+  color:#ffc5c1;
+}
+
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media(min-width:700px){
+
+  .footer-sheet{
+    max-width:620px;
+  }
+
+}
+
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media(max-width:390px){
+
+  .arc-nav{
+    width:330px;
+  }
+
+
+  .arc-nav.open
+  .arc-item:nth-child(1){
+    transform:
+      translate(-96px,-18px)
+      scale(1);
+  }
+
+
+  .arc-nav.open
+  .arc-item:nth-child(5){
+    transform:
+      translate(96px,-18px)
+      scale(1);
+  }
+
+
+  .arc-nav.more-open
+  .arc-more-item:nth-child(6){
+    transform:
+      translate(-132px,-46px)
+      scale(1);
+  }
+
+
+  .arc-nav.more-open
+  .arc-more-item:nth-child(11){
+    transform:
+      translate(132px,-46px)
+      scale(1);
+  }
+
+}
+
+</style>
+
+
+
+<!-- =========================================================
+     MORE SHEET
+========================================================= -->
+
+<div
+  id="sharedMoreBackdrop"
+  class="footer-sheet-backdrop"
+>
+
+  <div class="footer-sheet">
+
+    <div class="footer-sheet-handle"></div>
+
+
+    <div class="footer-sheet-head">
+
+      <div class="footer-sheet-title">
+        More
+      </div>
+
+
+      <button
+        id="sharedCloseMore"
+        class="footer-sheet-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+
+    <!-- PROFILE -->
+
+    <a
+      id="sharedProfileLink"
+      class="footer-more-link"
+    >
+
+      <div class="footer-more-icon">
+        👤
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Profile & Sharing
+        </div>
+
+        <div class="footer-more-sub">
+          Your profile · manage trip members
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </a>
+
+
+
+    <!-- BOOKINGS -->
+
+    <a
+      id="sharedBookingLink"
+      class="footer-more-link"
+    >
+
+      <div class="footer-more-icon">
+        🧳
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Bookings
+        </div>
+
+        <div class="footer-more-sub">
+          Hotels · flights · reservations
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </a>
+
+
+
+    <!-- EXPENSES -->
+
+    <a
+      id="sharedExpensesLink"
+      class="footer-more-link"
+    >
+
+      <div class="footer-more-icon">
+        💰
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Expenses
+        </div>
+
+        <div class="footer-more-sub">
+          Spending · budget · trip costs
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </a>
+
+
+
+    <!-- PLACES -->
+
+    <a
+      id="sharedPlacesLink"
+      class="footer-more-link"
+    >
+
+      <div class="footer-more-icon">
+        📍
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Places
+        </div>
+
+        <div class="footer-more-sub">
+          Saved places and shared itineraries
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </a>
+
+
+
+    <!-- MAP -->
+
+    <a
+      id="sharedMapLink"
+      class="footer-more-link"
+    >
+
+      <div class="footer-more-icon">
+        🗺️
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Trip Map
+        </div>
+
+        <div class="footer-more-sub">
+          View your itinerary day by day
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </a>
+
+
+
+    <div class="footer-more-separator"></div>
+
+
+
+    <!-- LOGOUT -->
+
+    <button
+      id="sharedLogout"
+      class="footer-more-link logout"
+      type="button"
+    >
+
+      <div class="footer-more-icon">
+        🚪
+      </div>
+
+
+      <div class="footer-more-main">
+
+        <div class="footer-more-title">
+          Log Out
+        </div>
+
+        <div class="footer-more-sub">
+          Sign out of your account
+        </div>
+
+      </div>
+
+
+      <div class="footer-more-arrow">
+        →
+      </div>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     OLD TRIP SHEET
+     Kept for footer.js compatibility.
+     Main TRIPS now goes directly to trips.html.
+========================================================= -->
+
+<div
+  id="sharedTripBackdrop"
+  class="footer-sheet-backdrop"
+>
+
+  <div class="footer-sheet">
+
+    <div class="footer-sheet-handle"></div>
+
+
+    <div class="footer-sheet-head">
+
+      <div class="footer-sheet-title">
+        Trips
+      </div>
+
+
+      <button
+        id="sharedCloseTrips"
+        class="footer-sheet-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div
+      id="sharedTripList"
+      class="footer-trip-list"
+    >
+
+      <div class="footer-trip-message">
+        Loading your trips…
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Hidden compatibility controls for old footer.js -->
+
+<button
+  id="sharedSwitchTrip"
+  type="button"
+  hidden
+  aria-hidden="true"
+></button>
+
+<a
+  id="sharedTripsLink"
+  href="trips.html"
+  hidden
+  aria-hidden="true"
+></a>
+
+
+
+<!-- =========================================================
+     SCRIM
+========================================================= -->
+
+<div
+  id="arcScrim"
+  class="arc-scrim"
+  onclick="
+    window.closeArcNav &&
+    window.closeArcNav()
+  "
+></div>
+
+
+
+<!-- =========================================================
+     ARC NAV
+========================================================= -->
+
+<nav
+  class="arc-nav"
+  id="arcNav"
+  aria-label="Main navigation"
+>
+
+
+  <!-- =====================================================
+       1. HOME
+  ====================================================== -->
+
+  <a
+    id="sharedNavHome"
+    class="arc-item"
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/Homefooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvSG9tZWZvb3Rlci5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NjMyMTI3LCJleHAiOjMzMzI1NjMyMTI3fQ.9BTopbR22KJCzKMMoLItwlXMPKMgkWFTB85CvDXmkxDrTGCwWtxIQfPpde2qSjrpCFojB5ijYTArNqJf0G5hPQ"
+      alt=""
+    >
+
+    <span class="arc-label">
+      HOME
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       2. TRIPS
+       DIRECTLY OPENS trips.html
+  ====================================================== -->
+
+  <a
+    id="sharedNavTrips"
+    class="arc-item"
+    href="trips.html"
+  >
+
+    <span
+      class="arc-trips-icon"
+      aria-hidden="true"
+    >
+      ✈️
+    </span>
+
+    <span class="arc-label">
+      TRIPS
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       3. PLAN
+  ====================================================== -->
+
+  <a
+    id="sharedNavPlan"
+    class="arc-item"
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/planfooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvcGxhbmZvb3Rlci5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NjMyMjAzLCJleHAiOjMzMzI1NjMyMjAzfQ.AzUGiKb-G7XtS_cERRiRhEqdIKs7MhJKW4vU-uWwMMS-CiArHmZnalWRfAxxFMj_DkEdD98fE01CTBNa6Cporg"
+      alt=""
+    >
+
+    <span class="arc-label">
+      PLAN
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       4. FOOD
+  ====================================================== -->
+
+  <a
+    id="sharedNavFood"
+    class="arc-item"
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/foodfooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvZm9vZGZvb3Rlci5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NjMyMTA1LCJleHAiOjMzMzI1NjMyMTA1fQ.BGrE11IoO2jl4Cf6xjkaaM5VbOTDtKfUW1xUoDnWlHa_3xJoOnOCmhuZXfLsMZ9gJFY8xSgg67C94PKYmYR1RA"
+      alt=""
+    >
+
+    <span class="arc-label">
+      FOOD
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       5. MORE
+  ====================================================== -->
+
+  <button
+    id="arcMoreBtn"
+    class="arc-item"
+    type="button"
+    onclick="
+      event.preventDefault();
+      event.stopPropagation();
+
+      var n =
+        document.getElementById(
+          'arcNav'
+        );
+
+      n.classList.toggle(
+        'more-open'
+      );
+    "
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/morefooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvbW9yZWZvb3Rlci5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NjMyMTc1LCJleHAiOjQ5NDMyMzIxNzV9.O6Lx5IOJjw8nXT5tGcTXIhHlWLfWDMzx8bKePRYd-uPgHlsiaeOWPw6QR6VgkghuSHMMrDiJxEZjEnUpNNsarQ"
+      alt=""
+    >
+
+    <span class="arc-label">
+      MORE
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       MORE 1 — BOOKING
+  ====================================================== -->
+
+  <a
+    id="sharedNavHub"
+    class="arc-more-item"
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/bookingfooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvYm9va2luZ2Zvb3Rlci5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5NjMyMDc4LCJleHAiOjQ5NDMyMzIwNzh9.AnZhB83lYYXO-5q5ADhzDQ_SzLNjtJHlwyOyPac-XdZ7zG4INt4wTp_S9VhoVoxz6KbtIrCZaUY1MxRm6G3BVA"
+      alt=""
+    >
+
+    <span class="arc-label">
+      BOOKING
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       MORE 2 — PROFILE
+  ====================================================== -->
+
+  <button
+    class="arc-more-item"
+    type="button"
+    onclick="
+      document
+        .getElementById(
+          'sharedProfileLink'
+        )
+        .click()
+    "
+  >
+
+    <span
+      style="
+        font-size:18px;
+        line-height:1;
+      "
+    >
+      👤
+    </span>
+
+    <span class="arc-label">
+      PROFILE
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       MORE 3 — EXPENSES
+  ====================================================== -->
+
+  <a
+    id="sharedNavExpenses"
+    class="arc-more-item"
+  >
+
+    <img
+      src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/expensesfooter.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvZXhwZW5zZXNmb290ZXIucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4OTY0MjQwMCwiZXhwIjozMzMyNTY0MjQwMH0.2N_yNGsFpk3jtyT5yNEeMxf6T6iW38taHMwkcalrL6erpYf81ELyq_ah1kIcerGMKL6BQmIOVWuMRsCRuVDb4A"
+      alt=""
+    >
+
+    <span class="arc-label">
+      EXPENSES
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       MORE 4 — PLACES
+  ====================================================== -->
+
+  <button
+    class="arc-more-item"
+    type="button"
+    onclick="
+      document
+        .getElementById(
+          'sharedPlacesLink'
+        )
+        .click()
+    "
+  >
+
+    <span
+      style="
+        font-size:18px;
+        line-height:1;
+      "
+    >
+      📍
+    </span>
+
+    <span class="arc-label">
+      PLACES
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       MORE 5 — MAP
+  ====================================================== -->
+
+  <button
+    class="arc-more-item"
+    type="button"
+    onclick="
+      document
+        .getElementById(
+          'sharedMapLink'
+        )
+        .click()
+    "
+  >
+
+    <span
+      style="
+        font-size:18px;
+        line-height:1;
+      "
+    >
+      🗺️
+    </span>
+
+    <span class="arc-label">
+      MAP
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       MORE 6 — LOG OUT
+  ====================================================== -->
+
+  <button
+    class="arc-more-item"
+    type="button"
+    onclick="
+      document
+        .getElementById(
+          'sharedLogout'
+        )
+        .click()
+    "
+  >
+
+    <span
+      style="
+        font-size:18px;
+        line-height:1;
+      "
+    >
+      🚪
+    </span>
+
+    <span class="arc-label">
+      LOG OUT
+    </span>
+
+  </button>
+
+
+
+  <!-- =====================================================
+       CENTER BUTTON
+  ====================================================== -->
+
+  <button
+    id="arcToggle"
+    class="arc-toggle"
+    type="button"
+    aria-label="Open menu"
+    aria-expanded="false"
+    onclick="
+      event.preventDefault();
+      event.stopPropagation();
+
+      var n =
+        document.getElementById(
+          'arcNav'
+        );
+
+      var s =
+        document.getElementById(
+          'arcScrim'
+        );
+
+      var open =
+        n.classList.toggle(
+          'open'
+        );
+
+      if(!open){
+        n.classList.remove(
+          'more-open'
+        );
+      }
+
+      if(s){
+        s.classList.toggle(
+          'open',
+          open
+        );
+      }
+
+      this.setAttribute(
+        'aria-expanded',
+        open
+        ?
+        'true'
+        :
+        'false'
+      );
+
+      this.setAttribute(
+        'aria-label',
+        open
+        ?
+        'Close menu'
+        :
+        'Open menu'
+      );
+    "
+  >
+
+    <span
+      class="arc-plus"
+      aria-hidden="true"
+    ></span>
+
+  </button>
+
+</nav>
+
+
+
+<!-- =========================================================
+     OLD MORE BUTTON COMPATIBILITY
+========================================================= -->
+
+<button
+  id="sharedNavMore"
+  type="button"
+  hidden
+  aria-hidden="true"
+></button>
+
+
+
+<!-- =========================================================
+     CLOSE ARC HELPER
+========================================================= -->
+
+<img
+  alt=""
+  width="1"
+  height="1"
+
+  style="
+    position:fixed;
+    left:-9px;
+    top:-9px;
+    opacity:0;
+    pointer-events:none;
+  "
+
+  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+
+  onload="
+    window.closeArcNav =
+      function(){
+
+        var n =
+          document.getElementById(
+            'arcNav'
+          );
+
+        var s =
+          document.getElementById(
+            'arcScrim'
+          );
+
+        var b =
+          document.getElementById(
+            'arcToggle'
+          );
+
+        if(n){
+
+          n.classList.remove(
+            'open',
+            'more-open'
+          );
+
+        }
+
+        if(s){
+
+          s.classList.remove(
+            'open'
+          );
+
+        }
+
+        if(b){
+
+          b.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+
+          b.setAttribute(
+            'aria-label',
+            'Open menu'
+          );
+
+        }
+
+      };
+  "
+>

@@ -1,0 +1,1269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05090c">
+<title>Assist · Travel</title>
+
+<style>
+:root{
+  --bg:#05090c; --surface:#0b1217; --surface-2:#0f171d; --surface-3:#141d24;
+  --line:#28323a; --line-soft:rgba(255,255,255,.06);
+  --text:#f5f2ed; --muted:#909aa1; --muted-2:#69757d;
+  --red:#e96d6b; --red-bright:#ff625f; --red-soft:rgba(255,98,95,.08);
+  --red-line:rgba(255,98,95,.32); --green:#79c995; --gold:#e4bd69; --blue:#78a9ef;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; color:var(--text);
+  background:radial-gradient(circle at 50% -5%,rgba(48,61,70,.20),transparent 30%),#030608;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;-webkit-tap-highlight-color:transparent}
+.plan-shell{
+  width:calc(100% - 24px); max-width:720px;
+  margin:calc(14px + env(safe-area-inset-top)) auto 105px;
+  overflow:hidden; border:1px solid #273139; border-radius:27px;
+  background:linear-gradient(180deg,#0a1116,#070d11);
+  box-shadow:0 24px 65px rgba(0,0,0,.40);
+}
+header{
+  position:relative; overflow:hidden;
+  background:radial-gradient(circle at 88% 0%,rgba(255,98,95,.065),transparent 27%),
+             linear-gradient(145deg,#10181e,#081015 65%,#070c10);
+}
+.header-inner{position:relative;z-index:2;padding:26px 20px 0}
+.plan-kanji{
+  position:absolute;z-index:0;right:6px;top:7px;
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",Georgia,serif;
+  font-size:126px;font-weight:700;line-height:1;color:var(--red-bright);opacity:.042;
+  pointer-events:none;user-select:none;
+}
+.eyebrow{margin-bottom:14px;color:#df7775;font-size:8px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}
+.plan-hero{display:flex;align-items:center;gap:15px}
+.plan-icon-wrap{
+  width:65px;height:65px;flex:0 0 65px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,98,95,.30);border-radius:50%;background:#0b1217;
+}
+.plan-page-title-icon{width:45px;height:45px;display:block;object-fit:contain;opacity:.88}
+.plan-page-title{margin:0;font-family:Georgia,"Times New Roman",serif;line-height:1}
+.plan-page-title span{color:#f7f4ee;font-size:41px;font-weight:700;letter-spacing:-.03em}
+.trip-name{margin-top:8px;max-width:350px;color:#89949c;font-size:9px;font-weight:500;line-height:1.4}
+
+/* The two pages deliberately share one "Plan" identity. */
+.mode-switch{
+  display:grid;grid-template-columns:1fr 1fr;gap:3px;
+  margin:0 0 13px;padding:3px;border:1px solid #28343c;border-radius:12px;background:#080e12;
+}
+.mode-btn{
+  min-height:34px;border:0;border-radius:8px;background:transparent;color:#69757d;
+  font-size:7px;font-weight:900;letter-spacing:.12em;cursor:pointer;
+}
+.mode-btn.active{
+  color:#f3cfcb;background:rgba(255,98,95,.075);
+  box-shadow:inset 0 0 0 1px rgba(255,98,95,.18);
+}
+
+.date-scroller{
+  display:flex;gap:7px;margin-top:24px;padding:0 0 17px;overflow-x:auto;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.date-scroller::-webkit-scrollbar{display:none}
+.date-btn{
+  flex:0 0 60px;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:7px 3px;border:1px solid #29343c;border-radius:13px;
+  background:linear-gradient(145deg,#11191f,#0b1217);color:var(--muted);cursor:pointer;
+}
+.date-weekday,.date-month{color:#747f86;font-size:6px;font-weight:800}
+.date-number{margin:4px 0;color:#f0eee9;font-family:Georgia,"Times New Roman",serif;font-size:21px;font-weight:700;line-height:1}
+.date-btn.active{
+  border-color:rgba(255,98,95,.40);
+  background:radial-gradient(circle at 50% 0%,rgba(255,98,95,.10),transparent 70%),#151318;
+}
+.date-btn.active .date-weekday,.date-btn.active .date-month{color:#d99895}
+
+main{width:100%;padding:0 17px 22px}
+.assist-card{
+  overflow:hidden;border:1px solid #28343c;border-radius:20px;
+  background:radial-gradient(circle at 85% 0%,rgba(255,255,255,.016),transparent 28%),
+             linear-gradient(150deg,#111a20,#0a1116);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.day-head{position:relative;padding:17px 18px 15px;border-bottom:1px solid rgba(255,255,255,.06)}
+.day-meta{display:flex;justify-content:space-between;gap:12px}
+.day-number{color:#dc7774;font-size:7px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.day-date{color:#768188;font-size:7px;line-height:1.4;text-align:right;text-transform:uppercase}
+.day-title{
+  max-width:78%;margin-top:8px;color:#f4f0e9;font-family:Georgia,"Times New Roman",serif;
+  font-size:24px;font-weight:700;line-height:1.05;letter-spacing:-.02em;
+}
+.day-sub{margin-top:6px;color:#7d8991;font-size:7px;line-height:1.45}
+
+.assist-body{padding:11px}
+.section-label{
+  margin:4px 2px 7px;color:#71808a;font-size:6px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
+}
+.weather-card{
+  padding:12px;border:1px solid rgba(120,169,239,.16);border-radius:14px;
+  background:linear-gradient(145deg,rgba(120,169,239,.055),rgba(255,255,255,.012));
+}
+.weather-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.weather-main{display:flex;align-items:center;gap:9px}
+.weather-icon{font-size:22px}
+.weather-title{font-family:Georgia,"Times New Roman",serif;font-size:15px;font-weight:700}
+.weather-meta{margin-top:2px;color:#83909a;font-size:7px}
+.weather-badge{
+  padding:4px 7px;border:1px solid rgba(121,201,149,.20);border-radius:999px;
+  background:rgba(121,201,149,.045);color:#9bd3ad;font-size:5.5px;font-weight:900;white-space:nowrap;
+}
+.weather-badge.rain{
+  border-color:rgba(120,169,239,.24);background:rgba(120,169,239,.055);color:#a8c5ec;
+}
+.weather-note{margin-top:9px;padding-top:9px;border-top:1px solid var(--line-soft);color:#9ca7ae;font-size:7px;line-height:1.55}
+
+.plan-list{border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.012)}
+.plan-row{display:grid;grid-template-columns:52px 9px minmax(0,1fr);gap:6px;padding:9px 10px;border-bottom:1px solid var(--line-soft)}
+.plan-row:last-child{border-bottom:0}
+.plan-time{color:#a5bdcf;font-size:7px;font-weight:900}
+.plan-dot{width:6px;height:6px;margin-top:2px;border-radius:50%;background:var(--red-bright)}
+.plan-title{font-size:8px;font-weight:900;line-height:1.35}
+.plan-loc{margin-top:2px;color:#74818a;font-size:6.5px;line-height:1.4}
+
+.alert{
+  margin-top:10px;padding:11px 12px;border:1px solid rgba(228,189,105,.20);border-radius:14px;
+  background:rgba(228,189,105,.04);
+}
+.alert.rain{border-color:rgba(120,169,239,.20);background:rgba(120,169,239,.04)}
+.alert-kicker{color:var(--gold);font-size:6px;font-weight:900;letter-spacing:.13em}
+.alert.rain .alert-kicker{color:#9dbce5}
+.alert-title{margin-top:5px;font-family:Georgia,"Times New Roman",serif;font-size:14px;font-weight:700}
+.alert-copy{margin-top:5px;color:#929da4;font-size:7px;line-height:1.55}
+
+.suggestion-grid{display:grid;gap:7px}
+.suggestion{
+  display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:9px;
+  padding:9px;border:1px solid #263139;border-radius:12px;background:#0d151a;
+}
+.suggestion-icon{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;background:#151e24;font-size:16px;
+}
+.suggestion-name{font-size:8px;font-weight:900;line-height:1.3}
+.suggestion-meta{margin-top:3px;color:#74818a;font-size:6.5px;line-height:1.4}
+.suggestion-tag{color:#91afd5;font-size:5.5px;font-weight:900;white-space:nowrap}
+.map-link{
+  display:inline-block;margin-top:4px;color:#b8c9dd;font-size:6px;font-weight:800;text-decoration:none;
+}
+
+
+.find-nearby{
+  width:100%;
+  min-height:44px;
+  margin-top:8px;
+  border:1px solid rgba(120,169,239,.24);
+  border-radius:11px;
+  background:rgba(120,169,239,.055);
+  color:#b8cdec;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.08em;
+  cursor:pointer;
+}
+.find-nearby.rain{
+  border-color:rgba(120,169,239,.34);
+  background:linear-gradient(145deg,rgba(120,169,239,.09),rgba(120,169,239,.035));
+  color:#c6d9f2;
+}
+.discovery-note{
+  margin-top:6px;
+  color:#697780;
+  font-size:6.5px;
+  line-height:1.45;
+}
+
+.state{
+  padding:32px 18px;border:1px dashed #303b43;border-radius:16px;background:rgba(255,255,255,.012);
+  color:#77838b;font-size:8px;line-height:1.6;text-align:center;
+}
+.state strong{display:block;margin-bottom:5px;color:#e8e7e3;font-family:Georgia,"Times New Roman",serif;font-size:15px}
+
+@media(max-width:390px){
+  .plan-shell{width:calc(100% - 18px)}
+  .header-inner{padding-left:17px;padding-right:17px}
+  .plan-page-title span{font-size:38px}
+  .plan-icon-wrap{width:60px;height:60px;flex-basis:60px}
+  .plan-page-title-icon{width:42px;height:42px}
+  .date-btn{flex-basis:57px}
+  main{padding-left:14px;padding-right:14px}
+}
+
+/* ===== ASSIST CHAT ===== */
+.chat-card{margin-top:12px;overflow:hidden;border:1px solid #28343c;border-radius:20px;background:linear-gradient(150deg,#10191f,#091015)}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line-soft)}
+.chat-label{color:#9fb4c4;font-size:7px;font-weight:900;letter-spacing:.14em}
+.chat-status{display:flex;align-items:center;gap:6px;color:#74818a;font-size:6px;font-weight:800}
+.chat-status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.chat-status.error .chat-status-dot{background:var(--red-bright)} .chat-status.error{color:#c98886}
+.chat-messages{min-height:150px;max-height:430px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;scrollbar-width:thin}
+.chat-empty{padding:18px 8px;color:#74818a;font-size:7px;line-height:1.6;text-align:center}
+.chat-empty strong{display:block;margin-bottom:5px;color:#e8e7e3;font-family:Georgia,"Times New Roman",serif;font-size:14px}
+.chat-row{display:flex}.chat-row.user{justify-content:flex-end}.chat-row.assistant{justify-content:flex-start}
+.chat-bubble{max-width:82%;padding:10px 12px;border:1px solid #29343c;border-radius:14px;background:#0e171c;color:#edf0ee;font-size:8px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.chat-row.user .chat-bubble{border-color:rgba(255,98,95,.30);background:rgba(255,98,95,.075);color:#fff1ef}
+.chat-source{margin-top:5px;color:#64727b;font-size:5.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.chat-thinking{color:#82909a}
+.chat-compose{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:10px;border-top:1px solid var(--line-soft);background:rgba(0,0,0,.10)}
+.chat-input{width:100%;min-height:40px;max-height:110px;resize:none;padding:11px 12px;border:1px solid #2a353d;border-radius:12px;outline:none;background:#080e12;color:var(--text);font:inherit;font-size:8px;line-height:1.45}
+.chat-input:focus{border-color:rgba(255,98,95,.38);box-shadow:0 0 0 2px rgba(255,98,95,.04)}
+.chat-send{min-width:58px;border:1px solid rgba(255,98,95,.30);border-radius:12px;background:rgba(255,98,95,.08);color:#f1aaa6;font-size:7px;font-weight:900;cursor:pointer}
+.chat-send:disabled{opacity:.45;cursor:not-allowed}
+.quick-prompts{display:flex;gap:6px;padding:0 10px 10px;overflow-x:auto;scrollbar-width:none}.quick-prompts::-webkit-scrollbar{display:none}
+.quick-prompt{flex:0 0 auto;padding:7px 9px;border:1px solid #29343c;border-radius:999px;background:#0c1419;color:#8e9ba4;font-size:6px;font-weight:800;cursor:pointer}
+
+</style>
+</head>
+
+<body>
+<div class="plan-shell">
+<header>
+  <div class="plan-kanji">旅</div>
+  <div class="header-inner">
+    <div id="tripEyebrow" class="eyebrow">TRIP · ASSIST</div>
+
+    <div class="plan-hero">
+      <div class="plan-icon-wrap">
+        <img
+          class="plan-page-title-icon"
+          src="https://zngncasvdrrxyrkjqutj.supabase.co/storage/v1/object/sign/Photos/Travel3Logo.png?token=eyJraWQiOiIzOTgxNDUwNy1mM2QwLTQ5ZGItODA4My0xODg1MWZkNGYxMmEiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJQaG90b3MvVHJhdmVsM0xvZ28ucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4OTcwNDUwMiwiZXhwIjozMzMyNTcwNDUwMn0.ciD2sShYC95aeLTucRmbI-AvrtletO259ymPAGCURr4FXltkLRmqiKd_yzkwrLl_q4XGahAWzevvfVkWyGOlZg"
+          alt=""
+          aria-hidden="true"
+        >
+      </div>
+      <div>
+        <h1 class="plan-page-title"><span>Plan</span></h1>
+        <div id="tripName" class="trip-name">Loading trip…</div>
+      </div>
+    </div>
+
+    <div id="dateScroller" class="date-scroller"></div>
+
+    <div class="mode-switch" aria-label="Plan mode">
+      <button id="itineraryMode" class="mode-btn" type="button">ITINERARY</button>
+      <button class="mode-btn active" type="button" aria-current="page">ASSIST</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="state"><strong>Loading Assist…</strong>Looking at your itinerary and nearby saved places.</div>
+</main>
+<section class="chat-card" style="margin:0 17px 22px">
+  <div class="chat-head"><div class="chat-label">ASSIST CHAT</div><div id="chatStatus" class="chat-status"><span class="chat-status-dot"></span><span>Ready</span></div></div>
+  <div id="chatMessages" class="chat-messages"><div id="chatEmpty" class="chat-empty"><strong>Ask about your trip</strong>Bookings, expenses and saved trip facts can be answered directly. Planning and recommendations use AI when needed.</div></div>
+  <div class="quick-prompts">
+    <button class="quick-prompt" type="button" data-prompt="What bookings do I have?">MY BOOKINGS</button>
+    <button class="quick-prompt" type="button" data-prompt="What is my schedule on this day?">THIS DAY</button>
+    <button class="quick-prompt" type="button" data-prompt="How much have I spent?">MY SPENDING</button>
+    <button class="quick-prompt" type="button" data-prompt="Is this day too tiring?">CHECK PACING</button>
+  </div>
+  <div class="chat-compose"><textarea id="chatInput" class="chat-input" rows="1" placeholder="Ask Assist about this trip…"></textarea><button id="chatSend" class="chat-send" type="button">SEND</button></div>
+</section>
+</div>
+
+<div id="footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="google-maps.js"></script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const requestedTripId = Number(params.get("trip")) || null;
+const savedTripId = Number(localStorage.getItem("current_trip_id")) || null;
+let TRIP_ID = requestedTripId || savedTripId || null;
+
+let currentUser=null, trip=null, accessibleTrips=[], schedule=[], places=[], restaurants=[];
+let groupedDays={}, selectedDate=null;
+
+const main=document.getElementById("main");
+const tripName=document.getElementById("tripName");
+const tripEyebrow=document.getElementById("tripEyebrow");
+const dateScroller=document.getElementById("dateScroller");
+
+function text(v){return String(v ?? "")}
+function esc(v){return text(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function norm(v){return text(v).trim().toLowerCase()}
+function parseDate(v){return new Date(v+"T12:00:00")}
+function localDateString(){
+  const d=new Date();
+  return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
+}
+function dateParts(v){
+  const d=parseDate(v);
+  return {
+    weekday:new Intl.DateTimeFormat("en-SG",{weekday:"short"}).format(d).toUpperCase(),
+    weekdayLong:new Intl.DateTimeFormat("en-SG",{weekday:"long"}).format(d).toUpperCase(),
+    day:new Intl.DateTimeFormat("en-SG",{day:"numeric"}).format(d),
+    month:new Intl.DateTimeFormat("en-SG",{month:"short"}).format(d).toUpperCase()
+  };
+}
+function timeToMinutes(v){
+  if(!v)return null;
+  const p=String(v).slice(0,5).split(":");
+  const h=Number(p[0]),m=Number(p[1]);
+  return Number.isNaN(h)||Number.isNaN(m)?null:h*60+m;
+}
+function labelToMinutes(v){
+  const m=String(v||"").match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i);
+  if(!m)return null;
+  let h=Number(m[1]); const min=Number(m[2]||0); const s=m[3].toUpperCase();
+  if(h===12)h=0; if(s==="PM")h+=12; return h*60+min;
+}
+function scheduleSortKey(item){
+  const exact=timeToMinutes(item.start_time); if(exact!==null)return exact;
+  const flex=labelToMinutes(item.time_label); if(flex!==null)return flex;
+  const l=norm(item.time_label);
+  if(l.includes("morning"))return 480;
+  if(l.includes("lunch"))return 720;
+  if(l.includes("afternoon"))return 900;
+  if(l.includes("evening"))return 1080;
+  if(l.includes("after"))return 2000;
+  return 1900;
+}
+function compareScheduleItems(a,b){
+  const x=scheduleSortKey(a),y=scheduleSortKey(b);
+  if(x!==y)return x-y;
+  return Number(a.sort_order||0)-Number(b.sort_order||0) || Number(a.id||0)-Number(b.id||0);
+}
+function itemTime(item){
+  if(item.time_label)return item.time_label;
+  if(!item.start_time)return "Flexible";
+  const p=item.start_time.split(":"); let h=Number(p[0]); const min=p[1]||"00";
+  const suffix=h>=12?"PM":"AM"; h=h%12||12; return `${h}:${min} ${suffix}`;
+}
+function itemLocation(item){return item.restaurant?.name||item.place?.name||item.location_name||""}
+function coordsOf(item){
+  const lat=Number(item.place?.latitude ?? item.restaurant?.latitude ?? item.latitude);
+  const lng=Number(item.place?.longitude ?? item.restaurant?.longitude ?? item.longitude);
+  return Number.isFinite(lat)&&Number.isFinite(lng)?{lat,lng}:null;
+}
+function haversine(a,b){
+  const R=6371, rad=x=>x*Math.PI/180;
+  const dLat=rad(b.lat-a.lat), dLng=rad(b.lng-a.lng);
+  const q=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(q),Math.sqrt(1-q));
+}
+function mapsLink(row){
+  return row.maps_url || (row.latitude&&row.longitude ? `https://www.google.com/maps/search/?api=1&query=${row.latitude},${row.longitude}` : null);
+}
+function dayNumber(date){
+  if(!trip?.start_date)return 1;
+  return Math.round((parseDate(date)-parseDate(trip.start_date))/86400000)+1;
+}
+function dayCity(date){
+  for(const item of groupedDays[date]||[]){
+    const c=item.place?.city||item.restaurant?.city;
+    if(c)return c;
+  }
+  return trip?.country||"";
+}
+function meaningfulArea(item){
+  return item.place?.area||item.restaurant?.area||item.place?.city||item.restaurant?.city||null;
+}
+function dayRouteTitle(date){
+  const areas=[];
+  for(const item of groupedDays[date]||[]){
+    const t=norm(item.item_type),title=norm(item.title);
+    if(t.includes("transport")||t.includes("hotel")||title.includes("arrive")||title.includes("depart")||title.includes("check-in"))continue;
+    const area=meaningfulArea(item);
+    if(area&&!areas.some(x=>norm(x)===norm(area)))areas.push(area);
+  }
+  if(areas.length>=2)return `${areas[0]} to ${areas.at(-1)}`;
+  if(areas.length===1)return areas[0];
+  return groupedDays[date]?.[0]?.title||"Trip Day";
+}
+
+async function getAccessibleTrips(){
+  const [ownResult,memberResult]=await Promise.all([
+    db.from("trips").select("*").eq("owner_id",currentUser.id).order("start_date",{ascending:true}),
+    db.from("trip_members").select("trip_id").eq("user_id",currentUser.id)
+  ]);
+  if(ownResult.error)throw ownResult.error;
+  if(memberResult.error)throw memberResult.error;
+  const own=(ownResult.data||[]).map(r=>({...r,access_type:"owner"}));
+  const ids=[...new Set((memberResult.data||[]).map(r=>Number(r.trip_id)).filter(Boolean))];
+  let shared=[];
+  if(ids.length){
+    const r=await db.from("trips").select("*").in("id",ids).order("start_date",{ascending:true});
+    if(r.error)throw r.error;
+    shared=(r.data||[]).map(x=>({...x,access_type:x.owner_id===currentUser.id?"owner":"shared"}));
+  }
+  const map=new Map();
+  [...own,...shared].forEach(r=>{const id=Number(r.id);if(!map.has(id)||r.access_type==="owner")map.set(id,r)});
+  return [...map.values()].sort((a,b)=>(a.start_date||"").localeCompare(b.start_date||""));
+}
+
+async function resolveTrip(){
+  const auth=await db.auth.getUser();
+  if(auth.error)throw auth.error;
+  currentUser=auth.data?.user||null;
+  if(!currentUser)throw new Error("Please sign in to view your trips.");
+  accessibleTrips=await getAccessibleTrips();
+  if(!accessibleTrips.length)throw new Error("You do not have any accessible trips yet.");
+  let resolved=accessibleTrips.find(r=>Number(r.id)===Number(TRIP_ID))||accessibleTrips[0];
+  TRIP_ID=Number(resolved.id);
+  localStorage.setItem("current_trip_id",String(TRIP_ID));
+  history.replaceState(null,"",`?trip=${TRIP_ID}${window.location.hash||""}`);
+}
+
+function loadScheduleQuery(){
+  return db.from("schedule").select(`
+    id,trip_id,schedule_date,start_time,end_time,time_label,sort_order,title,item_type,
+    description,notes,restaurant_id,place_id,location_name,address,latitude,longitude,
+    maps_url,is_optional,is_locked,
+    place:places(id,name,name_japanese,country,prefecture,city,area,address,latitude,longitude,maps_url,place_type),
+    restaurant:restaurants(id,name,name_japanese,country,prefecture,city,area,location,address,latitude,longitude,maps_url)
+  `).eq("trip_id",TRIP_ID).order("schedule_date",{ascending:true}).order("sort_order",{ascending:true});
+}
+
+function buildDays(){
+  groupedDays={};
+  schedule.forEach(item=>(groupedDays[item.schedule_date]??=[]).push(item));
+  Object.values(groupedDays).forEach(items=>items.sort(compareScheduleItems));
+}
+function chooseDate(){
+  const hash=window.location.hash.replace("#","");
+  if(hash&&trip.start_date&&trip.end_date&&hash>=trip.start_date&&hash<=trip.end_date){selectedDate=hash;return}
+  const today=localDateString();
+  if(trip.start_date&&trip.end_date&&today>=trip.start_date&&today<=trip.end_date){selectedDate=today;return}
+  if(trip.start_date&&today<trip.start_date){selectedDate=trip.start_date;return}
+  selectedDate=trip.end_date||Object.keys(groupedDays).sort()[0]||today;
+}
+function renderDates(){
+  if(!trip.start_date||!trip.end_date){dateScroller.innerHTML="";return}
+  const dates=[]; let cursor=parseDate(trip.start_date),end=parseDate(trip.end_date);
+  while(cursor<=end){
+    dates.push([cursor.getFullYear(),String(cursor.getMonth()+1).padStart(2,"0"),String(cursor.getDate()).padStart(2,"0")].join("-"));
+    cursor.setDate(cursor.getDate()+1);
+  }
+  dateScroller.innerHTML=dates.map(date=>{
+    const p=dateParts(date);
+    return `<button class="date-btn ${date===selectedDate?"active":""}" type="button" data-date="${date}">
+      <span class="date-weekday">${esc(p.weekday)}</span><span class="date-number">${esc(p.day)}</span><span class="date-month">${esc(p.month)}</span>
+    </button>`;
+  }).join("");
+  dateScroller.querySelectorAll(".date-btn").forEach(btn=>btn.onclick=()=>{
+    selectedDate=btn.dataset.date;
+    history.replaceState(null,"",`?trip=${TRIP_ID}#${selectedDate}`);
+    renderDates(); renderAssist();
+  });
+  requestAnimationFrame(()=>dateScroller.querySelector(".date-btn.active")?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"}));
+}
+
+function isTransport(item){
+  const t=norm(item.item_type),x=norm(item.title);
+  return t.includes("transport")||x.includes("train")||x.includes("drive")||x.includes("travel")||x.includes("head to")||x.includes("depart");
+}
+function isOutdoor(item){
+  const s=norm([item.item_type,item.title,item.description,item.notes,item.place?.place_type].join(" "));
+  const outdoor=["shrine","temple","garden","park","mount","highland","waterfall","falls","bamboo","walk","street","outdoor","viewpoint","beach","market"];
+  const indoor=["museum","aquarium","mall","shopping centre","shopping center","indoor","restaurant","cafe","hotel"];
+  if(indoor.some(x=>s.includes(x)))return false;
+  return outdoor.some(x=>s.includes(x));
+}
+function isLikelyIndoorPlace(row){
+  const s=norm([row.place_type,row.name,row.area].join(" "));
+  return ["museum","aquarium","gallery","mall","shopping","market","indoor","tower","centre","center"].some(x=>s.includes(x));
+}
+function anchorItem(items){
+  const withCoords=items.filter(x=>!isTransport(x)&&coordsOf(x));
+  if(!withCoords.length)return items.find(x=>coordsOf(x))||null;
+
+  /* Before the trip, use the first meaningful stop. During the selected day,
+     choose the closest scheduled stop to the current clock time. */
+  if(selectedDate!==localDateString())return withCoords[0];
+  const now=new Date().getHours()*60+new Date().getMinutes();
+  return withCoords.reduce((best,item)=>{
+    const k=scheduleSortKey(item);
+    return Math.abs(k-now)<Math.abs(scheduleSortKey(best)-now)?item:best;
+  },withCoords[0]);
+}
+function nearbyRows(source,anchor,filter=()=>true,limit=3){
+  const c=coordsOf(anchor); if(!c)return [];
+  return source.filter(r=>Number.isFinite(Number(r.latitude))&&Number.isFinite(Number(r.longitude))&&filter(r))
+    .map(r=>({...r,_distance:haversine(c,{lat:Number(r.latitude),lng:Number(r.longitude)})}))
+    .filter(r=>r._distance<=8)
+    .sort((a,b)=>a._distance-b._distance).slice(0,limit);
+}
+function distanceLabel(km){return km<1?`${Math.round(km*1000)} m away`:`${km.toFixed(1)} km away`}
+
+/*
+  WEATHER ADAPTER
+  ------------------------------------------------------------
+  Assist is fully usable now for itinerary + nearby suggestions.
+  To make weather LIVE, replace this function with your chosen weather API.
+  Expected shape:
+  { status:"rain"|"clear"|"unknown", icon:"🌧", title:"Rain expected",
+    meta:"Arashiyama · 2–5 PM", note:"Outdoor plans may be affected." }
+*/
+async function getWeatherForDay(date,anchor){
+  return {
+    status:"unknown",
+    icon:"☁️",
+    title:"Weather check",
+    meta:`${meaningfulArea(anchor)||dayCity(date)||trip?.country||"Trip area"}`,
+    note:"Live weather is ready to connect. Until a weather provider is added, Assist will not invent weather conditions."
+  };
+}
+
+
+async function findNearbyGoogle(kind="places"){
+
+  const items =
+    groupedDays[selectedDate] ||
+    [];
+
+  const anchor =
+    anchorItem(items);
+
+
+  if(!anchor){
+
+    alert(
+      "Assist could not find a location for this itinerary stop."
+    );
+
+    return;
+
+  }
+
+
+  const c =
+    coordsOf(anchor);
+
+
+  if(!c){
+
+    alert(
+      "This itinerary stop does not have latitude / longitude yet."
+    );
+
+    return;
+
+  }
+
+
+  const target =
+    document.getElementById(
+      kind === "food"
+      ? "foodDiscoveryResults"
+      : "placeDiscoveryResults"
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.innerHTML = `
+
+    <div class="state">
+
+      <strong>
+        Finding nearby places…
+      </strong>
+
+      Searching around
+      ${esc(
+        itemLocation(anchor) ||
+        anchor.title ||
+        "this stop"
+      )}.
+
+    </div>
+
+  `;
+
+
+  try{
+
+    if(
+      typeof window.getGooglePlaces !==
+      "function"
+    ){
+
+      throw new Error(
+        "Google Places helper is not available."
+      );
+
+    }
+
+
+    /*
+      IMPORTANT:
+      google-maps.js uses the NEW Google Places API.
+
+      It exposes:
+      window.getGooglePlaces()
+
+      which returns the Places library containing:
+      Place.searchNearby()
+
+      We deliberately do NOT use the old
+      google.maps.places.PlacesService API here.
+    */
+
+    const library =
+      await window.getGooglePlaces();
+
+
+    const Place =
+      library?.Place;
+
+
+    if(
+      !Place ||
+      typeof Place.searchNearby !==
+      "function"
+    ){
+
+      throw new Error(
+        "Google Nearby Search is not available."
+      );
+
+    }
+
+
+    const rain =
+      window.__assistWeatherStatus ===
+      "rain";
+
+
+    let includedPrimaryTypes;
+
+
+    if(kind === "food"){
+
+      includedPrimaryTypes = [
+        "restaurant",
+        "cafe"
+      ];
+
+    }
+
+    else if(rain){
+
+      /*
+        Wet-weather mode:
+        indoor-friendly categories come first.
+      */
+
+      includedPrimaryTypes = [
+        "museum",
+        "art_gallery",
+        "aquarium",
+        "shopping_mall",
+        "movie_theater",
+        "bowling_alley"
+      ];
+
+    }
+
+    else{
+
+      includedPrimaryTypes = [
+        "tourist_attraction",
+        "museum",
+        "art_gallery",
+        "aquarium",
+        "shopping_mall",
+        "park"
+      ];
+
+    }
+
+
+    const response =
+      await Place.searchNearby({
+
+        fields:[
+          "id",
+          "displayName",
+          "formattedAddress",
+          "location",
+          "googleMapsURI",
+          "rating",
+          "userRatingCount",
+          "regularOpeningHours",
+          "primaryType"
+        ],
+
+        locationRestriction:{
+          center:{
+            lat:c.lat,
+            lng:c.lng
+          },
+          radius:3000
+        },
+
+        includedPrimaryTypes,
+
+        maxResultCount:12,
+
+        rankPreference:
+          "DISTANCE"
+
+      });
+
+
+    let results =
+      (
+        response?.places ||
+        []
+      )
+
+      .map(place=>{
+
+        const placeLat =
+
+          typeof place.location?.lat ===
+          "function"
+
+          ?
+
+          place.location.lat()
+
+          :
+
+          Number(
+            place.location?.lat
+          );
+
+
+        const placeLng =
+
+          typeof place.location?.lng ===
+          "function"
+
+          ?
+
+          place.location.lng()
+
+          :
+
+          Number(
+            place.location?.lng
+          );
+
+
+        return {
+
+          id:
+            place.id,
+
+          name:
+            place.displayName ||
+            (
+              kind === "food"
+              ? "Restaurant"
+              : "Nearby place"
+            ),
+
+          area:
+            place.formattedAddress ||
+            "",
+
+          latitude:
+            placeLat,
+
+          longitude:
+            placeLng,
+
+          rating:
+            place.rating,
+
+          userRatingCount:
+            place.userRatingCount,
+
+          openNow:
+            place.regularOpeningHours
+              ?.openNow,
+
+          primaryType:
+            place.primaryType ||
+            "",
+
+          map:
+            place.googleMapsURI ||
+            (
+              Number.isFinite(placeLat) &&
+              Number.isFinite(placeLng)
+
+              ?
+
+              `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                `${placeLat},${placeLng}`
+              )}`
+
+              :
+
+              null
+            ),
+
+          _distance:
+
+            Number.isFinite(placeLat) &&
+            Number.isFinite(placeLng)
+
+            ?
+
+            haversine(
+              c,
+              {
+                lat:placeLat,
+                lng:placeLng
+              }
+            )
+
+            :
+
+            999
+
+        };
+
+      })
+
+      .filter(
+        row =>
+          row.name
+      );
+
+
+    /*
+      In rain mode, keep the indoor-friendly Google
+      result order. Otherwise distance is the main
+      useful ordering for Assist.
+    */
+
+    results =
+      results
+        .sort(
+          (a,b) =>
+            a._distance -
+            b._distance
+        )
+        .slice(
+          0,
+          8
+        );
+
+
+    if(!results.length){
+
+      target.innerHTML = `
+
+        <div class="state">
+
+          <strong>
+            No nearby results found
+          </strong>
+
+          Google did not return suitable
+          ${rain && kind !== "food"
+            ? "indoor places"
+            : "places"}
+          within about 3 km of this stop.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    target.innerHTML =
+      results
+        .map(row=>{
+
+          const meta =
+            [
+
+              distanceLabel(
+                row._distance
+              ),
+
+              row.rating
+              ?
+              `★ ${Number(
+                row.rating
+              ).toFixed(1)}`
+              :
+              null,
+
+              row.userRatingCount
+              ?
+              `${Number(
+                row.userRatingCount
+              ).toLocaleString()} reviews`
+              :
+              null
+
+            ]
+            .filter(Boolean)
+            .join(" · ");
+
+
+          const tag =
+
+            kind === "food"
+
+            ?
+
+            "NEARBY"
+
+            :
+
+            rain
+
+            ?
+
+            "INDOOR"
+
+            :
+
+            "DISCOVER";
+
+
+          const icon =
+
+            kind === "food"
+
+            ?
+
+            "🍽️"
+
+            :
+
+            rain
+
+            ?
+
+            "🏛️"
+
+            :
+
+            "📍";
+
+
+          return `
+
+            <div class="suggestion">
+
+              <div class="suggestion-icon">
+                ${icon}
+              </div>
+
+
+              <div>
+
+                <div class="suggestion-name">
+                  ${esc(row.name)}
+                </div>
+
+
+                <div class="suggestion-meta">
+                  ${esc(meta)}
+                </div>
+
+
+                ${
+                  row.area
+                  ?
+                  `
+                    <div class="suggestion-meta">
+                      ${esc(row.area)}
+                    </div>
+                  `
+                  :
+                  ""
+                }
+
+
+                ${
+                  row.map
+                  ?
+                  `
+                    <a
+                      class="map-link"
+                      href="${esc(row.map)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      OPEN MAP ↗
+                    </a>
+                  `
+                  :
+                  ""
+                }
+
+              </div>
+
+
+              <div class="suggestion-tag">
+                ${tag}
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join("");
+
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Assist nearby discovery:",
+      error
+    );
+
+
+    target.innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          Couldn't load nearby places
+        </strong>
+
+        ${esc(
+          error.message ||
+          "Google Nearby Search failed."
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function suggestionHTML(row,icon,tag){
+  const link=mapsLink(row);
+  return `<div class="suggestion">
+    <div class="suggestion-icon">${icon}</div>
+    <div>
+      <div class="suggestion-name">${esc(row.name)}</div>
+      <div class="suggestion-meta">${esc([row.area||row.city,distanceLabel(row._distance)].filter(Boolean).join(" · "))}</div>
+      ${link?`<a class="map-link" href="${esc(link)}" target="_blank" rel="noopener noreferrer">OPEN MAP ↗</a>`:""}
+    </div>
+    <div class="suggestion-tag">${esc(tag)}</div>
+  </div>`;
+}
+
+async function renderAssist(){
+  const items=groupedDays[selectedDate]||[];
+  if(!items.length){
+    main.innerHTML=`<div class="state"><strong>Nothing planned yet</strong>Assist needs at least one itinerary stop for this day.</div>`;
+    return;
+  }
+  const p=dateParts(selectedDate),city=dayCity(selectedDate),anchor=anchorItem(items);
+  const weather=await getWeatherForDay(selectedDate,anchor);
+  const rain=weather.status==="rain";
+  window.__assistWeatherStatus=weather.status;
+  const affected=rain?items.filter(x=>!isTransport(x)&&isOutdoor(x)):[];
+  const indoor=anchor?nearbyRows(places,anchor,isLikelyIndoorPlace,3):[];
+  const food=anchor?nearbyRows(restaurants,anchor,()=>true,3):[];
+
+  main.innerHTML=`
+    <section class="assist-card">
+      <div class="day-head">
+        <div class="day-meta">
+          <div class="day-number">DAY ${String(dayNumber(selectedDate)).padStart(2,"0")}${city?` · ${esc(city.toUpperCase())}`:""}</div>
+          <div class="day-date">${esc(p.weekdayLong)}<br>${esc(p.day)} ${esc(p.month)}</div>
+        </div>
+        <div class="day-title">${esc(dayRouteTitle(selectedDate))}</div>
+        <div class="day-sub">Assist checks this day's plan and surfaces useful alternatives around your itinerary.</div>
+      </div>
+
+      <div class="assist-body">
+        <div class="section-label">CONDITIONS</div>
+        <div class="weather-card">
+          <div class="weather-top">
+            <div class="weather-main">
+              <div class="weather-icon">${weather.icon}</div>
+              <div><div class="weather-title">${esc(weather.title)}</div><div class="weather-meta">${esc(weather.meta)}</div></div>
+            </div>
+            <div class="weather-badge ${rain?"rain":""}">${rain?"WEATHER ALERT":"CHECK"}</div>
+          </div>
+          <div class="weather-note">${esc(weather.note)}</div>
+        </div>
+
+        <div class="section-label" style="margin-top:13px">YOUR ITINERARY</div>
+        <div class="plan-list">
+          ${items.map(item=>`<div class="plan-row">
+            <div class="plan-time">${esc(itemTime(item))}</div>
+            <div class="plan-dot"></div>
+            <div><div class="plan-title">${esc(item.title)}${rain&&isOutdoor(item)?` <span style="color:#9dbce5">· RAIN AFFECTED</span>`:""}</div>
+            ${itemLocation(item)&&norm(itemLocation(item))!==norm(item.title)?`<div class="plan-loc">${esc(itemLocation(item))}</div>`:""}</div>
+          </div>`).join("")}
+        </div>
+
+        ${rain&&affected.length?`
+          <div class="alert rain">
+            <div class="alert-kicker">WET WEATHER</div>
+            <div class="alert-title">${affected.length} outdoor ${affected.length===1?"stop may":"stops may"} be affected</div>
+            <div class="alert-copy">Instead of automatically changing your plan, Assist is showing indoor options around ${esc(itemLocation(anchor)||anchor?.title||"your route")}.</div>
+          </div>`:""}
+
+        <div class="section-label" style="margin-top:13px">${rain?"WET WEATHER PLACES":"EXPLORE AROUND HERE"}</div>
+
+        ${rain ? `
+          <div class="alert rain">
+            <div class="alert-kicker">INDOOR FIRST</div>
+            <div class="alert-title">Find places that work better in the rain</div>
+            <div class="alert-copy">Assist will search around ${esc(itemLocation(anchor)||anchor?.title||"this itinerary stop")} and prioritise museums, aquariums, shopping and other indoor-friendly places.</div>
+          </div>
+        ` : ""}
+
+        ${indoor.length ? `
+          <div class="section-label" style="margin-top:10px">YOUR SAVED PLACES</div>
+          <div class="suggestion-grid">
+            ${indoor.map(r=>suggestionHTML(r,"🏛️",rain?"INDOOR":"YOUR PLACE")).join("")}
+          </div>
+        ` : ""}
+
+        <button class="find-nearby ${rain?"rain":""}" type="button" onclick="findNearbyGoogle('places')">
+          ${rain?"☔ FIND INDOOR PLACES NEARBY":"📍 FIND NEARBY PLACES"}
+        </button>
+        <div class="discovery-note">
+          Searches around your itinerary location — not your current GPS position.
+        </div>
+        <div id="placeDiscoveryResults" class="suggestion-grid" style="margin-top:7px"></div>
+
+        <div class="section-label" style="margin-top:13px">FOOD AROUND HERE</div>
+
+        ${food.length ? `
+          <div class="suggestion-grid">
+            ${food.map(r=>suggestionHTML(r,"🍽️","YOUR PICK")).join("")}
+          </div>
+        ` : ""}
+
+        <button class="find-nearby" type="button" onclick="findNearbyGoogle('food')">
+          🍽 FIND MORE FOOD NEARBY
+        </button>
+        <div id="foodDiscoveryResults" class="suggestion-grid" style="margin-top:7px"></div>
+      </div>
+    </section>`;
+}
+
+async function loadData(){
+  try{
+    await resolveTrip();
+    const tripResult=await db.from("trips").select("*").eq("id",TRIP_ID).single();
+    if(tripResult.error)throw tripResult.error;
+    trip=tripResult.data;
+    if(!trip)throw new Error("Trip not found.");
+
+    tripEyebrow.textContent=trip.country?`${trip.country.toUpperCase()} · AUTUMN 2026`:"TRIP · AUTUMN 2026";
+    if(trip.start_date&&trip.end_date){
+      const start=parseDate(trip.start_date),end=parseDate(trip.end_date);
+      const month=new Intl.DateTimeFormat("en-SG",{month:"short"}).format(start);
+      tripName.textContent=`${start.getDate()}–${end.getDate()} ${month} · ${trip.name||"My Trip"}`;
+    } else tripName.textContent=trip.name||"My Trip";
+    document.title=`Assist · ${trip.name||"Travel"}`;
+
+    let pq=db.from("places").select("*").order("name",{ascending:true});
+    let rq=db.from("restaurants").select("*").order("name",{ascending:true});
+    if(trip.country){pq=pq.ilike("country",trip.country);rq=rq.ilike("country",trip.country)}
+    const [sr,pr,rr]=await Promise.all([loadScheduleQuery(),pq,rq]);
+    if(sr.error)throw sr.error;if(pr.error)throw pr.error;if(rr.error)throw rr.error;
+    schedule=sr.data||[];places=pr.data||[];restaurants=rr.data||[];
+    buildDays();chooseDate();renderDates();await renderAssist();
+  }catch(error){
+    console.error(error);
+    tripName.textContent="Unable to load trip";
+    main.innerHTML=`<div class="state"><strong>Couldn't load Assist</strong>${esc(error.message||"Unknown database error.")}</div>`;
+  }
+}
+
+
+/* ===== ASSIST CHAT BACKEND ===== */
+let assistThreadId=null,assistBusy=false;
+const chatMessages=document.getElementById("chatMessages");
+const chatInput=document.getElementById("chatInput");
+const chatSend=document.getElementById("chatSend");
+const chatStatus=document.getElementById("chatStatus");
+
+function setChatStatus(label,isError=false){
+  chatStatus.classList.toggle("error",!!isError);
+  chatStatus.querySelector("span:last-child").textContent=label;
+}
+function addChatMessage(role,content,source=""){
+  document.getElementById("chatEmpty")?.remove();
+  const row=document.createElement("div");row.className=`chat-row ${role}`;
+  const bubble=document.createElement("div");bubble.className="chat-bubble";bubble.textContent=content;
+  if(source){const meta=document.createElement("div");meta.className="chat-source";meta.textContent=source==="supabase"?"TRIP DATABASE":source==="gemini"?"AI ASSIST":source;bubble.appendChild(meta)}
+  row.appendChild(bubble);chatMessages.appendChild(row);chatMessages.scrollTop=chatMessages.scrollHeight;return row;
+}
+async function readInvokeError(error){
+  let message=error?.message||"Travel Assist request failed.";
+  try{
+    const ctx=error?.context;
+    if(ctx&&typeof ctx.json==="function"){const body=await ctx.json();message=body?.error||body?.message||body?.details||message}
+    else if(ctx&&typeof ctx.text==="function"){const body=await ctx.text();if(body)message=body}
+  }catch(_){}
+  return message;
+}
+async function sendAssistMessage(forcedMessage=null){
+  if(assistBusy)return;
+  let message=text(forcedMessage??chatInput.value).trim();if(!message)return;
+  if(!TRIP_ID){setChatStatus("No trip selected",true);addChatMessage("assistant","I couldn't find the current trip yet.");return}
+  if(message==="What is my schedule on this day?"&&selectedDate)message=`What is my schedule on ${selectedDate}?`;
+  if(message==="Is this day too tiring?"&&selectedDate)message=`Is my schedule on ${selectedDate} too tiring?`;
+
+  assistBusy=true;chatSend.disabled=true;chatInput.disabled=true;chatInput.value="";
+  addChatMessage("user",message);setChatStatus("Thinking…");
+  const thinking=addChatMessage("assistant","Thinking…");thinking.querySelector(".chat-bubble").classList.add("chat-thinking");
+
+  try{
+    const sr=await db.auth.getSession();if(sr.error)throw sr.error;
+    const session=sr.data?.session;if(!session?.access_token)throw new Error("Your session has expired. Please sign in again.");
+    const payload={action:"chat",trip_id:TRIP_ID,message};
+    if(assistThreadId)payload.thread_id=assistThreadId;
+    const {data,error}=await db.functions.invoke("travel-assist",{body:payload,headers:{Authorization:`Bearer ${session.access_token}`}});
+    if(error)throw new Error(await readInvokeError(error));
+    if(data?.error)throw new Error(data.error);
+    const reply=text(data?.reply??data?.message).trim();if(!reply)throw new Error("Travel Assist returned an empty response.");
+    if(data?.thread_id)assistThreadId=data.thread_id;
+    thinking.remove();addChatMessage("assistant",reply,data?.source||"");setChatStatus(data?.ai_used?"AI Assist":"Trip data");
+  }catch(error){
+    console.error("travel-assist:",error);thinking.remove();
+    addChatMessage("assistant",`I couldn't reach Travel Assist.\n\n${error.message||"Unknown error."}`);setChatStatus("Connection error",true);
+  }finally{assistBusy=false;chatSend.disabled=false;chatInput.disabled=false;chatInput.focus()}
+}
+chatSend.addEventListener("click",()=>sendAssistMessage());
+chatInput.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendAssistMessage()}});
+document.querySelectorAll(".quick-prompt").forEach(btn=>btn.addEventListener("click",()=>sendAssistMessage(btn.dataset.prompt)));
+
+document.getElementById("itineraryMode").onclick=()=>{
+  location.href=`schedule.html?trip=${TRIP_ID}#${selectedDate||""}`;
+};
+
+loadData();
+</script>
+
+<script src="footer.js"></script>
+</body>
+</html>

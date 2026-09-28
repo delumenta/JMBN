@@ -1,0 +1,3341 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#070c10">
+
+<title>Places · Shared Itineraries</title>
+
+
+<style>
+
+:root{
+  --bg:#070c10;
+  --panel:#10161c;
+  --panel2:#151c23;
+  --line:#29323b;
+  --text:#f5f5f3;
+  --muted:#aeb5bc;
+  --muted2:#75828b;
+  --red:#c96f68;
+  --green:#67c587;
+  --blue:#5c9dff;
+  --gold:#e3b85c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+
+  min-height:100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      #17212a 0%,
+      transparent 38%
+    ),
+    var(--bg);
+
+  color:var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+  position:sticky;
+
+  top:0;
+
+  z-index:40;
+
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    14px
+    11px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+  background:
+    rgba(7,12,16,.96);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+}
+
+.header-inner{
+  max-width:760px;
+
+  margin:auto;
+}
+
+.eyebrow{
+  color:var(--red);
+
+  font-size:8px;
+  font-weight:900;
+
+  letter-spacing:.14em;
+}
+
+.header-row{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+h1{
+  margin:
+    3px
+    0
+    0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:24px;
+}
+
+.header-sub{
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:7px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main{
+  max-width:760px;
+
+  margin:auto;
+
+  padding:
+    12px
+    13px
+    30px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrap{
+  position:relative;
+
+  margin-bottom:14px;
+}
+
+.search-icon{
+  position:absolute;
+
+  left:11px;
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  color:#71808a;
+
+  font-size:13px;
+}
+
+.search{
+  width:100%;
+
+  min-height:42px;
+
+  padding:
+    8px
+    11px
+    8px
+    34px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  outline:none;
+
+  background:#10171d;
+
+  color:#fff;
+
+  font-size:9px;
+}
+
+.search::placeholder{
+  color:#64717a;
+}
+
+.search:focus{
+  border-color:
+    rgba(201,111,104,.55);
+
+  box-shadow:
+    0 0 0 2px
+    rgba(201,111,104,.05);
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin:
+    0
+    2px
+    8px;
+}
+
+.section-label{
+  color:#91a5b3;
+
+  font-size:7px;
+  font-weight:900;
+
+  letter-spacing:.13em;
+}
+
+.result-count{
+  color:#697680;
+
+  font-size:7px;
+}
+
+
+/* =========================================================
+   FEED
+========================================================= */
+
+.feed{
+  display:grid;
+
+  gap:9px;
+}
+
+.trip-card{
+  width:100%;
+
+  overflow:hidden;
+
+  padding:0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #141c22,
+      #0e1419
+    );
+
+  color:#fff;
+
+  text-align:left;
+
+  transition:
+    transform .12s ease,
+    border-color .12s ease;
+}
+
+.trip-card:hover{
+  border-color:
+    rgba(201,111,104,.30);
+}
+
+.trip-card:active{
+  transform:
+    scale(.995);
+}
+
+.card-strip{
+  height:4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--red),
+      #754541
+    );
+}
+
+.card-body{
+  padding:11px;
+}
+
+.card-top{
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:10px;
+}
+
+.country-icon{
+  flex:0 0 43px;
+
+  width:43px;
+  height:43px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#182129;
+
+  font-size:23px;
+}
+
+.card-main{
+  flex:1;
+
+  min-width:0;
+}
+
+.card-name{
+  overflow:hidden;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:17px;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.card-country{
+  margin-top:2px;
+
+  color:#84929a;
+
+  font-size:7px;
+}
+
+.card-dates{
+  margin-top:5px;
+
+  color:#c1c8cd;
+
+  font-size:7px;
+}
+
+.card-description{
+  display:-webkit-box;
+
+  margin-top:7px;
+
+  overflow:hidden;
+
+  color:#7c8991;
+
+  font-size:7px;
+  line-height:1.45;
+
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+
+
+/* =========================================================
+   PERSON
+========================================================= */
+
+.person-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  margin-top:10px;
+
+  padding-top:9px;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.055);
+}
+
+.avatar{
+  flex:0 0 25px;
+
+  width:25px;
+  height:25px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    #34404a;
+
+  border-radius:50%;
+
+  background:#182129;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:8px;
+  font-weight:900;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+}
+
+.person{
+  flex:1;
+
+  min-width:0;
+}
+
+.person-name{
+  overflow:hidden;
+
+  font-size:7px;
+  font-weight:900;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.person-label{
+  margin-top:1px;
+
+  color:#6f7d86;
+
+  font-size:5.5px;
+}
+
+.stats{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  color:#88959d;
+
+  font-size:6.5px;
+}
+
+.liked{
+  color:#df8d87;
+}
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+.state{
+  padding:
+    24px
+    15px;
+
+  border:
+    1px dashed
+    #35414a;
+
+  border-radius:13px;
+
+  color:var(--muted);
+
+  text-align:center;
+
+  font-size:8px;
+  line-height:1.55;
+}
+
+.state strong{
+  display:block;
+
+  margin-bottom:4px;
+
+  color:#fff;
+
+  font-size:10px;
+}
+
+
+/* =========================================================
+   ITINERARY SHEET
+========================================================= */
+
+.backdrop{
+  position:fixed;
+
+  inset:0;
+
+  z-index:150;
+
+  display:none;
+
+  align-items:flex-end;
+
+  background:
+    rgba(0,0,0,.76);
+
+  backdrop-filter:
+    blur(5px);
+
+  -webkit-backdrop-filter:
+    blur(5px);
+}
+
+.backdrop.open{
+  display:flex;
+}
+
+.sheet{
+  width:100%;
+
+  max-width:760px;
+  max-height:94vh;
+
+  margin:auto;
+
+  overflow:auto;
+
+  padding:
+    8px
+    14px
+    calc(20px + env(safe-area-inset-bottom));
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    21px
+    21px
+    0
+    0;
+
+  background:#0d1318;
+}
+
+.handle{
+  width:38px;
+  height:4px;
+
+  margin:
+    2px
+    auto
+    12px;
+
+  border-radius:999px;
+
+  background:#39454d;
+}
+
+.sheet-top{
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:10px;
+}
+
+.sheet-country{
+  flex:0 0 44px;
+
+  width:44px;
+  height:44px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#182129;
+
+  font-size:24px;
+}
+
+.sheet-main{
+  flex:1;
+
+  min-width:0;
+}
+
+.sheet-title{
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:20px;
+}
+
+.sheet-meta{
+  margin-top:3px;
+
+  color:#84919a;
+
+  font-size:7px;
+  line-height:1.5;
+}
+
+.close{
+  flex:0 0 34px;
+
+  width:34px;
+  height:34px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:9px;
+
+  background:#151c22;
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   AUTHOR
+========================================================= */
+
+.author{
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  margin-top:12px;
+
+  padding:8px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  background:
+    rgba(255,255,255,.018);
+}
+
+.author-info{
+  flex:1;
+}
+
+.author-name{
+  font-size:8px;
+  font-weight:900;
+}
+
+.author-sub{
+  margin-top:2px;
+
+  color:#74818a;
+
+  font-size:6px;
+}
+
+.sheet-description{
+  margin-top:10px;
+
+  color:#8c989f;
+
+  font-size:7px;
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   PUBLIC STATS
+========================================================= */
+
+.public-stats{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:10px;
+}
+
+.stat-chip{
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:999px;
+
+  background:#11181e;
+
+  color:#9da8ae;
+
+  font-size:6.5px;
+}
+
+
+/* =========================================================
+   LIKE / COPY
+========================================================= */
+
+.sheet-actions{
+  position:sticky;
+
+  top:-8px;
+
+  z-index:5;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:7px;
+
+  margin-top:11px;
+
+  padding:
+    7px
+    0;
+
+  background:#0d1318;
+}
+
+.like-btn,
+.copy-btn{
+  min-height:40px;
+
+  border-radius:10px;
+
+  font-size:7px;
+  font-weight:900;
+}
+
+.like-btn{
+  border:
+    1px solid
+    rgba(201,111,104,.30);
+
+  background:
+    rgba(201,111,104,.07);
+
+  color:#e9aaa5;
+}
+
+.like-btn.active{
+  border-color:
+    rgba(201,111,104,.50);
+
+  background:
+    rgba(201,111,104,.16);
+
+  color:#ffc0ba;
+}
+
+.copy-btn{
+  border:
+    1px solid
+    rgba(201,111,104,.30);
+
+  background:
+    rgba(201,111,104,.07);
+
+  color:#f0b1ac;
+}
+
+.copy-btn:hover{
+  background:
+    rgba(201,111,104,.12);
+}
+
+.copy-btn:disabled{
+  opacity:.42;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   ITINERARY
+========================================================= */
+
+.itinerary{
+  margin-top:8px;
+}
+
+.day{
+  margin-top:15px;
+}
+
+.day:first-child{
+  margin-top:5px;
+}
+
+.day-head{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:8px;
+
+  margin-bottom:6px;
+
+  padding-bottom:6px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.07);
+}
+
+.day-title{
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:13px;
+}
+
+.day-weekday{
+  color:#74818a;
+
+  font-size:6px;
+}
+
+.timeline{
+  display:grid;
+
+  gap:5px;
+}
+
+.item{
+  display:grid;
+
+  grid-template-columns:
+    51px
+    1fr;
+
+  gap:7px;
+
+  padding:7px;
+
+  border:
+    1px solid
+    #202a31;
+
+  border-radius:9px;
+
+  background:#10171c;
+}
+
+.item-time{
+  color:#b69490;
+
+  font-size:6px;
+  font-weight:900;
+
+  line-height:1.4;
+}
+
+.item-title{
+  font-size:8.5px;
+  font-weight:900;
+
+  line-height:1.35;
+}
+
+.item-location{
+  margin-top:2px;
+
+  color:#7e8a92;
+
+  font-size:6px;
+}
+
+.item-description{
+  margin-top:4px;
+
+  color:#7d8991;
+
+  font-size:6.5px;
+  line-height:1.45;
+}
+
+.optional{
+  display:inline-block;
+
+  margin-left:4px;
+
+  padding:
+    2px
+    4px;
+
+  border-radius:999px;
+
+  background:
+    rgba(227,184,92,.08);
+
+  color:#e1c273;
+
+  font-size:5px;
+  font-weight:900;
+}
+
+.map-link{
+  display:inline-block;
+
+  margin-top:4px;
+
+  color:#d9938d;
+
+  font-size:6px;
+
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   COPY NOTE
+========================================================= */
+
+.copy-note{
+  margin-top:10px;
+
+  padding:
+    8px
+    9px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:9px;
+
+  color:#71808a;
+
+  font-size:6px;
+  line-height:1.55;
+}
+
+
+</style>
+
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="application-name" content="Travel">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Travel">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+  <div class="header-inner">
+
+    <div class="eyebrow">
+      COMMUNITY
+    </div>
+
+
+    <div class="header-row">
+
+      <div>
+
+        <h1>
+          🌐 Places
+        </h1>
+
+        <div class="header-sub">
+          Shared itineraries from travellers
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+  <div class="search-wrap">
+
+    <div class="search-icon">
+      ⌕
+    </div>
+
+    <input
+      id="search"
+      class="search"
+      placeholder="Search country, trip or traveller..."
+    >
+
+  </div>
+
+
+  <div class="section-head">
+
+    <div class="section-label">
+      SHARED ITINERARIES
+    </div>
+
+    <div
+      id="resultCount"
+      class="result-count"
+    >
+      …
+    </div>
+
+  </div>
+
+
+  <div
+    id="feed"
+    class="feed"
+  >
+
+    <div class="state">
+
+      <strong>
+        Loading Places…
+      </strong>
+
+      Finding shared itineraries.
+
+    </div>
+
+  </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     ITINERARY POPUP
+========================================================= -->
+
+<div
+  id="itineraryBackdrop"
+  class="backdrop"
+>
+
+  <div class="sheet">
+
+    <div class="handle"></div>
+
+
+    <div id="itineraryHeader"></div>
+
+
+    <div id="itineraryBody"></div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SHARED FOOTER
+========================================================= -->
+
+<div id="footer"></div>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let publications = [];
+
+let filtered = [];
+
+let selectedPublication = null;
+
+let selectedItems = [];
+
+const pageParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+let currentTripId =
+  Number(
+    pageParams.get("trip")
+  )
+  ||
+  Number(
+    localStorage.getItem(
+      "current_trip_id"
+    )
+  )
+  ||
+  null;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function esc(value){
+
+  return String(
+    value ?? ""
+  )
+
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
+
+}
+
+
+function norm(value){
+
+  return String(
+    value ?? ""
+  )
+  .trim()
+  .toLowerCase();
+
+}
+
+
+function initials(name){
+
+  const words =
+    String(
+      name || "?"
+    )
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+
+  if(!words.length){
+
+    return "?";
+
+  }
+
+
+  if(words.length === 1){
+
+    return words[0]
+      .slice(
+        0,
+        2
+      )
+      .toUpperCase();
+
+  }
+
+
+  return (
+    words[0][0]
+    +
+    words[
+      words.length - 1
+    ][0]
+  )
+  .toUpperCase();
+
+}
+
+
+function avatarHTML(
+  item,
+  cssClass="avatar"
+){
+
+  const name =
+    item.owner_name ||
+    "Traveller";
+
+
+  if(item.owner_avatar){
+
+    return `
+
+      <div class="${cssClass}">
+
+        <img
+          src="${esc(item.owner_avatar)}"
+          alt="${esc(name)}"
+        >
+
+      </div>
+
+    `;
+
+  }
+
+
+  return `
+
+    <div class="${cssClass}">
+
+      ${esc(
+        initials(name)
+      )}
+
+    </div>
+
+  `;
+
+}
+
+
+function countryEmoji(country){
+
+  const value =
+    norm(country);
+
+
+  const map = {
+
+    japan:"🇯🇵",
+
+    singapore:"🇸🇬",
+
+    malaysia:"🇲🇾",
+
+    indonesia:"🇮🇩",
+
+    thailand:"🇹🇭",
+
+    vietnam:"🇻🇳",
+
+    taiwan:"🇹🇼",
+
+    china:"🇨🇳",
+
+    korea:"🇰🇷",
+
+    "south korea":"🇰🇷",
+
+    france:"🇫🇷",
+
+    italy:"🇮🇹",
+
+    spain:"🇪🇸",
+
+    uk:"🇬🇧",
+
+    "united kingdom":"🇬🇧",
+
+    usa:"🇺🇸",
+
+    "united states":"🇺🇸"
+
+  };
+
+
+  return (
+    map[value]
+    ||
+    "✈️"
+  );
+
+}
+
+
+function prettyDate(
+  value,
+  year=true
+){
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const date =
+    new Date(
+      value +
+      "T12:00:00"
+    );
+
+
+  return date.toLocaleDateString(
+    "en-SG",
+
+    year
+    ?
+
+    {
+      day:"numeric",
+      month:"short",
+      year:"numeric"
+    }
+
+    :
+
+    {
+      day:"numeric",
+      month:"short"
+    }
+
+  );
+
+}
+
+
+function tripDates(item){
+
+  if(
+    item.start_date &&
+    item.end_date
+  ){
+
+    return (
+      prettyDate(
+        item.start_date,
+        false
+      )
+      +
+      " – "
+      +
+      prettyDate(
+        item.end_date,
+        true
+      )
+    );
+
+  }
+
+
+  return "Dates not set";
+
+}
+
+
+function tripDays(item){
+
+  if(
+    !item.start_date ||
+    !item.end_date
+  ){
+
+    return "";
+
+  }
+
+
+  const start =
+    new Date(
+      item.start_date +
+      "T12:00:00"
+    );
+
+
+  const end =
+    new Date(
+      item.end_date +
+      "T12:00:00"
+    );
+
+
+  const diff =
+    Math.round(
+      (
+        end - start
+      )
+      /
+      86400000
+    )
+    +
+    1;
+
+
+  return (
+    diff > 0
+    ?
+    `${diff} days`
+    :
+    ""
+  );
+
+}
+
+
+function formatTime(value){
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const match =
+    String(value)
+      .match(
+        /^(\d{2}):(\d{2})/
+      );
+
+
+  if(!match){
+
+    return value;
+
+  }
+
+
+  return (
+    match[1]
+    +
+    ":"
+    +
+    match[2]
+  );
+
+}
+
+
+function dayLabel(dateString){
+
+  if(!dateString){
+
+    return "Trip Day";
+
+  }
+
+
+  const date =
+    new Date(
+      dateString +
+      "T12:00:00"
+    );
+
+
+  return date.toLocaleDateString(
+    "en-SG",
+    {
+      weekday:"long",
+      day:"numeric",
+      month:"short"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function start(){
+
+  try{
+
+    const auth =
+      await db.auth.getUser();
+
+
+    if(auth.error){
+
+      throw auth.error;
+
+    }
+
+
+    currentUser =
+      auth.data.user;
+
+
+    if(!currentUser){
+
+      location.href =
+        "login.html";
+
+      return;
+
+    }
+
+
+
+    await loadFeed();
+
+
+    /*
+      If arriving from:
+
+      trips.html → SHARE
+
+      automatically open
+      that itinerary.
+    */
+
+    const params =
+      new URLSearchParams(
+        location.search
+      );
+
+
+    const openId =
+      Number(
+        params.get(
+          "open"
+        )
+      );
+
+
+    if(openId){
+
+      const found =
+        publications.find(
+          item =>
+            Number(
+              item.publication_id
+            )
+            ===
+            openId
+        );
+
+
+      if(found){
+
+        await openItinerary(
+          openId
+        );
+
+      }
+
+    }
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    document.getElementById(
+      "feed"
+    ).innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          Couldn't load Places
+        </strong>
+
+        ${esc(
+          error.message ||
+          "Unknown error."
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD FEED
+========================================================= */
+
+async function loadFeed(){
+
+  const result =
+    await db.rpc(
+      "get_shared_itineraries"
+    );
+
+
+  if(result.error){
+
+    throw result.error;
+
+  }
+
+
+  publications =
+    result.data || [];
+
+
+  filtered =
+    [
+      ...publications
+    ];
+
+
+  renderFeed();
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+document.getElementById(
+  "search"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    const query =
+      norm(
+        event.target.value
+      );
+
+
+    if(!query){
+
+      filtered =
+        [
+          ...publications
+        ];
+
+    }
+
+
+    else{
+
+      filtered =
+        publications.filter(
+          item => {
+
+            const text =
+              [
+                item.trip_name,
+                item.country,
+                item.description,
+                item.owner_name
+              ]
+              .join(" ")
+              .toLowerCase();
+
+
+            return text.includes(
+              query
+            );
+
+          }
+        );
+
+    }
+
+
+    renderFeed();
+
+  }
+);
+
+
+/* =========================================================
+   RENDER FEED
+========================================================= */
+
+function renderFeed(){
+
+  document.getElementById(
+    "resultCount"
+  ).textContent =
+    String(
+      filtered.length
+    );
+
+
+  const feed =
+    document.getElementById(
+      "feed"
+    );
+
+
+  if(!filtered.length){
+
+    feed.innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          No itineraries found
+        </strong>
+
+        Shared trips will appear here.
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  feed.innerHTML =
+    filtered
+      .map(
+        item =>
+          feedCard(
+            item
+          )
+      )
+      .join("");
+
+
+  feed
+    .querySelectorAll(
+      "[data-publication]"
+    )
+    .forEach(
+      card => {
+
+        card.onclick =
+          () =>
+            openItinerary(
+              Number(
+                card.dataset.publication
+              )
+            );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   FEED CARD
+========================================================= */
+
+function feedCard(item){
+
+  return `
+
+    <button
+      class="trip-card"
+      type="button"
+      data-publication="${Number(
+        item.publication_id
+      )}"
+    >
+
+      <div class="card-strip"></div>
+
+
+      <div class="card-body">
+
+        <div class="card-top">
+
+          <div class="country-icon">
+
+            ${countryEmoji(
+              item.country
+            )}
+
+          </div>
+
+
+          <div class="card-main">
+
+            <div class="card-name">
+
+              ${esc(
+                item.trip_name ||
+                "Shared Trip"
+              )}
+
+            </div>
+
+
+            <div class="card-country">
+
+              ${esc(
+                item.country ||
+                ""
+              )}
+
+
+              ${
+                tripDays(item)
+
+                ?
+
+                ` · ${esc(
+                  tripDays(item)
+                )}`
+
+                :
+
+                ""
+              }
+
+            </div>
+
+
+            <div class="card-dates">
+
+              ${esc(
+                tripDates(item)
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        ${
+          item.description
+
+          ?
+
+          `
+            <div class="card-description">
+
+              ${esc(
+                item.description
+              )}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        <div class="person-row">
+
+          ${avatarHTML(
+            item
+          )}
+
+
+          <div class="person">
+
+            <div class="person-name">
+
+              ${esc(
+                item.owner_name ||
+                "Traveller"
+              )}
+
+            </div>
+
+
+            <div class="person-label">
+              SHARED ITINERARY
+            </div>
+
+          </div>
+
+
+          <div class="stats">
+
+            <span
+              class="${
+                item.liked_by_me
+                ?
+                "liked"
+                :
+                ""
+              }"
+            >
+
+              ${
+                item.liked_by_me
+                ?
+                "❤️"
+                :
+                "♡"
+              }
+
+              ${Number(
+                item.like_count ||
+                0
+              )}
+
+            </span>
+
+
+            <span>
+
+              📋
+
+              ${Number(
+                item.copy_count ||
+                0
+              )}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN ITINERARY
+========================================================= */
+
+async function openItinerary(
+  publicationId
+){
+
+  selectedPublication =
+    publications.find(
+      item =>
+        Number(
+          item.publication_id
+        )
+        ===
+        Number(
+          publicationId
+        )
+    );
+
+
+  if(!selectedPublication){
+
+    return;
+
+  }
+
+
+  selectedItems = [];
+
+
+  renderItineraryHeader();
+
+
+  document.getElementById(
+    "itineraryBody"
+  ).innerHTML = `
+
+    <div class="state">
+
+      <strong>
+        Loading itinerary…
+      </strong>
+
+      Getting the schedule.
+
+    </div>
+
+  `;
+
+
+  document.getElementById(
+    "itineraryBackdrop"
+  )
+  .classList
+  .add(
+    "open"
+  );
+
+
+  try{
+
+    const result =
+      await db.rpc(
+        "get_shared_itinerary_items",
+        {
+          p_publication_id:
+            Number(
+              publicationId
+            )
+        }
+      );
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    selectedItems =
+      result.data || [];
+
+
+    renderItinerary();
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    document.getElementById(
+      "itineraryBody"
+    ).innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          Couldn't load itinerary
+        </strong>
+
+        ${esc(
+          error.message ||
+          "Unknown error."
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   ITINERARY HEADER
+========================================================= */
+
+function renderItineraryHeader(){
+
+  const item =
+    selectedPublication;
+
+
+  document.getElementById(
+    "itineraryHeader"
+  ).innerHTML = `
+
+    <div class="sheet-top">
+
+      <div class="sheet-country">
+
+        ${countryEmoji(
+          item.country
+        )}
+
+      </div>
+
+
+      <div class="sheet-main">
+
+        <div class="sheet-title">
+
+          ${esc(
+            item.trip_name ||
+            "Shared Trip"
+          )}
+
+        </div>
+
+
+        <div class="sheet-meta">
+
+          ${esc(
+            item.country ||
+            ""
+          )}
+
+
+          ${
+            item.country &&
+            tripDates(item)
+
+            ?
+
+            " · "
+
+            :
+
+            ""
+          }
+
+
+          ${esc(
+            tripDates(item)
+          )}
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="closeItinerary"
+        class="close"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="author">
+
+      ${avatarHTML(
+        item
+      )}
+
+
+      <div class="author-info">
+
+        <div class="author-name">
+
+          ${esc(
+            item.owner_name ||
+            "Traveller"
+          )}
+
+        </div>
+
+
+        <div class="author-sub">
+          Published this itinerary
+        </div>
+
+      </div>
+
+    </div>
+
+
+    ${
+      item.description
+
+      ?
+
+      `
+        <div class="sheet-description">
+
+          ${esc(
+            item.description
+          )}
+
+        </div>
+      `
+
+      :
+
+      ""
+    }
+
+
+    <div class="public-stats">
+
+      <div class="stat-chip">
+
+        ❤️
+
+        ${Number(
+          item.like_count ||
+          0
+        )}
+
+        likes
+
+      </div>
+
+
+      <div class="stat-chip">
+
+        📋
+
+        ${Number(
+          item.copy_count ||
+          0
+        )}
+
+        copies
+
+      </div>
+
+
+      ${
+        tripDays(item)
+
+        ?
+
+        `
+          <div class="stat-chip">
+
+            🗓️
+
+            ${esc(
+              tripDays(item)
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+    </div>
+
+
+    <div class="sheet-actions">
+
+      <button
+        id="likeButton"
+        class="
+          like-btn
+          ${
+            item.liked_by_me
+            ?
+            "active"
+            :
+            ""
+          }
+        "
+        type="button"
+      >
+
+        ${
+          item.liked_by_me
+          ?
+          "❤️ LIKED"
+          :
+          "♡ LIKE"
+        }
+
+      </button>
+
+
+      <button
+        id="copyButton"
+        class="copy-btn"
+        type="button"
+        ${
+          item.allow_copy
+          ?
+          ""
+          :
+          "disabled"
+        }
+      >
+
+        ${
+          item.allow_copy
+          ?
+          "📋 COPY ITINERARY"
+          :
+          "🔒 COPY DISABLED"
+        }
+
+      </button>
+
+    </div>
+
+  `;
+
+
+  document.getElementById(
+    "closeItinerary"
+  ).onclick =
+    closeItinerary;
+
+
+  document.getElementById(
+    "likeButton"
+  ).onclick =
+    toggleLike;
+
+
+  if(item.allow_copy){
+
+    document.getElementById(
+      "copyButton"
+    ).onclick =
+      copyItinerary;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER ITINERARY
+========================================================= */
+
+function renderItinerary(){
+
+  const body =
+    document.getElementById(
+      "itineraryBody"
+    );
+
+
+  if(!selectedItems.length){
+
+    body.innerHTML = `
+
+      <div class="state">
+
+        <strong>
+          No itinerary items
+        </strong>
+
+        This traveller hasn't added
+        any schedule items yet.
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  const grouped = {};
+
+
+  selectedItems.forEach(
+    item => {
+
+      const date =
+        item.schedule_date ||
+        "unknown";
+
+
+      if(!grouped[date]){
+
+        grouped[date] = [];
+
+      }
+
+
+      grouped[date].push(
+        item
+      );
+
+    }
+  );
+
+
+  body.innerHTML = `
+
+    <div class="itinerary">
+
+      ${
+        Object
+          .entries(
+            grouped
+          )
+          .map(
+            ([date,items]) => {
+
+              return `
+
+                <section class="day">
+
+                  <div class="day-head">
+
+                    <div class="day-title">
+
+                      ${
+                        date === "unknown"
+
+                        ?
+
+                        "Trip Day"
+
+                        :
+
+                        esc(
+                          dayLabel(
+                            date
+                          )
+                        )
+                      }
+
+                    </div>
+
+
+                    <div class="day-weekday">
+
+                      ${items.length}
+
+                      ${
+                        items.length === 1
+                        ?
+                        "stop"
+                        :
+                        "stops"
+                      }
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="timeline">
+
+                    ${
+                      items
+                        .map(
+                          renderItem
+                        )
+                        .join("")
+                    }
+
+                  </div>
+
+                </section>
+
+              `;
+
+            }
+          )
+          .join("")
+      }
+
+    </div>
+
+
+    <div class="copy-note">
+
+      📋 Copying creates your own independent trip.
+
+      It copies the shared itinerary only.
+
+      Private bookings and trip members
+      are not copied.
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SCHEDULE ITEM
+========================================================= */
+
+function renderItem(item){
+
+  const time =
+    item.time_label
+
+    ||
+
+    formatTime(
+      item.start_time
+    )
+
+    ||
+
+    "—";
+
+
+  return `
+
+    <div class="item">
+
+      <div class="item-time">
+
+        ${esc(
+          time
+        )}
+
+      </div>
+
+
+      <div>
+
+        <div class="item-title">
+
+          ${esc(
+            item.title ||
+            "Untitled"
+          )}
+
+
+          ${
+            item.is_optional
+
+            ?
+
+            `
+              <span class="optional">
+                OPTIONAL
+              </span>
+            `
+
+            :
+
+            ""
+          }
+
+        </div>
+
+
+        ${
+          item.location_name
+
+          ?
+
+          `
+            <div class="item-location">
+
+              📍
+
+              ${esc(
+                item.location_name
+              )}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          item.description
+
+          ?
+
+          `
+            <div class="item-description">
+
+              ${esc(
+                item.description
+              )}
+
+            </div>
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          item.maps_url
+
+          ?
+
+          `
+            <a
+              class="map-link"
+              href="${esc(
+                item.maps_url
+              )}"
+              target="_blank"
+              rel="noopener"
+              onclick="event.stopPropagation()"
+            >
+              MAP →
+            </a>
+          `
+
+          :
+
+          ""
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CLOSE ITINERARY
+========================================================= */
+
+function closeItinerary(){
+
+  document.getElementById(
+    "itineraryBackdrop"
+  )
+  .classList
+  .remove(
+    "open"
+  );
+
+
+  selectedPublication =
+    null;
+
+
+  selectedItems = [];
+
+
+  history.replaceState(
+    null,
+    "",
+    currentTripId
+    ?
+    `places.html?trip=${currentTripId}`
+    :
+    "places.html"
+  );
+
+}
+
+
+document.getElementById(
+  "itineraryBackdrop"
+).onclick =
+  event => {
+
+    if(
+      event.target ===
+      document.getElementById(
+        "itineraryBackdrop"
+      )
+    ){
+
+      closeItinerary();
+
+    }
+
+  };
+
+
+/* =========================================================
+   LIKE
+========================================================= */
+
+async function toggleLike(){
+
+  if(!selectedPublication){
+
+    return;
+
+  }
+
+
+  const publicationId =
+    Number(
+      selectedPublication.publication_id
+    );
+
+
+  const button =
+    document.getElementById(
+      "likeButton"
+    );
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+  }
+
+
+  try{
+
+    const result =
+      await db.rpc(
+        "toggle_trip_like",
+        {
+          p_publication_id:
+            publicationId
+        }
+      );
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    const response =
+      Array.isArray(
+        result.data
+      )
+
+      ?
+
+      result.data[0]
+
+      :
+
+      result.data;
+
+
+    const liked =
+      Boolean(
+        response?.liked
+      );
+
+
+    const likeCount =
+      Number(
+        response?.like_count ||
+        0
+      );
+
+
+    publications =
+      publications.map(
+        item =>
+          Number(
+            item.publication_id
+          ) ===
+          publicationId
+
+          ?
+
+          {
+            ...item,
+
+            liked_by_me:
+              liked,
+
+            like_count:
+              likeCount
+          }
+
+          :
+
+          item
+      );
+
+
+    filtered =
+      filtered.map(
+        item =>
+          Number(
+            item.publication_id
+          ) ===
+          publicationId
+
+          ?
+
+          {
+            ...item,
+
+            liked_by_me:
+              liked,
+
+            like_count:
+              likeCount
+          }
+
+          :
+
+          item
+      );
+
+
+    selectedPublication =
+      {
+        ...selectedPublication,
+
+        liked_by_me:
+          liked,
+
+        like_count:
+          likeCount
+      };
+
+
+    renderFeed();
+
+    renderItineraryHeader();
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Couldn't update like.\n\n"
+      +
+      (
+        error.message ||
+        "Unknown error."
+      )
+    );
+
+  }
+
+
+  finally{
+
+    const refreshed =
+      document.getElementById(
+        "likeButton"
+      );
+
+
+    if(refreshed){
+
+      refreshed.disabled =
+        false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   COPY ITINERARY
+========================================================= */
+
+async function copyItinerary(){
+
+  if(
+    !selectedPublication ||
+    !selectedPublication.allow_copy
+  ){
+
+    return;
+
+  }
+
+
+  const yes =
+    confirm(
+      `Copy "${selectedPublication.trip_name}" into your trips?`
+    );
+
+
+  if(!yes){
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "copyButton"
+    );
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    "COPYING…";
+
+
+  let newTripId =
+    null;
+
+
+  try{
+
+    /*
+      Make sure itinerary items
+      have been loaded.
+    */
+
+    if(!selectedItems.length){
+
+      const result =
+        await db.rpc(
+          "get_shared_itinerary_items",
+          {
+            p_publication_id:
+              Number(
+                selectedPublication.publication_id
+              )
+          }
+        );
+
+
+      if(result.error){
+
+        throw result.error;
+
+      }
+
+
+      selectedItems =
+        result.data || [];
+
+    }
+
+
+    /*
+      1. CREATE NEW TRIP
+    */
+
+    const tripResult =
+      await db
+        .from(
+          "trips"
+        )
+        .insert({
+
+          owner_id:
+            currentUser.id,
+
+          name:
+            (
+              selectedPublication.trip_name ||
+              "Copied Trip"
+            )
+            +
+            " · Copy",
+
+          country:
+            selectedPublication.country ||
+            null,
+
+          start_date:
+            selectedPublication.start_date ||
+            null,
+
+          end_date:
+            selectedPublication.end_date ||
+            null,
+
+          description:
+            selectedPublication.description ||
+            null,
+
+          status:
+            "active"
+
+        })
+        .select()
+        .single();
+
+
+    if(tripResult.error){
+
+      throw tripResult.error;
+
+    }
+
+
+    newTripId =
+      Number(
+        tripResult.data.id
+      );
+
+
+    /*
+      2. COPY SCHEDULE
+    */
+
+    if(selectedItems.length){
+
+      const scheduleRows =
+        selectedItems.map(
+          (item,index) => ({
+
+            trip_id:
+              newTripId,
+
+            schedule_date:
+              item.schedule_date ||
+              null,
+
+            start_time:
+              item.start_time ||
+              null,
+
+            end_time:
+              item.end_time ||
+              null,
+
+            time_label:
+              item.time_label ||
+              null,
+
+            sort_order:
+              Number(
+                item.sort_order
+              )
+              ||
+              (
+                index + 1
+              ),
+
+            title:
+              item.title ||
+              "Untitled",
+
+            item_type:
+              item.item_type ||
+              "custom",
+
+            description:
+              item.description ||
+              null,
+
+            location_name:
+              item.location_name ||
+              null,
+
+            address:
+              item.address ||
+              null,
+
+            maps_url:
+              item.maps_url ||
+              null,
+
+            is_optional:
+              Boolean(
+                item.is_optional
+              ),
+
+            place_id:
+              item.place_id ||
+              null,
+
+            restaurant_id:
+              item.restaurant_id ||
+              null
+
+          })
+        );
+
+
+      const scheduleResult =
+        await db
+          .from(
+            "schedule"
+          )
+          .insert(
+            scheduleRows
+          );
+
+
+      if(scheduleResult.error){
+
+        throw scheduleResult.error;
+
+      }
+
+    }
+
+
+    /*
+      3. RECORD COPY
+    */
+
+    const copyResult =
+      await db
+        .from(
+          "trip_copies"
+        )
+        .insert({
+
+          publication_id:
+            Number(
+              selectedPublication.publication_id
+            ),
+
+          copied_by:
+            currentUser.id,
+
+          new_trip_id:
+            newTripId
+
+        });
+
+
+    if(copyResult.error){
+
+      throw copyResult.error;
+
+    }
+
+
+    /*
+      4. MAKE COPY CURRENT
+    */
+
+    localStorage.setItem(
+      "current_trip_id",
+      String(
+        newTripId
+      )
+    );
+
+
+    alert(
+      "Trip copied! Your copy is now separate from the original."
+    );
+
+
+    location.href =
+      `index.html?trip=${newTripId}`;
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    /*
+      Delete incomplete copy
+      if something failed.
+    */
+
+    if(newTripId){
+
+      try{
+
+        await db
+          .from(
+            "trips"
+          )
+          .delete()
+          .eq(
+            "id",
+            newTripId
+          )
+          .eq(
+            "owner_id",
+            currentUser.id
+          );
+
+      }
+
+
+      catch(cleanupError){
+
+        console.warn(
+          "Copy cleanup failed:",
+          cleanupError
+        );
+
+      }
+
+    }
+
+
+    alert(
+      "Couldn't copy this itinerary.\n\n"
+      +
+      (
+        error.message ||
+        "Unknown error."
+      )
+    );
+
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "📋 COPY ITINERARY";
+
+  }
+
+}
+
+
+/* =========================================================
+   GO
+========================================================= */
+
+start();
+
+</script>
+
+<!-- Shared footer logic -->
+<script src="footer.js"></script>
+
+
+<script src="pwa.js"></script>
+</body>
+</html>
