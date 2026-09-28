@@ -1,64 +1,54 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#101010" />
-  <title>OnTheGo — Find your next thing</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d"><title>OnTheGo — What now?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <a class="logo" href="#"><span class="logo-mark">✦</span><span>on<span>the</span>go</span></a>
-      <div class="top-actions">
-        <button class="location-pill" id="locationBtn">⌖ <span id="locationLabel">Use my location</span></button>
-        <button class="icon-button" id="themeBtn" aria-label="Toggle theme">◐</button>
-        <button class="avatar">D</button>
-      </div>
-    </header>
+<div class="app">
+<header><a class="brand" href="#"><span class="mark">↗</span><span>OnTheGo</span></a><button id="locBtn" class="location">◎ <span id="locText">Use my location</span></button></header>
+<main>
+<section class="welcome">
+<p class="kicker">YOUR TRIP, ONE TAP AHEAD</p>
+<h1>Got some spare time?<br><span>Let’s find your next move.</span></h1>
+<p class="lead">No research. No giant list. Just a few worthwhile things that fit where you are and the time you have.</p>
+<div class="time-row"><button class="time active" data-min="60">1 hr</button><button class="time" data-min="90">90 min</button><button class="time" data-min="120">2 hrs</button><button class="time" data-min="240">Half day</button></div>
+<button class="primary" id="whatNow">✦ What should I do now?</button>
+</section>
 
-    <main>
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">YOUR SPARE TIME, SORTED</p>
-          <h1>What do you feel like<br><em>doing now?</em></h1>
-          <p class="hero-sub">A few good ideas around you—without opening ten tabs or planning the whole trip.</p>
-        </div>
-        <div class="hero-orbit"><span>GO</span><span>MAYBE</span><span>SKIP</span><div class="orbit-pin">✦</div></div>
-      </section>
+<section class="next-card">
+<div><p class="kicker">NEXT ANCHOR</p><h3 id="anchorTitle">Nothing fixed yet</h3><p id="anchorSub">Your bookings and must-dos become anchors — gaps stay flexible.</p></div>
+<button id="anchorBtn">+ Add</button>
+</section>
 
-      <section class="context-bar">
-        <div class="context-main"><span class="live-dot"></span><div><strong id="contextTitle">Near you</strong><small id="contextSub">Use your location or choose a place</small></div></div>
-        <button class="change-link" id="changePlaceBtn">Change place</button>
-      </section>
+<section class="quick-grid">
+<button class="quick" id="aroundMe"><span class="qi red">◎</span><b>Around me</b><small>Worthwhile places near where I am</small><em>Explore →</em></button>
+<button class="quick" id="aroundPlace"><span class="qi cream">⌖</span><b>Around a place</b><small>See what’s good around your next stop</small><em>Choose place →</em></button>
+<button class="quick" id="food"><span class="qi gold">◒</span><b>Find food</b><small>A short list of good options, not 200 pins</small><em>Find food →</em></button>
+<button class="quick" id="expense"><span class="qi green">▣</span><b>Scan expense</b><small>Snap the receipt. Keep travelling.</small><em>Scan receipt →</em></button>
+</section>
 
-      <section class="modes">
-        <button class="mode-card active" data-mode="all"><span class="mode-icon coral">✦</span><b>Surprise me</b><small>One good next move</small></button>
-        <button class="mode-card" data-mode="place"><span class="mode-icon green">⌖</span><b>Places nearby</b><small>Sights, nature & culture</small></button>
-        <button class="mode-card" data-mode="food"><span class="mode-icon yellow">◒</span><b>Find food</b><small>Good restaurants close by</small></button>
-      </section>
+<section class="results-section" id="resultsSection">
+<div class="section-title"><div><p class="kicker" id="resultKicker">RIGHT NOW</p><h2 id="resultTitle">A few good options</h2></div><button id="refreshBtn">↻ Refresh</button></div>
+<div class="chips"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="quick">Quick stop</button><button class="chip" data-filter="saved">Saved</button></div>
+<div id="results" class="results"></div>
+<div id="empty" class="empty"><span>◎</span><b>Ready when you are</b><p>Use your location or choose a place to see what’s worth doing.</p></div>
+</section>
 
-      <section class="section-head">
-        <div><p class="eyebrow">RIGHT NOW</p><h2 id="resultsHeading">A little inspiration</h2></div>
-        <div class="result-actions"><button class="filter-button active" data-filter="all">All</button><button class="filter-button" data-filter="quick">Quick wins</button><button class="filter-button" data-filter="saved">Saved</button></div>
-      </section>
+<section class="today">
+<div class="section-title"><div><p class="kicker">TODAY</p><h2>Leave room for the trip.</h2></div></div>
+<div class="timeline"><div class="dot done"></div><div><small>Morning</small><b>Flexible</b><p>Use What Now? when you’re ready.</p></div><div class="dot"></div><div><small>Next</small><b id="timelineAnchor">No anchor added</b><p>Bookings and must-dos show here.</p></div></div>
+</section>
+</main>
+<nav><button class="active">✦<span>Now</span></button><button id="navPlan">▤<span>Today</span></button><button id="navSaved">♡<span>Saved</span></button><button id="navMore">≡<span>More</span></button></nav>
+</div>
 
-      <section id="results" class="results-grid"></section>
-      <div id="emptyState" class="empty-state hidden"><div>⌁</div><h3>Nothing here yet</h3><p>Allow location or search for a place to find ideas.</p></div>
-
-      <section class="nearby-strip">
-        <div><p class="eyebrow">THE POINT</p><h2>Not another itinerary.</h2><p>OnTheGo is for the moment between plans—the afternoon that opened up, the neighbourhood you just reached, or the question: “What’s good around here?”</p></div>
-        <button class="outline-button" id="exploreBtn">Explore the area ↗</button>
-      </section>
-    </main>
-
-    <nav class="bottom-nav"><button class="nav-item active"><span>⌂</span>Now</button><button class="nav-item" id="savedNav"><span>♡</span>Saved</button><button class="nav-item" id="mapNav"><span>⌖</span>Map</button><button class="nav-item" id="moreNav"><span>≡</span>More</button></nav>
-  </div>
-  <div id="toast" class="toast"></div>
-  <script type="module" src="app.js"></script>
-</body>
-</html>
+<div class="sheet hidden" id="placeSheet"><div class="sheet-card"><div class="handle"></div><button class="close">×</button><p class="kicker">AROUND A PLACE</p><h2>Where are you heading?</h2><form id="placeForm"><input id="placeInput" placeholder="e.g. Arashiyama, Kyoto" autocomplete="off"><button class="primary" type="submit">Explore nearby</button></form></div></div>
+<div class="sheet hidden" id="anchorSheet"><div class="sheet-card"><div class="handle"></div><button class="close">×</button><p class="kicker">ADD AN ANCHOR</p><h2>What can’t move?</h2><input id="anchorName" placeholder="Dinner at Torihara"><div class="row"><input id="anchorTime" type="time"><button class="primary" id="saveAnchor">Save anchor</button></div></div></div>
+<div class="sheet hidden" id="expenseSheet"><div class="sheet-card"><div class="handle"></div><button class="close">×</button><p class="kicker">EXPENSES</p><h2>Scan a receipt</h2><p class="muted">Take a photo and OnTheGo can use OCR to pull the merchant, total, currency and date.</p><label class="camera">▣ <b>Take / choose receipt photo</b><input id="receiptInput" type="file" accept="image/*" capture="environment"></label><img id="receiptPreview" class="preview hidden"><div id="receiptConfirm" class="receipt-confirm hidden"><input id="amount" placeholder="Amount"><select id="category"><option>Food</option><option>Transport</option><option>Activity</option><option>Shopping</option><option>Hotel</option><option>Other</option></select><button class="primary" id="saveExpense">Save expense</button></div></div></div>
+<div id="toast" class="toast"></div>
+<script type="module" src="app.js"></script>
+</body></html>
