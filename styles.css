@@ -116,3 +116,23 @@ button,input,select,textarea{font-size:.95em}
 .command-admin-cta:hover{background:var(--gold2);border-color:var(--gold2)}
 .command-admin-cta span{font-size:14px}
 @media(max-width:700px){.command-admin-panel,.command-admin-content{min-height:215px}.command-admin-content{padding:20px}.command-admin-art{object-position:60% 50%}}
+
+/* Welcome identity bar: readable without returning to the oversized original */
+.welcome-panel{min-height:78px!important}
+.welcome-person{padding:11px 17px!important;gap:14px!important}
+.welcome-rank-art{width:51px!important;height:51px!important}
+.welcome-rank-art img{width:44px!important;height:44px!important}
+.welcome-copy small{font-size:9px!important;margin-bottom:4px!important}
+.welcome-copy strong{font-size:19px!important;line-height:1.18!important}
+.welcome-copy em{font-size:9px!important;margin-top:4px!important;color:#9a9f91!important}
+.welcome-progress{margin-top:7px!important;gap:9px!important;grid-template-columns:auto minmax(120px,205px) auto!important}
+.welcome-progress-rank{font-size:10px!important}
+.welcome-progress-rank small{font-size:9px!important}
+.welcome-progress-bar{height:4px!important}
+.welcome-progress-req{font-size:8px!important;color:#9b9f92!important}
+.duty-control{min-width:275px!important;padding:10px 16px!important}
+.duty-control small{font-size:9px!important}
+.duty-control b{font-size:16px!important;margin-top:3px!important}
+.duty-toggle button{padding:9px 12px!important;font-size:9px!important}
+@media(max-width:900px){.welcome-progress{grid-template-columns:auto minmax(90px,1fr)!important}.welcome-progress-req{grid-column:1/-1}}
+@media(max-width:700px){.welcome-panel{min-height:0!important}.welcome-person{padding:11px 12px!important}.welcome-rank-art{width:45px!important;height:45px!important}.welcome-rank-art img{width:39px!important;height:39px!important}.welcome-copy strong{font-size:16px!important}.welcome-progress{grid-template-columns:1fr!important}.welcome-progress-req{grid-column:auto}.duty-control{min-width:0!important;padding:10px 12px!important}}
