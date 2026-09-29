@@ -27,9 +27,28 @@ async function load(){
  ]);
  state.profile=prof.data||{};state.missions=missions.data||[];state.crew=crew.data||[];state.certs=certs.data||[];state.announcements=ann.data||[];
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
- $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
+ $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
+ const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
+ $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
  render();
 }
+
+function syncDutyUI(status){
+ const s=status==="awol"?"awol":"active";$("#myDutyLabel").textContent=s.toUpperCase();
+ $("#dutyActive").classList.toggle("active",s==="active");$("#dutyAwol").classList.toggle("active",s==="awol");
+ $("#welcomePanel").classList.toggle("is-awol",s==="awol");
+}
+async function setDutyStatus(status){
+ if(!["active","awol"].includes(status))return;
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;
+ const previous=state.profile?.availability_status||"active";if(previous===status)return;
+ $(".duty-toggle button").forEach(b=>b.disabled=true);syncDutyUI(status);
+ const {data,error}=await sb.from("profiles").update({availability_status:status}).eq("user_id",session.user.id).select("user_id,availability_status").maybeSingle();
+ if(error||!data){syncDutyUI(previous);toast("Duty status update failed");console.error(error);$(".duty-toggle button").forEach(b=>b.disabled=false);return}
+ state.profile.availability_status=status;const mine=state.crew.find(x=>x.user_id===session.user.id);if(mine)mine.availability_status=status;
+ render();syncDutyUI(status);toast(status==="active"?"Welcome back. Status ACTIVE.":"Duty status set to AWOL.");$(".duty-toggle button").forEach(b=>b.disabled=false);
+}
+
 function render(){
  const active=state.crew.filter(p=>p.availability_status!=="awol").length, awol=state.crew.length-active, pct=state.crew.length?Math.round(active/state.crew.length*100):0;
  $("#mCrew").textContent=state.crew.length;$("#mActive").textContent=active;$("#mOps").textContent=state.missions.filter(m=>!m.start_time||new Date(m.start_time)>=new Date()).length;$("#mCerts").textContent=state.certs.length;
@@ -115,7 +134,7 @@ function filterOps(){let q=$("#opSearch").value.toLowerCase(),f=$("[data-opfilte
 function filterCrew(){let q=$("#crewSearch").value.toLowerCase(),f=$("[data-crewfilter].active")?.dataset.crewfilter||"all";let x=state.crew.filter(p=>(f==="all"||(f==="awol"?p.availability_status==="awol":p.availability_status!=="awol"))&&JSON.stringify(p).toLowerCase().includes(q));$("#crewGrid").innerHTML=crewCards(x)}
 $$(".nav").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="profile")loadMyProfile()});$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 $("#opSearch").oninput=filterOps;$("#crewSearch").oninput=filterCrew;$$("[data-opfilter]").forEach(b=>b.onclick=()=>{$$("[data-opfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterOps()});$$("[data-crewfilter]").forEach(b=>b.onclick=()=>{$$("[data-crewfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterCrew()});
-$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};
+$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};$("#welcomeProfile").onclick=()=>{showView("profile");loadMyProfile()};$("#dutyActive").onclick=()=>setDutyStatus("active");$("#dutyAwol").onclick=()=>setDutyStatus("awol");
 setInterval(()=>{$("#clock").textContent=new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})},1000);
 const initialView=location.hash.replace("#","");if(["command","operations","crew","academy","records","profile"].includes(initialView))showView(initialView);
 let liveTimer;function liveRefresh(){clearTimeout(liveTimer);liveTimer=setTimeout(()=>load().then(()=>toast("Manifest updated")).catch(()=>{}),450)}
