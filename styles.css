@@ -19,3 +19,25 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 
 /* compact promotion track */
 .welcome-copy{min-width:390px}.welcome-progress{display:grid!important;grid-template-columns:auto minmax(120px,220px) auto;align-items:center;gap:9px;margin-top:7px;max-width:590px}.welcome-progress[hidden]{display:none!important}.welcome-progress-rank{display:flex;align-items:center;gap:7px;font:600 9px "Barlow Condensed";color:#c9c4af}.welcome-progress-rank i{font-style:normal;color:var(--gold)}.welcome-progress-rank small{color:var(--gold2);font-size:7px;margin:0}.welcome-progress-bar{height:4px;background:#24251d;overflow:hidden}.welcome-progress-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8e752c,var(--gold2));transition:width .3s}.welcome-progress-req{display:flex;gap:7px;color:#656b61;font-size:6px;letter-spacing:.04em}.welcome-progress-req b{color:#aeb3a8}@media(max-width:900px){.welcome-progress{grid-template-columns:1fr 120px}.welcome-progress-req{grid-column:1/3}.welcome-copy{min-width:0}}@media(max-width:700px){.welcome-progress{grid-template-columns:1fr}.welcome-progress-bar,.welcome-progress-req{grid-column:auto}.welcome-progress-req{flex-wrap:wrap}}
+
+/* centered Mission Command */
+.detail-backdrop.open{background:rgba(0,0,0,.82);backdrop-filter:blur(7px)}
+.detail-drawer.mission-command{left:50%;right:auto;top:50%;bottom:auto;width:min(1120px,92vw);height:min(820px,90vh);padding:38px 42px;transform:translate(-50%,-47%) scale(.985);opacity:0;border:1px solid #4d482e;box-shadow:0 30px 100px rgba(0,0,0,.82),inset 0 0 80px rgba(212,182,91,.018);background:linear-gradient(145deg,#10120e,#070907 55%,#0c0e0b);transition:transform .22s ease,opacity .18s;overflow:auto}
+.detail-drawer.mission-command.open{transform:translate(-50%,-50%) scale(1);opacity:1}
+.detail-drawer.mission-command:before{content:"MISSION COMMAND";position:absolute;right:38px;top:18px;font:700 65px "Barlow Condensed";color:rgba(212,182,91,.018);letter-spacing:.04em}
+.mission-command .detail-close{position:fixed;right:16px;top:14px;z-index:4}
+.mission-command #detailBody{max-width:none}
+.mission-command .detail-hero{padding:20px 0 24px}
+.mission-command .detail-hero h2{font-size:46px}
+.mission-command .detail-hero:after{content:"JMBN // AUTHORIZED OPERATION";bottom:8px}
+.mission-command .detail-grid{grid-template-columns:repeat(4,1fr)}
+.mission-command .detail-section{padding:22px 0}
+.mission-command .detail-section.rsvp-section{margin:0;padding:22px;border:1px solid #3b3928;background:linear-gradient(100deg,rgba(212,182,91,.055),transparent 65%)}
+.mission-command .rsvp-actions{grid-template-columns:repeat(4,1fr)}
+.mission-command .rsvp-actions .withdraw{grid-column:auto}
+.mission-command .rsvp-tally{justify-content:flex-end}
+.mission-command .detail-list{grid-template-columns:repeat(2,1fr)}
+.mission-command .signup-person{min-height:54px}
+.mission-command .detail-copy{max-width:900px}
+.mission-command:after{content:"JMBN // TACTICAL OPERATIONS NETWORK";position:absolute;left:42px;bottom:14px;color:#34382f;font-size:6px;letter-spacing:.2em}
+@media(max-width:800px){.detail-drawer.mission-command{width:96vw;height:92vh;padding:30px 18px 55px}.mission-command .detail-grid{grid-template-columns:1fr 1fr}.mission-command .detail-hero h2{font-size:34px}.mission-command .rsvp-actions{grid-template-columns:1fr 1fr}.mission-command .rsvp-actions .withdraw{grid-column:1/3}.mission-command .detail-list{grid-template-columns:1fr}}
