@@ -64,3 +64,23 @@ html,body,button,input,select,textarea{font-family:"Play",sans-serif!important;}
 /* Global typeface lock: JMBN uses Play everywhere */
 *,*::before,*::after{font-family:"Play",sans-serif!important;}
 h1,h2,h3,h4,h5,h6,.hero-copy h2,.view-intro h2,.panel h3,.image-panel h3,.mission-card h3,.crew-card h3,.academy-hero h2,.detail-hero h2,.profile-name h2,.academy-command-copy h2,.academy-directory-head h3,.academy-programme-body h3,.academy-welcome-copy h2{font-family:"Play",sans-serif!important;}
+
+/* Compact Command identity/status bar */
+.welcome-panel{min-height:62px!important}
+.welcome-person{padding:8px 14px!important;gap:11px!important}
+.welcome-rank-art{width:42px!important;height:42px!important}
+.welcome-rank-art img{width:36px!important;height:36px!important}
+.welcome-copy small{font-size:6px!important;margin-bottom:2px!important}
+.welcome-copy strong{font-size:15px!important;line-height:1.05!important}
+.welcome-copy em{font-size:6px!important;margin-top:2px!important}
+.welcome-progress{margin-top:4px!important;gap:7px!important;grid-template-columns:auto minmax(100px,180px) auto!important}
+.welcome-progress-rank{font-size:7px!important}
+.welcome-progress-rank small{font-size:6px!important}
+.welcome-progress-bar{height:3px!important}
+.welcome-progress-req{font-size:5px!important}
+.duty-control{min-width:260px!important;padding:8px 14px!important}
+.duty-control small{font-size:6px!important}
+.duty-control b{font-size:12px!important;margin-top:2px!important}
+.duty-toggle button{padding:7px 10px!important;font-size:6px!important}
+.welcome-panel:after{font-size:40px!important;bottom:-14px!important}
+@media(max-width:700px){.welcome-panel{min-height:0!important}.welcome-person{padding:9px 10px!important}.welcome-rank-art{width:38px!important;height:38px!important}.welcome-rank-art img{width:32px!important;height:32px!important}.welcome-copy strong{font-size:13px!important}.duty-control{padding:7px 10px!important}}
