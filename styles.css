@@ -45,3 +45,6 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 /* larger clean JMBN rail logo */
 .brand .sig{width:62px;height:62px;border:0!important;background:transparent!important;padding:0!important;transform:none!important;overflow:visible}
 .brand .sig img{width:62px;height:62px;object-fit:contain;transform:none!important}
+
+/* mission operational role */
+.role-section{border-top:0!important;padding:20px 22px!important;margin:0!important;border-left:1px solid #3b3928;border-right:1px solid #3b3928;border-bottom:1px solid #3b3928;background:#0a0c09}.role-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px}.role-grid button{min-height:40px;border:1px solid var(--line);background:#090b08;color:#777d72;font-size:7px;font-weight:700;letter-spacing:.07em;cursor:pointer;padding:8px 5px}.role-grid button:hover{color:#ddd8c5;border-color:#5b5739}.role-grid button.active{color:var(--gold2);border-color:#786a37;background:rgba(212,182,91,.09);box-shadow:inset 0 -2px var(--gold)}@media(max-width:900px){.role-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:520px){.role-grid{grid-template-columns:repeat(2,1fr)}}
