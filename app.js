@@ -14,6 +14,29 @@ function missionRows(items,n=4){if(!items.length)return'<div class="empty">No op
 function missionCards(items){if(!items.length)return'<div class="empty">No matching operations.</div>';return items.map(m=>'<article class="mission-card" data-mission="'+esc(m.id)+'" tabindex="0"><span class="tag">'+esc(m.category||"operation")+'</span><h3>'+esc(m.title||"Untitled operation")+'</h3><div class="route"><span>'+esc(m.origin||"TBD")+'</span><span>→</span><span>'+esc(m.destination||"TBD")+'</span></div><div class="mission-meta"><span>'+fmtDate(m.start_time)+' / '+fmtTime(m.start_time)+'</span><span>'+esc(m.status||"PLANNED")+'</span></div></article>').join("")}
 function crewCards(items){if(!items.length)return'<div class="empty">No matching personnel.</div>';return items.map(p=>{const code=p.rank_code||p.rank?.code||"";const rankUrl=p.rank_image_url||(code?img("Ranks",code+".png"):"");return '<article class="crew-card" data-user="'+esc(p.user_id)+'" tabindex="0">'+(rankUrl?'<img class="rank-img" src="'+esc(rankUrl)+'" onerror="this.style.visibility=\'hidden\'">':'<div class="rank-img"></div>')+'<div><h3>'+esc(p.display_name||p.handle||"Crew")+'</h3><p>'+esc(code||p.rank_category||p.role||"JMBN")+'</p><small>'+esc(p.role||"Member")+' · '+esc(p.missions_attended||0)+' missions</small></div><i class="status-dot '+(p.availability_status==="awol"?"red":"green")+'"></i></article>'}).join("")}
 function certCards(items){if(!items.length)return'<div class="empty">Certification catalogue unavailable.</div>';return items.map(c=>{let code=(c.code||c.short_code||c.name||"").toUpperCase();let map={BMT:"BMT.png",MED:"MED.png",PIL:"PIL.png",SOC:"SOC.png"};let art=c.image_url||img("certification",map[code]||"APBmt1234.png");return '<article class="cert"><img src="'+esc(art)+'" onerror="this.src=\''+img("certification","BMT.png")+'\'"><h3>'+esc(c.name||c.title||code||"Certification")+'</h3><p>'+esc(c.description||c.category||"JMBN qualification pathway")+'</p></article>'}).join("")}
+
+async function loadAcademy(){
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;
+ const uid=session.user.id;
+ const [earnedReq,reqReq,assignReq]=await Promise.all([
+  sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",uid),
+  sb.from("certification_requirements").select("*"),
+  sb.from("academy_specialisation_assignments").select("*").eq("user_id",uid).maybeSingle()
+ ]);
+ const earned=earnedReq.data||[], reqs=reqReq.data||[], assignment=assignReq.data||null, earnedSet=new Set(earned.map(x=>(x.certification_code||"").toUpperCase()));
+ const type=code=>["BMT","SOC"].includes(code)?"core":["GUNNERY","ENGINEERING"].includes(code)?"specialisation":"support";
+ const codeOf=x=>(x.certification_code||x.code||x.short_code||"").toUpperCase();
+ $("#academyTotal").textContent=state.certs.length;$("#academyEarned").textContent=earned.length;$("#academyCurrent").textContent=(assignment?.specialisation_code||(!earnedSet.has("BMT")?"BMT":!earnedSet.has("SOC")?"SOC":"SUPPORT")).toUpperCase();
+ const node=(code,label,done,locked=false)=>'<div class="academy-path-node '+(done?"done ":"")+(locked?"locked":"")+'"><span>'+esc(code)+'</span><b>'+esc(label)+'</b><small>'+(done?"CERTIFIED":locked?"LOCKED":"AVAILABLE")+'</small></div>';
+ const bmt=earnedSet.has("BMT"),soc=earnedSet.has("SOC");
+ $("#academyPathTrack").innerHTML=node("BMT","Basic Military Training",bmt)+ '<i>→</i>'+node("SOC","Standard Obstacle Course",soc,!bmt)+'<i>→</i><div class="academy-path-branches"><div><small>SUPPORT PATHWAYS</small>'+["MED","LOG","MIN","PILOT"].map(x=>node(x,x,earnedSet.has(x),!soc)).join("")+'</div><div><small>ACTIVE SPECIALISATION</small>'+node(assignment?.specialisation_code||"—",assignment?.specialisation_code||"Awaiting assignment",earnedSet.has((assignment?.specialisation_code||"").toUpperCase()),!assignment).replace("academy-path-node","academy-path-node special")+'</div></div>';
+ renderAcademyProgrammes("all",earnedSet,reqs,assignment);
+ $("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{$("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
+}
+function renderAcademyProgrammes(filter,earnedSet,reqs,assignment){
+ const items=state.certs.filter(c=>filter==="all"||(["BMT","SOC"].includes((c.certification_code||"").toUpperCase())?"core":["GUNNERY","ENGINEERING"].includes((c.certification_code||"").toUpperCase())?"specialisation":"support")===filter);
+ $("#certGrid").innerHTML=items.map(c=>{const code=(c.certification_code||c.code||"").toUpperCase(),done=earnedSet.has(code),total=reqs.filter(r=>(r.certification_code||"").toUpperCase()===code).length,kind=["BMT","SOC"].includes(code)?"CORE PATHWAY":["GUNNERY","ENGINEERING"].includes(code)?"SPECIALISATION PATHWAY":"SUPPORT PATHWAY",art=c.big_art_cover||c.image_url||img("certification","BMT.png");let status=done?"CERTIFIED":code==="SOC"&&!earnedSet.has("BMT")?"LOCKED":["GUNNERY","ENGINEERING"].includes(code)&&assignment?.specialisation_code!==code?"ASSIGNMENT REQUIRED":"AVAILABLE";return '<article class="academy-programme '+status.toLowerCase().replaceAll(" ","-")+'"><div class="academy-programme-art"><img src="'+esc(art)+'"><span>'+esc(code)+'</span></div><div class="academy-programme-body"><small>'+kind+'</small><h3>'+esc(c.name||code)+'</h3><p>'+esc(c.description||"JMBN Academy certification programme.")+'</p><div class="academy-programme-foot"><b>'+status+'</b><span>'+total+' TRAINING REQUIREMENTS</span></div></div></article>'}).join("")||'<div class="empty">No Academy programmes in this category.</div>';
+}
 async function loadWelcomeProgress(uid){
  const {data:p,error}=await sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle();
  if(error||!p){$("#welcomeProgress").hidden=true;return}
@@ -38,7 +61,7 @@ async function load(){
  $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
  $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");await loadWelcomeProgress(uid);$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
- render();
+ render();await loadAcademy();
 }
 
 function syncDutyUI(status){
