@@ -42,11 +42,11 @@ async function setDutyStatus(status){
  if(!["active","awol"].includes(status))return;
  const {data:{session}}=await sb.auth.getSession();if(!session)return;
  const previous=state.profile?.availability_status||"active";if(previous===status)return;
- $(".duty-toggle button").forEach(b=>b.disabled=true);syncDutyUI(status);
+ $$(".duty-toggle button").forEach(b=>b.disabled=true);syncDutyUI(status);
  const {data,error}=await sb.from("profiles").update({availability_status:status}).eq("user_id",session.user.id).select("user_id,availability_status").maybeSingle();
- if(error||!data){syncDutyUI(previous);toast("Duty status update failed");console.error(error);$(".duty-toggle button").forEach(b=>b.disabled=false);return}
+ if(error||!data){syncDutyUI(previous);toast("Duty status update failed");console.error(error);$$(".duty-toggle button").forEach(b=>b.disabled=false);return}
  state.profile.availability_status=status;const mine=state.crew.find(x=>x.user_id===session.user.id);if(mine)mine.availability_status=status;
- render();syncDutyUI(status);toast(status==="active"?"Welcome back. Status ACTIVE.":"Duty status set to AWOL.");$(".duty-toggle button").forEach(b=>b.disabled=false);
+ render();syncDutyUI(status);toast(status==="active"?"Welcome back. Status ACTIVE.":"Duty status set to AWOL.");$$(".duty-toggle button").forEach(b=>b.disabled=false);
 }
 
 function render(){
