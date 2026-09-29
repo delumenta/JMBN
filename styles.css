@@ -41,3 +41,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 .mission-command .detail-copy{max-width:900px}
 .mission-command:after{content:"JMBN // TACTICAL OPERATIONS NETWORK";position:absolute;left:42px;bottom:14px;color:#34382f;font-size:6px;letter-spacing:.2em}
 @media(max-width:800px){.detail-drawer.mission-command{width:96vw;height:92vh;padding:30px 18px 55px}.mission-command .detail-grid{grid-template-columns:1fr 1fr}.mission-command .detail-hero h2{font-size:34px}.mission-command .rsvp-actions{grid-template-columns:1fr 1fr}.mission-command .rsvp-actions .withdraw{grid-column:1/3}.mission-command .detail-list{grid-template-columns:1fr}}
+
+/* larger clean JMBN rail logo */
+.brand .sig{width:62px;height:62px;border:0!important;background:transparent!important;padding:0!important;transform:none!important;overflow:visible}
+.brand .sig img{width:62px;height:62px;object-fit:contain;transform:none!important}
