@@ -26,6 +26,19 @@
 </header>
 <main>
 <section id="command" class="view active">
+  <section id="welcomePanel" class="welcome-panel">
+    <button id="welcomeProfile" class="welcome-person">
+      <span id="welcomeRankArt" class="welcome-rank-art"></span>
+      <span class="welcome-copy"><small>PERSONNEL ONLINE</small><strong>WELCOME BACK, <span id="welcomeRank">CREW</span> <span id="welcomeName">—</span></strong><em>OPEN PERSONNEL DOSSIER →</em></span>
+    </button>
+    <div class="duty-control">
+      <span><small>MY DUTY STATUS</small><b id="myDutyLabel">ACTIVE</b></span>
+      <div class="duty-toggle" role="group" aria-label="Duty status">
+        <button id="dutyActive" data-duty="active">ACTIVE</button>
+        <button id="dutyAwol" data-duty="awol">AWOL</button>
+      </div>
+    </div>
+  </section>
   <div class="hero">
     <img src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/JMBNR/09.png" alt="">
     <div class="hero-shade"></div><div class="hero-grid"></div>
