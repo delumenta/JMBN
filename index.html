@@ -29,7 +29,12 @@
   <section id="welcomePanel" class="welcome-panel">
     <button id="welcomeProfile" class="welcome-person">
       <span id="welcomeRankArt" class="welcome-rank-art"></span>
-      <span class="welcome-copy"><small>PERSONNEL ONLINE</small><strong>WELCOME BACK, <span id="welcomeRank">CREW</span> <span id="welcomeName">—</span></strong><em>OPEN PERSONNEL DOSSIER →</em></span>
+      <span class="welcome-copy"><small>PERSONNEL ONLINE</small><strong>WELCOME BACK, <span id="welcomeRank">CREW</span> <span id="welcomeName">—</span></strong><em>OPEN PERSONNEL DOSSIER →</em>
+        <span id="welcomeProgress" class="welcome-progress" hidden>
+          <span class="welcome-progress-rank"><b id="welcomeCurrentRank">—</b><i>→</i><b id="welcomeNextRank">—</b><small id="welcomeProgressPct">0%</small></span>
+          <span class="welcome-progress-bar"><i id="welcomeProgressBar"></i></span>
+          <span id="welcomeRequirements" class="welcome-progress-req"></span>
+        </span></span>
     </button>
     <div class="duty-control">
       <span><small>MY DUTY STATUS</small><b id="myDutyLabel">ACTIVE</b></span>
