@@ -51,7 +51,7 @@
       <div class="hero-actions"><button class="primary" data-go="operations">VIEW OPERATIONS</button><button class="ghost" data-go="crew">OPEN MANIFEST</button></div>
     </div>
     
-  </div><div id="nextOpStrip" class="next-op-strip"><span class="strip-label">NEXT DEPLOYMENT</span><b id="nextOpTitle">NO DEPLOYMENT SCHEDULED</b><span id="nextOpWhen">STANDING BY</span><button id="nextOpOpen" class="strip-open">OPEN FILE →</button></div>
+  </div><div id="nextOpStrip" class="next-op-strip"><span class="strip-label">NEXT DEPLOYMENT</span><button id="nextOpTitle" class="next-op-title" type="button">NO DEPLOYMENT SCHEDULED</button><span id="nextOpWhen">STANDING BY</span><button id="nextOpOpen" class="strip-open">OPEN FILE →</button></div>
   <div class="metrics">
     <article><small>PERSONNEL</small><b id="mCrew">—</b><span>registered crew</span></article>
     <article><small>ACTIVE DUTY</small><b id="mActive">—</b><span>available personnel</span></article>
@@ -60,7 +60,7 @@
   </div>
   <div class="dashboard-grid">
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">OPERATIONS BOARD</p><h3>Next deployments</h3></div><button class="text-btn" data-go="operations">ALL OPERATIONS →</button></div><div id="opPreview" class="op-list skeleton"></div></section>
-    <section class="panel"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
+    <section id="readinessPanel" class="panel readiness-panel" tabindex="0" role="button" aria-label="Open crew readiness roster"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div><span class="readiness-open">VIEW CREW →</span></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
     <section class="panel image-panel"><img src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/frontpage/Academy.png"><div><p class="eyebrow">ACADEMY</p><h3>Train for the station.</h3><p>Track qualifications, sign-offs and specialist progression.</p><button class="text-btn" data-go="academy">OPEN ACADEMY →</button></div></section>
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div id="announcements" class="feed skeleton"></div></section>
   </div>
