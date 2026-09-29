@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+/* Shared Onthego admin design. Existing JMBN admin data and controls remain intact. */
+:root{--bg:#070806!important;--panel:#0d0f0d!important;--sub:#11140f!important;--row:#10130f!important;--card:#11140f!important;--border:#303629!important;--accent:#e0c46b!important;--accent-soft:#c8ad59!important;--text:#eef0e8!important;--muted:#969d8d!important;--line:rgba(224,196,107,.22)!important;--line-soft:#303629!important;--frame-bg:#0d0f0d!important;--clip:none!important;--clip-sm:none!important;--fs-base:12px!important;--fs-small:10px!important}
+html,body{font-family:'Play',sans-serif!important;color:#eef0e8!important;background:#070806!important}
+body{padding:0 0 45px!important;min-height:100vh!important;background:radial-gradient(circle at 75% -10%,#1c2016,transparent 35%),#070806!important}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.022;background:repeating-linear-gradient(0deg,transparent 0 3px,#fff 4px)}
+body *:not(i){font-family:'Play',sans-serif!important}
+#header,#header2-mount{position:relative;z-index:110}
+.jmbn-header{width:100%!important;max-width:none!important;margin:0 0 24px!important;min-height:0!important;border:0!important;border-bottom:1px solid #343b2b!important;border-radius:0!important;background:#0b0d0a!important;box-shadow:none!important;padding:0 max(24px,calc((100vw - 1480px)/2))!important;overflow:visible!important}
+.jmbn-haze,.jmbn-frame-node,.jmbn-diagonal{display:none!important}
+.jmbn-top{min-height:74px!important;padding:12px 0!important;gap:18px!important}
+.jmbn-identity{gap:12px!important}
+.jmbn-logo{width:42px!important;height:42px!important;object-fit:contain!important}
+.jmbn-eyebrow{font-size:8px!important;color:#d4b65b!important;letter-spacing:.14em!important}
+.jmbn-title{font-size:22px!important;line-height:1.15!important;color:#eef0e8!important;letter-spacing:.015em!important}
+.jmbn-subtitle{font-size:9px!important;color:#858b7d!important}
+.jmbn-account{border:1px solid #303629!important;border-radius:4px!important;background:#10130f!important;min-height:45px!important}
+.jmbn-navrow{border-top:1px solid #303629!important;padding:0!important;min-height:42px!important;gap:5px!important}
+.jmbn-navlink{border-radius:0!important;font-size:10px!important;letter-spacing:.07em!important;color:#a6ab9d!important;padding:13px 14px!important}
+.jmbn-navlink:hover,.jmbn-navlink.active,.jmbn-navlink[aria-current="page"]{background:#171c13!important;color:#e0c46b!important}
+.jmbn-dropdown{background:#10130f!important;border:1px solid #424a32!important;box-shadow:0 14px 35px #000a!important}
+.page,.wrap,.grid{max-width:1480px!important;margin-left:auto!important;margin-right:auto!important}
+.page{width:calc(100% - 48px)!important}
+.wrap,.grid{width:calc(100% - 48px)!important}
+.panel{clip-path:none!important;border:1px solid #303629!important;border-radius:3px!important;background:#0d0f0d!important;box-shadow:none!important}
+.panel::before,.panel::after{display:none!important}
+.panel>*{position:relative;z-index:1}
+.panel .hd,.block-header,.console-header{background:#10130f!important;border-bottom:1px solid #303629!important;padding:14px 18px!important}
+.panel .hd h2,.panel .hd h3,.section-title,.console-title{color:#e0c46b!important;font-size:15px!important;font-weight:700!important;letter-spacing:.035em!important}
+.panel .body,.panel-inner{padding:18px!important}
+.main-panel{margin-top:0!important}
+.main-grid{grid-template-columns:minmax(255px,330px) minmax(0,1fr)!important;gap:18px!important}
+.small,.subtle,.meta{color:#929b8b!important}
+.badge,.pill,.tag,.console-pill{clip-path:none!important;border-radius:3px!important;background:#151a12!important;border:1px solid #444631!important;color:#e0c46b!important}
+button,input,select,textarea{font-family:'Play',sans-serif!important;border-radius:3px!important;clip-path:none!important;font-size:12px!important}
+button{border-color:#504a30!important;transition:background .15s,color .15s!important}
+button:hover:not(:disabled){background:#292d1b!important;color:#f4dc8a!important}
+input,select,textarea{background:#10130f!important;border:1px solid #343b2b!important;color:#eef0e8!important}
+input:focus,select:focus,textarea:focus{outline:1px solid #d4b65b!important;outline-offset:1px!important}
+a{color:#e0c46b}
+@media(max-width:1100px){.main-grid{grid-template-columns:1fr!important}}
+@media(max-width:760px){.jmbn-header{padding:0 12px!important}.jmbn-top{min-height:64px!important}.jmbn-logo{width:32px!important;height:32px!important}.jmbn-title{font-size:17px!important}.jmbn-subtitle{font-size:8px!important}.page,.wrap,.grid{width:calc(100% - 20px)!important}.panel .body,.panel-inner{padding:12px!important}.jmbn-navrow{flex-wrap:wrap!important}}
