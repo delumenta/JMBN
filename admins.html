@@ -514,33 +514,13 @@ button:hover{
   .kpis{grid-template-columns:1fr}
 }
 </style>
-<style>
-/* Onthego Command Deck Admin — same UI, original JMBN management logic */
-:root{--bg:#070906;--panel:#0b0d0a;--sub:#0b0d0a;--row:#10130e;--border:#363b2b;--card:#11140f;--accent:#e0c46b;--text:#e6e9df;--muted:#8f9787;--line:rgba(224,196,107,.3);--line-soft:#2c3025;--frame-bg:#0b0d0a;--clip:none;--clip-sm:none;--fs-base:12px;--fs-small:10px}
-html,body{background:#070906!important;color:var(--text)!important;font-family:"Play",sans-serif!important}
-body{padding:0 0 40px 136px!important}
-.admin-rail{position:fixed;inset:0 auto 0 0;width:120px;background:#090b08;border-right:1px solid #303425;display:flex;flex-direction:column;z-index:10}
-.admin-brand{display:flex;align-items:center;gap:7px;padding:16px 8px;color:#e0c46b;text-decoration:none;font-size:13px;font-weight:700;border-bottom:1px solid #303425}
-.admin-brand img{width:29px;height:29px;object-fit:contain}.admin-brand small{display:block;font-size:6px;letter-spacing:.09em;color:#89907c}
-.admin-rail nav{display:grid;gap:4px;padding:14px 5px}.admin-rail nav a{padding:12px 6px;color:#8e9688;text-decoration:none;font-size:9px;display:flex;gap:6px;align-items:center}.admin-rail nav a.active,.admin-rail nav a:hover{background:#171a12;color:#e0c46b;border-left:2px solid #e0c46b}.admin-rail-foot{margin:auto 8px 18px;font-size:7px;color:#717967}
-.admin-topbar{max-width:1500px;margin:auto;padding:23px 24px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #303425}.admin-topbar small{color:#d6b85d;font-size:8px;letter-spacing:.15em}.admin-topbar h1{font:700 25px "Play",sans-serif;margin:4px 0;color:#e6e9df}.admin-topbar a{font-size:9px;color:#d9bd65;text-decoration:none;border:1px solid #49422a;padding:10px}
-.page{width:calc(100% - 48px)!important;max-width:1452px!important;margin:18px auto!important}
-.panel,.panel::before,.panel::after{clip-path:none!important;box-shadow:none!important;border-radius:0!important}.panel{border:1px solid #303425!important;background:#0c0e0b!important}.panel::before,.panel::after{display:none!important}.panel .hd{border-bottom:1px solid #303425!important;padding:15px 18px!important}.panel .hd h2,.panel .hd h3{font-size:15px!important;color:#e0c46b!important}.panel .body{padding:18px!important}
-button,input,select{font-family:"Play",sans-serif!important;border-radius:3px!important;clip-path:none!important}button{border-color:#49422a!important}button:hover{background:#252617!important}
-.main-grid{grid-template-columns:minmax(240px,330px) minmax(0,1fr)!important;gap:18px!important}
-@media(max-width:1050px){.main-grid{grid-template-columns:1fr!important}}
-@media(max-width:700px){body{padding-left:0!important;padding-bottom:78px!important}.admin-rail{inset:auto 0 0 0;width:100%;height:60px;flex-direction:row;border-right:0;border-top:1px solid #303425}.admin-brand,.admin-rail-foot{display:none}.admin-rail nav{display:flex;overflow:auto;width:100%;padding:4px}.admin-rail nav a{min-width:70px;justify-content:center;flex-direction:column;font-size:8px;padding:6px}.admin-topbar{padding:14px}.admin-topbar h1{font-size:19px}.page{width:calc(100% - 20px)!important;margin:12px auto!important}}
-</style>
 </head>
 <body>
 
 <!-- header2.html matches the shared member header -->
-<aside class="admin-rail">
-<a class="admin-brand" href="index.html#command"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"><span>JMBN<small>COMMAND DECK</small></span></a>
-<nav><a href="index.html#command">⌂ <span>COMMAND</span></a><a href="index.html#operations">◇ <span>OPERATIONS</span></a><a href="index.html#crew">◉ <span>CREW</span></a><a href="academy.html">△ <span>ACADEMY</span></a><a class="active" href="admins.html">▣ <span>ADMIN CONSOLE</span></a><a href="index.html#records">▤ <span>RECORDS</span></a></nav><small class="admin-rail-foot">JMBN // OFFICER ACCESS</small></aside>
-<div class="admin-topbar"><div><small>JMBN // COMMAND SYSTEMS</small><h1>ADMIN CONSOLE</h1></div><a href="index.html#command">← RETURN TO COMMAND</a></div>
+<div id="header"></div>
 
-<div class="page" id="adminApp">
+<div class="page">
   <!-- Big unified panel -->
   <section class="panel main-panel">
     <div class="hd">
@@ -598,8 +578,8 @@ button,input,select{font-family:"Play",sans-serif!important;border-radius:3px!im
 </div>
 
 <!-- Shared header controller and avatar support -->
-
-
+<script src="js/avatars.js"></script>
+<script src="js/header.js"></script>
 
 <!-- Supabase JS (ESM) -->
 <script type="module">
@@ -675,6 +655,7 @@ async function runSyncProfiles(quiet = false){
 document.addEventListener('DOMContentLoaded', boot)
 
 async function boot(){
+  await mountHeader()
 
   // Get current auth session
   const { data: { session }, error: sErr } = await sb.auth.getSession()
@@ -689,6 +670,7 @@ async function boot(){
 
   me = session.user.id
 
+  // Only allow manual profile sync after elevated access is verified.
 
   /* ==== CHECK ELEVATION ==== */
   try{
