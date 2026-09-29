@@ -6,7 +6,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function base(){const p=location.pathname.split("/").filter(Boolean);return /github\.io$/.test(location.hostname)&&p.length?"/"+p[0]+"/":"/"}
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200)}
-function showView(id){$(".view").forEach(v=>v.classList.toggle("active",v.id===id));$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("#pageTitle").textContent={command:"COMMAND DECK",operations:"OPERATIONS",crew:"CREW MANIFEST",academy:"ACADEMY",records:"RECORDS"}[id]||"JMBN";history.replaceState(null,"","#"+id);scrollTo(0,0)}
+function showView(id){$(".view").forEach(v=>v.classList.toggle("active",v.id===id));$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("#pageTitle").textContent={command:"COMMAND DECK",operations:"OPERATIONS",crew:"CREW MANIFEST",academy:"ACADEMY",records:"RECORDS",profile:"PERSONNEL DOSSIER"}[id]||"JMBN";history.replaceState(null,"","#"+id);scrollTo(0,0)}
 function img(bucket,name){return URL+"/storage/v1/object/public/"+encodeURIComponent(bucket)+"/"+name.split("/").map(encodeURIComponent).join("/")}
 function fmtDate(v){if(!v)return"TBD";return new Date(v).toLocaleDateString("en-SG",{day:"2-digit",month:"short",year:"2-digit"}).toUpperCase()}
 function fmtTime(v){if(!v)return"";return new Date(v).toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})}
@@ -83,13 +83,41 @@ document.addEventListener("click",e=>{const mission=e.target.closest("[data-miss
 document.addEventListener("keydown",e=>{if(e.key==="Enter"){const x=e.target.closest("[data-mission],[data-user]");if(x){x.dataset.mission?openMission(x.dataset.mission):openCrew(x.dataset.user)}}if(e.key==="Escape")closeDrawer()});
 $("#detailClose").onclick=closeDrawer;$("#detailBackdrop").onclick=closeDrawer;
 
+
+async function loadMyProfile(){
+ const host=$("#profileView");if(!host)return;host.innerHTML='<div class="loading-detail">LOADING PERSONNEL DOSSIER…</div>';
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;const uid=session.user.id,p=state.crew.find(x=>x.user_id===uid)||state.profile||{};
+ const [rank,prog,certs,attendance,discord,userRoles,specs]=await Promise.all([
+  sb.from("v_profiles_with_rank").select("*").eq("user_id",uid).maybeSingle(),
+  sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle(),
+  sb.from("user_certifications").select("*").eq("user_id",uid),
+  sb.from("mission_attendees").select("*").eq("user_id",uid),
+  sb.from("discord_links").select("*").eq("user_id",uid).maybeSingle(),
+  sb.from("user_roles").select("role_id").eq("user_id",uid),
+  sb.from("academy_specialisation_ranks").select("*").eq("user_id",uid)
+ ]);
+ const rr=rank.data||{}, pr=prog.data||{}, cs=certs.data||[], at=attendance.data||[], dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
+ let roleNames=[];if(ur.length){const {data}=await sb.from("roles").select("*").in("id",ur.map(x=>x.role_id));roleNames=(data||[]).map(x=>x.name)}
+ const name=p.display_name||p.handle||session.user.email?.split("@")[0]||"CREW", avatar=dl.avatar_url||"", rankArt=rr.rank_image_url||p.rank_image_url||"";
+ const pct=Math.round(Math.min(100,Math.max(0,Math.min(Number(pr.pct_missions??100),Number(pr.pct_hours??100),Number(pr.pct_certs??100)))));
+ host.innerHTML='<div class="profile-identity"><div class="profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'">':esc(name.slice(0,2).toUpperCase()))+'</div><div class="profile-name"><p class="eyebrow">JMBN PERSONNEL IDENTIFICATION</p><h2>'+esc(name)+'</h2><div class="profile-rank">'+(rankArt?'<img src="'+esc(rankArt)+'">':'')+'<span>'+esc(rr.rank_name||pr.current_name||p.rank_code||"JMBN CREW")+(pr.current_paygrade?" // "+esc(pr.current_paygrade):"")+'</span></div><div class="profile-tags">'+roleNames.map(x=>'<span>'+esc(x)+'</span>').join("")+(p.availability_status?'<span>'+esc(p.availability_status.toUpperCase())+'</span>':'')+'</div></div><div class="verified-block"><i class="pulse"></i><b>IDENTITY VERIFIED</b><small>'+(dl.discord_id?"DISCORD LINKED":"JMBN ACCOUNT")+'</small></div></div>'+
+ '<div class="profile-kpis"><div><b>'+esc(pr.missions_attended??p.missions_attended??at.length)+'</b><small>MISSIONS</small></div><div><b>'+esc(pr.hours_total??0)+'</b><small>OPERATIONAL HOURS</small></div><div><b>'+cs.length+'</b><small>CERTIFICATIONS</small></div><div><b>'+esc(pr.current_code||rr.rank_code||p.rank_code||"—")+'</b><small>CURRENT RANK</small></div></div>'+
+ '<div class="profile-layout"><section class="panel"><div class="panel-head"><div><p class="eyebrow">01 // PERSONNEL</p><h3>Service Record</h3></div></div><div class="profile-rows"><p><span>HANDLE</span><b>'+esc(p.handle||dl.handle||"—")+'</b></p><p><span>SERVICE STATUS</span><b>'+esc((p.availability_status||"ACTIVE").toUpperCase())+'</b></p><p><span>RANK</span><b>'+esc(rr.rank_name||pr.current_name||"—")+'</b></p><p><span>RANK CODE</span><b>'+esc(rr.rank_code||pr.current_code||"—")+'</b></p><p><span>TRACK</span><b>'+esc(pr.current_category||pr.admin_track||p.rank_track||"—")+'</b></p></div></section>'+
+ '<section class="panel"><div class="panel-head"><div><p class="eyebrow">ADVANCEMENT</p><h3>Rank Progression</h3></div></div><div class="rank-progress-head"><b>'+esc(pr.current_code||"—")+'</b><span>→</span><b>'+esc(pr.next_code||"MAX")+'</b></div><div class="profile-progress"><i style="width:'+pct+'%"></i></div><div class="profile-progress-label">'+pct+'% MINIMUM REQUIREMENT PROGRESS</div><div class="profile-requirements"><span>MISSIONS <b>'+esc(pr.missions_attended??0)+' / '+esc(pr.missions_target??"—")+'</b></span><span>HOURS <b>'+esc(pr.hours_total??0)+' / '+esc(pr.hours_target??"—")+'</b></span><span>CERTS <b>'+esc(pr.certifications_total??cs.length)+' / '+esc(pr.certification_target??"—")+'</b></span></div></section></div>'+
+ '<section class="panel profile-wide"><div class="panel-head"><div><p class="eyebrow">QUALIFICATIONS</p><h3>Certification Record</h3></div><span class="tag">'+cs.length+' VERIFIED</span></div><div class="profile-cert-grid">'+(cs.length?cs.map(x=>'<div class="profile-cert"><b>'+esc(x.certification_code||x.code||"CERT")+'</b><small>'+fmtDate(x.awarded_at||x.created_at)+'</small></div>').join(""):'<div class="empty">No certifications recorded.</div>')+'</div></section>'+
+ (sp.length?'<section class="panel profile-wide"><div class="panel-head"><div><p class="eyebrow">ACADEMY</p><h3>Specialisation Ranks</h3></div></div><div class="profile-cert-grid">'+sp.map(x=>'<div class="profile-cert"><b>'+esc(x.specialisation_code)+'</b><small>RANK '+esc(x.rank_id)+'</small></div>').join("")+'</div></section>':'')+
+ '<section class="panel profile-wide"><div class="panel-head"><div><p class="eyebrow">SERVICE HISTORY</p><h3>Operational History</h3></div></div><div class="op-list">'+(at.length?at.slice().reverse().slice(0,10).map(x=>{const m=state.missions.find(z=>z.id===x.mission_id);return '<div class="op-row" data-mission="'+esc(x.mission_id)+'"><span class="op-date">'+fmtDate(m?.start_time||x.joined_at)+'</span><div><b>'+esc(m?.title||"Mission")+'</b><small>'+esc(x.role_in_mission||x.position_in_mission||"Crew")+'</small></div><span class="tag">'+esc((x.attendance||"RECORDED").toUpperCase())+'</span></div>'}).join(""):'<div class="empty">No operational history recorded.</div>')+'</div></section>'+
+ '<div class="profile-actions"><button class="ghost" id="profileSignout">SIGN OUT OF MANIFEST</button></div>';
+ $("#profileSignout").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}}
+}
+
 function filterOps(){let q=$("#opSearch").value.toLowerCase(),f=$("[data-opfilter].active")?.dataset.opfilter||"all";let x=state.missions.filter(m=>(f==="all"||m.category===f)&&JSON.stringify(m).toLowerCase().includes(q));$("#operationsGrid").innerHTML=missionCards(x)}
 function filterCrew(){let q=$("#crewSearch").value.toLowerCase(),f=$("[data-crewfilter].active")?.dataset.crewfilter||"all";let x=state.crew.filter(p=>(f==="all"||(f==="awol"?p.availability_status==="awol":p.availability_status!=="awol"))&&JSON.stringify(p).toLowerCase().includes(q));$("#crewGrid").innerHTML=crewCards(x)}
-$$(".nav").forEach(b=>b.onclick=()=>showView(b.dataset.view));$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
+$(".nav").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="profile")loadMyProfile()});$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 $("#opSearch").oninput=filterOps;$("#crewSearch").oninput=filterCrew;$$("[data-opfilter]").forEach(b=>b.onclick=()=>{$$("[data-opfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterOps()});$$("[data-crewfilter]").forEach(b=>b.onclick=()=>{$$("[data-crewfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterCrew()});
-$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#userBtn").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}};
+$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};
 setInterval(()=>{$("#clock").textContent=new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})},1000);
-const initialView=location.hash.replace("#","");if(["command","operations","crew","academy","records"].includes(initialView))showView(initialView);
+const initialView=location.hash.replace("#","");if(["command","operations","crew","academy","records","profile"].includes(initialView))showView(initialView);
 let liveTimer;function liveRefresh(){clearTimeout(liveTimer);liveTimer=setTimeout(()=>load().then(()=>toast("Manifest updated")).catch(()=>{}),450)}
 sb.channel("jmbn-manifest-live").on("postgres_changes",{event:"*",schema:"public",table:"missions"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"profiles"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"announcements"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"mission_signups"},liveRefresh).subscribe();
 load().catch(e=>{console.error(e);toast("Manifest sync failed")});
