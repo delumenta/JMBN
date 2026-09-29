@@ -84,3 +84,21 @@ h1,h2,h3,h4,h5,h6,.hero-copy h2,.view-intro h2,.panel h3,.image-panel h3,.missio
 .duty-toggle button{padding:7px 10px!important;font-size:6px!important}
 .welcome-panel:after{font-size:40px!important;bottom:-14px!important}
 @media(max-width:700px){.welcome-panel{min-height:0!important}.welcome-person{padding:9px 10px!important}.welcome-rank-art{width:38px!important;height:38px!important}.welcome-rank-art img{width:32px!important;height:32px!important}.welcome-copy strong{font-size:13px!important}.duty-control{padding:7px 10px!important}}
+
+/* Slightly tighter global type scale */
+body{font-size:95%!important}
+.topbar h1{font-size:24px!important}
+.hero-copy h2{font-size:clamp(40px,5.4vw,70px)!important}
+.view-intro h2{font-size:51px!important}
+.panel h3,.image-panel h3{font-size:19px!important}
+.metrics b{font-size:26px!important}
+.mission-card h3{font-size:20px!important}
+.crew-card h3{font-size:16px!important}
+.detail-hero h2{font-size:31px!important}
+.profile-name h2{font-size:35px!important}
+.academy-command-copy h2{font-size:49px!important}
+.academy-directory-head h3{font-size:25px!important}
+.academy-programme-body h3{font-size:18px!important}
+.academy-welcome-copy h2{font-size:42px!important}
+button,input,select,textarea{font-size:.95em}
+@media(max-width:700px){.topbar h1{font-size:19px!important}.hero-copy h2{font-size:47px!important}.view-intro h2{font-size:42px!important}}
