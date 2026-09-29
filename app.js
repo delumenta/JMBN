@@ -14,6 +14,14 @@ function missionRows(items,n=4){if(!items.length)return'<div class="empty">No op
 function missionCards(items){if(!items.length)return'<div class="empty">No matching operations.</div>';return items.map(m=>'<article class="mission-card" data-mission="'+esc(m.id)+'" tabindex="0"><span class="tag">'+esc(m.category||"operation")+'</span><h3>'+esc(m.title||"Untitled operation")+'</h3><div class="route"><span>'+esc(m.origin||"TBD")+'</span><span>→</span><span>'+esc(m.destination||"TBD")+'</span></div><div class="mission-meta"><span>'+fmtDate(m.start_time)+' / '+fmtTime(m.start_time)+'</span><span>'+esc(m.status||"PLANNED")+'</span></div></article>').join("")}
 function crewCards(items){if(!items.length)return'<div class="empty">No matching personnel.</div>';return items.map(p=>{const code=p.rank_code||p.rank?.code||"";const rankUrl=p.rank_image_url||(code?img("Ranks",code+".png"):"");return '<article class="crew-card" data-user="'+esc(p.user_id)+'" tabindex="0">'+(rankUrl?'<img class="rank-img" src="'+esc(rankUrl)+'" onerror="this.style.visibility=\'hidden\'">':'<div class="rank-img"></div>')+'<div><h3>'+esc(p.display_name||p.handle||"Crew")+'</h3><p>'+esc(code||p.rank_category||p.role||"JMBN")+'</p><small>'+esc(p.role||"Member")+' · '+esc(p.missions_attended||0)+' missions</small></div><i class="status-dot '+(p.availability_status==="awol"?"red":"green")+'"></i></article>'}).join("")}
 function certCards(items){if(!items.length)return'<div class="empty">Certification catalogue unavailable.</div>';return items.map(c=>{let code=(c.code||c.short_code||c.name||"").toUpperCase();let map={BMT:"BMT.png",MED:"MED.png",PIL:"PIL.png",SOC:"SOC.png"};let art=c.image_url||img("certification",map[code]||"APBmt1234.png");return '<article class="cert"><img src="'+esc(art)+'" onerror="this.src=\''+img("certification","BMT.png")+'\'"><h3>'+esc(c.name||c.title||code||"Certification")+'</h3><p>'+esc(c.description||c.category||"JMBN qualification pathway")+'</p></article>'}).join("")}
+async function loadWelcomeProgress(uid){
+ const {data:p,error}=await sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle();
+ if(error||!p){$("#welcomeProgress").hidden=true;return}
+ const vals=[Number(p.pct_missions??1),Number(p.pct_hours??1),Number(p.pct_certs??1)].map(v=>Number.isFinite(v)?Math.max(0,Math.min(1,v)):0);
+ const pct=Math.round(Math.min(...vals)*100);
+ $("#welcomeProgress").hidden=false;$("#welcomeCurrentRank").textContent=p.current_code||state.profile?.rank_code||"—";$("#welcomeNextRank").textContent=p.has_next_rank?(p.next_code||"—"):"MAX RANK";$("#welcomeProgressPct").textContent=pct+"%";$("#welcomeProgressBar").style.width=pct+"%";
+ $("#welcomeRequirements").innerHTML="<span>MISSIONS <b>"+esc(p.missions_attended??0)+"/"+esc(p.missions_target??"—")+"</b></span><span>HOURS <b>"+esc(p.hours_total??0)+"/"+esc(p.hours_target??"—")+"</b></span><span>CERTS <b>"+esc(p.certifications_total??0)+"/"+esc(p.certification_target??"—")+"</b></span>";
+}
 async function load(){
  const {data:{session}}=await sb.auth.getSession();
  if(!session){location.replace(base()+"auth.html");return}
@@ -29,7 +37,7 @@ async function load(){
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
  $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
- $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
+ $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");await loadWelcomeProgress(uid);$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
  render();
 }
 
