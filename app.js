@@ -69,8 +69,8 @@ function render(){
  $("#announcements").classList.remove("skeleton");$("#announcements").innerHTML=state.announcements.length?state.announcements.map(a=>'<div class="feed-item"><b>'+esc(a.title||"Command notice")+'</b><p>'+esc(a.body||a.message||a.content||"")+'</p></div>').join(""):'<div class="empty">No current signal traffic.</div>';
 }
 
-function openDrawer(html){$("#detailBody").innerHTML=html;$("#detailDrawer").classList.add("open");$("#detailBackdrop").classList.add("open")}
-function closeDrawer(){$("#detailDrawer").classList.remove("open");$("#detailBackdrop").classList.remove("open")}
+function openDrawer(html,mode="personnel"){$("#detailBody").innerHTML=html;$("#detailDrawer").classList.toggle("mission-command",mode==="mission");$("#detailDrawer").classList.add("open");$("#detailBackdrop").classList.add("open")}
+function closeDrawer(){$("#detailDrawer").classList.remove("open","mission-command");$("#detailBackdrop").classList.remove("open")}
 async function openCrew(userId){
  const p=state.crew.find(x=>x.user_id===userId);if(!p)return;
  openDrawer('<div class="loading-detail">LOADING PERSONNEL FILE…</div>');
@@ -86,7 +86,7 @@ async function openCrew(userId){
 }
 async function openMission(id){
  const m=state.missions.find(x=>x.id===id);if(!m)return;
- openDrawer('<div class="loading-detail">LOADING OPERATION FILE…</div>');
+ openDrawer('<div class="loading-detail">INITIALIZING MISSION COMMAND…</div>',"mission");
  const {data:{session}}=await sb.auth.getSession(); const uid=session?.user?.id;
  const [att,sign]=await Promise.all([sb.from("mission_attendees").select("*").eq("mission_id",id),sb.from("mission_signups").select("*").eq("mission_id",id)]);
  const attendance=att.data||[], signups=sign.data||[], mine=signups.find(x=>x.user_id===uid);
