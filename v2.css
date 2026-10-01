@@ -1,0 +1,74 @@
+/* User-first JMBN Manifest preview. Existing app.js and live Supabase wiring remain unchanged. */
+:root{--bg:#080a09;--panel:#101410;--panel2:#131813;--line:#2d352c;--gold:#d9b866;--gold2:#f1d989;--text:#f3f3ee;--muted:#a1aa9d}
+body{background:#080a09;color:var(--text);font-family:'Play',sans-serif}
+body *:not(i){font-family:'Play',sans-serif}
+.scan{opacity:.012}
+.rail{width:112px;background:#0b0e0b;border-right-color:#283027}
+.shell{margin-left:112px}
+.rail nav{padding-top:16px;gap:3px}
+.nav{height:72px;color:#a4ad9f}
+.nav span{font:700 11px 'Play',sans-serif;letter-spacing:.025em}
+.nav.active{background:#1c241b;color:#f1d989}
+.brand{height:88px}
+.topbar{height:88px;padding:0 38px;background:#0b0e0b}
+.topbar h1{font:700 26px 'Play',sans-serif;letter-spacing:.02em}
+.eyebrow{font:700 10px 'Play',sans-serif;letter-spacing:.10em}
+.view{max-width:1260px;padding:30px 34px 55px}
+.ux-intro{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:18px 0 30px}
+.ux-kicker{color:var(--gold);font-size:10px;letter-spacing:.14em;font-weight:700}
+.ux-intro h2{font-size:clamp(27px,3.3vw,42px);line-height:1.14;letter-spacing:-.02em;margin:8px 0 8px;font-weight:700}
+.ux-intro p{font-size:13px;color:#b1b9af;margin:0;max-width:530px;line-height:1.6}
+.ux-quick{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.ux-quick button,.ux-quick a{padding:13px 15px;border:1px solid #46513e;color:#f0e3bb;background:#172016;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.02em;cursor:pointer;white-space:nowrap}
+.ux-quick button:first-child{background:var(--gold);border-color:var(--gold);color:#14170f}
+.ux-quick button:hover,.ux-quick a:hover{filter:brightness(1.12)}
+#command{display:flex;flex-direction:column}
+#command .ux-intro{order:0}
+#command .welcome-panel{order:1;border:1px solid #3a4434;border-radius:8px;background:linear-gradient(115deg,#171f17,#0f140f);margin:0 0 14px}
+#command .next-op-strip{order:2;min-height:92px;border:1px solid #5a5239;border-radius:8px;background:linear-gradient(95deg,#211e13,#141810);grid-template-columns:110px minmax(0,1fr) auto auto;padding:18px 22px;margin-bottom:14px}
+.next-op-strip .strip-label{font-size:10px;line-height:1.5}
+.next-op-strip #nextOpTitle{font-size:17px;text-align:left;color:#fff}
+.next-op-strip #nextOpWhen{font-size:11px}
+.next-op-strip #nextOpOpen{font-size:10px;font-weight:700}
+#command .dashboard-grid{order:3;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:14px;margin:0}
+#command .dashboard-grid>.panel{min-height:0;border-radius:8px;padding:24px;background:#111611}
+#command .dashboard-grid>.panel:first-child{grid-column:1}
+#command .dashboard-grid>.readiness-panel{grid-column:2}
+#command .dashboard-grid>.command-admin-panel{grid-column:2}
+#command .dashboard-grid>.panel:last-child{grid-column:1;grid-row:2}
+#command .dashboard-grid .panel h3{font:700 19px 'Play',sans-serif}
+#command .metrics{order:4;border:1px solid #293228;border-radius:8px;margin-top:14px;background:#0d110d}
+#command .metrics article{padding:14px 20px}
+#command .metrics b{font:700 24px 'Play',sans-serif}
+#command .metrics small{font-size:10px}
+#command .hero{display:none}
+.welcome-copy strong{font-family:'Play',sans-serif!important}
+.panel,.mission-card,.crew-card{border-radius:7px}
+.primary,.ghost,.text-btn{font-family:'Play',sans-serif}
+.detail-drawer{font-family:'Play',sans-serif}
+@media(max-width:1050px){.ux-intro{align-items:flex-start;flex-direction:column}.ux-quick{justify-content:flex-start}#command .dashboard-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){
+ .rail{width:auto}.shell{margin-left:0}
+ .nav{height:65px}.nav span{font-size:10px}
+ .view{padding:18px 14px 100px}
+ .topbar{height:66px;padding:0 16px}
+ .ux-intro{padding:8px 2px 20px;gap:17px}
+ .ux-intro h2{font-size:30px}
+ .ux-intro p{font-size:12px}
+ .ux-quick{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:7px}
+ .ux-quick button,.ux-quick a{text-align:center;padding:13px 8px;white-space:normal}
+ .ux-quick button:first-child{grid-column:1/-1}
+ #command .welcome-panel{margin-bottom:10px}
+ #command .next-op-strip{grid-template-columns:1fr auto;padding:15px;gap:8px;min-height:100px}
+ #command .next-op-strip .strip-label{grid-column:1/-1;border:0}
+ #command .next-op-strip #nextOpTitle{font-size:16px}
+ #command .next-op-strip #nextOpWhen{grid-column:1;font-size:10px}
+ #command .next-op-strip #nextOpOpen{grid-column:2;grid-row:2/4}
+ #command .dashboard-grid{display:flex;flex-direction:column;gap:10px}
+ #command .dashboard-grid>.panel{padding:17px}
+ #command .dashboard-grid>.panel:first-child{order:0}
+ #command .dashboard-grid>.readiness-panel{order:1}
+ #command .dashboard-grid>.panel:last-child{order:2}
+ #command .dashboard-grid>.command-admin-panel{order:3}
+ #command .metrics{grid-template-columns:1fr 1fr}
+}
