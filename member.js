@@ -37,19 +37,19 @@ async function refreshMember(){
    text("memberRsvp","—");text("memberRole","—");
    text("memberActionTitle","You're all caught up");
    text("memberActionDescription","Check back when the command team posts the next operation.");
-   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberRoleSelect").disabled=true;el("memberRoleSave").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;el("memberAssignedRoles").textContent="No upcoming mission assignments.";return;
+   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;el("memberAssignedRoles").textContent="No upcoming mission assignments.";return;
   }
   el("memberRsvpActions").hidden=false;
   text("memberNextTitle",next.title||"Untitled operation");
   text("memberNextDate",niceDate(next.start_time));
   text("memberNextRoute",[next.origin,next.destination].filter(Boolean).join(" → ")||next.description||next.type||"Mission briefing available");
   text("memberRsvp",responseLabel(currentSignup?.status));
-  text("memberRole",currentSignup?.operational_role||"Not assigned");el("memberRoleSelect").value=currentSignup?.operational_role||"";el("memberRoleSelect").disabled=!currentSignup||!["going","maybe"].includes(currentSignup.status);el("memberRoleSave").disabled=el("memberRoleSelect").disabled;text("memberRoleHint",el("memberRoleSelect").disabled?"RSVP Going or Maybe to select your role.":"Select your preferred station for this operation.");
+  text("memberRole",currentSignup?.operational_role||"Not assigned");text("memberRoleHint",currentSignup?.operational_role?"Your confirmed station for this deployment.":"The command team will assign your station.");
   el("memberMissionOpen").disabled=false;el("memberCalendar").disabled=!next.start_time;renderReadiness();loadAssignedRoles(next.id);
   document.querySelectorAll("[data-member-rsvp]").forEach(x=>x.classList.toggle("selected",x.dataset.memberRsvp===currentSignup?.status));
   const pending=upcoming.filter(m=>!mine.some(s=>s.mission_id===m.id&&["going","maybe","not_going"].includes(s.status)));
   if(pending.length){text("memberActionTitle",pending.length+" mission"+(pending.length===1?"":"s")+" awaiting RSVP");text("memberActionDescription","Open Operations to respond to the missions you haven't answered yet.")}
-  else if(!currentSignup?.operational_role&&currentSignup?.status==="going"){text("memberActionTitle","Choose your mission role");text("memberActionDescription","Open your mission briefing to select an operational role.")}
+  else if(!currentSignup?.operational_role&&currentSignup?.status==="going"){text("memberActionTitle","Awaiting role assignment");text("memberActionDescription","Your commander will assign your operational station.")}
   else{text("memberActionTitle","Your responses are up to date");text("memberActionDescription","Review the briefing and crew roster before deployment.")}
  }catch(e){console.error("Member manifest:",e);text("memberSync","Unable to sync personal manifest");text("memberNextTitle","Unable to load your operations");showMessage("Please refresh or try again shortly.");}
  finally{refreshing=false}
@@ -93,7 +93,7 @@ function updateNotices(upcoming,mine){
  const unassigned=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&s.status==="going"&&!s.operational_role));
  noticeItems=[
  ...pending.map(m=>({title:"RSVP needed",detail:m.title||"Upcoming mission",id:m.id})),
- ...unassigned.map(m=>({title:"Choose your operational role",detail:m.title||"Upcoming mission",id:m.id}))
+ ...unassigned.map(m=>({title:"Awaiting commander role assignment",detail:m.title||"Upcoming mission",id:m.id}))
  ].slice(0,20);
  text("memberNoticeCount",String(noticeItems.length));
  const list=el("memberNoticeList");if(!list)return;list.replaceChildren();
@@ -111,17 +111,6 @@ el("memberCalendar")?.addEventListener("click",()=>{
  const url=URL.createObjectURL(new Blob([content],{type:"text/calendar;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="JMBN-"+selectedMission.id+".ics";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 
-el("memberRoleSave")?.addEventListener("click",async()=>{
- const role=el("memberRoleSelect").value;
- if(!selectedMission||!currentUser||!role||!currentSignup||!["going","maybe"].includes(currentSignup.status))return;
- const button=el("memberRoleSave");button.disabled=true;text("memberRoleStatus","Saving…");
- try{
-  const {error}=await client.from("mission_signups").upsert({mission_id:selectedMission.id,user_id:currentUser,status:currentSignup.status,operational_role:role},{onConflict:"mission_id,user_id"});
-  if(error)throw error;
-  text("memberRoleStatus","Role saved.");await refreshMember();
- }catch(e){text("memberRoleStatus","Unable to save role: "+(e.message||"try again"))}
- finally{button.disabled=false}
-});
 
 async function loadAssignedRoles(missionId){
  const box=el("memberAssignedRoles");if(!box)return;
