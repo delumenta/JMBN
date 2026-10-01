@@ -31,7 +31,7 @@ async function loadAcademy(){
  const bmt=earnedSet.has("BMT"),soc=earnedSet.has("SOC");
  $("#academyPathTrack").innerHTML=node("BMT","Basic Military Training",bmt)+ '<i>→</i>'+node("SOC","Standard Obstacle Course",soc,!bmt)+'<i>→</i><div class="academy-path-branches"><div><small>SUPPORT PATHWAYS</small>'+["MED","LOG","MIN","PILOT"].map(x=>node(x,x,earnedSet.has(x),!soc)).join("")+'</div><div><small>ACTIVE SPECIALISATION</small>'+node(assignment?.specialisation_code||"—",assignment?.specialisation_code||"Awaiting assignment",earnedSet.has((assignment?.specialisation_code||"").toUpperCase()),!assignment).replace("academy-path-node","academy-path-node special")+'</div></div>';
  renderAcademyProgrammes("all",earnedSet,reqs,assignment);
- $ ("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{$ ("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
+ document.querySelectorAll("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{document.querySelectorAll("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
 }
 function renderAcademyProgrammes(filter,earnedSet,reqs,assignment){
  const items=state.certs.filter(c=>filter==="all"||(["BMT","SOC"].includes((c.certification_code||"").toUpperCase())?"core":["GUNNERY","ENGINEERING"].includes((c.certification_code||"").toUpperCase())?"specialisation":"support")===filter);
@@ -131,7 +131,8 @@ async function openMission(id){
 async function setOperationalRole(missionId,role){
  const {data:{session}}=await sb.auth.getSession();if(!session){toast("Secure session required");return}
  const {data:existing,error:existingError}=await sb.from("mission_signups").select("status").eq("mission_id",missionId).eq("user_id",session.user.id).maybeSingle();
- if(existingError){toast("Could not check current RSVP: "+existingError.message);return}\n const {error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status:existing?.status||"going",operational_role:role},{onConflict:"mission_id,user_id"});
+ if(existingError){toast("Could not check current RSVP: "+existingError.message);return}
+ const {error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status:existing?.status||"going",operational_role:role},{onConflict:"mission_id,user_id"});
  if(error){console.error(error);toast("Role update failed: "+error.message);return}
  toast("Operational role: "+role.toUpperCase());await openMission(missionId);
 }
