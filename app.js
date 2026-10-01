@@ -1,6 +1,6 @@
 const URL="https://fcegavhipeaeihxegsnw.supabase.co";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
-const sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,flowType:"pkce",autoRefreshToken:true}});
+const sb=window.jmbnClient||(window.jmbnClient=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,flowType:"pkce",autoRefreshToken:true}}));
 let state={missions:[],crew:[],certs:[],announcements:[],profile:null};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -88,12 +88,12 @@ function render(){
  $("#nextOpTitle").textContent=upcoming?.title||"NO DEPLOYMENT SCHEDULED";$("#nextOpTitle").dataset.mission=upcoming?.id||"";$("#nextOpTitle").disabled=!upcoming;$("#nextOpWhen").textContent=upcoming?.start_time?(fmtDate(upcoming.start_time)+" / "+fmtTime(upcoming.start_time)):"STANDING BY";$("#nextOpOpen").dataset.mission=upcoming?.id||"";$("#nextOpOpen").style.visibility=upcoming?"visible":"hidden";
  $("#activeCount").textContent=active;$("#awolCount").textContent=awol;$("#readyPct").textContent=pct+"%";$("#crewOnline").textContent=active;$("#readyRing").style.background="conic-gradient(var(--gold) "+(pct*3.6)+"deg,#24271f 0deg)";
  $("#opPreview").classList.remove("skeleton");$("#opPreview").innerHTML=missionRows(state.missions.filter(m=>!m.start_time||new Date(m.start_time)>=new Date()),4);
- $("#operationsGrid").innerHTML=missionCards(state.missions);$("#crewGrid").innerHTML=crewCards(state.crew);$("#certGrid").innerHTML=certCards(state.certs);$("#recordMissions").innerHTML=missionRows([...state.missions].reverse(),8);
+ filterOps();$("#crewGrid").innerHTML=crewCards(state.crew);$("#certGrid").innerHTML=certCards(state.certs);$("#recordMissions").innerHTML=missionRows([...state.missions].reverse(),8);
  $("#announcements").classList.remove("skeleton");$("#announcements").innerHTML=state.announcements.length?state.announcements.map(a=>'<div class="feed-item"><b>'+esc(a.title||"Command notice")+'</b><p>'+esc(a.body||a.message||a.content||"")+'</p></div>').join(""):'<div class="empty">No current signal traffic.</div>';
 }
 
 function openDrawer(html,mode="personnel"){$("#detailBody").innerHTML=html;$("#detailDrawer").classList.toggle("mission-command",mode==="mission");$("#detailDrawer").classList.add("open");$("#detailBackdrop").classList.add("open")}
-function closeDrawer(){$("#detailDrawer").classList.remove("open","mission-command");$("#detailBackdrop").classList.remove("open")}
+function closeDrawer(){activeMissionId=null;$("#detailDrawer").classList.remove("open","mission-command");$("#detailBackdrop").classList.remove("open")}
 async function openCrew(userId){
  const p=state.crew.find(x=>x.user_id===userId);if(!p)return;
  openDrawer('<div class="loading-detail">LOADING PERSONNEL FILE…</div>');
@@ -113,19 +113,20 @@ function openReadiness(){
  const rows=(items,status)=>items.length?items.map(p=>{const code=p.rank_code||p.rank?.code||"",rank=p.rank_image_url||(code?img("Ranks",code+".png"):"");return '<button class="readiness-person" data-user="'+esc(p.user_id)+'"><span class="readiness-person-rank">'+(rank?'<img src="'+esc(rank)+'" alt="">':'')+'</span><span><b>'+esc(p.display_name||p.handle||"Crew")+'</b><small>'+esc(code||p.rank_category||p.role||"JMBN CREW")+'</small></span><i class="status-dot '+status+'"></i></button>'}).join(""):'<div class="readiness-empty">NO PERSONNEL</div>';
  openDrawer('<p class="eyebrow">PERSONNEL // READINESS ROSTER</p><div class="detail-hero"><h2>CREW READINESS</h2><p class="detail-status">'+active.length+' ACTIVE / '+awol.length+' AWOL</p></div><div class="readiness-roster"><section><div class="readiness-roster-head"><span><i class="dot green"></i> ACTIVE DUTY</span><b>'+active.length+'</b></div>'+rows(active,"green")+'</section><section><div class="readiness-roster-head"><span><i class="dot red"></i> AWOL</span><b>'+awol.length+'</b></div>'+rows(awol,"red")+'</section></div>');
 }
+let activeMissionId=null;
 async function openMission(id){
- const m=state.missions.find(x=>String(x.id)===String(id));if(!m)return;
+ const m=state.missions.find(x=>String(x.id)===String(id));if(!m){toast("Mission not found. Refresh Operations.");return}activeMissionId=m.id;
  openDrawer('<div class="loading-detail">INITIALIZING MISSION COMMAND…</div>',"mission");
- const {data:{session}}=await sb.auth.getSession(); const uid=session?.user?.id;
+ const {data:{session},error:authError}=await sb.auth.getSession();if(authError||!session){$("#detailBody").textContent="Sign in to view operations.";return}const uid=session.user.id;
  const [att,sign]=await Promise.all([sb.from("mission_attendees").select("*").eq("mission_id",id),sb.from("mission_signups").select("*").eq("mission_id",id)]);
- const attendance=att.data||[], signups=sign.data||[], mine=signups.find(x=>x.user_id===uid);
+ if(att.error||sign.error){console.error("Operation data:",att.error,sign.error);$("#detailBody").textContent="Unable to load this mission. Please try again.";return}const attendance=att.data||[], signups=sign.data||[], mine=signups.find(x=>x.user_id===uid);
  const people=new Map(); attendance.forEach(x=>people.set(x.user_id,{...x,_source:"attendance"})); signups.forEach(x=>people.set(x.user_id,{...(people.get(x.user_id)||{}),...x,_source:"signup"}));
  const counts={going:0,maybe:0,not_going:0};signups.forEach(x=>{if(counts[x.status]!==undefined)counts[x.status]++});
  const roles=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
  const role='<section class="detail-section role-section"><div class="rsvp-head"><div><h4>OPERATIONAL ROLE</h4><p>Select your preferred station for this operation.</p></div><span id="roleCurrent">'+esc((mine?.operational_role||"UNASSIGNED").toUpperCase())+'</span></div><div class="role-grid">'+roles.map(r=>'<button data-role="'+esc(r)+'" class="'+(mine?.operational_role===r?"active":"")+'">'+esc(r.toUpperCase())+'</button>').join("")+'</div></section>';
  const rsvp='<section class="detail-section rsvp-section"><div class="rsvp-head"><div><h4>YOUR RSVP</h4><p>Set your availability for this operation.</p></div><span id="rsvpCurrent">'+esc((mine?.status||"NO RESPONSE").replaceAll("_"," ").toUpperCase())+'</span></div><div class="rsvp-actions"><button data-rsvp="going" class="'+(mine?.status==="going"?"active going":"")+'"><b>✓</b> GOING</button><button data-rsvp="maybe" class="'+(mine?.status==="maybe"?"active maybe":"")+'"><b>?</b> MAYBE</button><button data-rsvp="not_going" class="'+(mine?.status==="not_going"?"active no":"")+'"><b>×</b> NOT GOING</button><button data-rsvp="withdraw" class="withdraw"><b>↶</b> WITHDRAW</button></div><div class="rsvp-tally"><span><i class="dot green"></i><b>'+counts.going+'</b> Going</span><span><i class="dot amber"></i><b>'+counts.maybe+'</b> Maybe</span><span><i class="dot red"></i><b>'+counts.not_going+'</b> Not Going</span></div></section>';
  $("#detailBody").innerHTML='<p class="eyebrow">OPERATION FILE // '+esc((m.category||"OPERATION").toUpperCase())+'</p><div class="detail-hero"><div><h2>'+esc(m.title||"Untitled operation")+'</h2><p>'+esc((m.status||"PLANNED").toUpperCase())+'</p></div></div><section class="detail-section"><h4>MISSION DATA</h4><div class="detail-grid"><div class="detail-stat"><small>START</small><b>'+fmtDate(m.start_time)+' '+fmtTime(m.start_time)+'</b></div><div class="detail-stat"><small>DURATION</small><b>'+esc(m.hours?m.hours+" HRS":"—")+'</b></div><div class="detail-stat"><small>ORIGIN</small><b>'+esc(m.origin||"TBD")+'</b></div><div class="detail-stat"><small>DESTINATION</small><b>'+esc(m.destination||"TBD")+'</b></div></div></section><section class="detail-section"><h4>BRIEFING</h4><div class="detail-copy">'+esc(m.notes||"No briefing notes filed.")+'</div></section>'+rsvp+role+'<section class="detail-section"><h4>CREW / SIGNUPS</h4><div class="detail-list">'+(people.size?[...people.values()].map(x=>{const p=state.crew.find(z=>z.user_id===x.user_id);const st=(x.status||x.attendance||"recorded").replaceAll("_"," ");return '<div class="detail-item signup-person"><div><b>'+esc(p?.display_name||p?.handle||"Crew")+'</b><small>'+(x.operational_role?esc(x.operational_role):(x.role_in_mission?esc(x.role_in_mission):"JMBN CREW"))+'</small></div><span class="signup-state '+esc(x.status||"")+'">'+esc(st.toUpperCase())+'</span></div>'}).join(""):'<div class="detail-item"><small>No crew signups recorded.</small></div>')+'</div></section>';
- document.querySelectorAll("#detailBody [data-rsvp]").forEach(btn=>btn.onclick=()=>setRsvp(id,btn.dataset.rsvp));document.querySelectorAll("#detailBody [data-role]").forEach(btn=>btn.onclick=()=>setOperationalRole(id,btn.dataset.role));
+ 
 }
 
 async function setOperationalRole(missionId,role){
@@ -160,7 +161,7 @@ async function setRsvp(missionId,status){
  }finally{buttons.forEach(b=>b.disabled=false)}
 }
 
-document.addEventListener("click",e=>{const mission=e.target.closest("[data-mission]"),crew=e.target.closest("[data-user]");if(mission)openMission(mission.dataset.mission);else if(crew)openCrew(crew.dataset.user)});
+document.addEventListener("click",e=>{const t=e.target.closest("button,[data-mission],[data-user]");if(!t)return;const r=t.closest("#detailBody [data-rsvp]");if(r){e.preventDefault();e.stopPropagation();if(!r.disabled&&activeMissionId)setRsvp(activeMissionId,r.dataset.rsvp);return}const role=t.closest("#detailBody [data-role]");if(role){e.preventDefault();e.stopPropagation();if(!role.disabled&&activeMissionId)setOperationalRole(activeMissionId,role.dataset.role);return}const mission=t.closest("[data-mission]");if(mission?.dataset.mission){openMission(mission.dataset.mission);return}const crew=t.closest("[data-user]");if(crew?.dataset.user)openCrew(crew.dataset.user)});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"){const x=e.target.closest("[data-mission],[data-user]");if(x){x.dataset.mission?openMission(x.dataset.mission):openCrew(x.dataset.user)}}if(e.key==="Escape")closeDrawer()});
 $("#detailClose").onclick=closeDrawer;$("#detailBackdrop").onclick=closeDrawer;
 
@@ -192,7 +193,7 @@ async function loadMyProfile(){
  $("#profileSignout").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}}
 }
 
-function filterOps(){let q=$("#opSearch").value.toLowerCase(),f=$("[data-opfilter].active")?.dataset.opfilter||"all";let x=state.missions.filter(m=>(f==="all"||m.category===f)&&JSON.stringify(m).toLowerCase().includes(q));$("#operationsGrid").innerHTML=missionCards(x)}
+function filterOps(){let q=$("#opSearch").value.toLowerCase(),f=$("[data-opfilter].active")?.dataset.opfilter||"all";let x=state.missions.filter(m=>(f==="all"||(f==="operations"?String(m.category||"operations").toLowerCase()!=="resource":String(m.category||"").toLowerCase()==="resource"))&&JSON.stringify(m).toLowerCase().includes(q));$("#operationsGrid").innerHTML=missionCards(x)}
 function filterCrew(){let q=$("#crewSearch").value.toLowerCase(),f=$("[data-crewfilter].active")?.dataset.crewfilter||"all";let x=state.crew.filter(p=>(f==="all"||(f==="awol"?p.availability_status==="awol":p.availability_status!=="awol"))&&JSON.stringify(p).toLowerCase().includes(q));$("#crewGrid").innerHTML=crewCards(x)}
 document.querySelectorAll(".nav[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="profile")loadMyProfile()});$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 $("#opSearch").oninput=filterOps;$("#crewSearch").oninput=filterCrew;$$("[data-opfilter]").forEach(b=>b.onclick=()=>{$$("[data-opfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterOps()});$$("[data-crewfilter]").forEach(b=>b.onclick=()=>{$$("[data-crewfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterCrew()});
