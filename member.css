@@ -14,3 +14,13 @@ button,a{font-family:Play,sans-serif}
 #command>.dashboard-grid>.command-admin-panel{display:none}
 #command>.dashboard-grid>.panel:last-child{grid-column:1/-1;grid-row:auto}
 #academy[hidden]{display:none!important}
+
+/* Single operations focus: remove duplicated mission summary cards. */
+#command .member-focus{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important}
+#command .member-next{min-height:0!important}
+#command .member-action-inline{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:19px 26px;border:1px solid #4b523a;border-top:0;background:#121811}
+#command .member-action-inline>div{display:flex;flex-direction:column;gap:5px}
+#command .member-action-inline strong{font:700 16px Play,sans-serif;color:#f0eee2}
+#command .member-action-inline p{margin:0;color:#aeb8aa;font:400 11px/1.5 Play,sans-serif}
+#command .member-action-inline button{flex-shrink:0;background:transparent;border:1px solid #6e6645;color:#e3c77a;padding:12px 14px;font:700 10px Play,sans-serif;cursor:pointer}
+@media(max-width:700px){#command .member-action-inline{padding:17px;align-items:flex-start;flex-direction:column}#command .member-action-inline button{width:100%;text-align:center}}
