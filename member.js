@@ -1,7 +1,7 @@
 // Member-specific layer. Reuses the live Supabase schema; never invents mission or signup data.
 const API="https://fcegavhipeaeihxegsnw.supabase.co";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
-const client=window.supabase.createClient(API,KEY,{auth:{persistSession:true,flowType:"pkce",autoRefreshToken:true}});
+const client=window.jmbnClient||(window.jmbnClient=window.supabase.createClient(API,KEY,{auth:{persistSession:true,flowType:"pkce",autoRefreshToken:true}}));
 const el=id=>document.getElementById(id);
 let selectedMission=null, currentUser=null, currentSignup=null, refreshing=false;let noticeItems=[];
 function niceDate(s){if(!s)return"DATE TO BE CONFIRMED";const d=new Date(s);return isNaN(d)?"DATE TO BE CONFIRMED":d.toLocaleString("en-SG",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true,timeZone:"Asia/Singapore"})+" SGT"}
@@ -17,11 +17,11 @@ async function refreshMember(){
   currentUser=session.user.id;
   const [missions,signups]=await Promise.all([
    client.from("missions").select("*").order("start_time",{ascending:true}),
-   client.from("mission_signups").select("mission_id,status,operational_role,user_id")
+   client.from("mission_signups").select("mission_id,status,operational_role,user_id").eq("user_id",currentUser)
   ]);
   if(missions.error)throw missions.error;
   if(signups.error)throw signups.error;
-  const all=missions.data||[], mine=signups.data||[], now=Date.now();
+  const all=missions.data||[], mine=(signups.data||[]).filter(x=>x.user_id===currentUser), now=Date.now();
   const upcoming=all.filter(m=>!m.start_time||new Date(m.start_time).getTime()>=now);
   const joined=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&s.status==="going"));
   const responded=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&["going","maybe"].includes(s.status)));
