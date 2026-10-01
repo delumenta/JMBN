@@ -3,7 +3,7 @@ const API="https://fcegavhipeaeihxegsnw.supabase.co";
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZWdhdmhpcGVhZWloeGVnc253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjk3NTcsImV4cCI6MjA3NzcwNTc1N30.i-ZjOlKc89-uA7fqOIvmAMv60-C2_NmKikRI_78Jei8";
 const client=window.supabase.createClient(API,KEY,{auth:{persistSession:true,flowType:"pkce",autoRefreshToken:true}});
 const el=id=>document.getElementById(id);
-let selectedMission=null, currentUser=null, currentSignup=null, refreshing=false;
+let selectedMission=null, currentUser=null, currentSignup=null, refreshing=false;let noticeItems=[];
 function niceDate(s){if(!s)return"DATE TO BE CONFIRMED";const d=new Date(s);return isNaN(d)?"DATE TO BE CONFIRMED":d.toLocaleString("en-SG",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true,timeZone:"Asia/Singapore"})+" SGT"}
 function text(id,v){if(el(id))el(id).textContent=v}
 function responseLabel(s){return ({going:"GOING",maybe:"MAYBE",not_going:"NOT GOING",withdraw:"NOT RESPONDED"})[s]||"NOT RESPONDED"}
@@ -13,7 +13,7 @@ async function refreshMember(){
  if(refreshing)return;refreshing=true;
  try{
   const {data:{session},error:authError}=await client.auth.getSession();if(authError)throw authError;
-  if(!session){text("memberSync","Sign in to view your manifest");return}
+  if(!session){text("memberSync","Sign in to view your manifest");text("memberNoticeCount","0");return}
   currentUser=session.user.id;
   const [missions,signups]=await Promise.all([
    client.from("missions").select("*").order("start_time",{ascending:true}),
@@ -26,6 +26,7 @@ async function refreshMember(){
   const joined=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&s.status==="going"));
   const responded=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&["going","maybe"].includes(s.status)));
   const next=responded[0]||upcoming[0]||null;
+  updateNotices(upcoming,mine);
   selectedMission=next;currentSignup=next?mine.find(s=>s.mission_id===next.id)||null:null;
   text("memberSync","LIVE MANIFEST · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Singapore"}));
   text("memberJoinedCount",String(joined.length).padStart(2,"0"));
@@ -36,7 +37,7 @@ async function refreshMember(){
    text("memberRsvp","—");text("memberRole","—");
    text("memberActionTitle","You're all caught up");
    text("memberActionDescription","Check back when the command team posts the next operation.");
-   el("memberMissionOpen").disabled=true;el("memberRsvpActions").hidden=true;return;
+   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;return;
   }
   el("memberRsvpActions").hidden=false;
   text("memberNextTitle",next.title||"Untitled operation");
@@ -44,7 +45,7 @@ async function refreshMember(){
   text("memberNextRoute",[next.origin,next.destination].filter(Boolean).join(" → ")||next.description||next.type||"Mission briefing available");
   text("memberRsvp",responseLabel(currentSignup?.status));
   text("memberRole",currentSignup?.operational_role||"Not assigned");
-  el("memberMissionOpen").disabled=false;
+  el("memberMissionOpen").disabled=false;el("memberCalendar").disabled=!next.start_time;renderReadiness();
   document.querySelectorAll("[data-member-rsvp]").forEach(x=>x.classList.toggle("selected",x.dataset.memberRsvp===currentSignup?.status));
   const pending=upcoming.filter(m=>!mine.some(s=>s.mission_id===m.id&&["going","maybe","not_going"].includes(s.status)));
   if(pending.length){text("memberActionTitle",pending.length+" mission"+(pending.length===1?"":"s")+" awaiting RSVP");text("memberActionDescription","Open Operations to respond to the missions you haven't answered yet.")}
@@ -71,3 +72,41 @@ el("memberMissionOpen")?.addEventListener("click",()=>{if(!selectedMission)retur
 el("memberActionButton")?.addEventListener("click",()=>document.querySelector('[data-view="operations"]')?.click());
 client.channel("jmbn-member-home").on("postgres_changes",{event:"*",schema:"public",table:"missions"},refreshMember).on("postgres_changes",{event:"*",schema:"public",table:"mission_signups"},refreshMember).subscribe();
 refreshMember();document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshMember()});
+
+function readyKey(){return "jmbn:readiness:"+currentUser+":"+(selectedMission?.id||"none")}
+function renderReadiness(){
+ const panel=el("memberReadiness");if(!panel)return;
+ panel.hidden=!selectedMission||currentSignup?.status!=="going";
+ if(panel.hidden)return;
+ let saved={};try{saved=JSON.parse(localStorage.getItem(readyKey())||"{}")}catch{}
+ document.querySelectorAll("[data-ready]").forEach(x=>x.checked=!!saved[x.dataset.ready]);
+ const done=Object.values(saved).filter(Boolean).length;
+ text("memberReadyCount",Math.min(done,3)+" / 3");
+}
+document.querySelectorAll("[data-ready]").forEach(x=>x.addEventListener("change",()=>{
+ if(!selectedMission||!currentUser)return;
+ let saved={};try{saved=JSON.parse(localStorage.getItem(readyKey())||"{}")}catch{}
+ saved[x.dataset.ready]=x.checked;localStorage.setItem(readyKey(),JSON.stringify(saved));renderReadiness();
+}));
+function updateNotices(upcoming,mine){
+ const pending=upcoming.filter(m=>!mine.some(s=>s.mission_id===m.id&&["going","maybe","not_going"].includes(s.status)));
+ const unassigned=upcoming.filter(m=>mine.some(s=>s.mission_id===m.id&&s.status==="going"&&!s.operational_role));
+ noticeItems=[
+ ...pending.map(m=>({title:"RSVP needed",detail:m.title||"Upcoming mission",id:m.id})),
+ ...unassigned.map(m=>({title:"Choose your operational role",detail:m.title||"Upcoming mission",id:m.id}))
+ ].slice(0,20);
+ text("memberNoticeCount",String(noticeItems.length));
+ const list=el("memberNoticeList");if(!list)return;list.replaceChildren();
+ if(!noticeItems.length){const p=document.createElement("p");p.textContent="You're up to date. No outstanding mission actions.";list.append(p);return}
+ noticeItems.forEach(n=>{const b=document.createElement("button");const title=document.createElement("strong");title.textContent=n.title;const detail=document.createElement("small");detail.textContent=n.detail;b.append(title,detail);b.addEventListener("click",()=>{el("memberNoticePanel").hidden=true;document.querySelector('[data-view="operations"]')?.click()});list.append(b)})
+}
+el("memberNoticeToggle")?.addEventListener("click",()=>{const p=el("memberNoticePanel");p.hidden=!p.hidden;el("memberNoticeToggle").setAttribute("aria-expanded",String(!p.hidden))});
+function icsEscape(v){return String(v||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;")}
+el("memberCalendar")?.addEventListener("click",()=>{
+ if(!selectedMission?.start_time)return;
+ const start=new Date(selectedMission.start_time);if(isNaN(start))return;
+ const end=new Date(start.getTime()+120*60000);
+ const stamp=d=>d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+ const content=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JMBN//Member Manifest//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:jmbn-"+selectedMission.id+"@manifest","DTSTAMP:"+stamp(new Date()),"DTSTART:"+stamp(start),"DTEND:"+stamp(end),"SUMMARY:"+icsEscape(selectedMission.title||"JMBN Operation"),"DESCRIPTION:"+icsEscape("JMBN deployment. Check your Manifest for the current briefing and assigned role. Calendar duration defaults to two hours; confirm against the mission briefing."),"END:VEVENT","END:VCALENDAR"].join("\r\n");
+ const url=URL.createObjectURL(new Blob([content],{type:"text/calendar;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="JMBN-"+selectedMission.id+".ics";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
