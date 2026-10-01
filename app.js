@@ -31,7 +31,7 @@ async function loadAcademy(){
  const bmt=earnedSet.has("BMT"),soc=earnedSet.has("SOC");
  $("#academyPathTrack").innerHTML=node("BMT","Basic Military Training",bmt)+ '<i>→</i>'+node("SOC","Standard Obstacle Course",soc,!bmt)+'<i>→</i><div class="academy-path-branches"><div><small>SUPPORT PATHWAYS</small>'+["MED","LOG","MIN","PILOT"].map(x=>node(x,x,earnedSet.has(x),!soc)).join("")+'</div><div><small>ACTIVE SPECIALISATION</small>'+node(assignment?.specialisation_code||"—",assignment?.specialisation_code||"Awaiting assignment",earnedSet.has((assignment?.specialisation_code||"").toUpperCase()),!assignment).replace("academy-path-node","academy-path-node special")+'</div></div>';
  renderAcademyProgrammes("all",earnedSet,reqs,assignment);
- $("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{$("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
+ $ ("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{$ ("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
 }
 function renderAcademyProgrammes(filter,earnedSet,reqs,assignment){
  const items=state.certs.filter(c=>filter==="all"||(["BMT","SOC"].includes((c.certification_code||"").toUpperCase())?"core":["GUNNERY","ENGINEERING"].includes((c.certification_code||"").toUpperCase())?"specialisation":"support")===filter);
@@ -125,7 +125,7 @@ async function openMission(id){
  const role='<section class="detail-section role-section"><div class="rsvp-head"><div><h4>OPERATIONAL ROLE</h4><p>Select your preferred station for this operation.</p></div><span id="roleCurrent">'+esc((mine?.operational_role||"UNASSIGNED").toUpperCase())+'</span></div><div class="role-grid">'+roles.map(r=>'<button data-role="'+esc(r)+'" class="'+(mine?.operational_role===r?"active":"")+'">'+esc(r.toUpperCase())+'</button>').join("")+'</div></section>';
  const rsvp='<section class="detail-section rsvp-section"><div class="rsvp-head"><div><h4>YOUR RSVP</h4><p>Set your availability for this operation.</p></div><span id="rsvpCurrent">'+esc((mine?.status||"NO RESPONSE").replaceAll("_"," ").toUpperCase())+'</span></div><div class="rsvp-actions"><button data-rsvp="going" class="'+(mine?.status==="going"?"active going":"")+'"><b>✓</b> GOING</button><button data-rsvp="maybe" class="'+(mine?.status==="maybe"?"active maybe":"")+'"><b>?</b> MAYBE</button><button data-rsvp="not_going" class="'+(mine?.status==="not_going"?"active no":"")+'"><b>×</b> NOT GOING</button><button data-rsvp="withdraw" class="withdraw"><b>↶</b> WITHDRAW</button></div><div class="rsvp-tally"><span><i class="dot green"></i><b>'+counts.going+'</b> Going</span><span><i class="dot amber"></i><b>'+counts.maybe+'</b> Maybe</span><span><i class="dot red"></i><b>'+counts.not_going+'</b> Not Going</span></div></section>';
  $("#detailBody").innerHTML='<p class="eyebrow">OPERATION FILE // '+esc((m.category||"OPERATION").toUpperCase())+'</p><div class="detail-hero"><div><h2>'+esc(m.title||"Untitled operation")+'</h2><p>'+esc((m.status||"PLANNED").toUpperCase())+'</p></div></div><section class="detail-section"><h4>MISSION DATA</h4><div class="detail-grid"><div class="detail-stat"><small>START</small><b>'+fmtDate(m.start_time)+' '+fmtTime(m.start_time)+'</b></div><div class="detail-stat"><small>DURATION</small><b>'+esc(m.hours?m.hours+" HRS":"—")+'</b></div><div class="detail-stat"><small>ORIGIN</small><b>'+esc(m.origin||"TBD")+'</b></div><div class="detail-stat"><small>DESTINATION</small><b>'+esc(m.destination||"TBD")+'</b></div></div></section><section class="detail-section"><h4>BRIEFING</h4><div class="detail-copy">'+esc(m.notes||"No briefing notes filed.")+'</div></section>'+rsvp+'<section class="detail-section"><h4>CREW / SIGNUPS</h4><div class="detail-list">'+(people.size?[...people.values()].map(x=>{const p=state.crew.find(z=>z.user_id===x.user_id);const st=(x.status||x.attendance||"recorded").replaceAll("_"," ");return '<div class="detail-item signup-person"><div><b>'+esc(p?.display_name||p?.handle||"Crew")+'</b><small>'+(x.operational_role?esc(x.operational_role):(x.role_in_mission?esc(x.role_in_mission):"JMBN CREW"))+'</small></div><span class="signup-state '+esc(x.status||"")+'">'+esc(st.toUpperCase())+'</span></div>'}).join(""):'<div class="detail-item"><small>No crew signups recorded.</small></div>')+'</div></section>';
- $("#detailBody [data-rsvp]").forEach(btn=>btn.onclick=()=>setRsvp(id,btn.dataset.rsvp));$("#detailBody [data-role]").forEach(btn=>btn.onclick=()=>setOperationalRole(id,btn.dataset.role));
+ $ ("#detailBody [data-rsvp]").forEach(btn=>btn.onclick=()=>setRsvp(id,btn.dataset.rsvp));$ ("#detailBody [data-role]").forEach(btn=>btn.onclick=()=>setOperationalRole(id,btn.dataset.role));
 }
 
 async function setOperationalRole(missionId,role){
@@ -137,11 +137,11 @@ async function setOperationalRole(missionId,role){
 }
 async function setRsvp(missionId,status){
  const {data:{session}}=await sb.auth.getSession();if(!session){toast("Secure session required");return}
- $$("#detailBody [data-rsvp]").forEach(b=>b.disabled=true);
+ $$ ("#detailBody [data-rsvp]").forEach(b=>b.disabled=true);
  let error;
  if(status==="withdraw"){({error}=await sb.from("mission_signups").delete().eq("mission_id",missionId).eq("user_id",session.user.id));}
  else {({error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status},{onConflict:"mission_id,user_id"}));}
- if(error){console.error(error);toast("RSVP failed: "+error.message);$$("#detailBody [data-rsvp]").forEach(b=>b.disabled=false);return}
+ if(error){console.error(error);toast("RSVP failed: "+error.message);$$ ("#detailBody [data-rsvp]").forEach(b=>b.disabled=false);return}
  toast(status==="withdraw"?"RSVP withdrawn":("RSVP: "+status.replaceAll("_"," ").toUpperCase()));
  await openMission(missionId);
 }
