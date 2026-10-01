@@ -45,3 +45,18 @@ button,a{font-family:Play,sans-serif}
 #memberNoticeList>p{font-size:12px;color:#b4beae}
 #command .member-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:700px){#command .member-shortcuts{grid-template-columns:1fr 1fr}.member-notice-panel{top:65px;right:12px}.member-mission-tools{gap:12px}.member-detail-btn{padding-top:12px}}
+
+/* Crew recognition featured panel and tidy homepage sections */
+#command .member-recognition{position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;min-height:205px;margin:22px 0 34px;padding:32px 38px;border:1px solid #6d603c;background:radial-gradient(ellipse at 88% 55%,#39351c66,transparent 43%),linear-gradient(110deg,#1d2419,#111811 76%)}
+#command .member-recognition>div{position:relative;z-index:1;max-width:690px}
+#command .member-recognition h2{font:700 clamp(23px,2.6vw,34px)/1.2 Play,sans-serif;color:#f1efdd;margin:10px 0}
+#command .member-recognition p:not(.eyebrow){font:400 12px/1.7 Play,sans-serif;color:#b9c3b3;margin:0 0 19px}
+#command .member-recognition a{display:inline-block;background:#d7b75e;border:1px solid #d7b75e;color:#10150f!important;text-decoration:none;font:700 10px Play,sans-serif;letter-spacing:.03em;padding:13px 18px}
+#command .member-recognition a:hover{background:#f1d784;border-color:#f1d784}
+#command .member-recognition-symbol{font:400 145px/1 Play,sans-serif;color:#d9c1743b;position:absolute;right:7%;top:50%;transform:translateY(-50%);pointer-events:none}
+#command .member-third{margin-top:30px}
+#command .member-duplicate-ops[hidden]{display:none!important}
+#command>.dashboard-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr)!important;gap:14px}
+#command>.dashboard-grid>.readiness-panel{grid-column:1!important;grid-row:auto!important}
+#command>.dashboard-grid>.panel:last-child{grid-column:2!important;grid-row:auto!important}
+@media(max-width:760px){#command .member-recognition{padding:26px 20px;min-height:0;margin:17px 0 28px}#command .member-recognition-symbol{font-size:100px;right:-8px;opacity:.45}#command>.dashboard-grid{display:flex!important;flex-direction:column!important}}
