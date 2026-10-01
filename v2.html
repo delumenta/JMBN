@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070806"><title>JMBN // Manifest — Simplified</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="v2.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head><body>
+<div class="scan"></div>
+<aside class="rail">
+  <a class="brand" href="#"><span class="sig"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"></span><span><b>JMBN</b><small>MANIFEST</small></span></a>
+  <nav>
+    <button class="nav active" data-view="command"><i>⌂</i><span>Command</span></button>
+    <button class="nav" data-view="operations"><i>◇</i><span>Operations</span></button>
+    <button class="nav" data-view="crew"><i>◉</i><span>Crew</span></button>
+    <a class="nav" href="academy.html"><i>△</i><span>Academy</span></a>
+    <button class="nav" data-view="records"><i>▤</i><span>Records</span></button><button class="nav" data-view="profile"><i>◎</i><span>Profile</span></button>
+  </nav>
+  <div class="rail-bottom"><span class="pulse"></span><small>JMBN NETWORK</small><b id="net">CONNECTING</b></div>
+</aside>
+<div class="shell">
+<header class="topbar">
+  <div><p class="eyebrow">THE JAMBANI COLLECTIVE // OPERATIONS NETWORK</p><h1 id="pageTitle">COMMAND DECK</h1></div>
+  <div class="top-actions"><div class="clock"><small>LOCAL / GMT+8</small><b id="clock">--:--</b></div><button id="userBtn" class="identity"><span class="avatar">?</span><span><small>IDENTITY</small><b id="userName">AUTHENTICATING</b></span></button></div>
+</header>
+<main>
+<section id="command" class="view active">
+<div class="ux-intro"><div><span class="ux-kicker">YOUR CREW HUB</span><h2>Good to have you aboard.</h2><p>Check your duty status, respond to your next operation and get back into the verse.</p></div><div class="ux-quick"><button data-go="operations">FIND AN OPERATION →</button><button data-go="crew">SEE THE CREW →</button><a href="academy.html">OPEN ACADEMY →</a></div></div>
+  <section id="welcomePanel" class="welcome-panel">
+    <button id="welcomeProfile" class="welcome-person">
+      <span id="welcomeRankArt" class="welcome-rank-art"></span>
+      <span class="welcome-copy"><small>PERSONNEL ONLINE</small><strong>WELCOME BACK, <span id="welcomeRank">CREW</span> <span id="welcomeName">—</span></strong><em>OPEN PERSONNEL DOSSIER →</em>
+        <span id="welcomeProgress" class="welcome-progress" hidden>
+          <span class="welcome-progress-rank"><b id="welcomeCurrentRank">—</b><i>→</i><b id="welcomeNextRank">—</b><small id="welcomeProgressPct">0%</small></span>
+          <span class="welcome-progress-bar"><i id="welcomeProgressBar"></i></span>
+          <span id="welcomeRequirements" class="welcome-progress-req"></span>
+        </span></span>
+    </button>
+    <div class="duty-control">
+      <span><small>MY DUTY STATUS</small><b id="myDutyLabel">ACTIVE</b></span>
+      <div class="duty-toggle" role="group" aria-label="Duty status">
+        <button id="dutyActive" data-duty="active">ACTIVE</button>
+        <button id="dutyAwol" data-duty="awol">AWOL</button>
+      </div>
+    </div>
+  </section>
+  <div class="hero">
+    <img src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/JMBNR/09.png" alt="">
+    <div class="hero-shade"></div><div class="hero-grid"></div>
+    <div class="hero-copy"><div class="live-kicker"><span class="pulse"></span> LIVE COMMAND PICTURE</div><p class="eyebrow">FLEET STATUS / LIVE MANIFEST</p><h2>READY THE CREW.</h2><p>One operational picture for missions, personnel, training and readiness.</p>
+      <div class="hero-actions"><button class="primary" data-go="operations">VIEW OPERATIONS</button><button class="ghost" data-go="crew">OPEN MANIFEST</button></div>
+    </div>
+    
+  </div><div id="nextOpStrip" class="next-op-strip"><span class="strip-label">NEXT DEPLOYMENT</span><button id="nextOpTitle" class="next-op-title" type="button">NO DEPLOYMENT SCHEDULED</button><span id="nextOpWhen">STANDING BY</span><button id="nextOpOpen" class="strip-open">OPEN FILE →</button></div>
+  <div class="metrics">
+    <article><small>PERSONNEL</small><b id="mCrew">—</b><span>registered crew</span></article>
+    <article><small>ACTIVE DUTY</small><b id="mActive">—</b><span>available personnel</span></article>
+    <article><small>UPCOMING OPS</small><b id="mOps">—</b><span>scheduled missions</span></article>
+    <article><small>CERTIFICATIONS</small><b id="mCerts">—</b><span>training catalogue</span></article>
+  </div>
+  <div class="dashboard-grid">
+    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">OPERATIONS BOARD</p><h3>Next deployments</h3></div><button class="text-btn" data-go="operations">ALL OPERATIONS →</button></div><div id="opPreview" class="op-list skeleton"></div></section>
+    <section id="readinessPanel" class="panel readiness-panel" tabindex="0" role="button" aria-label="Open crew readiness roster"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div><span class="readiness-open">VIEW CREW →</span></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
+    <section class="panel command-admin-panel" aria-labelledby="adminConsoleTitle">
+<img class="command-admin-art" src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20Admin.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCBBZG1pbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMDY5NjU4LCJleHAiOjMzMzI2MDY5NjU4fQ.BxG9Yl2cZRzDpMuUzLH6s5O_s2a4HPX6ZvZHnsuWHWw" alt="Armoured JMBN officer at the command console" loading="lazy">
+<div class="command-admin-overlay"></div>
+<div class="command-admin-content">
+  <p class="eyebrow"><span class="command-admin-mark">▣</span> OFFICER ACCESS // COMMAND SYSTEMS</p>
+  <h3 id="adminConsoleTitle">Admin Console</h3>
+  <p>Manage personnel, rank progression and certifications.</p>
+  <a class="command-admin-cta" href="admins.html">OPEN ADMIN CONSOLE <span aria-hidden="true">↗</span></a>
+</div>
+</section>
+    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div id="announcements" class="feed skeleton"></div></section>
+  </div>
+</section>
+<section id="operations" class="view"><div class="section-status"><span><i class="pulse"></i> LIVE MISSION BOARD</span><span id="opCount">0 FILES</span></div><div class="view-intro"><div><p class="eyebrow">MISSION CONTROL</p><h2>OPERATIONS</h2><p>Scheduled deployments and resource activity from the live manifest.</p></div><button class="primary" id="refreshOps">REFRESH FEED</button></div><div class="toolbar"><input id="opSearch" placeholder="Search operation, origin, destination…"><div class="seg"><button class="active" data-opfilter="all">ALL</button><button data-opfilter="operations">OPS</button><button data-opfilter="resource">RESOURCE</button></div></div><div id="operationsGrid" class="cards"></div></section>
+<section id="crew" class="view"><div class="section-status"><span><i class="pulse"></i> PERSONNEL NETWORK</span><span id="crewCount">0 RECORDS</span></div><div class="view-intro"><div><p class="eyebrow">PERSONNEL DATABASE</p><h2>CREW MANIFEST</h2><p>Ranks, duty state and mission participation at a glance.</p></div><div class="stat-chip"><span class="pulse"></span><b id="crewOnline">—</b> ACTIVE</div></div><div class="toolbar"><input id="crewSearch" placeholder="Search callsign, rank or role…"><div class="seg"><button class="active" data-crewfilter="all">ALL</button><button data-crewfilter="active">ACTIVE</button><button data-crewfilter="awol">AWOL</button></div></div><div id="crewGrid" class="crew-grid"></div></section>
+<section id="records" class="view"><div class="view-intro"><div><p class="eyebrow">ARCHIVE</p><h2>RECORDS</h2><p>Mission history, sessions and organization activity.</p></div></div><div class="dashboard-grid"><section class="panel span2"><div class="panel-head"><h3>Mission record</h3></div><div id="recordMissions" class="op-list"></div></section><section class="panel"><div class="panel-head"><h3>System</h3></div><div class="system-list"><p><span>Database</span><b>SUPABASE</b></p><p><span>Region</span><b>SINGAPORE</b></p><p><span>Manifest</span><b>LIVE</b></p></div></section></div></section><section id="profile" class="view"><div class="section-status"><span><i class="pulse"></i> VERIFIED PERSONNEL FILE</span><span>MY PROFILE</span></div><div id="profileView" class="profile-view"><div class="loading-detail">LOADING PERSONNEL DOSSIER…</div></div></section>
+</main>
+<footer><span>JMBN MANIFEST SYSTEM</span><span id="syncText">Awaiting secure session</span><span>BUILD // ONTHEGO</span></footer>
+</div>
+<div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
+<script type="module" src="app.js"></script>
+</body></html>
