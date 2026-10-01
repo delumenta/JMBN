@@ -114,7 +114,7 @@ function openReadiness(){
  openDrawer('<p class="eyebrow">PERSONNEL // READINESS ROSTER</p><div class="detail-hero"><h2>CREW READINESS</h2><p class="detail-status">'+active.length+' ACTIVE / '+awol.length+' AWOL</p></div><div class="readiness-roster"><section><div class="readiness-roster-head"><span><i class="dot green"></i> ACTIVE DUTY</span><b>'+active.length+'</b></div>'+rows(active,"green")+'</section><section><div class="readiness-roster-head"><span><i class="dot red"></i> AWOL</span><b>'+awol.length+'</b></div>'+rows(awol,"red")+'</section></div>');
 }
 async function openMission(id){
- const m=state.missions.find(x=>x.id===id);if(!m)return;
+ const m=state.missions.find(x=>String(x.id)===String(id));if(!m)return;
  openDrawer('<div class="loading-detail">INITIALIZING MISSION COMMAND…</div>',"mission");
  const {data:{session}}=await sb.auth.getSession(); const uid=session?.user?.id;
  const [att,sign]=await Promise.all([sb.from("mission_attendees").select("*").eq("mission_id",id),sb.from("mission_signups").select("*").eq("mission_id",id)]);
@@ -130,21 +130,35 @@ async function openMission(id){
 
 async function setOperationalRole(missionId,role){
  const {data:{session}}=await sb.auth.getSession();if(!session){toast("Secure session required");return}
- const {data:existing}=await sb.from("mission_signups").select("status").eq("mission_id",missionId).eq("user_id",session.user.id).maybeSingle();
- const {error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status:existing?.status||"going",operational_role:role},{onConflict:"mission_id,user_id"});
+ const {data:existing,error:existingError}=await sb.from("mission_signups").select("status").eq("mission_id",missionId).eq("user_id",session.user.id).maybeSingle();
+ if(existingError){toast("Could not check current RSVP: "+existingError.message);return}\n const {error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status:existing?.status||"going",operational_role:role},{onConflict:"mission_id,user_id"});
  if(error){console.error(error);toast("Role update failed: "+error.message);return}
  toast("Operational role: "+role.toUpperCase());await openMission(missionId);
 }
 async function setRsvp(missionId,status){
- const {data:{session}}=await sb.auth.getSession();if(!session){toast("Secure session required");return}
- $document.querySelectorAll("#detailBody [data-rsvp]").forEach(b=>b.disabled=true);
- let error;
- if(status==="withdraw"){({error}=await sb.from("mission_signups").delete().eq("mission_id",missionId).eq("user_id",session.user.id));}
- else {({error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:session.user.id,status},{onConflict:"mission_id,user_id"}));}
- if(error){console.error(error);toast("RSVP failed: "+error.message);$document.querySelectorAll("#detailBody [data-rsvp]").forEach(b=>b.disabled=false);return}
- toast(status==="withdraw"?"RSVP withdrawn":("RSVP: "+status.replaceAll("_"," ").toUpperCase()));
- await openMission(missionId);
+ const buttons=[...document.querySelectorAll("#detailBody [data-rsvp]")];
+ buttons.forEach(b=>b.disabled=true);
+ try{
+  const {data:{session},error:sessionError}=await sb.auth.getSession();
+  if(sessionError||!session){toast("Secure session required");return}
+  const uid=session.user.id;
+  let error;
+  if(status==="withdraw"){
+   ({error}=await sb.from("mission_signups").delete().eq("mission_id",missionId).eq("user_id",uid));
+  }else{
+   const {data:existing,error:lookupError}=await sb.from("mission_signups").select("operational_role").eq("mission_id",missionId).eq("user_id",uid).maybeSingle();
+   if(lookupError)throw lookupError;
+   ({error}=await sb.from("mission_signups").upsert({mission_id:missionId,user_id:uid,status,...(existing?.operational_role?{operational_role:existing.operational_role}:{})},{onConflict:"mission_id,user_id"}));
+  }
+  if(error)throw error;
+  toast(status==="withdraw"?"RSVP withdrawn":"RSVP: "+status.replaceAll("_"," ").toUpperCase());
+  await openMission(missionId);
+ }catch(error){
+  console.error("Mission RSVP failed:",error);
+  toast("RSVP failed: "+(error.message||"please try again"));
+ }finally{buttons.forEach(b=>b.disabled=false)}
 }
+
 document.addEventListener("click",e=>{const mission=e.target.closest("[data-mission]"),crew=e.target.closest("[data-user]");if(mission)openMission(mission.dataset.mission);else if(crew)openCrew(crew.dataset.user)});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"){const x=e.target.closest("[data-mission],[data-user]");if(x){x.dataset.mission?openMission(x.dataset.mission):openCrew(x.dataset.user)}}if(e.key==="Escape")closeDrawer()});
 $("#detailClose").onclick=closeDrawer;$("#detailBackdrop").onclick=closeDrawer;
