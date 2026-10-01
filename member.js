@@ -17,7 +17,7 @@ async function refreshMember(){
   currentUser=session.user.id;
   const [missions,signups]=await Promise.all([
    client.from("missions").select("*").order("start_time",{ascending:true}),
-   client.from("mission_signups").select("mission_id,status,operational_role").eq("user_id",currentUser)
+   client.from("mission_signups").select("mission_id,status,operational_role,user_id")
   ]);
   if(missions.error)throw missions.error;
   if(signups.error)throw signups.error;
@@ -37,7 +37,7 @@ async function refreshMember(){
    text("memberRsvp","—");text("memberRole","—");
    text("memberActionTitle","You're all caught up");
    text("memberActionDescription","Check back when the command team posts the next operation.");
-   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberRoleSelect").disabled=true;el("memberRoleSave").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;return;
+   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberRoleSelect").disabled=true;el("memberRoleSave").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;el("memberAssignedRoles").textContent="No upcoming mission assignments.";return;
   }
   el("memberRsvpActions").hidden=false;
   text("memberNextTitle",next.title||"Untitled operation");
@@ -45,7 +45,7 @@ async function refreshMember(){
   text("memberNextRoute",[next.origin,next.destination].filter(Boolean).join(" → ")||next.description||next.type||"Mission briefing available");
   text("memberRsvp",responseLabel(currentSignup?.status));
   text("memberRole",currentSignup?.operational_role||"Not assigned");el("memberRoleSelect").value=currentSignup?.operational_role||"";el("memberRoleSelect").disabled=!currentSignup||!["going","maybe"].includes(currentSignup.status);el("memberRoleSave").disabled=el("memberRoleSelect").disabled;text("memberRoleHint",el("memberRoleSelect").disabled?"RSVP Going or Maybe to select your role.":"Select your preferred station for this operation.");
-  el("memberMissionOpen").disabled=false;el("memberCalendar").disabled=!next.start_time;renderReadiness();
+  el("memberMissionOpen").disabled=false;el("memberCalendar").disabled=!next.start_time;renderReadiness();loadAssignedRoles(next.id);
   document.querySelectorAll("[data-member-rsvp]").forEach(x=>x.classList.toggle("selected",x.dataset.memberRsvp===currentSignup?.status));
   const pending=upcoming.filter(m=>!mine.some(s=>s.mission_id===m.id&&["going","maybe","not_going"].includes(s.status)));
   if(pending.length){text("memberActionTitle",pending.length+" mission"+(pending.length===1?"":"s")+" awaiting RSVP");text("memberActionDescription","Open Operations to respond to the missions you haven't answered yet.")}
@@ -122,3 +122,23 @@ el("memberRoleSave")?.addEventListener("click",async()=>{
  }catch(e){text("memberRoleStatus","Unable to save role: "+(e.message||"try again"))}
  finally{button.disabled=false}
 });
+
+async function loadAssignedRoles(missionId){
+ const box=el("memberAssignedRoles");if(!box)return;
+ box.textContent="Loading assigned roles…";
+ try{
+  const {data,error}=await client.from("mission_signups").select("user_id,operational_role,status").eq("mission_id",missionId).in("status",["going","maybe"]);
+  if(error)throw error;
+  if(selectedMission?.id!==missionId)return;
+  const assigned=(data||[]).filter(x=>x.operational_role);
+  if(!assigned.length){box.textContent="No crew roles selected yet.";return}
+  const counts=new Map();assigned.forEach(x=>counts.set(x.operational_role,(counts.get(x.operational_role)||0)+1));
+  box.replaceChildren();
+  [...counts].sort((a,b)=>a[0].localeCompare(b[0])).forEach(([role,count])=>{
+   const row=document.createElement("div");row.className="member-assigned-row";
+   const name=document.createElement("span");name.textContent=role;
+   const qty=document.createElement("b");qty.textContent=count+" "+(count===1?"crew":"crew");
+   row.append(name,qty);box.append(row)
+  });
+ }catch(e){box.textContent="Crew assignments unavailable. Open the mission briefing for the full roster.";console.error("Assigned roles:",e)}
+}
