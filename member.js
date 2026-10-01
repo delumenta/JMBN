@@ -37,14 +37,14 @@ async function refreshMember(){
    text("memberRsvp","—");text("memberRole","—");
    text("memberActionTitle","You're all caught up");
    text("memberActionDescription","Check back when the command team posts the next operation.");
-   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;return;
+   el("memberMissionOpen").disabled=true;el("memberCalendar").disabled=true;el("memberRoleSelect").disabled=true;el("memberRoleSave").disabled=true;el("memberReadiness").hidden=true;el("memberRsvpActions").hidden=true;return;
   }
   el("memberRsvpActions").hidden=false;
   text("memberNextTitle",next.title||"Untitled operation");
   text("memberNextDate",niceDate(next.start_time));
   text("memberNextRoute",[next.origin,next.destination].filter(Boolean).join(" → ")||next.description||next.type||"Mission briefing available");
   text("memberRsvp",responseLabel(currentSignup?.status));
-  text("memberRole",currentSignup?.operational_role||"Not assigned");
+  text("memberRole",currentSignup?.operational_role||"Not assigned");el("memberRoleSelect").value=currentSignup?.operational_role||"";el("memberRoleSelect").disabled=!currentSignup||!["going","maybe"].includes(currentSignup.status);el("memberRoleSave").disabled=el("memberRoleSelect").disabled;text("memberRoleHint",el("memberRoleSelect").disabled?"RSVP Going or Maybe to select your role.":"Select your preferred station for this operation.");
   el("memberMissionOpen").disabled=false;el("memberCalendar").disabled=!next.start_time;renderReadiness();
   document.querySelectorAll("[data-member-rsvp]").forEach(x=>x.classList.toggle("selected",x.dataset.memberRsvp===currentSignup?.status));
   const pending=upcoming.filter(m=>!mine.some(s=>s.mission_id===m.id&&["going","maybe","not_going"].includes(s.status)));
@@ -109,4 +109,16 @@ el("memberCalendar")?.addEventListener("click",()=>{
  const stamp=d=>d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
  const content=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JMBN//Member Manifest//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:jmbn-"+selectedMission.id+"@manifest","DTSTAMP:"+stamp(new Date()),"DTSTART:"+stamp(start),"DTEND:"+stamp(end),"SUMMARY:"+icsEscape(selectedMission.title||"JMBN Operation"),"DESCRIPTION:"+icsEscape("JMBN deployment. Check your Manifest for the current briefing and assigned role. Calendar duration defaults to two hours; confirm against the mission briefing."),"END:VEVENT","END:VCALENDAR"].join("\r\n");
  const url=URL.createObjectURL(new Blob([content],{type:"text/calendar;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="JMBN-"+selectedMission.id+".ics";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+
+el("memberRoleSave")?.addEventListener("click",async()=>{
+ const role=el("memberRoleSelect").value;
+ if(!selectedMission||!currentUser||!role||!currentSignup||!["going","maybe"].includes(currentSignup.status))return;
+ const button=el("memberRoleSave");button.disabled=true;text("memberRoleStatus","Saving…");
+ try{
+  const {error}=await client.from("mission_signups").upsert({mission_id:selectedMission.id,user_id:currentUser,status:currentSignup.status,operational_role:role},{onConflict:"mission_id,user_id"});
+  if(error)throw error;
+  text("memberRoleStatus","Role saved.");await refreshMember();
+ }catch(e){text("memberRoleStatus","Unable to save role: "+(e.message||"try again"))}
+ finally{button.disabled=false}
 });
