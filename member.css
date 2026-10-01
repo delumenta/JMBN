@@ -60,3 +60,19 @@ button,a{font-family:Play,sans-serif}
 #command>.dashboard-grid>.readiness-panel{grid-column:1!important;grid-row:auto!important}
 #command>.dashboard-grid>.panel:last-child{grid-column:2!important;grid-row:auto!important}
 @media(max-width:760px){#command .member-recognition{padding:26px 20px;min-height:0;margin:17px 0 28px}#command .member-recognition-symbol{font-size:100px;right:-8px;opacity:.45}#command>.dashboard-grid{display:flex!important;flex-direction:column!important}}
+
+#command .member-deployment-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:22px;margin-top:24px;padding-top:22px;border-top:1px solid #46513c}
+#command .member-deployment-main{min-width:0}
+#command .member-deployment-main .member-response{margin:0 0 17px;padding:0 0 16px;border-top:0}
+#command .member-deployment-main .member-rsvp-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#command .member-deployment-main .member-rsvp-actions button{min-width:0}
+#command .member-deployment-role{min-width:0;padding:22px;background:#101810;border:1px solid #526044;display:flex;flex-direction:column}
+#command .member-deployment-role h4{font:700 22px Play,sans-serif;color:#f1ecd9;margin:14px 0 7px}
+#command .member-deployment-role p{font:400 11px/1.6 Play,sans-serif;color:#adb9a8;margin:0 0 22px}
+#command .member-deployment-role label{font:700 10px Play,sans-serif;color:#d6bf79;margin-top:auto;margin-bottom:9px}
+#command .member-deployment-role select{width:100%;min-height:42px;background:#1a2318;color:#f1efe4;border:1px solid #687451;padding:10px;font:400 12px Play,sans-serif}
+#command .member-deployment-role select:disabled{opacity:.48}
+#command .member-deployment-role button{margin-top:10px;padding:13px;background:#d7b75e;border:0;color:#12170e;font:700 10px Play,sans-serif;cursor:pointer}
+#command .member-deployment-role button:disabled{opacity:.43;cursor:not-allowed}
+#command .member-deployment-role small{display:block;min-height:14px;margin-top:9px;color:#dfcc94;font:400 11px Play,sans-serif}
+@media(max-width:760px){#command .member-deployment-columns{grid-template-columns:1fr;gap:14px}#command .member-deployment-main .member-rsvp-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
