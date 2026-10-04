@@ -40,6 +40,7 @@ public partial class MainWindow : Window
    await data.SignInWithDiscordAsync();
    LoginButton.Visibility=Visibility.Collapsed;
    PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
+   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
    refreshTimer.Start();
    await RefreshOperationAsync();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
@@ -91,6 +92,13 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
+ async void LoadMission_Click(object sender,RoutedEventArgs e){
+  if(MissionPicker.SelectedItem is not MissionOption mission)return;
+  try{await data.SetActiveOperationAsync(mission.Id);await RefreshOperationAsync();}catch(Exception ex){LoginError.Text=ex.Message;}
+ }
+ async void EndMission_Click(object sender,RoutedEventArgs e){
+  try{await data.SetActiveOperationAsync(null);await RefreshOperationAsync();}catch(Exception ex){LoginError.Text=ex.Message;}
+ }
  void ShipImage_SizeChanged(object sender,SizeChangedEventArgs e)=>DrawMarkers();
  async void AckButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"acknowledged");readiness="ack";UpdateReadiness();await RefreshCrewAsync();}
  async void SeatButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"on_station");readiness="seat";UpdateReadiness();await RefreshCrewAsync();}
