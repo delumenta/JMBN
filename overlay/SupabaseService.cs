@@ -47,6 +47,28 @@ internal sealed class SupabaseService
         return bool.TryParse(await res.Content.ReadAsStringAsync(),out var value)&&value;
     }
 
+    public async Task<List<MissionOption>> GetMissionChoicesAsync()
+    {
+        using var req=Request(HttpMethod.Get,"/rest/v1/missions?select=id,title,start_time&order=start_time.asc");
+        using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();
+        using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());
+        var list=new List<MissionOption>();
+        foreach(var m in doc.RootElement.EnumerateArray()){
+            var id=m.GetProperty("id").GetString();if(string.IsNullOrWhiteSpace(id))continue;
+            var title=m.GetProperty("title").GetString()??"Untitled operation";
+            var start=m.TryGetProperty("start_time",out var st)&&st.ValueKind!=JsonValueKind.Null&&DateTimeOffset.TryParse(st.GetString(),out var dt)?dt:DateTimeOffset.Now;
+            list.Add(new MissionOption(id,title,start));
+        }
+        return list;
+    }
+
+    public async Task SetActiveOperationAsync(string? missionId)
+    {
+        using var req=Request(HttpMethod.Post,"/rest/v1/rpc/command_set_active_overlay_operation");
+        req.Content=JsonContent.Create(new { p_mission_id=missionId });
+        using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();
+    }
+
     HttpRequestMessage Request(HttpMethod method,string path){var r=new HttpRequestMessage(method,SupabaseConfig.Url+path);r.Headers.Add("apikey",SupabaseConfig.ApiKey);r.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);return r;}
 
     public async Task<MissionOption?> GetActiveMissionAsync()
