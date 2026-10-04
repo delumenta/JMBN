@@ -38,18 +38,13 @@ public partial class MainWindow : Window
   LoginError.Text=""; LoginButton.IsEnabled=false;
   try{
    await data.SignInAsync(UsernameBox.Text.Trim(),PasswordBox.Password);
-   var missions=await data.GetMissionsAsync();
-   MissionPicker.Items.Clear(); foreach(var m in missions)MissionPicker.Items.Add(m);
-   if(MissionPicker.Items.Count>0)MissionPicker.SelectedIndex=0;
    UsernameBox.Visibility=Visibility.Collapsed;PasswordBox.Visibility=Visibility.Collapsed;LoginButton.Visibility=Visibility.Collapsed;
-   PanelPrompt.Text="SELECT OPERATION";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
+   PanelPrompt.Text="COMMAND LINK";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
+   activeMission=await data.GetActiveMissionAsync();
+   if(activeMission is null){ActiveOperationText.Text="NO ACTIVE OPERATION";StatusText.Text="STANDING BY";return;}
+   ActiveOperationText.Text=activeMission.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+activeMission.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;
+   AckButton.IsEnabled=true;SeatButton.IsEnabled=true;await RefreshCrewAsync();refreshTimer.Start();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
- }
-
- async void LoadOperation_Click(object sender,RoutedEventArgs e){
-  activeMission=MissionPicker.SelectedItem as MissionOption;if(activeMission is null)return;
-  MissionTitle.Text="JMBN // "+activeMission.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;
-  AckButton.IsEnabled=true;SeatButton.IsEnabled=true;await RefreshCrewAsync();refreshTimer.Start();
  }
 
  async Task RefreshCrewAsync(){
