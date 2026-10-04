@@ -58,7 +58,7 @@ public partial class MainWindow : Window
 
  async Task RefreshCrewAsync(){
   if(activeMission is null)return;
-  try{crew=await data.GetCrewAsync(activeMission.Id);StatusText.Text="MANIFEST LIVE";DrawMarkers();}catch{StatusText.Text="SYNC RETRYING";}
+  try{crew=await data.GetCrewAsync(activeMission.Id);var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);readiness=me?.Readiness??"assigned";UpdateReadiness();DrawMarkers();}catch{StatusText.Text="SYNC RETRYING";}
  }
 
  void DrawMarkers(){
