@@ -40,7 +40,7 @@ public partial class MainWindow : Window
    await data.SignInWithDiscordAsync();
    LoginButton.Visibility=Visibility.Collapsed;
    PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
-   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
+   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;CommandTab.Visibility=Visibility.Visible;DrawerCloseButton.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
    refreshTimer.Start();
    await RefreshOperationAsync();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
@@ -52,7 +52,7 @@ public partial class MainWindow : Window
    if(latest is null){
     activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Visible;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();return;
    }
-   activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();LoadPanel.Visibility=CommandPanel.Visibility==Visibility.Visible?Visibility.Visible:Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
+   var changed=activeMission?.Id!=latest.Id;activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
   }catch{StatusText.Text="SYNC RETRYING";}
  }
@@ -92,6 +92,10 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
+ void CommandTab_Click(object sender,RoutedEventArgs e){
+  if(CommandPanel.Visibility!=Visibility.Visible)return;
+  LoadPanel.Visibility=LoadPanel.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
+ }
  async void AssignStations_Click(object sender,RoutedEventArgs e){
   if(activeMission is null)return;
   if(StationAssignScroll.Visibility==Visibility.Visible){StationAssignScroll.Visibility=Visibility.Collapsed;return;}
