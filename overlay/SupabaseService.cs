@@ -49,6 +49,24 @@ internal sealed class SupabaseService
         return list;
     }
 
+    public async Task<MissionOption?> GetActiveMissionAsync()
+    {
+        using var stateReq = Request(HttpMethod.Get, "/rest/v1/overlay_operation_state?select=mission_id&singleton=eq.true");
+        using var stateRes = await http.SendAsync(stateReq); stateRes.EnsureSuccessStatusCode();
+        using var stateDoc = JsonDocument.Parse(await stateRes.Content.ReadAsStringAsync());
+        var row = stateDoc.RootElement.EnumerateArray().FirstOrDefault();
+        if (row.ValueKind == JsonValueKind.Undefined || !row.TryGetProperty("mission_id", out var mid) || mid.ValueKind == JsonValueKind.Null) return null;
+        var id = mid.GetString(); if (string.IsNullOrWhiteSpace(id)) return null;
+        using var req = Request(HttpMethod.Get, "/rest/v1/missions?select=id,title,start_time&id=eq." + Uri.EscapeDataString(id));
+        using var res = await http.SendAsync(req); res.EnsureSuccessStatusCode();
+        using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync());
+        var mission = doc.RootElement.EnumerateArray().FirstOrDefault();
+        if (mission.ValueKind == JsonValueKind.Undefined) return null;
+        var title = mission.TryGetProperty("title", out var t) ? t.GetString() ?? "Untitled operation" : "Untitled operation";
+        var start = mission.TryGetProperty("start_time", out var st) && st.ValueKind != JsonValueKind.Null && DateTimeOffset.TryParse(st.GetString(), out var dt) ? dt : DateTimeOffset.Now;
+        return new MissionOption(id, title, start);
+    }
+
     public async Task<List<CrewAssignment>> GetCrewAsync(string missionId)
     {
         using var req = Request(HttpMethod.Get, "/rest/v1/mission_signups?select=user_id,status,operational_role,operational_station,overlay_readiness&mission_id=eq." + Uri.EscapeDataString(missionId) + "&status=in.(going,maybe)");
