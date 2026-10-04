@@ -21,22 +21,21 @@ internal sealed class SupabaseService
     public async Task SignInWithDiscordAsync()
     {
         const string redirect="http://127.0.0.1:54327/";
-        var verifier=RandomToken();
-        var challenge=B64(SHA256.HashData(Encoding.ASCII.GetBytes(verifier)));
-        var state=RandomToken();
         using var listener=new HttpListener();
         listener.Prefixes.Add(redirect); listener.Start();
-        var auth=SupabaseConfig.Url+"/auth/v1/authorize?provider=discord&redirect_to="+Uri.EscapeDataString(redirect)+"&code_challenge="+Uri.EscapeDataString(challenge)+"&code_challenge_method=s256&state="+Uri.EscapeDataString(state);
-        Process.Start(new ProcessStartInfo(auth){UseShellExecute=true});
+        var state=RandomToken();
+        var handoff="https://delumenta.github.io/onthego/overlay-auth.html?port=54327&state="+Uri.EscapeDataString(state);
+        Process.Start(new ProcessStartInfo(handoff){UseShellExecute=true});
         var ctx=await listener.GetContextAsync();
-        var code=ctx.Request.QueryString["code"]; var returnedState=ctx.Request.QueryString["state"];
+        var returnedState=ctx.Request.QueryString["state"];
+        var token=ctx.Request.QueryString["access_token"];
         var html="<html><body style='background:#080a08;color:#d7b66a;font-family:sans-serif;padding:40px'><h2>JMBN MANIFEST LINKED</h2><p>You can return to the overlay.</p><script>window.close()</script></body></html>";
         var bytes=Encoding.UTF8.GetBytes(html);ctx.Response.ContentType="text/html";ctx.Response.ContentLength64=bytes.Length;await ctx.Response.OutputStream.WriteAsync(bytes);ctx.Response.Close();listener.Stop();
-        if(string.IsNullOrWhiteSpace(code)||returnedState!=state)throw new InvalidOperationException("Discord sign-in was not completed.");
-        using var req=new HttpRequestMessage(HttpMethod.Post,SupabaseConfig.Url+"/auth/v1/token?grant_type=pkce");
-        req.Headers.Add("apikey",SupabaseConfig.ApiKey);req.Content=JsonContent.Create(new{auth_code=code,code_verifier=verifier});
-        using var res=await http.SendAsync(req);var body=await res.Content.ReadAsStringAsync();if(!res.IsSuccessStatusCode)throw new InvalidOperationException("Discord session exchange failed.");
-        using var doc=JsonDocument.Parse(body);accessToken=doc.RootElement.GetProperty("access_token").GetString();UserId=doc.RootElement.GetProperty("user").GetProperty("id").GetString();
+        if(string.IsNullOrWhiteSpace(token)||returnedState!=state)throw new InvalidOperationException("Discord sign-in was not completed.");
+        accessToken=token;
+        using var req=new HttpRequestMessage(HttpMethod.Get,SupabaseConfig.Url+"/auth/v1/user");req.Headers.Add("apikey",SupabaseConfig.ApiKey);req.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);
+        using var res=await http.SendAsync(req);if(!res.IsSuccessStatusCode)throw new InvalidOperationException("Manifest session could not be verified.");
+        using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());UserId=doc.RootElement.GetProperty("id").GetString();
     }
 
     HttpRequestMessage Request(HttpMethod method,string path){var r=new HttpRequestMessage(method,SupabaseConfig.Url+path);r.Headers.Add("apikey",SupabaseConfig.ApiKey);r.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);return r;}
