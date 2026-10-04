@@ -114,20 +114,28 @@ el("memberCalendar")?.addEventListener("click",()=>{
 
 async function loadAssignedRoles(missionId){
  const box=el("memberAssignedRoles");if(!box)return;
- box.textContent="Loading assigned roles…";
+ box.textContent="Loading crew assignments…";
  try{
-  const {data,error}=await client.from("mission_signups").select("user_id,operational_role,status").eq("mission_id",missionId).in("status",["going","maybe"]);
+  const {data,error}=await client.from("mission_signups").select("user_id,operational_role,operational_station,status").eq("mission_id",missionId);
   if(error)throw error;
   if(selectedMission?.id!==missionId)return;
-  const assigned=(data||[]).filter(x=>x.operational_role);
-  if(!assigned.length){box.textContent="No crew roles selected yet.";return}
-  const counts=new Map();assigned.forEach(x=>counts.set(x.operational_role,(counts.get(x.operational_role)||0)+1));
+  const going=(data||[]).filter(x=>String(x.status||"").toLowerCase()==="going");
+  if(!going.length){box.textContent="No crew have confirmed Going yet.";return}
+  const ids=[...new Set(going.map(x=>x.user_id).filter(Boolean))];
+  let names=new Map();
+  if(ids.length){
+   const {data:profiles,error:profileError}=await client.from("profiles").select("user_id,display_name,handle").in("user_id",ids);
+   if(profileError)throw profileError;
+   names=new Map((profiles||[]).map(p=>[p.user_id,p.display_name||p.handle||"Crew"]));
+  }
   box.replaceChildren();
-  [...counts].sort((a,b)=>a[0].localeCompare(b[0])).forEach(([role,count])=>{
+  going.sort((a,b)=>(names.get(a.user_id)||"").localeCompare(names.get(b.user_id)||"")).forEach(x=>{
    const row=document.createElement("div");row.className="member-assigned-row";
-   const name=document.createElement("span");name.textContent=role;
-   const qty=document.createElement("b");qty.textContent=count+" "+(count===1?"crew":"crew");
-   row.append(name,qty);box.append(row)
+   const who=document.createElement("span");who.textContent=names.get(x.user_id)||"Crew";
+   const detail=document.createElement("b");
+   const station=typeof stationLabel==="function"&&x.operational_station?stationLabel(x.operational_station):x.operational_station;
+   detail.textContent=[x.operational_role||"Unassigned",station||"Polaris station unassigned"].join(" · ");
+   row.append(who,detail);box.append(row)
   });
- }catch(e){box.textContent="Crew assignments unavailable. Open the mission briefing for the full roster.";console.error("Assigned roles:",e)}
+ }catch(e){box.textContent="Crew assignments unavailable. Open the mission briefing for the full roster.";console.error("Assigned crew:",e)}
 }
