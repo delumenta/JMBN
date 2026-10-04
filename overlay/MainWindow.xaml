@@ -22,9 +22,7 @@
       <StackPanel>
        <TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/>
        <TextBlock x:Name="PanelPrompt" Text="SIGN IN TO JMBN MANIFEST" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
-       <TextBox x:Name="UsernameBox" Height="32" Margin="0,0,0,8" ToolTip="Username or email"/>
-       <PasswordBox x:Name="PasswordBox" Height="32" Margin="0,0,0,10" ToolTip="Password"/>
-       <Button x:Name="LoginButton" Content="SIGN IN" Height="36" Click="Login_Click"/>
+       <Button x:Name="LoginButton" Content="SIGN IN WITH DISCORD" Height="38" Margin="0,6,0,0" Click="Login_Click"/>
        <TextBlock x:Name="LoginError" Foreground="#D98272" FontFamily="Play" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"/>
        <StackPanel x:Name="MissionPanel" Visibility="Collapsed">
         <TextBlock x:Name="ActiveOperationText" Text="CHECKING COMMAND OPERATION…" Foreground="#D7B66A" FontFamily="Play" FontSize="12" Margin="0,12,0,0" TextWrapping="Wrap"/>
