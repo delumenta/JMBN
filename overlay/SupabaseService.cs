@@ -49,7 +49,7 @@ internal sealed class SupabaseService
 
     public async Task<List<MissionOption>> GetMissionChoicesAsync()
     {
-        using var req=Request(HttpMethod.Get,"/rest/v1/missions?select=id,title,start_time&order=start_time.asc");
+        using var req=Request(HttpMethod.Get,"/rest/v1/missions?select=id,title,start_time&start_time=gte."+Uri.EscapeDataString(DateTimeOffset.UtcNow.ToString("O"))+"&order=start_time.asc");
         using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();
         using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());
         var list=new List<MissionOption>();
