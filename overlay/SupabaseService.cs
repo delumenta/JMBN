@@ -69,6 +69,13 @@ internal sealed class SupabaseService
         using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();
     }
 
+    public async Task AssignStationAsync(string missionId,string userId,string? station)
+    {
+        using var req=Request(HttpMethod.Post,"/rest/v1/rpc/command_assign_mission_station");
+        req.Content=JsonContent.Create(new { p_mission_id=missionId, p_user_id=userId, p_station=station });
+        using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();
+    }
+
     HttpRequestMessage Request(HttpMethod method,string path){var r=new HttpRequestMessage(method,SupabaseConfig.Url+path);r.Headers.Add("apikey",SupabaseConfig.ApiKey);r.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);return r;}
 
     public async Task<MissionOption?> GetActiveMissionAsync()
