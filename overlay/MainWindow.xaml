@@ -27,8 +27,7 @@
        <Button x:Name="LoginButton" Content="SIGN IN" Height="36" Click="Login_Click"/>
        <TextBlock x:Name="LoginError" Foreground="#D98272" FontFamily="Play" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"/>
        <StackPanel x:Name="MissionPanel" Visibility="Collapsed">
-        <ComboBox x:Name="MissionPicker" Height="34" FontFamily="Play" Margin="0,12,0,0"/>
-        <Button Content="LOAD OPERATION" Margin="0,14,0,0" Height="36" Click="LoadOperation_Click"/>
+        <TextBlock x:Name="ActiveOperationText" Text="CHECKING COMMAND OPERATION…" Foreground="#D7B66A" FontFamily="Play" FontSize="12" Margin="0,12,0,0" TextWrapping="Wrap"/>
        </StackPanel>
       </StackPanel>
      </Border>
