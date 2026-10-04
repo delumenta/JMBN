@@ -29,7 +29,7 @@
     <Grid Grid.Row="1" x:Name="MapRoot" Background="#01000000">
      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
-     <Border x:Name="LoadPanel" Width="390" Padding="22" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+     <Border x:Name="LoadPanel" Width="390" Padding="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,18,18,0" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
       <StackPanel>
        <TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/>
        <TextBlock x:Name="PanelPrompt" Text="SIGN IN TO JMBN MANIFEST" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
