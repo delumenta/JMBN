@@ -37,9 +37,9 @@ public partial class MainWindow : Window
  async void Login_Click(object sender,RoutedEventArgs e){
   LoginError.Text=""; LoginButton.IsEnabled=false;
   try{
-   await data.SignInAsync(UsernameBox.Text.Trim(),PasswordBox.Password);
-   UsernameBox.Visibility=Visibility.Collapsed;PasswordBox.Visibility=Visibility.Collapsed;LoginButton.Visibility=Visibility.Collapsed;
-   PanelPrompt.Text="COMMAND LINK";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
+   await data.SignInWithDiscordAsync();
+   LoginButton.Visibility=Visibility.Collapsed;
+   PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
    activeMission=await data.GetActiveMissionAsync();
    if(activeMission is null){ActiveOperationText.Text="NO ACTIVE OPERATION";StatusText.Text="STANDING BY";return;}
    ActiveOperationText.Text=activeMission.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+activeMission.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;
