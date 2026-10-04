@@ -29,7 +29,7 @@ public partial class MainWindow : Window
 
  public MainWindow(){
   InitializeComponent();
-  Loaded+=(_,__)=>{RegisterOverlayHotkey(); DrawMarkers(); refreshTimer.Tick += async (_,__) => await RefreshCrewAsync();};
+  Loaded+=(_,__)=>{RegisterOverlayHotkey(); DrawMarkers(); refreshTimer.Tick += async (_,__) => await RefreshOperationAsync();};
   SizeChanged+=(_,__)=>DrawMarkers();
   PreviewKeyDown+=OnKeyDown;
  }
@@ -40,11 +40,20 @@ public partial class MainWindow : Window
    await data.SignInWithDiscordAsync();
    LoginButton.Visibility=Visibility.Collapsed;
    PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
-   activeMission=await data.GetActiveMissionAsync();
-   if(activeMission is null){ActiveOperationText.Text="NO ACTIVE OPERATION";StatusText.Text="STANDING BY";return;}
-   ActiveOperationText.Text=activeMission.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+activeMission.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;
-   AckButton.IsEnabled=true;SeatButton.IsEnabled=true;await RefreshCrewAsync();refreshTimer.Start();
+   refreshTimer.Start();
+   await RefreshOperationAsync();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
+ }
+
+ async Task RefreshOperationAsync(){
+  try{
+   var latest=await data.GetActiveMissionAsync();
+   if(latest is null){
+    activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Visible;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();return;
+   }
+   activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
+   await RefreshCrewAsync();
+  }catch{StatusText.Text="SYNC RETRYING";}
  }
 
  async Task RefreshCrewAsync(){
