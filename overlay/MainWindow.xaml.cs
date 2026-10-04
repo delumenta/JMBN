@@ -70,12 +70,12 @@ public partial class MainWindow : Window
    var member=crew.FirstOrDefault(m=>m.Station==station.Id);
    var x=box.X+box.Width*station.X/100.0;var y=box.Y+box.Height*station.Y/100.0;
    var ready=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
-   var seated=member?.Readiness=="on_station";var mine=member?.UserId==data.UserId;
+   var seated=member?.Readiness=="on_station";var isMine=member?.UserId==data.UserId;
    if(seated){var ring=new Ellipse{Width=20,Height=20,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=1,Fill=Brushes.Transparent};Canvas.SetLeft(ring,x-10);Canvas.SetTop(ring,y-10);MarkerCanvas.Children.Add(ring);}
    var dot=new Ellipse{Width=14,Height=14,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,Fill=ready?new SolidColorBrush(Color.FromRgb(215,182,106)):new SolidColorBrush(Color.FromRgb(5,7,5))};
-   if(mine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
+   if(isMine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
    Canvas.SetLeft(dot,x-7);Canvas.SetTop(dot,y-7);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=member is null?station.Label:station.Label+"\n"+member.Name.ToUpperInvariant(),Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=mine?FontWeights.Bold:FontWeights.Normal,FontSize=10,Background=new SolidColorBrush(Color.FromArgb(150,5,7,5)),Padding=new Thickness(4,2,4,2)};
+   var label=new TextBlock{Text=member is null?station.Label:station.Label+"\n"+member.Name.ToUpperInvariant(),Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=10,Background=new SolidColorBrush(Color.FromArgb(150,5,7,5)),Padding=new Thickness(4,2,4,2)};
    Canvas.SetLeft(label,x+10);Canvas.SetTop(label,y-9);MarkerCanvas.Children.Add(label);
   }
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
