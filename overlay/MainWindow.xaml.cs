@@ -14,7 +14,11 @@ public partial class MainWindow : Window
 {
  const int HOTKEY_ID=9001, WM_HOTKEY=0x0312, MOD_ALT=0x0001, VK_J=0x4A;
  const int GWL_EXSTYLE=-20, WS_EX_TRANSPARENT=0x20, WS_EX_LAYERED=0x80000;
- bool clickThrough=false; string? activeMission; string readiness="assigned";
+ bool clickThrough=false;
+    readonly SupabaseService data = new();
+    List<CrewAssignment> crew = [];
+    MissionOption? activeMission;
+    readonly System.Windows.Threading.DispatcherTimer refreshTimer = new(){ Interval = TimeSpan.FromSeconds(8) }; string? activeMission; string readiness="assigned";
  readonly Station[] stations=[
   new("air","AIR",21.2,77.9),new("helmsman","HELMSMAN",12.4,87.0),new("surface","SURFACE",16.9,71.7),
   new("ood","OOD",10.4,79.0),new("command_chair","COMMAND CHAIR",14.0,77.4),new("engineering_duty_officer","ENGINEER",71.5,40.2),
@@ -22,44 +26,55 @@ public partial class MainWindow : Window
   new("mount_4_1","MOUNT 4-1",50.6,54.7),new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,88.5)
  ];
  // Preview data is replaced by Manifest data when live sync is connected.
- readonly CrewMarker[] preview=[new("DELUMENTA","mount_4_1",false),new("KAI","helmsman",false),new("YOU","ood",true)];
-
+ 
  public MainWindow(){
   InitializeComponent();
-  MissionPicker.Items.Add("OPERATION IRON WAKE // POLARIS");
-  MissionPicker.SelectedIndex=0;
-  Loaded+=(_,__)=>{RegisterOverlayHotkey(); DrawMarkers();};
+  Loaded+=(_,__)=>{RegisterOverlayHotkey(); DrawMarkers(); refreshTimer.Tick += async (_,__) => await RefreshCrewAsync();};
   SizeChanged+=(_,__)=>DrawMarkers();
   PreviewKeyDown+=OnKeyDown;
  }
 
- void LoadOperation_Click(object sender,RoutedEventArgs e){
-  activeMission=MissionPicker.SelectedItem?.ToString()??"POLARIS OPERATION";
-  MissionTitle.Text="JMBN // "+activeMission.Split("//")[0].Trim();
-  StatusText.Text="POLARIS // ACTIVE";
-  LoadPanel.Visibility=Visibility.Collapsed;
-  AckButton.IsEnabled=true; SeatButton.IsEnabled=true;
-  readiness="assigned"; UpdateReadiness(); DrawMarkers();
+ async void Login_Click(object sender,RoutedEventArgs e){
+  LoginError.Text=""; LoginButton.IsEnabled=false;
+  try{
+   await data.SignInAsync(UsernameBox.Text.Trim(),PasswordBox.Password);
+   var missions=await data.GetMissionsAsync();
+   MissionPicker.Items.Clear(); foreach(var m in missions)MissionPicker.Items.Add(m);
+   if(MissionPicker.Items.Count>0)MissionPicker.SelectedIndex=0;
+   UsernameBox.Visibility=Visibility.Collapsed;PasswordBox.Visibility=Visibility.Collapsed;LoginButton.Visibility=Visibility.Collapsed;
+   PanelPrompt.Text="SELECT OPERATION";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
+  }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
+ }
+
+ async void LoadOperation_Click(object sender,RoutedEventArgs e){
+  activeMission=MissionPicker.SelectedItem as MissionOption;if(activeMission is null)return;
+  MissionTitle.Text="JMBN // "+activeMission.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;
+  AckButton.IsEnabled=true;SeatButton.IsEnabled=true;await RefreshCrewAsync();refreshTimer.Start();
+ }
+
+ async Task RefreshCrewAsync(){
+  if(activeMission is null)return;
+  try{crew=await data.GetCrewAsync(activeMission.Id);StatusText.Text="MANIFEST LIVE";DrawMarkers();}catch{StatusText.Text="SYNC RETRYING";}
  }
 
  void DrawMarkers(){
   MarkerCanvas.Children.Clear();
   if(ShipImage.Source is not BitmapSource bmp || ShipImage.ActualWidth<=0 || ShipImage.ActualHeight<=0)return;
   var box=GetRenderedImageBox(bmp);
-  foreach(var crew in preview){
-   var station=stations.FirstOrDefault(s=>s.Id==crew.StationId); if(station is null)continue;
+  foreach(var member in crew){
+   var station=stations.FirstOrDefault(s=>s.Id==member.Station); if(station is null)continue;
    var x=box.X+box.Width*station.X/100.0; var y=box.Y+box.Height*station.Y/100.0;
-   var dot=new Ellipse{Width=crew.IsSelf?14:12,Height=crew.IsSelf?14:12,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,
-    Fill=crew.IsSelf?new SolidColorBrush(Color.FromRgb(215,182,106)):Brushes.Transparent};
-   if(crew.IsSelf)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
+   var dot=new Ellipse{Width=member.UserId==data.UserId?14:12,Height=member.UserId==data.UserId?14:12,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,
+    Fill=member.UserId==data.UserId?new SolidColorBrush(Color.FromRgb(215,182,106)):Brushes.Transparent};
+   if(member.UserId==data.UserId)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
    Canvas.SetLeft(dot,x-dot.Width/2);Canvas.SetTop(dot,y-dot.Height/2);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=crew.Name+"\n"+station.Label,Foreground=new SolidColorBrush(crew.IsSelf?Color.FromRgb(255,220,126):Color.FromRgb(215,182,106)),
-    FontFamily=new FontFamily("Play"),FontWeight=crew.IsSelf?FontWeights.Bold:FontWeights.Normal,FontSize=crew.IsSelf?11:10,
+   var label=new TextBlock{Text=member.Name+"\n"+station.Label,Foreground=new SolidColorBrush(member.UserId==data.UserId?Color.FromRgb(255,220,126):Color.FromRgb(215,182,106)),
+    FontFamily=new FontFamily("Play"),FontWeight=member.UserId==data.UserId?FontWeights.Bold:FontWeights.Normal,FontSize=member.UserId==data.UserId?11:10,
     Background=new SolidColorBrush(Color.FromArgb(165,5,7,5)),Padding=new Thickness(4,2,4,2)};
    Canvas.SetLeft(label,x+9);Canvas.SetTop(label,y-9);MarkerCanvas.Children.Add(label);
   }
-  ManningText.Text=$"{preview.Length} / {stations.Length} STATIONS MANNED";
-  var me=preview.FirstOrDefault(x=>x.IsSelf);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.StationId);
+  ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
+  var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   AssignmentText.Text=mine is null?"YOUR STATION // NOT ASSIGNED":"YOUR STATION // "+mine.Label;
  }
 
@@ -73,8 +88,8 @@ public partial class MainWindow : Window
  }
 
  void ShipImage_SizeChanged(object sender,SizeChangedEventArgs e)=>DrawMarkers();
- void AckButton_Click(object sender,RoutedEventArgs e){readiness="ack";UpdateReadiness();}
- void SeatButton_Click(object sender,RoutedEventArgs e){readiness="seat";UpdateReadiness();}
+ async void AckButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"acknowledged");readiness="ack";UpdateReadiness();await RefreshCrewAsync();}
+ async void SeatButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"on_station");readiness="seat";UpdateReadiness();await RefreshCrewAsync();}
  void UpdateReadiness(){
   AckButton.Content=readiness=="assigned"?"ACKNOWLEDGE":"✓ ACKNOWLEDGED";
   SeatButton.Content=readiness=="seat"?"● ON STATION":"ON STATION";
@@ -88,8 +103,7 @@ public partial class MainWindow : Window
  void CloseButton_Click(object sender,RoutedEventArgs e)=>Close();
  protected override void OnClosed(EventArgs e){var h=new WindowInteropHelper(this).Handle;UnregisterHotKey(h,HOTKEY_ID);base.OnClosed(e);}
  record Station(string Id,string Label,double X,double Y);
- record CrewMarker(string Name,string StationId,bool IsSelf);
- [DllImport("user32.dll")]static extern bool RegisterHotKey(IntPtr hWnd,int id,int fsModifiers,int vk);
+  [DllImport("user32.dll")]static extern bool RegisterHotKey(IntPtr hWnd,int id,int fsModifiers,int vk);
  [DllImport("user32.dll")]static extern bool UnregisterHotKey(IntPtr hWnd,int id);
  [DllImport("user32.dll")]static extern int GetWindowLong(IntPtr hWnd,int nIndex);
  [DllImport("user32.dll")]static extern int SetWindowLong(IntPtr hWnd,int nIndex,int dwNewLong);
