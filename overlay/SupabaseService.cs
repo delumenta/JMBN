@@ -41,7 +41,7 @@ internal sealed class SupabaseService
     public async Task<bool> HasCommandAccessAsync()
     {
         using var req=Request(HttpMethod.Post,"/rest/v1/rpc/is_elevated");
-        req.Content=JsonContent.Create(new { });
+        req.Content=JsonContent.Create(new { u=UserId });
         using var res=await http.SendAsync(req);
         if(!res.IsSuccessStatusCode)return false;
         return bool.TryParse(await res.Content.ReadAsStringAsync(),out var value)&&value;
