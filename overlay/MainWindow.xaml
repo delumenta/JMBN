@@ -29,9 +29,12 @@
     <Grid Grid.Row="1" x:Name="MapRoot" Background="#01000000">
      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
+     <Button x:Name="CommandTab" Content="COMMAND" Width="34" Height="110" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed" Click="CommandTab_Click" FontFamily="Play" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A">
+      <Button.LayoutTransform><RotateTransform Angle="-90"/></Button.LayoutTransform>
+     </Button>
      <Border x:Name="LoadPanel" Width="390" Padding="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,18,18,0" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
       <StackPanel>
-       <TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/>
+       <Grid><TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/><Button x:Name="DrawerCloseButton" Content="×" Width="28" Height="24" HorizontalAlignment="Right" Click="CommandTab_Click" Visibility="Collapsed"/></Grid>
        <TextBlock x:Name="PanelPrompt" Text="SIGN IN TO JMBN MANIFEST" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
        <Button x:Name="LoginButton" Content="SIGN IN WITH DISCORD" Height="38" Margin="0,6,0,0" Click="Login_Click" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
        <TextBlock x:Name="LoginError" Foreground="#D98272" FontFamily="Play" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"/>
