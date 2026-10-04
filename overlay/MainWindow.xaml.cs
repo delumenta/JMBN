@@ -18,15 +18,15 @@ public partial class MainWindow : Window
     readonly SupabaseService data = new();
     List<CrewAssignment> crew = [];
     MissionOption? activeMission;
-    readonly System.Windows.Threading.DispatcherTimer refreshTimer = new(){ Interval = TimeSpan.FromSeconds(8) }; string? activeMission; string readiness="assigned";
+    readonly System.Windows.Threading.DispatcherTimer refreshTimer = new(){ Interval = TimeSpan.FromSeconds(8) };
+    string readiness="assigned";
  readonly Station[] stations=[
   new("air","AIR",21.2,77.9),new("helmsman","HELMSMAN",12.4,87.0),new("surface","SURFACE",16.9,71.7),
   new("ood","OOD",10.4,79.0),new("command_chair","COMMAND CHAIR",14.0,77.4),new("engineering_duty_officer","ENGINEER",71.5,40.2),
   new("torpedo_director","TORPEDO DIRECTOR",35.3,72.4),new("mount_3_1","MOUNT 3-1",78.8,61.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),
   new("mount_4_1","MOUNT 4-1",50.6,54.7),new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,88.5)
  ];
- // Preview data is replaced by Manifest data when live sync is connected.
- 
+
  public MainWindow(){
   InitializeComponent();
   Loaded+=(_,__)=>{RegisterOverlayHotkey(); DrawMarkers(); refreshTimer.Tick += async (_,__) => await RefreshCrewAsync();};
