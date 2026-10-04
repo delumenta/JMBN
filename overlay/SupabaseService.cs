@@ -38,6 +38,15 @@ internal sealed class SupabaseService
         using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());UserId=doc.RootElement.GetProperty("id").GetString();
     }
 
+    public async Task<bool> HasCommandAccessAsync()
+    {
+        using var req=Request(HttpMethod.Post,"/rest/v1/rpc/is_elevated");
+        req.Content=JsonContent.Create(new { });
+        using var res=await http.SendAsync(req);
+        if(!res.IsSuccessStatusCode)return false;
+        return bool.TryParse(await res.Content.ReadAsStringAsync(),out var value)&&value;
+    }
+
     HttpRequestMessage Request(HttpMethod method,string path){var r=new HttpRequestMessage(method,SupabaseConfig.Url+path);r.Headers.Add("apikey",SupabaseConfig.ApiKey);r.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);return r;}
 
     public async Task<MissionOption?> GetActiveMissionAsync()
