@@ -115,12 +115,12 @@ function openReadiness(){
 }
 let activeMissionId=null;
 const POLARIS_STATIONS=[
- {id:"air",label:"AIR",x:50,y:26},{id:"helmsman",label:"HELMSMAN",x:48,y:30},
- {id:"surface",label:"SURFACE",x:53,y:31},{id:"ood",label:"OOD",x:45,y:32},
- {id:"command_chair",label:"COMMAND CHAIR",x:50,y:34},{id:"engineering_duty_officer",label:"ENGINEER",x:34,y:73},
- {id:"torpedo_director",label:"TORPEDO DIRECTOR",x:53,y:48},{id:"mount_3_1",label:"MOUNT 3-1",x:78,y:58},
- {id:"mount_3_2",label:"MOUNT 3-2",x:45,y:37},{id:"mount_4_1",label:"MOUNT 4-1",x:51,y:55},
- {id:"mount_4_2",label:"MOUNT 4-2",x:38,y:44},{id:"mount_6_1",label:"MOUNT 6-1",x:30,y:85}
+ {id:"air",label:"AIR",x:21.2,y:77.9},{id:"helmsman",label:"HELMSMAN",x:12.4,y:87.0},
+ {id:"surface",label:"SURFACE",x:16.9,y:71.7},{id:"ood",label:"OOD",x:10.4,y:79.0},
+ {id:"command_chair",label:"COMMAND CHAIR",x:14.0,y:77.4},{id:"engineering_duty_officer",label:"ENGINEER",x:71.5,y:40.2},
+ {id:"torpedo_director",label:"TORPEDO DIRECTOR",x:35.3,y:72.4},{id:"mount_3_1",label:"MOUNT 3-1",x:78.8,y:61.2},
+ {id:"mount_3_2",label:"MOUNT 3-2",x:45.7,y:37.0},{id:"mount_4_1",label:"MOUNT 4-1",x:50.6,y:54.7},
+ {id:"mount_4_2",label:"MOUNT 4-2",x:38.3,y:46.8},{id:"mount_6_1",label:"MOUNT 6-1",x:29.7,y:88.5}
 ];
 function stationLabel(id){return POLARIS_STATIONS.find(s=>s.id===id)?.label||"UNASSIGNED"}
 function polarisMap(signups,canAssign){
