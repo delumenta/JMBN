@@ -65,17 +65,17 @@ public partial class MainWindow : Window
   MarkerCanvas.Children.Clear();
   if(ShipImage.Source is not BitmapSource bmp || ShipImage.ActualWidth<=0 || ShipImage.ActualHeight<=0)return;
   var box=GetRenderedImageBox(bmp);
-  foreach(var member in crew){
-   var station=stations.FirstOrDefault(s=>s.Id==member.Station); if(station is null)continue;
-   var x=box.X+box.Width*station.X/100.0; var y=box.Y+box.Height*station.Y/100.0;
-   var dot=new Ellipse{Width=member.UserId==data.UserId?14:12,Height=member.UserId==data.UserId?14:12,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,
-    Fill=member.UserId==data.UserId?new SolidColorBrush(Color.FromRgb(215,182,106)):Brushes.Transparent};
-   if(member.UserId==data.UserId)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
-   Canvas.SetLeft(dot,x-dot.Width/2);Canvas.SetTop(dot,y-dot.Height/2);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=member.Name+"\n"+station.Label,Foreground=new SolidColorBrush(member.UserId==data.UserId?Color.FromRgb(255,220,126):Color.FromRgb(215,182,106)),
-    FontFamily=new FontFamily("Play"),FontWeight=member.UserId==data.UserId?FontWeights.Bold:FontWeights.Normal,FontSize=member.UserId==data.UserId?11:10,
-    Background=new SolidColorBrush(Color.FromArgb(165,5,7,5)),Padding=new Thickness(4,2,4,2)};
-   Canvas.SetLeft(label,x+9);Canvas.SetTop(label,y-9);MarkerCanvas.Children.Add(label);
+  foreach(var station in stations){
+   var member=crew.FirstOrDefault(m=>m.Station==station.Id);
+   var x=box.X+box.Width*station.X/100.0;var y=box.Y+box.Height*station.Y/100.0;
+   var ready=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
+   var seated=member?.Readiness=="on_station";var mine=member?.UserId==data.UserId;
+   if(seated){var ring=new Ellipse{Width=20,Height=20,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=1,Fill=Brushes.Transparent};Canvas.SetLeft(ring,x-10);Canvas.SetTop(ring,y-10);MarkerCanvas.Children.Add(ring);}
+   var dot=new Ellipse{Width=14,Height=14,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,Fill=ready?new SolidColorBrush(Color.FromRgb(215,182,106)):new SolidColorBrush(Color.FromRgb(5,7,5))};
+   if(mine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
+   Canvas.SetLeft(dot,x-7);Canvas.SetTop(dot,y-7);MarkerCanvas.Children.Add(dot);
+   var label=new TextBlock{Text=member is null?station.Label:station.Label+"\n"+member.Name.ToUpperInvariant(),Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=mine?FontWeights.Bold:FontWeights.Normal,FontSize=10,Background=new SolidColorBrush(Color.FromArgb(150,5,7,5)),Padding=new Thickness(4,2,4,2)};
+   Canvas.SetLeft(label,x+10);Canvas.SetTop(label,y-9);MarkerCanvas.Children.Add(label);
   }
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
