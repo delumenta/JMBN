@@ -22,7 +22,7 @@ public partial class MainWindow : Window
     string readiness="assigned";
  readonly Station[] stations=[
   new("air","AIR",21.2,77.9),new("helmsman","HELMSMAN",12.4,87.0),new("surface","SURFACE",16.9,71.7),
-  new("ood","OOD",10.4,79.0),new("command_chair","COMMAND CHAIR",14.0,77.4),new("engineering_duty_officer","ENGINEER",71.5,40.2),
+  new("ood","OOD",10.4,79.0),new("command_chair","CC",14.0,77.4),new("engineering_duty_officer","ENGINEER",71.5,40.2),
   new("torpedo_director","TORPEDO DIRECTOR",35.3,72.4),new("mount_3_1","MOUNT 3-1",77.0,59.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),
   new("mount_4_1","MOUNT 4-1",50.6,54.7),new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,84.8)
  ];
