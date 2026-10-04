@@ -22,7 +22,7 @@ public partial class MainWindow : Window
     string readiness="assigned";
  readonly Station[] stations=[
   new("air","AIR",21.2,77.9),new("helmsman","HELMSMAN",12.4,87.0),new("surface","SURFACE",16.9,71.7),
-  new("ood","OOD",10.4,79.0),new("command_chair","CC",14.0,77.4),new("engineering_duty_officer","ENGINEER",71.5,40.2),
+  new("ood","OOD",10.4,79.0),new("command_chair","COMMAND CHAIR",14.0,77.4),new("engineering_duty_officer","ENGINEERING DUTY OFFICER",71.5,40.2),
   new("torpedo_director","TORPEDO DIRECTOR",35.3,72.4),new("mount_3_1","MOUNT 3-1",77.0,59.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),
   new("mount_4_1","MOUNT 4-1",50.6,54.7),new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,84.8)
  ];
@@ -75,7 +75,7 @@ public partial class MainWindow : Window
    var dot=new Ellipse{Width=14,Height=14,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,Fill=ready?new SolidColorBrush(Color.FromRgb(215,182,106)):new SolidColorBrush(Color.FromRgb(5,7,5))};
    if(isMine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
    Canvas.SetLeft(dot,x-7);Canvas.SetTop(dot,y-7);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=member is null?station.Label:station.Label+"\n"+member.Name.ToUpperInvariant(),Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=10,Background=new SolidColorBrush(Color.FromArgb(150,5,7,5)),Padding=new Thickness(4,2,4,2)};
+   var label=new TextBlock{Text=member is null?station.Label:member.Name.ToUpperInvariant()+"\n"+station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=10,Background=new SolidColorBrush(Color.FromArgb(150,5,7,5)),Padding=new Thickness(4,2,4,2)};
    Canvas.SetLeft(label,x+10);Canvas.SetTop(label,y-9);MarkerCanvas.Children.Add(label);
   }
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
