@@ -3,7 +3,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Title="JMBN Polaris Overlay" WindowStyle="None" AllowsTransparency="True"
  Background="Transparent" Topmost="True" ShowInTaskbar="True"
- Width="1180" Height="700" MinWidth="720" MinHeight="430" ResizeMode="CanResizeWithGrip">
+ Width="1180" Height="700" MinWidth="720" MinHeight="430" ResizeMode="CanResizeWithGrip" FontFamily="Play">
  <Grid Margin="14">
   <Border Background="#E0080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
    <Grid>
@@ -22,10 +22,18 @@
       <StackPanel>
        <TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/>
        <TextBlock x:Name="PanelPrompt" Text="SIGN IN TO JMBN MANIFEST" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
-       <Button x:Name="LoginButton" Content="SIGN IN WITH DISCORD" Height="38" Margin="0,6,0,0" Click="Login_Click"/>
+       <Button x:Name="LoginButton" Content="SIGN IN WITH DISCORD" Height="38" Margin="0,6,0,0" Click="Login_Click" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
        <TextBlock x:Name="LoginError" Foreground="#D98272" FontFamily="Play" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"/>
        <StackPanel x:Name="MissionPanel" Visibility="Collapsed">
         <TextBlock x:Name="ActiveOperationText" Text="CHECKING COMMAND OPERATION…" Foreground="#D7B66A" FontFamily="Play" FontSize="12" Margin="0,12,0,0" TextWrapping="Wrap"/>
+        <StackPanel x:Name="CommandPanel" Visibility="Collapsed" Margin="0,12,0,0">
+         <TextBlock Text="COMMAND // LOAD MISSION" Foreground="#777D74" FontFamily="Play" FontSize="10" Margin="0,0,0,6"/>
+         <ComboBox x:Name="MissionPicker" Height="32" FontFamily="Play"/>
+         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+          <Button Content="LOAD MISSION" Width="145" Height="32" Click="LoadMission_Click" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
+          <Button Content="END OPERATION" Width="145" Height="32" Margin="8,0,0,0" Click="EndMission_Click" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
+         </StackPanel>
+        </StackPanel>
        </StackPanel>
       </StackPanel>
      </Border>
@@ -36,8 +44,8 @@
       <TextBlock x:Name="ManningText" Text="0 / 12 STATIONS MANNED" Foreground="#777D74" FontFamily="Play" FontSize="10" Margin="0,3,0,0"/>
      </StackPanel>
      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0">
-      <Button x:Name="AckButton" Content="ACKNOWLEDGE" Width="118" Height="32" Margin="0,0,8,0" Click="AckButton_Click" IsEnabled="False"/>
-      <Button x:Name="SeatButton" Content="ON STATION" Width="112" Height="32" Click="SeatButton_Click" IsEnabled="False"/>
+      <Button x:Name="AckButton" Content="ACKNOWLEDGE" Width="118" Height="32" Margin="0,0,8,0" Click="AckButton_Click" IsEnabled="False" FontFamily="Play" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
+      <Button x:Name="SeatButton" Content="ON STATION" Width="112" Height="32" Click="SeatButton_Click" IsEnabled="False" FontFamily="Play" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A"/>
      </StackPanel>
     </Grid>
    </Grid>
