@@ -75,7 +75,7 @@ public partial class MainWindow : Window
    var dot=new Ellipse{Width=16,Height=16,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,Fill=ready?new SolidColorBrush(Color.FromRgb(215,182,106)):new SolidColorBrush(Color.FromRgb(5,7,5))};
    if(isMine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
    Canvas.SetLeft(dot,x-8);Canvas.SetTop(dot,y-8);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=member is null?station.Label:member.Name.ToUpperInvariant()+"\n"+station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=11,Background=new SolidColorBrush(Color.FromArgb(135,5,7,5)),Padding=new Thickness(5,3,5,3)};
+   var label=new TextBlock{Text=member is null?station.Label:member.Name.ToUpperInvariant()+"\n"+station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=member is null?9:11,Background=member is null?Brushes.Transparent:new SolidColorBrush(Color.FromArgb(145,5,7,5)),Padding=member is null?new Thickness(3,1,3,1):new Thickness(5,3,5,3)};
    Canvas.SetLeft(label,x+12);Canvas.SetTop(label,y-11);MarkerCanvas.Children.Add(label);
   }
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
@@ -105,7 +105,7 @@ public partial class MainWindow : Window
   StationAssignPanel.Children.Clear();
   foreach(var station in stations){
    var row=new Grid{Margin=new Thickness(0,3,0,3)};
-   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(135)});
+   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(155)});
    row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(1,GridUnitType.Star)});
    var label=new TextBlock{Text=station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=10,VerticalAlignment=VerticalAlignment.Center};
    var picker=new ComboBox{FontFamily=new FontFamily("Play"),Height=28,Tag=station.Id};
