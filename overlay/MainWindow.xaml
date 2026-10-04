@@ -21,10 +21,15 @@
      <Border x:Name="LoadPanel" Width="390" Padding="22" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
       <StackPanel>
        <TextBlock Text="JMBN // MISSION OVERLAY" Foreground="#D7B66A" FontFamily="Play" FontWeight="Bold" FontSize="18"/>
-       <TextBlock Text="ACTIVE OPERATION" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
-       <ComboBox x:Name="MissionPicker" Height="34" FontFamily="Play"/>
-       <Button Content="LOAD OPERATION" Margin="0,14,0,0" Height="36" Click="LoadOperation_Click"/>
-       <TextBlock Text="Choose the mission you are deploying on." Foreground="#777D74" FontFamily="Play" FontSize="10" Margin="0,10,0,0"/>
+       <TextBlock x:Name="PanelPrompt" Text="SIGN IN TO JMBN MANIFEST" Foreground="#777D74" FontFamily="Play" FontSize="11" Margin="0,18,0,6"/>
+       <TextBox x:Name="UsernameBox" Height="32" Margin="0,0,0,8" ToolTip="Username or email"/>
+       <PasswordBox x:Name="PasswordBox" Height="32" Margin="0,0,0,10" ToolTip="Password"/>
+       <Button x:Name="LoginButton" Content="SIGN IN" Height="36" Click="Login_Click"/>
+       <TextBlock x:Name="LoginError" Foreground="#D98272" FontFamily="Play" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"/>
+       <StackPanel x:Name="MissionPanel" Visibility="Collapsed">
+        <ComboBox x:Name="MissionPicker" Height="34" FontFamily="Play" Margin="0,12,0,0"/>
+        <Button Content="LOAD OPERATION" Margin="0,14,0,0" Height="36" Click="LoadOperation_Click"/>
+       </StackPanel>
       </StackPanel>
      </Border>
     </Grid>
