@@ -52,7 +52,7 @@ public partial class MainWindow : Window
    if(latest is null){
     activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Visible;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();return;
    }
-   activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
+   activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();LoadPanel.Visibility=CommandPanel.Visibility==Visibility.Visible?Visibility.Visible:Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
   }catch{StatusText.Text="SYNC RETRYING";}
  }
