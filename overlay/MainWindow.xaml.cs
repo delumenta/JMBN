@@ -92,6 +92,39 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
+ async void AssignStations_Click(object sender,RoutedEventArgs e){
+  if(activeMission is null)return;
+  if(StationAssignScroll.Visibility==Visibility.Visible){StationAssignScroll.Visibility=Visibility.Collapsed;return;}
+  await RefreshCrewAsync();BuildStationAssignmentPanel();StationAssignScroll.Visibility=Visibility.Visible;
+ }
+ void BuildStationAssignmentPanel(){
+  StationAssignPanel.Children.Clear();
+  foreach(var station in stations){
+   var row=new Grid{Margin=new Thickness(0,3,0,3)};
+   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(135)});
+   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(1,GridUnitType.Star)});
+   var label=new TextBlock{Text=station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=10,VerticalAlignment=VerticalAlignment.Center};
+   var picker=new ComboBox{FontFamily=new FontFamily("Play"),Height=28,Tag=station.Id};
+   picker.Items.Add(new CrewChoice(null,"— UNASSIGNED —"));
+   foreach(var member in crew)picker.Items.Add(new CrewChoice(member.UserId,member.Name.ToUpperInvariant()));
+   var current=crew.FirstOrDefault(m=>m.Station==station.Id);
+   picker.SelectedItem=picker.Items.Cast<CrewChoice>().FirstOrDefault(i=>i.UserId==current?.UserId)??picker.Items[0];
+   picker.SelectionChanged+=StationPicker_Changed;
+   Grid.SetColumn(label,0);Grid.SetColumn(picker,1);row.Children.Add(label);row.Children.Add(picker);StationAssignPanel.Children.Add(row);
+  }
+ }
+ async void StationPicker_Changed(object sender,SelectionChangedEventArgs e){
+  if(activeMission is null||sender is not ComboBox picker||picker.SelectedItem is not CrewChoice choice)return;
+  var station=picker.Tag?.ToString();if(string.IsNullOrWhiteSpace(station))return;
+  try{
+   var previous=crew.FirstOrDefault(m=>m.Station==station);
+   if(choice.UserId is null){if(previous is not null)await data.AssignStationAsync(activeMission.Id,previous.UserId,null);}
+   else await data.AssignStationAsync(activeMission.Id,choice.UserId,station);
+   await RefreshCrewAsync();BuildStationAssignmentPanel();
+  }catch(Exception ex){LoginError.Text=ex.Message;await RefreshCrewAsync();BuildStationAssignmentPanel();}
+ }
+ record CrewChoice(string? UserId,string Name){public override string ToString()=>Name;}
+
  async void LoadMission_Click(object sender,RoutedEventArgs e){
   if(MissionPicker.SelectedItem is not MissionOption mission)return;
   try{await data.SetActiveOperationAsync(mission.Id);await RefreshOperationAsync();}catch(Exception ex){LoginError.Text=ex.Message;}
