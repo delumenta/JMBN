@@ -75,6 +75,7 @@ public partial class MainWindow : Window
   if(ShipImage.Source is not BitmapSource bmp || ShipImage.ActualWidth<=0 || ShipImage.ActualHeight<=0)return;
   var box=GetRenderedImageBox(bmp);
   var gold=new SolidColorBrush(Color.FromRgb(215,182,106));
+  var white=new SolidColorBrush(Color.FromRgb(232,232,232));
   var dark=new SolidColorBrush(Color.FromArgb(215,5,7,5));
   foreach(var station in stations){
    var member=crew.FirstOrDefault(m=>m.Station==station.Id);
@@ -82,25 +83,27 @@ public partial class MainWindow : Window
    var lx=box.X+box.Width*station.LabelX/100.0; var ly=box.Y+box.Height*station.LabelY/100.0;
    var acknowledged=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
    var isMine=member?.UserId==data.UserId;
+   var ring=member is null?white:gold;
 
    var labelText=member is null?"UNASSIGNED":member.Name.ToUpperInvariant();
    var label=new Border{Background=dark,BorderBrush=gold,BorderThickness=new Thickness(1),CornerRadius=new CornerRadius(2),Padding=new Thickness(6,3,6,3)};
    var stack=new StackPanel();
    stack.Children.Add(new TextBlock{Text=station.Label,Foreground=gold,FontFamily=new FontFamily("Play"),FontWeight=FontWeights.Bold,FontSize=10,TextWrapping=TextWrapping.NoWrap});
    stack.Children.Add(new TextBlock{Text=labelText,Foreground=member is null?new SolidColorBrush(Color.FromRgb(145,166,139)):Brushes.White,FontFamily=new FontFamily("Play"),FontSize=9,Margin=new Thickness(0,1,0,0),TextWrapping=TextWrapping.NoWrap});
+   label.BorderBrush=ring;
    label.Child=stack;
    label.Measure(new Size(double.PositiveInfinity,double.PositiveInfinity));
    var labelW=label.DesiredSize.Width; var labelH=label.DesiredSize.Height;
    var labelCenterX=lx+labelW/2; var labelCenterY=ly+labelH/2;
 
-   var line=new Line{X1=ax,Y1=ay,X2=labelCenterX,Y2=labelCenterY,Stroke=gold,StrokeThickness=1.6};
+   var line=new Line{X1=ax,Y1=ay,X2=labelCenterX,Y2=labelCenterY,Stroke=ring,StrokeThickness=1.6};
    MarkerCanvas.Children.Add(line);
 
    if(isMine){
     var glowRing=new Ellipse{Width=27,Height=27,Stroke=gold,StrokeThickness=2,Fill=Brushes.Transparent,Effect=new DropShadowEffect{Color=Color.FromRgb(255,194,58),BlurRadius=18,ShadowDepth=0,Opacity=.95}};
     Canvas.SetLeft(glowRing,ax-13.5);Canvas.SetTop(glowRing,ay-13.5);MarkerCanvas.Children.Add(glowRing);
    }
-   var dot=new Ellipse{Width=17,Height=17,Stroke=gold,StrokeThickness=2.2,Fill=acknowledged?gold:new SolidColorBrush(Color.FromArgb(225,5,7,5))};
+   var dot=new Ellipse{Width=17,Height=17,Stroke=ring,StrokeThickness=2.2,Fill=acknowledged?gold:new SolidColorBrush(Color.FromArgb(225,5,7,5))};
    Canvas.SetLeft(dot,ax-8.5);Canvas.SetTop(dot,ay-8.5);MarkerCanvas.Children.Add(dot);
 
    Canvas.SetLeft(label,lx);Canvas.SetTop(label,ly);MarkerCanvas.Children.Add(label);
