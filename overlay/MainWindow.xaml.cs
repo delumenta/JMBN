@@ -22,7 +22,7 @@ public partial class MainWindow : Window
     string readiness="assigned";
  readonly Station[] stations=[
   new("command_chair","COMMAND CHAIR",13.3,76.0,4.8,52.8),
-  new("icc","INTEGRATED COMMAND CENTRE",18.6,62.0,14.2,48.0),
+  new("icc","INTEGRATED COMMAND CENTRE",25.8,58.0,14.2,46.0),
   new("ood","OFFICER OF THE DECK",9.6,77.5,0.8,67.6),
   new("helmsman","HELMSMAN",11.7,85.5,7.0,91.0),
   new("air","CHIEF OF THE WATCH / “AIR”",20.5,76.0,49.5,82.0),
@@ -79,14 +79,14 @@ public partial class MainWindow : Window
   var white=new SolidColorBrush(Color.FromRgb(232,232,232));
   var dark=new SolidColorBrush(Color.FromArgb(215,5,7,5));
   foreach(var station in stations){
-   var member=station.Id=="icc"?null:crew.FirstOrDefault(m=>m.Station==station.Id);
+   var member=crew.FirstOrDefault(m=>m.Station==station.Id);
    var ax=box.X+box.Width*station.AnchorX/100.0; var ay=box.Y+box.Height*station.AnchorY/100.0;
    var lx=box.X+box.Width*station.LabelX/100.0; var ly=box.Y+box.Height*station.LabelY/100.0;
    var acknowledged=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
    var isMine=member?.UserId==data.UserId;
    var ring=member is null?white:gold;
 
-   var labelText=station.Id=="icc"?"ICC":member is null?"UNASSIGNED":member.Name.ToUpperInvariant();
+   var labelText=member is null?"UNASSIGNED":member.Name.ToUpperInvariant();
    var label=new Border{Background=dark,BorderBrush=gold,BorderThickness=new Thickness(1),CornerRadius=new CornerRadius(2),Padding=new Thickness(6,3,6,3)};
    var stack=new StackPanel();
    stack.Children.Add(new TextBlock{Text=station.Label,Foreground=gold,FontFamily=new FontFamily("Play"),FontWeight=FontWeights.Bold,FontSize=10,TextWrapping=TextWrapping.NoWrap});
@@ -109,7 +109,7 @@ public partial class MainWindow : Window
 
    Canvas.SetLeft(label,lx);Canvas.SetTop(label,ly);MarkerCanvas.Children.Add(label);
   }
-  ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Count(s=>s.Id!="icc")} ASSIGNABLE STATIONS MANNED";
+  ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   AssignmentText.Text=mine is null?"YOUR STATION // NOT ASSIGNED":"YOUR STATION // "+mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
  }
@@ -134,7 +134,7 @@ public partial class MainWindow : Window
  }
  void BuildStationAssignmentPanel(){
   StationAssignPanel.Children.Clear();
-  foreach(var station in stations.Where(s=>s.Id!="icc")){
+  foreach(var station in stations){
    var row=new Grid{Margin=new Thickness(0,1,0,1)};
    row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(115)});
    row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(1,GridUnitType.Star)});
