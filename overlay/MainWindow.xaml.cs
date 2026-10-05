@@ -21,10 +21,10 @@ public partial class MainWindow : Window
     readonly System.Windows.Threading.DispatcherTimer refreshTimer = new(){ Interval = TimeSpan.FromSeconds(8) };
     string readiness="assigned";
  readonly Station[] stations=[
-  new("air","AIR",21.2,77.9),new("helmsman","HELMSMAN",12.4,87.0),new("surface","SURFACE",16.9,71.7),
-  new("ood","OOD",10.4,79.0),new("command_chair","COMMAND CHAIR",14.0,77.4),new("engineering_duty_officer","ENGINEERING DUTY OFFICER",71.5,40.2),
-  new("torpedo_director","TORPEDO DIRECTOR",35.3,72.4),new("mount_3_1","MOUNT 3-1",77.0,59.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),
-  new("mount_4_1","MOUNT 4-1",50.6,54.7),new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,84.8)
+  new("command_chair","CC",14.0,77.4),new("ood","OOD",10.4,79.0),new("helmsman","HELMSMAN",12.4,87.0),new("air","AIR",21.2,77.9),
+  new("surface","SURFACE",16.9,71.7),new("engineering_duty_officer","ENGINEERING",71.5,40.2),new("torpedo_director","TORPEDO",35.3,72.4),
+  new("mount_3_1","MOUNT 3-1",77.0,59.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),new("mount_4_1","MOUNT 4-1",50.6,54.7),
+  new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,84.8)
  ];
 
  public MainWindow(){
@@ -104,11 +104,11 @@ public partial class MainWindow : Window
  void BuildStationAssignmentPanel(){
   StationAssignPanel.Children.Clear();
   foreach(var station in stations){
-   var row=new Grid{Margin=new Thickness(0,3,0,3)};
-   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(155)});
+   var row=new Grid{Margin=new Thickness(0,1,0,1)};
+   row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(115)});
    row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(1,GridUnitType.Star)});
    var label=new TextBlock{Text=station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=10,VerticalAlignment=VerticalAlignment.Center};
-   var picker=new ComboBox{FontFamily=new FontFamily("Play"),Height=28,Tag=station.Id};
+   var picker=new ComboBox{FontFamily=new FontFamily("Play"),Height=24,Tag=station.Id};
    picker.Items.Add(new CrewChoice(null,"— UNASSIGNED —"));
    foreach(var member in crew)picker.Items.Add(new CrewChoice(member.UserId,member.Name.ToUpperInvariant()));
    var current=crew.FirstOrDefault(m=>m.Station==station.Id);
