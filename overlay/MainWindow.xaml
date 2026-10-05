@@ -12,8 +12,42 @@
    <Setter Property="Foreground" Value="#D7B66A"/>
    <Setter Property="BorderBrush" Value="#8E7546"/>
    <Setter Property="BorderThickness" Value="1"/>
+   <Setter Property="Padding" Value="8,3"/>
+   <Setter Property="Template">
+    <Setter.Value>
+     <ControlTemplate TargetType="ComboBox">
+      <Grid>
+       <Border x:Name="Shell" Background="#050605" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+        <Grid>
+         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="28"/></Grid.ColumnDefinitions>
+         <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Left" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" TextElement.Foreground="#D7B66A"/>
+         <Border Grid.Column="1" BorderBrush="#40351F" BorderThickness="1,0,0,0">
+          <Path Width="8" Height="5" Fill="#D7B66A" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 8 0 L 4 5 Z"/>
+         </Border>
+        </Grid>
+       </Border>
+       <ToggleButton Background="Transparent" BorderThickness="0" Focusable="False" ClickMode="Press" IsChecked="{Binding IsDropDownOpen,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" Opacity="0"/>
+       <Popup x:Name="PART_Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+        <Border Background="#050605" BorderBrush="#8E7546" BorderThickness="1" MinWidth="{Binding ActualWidth,RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="320">
+         <ScrollViewer><ItemsPresenter/></ScrollViewer>
+        </Border>
+       </Popup>
+      </Grid>
+      <ControlTemplate.Triggers>
+       <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Shell" Property="BorderBrush" Value="#D7B66A"/></Trigger>
+       <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Shell" Property="Opacity" Value=".55"/></Trigger>
+      </ControlTemplate.Triggers>
+     </ControlTemplate>
+    </Setter.Value>
+   </Setter>
   </Style>
-  <Style TargetType="ComboBoxItem"><Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#050605"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="Padding" Value="8,6"/></Style>
+  <Style TargetType="ComboBoxItem">
+   <Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#050605"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="Padding" Value="8,6"/>
+   <Style.Triggers>
+    <Trigger Property="IsHighlighted" Value="True"><Setter Property="Background" Value="#1A170F"/><Setter Property="Foreground" Value="#F1D28A"/></Trigger>
+    <Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#241E10"/><Setter Property="Foreground" Value="#F1D28A"/></Trigger>
+   </Style.Triggers>
+  </Style>
  </Window.Resources>
  <Grid Margin="8">
   <Border Background="#E0080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
