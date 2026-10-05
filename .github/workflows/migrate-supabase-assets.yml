@@ -1,4 +1,4 @@
-name: Migrate Supabase static assets to GitHub
+name: Migrate Supabase static assets to GitHub\n# One-time migration runner
 
 on:
   push:
