@@ -12,7 +12,7 @@ namespace JMBNOverlay;
 internal sealed class SupabaseService
 {
     readonly HttpClient http = new();
-    string? accessToken;
+    string? accessToken;\n    static readonly SemaphoreSlim signInGate = new(1,1);
     internal string? UserId { get; private set; }
 
     static string B64(byte[] b)=>Convert.ToBase64String(b).TrimEnd('=').Replace('+','-').Replace('/','_');
@@ -20,22 +20,27 @@ internal sealed class SupabaseService
 
     public async Task SignInWithDiscordAsync()
     {
-        const string redirect="http://127.0.0.1:54327/";
-        using var listener=new HttpListener();
-        listener.Prefixes.Add(redirect); listener.Start();
-        var state=RandomToken();
-        var handoff="https://delumenta.github.io/onthego/overlay-auth.html?port=54327&state="+Uri.EscapeDataString(state);
-        Process.Start(new ProcessStartInfo(handoff){UseShellExecute=true});
-        var ctx=await listener.GetContextAsync();
-        var returnedState=ctx.Request.QueryString["state"];
-        var token=ctx.Request.QueryString["access_token"];
-        var html="<html><body style='background:#080a08;color:#d7b66a;font-family:sans-serif;padding:40px'><h2>JMBN MANIFEST LINKED</h2><p>You can return to the overlay.</p><script>window.close()</script></body></html>";
-        var bytes=Encoding.UTF8.GetBytes(html);ctx.Response.ContentType="text/html";ctx.Response.ContentLength64=bytes.Length;await ctx.Response.OutputStream.WriteAsync(bytes);ctx.Response.Close();listener.Stop();
-        if(string.IsNullOrWhiteSpace(token)||returnedState!=state)throw new InvalidOperationException("Discord sign-in was not completed.");
-        accessToken=token;
-        using var req=new HttpRequestMessage(HttpMethod.Get,SupabaseConfig.Url+"/auth/v1/user");req.Headers.Add("apikey",SupabaseConfig.ApiKey);req.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);
-        using var res=await http.SendAsync(req);if(!res.IsSuccessStatusCode)throw new InvalidOperationException("Manifest session could not be verified.");
-        using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());UserId=doc.RootElement.GetProperty("id").GetString();
+        if (!await signInGate.WaitAsync(0)) throw new InvalidOperationException("Discord sign-in is already in progress.");
+        try
+        {
+            const string redirect="http://127.0.0.1:54327/";
+            using var listener=new HttpListener(); listener.Prefixes.Add(redirect);
+            try { listener.Start(); }
+            catch (HttpListenerException ex) { throw new InvalidOperationException("JMBN sign-in is already open in another process. Close any other JMBN Companion window and try again.", ex); }
+            var state=RandomToken();
+            var handoff="https://delumenta.github.io/onthego/overlay-auth.html?port=54327&state="+Uri.EscapeDataString(state);
+            try { Process.Start(new ProcessStartInfo(handoff){UseShellExecute=true}); }
+            catch (Exception ex) { throw new InvalidOperationException("Could not open your browser for Discord sign-in.", ex); }
+            var ctx=await listener.GetContextAsync(); var returnedState=ctx.Request.QueryString["state"]; var token=ctx.Request.QueryString["access_token"];
+            var html="<html><body style='background:#080a08;color:#d7b66a;font-family:sans-serif;padding:40px'><h2>JMBN MANIFEST LINKED</h2><p>You can return to the companion app.</p><script>window.close()</script></body></html>";
+            var bytes=Encoding.UTF8.GetBytes(html);ctx.Response.ContentType="text/html";ctx.Response.ContentLength64=bytes.Length;await ctx.Response.OutputStream.WriteAsync(bytes);ctx.Response.Close();
+            if(string.IsNullOrWhiteSpace(token)||returnedState!=state)throw new InvalidOperationException("Discord sign-in was not completed.");
+            accessToken=token;
+            using var req=new HttpRequestMessage(HttpMethod.Get,SupabaseConfig.Url+"/auth/v1/user");req.Headers.Add("apikey",SupabaseConfig.ApiKey);req.Headers.Authorization=new AuthenticationHeaderValue("Bearer",accessToken);
+            using var res=await http.SendAsync(req);if(!res.IsSuccessStatusCode)throw new InvalidOperationException("Manifest session could not be verified.");
+            using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());UserId=doc.RootElement.GetProperty("id").GetString();
+        }
+        finally { signInGate.Release(); }
     }
 
     public async Task<bool> HasCommandAccessAsync()
