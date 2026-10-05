@@ -21,10 +21,18 @@ public partial class MainWindow : Window
     readonly System.Windows.Threading.DispatcherTimer refreshTimer = new(){ Interval = TimeSpan.FromSeconds(8) };
     string readiness="assigned";
  readonly Station[] stations=[
-  new("command_chair","CC",14.0,77.4),new("ood","OOD",10.4,79.0),new("helmsman","HELMSMAN",12.4,87.0),new("air","AIR",21.2,77.9),
-  new("surface","SURFACE",16.9,71.7),new("engineering_duty_officer","ENGINEERING",71.5,40.2),new("torpedo_director","TORPEDO",35.3,72.4),
-  new("mount_3_1","MOUNT 3-1",77.0,59.2),new("mount_3_2","MOUNT 3-2",45.7,37.0),new("mount_4_1","MOUNT 4-1",50.6,54.7),
-  new("mount_4_2","MOUNT 4-2",38.3,46.8),new("mount_6_1","MOUNT 6-1",29.7,84.8)
+  new("command_chair","COMMAND CHAIR",13.3,76.0,4.8,52.8),
+  new("ood","OFFICER OF THE DECK",9.6,77.5,0.8,67.6),
+  new("helmsman","HELMSMAN",11.7,85.5,7.0,91.0),
+  new("air","CHIEF OF THE WATCH / “AIR”",20.5,76.0,49.5,82.0),
+  new("surface","“SURFACE”",16.2,71.0,16.2,61.0),
+  new("engineering_duty_officer","ENGINEERING DUTY OFFICER",71.0,40.0,83.5,39.5),
+  new("torpedo_director","TORPEDO DIRECTOR CONSOLE",34.6,71.2,36.0,70.0),
+  new("mount_3_1","MOUNT 3-1",78.0,60.2,77.2,66.0),
+  new("mount_3_2","MOUNT 3-2",45.0,36.8,42.0,24.5),
+  new("mount_4_1","MOUNT 4-1",50.0,54.0,46.5,62.0),
+  new("mount_4_2","MOUNT 4-2",37.6,46.5,28.8,43.0),
+  new("mount_6_1","MOUNT 6-1",29.0,86.6,27.4,91.5)
  ];
 
  public MainWindow(){
@@ -66,17 +74,36 @@ public partial class MainWindow : Window
   MarkerCanvas.Children.Clear();
   if(ShipImage.Source is not BitmapSource bmp || ShipImage.ActualWidth<=0 || ShipImage.ActualHeight<=0)return;
   var box=GetRenderedImageBox(bmp);
+  var gold=new SolidColorBrush(Color.FromRgb(215,182,106));
+  var dark=new SolidColorBrush(Color.FromArgb(215,5,7,5));
   foreach(var station in stations){
    var member=crew.FirstOrDefault(m=>m.Station==station.Id);
-   var x=box.X+box.Width*station.X/100.0;var y=box.Y+box.Height*station.Y/100.0;
-   var ready=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
-   var seated=member?.Readiness=="on_station";var isMine=member?.UserId==data.UserId;
-   if(seated){var ring=new Ellipse{Width=20,Height=20,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=1,Fill=Brushes.Transparent};Canvas.SetLeft(ring,x-10);Canvas.SetTop(ring,y-10);MarkerCanvas.Children.Add(ring);}
-   var dot=new Ellipse{Width=16,Height=16,Stroke=new SolidColorBrush(Color.FromRgb(215,182,106)),StrokeThickness=2,Fill=ready?new SolidColorBrush(Color.FromRgb(215,182,106)):new SolidColorBrush(Color.FromRgb(5,7,5))};
-   if(isMine&&ready)dot.Effect=new DropShadowEffect{Color=Color.FromRgb(215,182,106),BlurRadius=16,ShadowDepth=0,Opacity=.9};
-   Canvas.SetLeft(dot,x-8);Canvas.SetTop(dot,y-8);MarkerCanvas.Children.Add(dot);
-   var label=new TextBlock{Text=member is null?station.Label:member.Name.ToUpperInvariant()+"\n"+station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontWeight=isMine?FontWeights.Bold:FontWeights.Normal,FontSize=member is null?9:11,Background=member is null?Brushes.Transparent:new SolidColorBrush(Color.FromArgb(145,5,7,5)),Padding=member is null?new Thickness(3,1,3,1):new Thickness(5,3,5,3)};
-   Canvas.SetLeft(label,x+12);Canvas.SetTop(label,y-11);MarkerCanvas.Children.Add(label);
+   var ax=box.X+box.Width*station.AnchorX/100.0; var ay=box.Y+box.Height*station.AnchorY/100.0;
+   var lx=box.X+box.Width*station.LabelX/100.0; var ly=box.Y+box.Height*station.LabelY/100.0;
+   var acknowledged=member is not null&&(member.Readiness=="acknowledged"||member.Readiness=="on_station");
+   var isMine=member?.UserId==data.UserId;
+
+   var labelText=member is null?"UNASSIGNED":member.Name.ToUpperInvariant();
+   var label=new Border{Background=dark,BorderBrush=gold,BorderThickness=new Thickness(1),CornerRadius=new CornerRadius(2),Padding=new Thickness(6,3,6,3)};
+   var stack=new StackPanel();
+   stack.Children.Add(new TextBlock{Text=station.Label,Foreground=gold,FontFamily=new FontFamily("Play"),FontWeight=FontWeights.Bold,FontSize=10,TextWrapping=TextWrapping.NoWrap});
+   stack.Children.Add(new TextBlock{Text=labelText,Foreground=member is null?new SolidColorBrush(Color.FromRgb(145,166,139)):Brushes.White,FontFamily=new FontFamily("Play"),FontSize=9,Margin=new Thickness(0,1,0,0),TextWrapping=TextWrapping.NoWrap});
+   label.Child=stack;
+   label.Measure(new Size(double.PositiveInfinity,double.PositiveInfinity));
+   var labelW=label.DesiredSize.Width; var labelH=label.DesiredSize.Height;
+   var labelCenterX=lx+labelW/2; var labelCenterY=ly+labelH/2;
+
+   var line=new Line{X1=ax,Y1=ay,X2=labelCenterX,Y2=labelCenterY,Stroke=gold,StrokeThickness=1.6};
+   MarkerCanvas.Children.Add(line);
+
+   if(isMine){
+    var glowRing=new Ellipse{Width=27,Height=27,Stroke=gold,StrokeThickness=2,Fill=Brushes.Transparent,Effect=new DropShadowEffect{Color=Color.FromRgb(255,194,58),BlurRadius=18,ShadowDepth=0,Opacity=.95}};
+    Canvas.SetLeft(glowRing,ax-13.5);Canvas.SetTop(glowRing,ay-13.5);MarkerCanvas.Children.Add(glowRing);
+   }
+   var dot=new Ellipse{Width=17,Height=17,Stroke=gold,StrokeThickness=2.2,Fill=acknowledged?gold:new SolidColorBrush(Color.FromArgb(225,5,7,5))};
+   Canvas.SetLeft(dot,ax-8.5);Canvas.SetTop(dot,ay-8.5);MarkerCanvas.Children.Add(dot);
+
+   Canvas.SetLeft(label,lx);Canvas.SetTop(label,ly);MarkerCanvas.Children.Add(label);
   }
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
@@ -151,7 +178,7 @@ public partial class MainWindow : Window
  void SetClickThrough(bool enabled){var h=new WindowInteropHelper(this).Handle;var ex=GetWindowLong(h,GWL_EXSTYLE);SetWindowLong(h,GWL_EXSTYLE,enabled?(ex|WS_EX_TRANSPARENT|WS_EX_LAYERED):(ex&~WS_EX_TRANSPARENT));}
  void CloseButton_Click(object sender,RoutedEventArgs e)=>Close();
  protected override void OnClosed(EventArgs e){var h=new WindowInteropHelper(this).Handle;UnregisterHotKey(h,HOTKEY_ID);base.OnClosed(e);}
- record Station(string Id,string Label,double X,double Y);
+ record Station(string Id,string Label,double AnchorX,double AnchorY,double LabelX,double LabelY);
   [DllImport("user32.dll")]static extern bool RegisterHotKey(IntPtr hWnd,int id,int fsModifiers,int vk);
  [DllImport("user32.dll")]static extern bool UnregisterHotKey(IntPtr hWnd,int id);
  [DllImport("user32.dll")]static extern int GetWindowLong(IntPtr hWnd,int nIndex);
