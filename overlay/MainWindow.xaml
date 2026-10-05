@@ -28,7 +28,7 @@
     </Grid>
     <Grid Grid.Row="1" x:Name="MapRoot" Background="#01000000">
      <TextBlock Text="CREW OVERLAY" Foreground="#7F8E7B" FontFamily="Play" FontSize="10" Margin="14,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="3"/>
-     <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.png" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
+     <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
      <Button x:Name="CommandTab" Content="COMMAND" Width="34" Height="110" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed" Click="CommandTab_Click" FontFamily="Play" Background="#090A08" Foreground="#D7B66A" BorderBrush="#D7B66A">
       <Button.LayoutTransform><RotateTransform Angle="-90"/></Button.LayoutTransform>
@@ -52,8 +52,7 @@
          <ScrollViewer x:Name="StationAssignScroll" Visibility="Collapsed" MaxHeight="390" Margin="0,8,0,0" VerticalScrollBarVisibility="Auto">
           <StackPanel x:Name="StationAssignPanel"/>
          </ScrollViewer>
-         <StackPanel Orientation="Horizontal" Visibility="Collapsed">
-         </StackPanel>
+         <StackPanel Orientation="Horizontal" Visibility="Collapsed"></StackPanel>
         </StackPanel>
        </StackPanel>
       </StackPanel>
