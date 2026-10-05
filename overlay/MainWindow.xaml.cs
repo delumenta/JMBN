@@ -59,7 +59,7 @@ public partial class MainWindow : Window
   try{
    var latest=await data.GetActiveMissionAsync();
    if(latest is null){
-    activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Visible;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();return;
+    activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();UpdateInfoPanels();return;
    }
    var changed=activeMission?.Id!=latest.Id;activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
@@ -112,6 +112,7 @@ public partial class MainWindow : Window
   ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   AssignmentText.Text=mine is null?"YOUR STATION // NOT ASSIGNED":"YOUR STATION // "+mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
+  UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();
  }
 
  Rect GetRenderedImageBox(BitmapSource bmp){
@@ -123,9 +124,44 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
+ void OverviewTab_Click(object sender,RoutedEventArgs e){
+  LoadPanel.Visibility=Visibility.Collapsed;
+  InfoPanelTitle.Text="OVERVIEW";OverviewPanel.Visibility=Visibility.Visible;CrewPanel.Visibility=Visibility.Collapsed;
+  UpdateInfoPanels();InfoPanel.Visibility=Visibility.Visible;
+ }
+ void CrewTab_Click(object sender,RoutedEventArgs e){
+  LoadPanel.Visibility=Visibility.Collapsed;
+  InfoPanelTitle.Text="POLARIS CREW";OverviewPanel.Visibility=Visibility.Collapsed;CrewPanel.Visibility=Visibility.Visible;
+  BuildCrewPanel();InfoPanel.Visibility=Visibility.Visible;
+ }
+ void InfoClose_Click(object sender,RoutedEventArgs e)=>InfoPanel.Visibility=Visibility.Collapsed;
  void CommandTab_Click(object sender,RoutedEventArgs e){
   if(CommandPanel.Visibility!=Visibility.Visible)return;
+  InfoPanel.Visibility=Visibility.Collapsed;
   LoadPanel.Visibility=LoadPanel.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
+ }
+ void UpdateInfoPanels(){
+  OverviewOperation.Text=activeMission?.Title.ToUpperInvariant()??"NO ACTIVE OPERATION";
+  var manned=crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station));
+  OverviewCrew.Text=$"{manned} / {stations.Length} STATIONS MANNED";
+  var assigned=crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station)&&x.Readiness=="assigned");
+  var ack=crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station)&&x.Readiness=="acknowledged");
+  var seated=crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station)&&x.Readiness=="on_station");
+  OverviewReadiness.Text=$"{assigned} ASSIGNED · {ack} ACKNOWLEDGED · {seated} ON STATION";
+  var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
+  OverviewAssignment.Text=mine is null?"NOT ASSIGNED":mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":"\n"+me.Role!.ToUpperInvariant());
+ }
+ void BuildCrewPanel(){
+  CrewListPanel.Children.Clear();
+  foreach(var station in stations){
+   var member=crew.FirstOrDefault(m=>m.Station==station.Id);
+   var block=new Border{BorderBrush=new SolidColorBrush(Color.FromRgb(45,42,31)),BorderThickness=new Thickness(0,0,0,1),Padding=new Thickness(0,8,0,8)};
+   var stack=new StackPanel();
+   stack.Children.Add(new TextBlock{Text=station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=10,FontWeight=FontWeights.Bold});
+   var state=member is null?"UNASSIGNED":member.Readiness=="on_station"?"ON STATION":member.Readiness=="acknowledged"?"ACKNOWLEDGED":"ASSIGNED";
+   stack.Children.Add(new TextBlock{Text=(member?.Name.ToUpperInvariant()??"—")+"  //  "+state,Foreground=member is null?new SolidColorBrush(Color.FromRgb(119,125,116)):Brushes.White,FontFamily=new FontFamily("Play"),FontSize=9,Margin=new Thickness(0,3,0,0)});
+   block.Child=stack;CrewListPanel.Children.Add(block);
+  }
  }
  async void AssignStations_Click(object sender,RoutedEventArgs e){
   if(activeMission is null)return;
