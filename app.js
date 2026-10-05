@@ -135,7 +135,7 @@ async function openMission(id){
  const {data:{session},error:authError}=await sb.auth.getSession();if(authError||!session){$("#detailBody").textContent="Sign in to view operations.";return}const uid=session.user.id;
  const [att,sign]=await Promise.all([sb.from("mission_attendees").select("*").eq("mission_id",id),sb.from("mission_signups").select("*").eq("mission_id",id)]);
  if(att.error||sign.error){console.error("Operation data:",att.error,sign.error);$("#detailBody").textContent="Unable to load this mission. Please try again.";return}const attendance=att.data||[], signups=sign.data||[], mine=signups.find(x=>x.user_id===uid);
- const people=new Map(); attendance.forEach(x=>people.set(x.user_id,{...x,status:x.status||x.attendance,_source:"attendance"})); signups.forEach(x=>people.set(x.user_id,{...(people.get(x.user_id)||{}),...x,_source:"signup"}));
+ const people=new Map(); attendance.forEach(x=>people.set(x.user_id,{...x,status:String(x.status||x.attendance||"").toLowerCase(),_source:"attendance"})); signups.forEach(x=>people.set(x.user_id,{...(people.get(x.user_id)||{}),...x,status:String(x.status||"").toLowerCase(),_source:"signup"}));
  const counts={going:0,maybe:0,not_going:0};signups.forEach(x=>{const s=String(x.status||"").toLowerCase();if(counts[s]!==undefined)counts[s]++});
  const roles=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
  const officer=await sb.rpc("is_elevated",{u:uid});const canAssign=officer.data===true&&!officer.error;
