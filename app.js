@@ -99,7 +99,7 @@ async function openCrew(userId){
  openDrawer('<div class="loading-detail">LOADING PERSONNEL FILE…</div>');
  const [certs,attendance,role,rank]=await Promise.all([
   sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",userId),
-  sb.from("mission_attendees").select("mission_id,attendance,role_in_mission,position_in_mission,joined_at").eq("user_id",userId),
+  sb.from("mission_signups").select("mission_id,status,operational_role,operational_station,created_at").eq("user_id",userId),
   p.ingame_role_id?sb.from("ingame_roles").select("*").eq("id",p.ingame_role_id).maybeSingle():Promise.resolve({data:null}),
   p.current_rank_id?sb.from("ranks").select("*").eq("id",p.current_rank_id).maybeSingle():Promise.resolve({data:null})
  ]);
@@ -193,7 +193,7 @@ async function loadMyProfile(){
   sb.from("v_profiles_with_rank").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("user_certifications").select("*").eq("user_id",uid),
-  sb.from("mission_attendees").select("*").eq("user_id",uid),
+  sb.from("mission_signups").select("*").eq("user_id",uid),
   sb.from("discord_links").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("user_roles").select("role_id").eq("user_id",uid),
   sb.from("academy_specialisation_ranks").select("*").eq("user_id",uid)
