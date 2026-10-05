@@ -6,8 +6,11 @@
  Width="1320" Height="820" MinWidth="820" MinHeight="560" ResizeMode="CanResizeWithGrip" FontFamily="Play">
  <Window.Resources>
   <Style TargetType="Button"><Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#090A08"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="BorderBrush" Value="#D7B66A"/><Setter Property="BorderThickness" Value="1"/></Style>
-  <Style TargetType="ComboBox"><Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#090A08"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="BorderBrush" Value="#D7B66A"/><Setter Property="BorderThickness" Value="1"/></Style>
-  <Style TargetType="ComboBoxItem"><Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#090A08"/><Setter Property="Foreground" Value="#D7B66A"/></Style>
+  <Style TargetType="ComboBox">
+   <Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#050605"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="BorderBrush" Value="#8E7546"/><Setter Property="BorderThickness" Value="1"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox"><Grid><Border Background="#050605" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/><Grid Margin="8,0,6,0"><ContentPresenter Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBlock Text="⌄" Foreground="#D7B66A" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12"/></Grid><Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False"><Border Background="#050605" BorderBrush="#8E7546" BorderThickness="1" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"><ScrollViewer><StackPanel IsItemsHost="True"/></ScrollViewer></Border></Popup></Grid></ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style TargetType="ComboBoxItem"><Setter Property="FontFamily" Value="Play"/><Setter Property="Background" Value="#050605"/><Setter Property="Foreground" Value="#D7B66A"/><Setter Property="Padding" Value="8,6"/></Style>
  </Window.Resources>
  <Grid Margin="8">
   <Border Background="#E0080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
@@ -21,7 +24,6 @@
      </StackPanel>
     </Grid>
     <Grid Grid.Row="1" x:Name="MapRoot" Background="#01000000">
-     <TextBlock Text="CREW OVERLAY" Foreground="#7F8E7B" FontSize="10" Margin="14,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="3"/>
      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
      <Button x:Name="CommandTab" Content="COMMAND" Width="92" Height="28" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,12,0" Visibility="Collapsed" Click="CommandTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546" Panel.ZIndex="5"/>
