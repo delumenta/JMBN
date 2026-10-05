@@ -91,8 +91,9 @@ internal sealed class SupabaseService
 
     public async Task<List<CrewAssignment>> GetCrewAsync(string missionId)
     {
-        using var req=Request(HttpMethod.Get,"/rest/v1/mission_signups?select=user_id,status,operational_role,operational_station,overlay_readiness&mission_id=eq."+Uri.EscapeDataString(missionId)+"&status=in.(going,Going)");
-        using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());var rows=doc.RootElement.EnumerateArray().ToList();
+        using var req=Request(HttpMethod.Get,"/rest/v1/mission_signups?select=user_id,status,operational_role,operational_station,overlay_readiness&mission_id=eq."+Uri.EscapeDataString(missionId));
+        using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();using var doc=JsonDocument.Parse(await res.Content.ReadAsStringAsync());
+        var rows=doc.RootElement.EnumerateArray().Where(x=>x.TryGetProperty("status",out var status)&&status.ValueKind!=JsonValueKind.Null&&string.Equals(status.GetString()?.Trim(),"going",StringComparison.OrdinalIgnoreCase)).ToList();
         var ids=rows.Select(x=>x.GetProperty("user_id").GetString()).Where(x=>!string.IsNullOrWhiteSpace(x)).Distinct().ToList();var names=new Dictionary<string,string>();
         if(ids.Count>0){using var p=Request(HttpMethod.Get,"/rest/v1/profiles?select=user_id,display_name,handle&user_id=in.("+string.Join(",",ids)+")");using var pr=await http.SendAsync(p);pr.EnsureSuccessStatusCode();using var pd=JsonDocument.Parse(await pr.Content.ReadAsStringAsync());
           foreach(var x in pd.RootElement.EnumerateArray()){var id=x.GetProperty("user_id").GetString()!;var name=x.TryGetProperty("display_name",out var d)&&d.ValueKind!=JsonValueKind.Null?d.GetString():null;if(string.IsNullOrWhiteSpace(name)&&x.TryGetProperty("handle",out var h)&&h.ValueKind!=JsonValueKind.Null)name=h.GetString();names[id]=name??"CREW";}}
