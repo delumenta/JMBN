@@ -1275,8 +1275,8 @@ async function loadMissions(uid){
 
   try{
     let { data, error } = await sb
-      .from('v_mission_attendees_detailed')
-      .select('mission_id, attendance, missions(id,title,start_time)')
+      .from('mission_signups')
+      .select('mission_id, status, missions(id,title,start_time)')
       .eq('user_id', uid)
       .order('missions.start_time', { ascending:false })
       .limit(20)
@@ -1284,8 +1284,8 @@ async function loadMissions(uid){
     // fallback if joined missions is null
     if(error || (data && data.length && data[0].missions == null)){
       const { data: bare, error: e2 } = await sb
-        .from('v_mission_attendees_detailed')
-        .select('mission_id, attendance')
+        .from('mission_signups')
+        .select('mission_id, status')
         .eq('user_id', uid)
         .order('mission_id', { ascending:false })
         .limit(50)
@@ -1306,7 +1306,7 @@ async function loadMissions(uid){
         .slice(0,20)
     }
 
-    const attended = (data || []).filter(r => r.attendance && r.attendance.toLowerCase() !== 'withdrawn')
+    const attended = (data || []).filter(r => r.status && r.status.toLowerCase() !== 'withdrawn')
     count.textContent = String(attended.length)
 
     if(!data || !data.length){
@@ -1317,7 +1317,7 @@ async function loadMissions(uid){
     box.innerHTML = data.map(r => {
       const m    = r.missions || {}
       const when = m.start_time ? new Date(m.start_time).toLocaleString() : ''
-      const att  = r.attendance || '—'
+      const att  = r.status || '—'
       return `<div class="item">
         <h4>${esc(m.title || 'Untitled Mission')}</h4>
         <div class="meta">${when} • Attendance: ${esc(att)}</div>
