@@ -12,7 +12,8 @@ namespace JMBNOverlay;
 internal sealed class SupabaseService
 {
     readonly HttpClient http = new();
-    string? accessToken;\n    static readonly SemaphoreSlim signInGate = new(1, 1); // serialize Discord auth attempts
+    string? accessToken;
+    static readonly SemaphoreSlim signInGate = new(1, 1); // serialize Discord auth attempts
     internal string? UserId { get; private set; }
 
     static string B64(byte[] b)=>Convert.ToBase64String(b).TrimEnd('=').Replace('+','-').Replace('/','_');
