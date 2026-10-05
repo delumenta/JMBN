@@ -109,9 +109,8 @@ public partial class MainWindow : Window
 
    Canvas.SetLeft(label,lx);Canvas.SetTop(label,ly);MarkerCanvas.Children.Add(label);
   }
-  ManningText.Text=$"{crew.Count(x=>!string.IsNullOrWhiteSpace(x.Station))} / {stations.Length} STATIONS MANNED";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
-  AssignmentText.Text=mine is null?"YOUR STATION // NOT ASSIGNED":"YOUR STATION // "+mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
+  AssignmentText.Text=mine is null?"NOT ASSIGNED":mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
   UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();
  }
 
@@ -204,12 +203,37 @@ public partial class MainWindow : Window
   try{await data.SetActiveOperationAsync(null);await RefreshOperationAsync();}catch(Exception ex){LoginError.Text=ex.Message;}
  }
  void ShipImage_SizeChanged(object sender,SizeChangedEventArgs e)=>DrawMarkers();
- async void AckButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"acknowledged");readiness="ack";UpdateReadiness();await RefreshCrewAsync();}
- async void SeatButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"on_station");readiness="seat";UpdateReadiness();await RefreshCrewAsync();}
+ async void AckButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"acknowledged");readiness="acknowledged";UpdateReadiness();await RefreshCrewAsync();}
+ async void SeatButton_Click(object sender,RoutedEventArgs e){if(activeMission is null)return;await data.SetReadinessAsync(activeMission.Id,"on_station");readiness="on_station";UpdateReadiness();await RefreshCrewAsync();}
  void UpdateReadiness(){
-  AckButton.Content=readiness=="assigned"?"ACKNOWLEDGE":"✓ ACKNOWLEDGED";
-  SeatButton.Content=readiness=="seat"?"● ON STATION":"ON STATION";
-  StatusText.Text=readiness=="seat"?"READY // ON STATION":readiness=="ack"?"ASSIGNMENT ACKNOWLEDGED":"POLARIS // ACTIVE";
+  var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);
+  var hasStation=me is not null&&!string.IsNullOrWhiteSpace(me.Station);
+  var state=me?.Readiness??readiness;
+  var gold=new SolidColorBrush(Color.FromRgb(215,182,106));
+  var white=new SolidColorBrush(Color.FromRgb(232,232,232));
+  PersonalStatusDot.Effect=null;
+  PersonalStatusDot.Fill=Brushes.Transparent;
+  PersonalStatusDot.Stroke=hasStation?gold:white;
+  AckButton.Visibility=Visibility.Collapsed;SeatButton.Visibility=Visibility.Collapsed;
+  if(!hasStation){
+   PersonalStatusText.Text="NOT ASSIGNED";PersonalStatusText.Foreground=white;
+   StatusText.Text=activeMission is null?"OPERATION NOT LOADED":"POLARIS // ACTIVE";
+   return;
+  }
+  if(state=="on_station"||state=="seat"){
+   PersonalStatusText.Text="ON STATION";PersonalStatusText.Foreground=gold;
+   PersonalStatusDot.Fill=gold;PersonalStatusDot.Effect=new DropShadowEffect{Color=Color.FromRgb(255,194,58),BlurRadius=12,ShadowDepth=0,Opacity=.85};
+   StatusText.Text="READY // ON STATION";return;
+  }
+  PersonalStatusDot.Effect=new DropShadowEffect{Color=Color.FromRgb(255,194,58),BlurRadius=12,ShadowDepth=0,Opacity=.85};
+  if(state=="acknowledged"||state=="ack"){
+   PersonalStatusText.Text="ACKNOWLEDGED";PersonalStatusText.Foreground=gold;
+   SeatButton.Visibility=Visibility.Visible;SeatButton.IsEnabled=true;
+   StatusText.Text="ASSIGNMENT ACKNOWLEDGED";return;
+  }
+  PersonalStatusText.Text="ASSIGNED";PersonalStatusText.Foreground=gold;
+  AckButton.Content="ACKNOWLEDGE";AckButton.Visibility=Visibility.Visible;AckButton.IsEnabled=true;
+  StatusText.Text="POLARIS // ACTIVE";
  }
  void Header_MouseLeftButtonDown(object sender,MouseButtonEventArgs e){if(e.ButtonState==MouseButtonState.Pressed)DragMove();}
  void RegisterOverlayHotkey(){var h=new WindowInteropHelper(this);var src=HwndSource.FromHwnd(h.Handle);src?.AddHook(WndProc);RegisterHotKey(h.Handle,HOTKEY_ID,MOD_ALT,VK_J);}
