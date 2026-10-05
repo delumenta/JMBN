@@ -1,0 +1,88 @@
+name: Migrate Supabase static assets to GitHub
+
+on:
+  push:
+    paths:
+      - ".github/workflows/migrate-supabase-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Download and optimize public static assets
+        shell: python
+        run: |
+          import os, urllib.parse, urllib.request
+          from PIL import Image
+          base="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public"
+          items={
+            "Ranks": ["AR-E4.png","CAPT-O6.png","CDRE-O7.png","CMDR-O5.png","CPO-E8.png","CWO-W3.png","ENS-O1.png","LCDR-O4.png","LR-E5.png","LT-O3.png","LTJG-O2.png","MCPO-E9.png","MID-OT.png","MR-E6.png","MWO-W2.png","OR-E2.png","OR-E3.png","PO-E7.png","WO-W1.png"],
+            "frontpage": ["Academy.png","grow.png","Grow123.png","jmbn.jpg","mission-1.png","mission(alt).jpg","mission123.png"],
+            "JMBNR": ["01.png","02.png","04.png","05.png","06.png","07.png","08.png","09.png","10.png","o3.png"],
+            "certification": ["APBmt1234.png","APBmt12346.png","APCargo.png","APENg.png","APGunnery (1).png","APGunnery.png","APMed.png","APmining.png","APOV.png","APPilot.png","BMT.png","BMTBigart.png","MED.png","MEDBigart.png","PIL.png","PILBigart.png","SOC.png","SOCBigart.png"],
+            "Modules": ["APFex.png","BMT-01.png","BMT-02.png","BMT-03.png","BMT-04.png","med-01.png","med-02.png","med-03.png"],
+            "LinkAccount": ["Step 3.png","Step1.png","Step2.png"]
+          }
+          for bucket,names in items.items():
+            outdir=os.path.join("assets","supabase",bucket)
+            os.makedirs(outdir,exist_ok=True)
+            for name in names:
+              url=f"{base}/{urllib.parse.quote(bucket,safe='')}/{urllib.parse.quote(name,safe='')}"
+              dst=os.path.join(outdir,name)
+              print("Downloading",bucket,name)
+              urllib.request.urlretrieve(url,dst)
+              try:
+                im=Image.open(dst)
+                max_px=1024 if bucket=="Ranks" else 1920
+                im.thumbnail((max_px,max_px),Image.Resampling.LANCZOS)
+                ext=os.path.splitext(name)[1].lower()
+                if ext==".png":
+                  im.save(dst,"PNG",optimize=True,compress_level=9)
+                else:
+                  if im.mode not in ("RGB","L"): im=im.convert("RGB")
+                  im.save(dst,"JPEG",quality=86,optimize=True,progressive=True)
+              except Exception as e:
+                print("Optimization skipped",dst,e)
+      - name: Replace hard-coded public Supabase asset URLs
+        shell: python
+        run: |
+          import os,re,urllib.parse
+          root="."
+          exts=(".html",".js",".css",".json",".md",".cs",".xaml")
+          prefix="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/public/"
+          for dp,ds,fs in os.walk(root):
+            if ".git" in dp.split(os.sep) or os.path.join("assets","supabase") in dp: continue
+            for fn in fs:
+              if not fn.endswith(exts): continue
+              p=os.path.join(dp,fn)
+              try: s=open(p,encoding="utf-8").read()
+              except: continue
+              old=s
+              def repl(m):
+                bucket=urllib.parse.unquote(m.group(1)); name=urllib.parse.unquote(m.group(2))
+                return "assets/supabase/"+bucket+"/"+name
+              s=re.sub(re.escape(prefix)+r"([^/]+)/([^\"'\x60\s)<>?#]+)",repl,s)
+              if s!=old:
+                open(p,"w",encoding="utf-8",newline="").write(s)
+                print("Updated",p)
+      - name: Commit migrated assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/supabase
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Migrate static Supabase assets to GitHub"
+            git push
+          fi
