@@ -118,7 +118,9 @@ public partial class MainWindow : Window
   var readyCount=crew.Count(x=>x.Readiness=="acknowledged"||x.Readiness=="on_station");
   ReadyRoomCrew.Text=$"CREW READINESS ({readyCount} / {crew.Count} READY)";
   ReadyRoomProgress.Maximum=Math.Max(1,crew.Count);ReadyRoomProgress.Value=readyCount;
-  ReadyRoomCrewDetail.Text=crew.Count==0?"No crew have RSVP’d Going.":readyCount==crew.Count?"All Going crew are ready for deployment.":$"{crew.Count-readyCount} of {crew.Count} Going crew not ready.";
+  var readyNames=crew.Where(x=>x.Readiness=="acknowledged"||x.Readiness=="on_station").Select(x=>x.Name.ToUpperInvariant()).ToList();
+  var waitingNames=crew.Where(x=>x.Readiness!="acknowledged"&&x.Readiness!="on_station").Select(x=>x.Name.ToUpperInvariant()).ToList();
+  ReadyRoomCrewDetail.Text=crew.Count==0?"No crew have RSVP’d Going.":readyNames.Count==0?$"READY: NONE   ·   WAITING: {string.Join(" · ",waitingNames)}":waitingNames.Count==0?$"READY: {string.Join(" · ",readyNames)}   ·   ALL CREW READY":$"READY: {string.Join(" · ",readyNames)}   ·   WAITING: {string.Join(" · ",waitingNames)}";
   UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();if(CrewPage.Visibility==Visibility.Visible)BuildCrewPage();
  }
 
