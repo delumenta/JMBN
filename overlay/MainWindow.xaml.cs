@@ -59,9 +59,9 @@ public partial class MainWindow : Window
   try{
    var latest=await data.GetActiveMissionAsync();
    if(latest is null){
-    activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();UpdateInfoPanels();return;
+    activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();UpdateInfoPanels();return;
    }
-   var changed=activeMission?.Id!=latest.Id;if(changed)ResetPreDeploymentChecks();activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
+   var changed=activeMission?.Id!=latest.Id;if(changed)ResetPreDeploymentChecks();activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
    ReadyRoomOperation.Text=latest.Title.ToUpperInvariant();
    ReadyRoomMissionTime.Text=latest.StartTime.ToLocalTime().ToString("ddd dd MMM yyyy · HHmm").ToUpperInvariant();
