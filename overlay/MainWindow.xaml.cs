@@ -63,6 +63,7 @@ public partial class MainWindow : Window
    }
    var changed=activeMission?.Id!=latest.Id;activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
+   ReadyRoomOperation.Text="PRE-DEPLOYMENT // "+latest.Title.ToUpperInvariant();
   }catch{StatusText.Text="SYNC RETRYING";}
  }
 
@@ -111,6 +112,8 @@ public partial class MainWindow : Window
   }
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   AssignmentText.Text=mine is null?"NOT ASSIGNED":mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
+  ReadyRoomAssignment.Text=AssignmentText.Text;
+  ReadyRoomCrew.Text=$"{crew.Count} CREW CONNECTED";
   UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();
  }
 
@@ -123,19 +126,36 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
+ void ReadyRoomTab_Click(object sender,RoutedEventArgs e){
+  InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;ReadyRoomPanel.Visibility=Visibility.Visible;
+ }
+ void PreflightCheck_Changed(object sender,RoutedEventArgs e){
+  if(DeploymentReadyButton is null)return;
+  DeploymentReadyButton.IsEnabled=LoadoutCheck.IsChecked==true&&BioCheck.IsChecked==true&&CommsCheck.IsChecked==true&&MedbayCheck.IsChecked==true&&activeMission is not null;
+ }
+ async void DeploymentReadyButton_Click(object sender,RoutedEventArgs e){
+  if(activeMission is null||!DeploymentReadyButton.IsEnabled)return;
+  try{
+   await data.SetReadinessAsync(activeMission.Id,"acknowledged");
+   readiness="acknowledged";UpdateReadiness();await RefreshCrewAsync();
+   DeploymentReadyButton.Content="READY // DEPLOYMENT CONFIRMED";DeploymentReadyButton.IsEnabled=false;
+  }catch(Exception ex){LoginError.Text=ex.Message;}
+ }
  void OverviewTab_Click(object sender,RoutedEventArgs e){
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;
   LoadPanel.Visibility=Visibility.Collapsed;
   InfoPanelTitle.Text="OVERVIEW";OverviewPanel.Visibility=Visibility.Visible;CrewPanel.Visibility=Visibility.Collapsed;
   UpdateInfoPanels();InfoPanel.Visibility=Visibility.Visible;
  }
  void CrewTab_Click(object sender,RoutedEventArgs e){
-  LoadPanel.Visibility=Visibility.Collapsed;
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;
   InfoPanelTitle.Text="POLARIS CREW";OverviewPanel.Visibility=Visibility.Collapsed;CrewPanel.Visibility=Visibility.Visible;
   BuildCrewPanel();InfoPanel.Visibility=Visibility.Visible;
  }
  void InfoClose_Click(object sender,RoutedEventArgs e)=>InfoPanel.Visibility=Visibility.Collapsed;
  void CommandTab_Click(object sender,RoutedEventArgs e){
   if(CommandPanel.Visibility!=Visibility.Visible)return;
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;
   InfoPanel.Visibility=Visibility.Collapsed;
   LoadPanel.Visibility=LoadPanel.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
  }
