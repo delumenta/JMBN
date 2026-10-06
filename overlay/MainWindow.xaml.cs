@@ -63,7 +63,8 @@ public partial class MainWindow : Window
    }
    var changed=activeMission?.Id!=latest.Id;if(changed)ResetPreDeploymentChecks();activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
-   ReadyRoomOperation.Text="PRE-DEPLOYMENT // "+latest.Title.ToUpperInvariant();
+   ReadyRoomOperation.Text=latest.Title.ToUpperInvariant();
+   ReadyRoomMissionTime.Text=latest.StartTime.ToLocalTime().ToString("ddd dd MMM yyyy · HHmm").ToUpperInvariant();
   }catch{StatusText.Text="SYNC RETRYING";}
  }
 
@@ -113,7 +114,11 @@ public partial class MainWindow : Window
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   AssignmentText.Text=mine is null?"NOT ASSIGNED":mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":" · "+me.Role!.ToUpperInvariant());
   ReadyRoomAssignment.Text=AssignmentText.Text;
-  ReadyRoomCrew.Text=$"{crew.Count} CREW CONNECTED";
+  ReadyRoomCallsign.Text=me is null?"JMBN CREW":me.Name.ToUpperInvariant();
+  var readyCount=crew.Count(x=>x.Readiness=="acknowledged"||x.Readiness=="on_station");
+  ReadyRoomCrew.Text=$"CREW ({readyCount} / {crew.Count} READY)";
+  ReadyRoomProgress.Maximum=Math.Max(1,crew.Count);ReadyRoomProgress.Value=readyCount;
+  ReadyRoomCrewDetail.Text=crew.Count==0?"Waiting for crew readiness.":$"{crew.Count-readyCount} crew remaining before deployment.";
   UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();
  }
 
