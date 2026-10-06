@@ -261,16 +261,16 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 
 // Bottom JMBN operations ticker
 (()=>{const el=$("#opsTicker"),chip=$("#opsChip"),msg=$("#opsMsg"),prev=$("#opsPrev"),next=$("#opsNext"),pause=$("#opsPause"),close=$("#opsClose");if(!el)return;const lines=[
-"CONTACT: AshenShrike joined the Frontier Fighters.",
-"OPS: FloatinTiger caused a “minor” power shortage.",
-"COMMS: Hendra broadcast karaoke on all channels. Again.",
-"SECURITY: Jeneral “poked” a pirate Idris. Backup requested.",
-"CARGO: Ricojes mislabeled 300 SCU of scrap as platinum.",
-"ALERT: Gerald installed Windows on the ship radar. It crashed.",
-"OPS: AshenShrike tried “turning it off and on again.” Success.",
+"CONTACT: [user] joined the Frontier Fighters.",
+"OPS: [user] caused a “minor” power shortage.",
+"COMMS: [user] broadcast karaoke on all channels. Again.",
+"SECURITY: [user] “poked” a pirate Idris. Backup requested.",
+"CARGO: [user] mislabeled 300 SCU of scrap as platinum.",
+"ALERT: [user] installed Windows on the ship radar. It crashed.",
+"OPS: [user] tried “turning it off and on again.” Success.",
 "SYSTEM: Update failed successfully. Classic.",
-"OPS: Nomad vs FloatinTiger over the last power cell.",
-"CARGO: Shrike stacked crates into a “fortress of solitude.”",
+"OPS: [user] vs [user] over the last power cell.",
+"CARGO: [user] stacked crates into a “fortress of solitude.”",
 "ENGINEERING: Someone touched the component that clearly said DO NOT TOUCH.",
 "COMMS: Open mic detected. Heavy breathing and snack consumption confirmed.",
 "SECURITY: Boarding party ready. Nobody remembered the door code.",
@@ -281,7 +281,7 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 "OPS: Crew reports the landing was technically survivable.",
 "COMMS: Whoever is playing music in Engineering has excellent taste.",
 "SECURITY: Suspicious individual identified. It was a mirror.",
-"ENGINEERING: Power restored. Cause of failure classified as “FloatinTiger.”",
+"ENGINEERING: Power restored. Cause of failure classified as “[user].”",
 "SYSTEM: Quantum drive emotionally unavailable. Try again later.",
 "OPS: Command confirms ramming is still not an approved docking procedure.",
 "CARGO: Box missing. Box found. Different box now missing.",
@@ -311,4 +311,4 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 "COMMS: Unknown transmission received: “o7”. Diplomatic response sent: “o7”.",
 "OPS: Captain has a plan. Details remain a developing situation.",
 "SYSTEM: JMBN network operational. Competence not guaranteed."
-];const styles={ALERT:"var(--gold2)",OPS:"var(--gold2)",COMMS:"#9ecbff",SECURITY:"tomato",CARGO:"#a0f0c0",SYSTEM:"#f7f1d0",CONTACT:"#f7f1d0"};let i=0,timer,playing=true;const type=line=>(line.match(/^([A-Z]+):/)||[])[1]||"OPS";function render(){const line=lines[i],t=type(line);chip.textContent=`[${t}]`;chip.style.background=styles[t]||"var(--gold2)";chip.style.color="#000";msg.style.opacity=0;setTimeout(()=>{msg.textContent=line;msg.style.opacity=1},180);pause.textContent=playing?"Pause":"Play"}function nextL(){i=(i+1)%lines.length;render()}function prevL(){i=(i-1+lines.length)%lines.length;render()}function start(){if(timer)return;playing=true;timer=setInterval(nextL,4000);render()}function stop(){playing=false;clearInterval(timer);timer=null;render()}next.onclick=()=>{stop();nextL()};prev.onclick=()=>{stop();prevL()};pause.onclick=()=>playing?stop():start();close.onclick=()=>{el.style.display="none";sessionStorage.setItem("opsClosed","1")};if(sessionStorage.getItem("opsClosed")==="1"){el.style.display="none";return}start()})();
+];const styles={ALERT:"var(--gold2)",OPS:"var(--gold2)",COMMS:"#9ecbff",SECURITY:"tomato",CARGO:"#a0f0c0",SYSTEM:"#f7f1d0",CONTACT:"#f7f1d0"};let i=0,timer,playing=true;const type=line=>(line.match(/^([A-Z]+):/)||[])[1]||"OPS";function render(){const raw=lines[i],line=raw.replaceAll("[user]",state.profile?.handle||state.profile?.display_name||"CREW"),t=type(line);chip.textContent=`[${t}]`;chip.style.background=styles[t]||"var(--gold2)";chip.style.color="#000";msg.style.opacity=0;setTimeout(()=>{msg.textContent=line;msg.style.opacity=1},180);pause.textContent=playing?"Pause":"Play"}function nextL(){i=(i+1)%lines.length;render()}function prevL(){i=(i-1+lines.length)%lines.length;render()}function start(){if(timer)return;playing=true;timer=setInterval(nextL,4000);render()}function stop(){playing=false;clearInterval(timer);timer=null;render()}next.onclick=()=>{stop();nextL()};prev.onclick=()=>{stop();prevL()};pause.onclick=()=>playing?stop():start();close.onclick=()=>{el.style.display="none";sessionStorage.setItem("opsClosed","1")};if(sessionStorage.getItem("opsClosed")==="1"){el.style.display="none";return}start()})();
