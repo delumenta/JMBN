@@ -49,7 +49,7 @@ public partial class MainWindow : Window
    await data.SignInWithDiscordAsync();
    LoginButton.Visibility=Visibility.Collapsed;
    PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
-   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;CommandTab.Visibility=Visibility.Visible;ShellCommandButton.Visibility=Visibility.Visible;DrawerCloseButton.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
+   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;ShellCommandButton.Visibility=Visibility.Visible;DrawerCloseButton.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
    refreshTimer.Start();
    await RefreshOperationAsync();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
@@ -119,7 +119,7 @@ public partial class MainWindow : Window
   ReadyRoomCrew.Text=$"CREW ({readyCount} / {crew.Count} READY)";
   ReadyRoomProgress.Maximum=Math.Max(1,crew.Count);ReadyRoomProgress.Value=readyCount;
   ReadyRoomCrewDetail.Text=crew.Count==0?"Waiting for crew readiness.":$"{crew.Count-readyCount} crew remaining before deployment.";
-  UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();
+  UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();if(CrewPage.Visibility==Visibility.Visible)BuildCrewPage();
  }
 
  Rect GetRenderedImageBox(BitmapSource bmp){
@@ -135,15 +135,17 @@ public partial class MainWindow : Window
   foreach(var b in new[]{ShellReadyRoomTab,ShellTacticalTab,ShellCrewTab,ShellGlossaryTab}){b.Background=new SolidColorBrush(Color.FromRgb(9,10,8));b.Foreground=new SolidColorBrush(Color.FromRgb(215,182,106));b.BorderThickness=new Thickness(0);}
   active.Background=new SolidColorBrush(Color.FromRgb(36,30,16));active.Foreground=new SolidColorBrush(Color.FromRgb(241,210,138));active.BorderBrush=new SolidColorBrush(Color.FromRgb(215,182,106));active.BorderThickness=new Thickness(0,0,0,2);
  }
- void ReadyRoomTab_Click(object sender,RoutedEventArgs e){
-  InfoPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;ReadyRoomPanel.Visibility=Visibility.Visible;SetShellTab(ShellReadyRoomTab);
+ void ShowPage(string page){
+  TacticalPage.Visibility=page=="tactical"?Visibility.Visible:Visibility.Collapsed;
+  ReadyRoomPanel.Visibility=page=="ready"?Visibility.Visible:Visibility.Collapsed;
+  CrewPage.Visibility=page=="crew"?Visibility.Visible:Visibility.Collapsed;
+  GlossaryPanel.Visibility=page=="glossary"?Visibility.Visible:Visibility.Collapsed;
+  InfoPanel.Visibility=Visibility.Collapsed;
+  if(page!="command")LoadPanel.Visibility=Visibility.Collapsed;
  }
- void TacticalTab_Click(object sender,RoutedEventArgs e){
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;SetShellTab(ShellTacticalTab);
- }
- void GlossaryTab_Click(object sender,RoutedEventArgs e){
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Visible;SetShellTab(ShellGlossaryTab);
- }
+ void ReadyRoomTab_Click(object sender,RoutedEventArgs e){ShowPage("ready");SetShellTab(ShellReadyRoomTab);}
+ void TacticalTab_Click(object sender,RoutedEventArgs e){ShowPage("tactical");SetShellTab(ShellTacticalTab);DrawMarkers();}
+ void GlossaryTab_Click(object sender,RoutedEventArgs e){ShowPage("glossary");SetShellTab(ShellGlossaryTab);}
  void SettingsButton_Click(object sender,RoutedEventArgs e){StatusText.Text="SETTINGS // COMING SOON";}
  void MinimizeButton_Click(object sender,RoutedEventArgs e)=>WindowState=WindowState.Minimized;
  void MaximizeButton_Click(object sender,RoutedEventArgs e)=>WindowState=WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized;
@@ -170,14 +172,11 @@ public partial class MainWindow : Window
   UpdateInfoPanels();InfoPanel.Visibility=Visibility.Visible;
  }
  void CrewTab_Click(object sender,RoutedEventArgs e){
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;SetShellTab(ShellCrewTab);
-  InfoPanelTitle.Text="POLARIS CREW";OverviewPanel.Visibility=Visibility.Collapsed;CrewPanel.Visibility=Visibility.Visible;
-  BuildCrewPanel();InfoPanel.Visibility=Visibility.Visible;
+  ShowPage("crew");SetShellTab(ShellCrewTab);BuildCrewPage();
  }
  void InfoClose_Click(object sender,RoutedEventArgs e)=>InfoPanel.Visibility=Visibility.Collapsed;
  void CommandTab_Click(object sender,RoutedEventArgs e){
   if(CommandPanel.Visibility!=Visibility.Visible)return;
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;
   InfoPanel.Visibility=Visibility.Collapsed;
   LoadPanel.Visibility=LoadPanel.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
  }
@@ -191,6 +190,19 @@ public partial class MainWindow : Window
   OverviewReadiness.Text=$"{assigned} ASSIGNED · {ack} ACKNOWLEDGED · {seated} ON STATION";
   var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);var mine=me is null?null:stations.FirstOrDefault(s=>s.Id==me.Station);
   OverviewAssignment.Text=mine is null?"NOT ASSIGNED":mine.Label+(string.IsNullOrWhiteSpace(me?.Role)?"":"\n"+me.Role!.ToUpperInvariant());
+ }
+ void BuildCrewPage(){
+  CrewPageList.Children.Clear();
+  foreach(var station in stations){
+   var member=crew.FirstOrDefault(m=>m.Station==station.Id);
+   var row=new Border{BorderBrush=new SolidColorBrush(Color.FromRgb(45,42,31)),BorderThickness=new Thickness(0,0,0,1),Padding=new Thickness(4,12,4,12)};
+   var grid=new Grid();grid.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(1,GridUnitType.Star)});grid.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(220)});
+   var left=new StackPanel();left.Children.Add(new TextBlock{Text=station.Label,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=12,FontWeight=FontWeights.Bold});
+   left.Children.Add(new TextBlock{Text=member?.Name.ToUpperInvariant()??"UNASSIGNED",Foreground=member is null?new SolidColorBrush(Color.FromRgb(119,125,116)):Brushes.White,FontFamily=new FontFamily("Play"),FontSize=11,Margin=new Thickness(0,4,0,0)});
+   var state=member is null?"UNASSIGNED":member.Readiness=="on_station"?"ON STATION":member.Readiness=="acknowledged"?"ACKNOWLEDGED":"ASSIGNED";
+   var status=new TextBlock{Text=state,Foreground=new SolidColorBrush(Color.FromRgb(215,182,106)),FontFamily=new FontFamily("Play"),FontSize=11,FontWeight=FontWeights.Bold,HorizontalAlignment=HorizontalAlignment.Right,VerticalAlignment=VerticalAlignment.Center};
+   Grid.SetColumn(left,0);Grid.SetColumn(status,1);grid.Children.Add(left);grid.Children.Add(status);row.Child=grid;CrewPageList.Children.Add(row);
+  }
  }
  void BuildCrewPanel(){
   CrewListPanel.Children.Clear();
