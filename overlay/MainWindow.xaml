@@ -52,7 +52,7 @@
  <Grid Margin="8">
   <Border Background="#E0080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
    <Grid>
-    <Grid.RowDefinitions><RowDefinition Height="46"/><RowDefinition Height="40"/><RowDefinition Height="*"/><RowDefinition Height="82"/><RowDefinition Height="48"/></Grid.RowDefinitions>
+    <Grid.RowDefinitions><RowDefinition Height="46"/><RowDefinition Height="40"/><RowDefinition Height="*"/><RowDefinition x:Name="TacticalStationFooterRow" Height="0"/><RowDefinition x:Name="TacticalLegendFooterRow" Height="0"/></Grid.RowDefinitions>
     <Grid Grid.Row="0" Background="#F00B0D0B" MouseLeftButtonDown="Header_MouseLeftButtonDown">
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
