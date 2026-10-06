@@ -56,7 +56,7 @@
     <Grid Grid.Row="0" Background="#F00B0D0B" MouseLeftButtonDown="Header_MouseLeftButtonDown">
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
-      <Border Width="27" Height="27" CornerRadius="14" BorderBrush="#D7B66A" BorderThickness="1.5" Margin="0,0,10,0"><TextBlock Text="J" Foreground="#D7B66A" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+      <Border Width="30" Height="30" CornerRadius="15" BorderBrush="#D7B66A" BorderThickness="1" Margin="0,0,10,0" ClipToBounds="True"><Image Source="https://delumenta.github.io/onthego/icons/icon-192.png" Stretch="UniformToFill"/></Border>
       <TextBlock Text="JMBN OPERATIONS COMPANION" Foreground="#D7B66A" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
      </StackPanel>
      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
