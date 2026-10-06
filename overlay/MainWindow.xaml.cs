@@ -116,9 +116,9 @@ public partial class MainWindow : Window
   ReadyRoomAssignment.Text=AssignmentText.Text;
   ReadyRoomCallsign.Text=me is null?"JMBN CREW":me.Name.ToUpperInvariant();
   var readyCount=crew.Count(x=>x.Readiness=="acknowledged"||x.Readiness=="on_station");
-  ReadyRoomCrew.Text=$"CREW ({readyCount} / {crew.Count} READY)";
+  ReadyRoomCrew.Text=$"CREW READINESS ({readyCount} / {crew.Count} READY)";
   ReadyRoomProgress.Maximum=Math.Max(1,crew.Count);ReadyRoomProgress.Value=readyCount;
-  ReadyRoomCrewDetail.Text=crew.Count==0?"Waiting for crew readiness.":$"{crew.Count-readyCount} crew remaining before deployment.";
+  ReadyRoomCrewDetail.Text=crew.Count==0?"No crew have RSVP’d Going.":readyCount==crew.Count?"All Going crew are ready for deployment.":$"{crew.Count-readyCount} of {crew.Count} Going crew not ready.";
   UpdateInfoPanels();if(CrewPanel.Visibility==Visibility.Visible)BuildCrewPanel();if(CrewPage.Visibility==Visibility.Visible)BuildCrewPage();
  }
 
@@ -155,7 +155,14 @@ public partial class MainWindow : Window
  }
  void PreflightCheck_Changed(object sender,RoutedEventArgs e){
   if(DeploymentReadyButton is null)return;
-  DeploymentReadyButton.IsEnabled=LoadoutCheck.IsChecked==true&&BioCheck.IsChecked==true&&CommsCheck.IsChecked==true&&MedbayCheck.IsChecked==true&&activeMission is not null;
+  var me=crew.FirstOrDefault(x=>x.UserId==data.UserId);
+  var hasStation=me is not null&&!string.IsNullOrWhiteSpace(me.Station);
+  DeploymentReadyButton.IsEnabled=hasStation&&LoadoutCheck.IsChecked==true&&BioCheck.IsChecked==true&&CommsCheck.IsChecked==true&&MedbayCheck.IsChecked==true&&activeMission is not null;
+ }
+ async void ResetCrewReadiness_Click(object sender,RoutedEventArgs e){
+  if(activeMission is null)return;
+  try{await data.ResetCrewReadinessAsync(activeMission.Id);ResetPreDeploymentChecks();await RefreshCrewAsync();LoginError.Text="CREW READINESS RESET";}
+  catch(Exception ex){LoginError.Text=ex.Message;}
  }
  async void DeploymentReadyButton_Click(object sender,RoutedEventArgs e){
   if(activeMission is null||!DeploymentReadyButton.IsEnabled)return;
@@ -270,6 +277,7 @@ public partial class MainWindow : Window
   PersonalStatusDot.Stroke=hasStation?gold:white;
   AckButton.Visibility=Visibility.Collapsed;SeatButton.Visibility=Visibility.Collapsed;
   if(!hasStation){
+   DeploymentReadyButton.IsEnabled=false;
    PersonalStatusText.Text="NOT ASSIGNED";PersonalStatusText.Foreground=white;
    StatusText.Text=activeMission is null?"OPERATION NOT LOADED":"POLARIS // ACTIVE";
    return;
