@@ -142,6 +142,8 @@ public partial class MainWindow : Window
   GlossaryPanel.Visibility=page=="glossary"?Visibility.Visible:Visibility.Collapsed;
   TacticalStationFooter.Visibility=page=="tactical"?Visibility.Visible:Visibility.Collapsed;
   TacticalLegendFooter.Visibility=page=="tactical"?Visibility.Visible:Visibility.Collapsed;
+  TacticalStationFooterRow.Height=page=="tactical"?new GridLength(82):new GridLength(0);
+  TacticalLegendFooterRow.Height=page=="tactical"?new GridLength(48):new GridLength(0);
   InfoPanel.Visibility=Visibility.Collapsed;
   if(page!="command")LoadPanel.Visibility=Visibility.Collapsed;
  }
