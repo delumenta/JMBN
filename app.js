@@ -213,14 +213,14 @@ async function loadMyProfile(){
   sb.from("v_profiles_with_rank").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("user_certifications").select("*").eq("user_id",uid),
-  sb.from("mission_signups").select("*").eq("user_id",uid),
+  sb.from("mission_signups").select("*").eq("user_id",uid).eq("attendance_confirmed",true),
   sb.from("discord_links").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("user_roles").select("role_id").eq("user_id",uid),
   sb.from("academy_specialisation_ranks").select("*").eq("user_id",uid),
   sb.from("ranks").select("id,code,name,category,paygrade,sort_order,image_url").eq("is_active",true).order("sort_order"),
   sb.from("certifications").select("certification_code,name,image_url,sort_order").order("sort_order")
  ]);
- const rr=rank.data||{}, pr=prog.data||{}, cs=certs.data||[], at=attendance.data||[], dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
+ const rr=rank.data||{}, pr=prog.data||{}, cs=certs.data||[], at=(attendance.data||[]).filter(x=>{const m=state.missions.find(z=>String(z.id)===String(x.mission_id));return m&&missionLocked(m)}), dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
  let roleNames=[];if(ur.length){const {data}=await sb.from("roles").select("*").in("id",ur.map(x=>x.role_id));roleNames=(data||[]).map(x=>x.name)}
  const name=p.display_name||p.handle||session.user.email?.split("@")[0]||"CREW", avatar=dl.avatar_url||"", rankArt=rr.rank_image_url||p.rank_image_url||"";
  const ranks=allRanks.data||[], currentCode=pr.current_code||rr.rank_code||p.rank_code||"", nextCode=pr.next_code||"";
