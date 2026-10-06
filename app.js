@@ -48,6 +48,12 @@ async function loadWelcomeProgress(uid){
  $("#welcomeProgress").hidden=false;$("#welcomeCurrentRank").textContent=p.current_code||state.profile?.rank_code||"—";$("#welcomeNextRank").textContent=p.has_next_rank?(p.next_code||"—"):"MAX RANK";$("#welcomeProgressPct").textContent=pct+"%";$("#welcomeProgressBar").style.width=pct+"%";
  $("#welcomeRequirements").innerHTML="<span>MISSIONS <b>"+esc(p.missions_attended??0)+"/"+esc(p.missions_target??"—")+"</b></span><span>HOURS <b>"+esc(p.hours_total??0)+"/"+esc(p.hours_target??"—")+"</b></span><span>CERTS <b>"+esc(p.certifications_total??0)+"/"+esc(p.certification_target??"—")+"</b></span>";
 }
+function renderPendingAccess(session,profile){
+ const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
+ document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#070806;color:#e8e5d8;font-family:Play,sans-serif"><section style="width:min(620px,100%);border:1px solid #665b2c;background:#0b0c09;padding:38px;box-shadow:0 0 60px #000"><p style="margin:0 0 12px;color:#bda54c;font-size:11px;letter-spacing:.18em">JMBN // PERSONNEL ACCESS</p><h1 style="margin:0 0 14px;font-size:32px;letter-spacing:.05em">WELCOME, '+esc(name.toUpperCase())+'</h1><p style="color:#aaa896;line-height:1.65">Your Discord identity has been verified and your JMBN personnel record has been created.</p><div style="margin:26px 0;padding:18px;border-left:2px solid #c6aa45;background:#11120d"><b style="display:block;color:#d8bf60;letter-spacing:.1em">ACCESS PENDING</b><span style="display:block;margin-top:8px;color:#aaa896;line-height:1.5">Command approval is required before the Manifest, Operations and Academy network becomes available.</span></div><button id="pendingLogout" style="border:1px solid #665b2c;background:transparent;color:#d8bf60;padding:11px 18px;font:700 12px Play,sans-serif;letter-spacing:.12em;cursor:pointer">SIGN OUT</button></section></div>';
+ document.getElementById("pendingLogout")?.addEventListener("click",async()=>{await sb.auth.signOut();location.replace(base()+"auth.html")});
+}
+
 async function load(){
  const {data:{session}}=await sb.auth.getSession();
  if(!session){location.replace(base()+"auth.html");return}
@@ -61,6 +67,7 @@ async function load(){
   sb.from("mission_signups").select("mission_id,status,operational_role,operational_station,overlay_readiness,attendance_confirmed,created_at").eq("user_id",uid)
  ]);
  state.profile=prof.data||{};state.missions=missions.data||[];state.crew=crew.data||[];state.certs=certs.data||[];state.announcements=ann.data||[];state.mySignups=mySignups.data||[];
+ if(!prof.data||String(state.profile.role||"Guest").toLowerCase()==="guest"){renderPendingAccess(session,state.profile);return}
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
  $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
