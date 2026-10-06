@@ -52,15 +52,38 @@
  <Grid Margin="8">
   <Border Background="#E0080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5">
    <Grid>
-    <Grid.RowDefinitions><RowDefinition Height="42"/><RowDefinition Height="*"/><RowDefinition Height="82"/><RowDefinition Height="48"/></Grid.RowDefinitions>
-    <Grid Grid.Row="0" Background="#D00C0E0B" MouseLeftButtonDown="Header_MouseLeftButtonDown">
-     <TextBlock x:Name="MissionTitle" Text="JMBN // POLARIS" Foreground="#D7B66A" FontWeight="Bold" FontSize="15" Margin="14,0" VerticalAlignment="Center"/>
-     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0">
-      <TextBlock x:Name="StatusText" Text="OPERATION NOT LOADED" Foreground="#91A68B" Margin="0,0,18,0"/>
-      <Button Content="×" Width="32" Height="26" Click="CloseButton_Click"/>
+    <Grid.RowDefinitions><RowDefinition Height="46"/><RowDefinition Height="40"/><RowDefinition Height="*"/><RowDefinition Height="82"/><RowDefinition Height="48"/></Grid.RowDefinitions>
+    <Grid Grid.Row="0" Background="#F00B0D0B" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+      <Border Width="27" Height="27" CornerRadius="14" BorderBrush="#D7B66A" BorderThickness="1.5" Margin="0,0,10,0"><TextBlock Text="J" Foreground="#D7B66A" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+      <TextBlock Text="JMBN OPERATIONS COMPANION" Foreground="#D7B66A" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
+     </StackPanel>
+     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+      <Ellipse Width="8" Height="8" Fill="#79D889" Margin="0,0,7,0"/>
+      <TextBlock x:Name="StatusText" Text="OPERATION NOT LOADED" Foreground="#91A68B" FontSize="10" VerticalAlignment="Center" Margin="0,0,14,0"/>
+      <Button Content="—" Width="30" Height="26" Click="MinimizeButton_Click" BorderThickness="0"/>
+      <Button Content="□" Width="30" Height="26" Click="MaximizeButton_Click" BorderThickness="0"/>
+      <Button Content="×" Width="30" Height="26" Click="CloseButton_Click" BorderThickness="0"/>
      </StackPanel>
     </Grid>
-    <Grid Grid.Row="1" x:Name="MapRoot" Background="#01000000" ClipToBounds="True">
+    <Grid Grid.Row="1" Background="#F0080908">
+     <Border BorderBrush="#5C4B2C" BorderThickness="0,1,0,1">
+      <Grid Margin="14,0">
+       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Button x:Name="ShellReadyRoomTab" Content="READY ROOM" Width="108" Height="30" Click="ReadyRoomTab_Click" Background="#241E10" Foreground="#F1D28A" BorderThickness="0,0,0,2"/>
+        <Button x:Name="ShellTacticalTab" Content="TACTICAL" Width="92" Height="30" Margin="5,0,0,0" Click="TacticalTab_Click" BorderThickness="0"/>
+        <Button x:Name="ShellCrewTab" Content="CREW" Width="72" Height="30" Margin="5,0,0,0" Click="CrewTab_Click" BorderThickness="0"/>
+        <Button x:Name="ShellGlossaryTab" Content="GLOSSARY" Width="92" Height="30" Margin="5,0,0,0" Click="GlossaryTab_Click" BorderThickness="0"/>
+       </StackPanel>
+       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button x:Name="ShellCommandButton" Content="COMMAND" Width="92" Height="30" Visibility="Collapsed" Click="CommandTab_Click"/>
+        <Button Content="⚙" Width="34" Height="30" Margin="7,0,0,0" Click="SettingsButton_Click"/>
+       </StackPanel>
+      </Grid>
+     </Border>
+    </Grid>
+    <Grid Grid.Row="2" x:Name="MapRoot" Background="#01000000" ClipToBounds="True">
      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,12,0" Panel.ZIndex="5">
@@ -110,6 +133,19 @@
        <Button Grid.Row="3" x:Name="DeploymentReadyButton" Content="✓  READY FOR DEPLOYMENT" Margin="28,8,28,16" FontSize="16" FontWeight="Bold" IsEnabled="False" Click="DeploymentReadyButton_Click"/>
       </Grid>
      </Border>
+     <Border x:Name="GlossaryPanel" Margin="26,54,26,24" Padding="28" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Visibility="Collapsed" Panel.ZIndex="9">
+      <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+       <StackPanel><TextBlock Text="COMMAND GLOSSARY" Foreground="#E8E8E8" FontSize="28" FontWeight="Bold"/><TextBlock Text="JMBN shipboard terminology and weapons-control calls." Foreground="#777D74" FontSize="11" Margin="0,5,0,16"/></StackPanel>
+       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel>
+        <TextBlock Text="SHIP ORIENTATION" Foreground="#D7B66A" FontSize="14" FontWeight="Bold" Margin="0,0,0,8"/>
+        <TextBlock Text="PORT / PORTSIDE — Left side of ship&#x0a;STARBOARD — Right side of ship&#x0a;FORE / BOW — Front of ship&#x0a;AFT / STERN — Rear of ship&#x0a;STARBOARD BOW — Front right&#x0a;PORT BOW — Front left&#x0a;STARBOARD REAR — Right rear&#x0a;PORT REAR — Left rear" Foreground="#E8E8E8" FontSize="12" LineHeight="22"/>
+        <TextBlock Text="CONTACTS &amp; WEAPONS CONTROL" Foreground="#D7B66A" FontSize="14" FontWeight="Bold" Margin="0,20,0,8"/>
+        <TextBlock Text="BOGEY — White contact; neutral / unknown&#x0a;BANDIT — Red contact; hostile&#x0a;WEAPONS SECURE — No shooting&#x0a;WEAPONS HOLD — Ready to shoot on orders&#x0a;WEAPONS TIGHT — Shoot bandits&#x0a;WEAPONS FREE — Shoot anything not friendly / blue" Foreground="#E8E8E8" FontSize="12" LineHeight="22"/>
+        <TextBlock Text="MISSILES &amp; MOUNTS" Foreground="#D7B66A" FontSize="14" FontWeight="Bold" Margin="0,20,0,8"/>
+        <TextBlock Text="VAMPIRE — Incoming missile&#x0a;BIRD — Outgoing missile&#x0a;BULLDOG — Torpedo / heavy anti-ship missile&#x0a;6-1 — Main S6 gun&#x0a;4-1 — Port S4 turret&#x0a;4-2 — Starboard S4 turret&#x0a;3-1 / 3-2 — S3 turrets" Foreground="#E8E8E8" FontSize="12" LineHeight="22"/>
+       </StackPanel></ScrollViewer>
+      </Grid>
+     </Border>
      <Border x:Name="InfoPanel" Width="330" Padding="18" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,48,10,10" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5" Visibility="Collapsed" Panel.ZIndex="6">
       <StackPanel>
        <Grid><TextBlock x:Name="InfoPanelTitle" Text="OVERVIEW" Foreground="#D7B66A" FontWeight="Bold" FontSize="18"/><Button Content="×" Width="28" Height="24" HorizontalAlignment="Right" Click="InfoClose_Click"/></Grid>
@@ -141,7 +177,7 @@
       </StackPanel>
      </Border>
     </Grid>
-    <Grid Grid.Row="2" Background="#F00A0C09">
+    <Grid Grid.Row="3" Background="#F00A0C09">
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
      <StackPanel Margin="16,9,12,8" VerticalAlignment="Center">
       <TextBlock Text="YOUR STATION" Foreground="#777D74" FontSize="9" FontWeight="Bold"/>
@@ -156,7 +192,7 @@
       <Button x:Name="SeatButton" Content="ON STATION" Width="112" Height="32" Click="SeatButton_Click" IsEnabled="False" Visibility="Collapsed"/>
      </StackPanel>
     </Grid>
-    <Grid Grid.Row="3" Background="#F0070807">
+    <Grid Grid.Row="4" Background="#F0070807">
      <Border BorderBrush="#806A3E" BorderThickness="0,1,0,0" Padding="16,5">
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
        <Ellipse Width="18" Height="18" Stroke="#E8E8E8" StrokeThickness="2" Fill="Transparent"/><StackPanel Margin="8,0,28,0"><TextBlock Text="UNASSIGNED" Foreground="#E8E8E8" FontSize="10" FontWeight="Bold"/><TextBlock Text="Station empty" Foreground="#777D74" FontSize="8"/></StackPanel>
