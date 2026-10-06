@@ -61,7 +61,7 @@ public partial class MainWindow : Window
    if(latest is null){
     activeMission=null;crew=[];ActiveOperationText.Text="NO ACTIVE OPERATION";MissionTitle.Text="JMBN // POLARIS";StatusText.Text="STANDING BY";LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=false;SeatButton.IsEnabled=false;DrawMarkers();UpdateInfoPanels();return;
    }
-   var changed=activeMission?.Id!=latest.Id;activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
+   var changed=activeMission?.Id!=latest.Id;if(changed)ResetPreDeploymentChecks();activeMission=latest;ActiveOperationText.Text=latest.Title.ToUpperInvariant();MissionTitle.Text="JMBN // "+latest.Title.ToUpperInvariant();if(CommandPanel.Visibility==Visibility.Visible&&changed)LoadPanel.Visibility=Visibility.Collapsed;else if(CommandPanel.Visibility!=Visibility.Visible)LoadPanel.Visibility=Visibility.Collapsed;AckButton.IsEnabled=true;SeatButton.IsEnabled=true;
    await RefreshCrewAsync();
    ReadyRoomOperation.Text="PRE-DEPLOYMENT // "+latest.Title.ToUpperInvariant();
   }catch{StatusText.Text="SYNC RETRYING";}
@@ -128,6 +128,10 @@ public partial class MainWindow : Window
 
  void ReadyRoomTab_Click(object sender,RoutedEventArgs e){
   InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;ReadyRoomPanel.Visibility=Visibility.Visible;
+ }
+ void ResetPreDeploymentChecks(){
+  LoadoutCheck.IsChecked=false;BioCheck.IsChecked=false;CommsCheck.IsChecked=false;MedbayCheck.IsChecked=false;
+  DeploymentReadyButton.Content="READY FOR DEPLOYMENT";DeploymentReadyButton.IsEnabled=false;
  }
  void PreflightCheck_Changed(object sender,RoutedEventArgs e){
   if(DeploymentReadyButton is null)return;
