@@ -107,4 +107,6 @@ internal sealed class SupabaseService
     }
 
     public async Task SetReadinessAsync(string missionId,string readiness){using var req=Request(HttpMethod.Post,"/rest/v1/rpc/set_my_overlay_readiness");req.Content=JsonContent.Create(new{p_mission_id=missionId,p_readiness=readiness});using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();}
+
+    public async Task ResetCrewReadinessAsync(string missionId){using var req=Request(HttpMethod.Post,"/rest/v1/rpc/command_reset_overlay_readiness");req.Content=JsonContent.Create(new{p_mission_id=missionId});using var res=await http.SendAsync(req);res.EnsureSuccessStatusCode();}
 }
