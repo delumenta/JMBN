@@ -140,6 +140,8 @@ public partial class MainWindow : Window
   ReadyRoomPanel.Visibility=page=="ready"?Visibility.Visible:Visibility.Collapsed;
   CrewPage.Visibility=page=="crew"?Visibility.Visible:Visibility.Collapsed;
   GlossaryPanel.Visibility=page=="glossary"?Visibility.Visible:Visibility.Collapsed;
+  TacticalStationFooter.Visibility=page=="tactical"?Visibility.Visible:Visibility.Collapsed;
+  TacticalLegendFooter.Visibility=page=="tactical"?Visibility.Visible:Visibility.Collapsed;
   InfoPanel.Visibility=Visibility.Collapsed;
   if(page!="command")LoadPanel.Visibility=Visibility.Collapsed;
  }
