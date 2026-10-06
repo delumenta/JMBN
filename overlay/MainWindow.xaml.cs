@@ -49,7 +49,7 @@ public partial class MainWindow : Window
    await data.SignInWithDiscordAsync();
    LoginButton.Visibility=Visibility.Collapsed;
    PanelPrompt.Text="MANIFEST LINKED";MissionPanel.Visibility=Visibility.Visible;StatusText.Text="MANIFEST CONNECTED";
-   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;CommandTab.Visibility=Visibility.Visible;DrawerCloseButton.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
+   if(await data.HasCommandAccessAsync()){CommandPanel.Visibility=Visibility.Visible;CommandTab.Visibility=Visibility.Visible;ShellCommandButton.Visibility=Visibility.Visible;DrawerCloseButton.Visibility=Visibility.Visible;MissionPicker.ItemsSource=await data.GetMissionChoicesAsync();}
    refreshTimer.Start();
    await RefreshOperationAsync();
   }catch(Exception ex){LoginError.Text=ex.Message;}finally{LoginButton.IsEnabled=true;}
@@ -131,9 +131,22 @@ public partial class MainWindow : Window
   return new Rect(left,top,w,h);
  }
 
- void ReadyRoomTab_Click(object sender,RoutedEventArgs e){
-  InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;ReadyRoomPanel.Visibility=Visibility.Visible;
+ void SetShellTab(Button active){
+  foreach(var b in new[]{ShellReadyRoomTab,ShellTacticalTab,ShellCrewTab,ShellGlossaryTab}){b.Background=new SolidColorBrush(Color.FromRgb(9,10,8));b.Foreground=new SolidColorBrush(Color.FromRgb(215,182,106));b.BorderThickness=new Thickness(0);}
+  active.Background=new SolidColorBrush(Color.FromRgb(36,30,16));active.Foreground=new SolidColorBrush(Color.FromRgb(241,210,138));active.BorderBrush=new SolidColorBrush(Color.FromRgb(215,182,106));active.BorderThickness=new Thickness(0,0,0,2);
  }
+ void ReadyRoomTab_Click(object sender,RoutedEventArgs e){
+  InfoPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;ReadyRoomPanel.Visibility=Visibility.Visible;SetShellTab(ShellReadyRoomTab);
+ }
+ void TacticalTab_Click(object sender,RoutedEventArgs e){
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;SetShellTab(ShellTacticalTab);
+ }
+ void GlossaryTab_Click(object sender,RoutedEventArgs e){
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;InfoPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Visible;SetShellTab(ShellGlossaryTab);
+ }
+ void SettingsButton_Click(object sender,RoutedEventArgs e){StatusText.Text="SETTINGS // COMING SOON";}
+ void MinimizeButton_Click(object sender,RoutedEventArgs e)=>WindowState=WindowState.Minimized;
+ void MaximizeButton_Click(object sender,RoutedEventArgs e)=>WindowState=WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized;
  void ResetPreDeploymentChecks(){
   LoadoutCheck.IsChecked=false;BioCheck.IsChecked=false;CommsCheck.IsChecked=false;MedbayCheck.IsChecked=false;
   DeploymentReadyButton.Content="READY FOR DEPLOYMENT";DeploymentReadyButton.IsEnabled=false;
@@ -157,14 +170,14 @@ public partial class MainWindow : Window
   UpdateInfoPanels();InfoPanel.Visibility=Visibility.Visible;
  }
  void CrewTab_Click(object sender,RoutedEventArgs e){
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;LoadPanel.Visibility=Visibility.Collapsed;SetShellTab(ShellCrewTab);
   InfoPanelTitle.Text="POLARIS CREW";OverviewPanel.Visibility=Visibility.Collapsed;CrewPanel.Visibility=Visibility.Visible;
   BuildCrewPanel();InfoPanel.Visibility=Visibility.Visible;
  }
  void InfoClose_Click(object sender,RoutedEventArgs e)=>InfoPanel.Visibility=Visibility.Collapsed;
  void CommandTab_Click(object sender,RoutedEventArgs e){
   if(CommandPanel.Visibility!=Visibility.Visible)return;
-  ReadyRoomPanel.Visibility=Visibility.Collapsed;
+  ReadyRoomPanel.Visibility=Visibility.Collapsed;GlossaryPanel.Visibility=Visibility.Collapsed;
   InfoPanel.Visibility=Visibility.Collapsed;
   LoadPanel.Visibility=LoadPanel.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
  }
