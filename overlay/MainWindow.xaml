@@ -64,10 +64,42 @@
      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,12,0" Panel.ZIndex="5">
-      <Button x:Name="OverviewTab" Content="OVERVIEW" Width="92" Height="28" Click="OverviewTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
+      <Button x:Name="ReadyRoomTab" Content="READY ROOM" Width="108" Height="28" Click="ReadyRoomTab_Click" Background="#D7B66A" Foreground="#090A08" BorderBrush="#D7B66A"/>
+      <Button x:Name="OverviewTab" Content="OVERVIEW" Width="92" Height="28" Margin="6,0,0,0" Click="OverviewTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
       <Button x:Name="CrewTab" Content="CREW" Width="68" Height="28" Margin="6,0,0,0" Click="CrewTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
       <Button x:Name="CommandTab" Content="COMMAND" Width="92" Height="28" Margin="6,0,0,0" Visibility="Collapsed" Click="CommandTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
      </StackPanel>
+     <Border x:Name="ReadyRoomPanel" Margin="26,54,26,24" Padding="26" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Panel.ZIndex="8">
+      <Grid>
+       <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+       <StackPanel>
+        <TextBlock Text="READY ROOM" Foreground="#E8E8E8" FontSize="30" FontWeight="Bold"/>
+        <TextBlock x:Name="ReadyRoomOperation" Text="PRE-DEPLOYMENT // NO ACTIVE OPERATION" Foreground="#D7B66A" FontSize="12" Margin="0,4,0,0"/>
+       </StackPanel>
+       <Grid Grid.Row="1" Margin="0,22,0,18">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+        <StackPanel>
+         <TextBlock Text="YOUR ASSIGNMENT" Foreground="#D7B66A" FontSize="11" FontWeight="Bold"/>
+         <TextBlock x:Name="ReadyRoomAssignment" Text="NOT ASSIGNED" Foreground="#E8E8E8" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+         <TextBlock Text="CREW READINESS" Foreground="#D7B66A" FontSize="11" FontWeight="Bold"/>
+         <TextBlock x:Name="ReadyRoomCrew" Text="0 CREW CONNECTED" Foreground="#E8E8E8" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+        </StackPanel>
+       </Grid>
+       <Grid Grid.Row="2">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <TextBlock Text="PRE-DEPLOYMENT CHECKLIST" Foreground="#D7B66A" FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,8,0,0">
+         <Border Margin="0,0,8,0" Padding="14" BorderBrush="#8E7546" BorderThickness="1" CornerRadius="4"><StackPanel VerticalAlignment="Center"><TextBlock Text="LOADOUT READY" Foreground="#E8E8E8" FontSize="14" FontWeight="Bold" TextAlignment="Center"/><TextBlock Text="Weapon, ammo and gear set." Foreground="#777D74" FontSize="10" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,12"/><CheckBox x:Name="LoadoutCheck" HorizontalAlignment="Center" Checked="PreflightCheck_Changed" Unchecked="PreflightCheck_Changed"/></StackPanel></Border>
+         <Border Margin="8,0" Padding="14" BorderBrush="#8E7546" BorderThickness="1" CornerRadius="4"><StackPanel VerticalAlignment="Center"><TextBlock Text="BIO BREAK COMPLETE" Foreground="#E8E8E8" FontSize="14" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"/><TextBlock Text="Take care of it now." Foreground="#777D74" FontSize="10" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,12"/><CheckBox x:Name="BioCheck" HorizontalAlignment="Center" Checked="PreflightCheck_Changed" Unchecked="PreflightCheck_Changed"/></StackPanel></Border>
+         <Border Margin="8,0" Padding="14" BorderBrush="#8E7546" BorderThickness="1" CornerRadius="4"><StackPanel VerticalAlignment="Center"><TextBlock Text="COMMS READY" Foreground="#E8E8E8" FontSize="14" FontWeight="Bold" TextAlignment="Center"/><TextBlock Text="Mic working and in channel." Foreground="#777D74" FontSize="10" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,12"/><CheckBox x:Name="CommsCheck" HorizontalAlignment="Center" Checked="PreflightCheck_Changed" Unchecked="PreflightCheck_Changed"/></StackPanel></Border>
+         <Border Margin="8,0,0,0" Padding="14" BorderBrush="#8E7546" BorderThickness="1" CornerRadius="4"><StackPanel VerticalAlignment="Center"><TextBlock Text="MEDBAY RESPAWN SET" Foreground="#E8E8E8" FontSize="14" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"/><TextBlock Text="Respawn point set at Medbay." Foreground="#777D74" FontSize="10" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,12"/><CheckBox x:Name="MedbayCheck" HorizontalAlignment="Center" Checked="PreflightCheck_Changed" Unchecked="PreflightCheck_Changed"/></StackPanel></Border>
+        </UniformGrid>
+       </Grid>
+       <Button Grid.Row="3" x:Name="DeploymentReadyButton" Content="READY FOR DEPLOYMENT" Height="52" Margin="0,22,0,0" FontSize="15" FontWeight="Bold" IsEnabled="False" Click="DeploymentReadyButton_Click"/>
+      </Grid>
+     </Border>
      <Border x:Name="InfoPanel" Width="330" Padding="18" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,48,10,10" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5" Visibility="Collapsed" Panel.ZIndex="6">
       <StackPanel>
        <Grid><TextBlock x:Name="InfoPanelTitle" Text="OVERVIEW" Foreground="#D7B66A" FontWeight="Bold" FontSize="18"/><Button Content="×" Width="28" Height="24" HorizontalAlignment="Right" Click="InfoClose_Click"/></Grid>
