@@ -4,7 +4,7 @@ const sb=window.jmbnClient||(window.jmbnClient=window.supabase.createClient(URL,
 let state={missions:[],crew:[],certs:[],announcements:[],profile:null,mySignups:[]};
 function missionEnd(m){const start=new Date(m?.start_time||0);const hrs=Math.max(Number(m?.hours)||0,0);return new Date(start.getTime()+hrs*3600000)}
 function missionLocked(m){return !!m?.start_time&&new Date()>=missionEnd(m)}
-function isReadySignup(s){return ["ready","on_station"].includes(String(s?.overlay_readiness||"").toLowerCase())}
+function isReadySignup(s){return String(s?.overlay_readiness||"").toLowerCase()==="ready"}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function base(){const p=location.pathname.split("/").filter(Boolean);return /github\.io$/.test(location.hostname)&&p.length?"/"+p[0]+"/":"/"}
