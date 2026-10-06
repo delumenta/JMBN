@@ -329,5 +329,14 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 "COMMS: Sam/Freezern: “Give me five more minutes, guys… I’m in the toilet.”",
 "ALERT: Johnny: “Guys… I can’t move. I think I’m stuck in the seat.”",
 "COMMS: AshenShrike: “OOD, come about!!” — DeLumenta: “Beans, come about!” — AshenShrike shakes his head.",
+"COMMS: “Who’s the Helmsman?” — Silence on all channels.",
+"ALERT: “CONTACT!” — Stand down. It’s a rock.",
+"ENGINEERING: “Who turned that off?” — Investigation suspended due to nobody admitting anything.",
+"COMMS: [user1]: “Are you following me?” — [user2]: “I thought you were following me.”",
+"SECURITY: AshenShrike: “Weapons hold.” — Sam/Freezern continues firing.",
+"COMMS: OOD requested a status report. Engineering replied: “Yes.”",
+"SECURITY: Boarding team assembled. Jesric is holding a fire extinguisher.",
+"OPS: Captain: “Come about!” — Five minutes later, OOD: “Come about!” — Helmsman: “???”.",
+"COMMS: “Set Condition One.” — Sam/Freezern is still talking about food.",
 "SYSTEM: JMBN network operational. Competence not guaranteed."
 ];const styles={ALERT:"var(--gold2)",OPS:"var(--gold2)",COMMS:"#9ecbff",SECURITY:"tomato",CARGO:"#a0f0c0",SYSTEM:"#f7f1d0",CONTACT:"#f7f1d0"};let i=0,timer,playing=true;const type=line=>(line.match(/^([A-Z]+):/)||[])[1]||"OPS";function render(){const raw=lines[i],members=(state.crew||[]).filter(p=>p?.handle||p?.display_name),pick=exclude=>{const pool=members.filter(p=>(p.handle||p.display_name)!==exclude);const p=(pool.length?pool:members)[Math.floor(Math.random()*Math.max((pool.length?pool:members).length,1))];return p?.handle||p?.display_name||"CREW"},user1=pick(),user2=pick(user1),user=pick(),line=raw.replaceAll("[user1]",user1).replaceAll("[user2]",user2).replaceAll("[user]",user),t=type(line);chip.textContent=`[${t}]`;chip.style.background=styles[t]||"var(--gold2)";chip.style.color="#000";msg.style.opacity=0;setTimeout(()=>{msg.textContent=line;msg.style.opacity=1},180);pause.textContent=playing?"Pause":"Play"}function nextL(){i=(i+1)%lines.length;render()}function prevL(){i=(i-1+lines.length)%lines.length;render()}function start(){if(timer)return;playing=true;timer=setInterval(nextL,4000);render()}function stop(){playing=false;clearInterval(timer);timer=null;render()}next.onclick=()=>{stop();nextL()};prev.onclick=()=>{stop();prevL()};pause.onclick=()=>playing?stop():start();close.onclick=()=>{el.style.display="none";sessionStorage.setItem("opsClosed","1")};if(sessionStorage.getItem("opsClosed")==="1"){el.style.display="none";return}start()})();
