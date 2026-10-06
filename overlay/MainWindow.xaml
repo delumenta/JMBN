@@ -84,15 +84,12 @@
      </Border>
     </Grid>
     <Grid Grid.Row="2" x:Name="MapRoot" Background="#01000000" ClipToBounds="True">
-     <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
-     <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
-     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,12,0" Panel.ZIndex="5">
-      <Button x:Name="ReadyRoomTab" Content="READY ROOM" Width="108" Height="28" Click="ReadyRoomTab_Click" Background="#D7B66A" Foreground="#090A08" BorderBrush="#D7B66A"/>
-      <Button x:Name="OverviewTab" Content="OVERVIEW" Width="92" Height="28" Margin="6,0,0,0" Click="OverviewTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
-      <Button x:Name="CrewTab" Content="CREW" Width="68" Height="28" Margin="6,0,0,0" Click="CrewTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
-      <Button x:Name="CommandTab" Content="COMMAND" Width="92" Height="28" Margin="6,0,0,0" Visibility="Collapsed" Click="CommandTab_Click" Background="#D00C0E0B" Foreground="#D7B66A" BorderBrush="#8E7546"/>
-     </StackPanel>
-     <Border x:Name="ReadyRoomPanel" Margin="26,54,26,24" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Panel.ZIndex="8">
+     <Grid x:Name="TacticalPage" Visibility="Collapsed">
+      <Image x:Name="ShipImage" Source="https://delumenta.github.io/onthego/assets/polaris-stations.jpg" Stretch="Uniform" SizeChanged="ShipImage_SizeChanged"/>
+      <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False"/>
+     </Grid>
+
+     <Border x:Name="ReadyRoomPanel" Margin="16" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Panel.ZIndex="8">
       <Grid>
        <Grid.RowDefinitions><RowDefinition Height="150"/><RowDefinition Height="145"/><RowDefinition Height="*"/><RowDefinition Height="76"/></Grid.RowDefinitions>
        <Grid Grid.Row="0" Margin="26,20,26,0">
@@ -133,7 +130,7 @@
        <Button Grid.Row="3" x:Name="DeploymentReadyButton" Content="✓  READY FOR DEPLOYMENT" Margin="28,8,28,16" FontSize="16" FontWeight="Bold" IsEnabled="False" Click="DeploymentReadyButton_Click"/>
       </Grid>
      </Border>
-     <Border x:Name="GlossaryPanel" Margin="26,54,26,24" Padding="28" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Visibility="Collapsed" Panel.ZIndex="9">
+     <Border x:Name="GlossaryPanel" Margin="16" Padding="28" Background="#F4080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Visibility="Collapsed" Panel.ZIndex="9">
       <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
        <StackPanel><TextBlock Text="COMMAND GLOSSARY" Foreground="#E8E8E8" FontSize="28" FontWeight="Bold"/><TextBlock Text="JMBN shipboard terminology and weapons-control calls." Foreground="#777D74" FontSize="11" Margin="0,5,0,16"/></StackPanel>
        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel>
@@ -144,6 +141,12 @@
         <TextBlock Text="MISSILES &amp; MOUNTS" Foreground="#D7B66A" FontSize="14" FontWeight="Bold" Margin="0,20,0,8"/>
         <TextBlock Text="VAMPIRE — Incoming missile&#x0a;BIRD — Outgoing missile&#x0a;BULLDOG — Torpedo / heavy anti-ship missile&#x0a;6-1 — Main S6 gun&#x0a;4-1 — Port S4 turret&#x0a;4-2 — Starboard S4 turret&#x0a;3-1 / 3-2 — S3 turrets" Foreground="#E8E8E8" FontSize="12" LineHeight="22"/>
        </StackPanel></ScrollViewer>
+      </Grid>
+     </Border>
+     <Border x:Name="CrewPage" Margin="16" Padding="28" Background="#FF080A08" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="6" Visibility="Collapsed" Panel.ZIndex="9">
+      <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+       <StackPanel><TextBlock Text="POLARIS CREW" Foreground="#E8E8E8" FontSize="28" FontWeight="Bold"/><TextBlock Text="Current operation station assignments and readiness." Foreground="#777D74" FontSize="11" Margin="0,5,0,16"/></StackPanel>
+       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="CrewPageList"/></ScrollViewer>
       </Grid>
      </Border>
      <Border x:Name="InfoPanel" Width="330" Padding="18" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,48,10,10" Background="#F20A0C09" BorderBrush="#9C8060" BorderThickness="1" CornerRadius="5" Visibility="Collapsed" Panel.ZIndex="6">
