@@ -181,7 +181,7 @@
       </StackPanel>
      </Border>
     </Grid>
-    <Grid Grid.Row="3" Background="#F00A0C09">
+    <Grid x:Name="TacticalStationFooter" Grid.Row="3" Background="#F00A0C09" Visibility="Collapsed">
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
      <StackPanel Margin="16,9,12,8" VerticalAlignment="Center">
       <TextBlock Text="YOUR STATION" Foreground="#777D74" FontSize="9" FontWeight="Bold"/>
@@ -196,7 +196,7 @@
       <Button x:Name="SeatButton" Content="ON STATION" Width="112" Height="32" Click="SeatButton_Click" IsEnabled="False" Visibility="Collapsed"/>
      </StackPanel>
     </Grid>
-    <Grid Grid.Row="4" Background="#F0070807">
+    <Grid x:Name="TacticalLegendFooter" Grid.Row="4" Background="#F0070807" Visibility="Collapsed">
      <Border BorderBrush="#806A3E" BorderThickness="0,1,0,0" Padding="16,5">
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
        <Ellipse Width="18" Height="18" Stroke="#E8E8E8" StrokeThickness="2" Fill="Transparent"/><StackPanel Margin="8,0,28,0"><TextBlock Text="UNASSIGNED" Foreground="#E8E8E8" FontSize="10" FontWeight="Bold"/><TextBlock Text="Station empty" Foreground="#777D74" FontSize="8"/></StackPanel>
