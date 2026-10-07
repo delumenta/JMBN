@@ -780,15 +780,22 @@ async function loadMembers(){
     // roles from public.profiles
     const { data: prows, error: pErr } = await sb
       .from('profiles')
-      .select('user_id, role')
+      .select('user_id, role, callsign')
 
     if (pErr) throw pErr
 
-    const roleMap = new Map((prows || []).map(r => [r.user_id, r.role]))
+    const profileMap = new Map((prows || []).map(r => [r.user_id, r]))
+    const { data: drows, error: dErr } = await sb
+      .from('discord_links')
+      .select('user_id, handle')
+    if (dErr) throw dErr
+    const discordMap = new Map((drows || []).map(r => [r.user_id, r.handle]))
 
     MEMBERS = (vrows || []).map(r => ({
       ...r,
-      role: roleMap.get(r.user_id) || 'Guest'
+      role: profileMap.get(r.user_id)?.role || 'Guest',
+      callsign: profileMap.get(r.user_id)?.callsign || '',
+      discord_handle: discordMap.get(r.user_id) || ''
     }))
 
     renderMembers()
@@ -802,7 +809,7 @@ function renderMembers(){
   const q    = ($('#mSearch').value || '').toLowerCase().trim()
   const list = $('#mList')
   const rows = q
-    ? MEMBERS.filter(m => (`${m.handle} ${m.display_name}`).toLowerCase().includes(q))
+    ? MEMBERS.filter(m => (`${m.discord_handle} ${m.callsign} ${m.handle} ${m.display_name}`).toLowerCase().includes(q))
     : MEMBERS
 
   if(!rows.length){
@@ -813,6 +820,7 @@ function renderMembers(){
   rows.forEach(m => {
     const row = document.createElement('div')
     row.className = 'mrow'
+    row.dataset.userId = String(m.user_id)
     row.innerHTML = `
       <div class="mavatar">
         ${m.current_rank_image_url
@@ -820,8 +828,8 @@ function renderMembers(){
           : '👤'}
       </div>
       <div>
-        <div><b>${esc(m.handle || '(no handle)')}</b>
-          <span class="small">• ${esc(m.display_name || '')}</span>
+        <div><b>Handle: ${esc(m.discord_handle || '(not linked)')}</b>
+          <span class="small">• Callsign: ${esc(m.callsign || 'not set')}</span>
         </div>
         <div class="small">
           Role: ${esc(m.role || 'Guest')} •
@@ -853,6 +861,22 @@ async function openMember(userId, rowEl){
 
   $('#inspector').innerHTML = `
     <div id="summary"></div>
+
+    <div class="subpanel">
+      <div class="hd"><h3>Member Identity</h3></div>
+      <div class="body">
+        <div class="small" style="margin-bottom:10px">Discord Handle is synced from the linked account. Set the Callsign used in the crew roster and Operations.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+          <label class="small">Handle
+            <input value="${esc(res.discord_handle || 'Not linked')}" readonly style="display:block;width:100%;margin-top:4px;padding:8px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;color:var(--text)">
+          </label>
+          <label class="small">Callsign
+            <input id="callSignInput" value="${esc(res.callsign || '')}" maxlength="40" placeholder="e.g. Sam / Freezern" style="display:block;width:100%;margin-top:4px;padding:8px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;color:var(--text)">
+          </label>
+        </div>
+        <div style="margin-top:10px"><button id="btnSaveCallsign" class="btn-ok" type="button">Save Callsign</button></div>
+      </div>
+    </div>
 
     <div class="kpis">
       <div class="kpi"><h4>Total Missions</h4><div class="val" id="k_mis">—</div></div>
@@ -921,6 +945,36 @@ async function openMember(userId, rowEl){
       <div class="body"><div id="misList" class="list">Loading…</div></div>
     </div>
   `
+
+  $('#btnSaveCallsign').onclick = async () => {
+    const button = $('#btnSaveCallsign')
+    const callsign = $('#callSignInput').value.trim() || null
+    button.disabled = true
+    button.textContent = 'Saving…'
+    try {
+      const { data, error } = await sb
+        .from('profiles')
+        .update({ callsign })
+        .eq('user_id', userId)
+        .select('user_id, callsign')
+        .maybeSingle()
+      if (error) throw error
+      if (!data) throw new Error('No profile was updated. Check elevated access.')
+      res.callsign = data.callsign || ''
+      SELECTED = res
+      const activeUserId = String(userId)
+      renderMembers()
+      const activeRow = [...document.querySelectorAll('.mrow')].find(x => x.dataset.userId === activeUserId)
+      markActive(activeRow)
+      button.textContent = 'Saved'
+      alert('Callsign saved.')
+    } catch (err) {
+      console.error('Callsign update failed:', err)
+      alert('Could not save callsign: ' + (err.message || err))
+      button.disabled = false
+      button.textContent = 'Save Callsign'
+    }
+  }
 
   await Promise.all([
     loadProgress(userId),
