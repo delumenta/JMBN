@@ -828,7 +828,7 @@ function renderMembers(){
           : '👤'}
       </div>
       <div>
-        <div><b>Handle: ${esc(m.discord_handle || '(not linked)')}</b>
+        <div><b>Handle: ${esc(m.discord_handle || m.handle || '(not linked)')}</b>
           <span class="small">• Callsign: ${esc(m.callsign || 'not set')}</span>
         </div>
         <div class="small">
@@ -865,10 +865,10 @@ async function openMember(userId, rowEl){
     <div class="subpanel">
       <div class="hd"><h3>Member Identity</h3></div>
       <div class="body">
-        <div class="small" style="margin-bottom:10px">Discord Handle is synced from the linked account. Set the Callsign used in the crew roster and Operations.</div>
+        <div class="small" style="margin-bottom:10px">Shows the linked Discord name when available, otherwise the profile handle. Set the Callsign used in the crew roster and Operations.</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
           <label class="small">Handle
-            <input value="${esc(res.discord_handle || 'Not linked')}" readonly style="display:block;width:100%;margin-top:4px;padding:8px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;color:var(--text)">
+            <input value="${esc(res.discord_handle || res.handle || 'Not linked')}" readonly style="display:block;width:100%;margin-top:4px;padding:8px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;color:var(--text)">
           </label>
           <label class="small">Callsign
             <input id="callSignInput" value="${esc(res.callsign || '')}" maxlength="40" placeholder="e.g. Sam / Freezern" style="display:block;width:100%;margin-top:4px;padding:8px;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;color:var(--text)">
