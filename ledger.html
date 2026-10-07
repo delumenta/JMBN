@@ -640,6 +640,8 @@ hr.sep{
               <th>Handle</th>
               <th>Rank / PG</th>
               <th class="text-right">Weight</th>
+              <th class="text-right">Rank Add (aUEC)</th>
+              <th class="text-right">Manual Add (aUEC)</th>
               <th class="text-right">Final Share (aUEC)</th>
             </tr>
           </thead>
@@ -1106,7 +1108,7 @@ async function saveOverridesToSupabase(){
   await loadMissionsFromSupabase();
 }
 
-/* ============== CREW MODAL (v_missions_payout_live + v_profiles_detailed) ============== */
+/* ============== CREW MODAL (canonical payout view + direct profile/rank tables) ============== */
 const crewModal = $('#crewModal');
 $('#crewModalClose').addEventListener('click',()=>{ crewModal.style.display='none'; });
 crewModal.addEventListener('click',e=>{
@@ -1129,24 +1131,24 @@ async function openCrewModal(mission){
     Status: <span class="hilite">${mission.status || 'unknown'}</span> •
     Payout: <span class="hilite">${payout ? fmt(payout) : '—'} aUEC</span>
   `;
-  $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Loading…</td></tr>`;
+  $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">Loading…</td></tr>`;
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
   const { data: payouts, error } = await sb
     .from('v_missions_payout_live')
-    .select('mission_id,user_id,paygrade,weight,final_share')
+    .select('mission_id,user_id,paygrade,weight,default_add_pay,add_pay_override,applied_extra,final_share')
     .eq('mission_id', mission.id);
 
   if(error){
     console.error(error);
-    $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">Failed to load crew payouts.</td></tr>`;
+    $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">Failed to load crew payouts.</td></tr>`;
     showToast('Failed to load crew payouts',true);
     return;
   }
   if(!payouts || !payouts.length){
-    $('#crewRows').innerHTML = `<tr><td colspan="5" class="subtle">No payout rows for this mission yet.</td></tr>`;
-    $('#crewSummary').textContent = 'No participants recorded.';
+    $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">No confirmed crew payouts for this completed mission yet.</td></tr>`;
+    $('#crewSummary').textContent = 'No confirmed participants recorded.';
     return;
   }
 
@@ -1154,8 +1156,8 @@ async function openCrewModal(mission){
   let profiles = [];
   if(userIds.length){
     const { data: profs, error: e2 } = await sb
-      .from('v_profiles_detailed')
-      .select('user_id,handle,display_name,current_rank_code,current_rank_name')
+      .from('profiles')
+      .select('user_id,handle,display_name,current_rank_id')
       .in('user_id', userIds);
     if(e2){
       console.error(e2);
@@ -1164,32 +1166,51 @@ async function openCrewModal(mission){
       profiles = profs || [];
     }
   }
+
+  const rankIds = [...new Set(profiles.map(p=>p.current_rank_id).filter(Boolean))];
+  let ranks = [];
+  if(rankIds.length){
+    const { data: rankRows, error: e3 } = await sb
+      .from('ranks')
+      .select('id,code,name')
+      .in('id', rankIds);
+    if(e3){
+      console.error(e3);
+      showToast('Failed to load rank details',true);
+    }else{
+      ranks = rankRows || [];
+    }
+  }
+
   const profMap = {};
   profiles.forEach(p=>{ profMap[p.user_id] = p; });
+  const rankMap = {};
+  ranks.forEach(r=>{ rankMap[r.id] = r; });
 
   payouts.sort((a,b)=>(b.final_share||0)-(a.final_share||0));
 
   let totalShare = 0;
+  let totalExtras = 0;
   const rows = payouts.map(p=>{
-    const prof   = profMap[p.user_id] || {};
+    const prof = profMap[p.user_id] || {};
+    const rank = rankMap[prof.current_rank_id] || {};
     const handle = prof.handle || p.user_id?.slice(0,8) || '—';
-
-    // Show only non-email display names; otherwise just '—'
-    let name = '—';
-    if(prof.display_name && !prof.display_name.includes('@')){
-      name = prof.display_name;
-    }
-
-    const rank  = prof.current_rank_code || prof.current_rank_name || p.paygrade || '—';
-    const w     = p.weight ?? 0;
+    const rankLabel = rank.code || rank.name || p.paygrade || '—';
+    const weight = Number(p.weight || 0);
+    const rankAdd = Number(p.default_add_pay || 0);
+    const manualAdd = Number(p.add_pay_override || 0);
+    const appliedExtra = Number(p.applied_extra || 0);
     const share = Number(p.final_share || 0);
 
     totalShare += share;
+    totalExtras += appliedExtra;
     return `
       <tr>
         <td>${handle}</td>
-        <td>${rank}</td>
-        <td class="text-right mono">${w ? w.toFixed(3) : ''}</td>
+        <td>${rankLabel}</td>
+        <td class="text-right mono">${weight ? weight.toFixed(3) : ''}</td>
+        <td class="text-right mono">${rankAdd ? fmt(rankAdd) : '—'}</td>
+        <td class="text-right mono">${manualAdd ? fmt(manualAdd) : '—'}</td>
         <td class="text-right mono">${share ? fmt(Math.round(share)) : '—'}</td>
       </tr>
     `;
@@ -1198,6 +1219,7 @@ async function openCrewModal(mission){
   $('#crewRows').innerHTML = rows;
   $('#crewSummary').innerHTML = `
     Participants: <span class="hilite">${payouts.length}</span>
+    • Extras reserved from crew pool: <span class="hilite">${fmt(Math.round(totalExtras))} aUEC</span>
     • Total distributed: <span class="hilite">${fmt(Math.round(totalShare))} aUEC</span>
   `;
 }
