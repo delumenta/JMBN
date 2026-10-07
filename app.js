@@ -43,12 +43,26 @@ function renderAcademyProgrammes(filter,earnedSet,reqs,assignment){
  $("#certGrid").innerHTML=items.map(c=>{const code=(c.certification_code||c.code||"").toUpperCase(),done=earnedSet.has(code),total=reqs.filter(r=>(r.certification_code||"").toUpperCase()===code).length,kind=["BMT","SOC"].includes(code)?"CORE PATHWAY":["GUNNERY","ENGINEERING"].includes(code)?"SPECIALISATION PATHWAY":"SUPPORT PATHWAY",art=c.big_art_cover||c.image_url||img("certification","BMT.png");let status=done?"CERTIFIED":code==="SOC"&&!earnedSet.has("BMT")?"LOCKED":["GUNNERY","ENGINEERING"].includes(code)&&assignment?.specialisation_code!==code?"ASSIGNMENT REQUIRED":"AVAILABLE";return '<article class="academy-programme '+status.toLowerCase().replaceAll(" ","-")+'"><div class="academy-programme-art"><img src="'+esc(art)+'"><span>'+esc(code)+'</span></div><div class="academy-programme-body"><small>'+kind+'</small><h3>'+esc(c.name||code)+'</h3><p>'+esc(c.description||"JMBN Academy certification programme.")+'</p><div class="academy-programme-foot"><b>'+status+'</b><span>'+total+' TRAINING REQUIREMENTS</span></div></div></article>'}).join("")||'<div class="empty">No Academy programmes in this category.</div>';
 }
 async function loadWelcomeProgress(uid){
- const {data:p,error}=await sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle();
- if(error||!p){$("#welcomeProgress").hidden=true;return}
- const vals=[Number(p.pct_missions??1),Number(p.pct_hours??1),Number(p.pct_certs??1)].map(v=>Number.isFinite(v)?Math.max(0,Math.min(1,v)):0);
+ const [{data:profile},{data:ranks},{data:signups},{data:missions},{data:certs}]=await Promise.all([
+  sb.from("profiles").select("rank_code,rank_category,current_rank_id").eq("user_id",uid).maybeSingle(),
+  sb.from("ranks").select("id,code,name,category,paygrade,sort_order,missions_target,hours_target,certification_target").eq("is_active",true).order("sort_order"),
+  sb.from("mission_signups").select("mission_id,attendance_confirmed").eq("user_id",uid).eq("attendance_confirmed",true),
+  sb.from("missions").select("id,start_time,hours"),
+  sb.from("user_certifications").select("certification_code").eq("user_id",uid)
+ ]);
+ const list=(ranks||[]).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+ const current=list.find(r=>String(r.id)===String(profile?.current_rank_id))||list.find(r=>r.code===profile?.rank_code);
+ const track=list.filter(r=>!current?.category||r.category===current.category);
+ const next=current?track.find(r=>Number(r.sort_order)>Number(current.sort_order)):track[0];
+ const ended=new Map((missions||[]).filter(m=>m.start_time&&new Date(new Date(m.start_time).getTime()+Number(m.hours||0)*3600000)<=new Date()).map(m=>[String(m.id),m]));
+ const attended=[...new Set((signups||[]).map(x=>String(x.mission_id)).filter(id=>ended.has(id)))];
+ const missionsAttended=attended.length;
+ const hoursTotal=attended.reduce((sum,id)=>sum+Number(ended.get(id)?.hours||0),0);
+ const missionsTarget=Number(next?.missions_target||0),hoursTarget=Number(next?.hours_target||0),certTarget=Number(next?.certification_target||0);
+ const vals=[missionsTarget?missionsAttended/missionsTarget:1,hoursTarget?hoursTotal/hoursTarget:1,certTarget?(certs||[]).length/certTarget:1].map(v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0)));
  const pct=Math.round(Math.min(...vals)*100);
- $("#welcomeProgress").hidden=false;$("#welcomeCurrentRank").textContent=p.current_code||state.profile?.rank_code||"—";$("#welcomeNextRank").textContent=p.has_next_rank?(p.next_code||"—"):"MAX RANK";$("#welcomeProgressPct").textContent=pct+"%";$("#welcomeProgressBar").style.width=pct+"%";
- $("#welcomeRequirements").innerHTML="<span>MISSIONS <b>"+esc(p.missions_attended??0)+"/"+esc(p.missions_target??"—")+"</b></span><span>HOURS <b>"+esc(p.hours_total??0)+"/"+esc(p.hours_target??"—")+"</b></span><span>CERTS <b>"+esc(p.certifications_total??0)+"/"+esc(p.certification_target??"—")+"</b></span>";
+ $("#welcomeProgress").hidden=false;$("#welcomeCurrentRank").textContent=current?.code||profile?.rank_code||state.profile?.rank_code||"—";$("#welcomeNextRank").textContent=next?.code||"MAX RANK";$("#welcomeProgressPct").textContent=pct+"%";$("#welcomeProgressBar").style.width=pct+"%";
+ $("#welcomeRequirements").innerHTML="<span>MISSIONS <b>"+esc(missionsAttended)+"/"+esc(missionsTarget||"—")+"</b></span><span>HOURS <b>"+esc(hoursTotal)+"/"+esc(hoursTarget||"—")+"</b></span><span>CERTS <b>"+esc((certs||[]).length)+"/"+esc(certTarget||"—")+"</b></span>";
 }
 function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
