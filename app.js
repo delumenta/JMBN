@@ -238,12 +238,13 @@ async function setRsvp(missionId,status){
   }
   if(error)throw error;
   const signupIndex=state.mySignups.findIndex(x=>String(x.mission_id)===String(missionId));
+  const existingRole=signupIndex>=0?state.mySignups[signupIndex]?.operational_role:null;
   if(status==="withdraw"){
    if(signupIndex>=0)state.mySignups.splice(signupIndex,1);
   }else if(signupIndex>=0){
    state.mySignups[signupIndex].status=status;
   }else{
-   state.mySignups.push({mission_id:missionId,status,operational_role:existing?.operational_role||null,operational_station:null});
+   state.mySignups.push({mission_id:missionId,status,operational_role:existingRole||null,operational_station:null});
   }
   updateMemberNotices();
   toast(status==="withdraw"?"RSVP withdrawn":"RSVP: "+status.replaceAll("_"," ").toUpperCase());
