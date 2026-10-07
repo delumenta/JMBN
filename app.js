@@ -15,6 +15,40 @@ function fmtDate(v){if(!v)return"TBD";return new Date(v).toLocaleDateString("en-
 function fmtTime(v){if(!v)return"";return new Date(v).toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})}
 function crewCallsign(p){return String(p?.callsign||"").trim()||"CALLSIGN NOT SET"}
 function crewHandle(p){return String(p?.discord_handle||p?.discord_username||p?.handle||"").trim()}
+function updateMemberNotices(){
+ const upcoming=state.missions.filter(m=>!m.start_time||new Date(m.start_time).getTime()>=Date.now());
+ const mine=state.mySignups||[];
+ const pending=upcoming.filter(m=>!mine.some(x=>x.mission_id===m.id&&["going","maybe","not_going"].includes(String(x.status||"").toLowerCase())));
+ const unassigned=upcoming.filter(m=>mine.some(x=>x.mission_id===m.id&&String(x.status||"").toLowerCase()==="going"&&(!x.operational_role||!x.operational_station)));
+ const notices=[
+  ...pending.map(m=>({title:"RSVP needed",detail:m.title||"Upcoming mission",id:m.id})),
+  ...unassigned.map(m=>({title:"Assignment incomplete",detail:(m.title||"Upcoming mission")+" — role or station not assigned",id:m.id}))
+ ].slice(0,20);
+ const count=$("#memberNoticeCount"),list=$("#memberNoticeList");
+ if(count)count.textContent=String(notices.length);
+ if(!list)return;
+ list.replaceChildren();
+ if(!notices.length){
+  const p=document.createElement("p");
+  p.textContent="You're up to date. No outstanding mission actions.";
+  list.append(p);
+  return;
+ }
+ notices.forEach(n=>{
+  const b=document.createElement("button");
+  const title=document.createElement("strong"),detail=document.createElement("small");
+  title.textContent=n.title;detail.textContent=n.detail;b.append(title,detail);
+  b.addEventListener("click",()=>{
+   $("#memberNoticePanel").hidden=true;
+   showView("operations");
+   requestAnimationFrame(()=>{
+    const card=document.querySelector('[data-mission="'+CSS.escape(String(n.id))+'"]');
+    if(card)card.click();
+   });
+  });
+  list.append(b);
+ });
+}
 function missionRows(items,n=4){if(!items.length)return'<div class="empty">No operations in the manifest yet.</div>';return items.slice(0,n).map(m=>'<div class="op-row" data-mission="'+esc(m.id)+'" tabindex="0"><span class="op-date">'+fmtDate(m.start_time)+'</span><div><b>'+esc(m.title||"Untitled operation")+'</b><small>'+esc([m.origin,m.destination].filter(Boolean).join(" → ")||m.type||"Mission")+'</small></div><span class="tag">'+esc(m.category||m.status||"OP")+'</span></div>').join("")}
 function missionCards(items){if(!items.length)return'<div class="empty">No matching operations.</div>';return items.map(m=>{const locked=missionLocked(m);return '<article class="mission-card '+(locked?'mission-locked':'')+'" data-mission="'+esc(m.id)+'" tabindex="0"><span class="tag">'+esc(m.category||"operation")+'</span><h3>'+esc(m.title||"Untitled operation")+'</h3><div class="route"><span>'+esc(m.origin||"TBD")+'</span><span>→</span><span>'+esc(m.destination||"TBD")+'</span></div><div class="mission-meta"><span>'+fmtDate(m.start_time)+' / '+fmtTime(m.start_time)+'</span><span>'+(locked?'COMPLETED · LOCKED':esc(m.status||"PLANNED"))+'</span></div></article>'}).join("")}
 function crewCards(items){if(!items.length)return'<div class="empty">No matching personnel.</div>';return items.map(p=>{const code=p.rank_code||p.rank?.code||"";const rankUrl=p.rank_image_url||(code?img("Ranks",code+".png"):"");return '<article class="crew-card" data-user="'+esc(p.user_id)+'" tabindex="0">'+(rankUrl?'<img class="rank-img" src="'+esc(rankUrl)+'" onerror="this.style.visibility=\'hidden\'">':'<div class="rank-img"></div>')+'<div><h3>'+esc(crewCallsign(p))+'</h3>'+'<p>'+esc(code||p.rank_category||p.role||"JMBN")+'</p><small>'+esc(p.role||"Member")+' · '+esc(p.missions_attended||0)+' missions</small></div><i class="status-dot '+(p.availability_status==="awol"?"red":"green")+'"></i></article>'}).join("")}
@@ -85,6 +119,7 @@ async function load(){
  ]);
  const handleByUser=new Map((discordLinks.data||[]).map(x=>[x.user_id,x.handle]));
  state.profile={...(prof.data||{}),discord_handle:handleByUser.get(uid)||""};state.missions=missions.data||[];state.crew=(crew.data||[]).map(p=>({...p,discord_handle:handleByUser.get(p.user_id)||""}));state.certs=certs.data||[];state.announcements=ann.data||[];state.mySignups=mySignups.data||[];
+ updateMemberNotices();
  if(!prof.data||String(state.profile.role||"Guest").toLowerCase()==="guest"){renderPendingAccess(session,state.profile);return}
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
  $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
@@ -302,7 +337,13 @@ async function loadMyProfile(){
 
 function filterOps(){let q=$("#opSearch").value.toLowerCase(),f=$("[data-opfilter].active")?.dataset.opfilter||"all";let x=state.missions.filter(m=>(f==="all"||(f==="operations"?String(m.category||"operations").toLowerCase()!=="resource":String(m.category||"").toLowerCase()==="resource"))&&JSON.stringify(m).toLowerCase().includes(q));$("#operationsGrid").innerHTML=missionCards(x)}
 function filterCrew(){let q=$("#crewSearch").value.toLowerCase(),f=$("[data-crewfilter].active")?.dataset.crewfilter||"all";let x=state.crew.filter(p=>(f==="all"||(f==="awol"?p.availability_status==="awol":p.availability_status!=="awol"))&&JSON.stringify(p).toLowerCase().includes(q));$("#crewGrid").innerHTML=crewCards(x)}
-document.querySelectorAll(".nav[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="profile")loadMyProfile()});$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
+document.querySelectorAll(".nav[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="profile")loadMyProfile()});
+$("#memberNoticeToggle")?.addEventListener("click",()=>{
+ const panel=$("#memberNoticePanel");if(!panel)return;
+ panel.hidden=!panel.hidden;
+ $("#memberNoticeToggle").setAttribute("aria-expanded",String(!panel.hidden));
+});
+$$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 $("#opSearch").oninput=filterOps;$("#crewSearch").oninput=filterCrew;$$("[data-opfilter]").forEach(b=>b.onclick=()=>{$$("[data-opfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterOps()});$$("[data-crewfilter]").forEach(b=>b.onclick=()=>{$$("[data-crewfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterCrew()});
 $("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#readinessPanel").onclick=()=>openReadiness();$("#readinessPanel").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openReadiness()}};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};$("#welcomeProfile").onclick=()=>{showView("profile");loadMyProfile()};$("#railLogout").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}};$("#dutyActive").onclick=()=>setDutyStatus("active");$("#dutyAwol").onclick=()=>setDutyStatus("awol");
 setInterval(()=>{$("#clock").textContent=new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})},1000);
