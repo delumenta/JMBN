@@ -219,7 +219,7 @@ $("#detailClose").onclick=closeDrawer;$("#detailBackdrop").onclick=closeDrawer;
 
 async function loadMyProfile(){
  const host=$("#profileView");if(!host)return;host.innerHTML='<div class="loading-detail">LOADING PERSONNEL DOSSIER…</div>';
- const {data:{session}}=await sb.auth.getSession();if(!session)return;const uid=session.user.id,p=state.crew.find(x=>x.user_id===uid)||state.profile||{};
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;const uid=session.user.id;
  const [rank,prog,certs,attendance,discord,userRoles,specs,allRanks,allCerts]=await Promise.all([
   sb.from("profiles").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("profiles").select("*").eq("user_id",uid).maybeSingle(),
@@ -231,6 +231,7 @@ async function loadMyProfile(){
   sb.from("ranks").select("id,code,name,category,paygrade,sort_order,image_url").eq("is_active",true).order("sort_order"),
   sb.from("certifications").select("certification_code,name,image_url,small_art_cover,big_art_cover,hero_art_cover,sort_order").order("sort_order")
  ]);
+ const p={...(state.profile||{}),...(state.crew.find(x=>x.user_id===uid)||{}),...(rank.data||{})};
  const rr=rank.data||{}, cs=certs.data||[], at=(attendance.data||[]).filter(x=>{const m=state.missions.find(z=>String(z.id)===String(x.mission_id));return m&&missionLocked(m)}), dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
  const completedMissionIds=[...new Set(at.map(x=>x.mission_id))];
  const pr={...rr,current_code:rr.rank_code||"",current_name:rr.rank_name||"",current_paygrade:rr.paygrade||"",current_category:rr.rank_category||rr.rank_category||"",missions_attended:completedMissionIds.length,hours_total:completedMissionIds.reduce((sum,id)=>sum+Number(state.missions.find(m=>String(m.id)===String(id))?.hours||0),0),certifications_total:cs.length};
