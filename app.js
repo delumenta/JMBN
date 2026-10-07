@@ -221,8 +221,8 @@ async function loadMyProfile(){
  const host=$("#profileView");if(!host)return;host.innerHTML='<div class="loading-detail">LOADING PERSONNEL DOSSIER…</div>';
  const {data:{session}}=await sb.auth.getSession();if(!session)return;const uid=session.user.id,p=state.crew.find(x=>x.user_id===uid)||state.profile||{};
  const [rank,prog,certs,attendance,discord,userRoles,specs,allRanks,allCerts]=await Promise.all([
-  sb.from("v_profiles_with_rank").select("*").eq("user_id",uid).maybeSingle(),
-  sb.from("v_user_rank_progress").select("*").eq("user_id",uid).maybeSingle(),
+  sb.from("profiles").select("*").eq("user_id",uid).maybeSingle(),
+  sb.from("profiles").select("*").eq("user_id",uid).maybeSingle(),
   sb.from("user_certifications").select("*").eq("user_id",uid),
   sb.from("mission_signups").select("*").eq("user_id",uid).eq("attendance_confirmed",true),
   sb.from("discord_links").select("*").eq("user_id",uid).maybeSingle(),
@@ -231,13 +231,26 @@ async function loadMyProfile(){
   sb.from("ranks").select("id,code,name,category,paygrade,sort_order,image_url").eq("is_active",true).order("sort_order"),
   sb.from("certifications").select("certification_code,name,image_url,sort_order").order("sort_order")
  ]);
- const rr=rank.data||{}, pr=prog.data||{}, cs=certs.data||[], at=(attendance.data||[]).filter(x=>{const m=state.missions.find(z=>String(z.id)===String(x.mission_id));return m&&missionLocked(m)}), dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
+ const rr=rank.data||{}, cs=certs.data||[], at=(attendance.data||[]).filter(x=>{const m=state.missions.find(z=>String(z.id)===String(x.mission_id));return m&&missionLocked(m)}), dl=discord.data||{}, ur=userRoles.data||[], sp=specs.data||[];
+ const completedMissionIds=[...new Set(at.map(x=>x.mission_id))];
+ const pr={...rr,current_code:rr.rank_code||"",current_name:rr.rank_name||"",current_paygrade:rr.paygrade||"",current_category:rr.rank_category||rr.rank_category||"",missions_attended:completedMissionIds.length,hours_total:completedMissionIds.reduce((sum,id)=>sum+Number(state.missions.find(m=>String(m.id)===String(id))?.hours||0),0),certifications_total:cs.length};
  let roleNames=[];if(ur.length){const {data}=await sb.from("roles").select("*").in("id",ur.map(x=>x.role_id));roleNames=(data||[]).map(x=>x.name)}
  const name=crewCallsign(p), avatar=dl.avatar_url||"", rankArt=rr.rank_image_url||p.rank_image_url||"";
  const ranks=allRanks.data||[], currentCode=pr.current_code||rr.rank_code||p.rank_code||"", nextCode=pr.next_code||"";
  const currentRank=ranks.find(x=>x.code===currentCode)||{code:currentCode,name:pr.current_name||rr.rank_name||"",paygrade:pr.current_paygrade||"",image_url:rankArt,category:pr.current_category||rr.category||""};
+ rr.rank_name=currentRank.name||rr.rank_name||"";
+ pr.current_name=currentRank.name||pr.current_name||"";
+ pr.current_category=currentRank.category||pr.current_category||"";
  const trackRanks=ranks.filter(x=>!currentRank.category||String(x.category).toLowerCase()===String(currentRank.category).toLowerCase()), currentIndex=trackRanks.findIndex(x=>x.code===currentCode);
  const nextRank=ranks.find(x=>x.code===nextCode)||(currentIndex>=0?trackRanks[currentIndex+1]:null);
+ pr.missions_target=nextRank?.missions_target||0;
+ pr.hours_target=nextRank?.hours_target||0;
+ pr.certification_target=nextRank?.certification_target||0;
+ pr.pct_missions=pr.missions_target?Math.min(1,pr.missions_attended/pr.missions_target):1;
+ pr.pct_hours=pr.hours_target?Math.min(1,pr.hours_total/pr.hours_target):1;
+ pr.pct_certs=pr.certification_target?Math.min(1,pr.certifications_total/pr.certification_target):1;
+ const earnedCodes=new Set(cs.map(x=>String(x.certification_code||"").toUpperCase()));
+ const certMedals=(allCerts.data||[]).map(cert=>{const code=String(cert.certification_code||"").toUpperCase();const earned=earnedCodes.has(code);return '<div class="profile-cert-medal '+(earned?"earned":"dim")+'"><span>'+esc(code)+'</span><b>'+esc(cert.name||code)+'</b><small>'+(earned?"VERIFIED":"NOT EARNED")+'</small></div>';}).join("");
  const rankRail=trackRanks.map((x,i)=>'<div class="profile-rank-step '+(x.code===currentCode?"current":(currentIndex>=0&&i<currentIndex?"earned":"future"))+'">'+(x.image_url?'<img src="'+esc(x.image_url)+'" alt="'+esc(x.code)+'">':'<span class="rank-step-fallback">◇</span>')+'<b>'+esc(x.code)+'</b><small>'+esc(x.paygrade||"")+'</small></div>').join("");
  const pct=Math.round(Math.min(100,Math.max(0,Math.min(Number(pr.pct_missions??100),Number(pr.pct_hours??100),Number(pr.pct_certs??100)))));
  host.innerHTML='<div class="profile-identity"><div class="profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'">':esc(name.slice(0,2).toUpperCase()))+'</div><div class="profile-name"><p class="eyebrow">JMBN PERSONNEL IDENTIFICATION</p><h2>'+esc(name)+'</h2><div class="profile-rank">'+(rankArt?'<img src="'+esc(rankArt)+'">':'')+'<span>'+esc(rr.rank_name||pr.current_name||p.rank_code||"JMBN CREW")+(pr.current_paygrade?" // "+esc(pr.current_paygrade):"")+'</span></div><div class="profile-tags">'+roleNames.map(x=>'<span>'+esc(x)+'</span>').join("")+(p.availability_status?'<span>'+esc(p.availability_status.toUpperCase())+'</span>':'')+'</div></div><div class="verified-block"><i class="pulse"></i><b>IDENTITY VERIFIED</b><small>'+(dl.discord_id?"DISCORD LINKED":"JMBN ACCOUNT")+'</small></div></div>'+
