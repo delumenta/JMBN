@@ -169,3 +169,13 @@ button,input,select,textarea{font-size:.95em}
 
 /* Signal traffic — larger broadcast/announcement rail */
 .ops-ticker{min-height:52px!important;padding:0 18px!important;gap:14px!important;border-top:1px solid #665d34!important;box-shadow:0 -10px 32px rgba(0,0,0,.42),0 -1px 10px rgba(212,182,91,.06)!important}.ops-ticker:before{font-size:8px!important;padding-right:15px!important}.ops-chip{padding:5px 9px!important;font-size:9px!important}.ops-msg{font-size:11px!important;letter-spacing:.015em!important;color:#b8bdb2!important}.ops-btn{min-width:28px!important;height:28px!important;font-size:9px!important}body{padding-bottom:52px!important}@media(max-width:760px){.ops-ticker{min-height:48px!important;padding:0 12px!important}.ops-msg{font-size:10px!important}body{padding-bottom:48px!important}}
+
+/* member editable callsign */
+.profile-callsign-editor{margin-top:15px;padding-top:14px;border-top:1px solid var(--line)}
+.profile-callsign-editor>label{display:block;color:var(--muted);font-size:8px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.profile-callsign-control{display:flex;gap:8px}
+.profile-callsign-control input{flex:1;min-width:0;border:1px solid var(--line);background:#0b0d0a;color:var(--text);padding:10px 11px;font-size:10px;outline:none}
+.profile-callsign-control input:focus{border-color:var(--gold)}
+.profile-callsign-control button{min-width:86px}
+.profile-callsign-editor>small{display:block;color:var(--muted);font-size:8px;line-height:1.5;margin-top:8px}
+@media(max-width:420px){.profile-callsign-control{flex-direction:column}.profile-callsign-control button{width:100%}}
