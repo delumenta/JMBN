@@ -22,8 +22,9 @@
 <div class="shell">
 <header class="topbar">
   <div><p class="eyebrow">THE JAMBANI COLLECTIVE // OPERATIONS NETWORK</p><h1 id="pageTitle">COMMAND DECK</h1></div>
-  <div class="top-actions"><div class="clock"><small>LOCAL / GMT+8</small><b id="clock">--:--</b></div><button id="userBtn" class="identity"><span class="avatar">?</span><span><small>IDENTITY</small><b id="userName">AUTHENTICATING</b></span></button></div>
+  <div class="top-actions"><button type="button" id="memberNoticeToggle" class="member-notice-toggle" aria-label="Notifications" aria-expanded="false">NOTIFICATIONS <span id="memberNoticeCount">0</span></button><div class="clock"><small>LOCAL / GMT+8</small><b id="clock">--:--</b></div><button id="userBtn" class="identity"><span class="avatar">?</span><span><small>IDENTITY</small><b id="userName">AUTHENTICATING</b></span></button></div>
 </header>
+<aside id="memberNoticePanel" class="member-notice-panel" hidden><h2>YOUR NOTIFICATIONS</h2><div id="memberNoticeList">Checking your missions…</div></aside>
 <main>
 <section id="command" class="view active">
   <section id="welcomePanel" class="welcome-panel">
