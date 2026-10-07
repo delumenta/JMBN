@@ -648,6 +648,9 @@ hr.sep{
           <tbody id="crewRows"></tbody>
         </table>
       </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn-primary" id="saveCrewOverrides">Save Manual Adds</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1110,6 +1113,7 @@ async function saveOverridesToSupabase(){
 
 /* ============== CREW MODAL (canonical payout view + direct profile/rank tables) ============== */
 const crewModal = $('#crewModal');
+let crewMissionId = null;
 $('#crewModalClose').addEventListener('click',()=>{ crewModal.style.display='none'; });
 crewModal.addEventListener('click',e=>{
   if(e.target === crewModal) crewModal.style.display='none';
@@ -1124,6 +1128,7 @@ document.body.addEventListener('click',e=>{
 });
 
 async function openCrewModal(mission){
+  crewMissionId = mission.id;
   $('#crewMissionTitle').textContent = mission.title || 'Mission Crew';
   const payout = mission.payout_auec || 0;
   $('#crewMissionMeta').innerHTML = `
@@ -1210,7 +1215,10 @@ async function openCrewModal(mission){
         <td>${rankLabel}</td>
         <td class="text-right mono">${weight ? weight.toFixed(3) : ''}</td>
         <td class="text-right mono">${rankAdd ? fmt(rankAdd) : '—'}</td>
-        <td class="text-right mono">${manualAdd ? fmt(manualAdd) : '—'}</td>
+        <td class="text-right mono">
+          <input class="crewManualAdd" type="number" min="0" step="100"
+                 value="${manualAdd || 0}" data-user-id="${p.user_id}">
+        </td>
         <td class="text-right mono">${share ? fmt(Math.round(share)) : '—'}</td>
       </tr>
     `;
@@ -1223,6 +1231,37 @@ async function openCrewModal(mission){
     • Total distributed: <span class="hilite">${fmt(Math.round(totalShare))} aUEC</span>
   `;
 }
+
+
+$('#saveCrewOverrides').addEventListener('click', saveCrewOverrides);
+
+async function saveCrewOverrides(){
+  if(!crewMissionId) return;
+  const inputs = [...document.querySelectorAll('#crewRows .crewManualAdd[data-user-id]')];
+  const payload = inputs.map(input=>({
+    mission_id: crewMissionId,
+    user_id: input.dataset.userId,
+    add_pay_override: Number(input.value || 0),
+    add_pay_auec: Number(input.value || 0),
+    updated_by: me
+  }));
+  if(!payload.length){
+    showToast('No crew rows to save',true);
+    return;
+  }
+  const { error } = await sb
+    .from('mission_payout_overrides')
+    .upsert(payload,{onConflict:'mission_id,user_id'});
+  if(error){
+    console.error(error);
+    showToast('Failed to save manual adds',true);
+    return;
+  }
+  showToast('Manual mission adds saved');
+  const mission = missions.find(m=>m.id===crewMissionId);
+  if(mission) await openCrewModal(mission);
+}
+
 
 /* ============== INIT ============== */
 document.addEventListener('DOMContentLoaded', async ()=>{
