@@ -629,7 +629,10 @@ hr.sep{
         <div class="modal-title" id="crewMissionTitle">Mission Crew</div>
         <div class="subtle" id="crewMissionMeta"></div>
       </div>
-      <button class="modal-close" id="crewModalClose" aria-label="Close">&times;</button>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="btn-primary" id="snapshotPayouts">Snapshot Payout</button>
+        <button class="modal-close" id="crewModalClose" aria-label="Close">&times;</button>
+      </div>
     </div>
     <div class="modal-body">
       <div class="subtle" id="crewSummary" style="margin-bottom:4px"></div>
@@ -1115,6 +1118,21 @@ async function saveOverridesToSupabase(){
 const crewModal = $('#crewModal');
 let crewMissionId = null;
 $('#crewModalClose').addEventListener('click',()=>{ crewModal.style.display='none'; });
+$('#snapshotPayouts').addEventListener('click',async()=>{
+  if(!crewMissionId) return;
+  if(!confirm('Freeze the current payout calculation for this mission? This cannot be undone.')) return;
+  const button = $('#snapshotPayouts');
+  button.disabled = true;
+  const { data, error } = await sb.rpc('snapshot_mission_payouts',{p_mission_id:crewMissionId});
+  button.disabled = false;
+  if(error){
+    showToast(error.message || 'Failed to snapshot payout',true);
+    return;
+  }
+  showToast(`Payout snapshot saved for ${data || 0} crew members`);
+  const mission = missions.find(m=>m.id===crewMissionId);
+  if(mission) await openCrewModal(mission);
+});
 crewModal.addEventListener('click',e=>{
   if(e.target === crewModal) crewModal.style.display='none';
 });
@@ -1140,16 +1158,30 @@ async function openCrewModal(mission){
   $('#crewSummary').textContent = '';
   crewModal.style.display = 'flex';
 
-  const { data: payouts, error } = await sb
-    .from('v_missions_payout_live')
+  let payouts = null;
+  let payoutSource = 'live';
+  const { data: snapshots, error: snapshotReadError } = await sb
+    .from('mission_payout_snapshots')
     .select('mission_id,user_id,paygrade,weight,default_add_pay,add_pay_override,applied_extra,final_share')
     .eq('mission_id', mission.id);
 
-  if(error){
-    console.error(error);
-    $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">Failed to load crew payouts.</td></tr>`;
-    showToast('Failed to load crew payouts',true);
-    return;
+  if(snapshotReadError){
+    console.warn('Snapshot lookup failed; using live payout view:', snapshotReadError.message);
+  }else if(snapshots && snapshots.length){
+    payouts = snapshots;
+    payoutSource = 'immutable snapshot';
+  }else{
+    const { data: livePayouts, error } = await sb
+      .from('v_missions_payout_live')
+      .select('mission_id,user_id,paygrade,weight,default_add_pay,add_pay_override,applied_extra,final_share')
+      .eq('mission_id', mission.id);
+    if(error){
+      console.error(error);
+      $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">Failed to load crew payouts.</td></tr>`;
+      showToast('Failed to load crew payouts',true);
+      return;
+    }
+    payouts = livePayouts || [];
   }
   if(!payouts || !payouts.length){
     $('#crewRows').innerHTML = `<tr><td colspan="6" class="subtle">No confirmed crew payouts for this completed mission yet.</td></tr>`;
@@ -1229,6 +1261,7 @@ async function openCrewModal(mission){
     Participants: <span class="hilite">${payouts.length}</span>
     • Extras reserved from crew pool: <span class="hilite">${fmt(Math.round(totalExtras))} aUEC</span>
     • Total distributed: <span class="hilite">${fmt(Math.round(totalShare))} aUEC</span>
+    • Source: <span class="hilite">${payoutSource}</span>
   `;
 }
 
