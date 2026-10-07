@@ -761,42 +761,37 @@ async function loadMembers(){
   list.textContent = 'Loading…'
 
   try {
-    // rank + basic info
-    const { data: vrows, error: vErr } = await sb
-      .from('v_profiles_detailed')
-      .select(`
-        user_id,
-        handle,
-        display_name,
-        current_rank_category,
-        current_rank_name,
-        current_rank_code,
-        current_rank_image_url
-      `)
-      .order('handle')
+    const [{ data: prows, error: pErr }, { data: ranks, error: rErr }, { data: drows, error: dErr }] = await Promise.all([
+      sb.from('profiles')
+        .select('user_id,handle,display_name,role,callsign,current_rank_id,rank_code,rank_category,rank_image_url')
+        .order('handle'),
+      sb.from('ranks')
+        .select('id,code,name,category,image_url,sort_order')
+        .eq('is_active', true)
+        .order('sort_order'),
+      sb.from('discord_links')
+        .select('user_id,handle')
+    ])
 
-    if (vErr) throw vErr
+    if (pErr || rErr || dErr) throw pErr || rErr || dErr
 
-    // roles from public.profiles
-    const { data: prows, error: pErr } = await sb
-      .from('profiles')
-      .select('user_id, role, callsign')
-
-    if (pErr) throw pErr
-
-    const profileMap = new Map((prows || []).map(r => [r.user_id, r]))
-    const { data: drows, error: dErr } = await sb
-      .from('discord_links')
-      .select('user_id, handle')
-    if (dErr) throw dErr
+    const rankById = new Map((ranks || []).map(r => [String(r.id), r]))
     const discordMap = new Map((drows || []).map(r => [r.user_id, r.handle]))
 
-    MEMBERS = (vrows || []).map(r => ({
-      ...r,
-      role: profileMap.get(r.user_id)?.role || 'Guest',
-      callsign: profileMap.get(r.user_id)?.callsign || '',
-      discord_handle: discordMap.get(r.user_id) || ''
-    }))
+    MEMBERS = (prows || []).map(p => {
+      const rank = rankById.get(String(p.current_rank_id)) ||
+        (ranks || []).find(r => r.code === p.rank_code)
+      return {
+        ...p,
+        current_rank_category: rank?.category || p.rank_category || '',
+        current_rank_name: rank?.name || '',
+        current_rank_code: rank?.code || p.rank_code || '',
+        current_rank_image_url: rank?.image_url || p.rank_image_url || '',
+        role: p.role || 'Guest',
+        callsign: p.callsign || '',
+        discord_handle: discordMap.get(p.user_id) || ''
+      }
+    }).sort((a,b) => String(a.handle || '').localeCompare(String(b.handle || '')))
 
     renderMembers()
   } catch (err) {
@@ -804,7 +799,6 @@ async function loadMembers(){
     list.textContent = 'Failed to load members: ' + (err.message || err)
   }
 }
-
 function renderMembers(){
   const q    = ($('#mSearch').value || '').toLowerCase().trim()
   const list = $('#mList')
@@ -988,10 +982,41 @@ async function openMember(userId, rowEl){
 
 /* ===== Progress + ROLE CONTROL ===== */
 async function loadProgress(uid){
-  const [{ data: prog }, { data: up }] = await Promise.all([
-    sb.from('v_user_rank_progress').select('*').eq('user_id', uid).maybeSingle(),
-    sb.from('v_user_progress').select('*').eq('user_id', uid).maybeSingle()
+  const [{ data: profile, error: pErr }, { data: ranks, error: rErr }, { data: signups, error: sErr }, { data: missions, error: mErr }, { data: certs, error: cErr }] = await Promise.all([
+    sb.from('profiles').select('rank_code,rank_category,current_rank_id').eq('user_id', uid).maybeSingle(),
+    sb.from('ranks').select('id,code,name,category,paygrade,sort_order,missions_target,hours_target,certification_target').eq('is_active', true).order('sort_order'),
+    sb.from('mission_signups').select('mission_id,attendance_confirmed').eq('user_id', uid).eq('attendance_confirmed', true),
+    sb.from('missions').select('id,start_time,hours'),
+    sb.from('user_certifications').select('certification_code').eq('user_id', uid)
   ])
+
+  if (pErr || rErr || sErr || mErr || cErr) {
+    throw pErr || rErr || sErr || mErr || cErr
+  }
+
+  const rankList = (ranks || []).slice().sort((a,b) => Number(a.sort_order || 0) - Number(b.sort_order || 0))
+  const current = rankList.find(r => String(r.id) === String(profile?.current_rank_id)) ||
+    rankList.find(r => r.code === profile?.rank_code)
+  const track = rankList.filter(r => !current?.category || r.category === current.category)
+  const next = current ? track.find(r => Number(r.sort_order) > Number(current.sort_order)) : track[0]
+  const ended = new Map((missions || [])
+    .filter(m => m.start_time && new Date(new Date(m.start_time).getTime() + Number(m.hours || 0) * 3600000) <= new Date())
+    .map(m => [String(m.id), m]))
+  const attended = [...new Set((signups || []).map(x => String(x.mission_id)).filter(id => ended.has(id)))]
+  const prog = {
+    current_name: current?.name || profile?.rank_code || '(unranked)',
+    current_paygrade: current?.paygrade || '—',
+    next_name: next?.name || '—',
+    next_paygrade: next?.paygrade || '—',
+    missions_target: next?.missions_target || 0,
+    hours_target: next?.hours_target || 0,
+    certification_target: next?.certification_target || 0
+  }
+  const up = {
+    missions_attended: attended.length,
+    hours_total: attended.reduce((sum,id) => sum + Number(ended.get(id)?.hours || 0), 0),
+    certifications_total: (certs || []).length
+  }
 
   const cur   = esc(prog?.current_name || '(unranked)')
   const curPg = esc(prog?.current_paygrade || '—')
