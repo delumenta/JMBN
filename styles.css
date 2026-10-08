@@ -715,30 +715,24 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Mission image at the far end of each Operations card, fading toward its details */
-#operations .mission-card{
- background-color:var(--panel);
- background-image:
-   linear-gradient(90deg,rgba(13,15,13,1) 0%,rgba(13,15,13,.98) 34%,rgba(13,15,13,.78) 59%,rgba(13,15,13,.22) 100%),
-   linear-gradient(0deg,rgba(7,8,6,.58),rgba(7,8,6,.04) 62%),
-   url("assets/supabase/frontpage/mission-1.png");
- background-position:center,right center;
- background-size:cover,cover,48% 100%;
- background-repeat:no-repeat;
+/* Mission artwork sits opposite the Operations heading, behind Refresh Feed */
+#operations .view-intro{
+ position:relative;
+ isolation:isolate;
+ overflow:hidden;
+ min-height:220px;
+ padding:32px 26px;
+ border:1px solid rgba(180,157,91,.24);
+ background:
+   linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.98) 30%,rgba(5,7,6,.82) 55%,rgba(5,7,6,.28) 100%),
+   linear-gradient(0deg,rgba(7,8,6,.88),rgba(7,8,6,.06) 64%),
+   url("assets/supabase/frontpage/mission-1.png") right center / cover no-repeat;
 }
-#operations .mission-card h3,
-#operations .mission-card .route,
-#operations .mission-card .mission-meta,
-#operations .mission-card .tag{position:relative;z-index:1}
-#operations .mission-card:hover{
- border-color:rgba(212,182,91,.48);
- background-image:
-   linear-gradient(90deg,rgba(13,15,13,1) 0%,rgba(13,15,13,.96) 32%,rgba(13,15,13,.70) 57%,rgba(13,15,13,.12) 100%),
-   linear-gradient(0deg,rgba(7,8,6,.52),rgba(7,8,6,.02) 62%),
-   url("assets/supabase/frontpage/mission-1.png");
-}
+#operations .view-intro h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
+#operations .view-intro p:not(.eyebrow){color:#d0d2c9}
+#operations .view-intro .primary{position:relative;z-index:1}
 @media(max-width:650px){
- #operations .mission-card{background-position:center,right center}
+ #operations .view-intro{min-height:205px;padding:26px 18px;background-position:center,right center}
 }
 
 
