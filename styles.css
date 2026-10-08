@@ -648,6 +648,23 @@ button,input,select,textarea{font-size:.95em}
     -30px 0 80px rgba(0,0,0,.72);
   backdrop-filter:blur(8px) saturate(.82);
 }
+.detail-drawer.mission-command:before{
+  display:block!important;
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(ellipse at 18% 18%,rgba(104,126,115,.12),transparent 39%),
+    radial-gradient(ellipse at 78% 14%,rgba(72,94,97,.11),transparent 37%),
+    radial-gradient(ellipse at 52% 92%,rgba(44,77,72,.14),transparent 43%),
+    url("assets/Polaris-BG.png") center/cover no-repeat;
+  background-blend-mode:screen;
+  opacity:.18;
+  filter:blur(4px) saturate(.65);
+  z-index:0;
+}
 .detail-drawer.mission-command:after{
   display:block!important;
   content:"";
