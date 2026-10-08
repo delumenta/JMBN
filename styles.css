@@ -715,34 +715,44 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Compact Operations artwork header */
-#operations .view-intro{
- position:relative;
- isolation:isolate;
- overflow:hidden;
- min-height:170px;
- margin:0 -38px;
- padding:22px 38px 26px;
- border:0;
- background:
-   linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.96) 30%,rgba(5,7,6,.76) 55%,rgba(5,7,6,.24) 100%),
-   linear-gradient(0deg,rgba(7,8,6,.78),rgba(7,8,6,.04) 64%),
-   url("assets/supabase/frontpage/mission-1.png") right center / auto 100% no-repeat;
- background-size:cover,cover,auto 100%;
- background-position:center,center,right center;
+/* Operations banner mirrors the Crew Manifest artwork treatment. */
+#operations .operations-hero{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
+  min-height:210px;margin:-30px -38px 0;padding:18px 38px 22px;overflow:hidden;
+  background-color:#080907;
+  background-image:
+    linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
+    linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
+    url("assets/supabase/frontpage/mission-1.png");
+  background-size:cover,cover,cover;
+  background-position:center,center,center 52%;
+  background-repeat:no-repeat;
+  border-bottom:0;
 }
-#operations .view-intro h2{font-size:48px;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
-#operations .view-intro p:not(.eyebrow){color:#d0d2c9}
-#operations .view-intro .primary{position:relative;z-index:1}
+#operations .operations-hero .section-status{
+  position:relative;padding:2px 0 0;border:0;color:#a1a597;
+}
+#operations .operations-hero .view-intro{
+  position:relative;align-items:center;gap:24px;padding:0;border:0;
+}
+#operations .operations-hero .view-intro h2{
+  font-size:clamp(42px,4.8vw,64px);margin:7px 0 9px;line-height:.9;
+  color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65);
+}
+#operations .operations-hero .view-intro p:not(.eyebrow){
+  max-width:500px;margin:0;color:#d0d2c9;font-size:13px;
+}
+#operations .operations-hero .primary{position:relative;z-index:1}
+#operations .toolbar{padding:18px 0;border-bottom:0}
 @media(max-width:800px){
- #operations .view-intro{margin:0 -16px;padding:20px 16px 24px}
+  #operations .operations-hero{margin:-30px -16px 0;padding:18px 16px 22px}
 }
 @media(max-width:650px){
- #operations .view-intro{min-height:155px;padding:18px 16px 22px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
- #operations .view-intro h2{font-size:42px}
+  #operations .operations-hero{min-height:185px;padding:16px 16px 19px;background-position:center,center,62% center}
+  #operations .operations-hero .view-intro{align-items:flex-start;gap:14px}
+  #operations .operations-hero .view-intro h2{font-size:clamp(40px,10vw,52px)}
+  #operations .operations-hero .view-intro p:not(.eyebrow){max-width:290px;font-size:12px}
 }
-
-
 /* Crew profile modal background — use the exact uploaded artwork. */
 .detail-drawer.personnel-modal{
   background:#0b1317 url("assets/crew-modal-bg.png") center center / cover no-repeat!important;
