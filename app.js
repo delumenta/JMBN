@@ -140,33 +140,70 @@ function syncDutyUI(status){
 }
 async function setDutyStatus(status){
  if(!["active","awol"].includes(status))return;
- const {data:{session}}=await sb.auth.getSession();if(!session)return;
- const previous=state.profile?.availability_status||"active";if(previous===status)return;
+ const {data:{session},error:sessionError}=await sb.auth.getSession();
+ if(sessionError||!session){toast("Secure session required");return}
+ const uid=session.user.id;
+ const previous=state.profile?.availability_status==="awol"?"awol":"active";
+ if(previous===status)return;
  const button=$("#dutyToggle");
  if(button)button.disabled=true;
  syncDutyUI(status);
+
+ let savedStatus=null;
+ let saveError=null;
  try{
-  const {data,error}=await sb.from("profiles").update({availability_status:status}).eq("user_id",session.user.id).select("user_id,availability_status").maybeSingle();
-  if(error||!data){
+  const {data,error}=await sb.from("profiles")
+   .update({availability_status:status})
+   .eq("user_id",uid)
+   .select("user_id,availability_status")
+   .maybeSingle();
+  if(error)throw error;
+  if(!data?.availability_status)throw new Error("No updated profile row was returned.");
+  savedStatus=data.availability_status;
+ }catch(error){
+  saveError=error;
+  console.error("Duty status save:",error);
+ }
+
+ // A request can reach Supabase and commit even if the response is lost,
+ // or the returned-row query can fail after the update. Re-read the profile
+ // before deciding what the toggle should display.
+ if(!savedStatus){
+  try{
+   const {data,error}=await sb.from("profiles")
+    .select("availability_status")
+    .eq("user_id",uid)
+    .maybeSingle();
+   if(error)throw error;
+   if(!["active","awol"].includes(data?.availability_status)){
+    throw new Error("Could not confirm the saved duty status.");
+   }
+   savedStatus=data.availability_status;
+  }catch(readError){
+   state.profile.availability_status=previous;
+   const mine=state.crew.find(x=>x.user_id===uid);
+   if(mine)mine.availability_status=previous;
    syncDutyUI(previous);
-   toast("Duty status update failed");
-   console.error(error);
+   toast("Duty status couldn't be confirmed");
+   if(button)button.disabled=false;
+   console.error("Duty status read-back:",readError,saveError);
    return;
   }
-  state.profile.availability_status=status;
-  const mine=state.crew.find(x=>x.user_id===session.user.id);
-  if(mine)mine.availability_status=status;
-  render();
-  syncDutyUI(status);
-  toast(status==="active"?"Welcome back. Status ACTIVE.":"Duty status set to AWOL.");
- }catch(error){
-  state.profile.availability_status=previous;
-  syncDutyUI(previous);
-  toast("Duty status refresh failed");
-  console.error("Duty status refresh:",error);
- }finally{
-  if(button)button.disabled=false;
  }
+
+ state.profile.availability_status=savedStatus;
+ const mine=state.crew.find(x=>x.user_id===uid);
+ if(mine)mine.availability_status=savedStatus;
+ syncDutyUI(savedStatus);
+ try{render()}catch(renderError){console.error("Duty status saved; manifest render failed:",renderError)}
+
+ if(savedStatus===status){
+  toast(savedStatus==="active"?"Duty status set to ONLINE.":"Duty status set to AWOL.");
+ }else{
+  toast("Duty status remains "+(savedStatus==="active"?"ONLINE.":"AWOL."));
+  if(saveError)console.error("Requested status was not confirmed.",saveError);
+ }
+ if(button)button.disabled=false;
 }
 
 function render(){
