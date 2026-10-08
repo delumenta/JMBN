@@ -715,10 +715,10 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Operations banner mirrors the Crew Manifest artwork treatment. */
+/* Operations banner mirrors Crew Manifest sizing and layout. */
 #operations .operations-hero{
   position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
-  min-height:210px;margin:-30px -38px 0;padding:18px 38px 22px;overflow:hidden;
+  min-height:280px;margin:-30px -38px 0;padding:20px 38px 24px;overflow:hidden;
   background-color:#080907;
   background-image:
     linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
@@ -736,7 +736,7 @@ button,input,select,textarea{font-size:.95em}
   position:relative;align-items:center;gap:24px;padding:0;border:0;
 }
 #operations .operations-hero .view-intro h2{
-  font-size:clamp(42px,4.8vw,64px);margin:7px 0 9px;line-height:.9;
+  font-size:clamp(46px,5vw,72px);margin:7px 0 9px;line-height:.9;
   color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65);
 }
 #operations .operations-hero .view-intro p:not(.eyebrow){
@@ -745,13 +745,17 @@ button,input,select,textarea{font-size:.95em}
 #operations .operations-hero .primary{position:relative;z-index:1}
 #operations .toolbar{padding:18px 0;border-bottom:0}
 @media(max-width:800px){
-  #operations .operations-hero{margin:-30px -16px 0;padding:18px 16px 22px}
+  #operations .operations-hero{margin:-30px -16px 0;padding:18px 16px 20px}
 }
-@media(max-width:650px){
-  #operations .operations-hero{min-height:185px;padding:16px 16px 19px;background-position:center,center,62% center}
-  #operations .operations-hero .view-intro{align-items:flex-start;gap:14px}
-  #operations .operations-hero .view-intro h2{font-size:clamp(40px,10vw,52px)}
-  #operations .operations-hero .view-intro p:not(.eyebrow){max-width:290px;font-size:12px}
+@media(max-width:700px){
+  #operations .operations-hero{
+    min-height:250px;margin:-18px -16px 0;padding:18px 16px 20px;
+    background-position:center,center,68% 6%;
+  }
+  #operations .operations-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
+  #operations .operations-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
+  #operations .toolbar{flex-wrap:wrap;gap:10px}
+  #operations .toolbar input{width:100%}
 }
 /* Crew profile modal background — use the exact uploaded artwork. */
 .detail-drawer.personnel-modal{
