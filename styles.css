@@ -523,3 +523,40 @@ button,input,select,textarea{font-size:.95em}
 
 /* Personnel service information */
 .personnel-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.personnel-info-item{background:#111711;border:1px solid #333b32;border-radius:5px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}.personnel-info-item small{color:#d4b667;font-size:10px;letter-spacing:.09em;font-weight:700}.personnel-info-item strong{color:#f0eee4;font-size:14px;overflow-wrap:anywhere}.personnel-info-item span{color:#a5aaa0;font-size:11px;line-height:1.5}@media(max-width:700px){.personnel-info-grid{grid-template-columns:1fr}.personnel-info-item{gap:5px}}
+
+/* JMBN personnel dossier — polished editorial treatment */
+.detail-drawer.personnel-modal{width:min(900px,95vw);height:min(820px,92vh);padding:38px 44px;background:radial-gradient(ellipse at 95% 0%,rgba(177,137,58,.105),transparent 42%),linear-gradient(155deg,#131712 0%,#090c0b 70%);border:1px solid #63583b;border-radius:12px;box-shadow:0 40px 110px #000c,0 0 0 1px #000 inset}
+.personnel-service>.eyebrow{font-size:10px;letter-spacing:.24em;color:#a99565;margin:0}
+.personnel-service-head{gap:22px;padding:25px 0 26px;border-color:#3b4038}
+.personnel-service-head .rank-img{width:84px;height:84px;filter:drop-shadow(0 8px 18px #0008)}
+.personnel-service-head h2{font-size:clamp(24px,3vw,34px);letter-spacing:-.025em}
+.personnel-service-head p{font-size:12px;letter-spacing:.08em}
+.personnel-duty{background:#122119;border-color:#315c40;color:#9cdbab;font-weight:700;letter-spacing:.09em}
+.personnel-service-stats{gap:0;margin:6px 0 22px;padding:17px 0;border-bottom:1px solid #323a32}
+.personnel-service-stats article{background:transparent;border:0;border-right:1px solid #313a32;padding:4px 22px}
+.personnel-service-stats article:first-child{padding-left:0}
+.personnel-service-stats article:last-child{border-right:0}
+.personnel-service-stats small{color:#909d91;letter-spacing:.14em}
+.personnel-service-stats strong{font-size:31px;margin-top:7px;line-height:1.1}
+.personnel-service-stats .personnel-stat-text{font-size:19px}
+.personnel-side-panels{border:0;gap:16px;align-items:stretch;margin:4px 0 20px}
+.personnel-side-panels .personnel-service-section{padding:0;display:flex;flex-direction:column}
+.personnel-service-section h3{font-size:11px;letter-spacing:.17em;margin:0 0 13px;color:#c6ac70}
+.personnel-side-panels .personnel-certs{flex:1;min-height:126px;border:1px solid #323b33;background:#121713;border-radius:9px;padding:17px;align-content:start}
+.personnel-side-panels .personnel-certs>div{background:#1a2019;border:1px solid #343f34;border-radius:6px}
+.personnel-favorite-single{flex:1;min-height:126px;border:1px solid #766139;border-radius:9px;padding:22px 24px;background:radial-gradient(circle at 100% 0%,#4b3b1a55,transparent 65%),linear-gradient(135deg,#242315,#151a13)}
+.personnel-favorite-single strong{font-size:clamp(23px,2.6vw,31px);letter-spacing:-.025em}
+.personnel-favorite-single small{font-size:12px;color:#b1ad97}
+.personnel-info-section{border-top:1px solid #343a32;padding:22px 0 24px}
+.personnel-info-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:#111612;border:1px solid #333d33;border-radius:9px;overflow:hidden}
+.personnel-info-item{background:transparent;border:0;border-radius:0;border-right:1px solid #333d33;padding:19px 18px;gap:8px}
+.personnel-info-item:last-child{border-right:0}
+.personnel-info-item small{color:#bda36b;font-size:10px;letter-spacing:.12em}
+.personnel-info-item strong{font-size:14px;line-height:1.3}
+.personnel-info-item span{font-size:11px;color:#96a198}
+.personnel-history{display:grid;gap:7px}
+.personnel-history-row{margin:0;border:1px solid #303a32;background:#111713;border-radius:7px;padding:15px 17px;transition:background .18s,border-color .18s}
+.personnel-history-row:hover{background:#1a211a;border-color:#6c603e}
+.personnel-history-row strong{font-size:17px}
+@media(max-width:700px){.detail-drawer.personnel-modal{padding:26px 20px;width:96vw;height:94vh}.personnel-service-stats article{padding:4px 10px}.personnel-service-stats article:first-child{padding-left:0}.personnel-service-stats strong{font-size:23px}.personnel-service-stats .personnel-stat-text{font-size:15px}.personnel-info-grid{grid-template-columns:1fr}.personnel-info-item{border-right:0;border-bottom:1px solid #333d33;padding:15px 18px}.personnel-info-item:last-child{border-bottom:0}}
+@media(max-width:600px){.personnel-side-panels{grid-template-columns:1fr;gap:18px}.personnel-service-head{gap:12px;flex-wrap:wrap}.personnel-duty{margin-left:0}.personnel-service-head .rank-img{width:62px;height:62px}}
