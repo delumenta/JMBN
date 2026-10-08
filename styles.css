@@ -882,4 +882,4 @@ button,input,select,textarea{font-size:.95em}
 }
 
 /* Nudge the callsign line down slightly for better balance with the rank emblem. */
-#detailDrawer.personnel-modal .personnel-head-identity h2{transform:translateY(20px)!important}
+#detailDrawer.personnel-modal .personnel-head-identity h2{transform:translateY(10px)!important}
