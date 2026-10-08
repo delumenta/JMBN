@@ -715,13 +715,16 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Exact uploaded artwork for the Operations modal */
+/* Mission image blended into the Operations modal */
 .detail-drawer.mission-command{
- background:#0b1317 url("assets/operation-modal-bg.png") center center / cover no-repeat!important;
+ background:
+   linear-gradient(90deg,rgba(4,8,7,.96) 0%,rgba(4,8,7,.76) 42%,rgba(4,8,7,.38) 76%,rgba(4,8,7,.62) 100%),
+   linear-gradient(0deg,rgba(4,7,6,.92) 0%,rgba(5,9,8,.24) 48%,rgba(4,7,6,.48) 100%),
+   url("assets/supabase/frontpage/mission-1.png") center center / cover no-repeat!important;
  isolation:isolate;
 }
 .detail-drawer.mission-command::before,.detail-drawer.mission-command::after{display:none!important;content:none!important}
-.detail-drawer.mission-command .op-new-card{background:rgba(5,9,11,.87)!important;border-color:rgba(112,125,126,.31)!important}
+.detail-drawer.mission-command .op-new-card{background:rgba(5,9,11,.88)!important;border-color:rgba(112,125,126,.31)!important}
 
 
 /* Crew profile modal background — use the exact uploaded artwork. */
