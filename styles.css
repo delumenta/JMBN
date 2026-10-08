@@ -722,3 +722,20 @@ button,input,select,textarea{font-size:.95em}
 }
 .detail-drawer.mission-command::before,.detail-drawer.mission-command::after{display:none!important;content:none!important}
 .detail-drawer.mission-command .op-new-card{background:rgba(5,9,11,.87)!important;border-color:rgba(112,125,126,.31)!important}
+
+
+/* Crew profile modal background — use the exact uploaded artwork. */
+.detail-drawer.personnel-modal{
+  background:#0b1317 url("assets/crew-modal-bg.png") center center / cover no-repeat!important;
+  isolation:isolate;
+}
+.detail-drawer.personnel-modal::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(3,8,9,.52),rgba(3,8,9,.14) 55%,rgba(3,8,9,.30))!important;
+}
+.detail-drawer.personnel-modal #detailBody,.detail-drawer.personnel-modal>.detail-close{position:relative;z-index:1}
