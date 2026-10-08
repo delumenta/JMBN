@@ -813,7 +813,7 @@ button,input,select,textarea{font-size:.95em}
   grid-template-columns:minmax(0,1fr) auto!important;
   align-items:center!important;
   column-gap:20px!important;
-  row-gap:4px!important;
+  row-gap:12px!important;
   min-width:0;
 }
 #detailDrawer.personnel-modal .personnel-head-identity h2{
