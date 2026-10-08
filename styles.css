@@ -513,3 +513,6 @@ button,input,select,textarea{font-size:.95em}
 
 /* Single most frequently served assignment, not a full breakdown */
 .personnel-favourite{display:grid;grid-template-columns:1fr 1fr;gap:12px}.personnel-favourite>div{padding:20px;border:1px solid #45412c;background:linear-gradient(125deg,#151810,#0c110e)}.personnel-favourite small,.personnel-favourite strong,.personnel-favourite span{display:block}.personnel-favourite small{color:#9a9e91;font-size:10px;letter-spacing:.1em}.personnel-favourite strong{color:#e3c16a;font-size:23px;margin:12px 0 6px}.personnel-favourite span{color:#9aa49d;font-size:11px}@media(max-width:550px){.personnel-favourite{grid-template-columns:1fr}}
+
+/* Certifications and a single favorite role side by side */
+.personnel-side-panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid #343a32}.personnel-side-panels .personnel-service-section{border-top:0;min-width:0}.personnel-side-panels .personnel-certs{grid-template-columns:1fr}.personnel-favorite-single{border:1px solid #45412c;background:#111610;padding:22px;min-height:95px}.personnel-favorite-single strong{display:block;font:700 25px Play,sans-serif;color:#e3c16a}.personnel-favorite-single small{display:block;margin-top:10px;color:#9aa49d;font-size:11px}@media(max-width:600px){.personnel-side-panels{grid-template-columns:1fr;gap:0}}
