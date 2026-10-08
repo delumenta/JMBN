@@ -915,7 +915,7 @@ button,input,select,textarea{font-size:.95em}
   background-size:cover,cover,cover;
   background-position:center,center,center 18%;
   background-repeat:no-repeat;
-  border-bottom:1px solid rgba(212,182,91,.42);
+  border-bottom:0;
 }
 #crew .crew-manifest-hero .section-status{
   position:relative;padding:2px 0 0;border:0;color:#a1a597;
@@ -934,7 +934,7 @@ button,input,select,textarea{font-size:.95em}
   color:#e5e6df;font-size:14px;
 }
 #crew .toolbar{
-  padding:18px 0;border-bottom:1px solid rgba(212,182,91,.12);
+  padding:18px 0;border-bottom:0;
 }
 #crew .crew-grid{padding-top:18px}
 @media(max-width:700px){
