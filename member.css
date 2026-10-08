@@ -125,3 +125,7 @@ button,a{font-family:Play,sans-serif}
  .detail-drawer.personnel-modal .personnel-service-section:last-child{min-height:0}
  .detail-drawer.personnel-modal .personnel-history{min-height:220px}
 }
+
+/* Remove the thin divider directly below the Certifications and Favorite Role headings. */
+.detail-drawer.personnel-modal .personnel-side-panels .personnel-certs,
+.detail-drawer.personnel-modal .personnel-side-panels .personnel-favorite-single{border-top:0!important}
