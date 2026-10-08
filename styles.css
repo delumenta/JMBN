@@ -725,7 +725,7 @@ button,input,select,textarea{font-size:.95em}
     linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
     url("assets/supabase/frontpage/mission-1.png");
   background-size:cover,cover,cover;
-  background-position:center,center,center 52%;
+  background-position:center,center,center 30%;
   background-repeat:no-repeat;
   border-bottom:0;
 }
