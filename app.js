@@ -129,16 +129,21 @@ async function load(){
 }
 
 function syncDutyUI(status){
- const s=status==="awol"?"awol":"active";$("#myDutyLabel").textContent=s.toUpperCase();
- $("#dutyActive").classList.toggle("active",s==="active");$("#dutyAwol").classList.toggle("active",s==="awol");
- $("#welcomePanel").classList.toggle("is-awol",s==="awol");
+ const s=status==="awol"?"awol":"active";
+ const online=s==="active";
+ $("#myDutyLabel").textContent=online?"ONLINE":"AWOL";
+ $("#dutyToggleText").textContent=online?"ONLINE":"AWOL";
+ $("#dutyToggle").classList.toggle("active",online);
+ $("#dutyToggle").classList.toggle("awol",!online);
+ $("#dutyToggle").setAttribute("aria-pressed",String(online));
+ $("#welcomePanel").classList.toggle("is-awol",!online);
 }
 async function setDutyStatus(status){
  if(!["active","awol"].includes(status))return;
  const {data:{session}}=await sb.auth.getSession();if(!session)return;
  const previous=state.profile?.availability_status||"active";if(previous===status)return;
- const buttons=$$(".duty-toggle button");
- buttons.forEach(b=>b.disabled=true);
+ const button=$("#dutyToggle");
+ if(button)button.disabled=true;
  syncDutyUI(status);
  try{
   const {data,error}=await sb.from("profiles").update({availability_status:status}).eq("user_id",session.user.id).select("user_id,availability_status").maybeSingle();
@@ -160,7 +165,7 @@ async function setDutyStatus(status){
   toast("Duty status refresh failed");
   console.error("Duty status refresh:",error);
  }finally{
-  buttons.forEach(b=>b.disabled=false);
+  if(button)button.disabled=false;
  }
 }
 
@@ -375,7 +380,10 @@ $("#memberNoticeToggle")?.addEventListener("click",()=>{
 });
 $$("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 $("#opSearch").oninput=filterOps;$("#crewSearch").oninput=filterCrew;$$("[data-opfilter]").forEach(b=>b.onclick=()=>{$$("[data-opfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterOps()});$$("[data-crewfilter]").forEach(b=>b.onclick=()=>{$$("[data-crewfilter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterCrew()});
-$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#readinessPanel").onclick=()=>openReadiness();$("#readinessPanel").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openReadiness()}};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};$("#welcomeProfile").onclick=()=>{showView("profile");loadMyProfile()};$("#railLogout").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}};$("#dutyActive").onclick=()=>setDutyStatus("active");$("#dutyAwol").onclick=()=>setDutyStatus("awol");
+$("#refreshOps").onclick=()=>{toast("Refreshing manifest…");load()};$("#readinessPanel").onclick=()=>openReadiness();$("#readinessPanel").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openReadiness()}};$("#userBtn").onclick=()=>{showView("profile");loadMyProfile()};$("#welcomeProfile").onclick=()=>{showView("profile");loadMyProfile()};$("#railLogout").onclick=async()=>{if(confirm("Sign out of JMBN Manifest?")){await sb.auth.signOut();location.replace(base()+"auth.html")}};$("#dutyToggle").onclick=()=>{
+ const current=state.profile?.availability_status==="awol"?"awol":"active";
+ setDutyStatus(current==="awol"?"active":"awol");
+};
 setInterval(()=>{$("#clock").textContent=new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})},1000);
 const initialView=location.hash.replace("#","");
 if(["command","operations","crew","academy","records","profile"].includes(initialView)){
