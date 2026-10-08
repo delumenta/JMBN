@@ -717,7 +717,7 @@ button,input,select,textarea{font-size:.95em}
 
 /* Exact uploaded artwork for the Operations modal */
 .detail-drawer.mission-command{
- background:#0b1317 url("assets/operations-modal-bg.png") center center / cover no-repeat!important;
+ background:#0b1317 url("assets/operation-modal-bg.png") center center / cover no-repeat!important;
  isolation:isolate;
 }
 .detail-drawer.mission-command::before,.detail-drawer.mission-command::after{display:none!important;content:none!important}
