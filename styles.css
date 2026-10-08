@@ -320,3 +320,36 @@ button,input,select,textarea{font-size:.95em}
 @media(max-width:700px){
   .duty-toggle-button{min-width:96px;padding:9px 11px;font-size:9px}
 }
+
+
+/* Larger mission status badges: OOD, RSVP, duration and overlay state */
+#detailBody .rsvp-head>span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:82px;
+  min-height:34px;
+  padding:8px 12px;
+  border:1px solid #8a773c;
+  background:rgba(212,182,91,.08);
+  color:var(--gold2);
+  font:700 10px/1 Play,sans-serif;
+  letter-spacing:.1em;
+  white-space:nowrap;
+}
+#detailBody .rsvp-head>span#roleCurrent{
+  min-width:96px;
+  font-size:11px;
+}
+#detailBody .rsvp-head>span#rsvpCurrent{
+  min-width:82px;
+}
+@media(max-width:560px){
+  #detailBody .rsvp-head>span{
+    min-width:74px;
+    min-height:32px;
+    padding:7px 9px;
+    font-size:9px;
+  }
+  #detailBody .rsvp-head>span#roleCurrent{min-width:82px;font-size:10px}
+}
