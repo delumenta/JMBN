@@ -726,13 +726,15 @@ button,input,select,textarea{font-size:.95em}
  background:
    linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.98) 30%,rgba(5,7,6,.82) 55%,rgba(5,7,6,.28) 100%),
    linear-gradient(0deg,rgba(7,8,6,.88),rgba(7,8,6,.06) 64%),
-   url("assets/supabase/frontpage/mission-1.png") right center / cover no-repeat;
+   url("assets/supabase/frontpage/mission-1.png") right center / auto 110% no-repeat;
+ background-size:cover,cover,auto 110%;
+ background-position:center,center,right center;
 }
 #operations .view-intro h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
 #operations .view-intro p:not(.eyebrow){color:#d0d2c9}
 #operations .view-intro .primary{position:relative;z-index:1}
 @media(max-width:650px){
- #operations .view-intro{min-height:205px;padding:26px 18px;background-position:center,right center}
+ #operations .view-intro{min-height:205px;padding:26px 18px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
 }
 
 
