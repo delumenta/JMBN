@@ -866,3 +866,17 @@ button,input,select,textarea{font-size:.95em}
 /* Keep operation title and date clear of the decorative top frame. */
 .detail-drawer.mission-command .op-new-header .op-heading,
 .detail-drawer.mission-command .op-new-header .op-meta{position:relative;top:12px}
+
+/* Center the open crew profile and let its height follow its actual content. */
+#detailDrawer.personnel-modal.open{
+  left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;
+  width:min(1050px,96vw)!important;height:auto!important;max-height:94vh!important;
+  transform:translate(-50%,-50%)!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+}
+@media(max-width:700px){
+ #detailDrawer.personnel-modal.open{
+   width:97vw!important;max-height:95vh!important;
+   padding:22px 16px!important;
+ }
+}
