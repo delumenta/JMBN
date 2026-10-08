@@ -750,7 +750,7 @@ button,input,select,textarea{font-size:.95em}
 @media(max-width:700px){
   #operations .operations-hero{
     min-height:250px;margin:-18px -16px 0;padding:18px 16px 20px;
-    background-position:center,center,68% 6%;
+    background-size:cover,cover,auto 300px;background-position:center,center,right 38%;
   }
   #operations .operations-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
   #operations .operations-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
@@ -927,8 +927,8 @@ button,input,select,textarea{font-size:.95em}
     linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
     linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
     url("assets/supabase/frontpage/Grow123.png");
-  background-size:cover,cover,cover;
-  background-position:center,center,center 6%;
+  background-size:cover,cover,auto 390px;
+  background-position:center,center,right 42%;
   background-repeat:no-repeat;
   border-bottom:0;
 }
