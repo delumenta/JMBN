@@ -714,3 +714,10 @@ button,input,select,textarea{font-size:.95em}
   .op-card-heading{font-size:10px}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
+
+/* JMBN operation modal: smoky blue-black backdrop from generated art (embedded, no asset upload required) */
+.detail-drawer.mission-command{background:#070d0e!important;isolation:isolate;overflow:hidden}
+.detail-drawer.mission-command::before{content:""!important;display:block!important;position:absolute;inset:-12px;pointer-events:none;background-image:linear-gradient(90deg,rgba(3,7,8,.37),rgba(4,7,8,.48)),url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABELDA8MChEPDg8TEhEUGSobGRcXGTMkJh4qPDU/Pjs1OjlDS2BRQ0daSDk6U3FUWmNma2xrQFB2fnRofWBpa2f/2wBDARITExkWGTEbGzFnRTpFZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2f/wAARCAC0AUADASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAECAwb/xAAbEAEBAQADAQEAAAAAAAAAAAAAARECITFBUf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APGmoKyq/EnTUoESrWQKBgLFxJ01oJhTUoJRUABQQxQAAEMUAwAAUBDAAxU00FEAAAFiAKuJKsoKi6A5KoCAAaqAAAGrqGgtQAANBUAFEUAAAAFE0BUABFQAUBFXEAEUFEUBUALUNASKYArK1ABAUVAFEUQAAAAAAIANIlAVAANAFQAFQBVlQBqxMWGqM4LUqAIAoAIsACUAEFwwEAwAMARQFRQAQAFAQAAAAAAAAAAAAioA1ozrUAvjNbhkoMEbvFMBBqRQYyjSYAiNSAigABQRFAQAEFAAAAAAAAAAAAAAQFTQFBUwFanjKwRqNSRhqUGrOmbMW8kvLVRATAABUkaZbBEaZA1NKYgCaAogAAAAAAAAAAAAAAAigIKAYACwQBo1nTQat1E1QXTUAa1LUQF0RQWX9Vk0FSmoBQAAQFEBVEBFAABAUAAADRFAAAAABQQKgAKAACoAAALYi31AAARUBVEBFRQEFARQAAAABAAUAEVAFAAxcADAFEoUQAAEAAAUVAFAEAAAQAVABUAAFUQEUQAUAEFABABQAAFBNAABUABFAQAVBQAVAWCgglVAQDBRTFERFqAACgAAAAAAAKCCCxFATQA1dQFUARBQAoAIqAAChoAqob0IAgCoAoACAABBTFhFwRnBQVFEBRAAWLBEAARUwUAAABUVBFQBTQADAAABIoAKAIAAAAABPVAQTQAAFAAAAAAFAAARAAFAEAFEAFAAAASgD//Z");background-size:cover;background-position:center;opacity:.9;filter:none;transform:none;z-index:0}
+.detail-drawer.mission-command::after{background:linear-gradient(135deg,rgba(16,24,23,.1),rgba(0,0,0,.25))!important;z-index:0}
+.detail-drawer.mission-command #detailBody,.detail-drawer.mission-command>.detail-close{position:relative;z-index:1}
+.detail-drawer.mission-command .op-new-card{background:rgba(8,12,12,.72);backdrop-filter:blur(7px)}
