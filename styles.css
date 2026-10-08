@@ -806,3 +806,59 @@ button,input,select,textarea{font-size:.95em}
  #detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child{min-height:0!important}
  #detailDrawer.personnel-modal .personnel-history{min-height:145px!important}
 }
+
+/* Balance the personnel header and let Operations History size to its content. */
+#detailDrawer.personnel-modal .personnel-head-identity{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:20px!important;
+  row-gap:4px!important;
+  min-width:0;
+}
+#detailDrawer.personnel-modal .personnel-head-identity h2{
+  grid-column:1;grid-row:1;margin:0!important;
+}
+#detailDrawer.personnel-modal .personnel-head-identity p{
+  grid-column:1;grid-row:2;margin:0!important;
+}
+#detailDrawer.personnel-modal .personnel-head-identity .personnel-duty{
+  grid-column:2;grid-row:1 / span 2;
+  justify-self:end;align-self:center;margin:0!important;
+}
+#detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child{
+  min-height:0!important;
+}
+#detailDrawer.personnel-modal .personnel-history{
+  min-height:0!important;
+}
+#detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child:has(.personnel-history-row){
+  min-height:250px!important;
+}
+#detailDrawer.personnel-modal .personnel-history:has(.personnel-history-row){
+  min-height:180px!important;
+}
+#detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child:has(.personnel-exp-empty){
+  min-height:132px!important;
+}
+#detailDrawer.personnel-modal .personnel-history:has(.personnel-exp-empty){
+  min-height:46px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+}
+#detailDrawer.personnel-modal .personnel-history:has(.personnel-exp-empty) .personnel-exp-empty{
+  margin:0!important;text-align:center;
+}
+@media(max-width:700px){
+ #detailDrawer.personnel-modal .personnel-head-identity{
+   grid-template-columns:minmax(0,1fr)!important;
+   row-gap:5px!important;
+ }
+ #detailDrawer.personnel-modal .personnel-head-identity h2,
+ #detailDrawer.personnel-modal .personnel-head-identity p,
+ #detailDrawer.personnel-modal .personnel-head-identity .personnel-duty{
+   grid-column:1;grid-row:auto;
+ }
+ #detailDrawer.personnel-modal .personnel-head-identity .personnel-duty{justify-self:start}
+ #detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child:has(.personnel-history-row){min-height:0!important}
+ #detailDrawer.personnel-modal .personnel-history:has(.personnel-history-row){min-height:0!important}
+}
