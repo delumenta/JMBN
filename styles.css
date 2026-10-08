@@ -641,9 +641,7 @@ button,input,select,textarea{font-size:.95em}
 }
 .detail-drawer.mission-command{
   background:
-    linear-gradient(135deg,rgba(7,13,12,.90),rgba(4,8,7,.96) 72%),
-    url("assets/Polaris-BG.png") center/cover no-repeat;
-  background-blend-mode:normal;
+    linear-gradient(135deg,rgba(16,19,15,.985),rgba(8,10,9,.99) 72%);
   box-shadow:
     inset 0 0 0 1px rgba(214,180,76,.10),
     inset 0 0 90px rgba(54,88,82,.18),
