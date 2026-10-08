@@ -632,3 +632,66 @@ button,input,select,textarea{font-size:.95em}
 .personnel-service-section h3 .personnel-section-icon{display:inline-flex;align-items:center;justify-content:center;margin-right:10px;vertical-align:middle}
 .personnel-service-section h3 .personnel-section-icon .personnel-gold-icon{width:21px;height:21px}
 @media(max-width:750px){.personnel-info-item{gap:12px}.personnel-info-emblem{flex-basis:26px}}
+
+
+/* Mission modal — cinematic command surface */
+.detail-backdrop.open{
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(6px) saturate(.78);
+}
+.detail-drawer.mission-command{
+  background:
+    linear-gradient(135deg,rgba(7,13,12,.90),rgba(4,8,7,.96) 72%),
+    url("assets/Polaris-BG.png") center/cover no-repeat;
+  background-blend-mode:normal;
+  box-shadow:
+    inset 0 0 0 1px rgba(214,180,76,.10),
+    inset 0 0 90px rgba(54,88,82,.18),
+    -30px 0 80px rgba(0,0,0,.72);
+  backdrop-filter:blur(8px) saturate(.82);
+}
+.detail-drawer.mission-command:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:linear-gradient(115deg,rgba(212,182,91,.055),transparent 34%,rgba(27,61,63,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.detail-drawer.mission-command #detailBody{position:relative;z-index:1}
+.op-card-heading{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#e3bd63;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+.op-section-emblem{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:21px;
+  height:21px;
+  flex:0 0 21px;
+  color:#d8ad5c;
+  font-size:18px;
+  line-height:1;
+  filter:drop-shadow(0 0 6px rgba(216,173,92,.16));
+}
+.op-new h3 .op-section-emblem{
+  margin-right:8px;
+  vertical-align:-3px;
+}
+.op-roster-head h3{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+@media(max-width:700px){
+  .op-card-heading{font-size:10px}
+  .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
+}
