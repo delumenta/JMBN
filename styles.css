@@ -906,14 +906,14 @@ button,input,select,textarea{font-size:.95em}
 /* Crew Manifest cinematic banner */
 #crew .crew-manifest-hero{
   position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
-  min-height:370px;margin:-30px -38px 0;padding:24px 38px 28px;overflow:hidden;
+  min-height:280px;margin:-30px -38px 0;padding:20px 38px 24px;overflow:hidden;
   background-color:#080907;
   background-image:
     linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
     linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
     url("assets/supabase/frontpage/Grow123.png");
   background-size:cover,cover,cover;
-  background-position:center,center,center 18%;
+  background-position:center,center,center 6%;
   background-repeat:no-repeat;
   border-bottom:0;
 }
@@ -939,8 +939,8 @@ button,input,select,textarea{font-size:.95em}
 #crew .crew-grid{padding-top:18px}
 @media(max-width:700px){
   #crew .crew-manifest-hero{
-    min-height:310px;margin:-18px -16px 0;padding:18px 16px 22px;
-    background-position:center,center,68% 12%;
+    min-height:250px;margin:-18px -16px 0;padding:18px 16px 20px;
+    background-position:center,center,68% 6%;
   }
   #crew .crew-manifest-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
   #crew .crew-manifest-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
