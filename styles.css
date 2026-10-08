@@ -646,7 +646,7 @@ button,input,select,textarea{font-size:.95em}
     inset 0 0 0 1px rgba(214,180,76,.10),
     inset 0 0 90px rgba(54,88,82,.18),
     -30px 0 80px rgba(0,0,0,.72);
-  backdrop-filter:blur(8px) saturate(.82);
+  backdrop-filter:none;
 }
 .detail-drawer.mission-command:before{
   display:block!important;
@@ -666,7 +666,7 @@ button,input,select,textarea{font-size:.95em}
   background-position:center,center,center,center,center,center;
   background-repeat:no-repeat;
   opacity:.88;
-  filter:blur(1px) saturate(.86);
+  filter:saturate(.86);
   transform:scale(1.04);
   z-index:0;
 }
