@@ -503,3 +503,6 @@ button,input,select,textarea{font-size:.95em}
 .personnel-modal .detail-stat,.personnel-modal .detail-item{min-width:0}
 @media(max-width:700px){.detail-drawer.personnel-modal{width:96vw;height:93vh;padding:22px 16px}.personnel-modal .detail-grid,.personnel-modal .detail-list{grid-template-columns:repeat(2,minmax(0,1fr))}.personnel-modal .detail-hero .rank-img{width:65px;height:65px}}
 @media(max-width:430px){.personnel-modal .detail-grid,.personnel-modal .detail-list{grid-template-columns:1fr}}
+
+/* Personnel rank insignia without framing */
+.personnel-modal .detail-hero .rank-img{background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
