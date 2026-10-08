@@ -652,17 +652,19 @@ button,input,select,textarea{font-size:.95em}
   display:block!important;
   content:"";
   position:absolute;
-  inset:0;
+  inset:-8%;
   pointer-events:none;
   border-radius:inherit;
   background:
-    radial-gradient(ellipse at 18% 18%,rgba(104,126,115,.12),transparent 39%),
-    radial-gradient(ellipse at 78% 14%,rgba(72,94,97,.11),transparent 37%),
-    radial-gradient(ellipse at 52% 92%,rgba(44,77,72,.14),transparent 43%),
-    url("assets/Polaris-BG.png") center/cover no-repeat;
+    radial-gradient(ellipse 72% 34% at 8% 18%,rgba(116,145,132,.25),transparent 68%),
+    radial-gradient(ellipse 64% 30% at 84% 12%,rgba(91,124,128,.21),transparent 70%),
+    radial-gradient(ellipse 78% 38% at 42% 52%,rgba(61,94,86,.18),transparent 72%),
+    radial-gradient(ellipse 62% 32% at 92% 82%,rgba(91,112,94,.16),transparent 70%),
+    radial-gradient(ellipse 78% 30% at 15% 94%,rgba(38,76,68,.20),transparent 72%);
   background-blend-mode:screen;
-  opacity:.18;
-  filter:blur(4px) saturate(.65);
+  opacity:.46;
+  filter:blur(18px) saturate(.72);
+  transform:scale(1.04);
   z-index:0;
 }
 .detail-drawer.mission-command:after{
