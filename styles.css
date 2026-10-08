@@ -662,7 +662,7 @@ button,input,select,textarea{font-size:.95em}
     radial-gradient(ellipse 62% 32% at 92% 82%,rgba(91,112,94,.16),transparent 70%),
     radial-gradient(ellipse 78% 30% at 15% 94%,rgba(38,76,68,.20),transparent 72%),
     url("assets/operation-modal-bg.png");
-  background-size:auto,auto,auto,auto,auto,100% auto;
+  background-size:auto,auto,auto,auto,auto,115% auto;
   background-position:center,center,center,center,center,center;
   background-repeat:no-repeat;
   opacity:.88;
