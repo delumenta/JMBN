@@ -862,3 +862,7 @@ button,input,select,textarea{font-size:.95em}
  #detailDrawer.personnel-modal .personnel-service>.personnel-service-section:last-child:has(.personnel-history-row){min-height:0!important}
  #detailDrawer.personnel-modal .personnel-history:has(.personnel-history-row){min-height:0!important}
 }
+
+/* Keep operation title and date clear of the decorative top frame. */
+.detail-drawer.mission-command .op-new-header .op-heading,
+.detail-drawer.mission-command .op-new-header .op-meta{position:relative;top:12px}
