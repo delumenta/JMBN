@@ -721,8 +721,9 @@ button,input,select,textarea{font-size:.95em}
  isolation:isolate;
  overflow:hidden;
  min-height:220px;
- padding:32px 26px;
- border:1px solid rgba(180,157,91,.24);
+ margin:0 -38px;
+ padding:32px 38px 42px;
+ border:0;
  background:
    linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.98) 30%,rgba(5,7,6,.82) 55%,rgba(5,7,6,.28) 100%),
    linear-gradient(0deg,rgba(7,8,6,.88),rgba(7,8,6,.06) 64%),
@@ -733,8 +734,11 @@ button,input,select,textarea{font-size:.95em}
 #operations .view-intro h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
 #operations .view-intro p:not(.eyebrow){color:#d0d2c9}
 #operations .view-intro .primary{position:relative;z-index:1}
+@media(max-width:800px){
+ #operations .view-intro{margin:0 -16px;padding:28px 16px 38px}
+}
 @media(max-width:650px){
- #operations .view-intro{min-height:205px;padding:26px 18px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
+ #operations .view-intro{min-height:205px;padding:26px 16px 34px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
 }
 
 
