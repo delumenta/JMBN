@@ -283,3 +283,40 @@ button,input,select,textarea{font-size:.95em}
     font-size:9px;
   }
 }
+
+
+/* Single online / AWOL duty switch */
+.duty-toggle-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-width:112px;
+  padding:10px 14px;
+  border:1px solid #5f633f;
+  background:#151b12;
+  color:#e3cb82;
+  cursor:pointer;
+  font:700 10px Play,sans-serif;
+  letter-spacing:.08em;
+  transition:.18s ease;
+}
+.duty-toggle-button:hover{border-color:#d7b75e;background:#202818}
+.duty-toggle-button.active{border-color:#6b8b57;color:#b9df9d}
+.duty-toggle-button.awol{border-color:#935b52;background:#241614;color:#f0aaa1}
+.duty-toggle-button:disabled{opacity:.6;cursor:wait}
+.duty-toggle-dot{
+  width:8px;
+  height:8px;
+  flex:0 0 8px;
+  border-radius:50%;
+  background:#78d18a;
+  box-shadow:0 0 9px rgba(120,209,138,.75);
+}
+.duty-toggle-button.awol .duty-toggle-dot{
+  background:#d56a61;
+  box-shadow:0 0 9px rgba(213,106,97,.7);
+}
+@media(max-width:700px){
+  .duty-toggle-button{min-width:96px;padding:9px 11px;font-size:9px}
+}
