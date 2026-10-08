@@ -715,30 +715,31 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Mission artwork sits opposite the Operations heading, behind Refresh Feed */
+/* Compact Operations artwork header */
 #operations .view-intro{
  position:relative;
  isolation:isolate;
  overflow:hidden;
- min-height:220px;
+ min-height:170px;
  margin:0 -38px;
- padding:32px 38px 42px;
+ padding:22px 38px 26px;
  border:0;
  background:
-   linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.98) 30%,rgba(5,7,6,.82) 55%,rgba(5,7,6,.28) 100%),
-   linear-gradient(0deg,rgba(7,8,6,.88),rgba(7,8,6,.06) 64%),
-   url("assets/supabase/frontpage/mission-1.png") right center / auto 110% no-repeat;
- background-size:cover,cover,auto 110%;
+   linear-gradient(90deg,rgba(5,7,6,.99) 0%,rgba(5,7,6,.96) 30%,rgba(5,7,6,.76) 55%,rgba(5,7,6,.24) 100%),
+   linear-gradient(0deg,rgba(7,8,6,.78),rgba(7,8,6,.04) 64%),
+   url("assets/supabase/frontpage/mission-1.png") right center / auto 100% no-repeat;
+ background-size:cover,cover,auto 100%;
  background-position:center,center,right center;
 }
-#operations .view-intro h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
+#operations .view-intro h2{font-size:48px;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
 #operations .view-intro p:not(.eyebrow){color:#d0d2c9}
 #operations .view-intro .primary{position:relative;z-index:1}
 @media(max-width:800px){
- #operations .view-intro{margin:0 -16px;padding:28px 16px 38px}
+ #operations .view-intro{margin:0 -16px;padding:20px 16px 24px}
 }
 @media(max-width:650px){
- #operations .view-intro{min-height:205px;padding:26px 16px 34px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
+ #operations .view-intro{min-height:155px;padding:18px 16px 22px;background-size:cover,cover,auto 100%;background-position:center,center,right center}
+ #operations .view-intro h2{font-size:42px}
 }
 
 
