@@ -865,7 +865,7 @@ button,input,select,textarea{font-size:.95em}
 
 /* Keep operation title and date clear of the decorative top frame. */
 .detail-drawer.mission-command .op-new-header .op-heading,
-.detail-drawer.mission-command .op-new-header .op-meta{position:relative;top:12px}
+.detail-drawer.mission-command .op-new-header .op-meta{position:relative;top:30px}
 
 /* Center the open crew profile and let its height follow its actual content. */
 #detailDrawer.personnel-modal.open{
