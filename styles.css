@@ -901,3 +901,50 @@ button,input,select,textarea{font-size:.95em}
 
 /* Nudge the callsign line down slightly for better balance with the rank emblem. */
 #detailDrawer.personnel-modal .personnel-head-identity h2{transform:translateY(10px)!important}
+
+
+/* Crew Manifest cinematic banner */
+#crew .crew-manifest-hero{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
+  min-height:370px;margin:-30px -38px 0;padding:24px 38px 28px;overflow:hidden;
+  background-color:#080907;
+  background-image:
+    linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
+    linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
+    url("assets/supabase/frontpage/Grow123.png");
+  background-size:cover,cover,cover;
+  background-position:center,center,center 18%;
+  background-repeat:no-repeat;
+  border-bottom:1px solid rgba(212,182,91,.42);
+}
+#crew .crew-manifest-hero .section-status{
+  position:relative;padding:2px 0 0;border:0;color:#a1a597;
+}
+#crew .crew-manifest-hero .view-intro{
+  position:relative;align-items:center;gap:24px;padding:0;border:0;
+}
+#crew .crew-manifest-hero .view-intro h2{
+  font-size:clamp(46px,5vw,72px);margin:7px 0 9px;line-height:.9;
+}
+#crew .crew-manifest-hero .view-intro p:not(.eyebrow){
+  max-width:500px;margin:0;color:#b8bcb2;font-size:13px;
+}
+#crew .crew-manifest-hero .stat-chip{
+  flex:0 0 auto;border:0;background:transparent;padding:0;white-space:nowrap;
+  color:#e5e6df;font-size:14px;
+}
+#crew .toolbar{
+  padding:18px 0;border-bottom:1px solid rgba(212,182,91,.12);
+}
+#crew .crew-grid{padding-top:18px}
+@media(max-width:700px){
+  #crew .crew-manifest-hero{
+    min-height:310px;margin:-18px -16px 0;padding:18px 16px 22px;
+    background-position:center,center,68% 12%;
+  }
+  #crew .crew-manifest-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
+  #crew .crew-manifest-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
+  #crew .crew-manifest-hero .stat-chip{font-size:12px}
+  #crew .toolbar{flex-wrap:wrap;gap:10px}
+  #crew .toolbar input{width:100%}
+}
