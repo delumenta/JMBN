@@ -488,3 +488,18 @@ button,input,select,textarea{font-size:.95em}
 @media(max-width:850px){.detail-drawer.mission-command{padding:24px 15px}.op-new-columns,.op-top-cards{grid-template-columns:1fr}.op-brief{min-height:0}.op-roster{overflow-x:auto}.op-roster-labels,.op-roster-row{min-width:560px}.op-new-footer{flex-wrap:wrap}}
 
 .op-roster-avatar{position:relative;overflow:hidden}.op-roster-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.op-roster-avatar>span{position:relative;z-index:0}
+
+/* Centered personnel dossier, using existing member data and Play type */
+.detail-drawer.personnel-modal{position:fixed;left:50%;right:auto;top:50%;bottom:auto;width:min(920px,94vw);height:min(750px,90vh);max-width:none;padding:34px 38px;transform:translate(-50%,-47%) scale(.985);opacity:0;overflow-y:auto;background:linear-gradient(145deg,#10130f,#080a09 70%);border:1px solid #ae914c;border-radius:7px;box-shadow:0 30px 100px rgba(0,0,0,.85);font-family:Play,sans-serif;transition:transform .22s ease,opacity .18s}
+.detail-drawer.personnel-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1}
+.personnel-modal #detailBody{max-width:none;font-family:Play,sans-serif}
+.personnel-modal .detail-close{position:sticky;float:right;top:0;z-index:5}
+.personnel-modal .detail-hero{display:flex;align-items:center;gap:22px;padding:24px 0 28px}
+.personnel-modal .detail-hero h2{font:700 clamp(25px,3vw,38px) Play,sans-serif}
+.personnel-modal .detail-hero .rank-img{width:94px;height:94px;object-fit:contain}
+.personnel-modal .detail-section{padding:22px 0}
+.personnel-modal .detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.personnel-modal .detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.personnel-modal .detail-stat,.personnel-modal .detail-item{min-width:0}
+@media(max-width:700px){.detail-drawer.personnel-modal{width:96vw;height:93vh;padding:22px 16px}.personnel-modal .detail-grid,.personnel-modal .detail-list{grid-template-columns:repeat(2,minmax(0,1fr))}.personnel-modal .detail-hero .rank-img{width:65px;height:65px}}
+@media(max-width:430px){.personnel-modal .detail-grid,.personnel-modal .detail-list{grid-template-columns:1fr}}
