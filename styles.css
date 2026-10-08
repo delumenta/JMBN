@@ -715,66 +715,10 @@ button,input,select,textarea{font-size:.95em}
   .op-section-emblem{width:19px;height:19px;flex-basis:19px;font-size:16px}
 }
 
-/* Smooth operation backdrop. No enlarged low-resolution JPEG. */
+/* Exact uploaded artwork for the Operations modal */
 .detail-drawer.mission-command{
- background-color:#0a1216!important;
- background-image:
-  radial-gradient(ellipse 64% 57% at 89% 34%,rgba(30,44,49,.30),transparent 78%),
-  radial-gradient(ellipse 56% 66% at 9% 54%,rgba(27,40,45,.22),transparent 76%),
-  radial-gradient(ellipse 55% 38% at 50% 90%,rgba(18,30,34,.25),transparent 85%),
-  linear-gradient(125deg,#10191d 0%,#0a1216 43%,#0b1418 100%)!important;
- background-size:cover!important;
- background-position:center!important;
+ background:#0b1317 url("assets/crew-modal-bg.png") center center / cover no-repeat!important;
  isolation:isolate;
 }
 .detail-drawer.mission-command::before,.detail-drawer.mission-command::after{display:none!important;content:none!important}
 .detail-drawer.mission-command .op-new-card{background:rgba(5,9,11,.87)!important;border-color:rgba(112,125,126,.31)!important}
-\n/* Approved crew profile: planet background, compact badges and latest three ops. */
-.detail-drawer.personnel-modal{width:min(1100px,96vw);height:auto;max-height:94vh;padding:46px 64px 38px;background-color:#080e0f;background-image:linear-gradient(90deg,rgba(3,8,9,.54),rgba(3,8,9,.16) 55%,rgba(3,8,9,.30)),url('assets/crew-modal-bg.png');background-position:center;background-size:cover;background-repeat:no-repeat;border:1px solid #967439;border-radius:8px;isolation:isolate;color:#f4f2eb;font-family:'Play',sans-serif}
-.detail-drawer.personnel-modal::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(3,8,9,.10),transparent 45%,rgba(3,8,9,.14));display:block!important}.detail-drawer.personnel-modal::after{display:none!important}
-.personnel-modal #detailBody{position:relative;z-index:1}
-.personnel-modal .detail-close{z-index:2;right:20px;top:20px;border:1px solid #b49255;border-radius:7px;background:#101716bd;color:#e1b666;width:36px;height:36px}
-.personnel-modal .personnel-record-banner{padding:16px 30px 0 68px;letter-spacing:.23em;font-size:22px;font-weight:700;color:#f3edda}
-.personnel-modal .personnel-service-head{min-height:158px;padding:25px 0 22px;border:0;background:none;gap:24px}
-.personnel-modal .personnel-rank-mark{width:112px;height:112px;clip-path:none;border-radius:50%;border:2px solid #bb9149;background:rgba(6,12,13,.65);box-shadow:inset 0 0 0 4px #0d1514}
-.personnel-modal .personnel-rank-mark .rank-img{width:78px;height:78px;object-fit:contain}
-.personnel-modal .personnel-head-identity h2{font:700 31px 'Play',sans-serif;letter-spacing:.13em}
-.personnel-modal .personnel-head-identity p{font-size:13px;letter-spacing:.25em;color:#dfb768;margin:6px 0 12px}
-.personnel-modal .personnel-duty{display:inline-block;border:1px solid #447e5b;border-radius:5px;padding:5px 9px;font-size:10px;background:#0c241bbd;color:#81e6a7}
-.personnel-modal .personnel-duty.is-awol{border-color:#915752;background:#301514aa;color:#e99a8d}
-.personnel-modal .personnel-side-panels{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin:0 0 12px}
-.personnel-modal .personnel-side-panels .personnel-service-section,.personnel-modal .personnel-info-section,.personnel-modal .personnel-service>.personnel-service-section:last-child{background:rgba(6,13,14,.68);backdrop-filter:blur(2px);border:1px solid #827049;border-radius:6px;padding:17px 22px;min-height:0}
-.personnel-modal .personnel-service-section h3{font:700 11px 'Play',sans-serif;letter-spacing:.18em;color:#dfb768;display:flex;align-items:center;gap:10px;margin:0}
-.personnel-modal .personnel-section-icon{display:inline-flex;margin:0!important;flex:none}
-.personnel-modal .personnel-section-icon .personnel-gold-icon{width:30px;height:30px}
-.personnel-modal .personnel-side-panels .personnel-certs{display:flex;align-items:flex-start;gap:14px;padding:8px 0 0 40px;border:0;background:none}
-.personnel-modal .personnel-side-panels .personnel-cert-badge{flex:0 1 85px;gap:4px}
-.personnel-modal .personnel-cert-badge img{width:52px;height:52px;object-fit:contain}
-.personnel-modal .personnel-cert-badge b{font-size:10px;color:#f1eee4;letter-spacing:.04em}
-.personnel-modal .personnel-favorite-single{border:0;padding:5px 0 12px 40px;background:none}
-.personnel-modal .personnel-favorite-single strong{font-size:25px;color:#f6f2ea;font-weight:400;text-transform:capitalize}
-.personnel-modal .personnel-favorite-single small{font-size:11px;letter-spacing:.09em;color:#d1d1c8}
-.personnel-modal .personnel-info-section{margin-bottom:12px}
-.personnel-modal .personnel-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:0;background:none}
-.personnel-modal .personnel-info-item,.personnel-modal .personnel-info-item:first-child{padding:0 16px;align-items:center;gap:14px;border-right:1px solid #6b5b3d;border-bottom:0}
-.personnel-modal .personnel-info-item:first-child{padding-left:0}
-.personnel-modal .personnel-info-item:last-child{border:0;padding-right:0}
-.personnel-modal .personnel-info-emblem .personnel-gold-icon{width:32px;height:32px}
-.personnel-modal .personnel-info-item small{font-size:9px;letter-spacing:.14em;color:#dfb768}
-.personnel-modal .personnel-info-item strong{font-size:20px;font-weight:400;overflow-wrap:anywhere;line-height:1.2}
-.personnel-modal .personnel-info-item span:empty{display:none}
-.personnel-modal .personnel-info-copy{gap:5px}
-.personnel-modal .personnel-info-copy>span{font-size:10px;color:#cdd0c7}
-.personnel-modal .personnel-service>.personnel-service-section:last-child h3{padding-bottom:12px;border-bottom:1px solid #465048}
-.personnel-modal .personnel-service>.personnel-service-section:last-child h3 span:last-child{margin-left:auto;font-size:10px;font-weight:400;letter-spacing:0;color:#929a92}
-.personnel-modal .personnel-history{max-height:none;overflow:visible;display:grid;gap:0}
-.personnel-modal .personnel-history-row{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) auto;background:none;border:0;border-bottom:1px solid #374039;border-radius:0;padding:11px 0;gap:16px}
-.personnel-modal .personnel-history-row:last-child{border:0}
-.personnel-modal .personnel-history-emblem{display:none}
-.personnel-modal .personnel-history-name b{font-size:12px;font-weight:400}
-.personnel-modal .personnel-history-name small{font-size:9px;color:#adb2a8;margin-top:4px}
-.personnel-modal .personnel-history-role b{font-size:11px;font-weight:400;text-transform:capitalize}
-.personnel-modal .personnel-history-role small{display:none}
-.personnel-modal .personnel-attended{border:1px solid #427555;background:#0b211899;padding:5px 8px;font-size:9px;font-weight:400}
-@media(max-width:750px){.detail-drawer.personnel-modal{padding:26px 20px;width:96vw;height:auto;max-height:94vh}.personnel-modal .personnel-record-banner{font-size:17px;padding-left:48px}.personnel-modal .personnel-rank-mark{width:82px;height:82px}.personnel-modal .personnel-rank-mark .rank-img{width:60px;height:60px}.personnel-modal .personnel-head-identity h2{font-size:25px}.personnel-modal .personnel-side-panels{grid-template-columns:1fr}.personnel-modal .personnel-info-grid{grid-template-columns:1fr}.personnel-modal .personnel-info-item,.personnel-modal .personnel-info-item:first-child{padding:12px 0;border-right:0;border-bottom:1px solid #514934}.personnel-modal .personnel-info-item:last-child{border-bottom:0}.personnel-modal .personnel-history-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}.personnel-modal .personnel-history-role{grid-column:1;grid-row:auto}.personnel-modal .personnel-attended{grid-column:2;grid-row:1 / span 2}.personnel-modal .personnel-service>.personnel-service-section:last-child h3{flex-wrap:wrap}.personnel-modal .personnel-service>.personnel-service-section:last-child h3 span:last-child{font-size:9px}.personnel-modal .personnel-side-panels .personnel-service-section{padding:15px}}
-
