@@ -723,7 +723,7 @@ button,input,select,textarea{font-size:.95em}
    linear-gradient(0deg,rgba(7,8,6,.58),rgba(7,8,6,.04) 62%),
    url("assets/supabase/frontpage/mission-1.png");
  background-position:center,right center;
- background-size:cover,cover,cover;
+ background-size:cover,cover,48% 100%;
  background-repeat:no-repeat;
 }
 #operations .mission-card h3,
