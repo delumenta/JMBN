@@ -880,3 +880,6 @@ button,input,select,textarea{font-size:.95em}
    padding:22px 16px!important;
  }
 }
+
+/* Nudge the callsign line down slightly for better balance with the rank emblem. */
+#detailDrawer.personnel-modal .personnel-head-identity h2{transform:translateY(4px)}
