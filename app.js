@@ -219,11 +219,11 @@ function render(){
  $("#announcements").classList.remove("skeleton");$("#announcements").innerHTML=state.announcements.length?state.announcements.map(a=>'<div class="feed-item"><b>'+esc(a.title||"Command notice")+'</b><p>'+esc(a.body||a.message||a.content||"")+'</p></div>').join(""):'<div class="empty">No current signal traffic.</div>';
 }
 
-function openDrawer(html,mode="personnel"){$("#detailBody").innerHTML=html;$("#detailDrawer").classList.toggle("mission-command",mode==="mission");$("#detailDrawer").classList.add("open");$("#detailBackdrop").classList.add("open")}
-function closeDrawer(){activeMissionId=null;$("#detailDrawer").classList.remove("open","mission-command");$("#detailBackdrop").classList.remove("open")}
+function openDrawer(html,mode="personnel"){$("#detailBody").innerHTML=html;$("#detailDrawer").classList.toggle("mission-command",mode==="mission");$("#detailDrawer").classList.toggle("personnel-modal",mode==="member");$("#detailDrawer").classList.add("open");$("#detailBackdrop").classList.add("open")}
+function closeDrawer(){activeMissionId=null;$("#detailDrawer").classList.remove("open","mission-command","personnel-modal");$("#detailBackdrop").classList.remove("open")}
 async function openCrew(userId){
  const p=state.crew.find(x=>x.user_id===userId);if(!p)return;
- openDrawer('<div class="loading-detail">LOADING PERSONNEL FILE…</div>');
+ openDrawer('<div class="loading-detail">LOADING PERSONNEL FILE…</div>',"member");
  const [certs,attendance,role,rank]=await Promise.all([
   sb.from("user_certifications").select("certification_code,awarded_at").eq("user_id",userId),
   sb.from("mission_signups").select("mission_id,status,operational_role,operational_station,created_at").eq("user_id",userId),
