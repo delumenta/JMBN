@@ -651,6 +651,7 @@ button,input,select,textarea{font-size:.95em}
   backdrop-filter:blur(8px) saturate(.82);
 }
 .detail-drawer.mission-command:after{
+  display:block!important;
   content:"";
   position:absolute;
   inset:0;
