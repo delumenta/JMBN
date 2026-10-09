@@ -15,8 +15,8 @@
 @media(max-width:750px){.career-banner::before{background-position:43% center;background-size:cover}}
 
 /* Sessions: bring crew helmets into view without moving the headline. */
-.sessions-banner::before{background-position:center 48%}
-@media(max-width:750px){.sessions-banner::before{background-position:52% 48%}}
+.sessions-banner::before{background-position:center 48%;background-size:96% auto;background-color:#090908}
+@media(max-width:750px){.sessions-banner::before{background-position:52% 48%;background-size:cover}}
 
 /* Join: lift the crew image slightly to reduce empty ceiling above their heads. */
 .join-banner::before{background-position:center 42%}
