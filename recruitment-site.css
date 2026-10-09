@@ -9,3 +9,7 @@
 .banner::before{background-image:var(--art);background-repeat:no-repeat;background-size:cover;background-position:center 24%}
 .banner::after{background:linear-gradient(90deg,rgba(9,9,8,.88) 0%,rgba(9,9,8,.52) 44%,rgba(9,9,8,.14) 100%),linear-gradient(0deg,#090908 0%,transparent 32%)}
 @media(max-width:750px){.banner{min-height:430px}.banner::before{background-position:60% 22%}.banner::after{background:linear-gradient(90deg,rgba(9,9,8,.83),rgba(9,9,8,.35)),linear-gradient(0deg,#090908,transparent 38%)}}
+
+/* Career Paths: lower the photo crop to reveal more of the ship's hull. */
+.career-banner::before{background-position:center 72%}
+@media(max-width:750px){.career-banner::before{background-position:58% 65%}}
