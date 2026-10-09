@@ -979,7 +979,7 @@ button,input,select,textarea{font-size:.95em}
 /* JMBN legacy command-frame backdrop shared by Command, Operations, Crew and Records. */
 body::before{
   content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.24) 48%,rgba(0,0,0,.34)),url("assets/jmbn-command-bg.svg") center top / cover no-repeat;
+  background:linear-gradient(180deg,rgba(0,0,0,.56),rgba(0,0,0,.64) 48%,rgba(0,0,0,.70)),url("assets/jmbn-command-bg.svg") center top / cover no-repeat;
 }
 .shell{position:relative;z-index:1}
 /* Allow the geometric frame to remain visible around content without changing panel layout. */
