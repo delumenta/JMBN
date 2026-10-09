@@ -989,3 +989,8 @@ body::before{
 body:has(#command.view.active)::before{
   display:none;
 }
+
+/* Operations and Crew Manifest: solid black section and hero backgrounds, no artwork. */
+body:has(#operations.view.active),body:has(#crew.view.active){background:#000}
+body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{display:none!important}
+#operations .operations-hero,#crew .crew-manifest-hero{background:#000!important;background-image:none!important}
