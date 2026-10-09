@@ -987,5 +987,5 @@ body::before{
 
 /* Command Deck: dedicated black-and-gold backdrop (other sections retain existing frame). */
 body:has(#command.view.active)::before{
-  background: #050605 url("assets/command-bg.png") center top / 100% 100% no-repeat;
+  background: #050605 url("assets/Command-BG123.png") center top / 100% 100% no-repeat;
 }
