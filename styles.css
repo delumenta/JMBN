@@ -680,6 +680,14 @@ button,input,select,textarea{font-size:.95em}
   background:linear-gradient(115deg,rgba(212,182,91,.055),transparent 34%,rgba(27,61,63,.10));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
 }
+/* Desktop: show the full operation artwork instead of enlarging it beyond the modal. Mobile framing stays unchanged. */
+@media(min-width:701px){
+  .detail-drawer.mission-command:before{
+    inset:0;
+    transform:none;
+    background-size:auto,auto,auto,auto,auto,100% auto;
+  }
+}
 .detail-drawer.mission-command #detailBody{position:relative;z-index:1}
 .op-card-heading{
   display:flex;
