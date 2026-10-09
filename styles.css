@@ -685,7 +685,7 @@ button,input,select,textarea{font-size:.95em}
   .detail-drawer.mission-command:before{
     inset:0;
     transform:none;
-    background-size:auto,auto,auto,auto,auto,108% auto;
+    background-size:auto,auto,auto,auto,auto,105% auto;
     background-position:center,center,center,center,center,center;
   }
 }
