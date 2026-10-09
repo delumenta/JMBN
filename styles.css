@@ -732,11 +732,11 @@ button,input,select,textarea{font-size:.95em}
   min-height:280px;margin:-30px -38px 0;padding:20px 38px 24px;overflow:hidden;
   background-color:#080907;
   background-image:
-    linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
+    linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 22%,rgba(7,8,6,.68) 42%,rgba(7,8,6,.08) 78%),
     linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
-    url("assets/supabase/frontpage/mission-1.png");
-  background-size:cover,cover,96% auto;
-  background-position:center,center,right 30%;
+    url("assets/operations-hero-new.webp");
+  background-size:cover,cover,cover;
+  background-position:center,center,center 45%;
   background-repeat:no-repeat;
   border-bottom:0;
 }
@@ -761,7 +761,7 @@ button,input,select,textarea{font-size:.95em}
 @media(max-width:700px){
   #operations .operations-hero{
     min-height:250px;margin:-18px -16px 0;padding:18px 16px 20px;
-    background-size:cover,cover,auto 300px;background-position:center,center,right 38%;
+    background-size:cover,cover,auto 100%;background-position:center,center,65% center;
   }
   #operations .operations-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
   #operations .operations-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
