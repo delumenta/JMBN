@@ -937,7 +937,7 @@ button,input,select,textarea{font-size:.95em}
   background-image:
     linear-gradient(90deg,#070806 0%,rgba(7,8,6,.94) 27%,rgba(7,8,6,.42) 57%,rgba(7,8,6,.14) 100%),
     linear-gradient(0deg,rgba(7,8,6,.68) 0%,transparent 54%),
-    url("assets/crew-hero.webp");
+    url("assets/crew-hero1.webp");
   background-size:cover,cover,auto 185%;
   background-position:center,center,right 36%;
   background-repeat:no-repeat;
