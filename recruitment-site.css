@@ -13,3 +13,7 @@
 /* Career Paths: lower the photo crop to reveal more of the ship's hull. */
 .career-banner::before{background-position:center 50%;background-size:cover;background-color:#090b10}
 @media(max-width:750px){.career-banner::before{background-position:43% center;background-size:cover}}
+
+/* Sessions: bring crew helmets into view without moving the headline. */
+.sessions-banner::before{background-position:center 7%}
+@media(max-width:750px){.sessions-banner::before{background-position:52% 5%}}
