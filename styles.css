@@ -984,3 +984,8 @@ body::before{
 .shell{position:relative;z-index:1}
 /* Allow the geometric frame to remain visible around content without changing panel layout. */
 #command .panel,#operations .panel,#crew .panel,#records .panel{background:linear-gradient(145deg,rgba(18,21,16,.91),rgba(9,11,9,.91))}
+
+/* Command Deck: dedicated black-and-gold backdrop (other sections retain existing frame). */
+body:has(#command.view.active)::before{
+  background: url("assets/command-bg.png") center center / cover no-repeat;
+}
