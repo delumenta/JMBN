@@ -7,6 +7,20 @@
   <link rel="stylesheet" href="recruitment-site.css">
   <link rel="stylesheet" href="recruitment-header.css">
   <script src="recruitment-header.js" defer></script>
+<style>
+/* Activities editorial sections: self-contained to prevent stale stylesheet issues. */
+.activities-editorial-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(35px,7vw,100px);align-items:center}
+.activities-editorial-main h2{margin:12px 0 15px}
+.activities-editorial-main .copy{max-width:510px;margin:0 0 24px}
+.activities-editorial-aside{border-left:1px solid rgba(215,173,98,.28);padding:10px 0 10px clamp(22px,4vw,55px)}
+.activities-editorial-number{font-size:38px;font-weight:700;color:var(--gold);line-height:1}
+.activities-editorial-aside h3{font-size:clamp(19px,2.5vw,27px);text-transform:uppercase;letter-spacing:-.035em;margin:18px 0 10px}
+.activities-editorial-aside p{font-size:14px;color:var(--muted);line-height:1.7;max-width:340px;margin:0}
+.activities-editorial-link{display:inline-block;color:var(--bright);font-size:12px;margin-top:20px;letter-spacing:.05em}
+.activities-editorial-link:hover{text-decoration:underline}
+.activities-editorial-last{padding-block:75px}
+@media(max-width:750px){.activities-editorial-grid{grid-template-columns:1fr;gap:30px}.activities-editorial-aside{border-left:0;border-top:1px solid rgba(215,173,98,.28);padding:23px 0 0}.activities-editorial-number{font-size:28px}.activities-editorial-aside h3{font-size:21px;margin:10px 0}.activities-editorial-last{padding-block:55px}}
+</style>
 </head>
 <body>
   <div id="site-header"></div>
@@ -23,10 +37,25 @@
         <article class="tile"><div class="label">04 / Discovery</div><h3>Exploration & events</h3><p>Travel with the organization, discover places and join the casual nights that become memorable ones.</p></article>
       </div>
     </section>
-    <section class="section stripe"><div class="wrap split"><div><div class="label">Inside the crew</div><h2>See our sessions.</h2><p class="copy">Take a look at moments from our time in the ’verse.</p><a class="btn" href="recruitment-sessions.html">View session gallery ↗</a></div><div class="empty"><h3>More than a mission</h3>See the people and moments behind the crew.</div></div></section>
-    <section class="section wrap split">
-      <div><div class="label">Your first session</div><h2>Just show up.</h2><p class="copy">You do not need a particular ship or qualification to express interest. Tell the organization what you enjoy and find out where you can join in.</p><a class="btn" href="recruitment-join.html">Introduce yourself ↗</a></div>
-      <div class="empty"><h3>Looking for your place?</h3>Explore different ways to contribute and find the role that suits you.<p><a href="recruitment-careers.html" style="color:var(--bright)">See Career Paths ↗</a></p></div>
+    <section class="section stripe activities-editorial">
+      <div class="wrap activities-editorial-grid">
+        <div class="activities-editorial-main">
+          <div class="label">Inside the crew / 01</div>
+          <h2>See our sessions.</h2>
+          <p class="copy">Take a look at moments from our time in the ’verse. The best stories are the ones we make together.</p>
+          <a class="btn" href="recruitment-sessions.html">View session gallery ↗</a>
+        </div>
+        <div class="activities-editorial-aside"><span class="activities-editorial-number">01</span><h3>More than a mission.</h3><p>Discover the people and moments behind the crew.</p></div>
+      </div>
+    </section>
+    <section class="section wrap activities-editorial activities-editorial-grid activities-editorial-last">
+      <div class="activities-editorial-main">
+        <div class="label">Your first session / 02</div>
+        <h2>Just show up.</h2>
+        <p class="copy">No particular ship or qualification needed. Tell us what you enjoy and find your place in the crew.</p>
+        <a class="btn" href="recruitment-join.html">Introduce yourself ↗</a>
+      </div>
+      <div class="activities-editorial-aside"><span class="activities-editorial-number">02</span><h3>Find your place.</h3><p>Explore the roles that suit you and discover where you can contribute.</p><a class="activities-editorial-link" href="recruitment-careers.html">Explore career paths ↗</a></div>
     </section>
   </main>
   <footer class="footer"><div class="wrap"><span>© JMBN · Activities</span><a href="recruitment.html">Return home ↑</a></div></footer>
