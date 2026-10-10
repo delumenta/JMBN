@@ -16,14 +16,19 @@
 .activities-slider-arrow:hover,.activities-slider-arrow:focus-visible{background:#d7ad621a;border-color:var(--gold)}
 .activities-slider-count{font-size:12px;color:var(--muted);letter-spacing:.14em;min-width:48px;text-align:center}
 .activities-slide{display:none;min-height:220px;animation:activitiesFade .22s ease}
-.activities-slide.is-active{display:block}
+.activities-slide.is-active{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(22px,4vw,65px);align-items:center}
+.activities-slide .activities-slide-card{border:1px dotted var(--line);padding:clamp(22px,3vw,36px);background:var(--panel);min-height:145px;display:flex;flex-direction:column;justify-content:center}
+.activities-slide .activities-slide-card h3{font-size:clamp(16px,1.6vw,21px);margin:0 0 15px;color:var(--white);text-transform:none}
+.activities-slide .activities-slide-card p{font-size:14px;line-height:1.7;color:var(--muted);margin:0}
+.activities-slide .activities-slide-card a{color:var(--bright);font-size:13px;margin-top:16px;display:inline-block}
+.activities-slide .activities-slide-card a:hover{text-decoration:underline}
 .activities-slide h2{margin:0 0 16px}
 .activities-slide .copy{max-width:590px;margin:0 0 25px}
 .activities-slider-progress{display:flex;gap:7px;margin-top:34px}
 .activities-slider-dot{width:38px;height:3px;border:0;background:#555044;padding:0;cursor:pointer}
 .activities-slider-dot[aria-current="true"]{background:var(--gold)}
 @keyframes activitiesFade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
-@media(max-width:750px){.activities-slider-inner{padding-block:48px}.activities-slider-arrow{width:40px;height:40px}.activities-slide{min-height:230px}.activities-slider-top{margin-bottom:20px}}
+@media(max-width:750px){.activities-slide.is-active{grid-template-columns:1fr;gap:22px}.activities-slide .activities-slide-card{min-height:125px}.activities-slider-inner{padding-block:48px}.activities-slider-arrow{width:40px;height:40px}.activities-slide{min-height:230px}.activities-slider-top{margin-bottom:20px}}
 @media(prefers-reduced-motion:reduce){.activities-slide{animation:none}}
 </style>
 </head>
@@ -53,14 +58,16 @@
           </div>
         </div>
         <div class="activities-slide is-active" id="activities-slide-1" aria-hidden="false">
-          <h2>See our sessions.</h2>
-          <p class="copy">Take a look at moments from our time in the ’verse. Discover the people and stories behind JMBN.</p>
-          <a class="btn" href="recruitment-sessions.html">View session gallery ↗</a>
+          <div class="activities-slide-copy"><h2>See our sessions.</h2>
+          <p class="copy">Take a look at moments from our time in the ’verse.</p>
+          <a class="btn" href="recruitment-sessions.html">View session gallery ↗</a></div>
+          <div class="activities-slide-card"><h3>More than a mission</h3><p>See the people and moments behind the crew.</p></div>
         </div>
         <div class="activities-slide" id="activities-slide-2" aria-hidden="true" inert>
-          <h2>Just show up.</h2>
-          <p class="copy">No particular ship or qualification needed. Tell us what you enjoy and find your place among the crew.</p>
-          <a class="btn" href="recruitment-join.html">Introduce yourself ↗</a>
+          <div class="activities-slide-copy"><h2>Just show up.</h2>
+          <p class="copy">You do not need a particular ship or qualification to express interest. Tell the organization what you enjoy and find out where you can join in.</p>
+          <a class="btn" href="recruitment-join.html">Introduce yourself ↗</a></div>
+          <div class="activities-slide-card"><h3>Looking for your place?</h3><p>Explore different ways to contribute and find the role that suits you.</p><a href="recruitment-careers.html">See Career Paths ↗</a></div>
         </div>
         <div class="activities-slider-progress" aria-label="Select slide">
           <button class="activities-slider-dot" type="button" aria-label="Show sessions" aria-current="true" data-slide="0"></button>
