@@ -17,9 +17,13 @@
 .photo-story{border-block:1px solid var(--line);background:#11110e;padding:clamp(65px,8vw,110px) 0}.photo-story-head{display:flex;align-items:end;justify-content:space-between;gap:35px;margin-bottom:30px}.photo-story-head h2{font-size:clamp(40px,5vw,75px);text-transform:uppercase;letter-spacing:-.06em;line-height:1;margin:15px 0 0}.photo-story-head p{max-width:380px;color:var(--soft);line-height:1.75;font-size:14px}.photo-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:14px}.photo-main,.photo-side a{position:relative;display:block;overflow:hidden;border:1px solid var(--line);background:#1b1a16}.photo-main{min-height:560px}.photo-side{display:grid;grid-template-rows:1fr 1fr;gap:14px}.photo-side a{min-height:272px}.photo-grid img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transition:transform .5s;filter:saturate(.83)}.photo-grid a:hover img{transform:scale(1.035)}.photo-grid a:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#080807e9,transparent 63%);pointer-events:none}.photo-grid .photo-caption{position:absolute;z-index:1;bottom:25px;left:27px;right:25px}.photo-caption b{display:block;color:var(--gold-light);font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin-bottom:7px}.photo-caption strong{font-size:clamp(22px,3vw,38px);text-transform:uppercase;letter-spacing:-.04em}.photo-side .photo-caption strong{font-size:25px}@media(max-width:700px){.photo-story-head{display:block}.photo-grid{grid-template-columns:1fr}.photo-main{min-height:350px}.photo-side a{min-height:240px}}
 
 /* Intro carousel and clickable numbered pillars. */
-.stat-switch{appearance:none;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit;transition:background .2s ease}
-.stat-switch:hover,.stat-switch:focus-visible{background:#d7ad6210;outline-offset:-2px}
-.stat-switch.is-selected{background:#d7ad620b}
+.stat-switch{appearance:none;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit;border:0;border-right:1px solid var(--line);border-radius:0;position:relative;transition:background .2s ease}
+.stat-switch:last-child{border-right:0}
+.stat-switch:hover{background:#d7ad6208}
+.stat-switch:focus{outline:none}
+.stat-switch:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.stat-switch.is-selected{background:transparent}
+.stat-switch.is-selected::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold)}
 .stat-switch.is-selected b{color:var(--gold-light)}
 .intro-carousel{position:relative;padding-top:0}
 .intro-carousel-controls{position:absolute;right:0;top:-48px;display:flex;align-items:center;gap:12px;z-index:2}
