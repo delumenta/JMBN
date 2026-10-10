@@ -100,6 +100,8 @@
   document.getElementById('activities-prev').addEventListener('click',()=>show(active-1));
   document.getElementById('activities-next').addEventListener('click',()=>show(active+1));
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>show(i)));
+  const activitiesCarousel=document.querySelector('.activities-slider');
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){let auto=setInterval(()=>show(active+1),5000);const reset=()=>{clearInterval(auto);auto=setInterval(()=>show(active+1),5000)};activitiesCarousel.addEventListener('click',reset);activitiesCarousel.addEventListener('mouseenter',()=>clearInterval(auto));activitiesCarousel.addEventListener('mouseleave',reset);document.addEventListener('visibilitychange',()=>{clearInterval(auto);if(!document.hidden)reset()});}
 })();
 </script>
 </body>
