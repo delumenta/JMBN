@@ -198,8 +198,8 @@
     try{
       const registration =
         await navigator.serviceWorker.register(
-          "/onthego/service-worker.js",
-          { scope:"/onthego/" }
+          "/JMBN/service-worker.js",
+          { scope:"/JMBN/" }
         );
 
       await registration.update();
