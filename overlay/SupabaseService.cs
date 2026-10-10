@@ -29,7 +29,7 @@ internal sealed class SupabaseService
             try { listener.Start(); }
             catch (HttpListenerException ex) { throw new InvalidOperationException("JMBN sign-in is already open in another process. Close any other JMBN Companion window and try again.", ex); }
             var state=RandomToken();
-            var handoff="https://delumenta.github.io/onthego/overlay-auth.html?port=54327&state="+Uri.EscapeDataString(state);
+            var handoff="https://delumenta.github.io/JMBN/overlay-auth.html?port=54327&state="+Uri.EscapeDataString(state);
             try { Process.Start(new ProcessStartInfo(handoff){UseShellExecute=true}); }
             catch (Exception ex) { throw new InvalidOperationException("Could not open your browser for Discord sign-in.", ex); }
             var ctx=await listener.GetContextAsync(); var returnedState=ctx.Request.QueryString["state"]; var token=ctx.Request.QueryString["access_token"];
