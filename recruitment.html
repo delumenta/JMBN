@@ -25,6 +25,13 @@
 .stat-switch.is-selected{background:transparent}
 .stat-switch.is-selected::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold)}
 .stat-switch.is-selected b{color:var(--gold-light)}
+/* Keep numbered pillars minimal: no native button focus outlines or boxed active states. */
+.stat-switch,.stat-switch:hover,.stat-switch:focus,.stat-switch:focus-visible,.stat-switch.is-selected{outline:none;box-shadow:none;border-top:0;border-bottom:0;border-left:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
+.stat-switch:last-child,.stat-switch:last-child:hover,.stat-switch:last-child:focus,.stat-switch:last-child:focus-visible{border-right:0}
+.stat-switch{position:relative}
+.stat-switch.is-selected:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold)}
+.stat-switch:focus-visible:after{height:3px;background:var(--gold-light)}
+.stat-switch:hover b{color:var(--gold-light)}
 .intro-carousel{position:relative;padding-top:0}
 .intro-carousel-controls{position:absolute;right:0;top:-48px;display:flex;align-items:center;gap:12px;z-index:2}
 .intro-carousel-controls button{width:36px;height:36px;border:1px solid var(--line);background:transparent;color:var(--gold-light);font-size:23px;line-height:1}
