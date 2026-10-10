@@ -1,10 +1,10 @@
 {
-  "id": "/onthego/",
+  "id": "/JMBN/",
   "name": "Travel",
   "short_name": "Travel",
   "description": "Plan trips, itineraries, food, bookings, places and expenses.",
-  "start_url": "/onthego/index.html",
-  "scope": "/onthego/",
+  "start_url": "/JMBN/index.html",
+  "scope": "/JMBN/",
   "display": "standalone",
   "display_override": ["standalone"],
   "orientation": "portrait-primary",
@@ -15,19 +15,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/onthego/icons/icon-192.png",
+      "src": "/JMBN/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/onthego/icons/icon-512.png",
+      "src": "/JMBN/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/onthego/icons/icon-512.png",
+      "src": "/JMBN/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -37,17 +37,17 @@
     {
       "name": "Plan",
       "short_name": "Plan",
-      "url": "/onthego/schedule.html"
+      "url": "/JMBN/schedule.html"
     },
     {
       "name": "Food",
       "short_name": "Food",
-      "url": "/onthego/food.html"
+      "url": "/JMBN/food.html"
     },
     {
       "name": "Bookings",
       "short_name": "Bookings",
-      "url": "/onthego/bookings.html"
+      "url": "/JMBN/bookings.html"
     }
   ]
 }
