@@ -21,3 +21,19 @@
 /* Join: lift the crew image slightly to reduce empty ceiling above their heads. */
 .join-banner::before{background-position:center 42%}
 @media(max-width:750px){.join-banner::before{background-position:60% 38%}}
+
+/* Activities page: editorial CTA panels replacing generic dashed placeholders. */
+.activity-cta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:clamp(22px,5vw,72px)}
+.activity-cta-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding-block:20px}
+.activity-cta-copy h2{margin-bottom:12px}
+.activity-cta-copy .copy{max-width:480px;margin:0 0 26px}
+.activity-cta-panel{min-height:260px;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(22px,3vw,38px);position:relative;isolation:isolate;overflow:hidden;border:1px solid var(--line);background:radial-gradient(ellipse at 85% 15%,#d7ad6220,transparent 55%),linear-gradient(135deg,#24251d,#11120f 75%);transition:border-color .2s,transform .2s}
+.activity-cta-panel:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(135deg,transparent 25%,#d7ad620b 100%);pointer-events:none}
+.activity-cta-panel:hover{border-color:var(--gold);transform:translateY(-3px)}
+.activity-panel-index{font-size:10px;letter-spacing:.22em;font-weight:700;color:var(--gold)}
+.activity-panel-bottom{display:flex;flex-direction:column;gap:12px}
+.activity-panel-bottom strong{font-size:clamp(23px,3vw,38px);line-height:1.1;text-transform:uppercase;letter-spacing:-.035em;color:var(--white)}
+.activity-panel-bottom>span{color:var(--bright);font-size:13px}
+.activity-career-panel{background:radial-gradient(ellipse at 85% 20%,#d7ad621c,transparent 60%),linear-gradient(135deg,#1a1d18,#10110e 80%)}
+.activity-cta-last{padding-block:70px}
+@media(max-width:750px){.activity-cta{grid-template-columns:1fr;gap:22px}.activity-cta-copy{padding-block:0}.activity-cta-panel{min-height:190px}.activity-cta-last{padding-block:55px}.activity-cta-copy .copy{margin-bottom:20px}}
