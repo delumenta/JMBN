@@ -11,7 +11,7 @@
 @media(max-width:750px){.banner{min-height:430px}.banner::before{background-position:60% 22%}.banner::after{background:linear-gradient(90deg,rgba(9,9,8,.83),rgba(9,9,8,.35)),linear-gradient(0deg,#090908,transparent 38%)}}
 
 /* Career Paths: lower the photo crop to reveal more of the ship's hull. */
-.career-banner::before{background-position:center 50%;background-size:cover;background-color:#090b10}
+.career-banner::before{background-position:center 50%;background-size:cover;background-color:#090b10};transform:scale(.95)
 @media(max-width:750px){.career-banner::before{background-position:43% center;background-size:cover}}
 
 /* Sessions: bring crew helmets into view without moving the headline. */
