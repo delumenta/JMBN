@@ -28,12 +28,19 @@ jobs:
           page=Path('discord-activity/index.html')
           sdk=Path('discord-activity/vendor/supabase.js').read_text()
           html=page.read_text()
-          start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>\nwindow.__supabaseLoadErrors=')
-          end=html.index('</script>',start)+len('</script>')
-          sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
-          replacement='<script>/* JMBN embedded Supabase SDK */\n'+sdk+'\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
-          html=html[:start]+replacement+html[end:]
-          html=html.replace('build 20261013-c','build 20261013-d')
+          marker='<script>/* JMBN embedded Supabase SDK */'
+          if marker in html:
+              start=html.index(marker)
+              end=html.index('</script>',start)+len('</script>')
+              sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
+              replacement=marker+'\\n'+sdk+'\\n</script>'
+              html=html[:start]+replacement+html[end:]
+          else:
+              start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>window.__supabaseLoadErrors=')
+              end=html.index('</script>',start)+len('</script>')
+              sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
+              replacement=marker+'\\n'+sdk+'\\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
+              html=html[:start]+replacement+html[end:]
           page.write_text(html)
           PY
       - name: Commit vendored library and embedded Activity
