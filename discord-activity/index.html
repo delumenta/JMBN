@@ -184,7 +184,7 @@ scene.add(new THREE.HemisphereLight(0xf5f7fa,0x617783,2.65));
 const key=new THREE.DirectionalLight(0xfff7e8,2.6);key.position.set(3,8,5);scene.add(key);
 const fit=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false)};
 new ResizeObserver(fit).observe(host);fit();
-new GLTFLoader().load('assets/models/polaris.glb',gltf=>{
+new GLTFLoader().load(location.origin+'/assets/models/polaris.glb',gltf=>{
  const model=gltf.scene;
  model.traverse(o=>{if(!o.isMesh)return;const convert=m=>{const n=m.clone();if(!n.map){n.color.set('#b3bfc2');n.metalness=.22;n.roughness=.65}else{n.color.multiplyScalar(1.12)}n.side=THREE.DoubleSide;return n};o.material=Array.isArray(o.material)?o.material.map(convert):convert(o.material)});
  scene.add(model);
@@ -197,7 +197,7 @@ new GLTFLoader().load('assets/models/polaris.glb',gltf=>{
  else{camera.position.set(span*3,0,0);camera.up.set(0,1,0)}
  const extent=span*.73;camera.left=-extent;camera.right=extent;camera.top=extent;camera.bottom=-extent;camera.near=.01;camera.far=span*20;camera.lookAt(0,0,0);camera.rotateZ(Math.PI);camera.updateProjectionMatrix();
  const baseQuaternion=model.quaternion.clone();const clock=new THREE.Clock();renderer.setAnimationLoop(()=>{const t=clock.getElapsedTime();if(motionEnabled){const yaw=Math.sin(t*.24)*.055+Math.sin(t*.083)*.018;const bank=Math.sin(t*.35)*.012;const tilt=Math.sin(t*.21)*.009;const q=new THREE.Quaternion().setFromEuler(new THREE.Euler(tilt,yaw,bank,'YXZ'));model.quaternion.copy(baseQuaternion).multiply(q);host.style.left=(50+Math.sin(t*.24)*.35)+'%';host.style.top=(50+Math.sin(t*.32)*.25)+'%'}else{model.quaternion.copy(baseQuaternion)}renderer.render(scene,camera)});
-},undefined,e=>{console.error('Polaris model load failed',e);host.textContent='POLARIS MODEL UNAVAILABLE';host.style.color='#cdbb8d';host.style.fontSize='10px'});
+},undefined,e=>{console.error('Polaris model load failed',e);host.textContent='POLARIS MODEL UNAVAILABLE · '+(e?.message||'asset blocked');host.style.color='#cdbb8d';host.style.fontSize='10px'});
 </script><script type="module">
 import {DiscordSDK} from 'https://1441312154358779985.discordsays.com/vendor/discord-sdk.mjs';
 const sdk=new DiscordSDK('1441312154358779985');
