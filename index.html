@@ -16,7 +16,7 @@
     <button class="nav active" data-view="command"><i>⌂</i><span>Command</span></button>
     <button class="nav" data-view="operations"><i>◇</i><span>Operations</span></button>
     <button class="nav" data-view="crew"><i>◉</i><span>Crew</span></button>
-    <a class="nav" href="academy.html"><i>△</i><span>Academy</span></a>
+    <a class="nav" href="index.html#battlestations"><i>△</i><span>Battle Stations</span></a>
     <button class="nav" data-view="records"><i>▤</i><span>Records</span></button><button class="nav" data-view="profile"><i>◎</i><span>Profile</span></button>
   </nav>
   <div class="rail-bottom"><button id="railLogout" class="rail-logout" type="button" title="Sign out"><i>⇥</i><span>LOGOUT</span></button><span class="pulse"></span><small>JMBN NETWORK</small><b id="net">CONNECTING</b></div>
@@ -28,6 +28,7 @@
 </header>
 <aside id="memberNoticePanel" class="member-notice-panel" hidden><h2>YOUR NOTIFICATIONS</h2><div id="memberNoticeList">Checking your missions…</div></aside>
 <main>
+<section id="battlestations" class="view" style="padding:24px"><p class="eyebrow">JMBN // POLARIS COMBAT SIMULATION</p><h2 style="font-size:clamp(26px,4vw,46px);margin:12px 0;color:#dfc17b">BATTLE STATIONS</h2><p style="color:#b9b7a9;margin:0 0 24px">We are the Polaris. Man your station, engage incoming hostiles, and survive the attack.</p><div style="display:flex;gap:12px;flex-wrap:wrap"><a href="gunnery-academy.html" style="padding:15px 22px;border:1px solid #bca166;color:#ead3a0;text-decoration:none;background:#29251a">SOLO PLAY →</a><a href="gunnery-multiplayer.html" style="padding:15px 22px;border:1px solid #bca166;color:#ead3a0;text-decoration:none;background:#29251a">MULTIPLAYER →</a></div></section>
 <section id="command" class="view active">
   <section id="welcomePanel" class="welcome-panel">
     <button id="welcomeProfile" class="welcome-person">
@@ -85,5 +86,6 @@
 <footer><span>JMBN MANIFEST SYSTEM</span><span id="syncText">Awaiting secure session</span><span>BUILD // ONTHEGO</span></footer>
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
+<script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
 <script type="module" src="app.js?v=onthego-20261008-crew-modal-layout-v4"></script>
 </body></html>
