@@ -5,7 +5,7 @@
 @media(max-width:780px){#app{grid-template-rows:minmax(390px,64dvh) minmax(230px,36dvh)}#viewport{height:64dvh}#tools{gap:3px;right:6px}#tools button{font-size:10px;padding:7px 6px}#readout{top:47px;left:9px;right:auto;text-align:left;max-width:70%;background:#07131b99;padding:5px;border-radius:3px}#legend{max-width:calc(100% - 12px);font-size:9px}#legend div:last-child{display:none}.pin{font-size:10px;padding:4px 6px;max-width:86px}#right{display:none}#mobileDetail{position:sticky;bottom:0;background:#101b1c;z-index:3}.deck-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}#zoomHint{display:block;position:absolute;left:8px;top:86px;font-size:10px;color:#9bb6b9;pointer-events:none}} 
 #deckQuick{position:absolute;top:58px;left:12px;display:flex;gap:6px;z-index:6;pointer-events:auto}#deckQuick button{background:#061923dd;border:1px solid #319dc1;color:#a7dfff;padding:9px 13px;font-weight:700}#deckQuick button.active{background:#15506b;color:#fff}#togglePanel{display:none}#panInfo{position:absolute;bottom:16px;right:14px;color:#7bb3c7;font:11px monospace;pointer-events:none;z-index:3}#gridHint{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 15%,#1472ad17,transparent 70%)}#viewport.full{position:fixed!important;inset:0;z-index:20}#viewport.full #togglePanel{display:block}#togglePanel{position:absolute;top:12px;right:12px;z-index:8;background:#0b2637dc;border:1px solid #42b9e8;color:#bef1fa}#tools{top:11px;max-width:calc(100% - 85px)}#readout{top:116px}#deckQuick{top:59px}#panInfo{bottom:13px}
 @media(max-width:780px){#app{display:block;height:100dvh}#viewport{position:fixed!important;inset:0;height:100dvh!important;z-index:1}#left{position:fixed;z-index:12;left:0;right:0;bottom:0;max-height:68dvh;overflow:auto;transform:translateY(calc(100% - 49px));transition:transform .24s ease;background:#09171cee;border-top:1px solid #3a8ba1;border-radius:14px 14px 0 0;box-shadow:0 -10px 30px #0008}body.drawerOpen #left{transform:translateY(0)}#left header{padding:8px 13px}#left header h1{font-size:15px}#left header .eyebrow{font-size:9px}#left .mode-buttons{padding:7px}#left .deck-buttons{padding:7px}#left #list{max-height:23dvh}#left #mobileDetail{position:static}#togglePanel{display:block}#tools{top:14px;left:9px;right:52px;max-width:none;gap:4px}#tools button{font-size:10px;padding:8px 7px}#readout{left:12px;right:auto;top:145px;text-align:left;font-size:12px;max-width:74%}#deckQuick{left:9px;top:64px;gap:5px}#deckQuick button{font-size:11px;padding:9px 12px}#legend{bottom:70px;left:9px;max-width:calc(100% - 18px);background:#061522a6;border:0;padding:6px 9px}#legend div:last-child{display:none}#legend strong{font-size:11px}#panInfo{right:9px;bottom:57px;font-size:9px}#zoomHint{top:116px;left:10px}#labels{overflow:hidden}.pin{font-size:9px;padding:5px 6px}#right{display:none}#viewport.full #togglePanel{display:block}} 
-</style></head><body><div id="app"><aside id="left"><header><span class="eyebrow">JMBN // FLEET ATLAS</span><h1>RSI POLARIS</h1><p>Interactive crew station and turret directory. Locate a mount, inspect its deck and identify the nearest turret access.</p></header><div class="mode-buttons"><button id="deckMode" class="active">DECK ATLAS</button><button id="exteriorMode">3D EXTERIOR</button></div><div class="deck-buttons"><button data-deck="upper" class="active">UPPER / TOP <small>GUN ACCESS</small></button><button data-deck="cargo">CARGO <small>LOWER LEVEL</small></button><button data-deck="all">STACKED <small>BOTH LEVELS</small></button></div><div class="sectionTitle">STATION DIRECTORY</div><div id="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">COMMAND</button><button data-filter="support">SUPPORT</button></div><div id="list"></div><div id="mobileDetail">Select a station to identify its access location.</div></aside><main id="viewport"><div id="three"></div><div id="gridHint"></div><div id="overlay"><div id="labels"></div><button id="togglePanel">☰ STATIONS</button><div id="tools"><button id="topView">PLAN VIEW</button><button id="isometric">ISOMETRIC</button><button id="sideView">SIDE</button><button id="toggleLabels">HIDE LABELS</button><button id="panMode" aria-pressed="false">PAN MODE</button><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomOut" aria-label="Zoom out">－</button><button id="homeCamera" aria-label="Reset camera">⌖</button><button id="zoomIn">＋</button><button id="zoomOut">−</button></div><div id="deckQuick"><button data-quick-deck="upper" class="active">TOP</button><button data-quick-deck="cargo">CARGO</button><button data-quick-deck="all">ALL</button><button id="shellBtn">SHELL OFF</button></div><div id="readout">TOP DECK<small>CLICK A STATION MARKER</small></div><div id="panInfo">ONE FINGER: ROTATE · TWO FINGERS: PAN / ZOOM</div><div id="legend"><strong>JMBN STATION REFERENCE</strong><div>One finger drag to rotate · Two fingers to pan and zoom · Tap markers to identify stations</div><div>Cutaway deck layouts are simplified reconstructions from supplied concept plans, not exact game geometry.</div></div><div id="zoomHint">DRAG ROTATE · 2 FINGERS PAN/ZOOM</div><div id="error"></div><div id="load">INITIALIZING DECK ATLAS…</div></div></main><aside id="right"><span class="eyebrow">STATION DETAILS</span><div id="stationName">SELECT A STATION</div><div id="stationMeta">POLARIS // NAVIGATION</div><p id="detail">Choose a mount or station from the left panel or select a highlighted marker on the 3D cutaway.</p><div class="note">The source images establish approximate room and mount relationships, but not calibrated 3D coordinates, exact routes, or all levels. This guide intentionally marks its deck geometry as conceptual.</div><div class="note">No crew assignments. This page is a station identification tool, separate from Battle Stations combat.</div></aside></div>
+</style></head><body><div id="app"><aside id="left"><header><span class="eyebrow">JMBN // FLEET ATLAS</span><h1>RSI POLARIS</h1><p>Interactive crew station and turret directory. Locate a mount, inspect its deck and identify the nearest turret access.</p></header><div class="mode-buttons"><button id="deckMode" class="active">DECK ATLAS</button><button id="exteriorMode">3D EXTERIOR</button></div><div class="deck-buttons"><button data-deck="upper" class="active">UPPER / TOP <small>GUN ACCESS</small></button><button data-deck="cargo">CARGO <small>LOWER LEVEL</small></button><button data-deck="all">STACKED <small>BOTH LEVELS</small></button></div><div class="sectionTitle">STATION DIRECTORY</div><div id="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">COMMAND</button><button data-filter="support">SUPPORT</button></div><div id="list"></div><div id="mobileDetail">Select a station to identify its access location.</div></aside><main id="viewport"><div id="three"></div><div id="gridHint"></div><div id="overlay"><div id="labels"></div><button id="togglePanel">☰ STATIONS</button><div id="tools"><button id="topView">PLAN VIEW</button><button id="isometric">ISOMETRIC</button><button id="sideView">SIDE</button><button id="toggleLabels">HIDE LABELS</button><button id="panMode" aria-pressed="false">PAN MODE</button><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomOut" aria-label="Zoom out">－</button><button id="homeCamera" aria-label="Reset camera">⌖</button></div><div id="deckQuick"><button data-quick-deck="upper" class="active">TOP</button><button data-quick-deck="cargo">CARGO</button><button data-quick-deck="all">ALL</button><button id="shellBtn">SHELL ON</button></div><div id="readout">TOP DECK<small>CLICK A STATION MARKER</small></div><div id="panInfo">ONE FINGER: ROTATE · TWO FINGERS: PAN / ZOOM</div><div id="legend"><strong>JMBN STATION REFERENCE</strong><div>One finger drag to rotate · Two fingers to pan and zoom · Tap markers to identify stations</div><div>Cutaway deck layouts are simplified reconstructions from supplied concept plans, not exact game geometry.</div></div><div id="zoomHint">DRAG ROTATE · 2 FINGERS PAN/ZOOM</div><div id="error"></div><div id="load">INITIALIZING DECK ATLAS…</div></div></main><aside id="right"><span class="eyebrow">STATION DETAILS</span><div id="stationName">SELECT A STATION</div><div id="stationMeta">POLARIS // NAVIGATION</div><p id="detail">Choose a mount or station from the left panel or select a highlighted marker on the 3D cutaway.</p><div class="note">The source images establish approximate room and mount relationships, but not calibrated 3D coordinates, exact routes, or all levels. This guide intentionally marks its deck geometry as conceptual.</div><div class="note">No crew assignments. This page is a station identification tool, separate from Battle Stations combat.</div></aside></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import{OrbitControls}from'https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js';
@@ -30,7 +30,7 @@ const camera=new THREE.PerspectiveCamera(42,1,.1,3000),renderer=new THREE.WebGLR
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
 $('three').append(renderer.domElement);const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.dampingFactor=.09;orbit.minDistance=12;orbit.maxDistance=650;orbit.enablePan=true;orbit.screenSpacePanning=true;orbit.touches.ONE=THREE.TOUCH.ROTATE;orbit.touches.TWO=THREE.TOUCH.DOLLY_PAN;renderer.domElement.style.touchAction='none';
 scene.add(new THREE.HemisphereLight(0xd6e7f0,0x46555e,2.5));const key=new THREE.DirectionalLight(0xfff4df,2.9);key.position.set(-35,100,-40);scene.add(key);
-const deckRoot=new THREE.Group(),exteriorRoot=new THREE.Group(),shellRoot=new THREE.Group();scene.add(deckRoot,exteriorRoot,shellRoot);let shellEnabled=false;
+const deckRoot=new THREE.Group(),exteriorRoot=new THREE.Group(),shellRoot=new THREE.Group();scene.add(deckRoot,exteriorRoot,shellRoot);let shellEnabled=true;
 const wall=new THREE.MeshStandardMaterial({color:0x6d7777,metalness:.42,roughness:.54,transparent:true,opacity:.77,side:THREE.DoubleSide});
 const floor=new THREE.MeshStandardMaterial({color:0x26353b,metalness:.24,roughness:.65,side:THREE.DoubleSide});
 const room=new THREE.MeshStandardMaterial({color:0x537080,transparent:true,opacity:.65,roughness:.63});
@@ -84,6 +84,128 @@ if(isUpper){
 }
 return group}
 const lowerDeck=deck(-11,false),upperDeck=deck(4,true);
+
+/* Independently modelled Polaris-inspired deck detail from supplied concept
+   blueprints. These are illustrative reconstructed assets, not ADI assets. */
+const rimSteel=new THREE.MeshStandardMaterial({color:0xb8c4c5,metalness:.68,roughness:.34});
+const darkSteel=new THREE.MeshStandardMaterial({color:0x243640,metalness:.63,roughness:.43});
+const holoBlue=new THREE.MeshBasicMaterial({color:0x1278db,transparent:true,opacity:.11,depthWrite:false,side:THREE.DoubleSide});
+const beaconGold=new THREE.MeshBasicMaterial({color:0xffcf63}),beaconRed=new THREE.MeshBasicMaterial({color:0xfb5c56});
+function post(g,x,y,z,h=2.4,material=rimSteel){return box(g,x,y+h/2,z,.33,h,.33,material)}
+function frameRoom(g,x,z,w,d,y,openSide='south'){
+ const segments=[
+ [x-w/2,z-d/2,x+w/2,z-d/2,'north'],[x-w/2,z+d/2,x+w/2,z+d/2,'south'],
+ [x-w/2,z-d/2,x-w/2,z+d/2,'west'],[x+w/2,z-d/2,x+w/2,z+d/2,'east']
+ ];
+ for(const [ax,az,bx,bz,side] of segments){
+  if(side===openSide){const center=new THREE.Vector2((ax+bx)/2,(az+bz)/2),v=new THREE.Vector2(bx-ax,bz-az).normalize();
+   const half=new THREE.Vector2(bx-ax,bz-az).length()/2;
+   if(half>2){wallSegment(g,ax,az,center.x-v.x*1.6,center.y-v.y*1.6,y,3,.24,rimSteel);
+   wallSegment(g,center.x+v.x*1.6,center.y+v.y*1.6,bx,bz,y,3,.24,rimSteel)}
+  }else wallSegment(g,ax,az,bx,bz,y,3,.24,rimSteel);
+ }
+ for(const xx of [x-w/2,x+w/2])for(const zz of [z-d/2,z+d/2])post(g,xx,y,zz,3);
+}
+function hatch(g,x,z,y,rot=0){
+ const h=new THREE.Group();h.position.set(x,y,z);h.rotation.y=rot;g.add(h);
+ box(h,0,.08,0,3.6,.14,3.6,darkSteel);
+ box(h,0,.14,0,2.35,.16,2.35,room);
+ for(const a of [-1,1]){box(h,a*1.42,.18,0,.15,.15,3.35,beaconGold);box(h,0,.18,a*1.42,2.8,.14,.15,beaconGold)}
+}
+function staircase(g,x,z,y,reverse=1){
+ for(let i=0;i<8;i++)box(g,x,y+.22+i*.30,z+(i-4)*1.05*reverse,5.2,.38,1,darkSteel);
+ for(const side of [-1,1]){const end=z+4.2*reverse,start=z-4.2*reverse;
+ wallSegment(g,x+side*2.75,start,x+side*2.75,end,y+1.1,1.1,.2,rimSteel)}
+}
+function terminal(g,x,z,y,rot=0){
+ const unit=new THREE.Group();unit.position.set(x,y,z);unit.rotation.y=rot;g.add(unit);
+ box(unit,0,.45,0,2.2,.9,1.3,darkSteel);
+ const monitor=box(unit,0,1.45,-.55,1.85,.9,.16,room);monitor.rotation.x=-.25;
+ box(unit,0,1.45,-.64,1.52,.52,.05,turquoise);
+ box(unit,0,.93,-.65,1.9,.07,.16,beaconGold);
+}
+function seat(g,x,z,y,rot=0){const chair=new THREE.Group();chair.position.set(x,y,z);chair.rotation.y=rot;g.add(chair);
+ box(chair,0,.65,0,1.15,.3,1.25,darkSteel);box(chair,0,1.25,.57,1.1,1.5,.23,rimSteel);
+ box(chair,0,.32,0,.35,.6,.35,darkSteel);
+}
+function cargoCrate(g,x,z,y,w=2,d=3){box(g,x,y+.75,z,w,1.5,d,darkSteel);
+ for(const side of [-1,1]){box(g,x+side*w*.46,y+.85,z,.14,1.5,d,rimSteel);
+ box(g,x,y+.85,z+side*d*.46,w,1.5,.14,rimSteel)}
+}
+function turretAccess(g,x,z,y){const base=new THREE.Group();base.position.set(x,y,z);g.add(base);
+ const cyl=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,.65,18),darkSteel);cyl.position.y=.25;base.add(cyl);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(3.1,.27,9,22),beaconGold);ring.position.y=.68;ring.rotation.x=Math.PI/2;base.add(ring);
+ box(base,0,.72,0,2.6,.20,2.8,rimSteel);
+ for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){const postX=Math.cos(a)*2.7,postZ=Math.sin(a)*2.7;post(base,postX,.3,postZ,1.5)}
+}
+function passage(g,x,z,y,length=12,wide=4){
+ box(g,x,y+.22,z,wide,.13,length,darkSteel);
+ for(const side of [-1,1]){wallSegment(g,x+side*wide/2,z-length/2,x+side*wide/2,z+length/2,y,1.8,.16,rimSteel)}
+ for(let zz=z-length/2+2;zz<z+length/2;zz+=3){box(g,x,y+.33,zz,wide-.6,.07,.17,stripe)}
+}
+function buildUpperDetails(g,y){
+ // Bridge: seats and forward displays.
+ for(const [x,z,r]of[[-4,-89,-.4],[0,-91,0],[4,-89,.4],[-5,-81,0],[5,-81,0]]){seat(g,x,z,y,r);terminal(g,x,z-2,y,r)}
+ frameRoom(g,0,-83,14,21,y,'south');
+ // ICC and forward operations access.
+ for(const x of [-7,0,7]){terminal(g,x,-54,y);seat(g,x,-51,y)}
+ for(const side of [-1,1]){
+  passage(g,side*12,-46,y,13,3);
+  frameRoom(g,side*14,-29,11,17,y,'south');
+  frameRoom(g,side*14,-7,11,15,y,'north');
+  for(const zz of [-34,-27,-8]){terminal(g,side*14,zz,y,side*.55)}
+  // Visible numbered turret-access plinths.
+  turretAccess(g,side*14,-2,y);
+  turretAccess(g,side*23,60,y);
+  for(const zz of [9,22,35,48,61]){post(g,side*20,y,zz,4);box(g,side*20,y+3.85,zz,2.1,.27,4,rimSteel)}
+  // Hangar side utility bays and stairs.
+  staircase(g,side*23,12,y,side);
+  for(const zz of [17,32,47]){cargoCrate(g,side*24,zz,y,2.1,3.2)}
+ }
+ // Hangar upper lip with ribbed structural edges and corner gates.
+ for(let zz=6;zz<=65;zz+=6){
+  box(g,-19.9,y+1.2,zz,.55,2.4,.35,rimSteel);
+  box(g,19.9,y+1.2,zz,.55,2.4,.35,rimSteel);
+ }
+ for(const zz of [5,65]){wallSegment(g,-20,zz,-13,zz,y,1.7,.4,rimSteel);wallSegment(g,13,zz,20,zz,y,1.7,.4,rimSteel)}
+ hatch(g,0,-67,y);hatch(g,0,-41,y);hatch(g,-23,67,y);hatch(g,23,67,y);
+ for(let x=-10;x<=10;x+=4){cargoCrate(g,x,82,y,2.5,2.8)}
+}
+function buildCargoDetails(g,y){
+ // Forward torpedo room: tubes, director terminals, maintenance walkways.
+ for(const side of [-1,1])for(let x=3;x<=10;x+=3.5){
+  const tube=new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.15,14,14),darkSteel);
+  tube.rotation.x=Math.PI/2;tube.position.set(side*x,y+1.75,-82);g.add(tube);
+  const cap=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,.45,14),rimSteel);
+  cap.rotation.x=Math.PI/2;cap.position.set(side*x,y+1.75,-89.2);g.add(cap);
+ }
+ for(const x of [-5,5])terminal(g,x,-61,y);
+ turretAccess(g,8,-62,y);
+ // Wide cargo bay, internal crate stacks and an articulated ramp.
+ for(let xx=-10;xx<=10;xx+=6)for(let zz=-40;zz<=-12;zz+=11)if(Math.abs(xx)>2)cargoCrate(g,xx,zz,y,3.3,4.2);
+ staircase(g,0,-5,y,1);hatch(g,0,4,y);
+ for(const side of [-1,1]){
+  passage(g,side*17,25,y,43,3.5);
+  for(const zz of [15,27,39,51]){frameRoom(g,side*14,zz,8,10,y,'north');cargoCrate(g,side*14,zz,y,3.5,4)}
+  staircase(g,side*23,57,y,side);
+ }
+ // Engineering mezzanine: cylinders, coolant assemblies and terminal bank.
+ for(const x of [-9,-3,3,9]){
+  const unit=new THREE.Mesh(new THREE.CylinderGeometry(1.35,1.35,8,12),darkSteel);
+  unit.position.set(x,y+2.1,73);unit.rotation.x=Math.PI/2;g.add(unit);
+  box(g,x,y+.22,79,3,.22,3,beaconGold);
+ }
+ for(const x of [-7,0,7])terminal(g,x,83,y);
+}
+buildUpperDetails(upperDeck,4);buildCargoDetails(lowerDeck,-11);
+// Orientation helpers in the 3D world.
+const coordinateLines=new THREE.Group();deckRoot.add(coordinateLines);
+for(const zz of [-92,-65,-35,0,35,70,90]){
+ const pts=[new THREE.Vector3(-36,-13,zz),new THREE.Vector3(36,-13,zz)];
+ const g=new THREE.BufferGeometry().setFromPoints(pts);
+ coordinateLines.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:0x1a719a,transparent:true,opacity:.21})));
+}
+
 const locatorMeshes=new Map(),locatorMaterial=new THREE.MeshBasicMaterial({color:0xf5c66f,depthTest:false}),selectedMaterial=new THREE.MeshBasicMaterial({color:0xa0f4ef,depthTest:false});
 for(const s of stations){s.y=s.deck==='upper'?7.7:-7.2;const group=new THREE.Group();deckRoot.add(group);group.position.set(s.x,s.y,s.z);const pin=new THREE.Mesh(new THREE.SphereGeometry(1.65,14,12),locatorMaterial.clone());group.add(pin);const halo=new THREE.Mesh(new THREE.TorusGeometry(3.2,.21,7,24),locatorMaterial.clone());halo.rotation.x=-Math.PI/2;group.add(halo);locatorMeshes.set(s.id,{group,pin,halo})}
 let mode='deck',currentDeck='upper',selected=null,filter='all',labelsVisible=true,exterior=null;
@@ -116,7 +238,7 @@ $('deckMode').onclick=()=>setMode('deck');$('exteriorMode').onclick=()=>setMode(
 document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>{currentDeck=b.dataset.deck;applyDeck()});document.querySelectorAll('[data-quick-deck]').forEach(b=>b.onclick=()=>{if(mode!=='deck')setMode('deck');currentDeck=b.dataset.quickDeck;applyDeck()});$('togglePanel').onclick=()=>document.body.classList.toggle('drawerOpen');$('zoomIn').onclick=()=>{camera.position.lerp(orbit.target,.22);orbit.update()};$('zoomOut').onclick=()=>{camera.position.sub(orbit.target).multiplyScalar(1.28).add(orbit.target);orbit.update()};$('shellBtn').onclick=()=>{shellEnabled=!shellEnabled;shellRoot.visible=mode==='deck'&&shellEnabled;$('shellBtn').textContent=shellEnabled?'SHELL ON':'SHELL OFF'};document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(c=>c.classList.toggle('active',c===b));applyDeck();renderList()});
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();renderer.domElement.addEventListener('click',e=>{if(mode!=='deck')return;const rect=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rect.left)/rect.width*2-1,-((e.clientY-rect.top)/rect.height)*2+1);ray.setFromCamera(pointer,camera);let hit=null,d=Infinity;for(const s of stations){const mesh=locatorMeshes.get(s.id);if(!mesh.group.visible)continue;const p=new THREE.Vector3();mesh.group.getWorldPosition(p);const distance=ray.ray.distanceToPoint(p);if(distance<4.6&&distance<d){hit=s;d=distance}}if(hit)select(hit)});
 function fit(){const w=$('three').clientWidth||innerWidth,h=$('three').clientHeight||innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(()=>{const prevAspect=camera.aspect;fit();if(Math.abs(prevAspect-camera.aspect)>.15&&mode==='deck')cameraView('iso')}).observe($('three'));fit();
-new GLTFLoader().load('assets/models/polaris.glb',g=>{exterior=g.scene;exterior.traverse(o=>{if(!o.isMesh)return;const amend=m=>{const c=m.clone();if(!c.map){c.color.set('#a2b4bf');c.metalness=.37;c.roughness=.55}c.side=THREE.DoubleSide;return c};o.material=Array.isArray(o.material)?o.material.map(amend):amend(o.material)});exteriorRoot.add(exterior);exteriorRoot.visible=false;const ghost=exterior.clone(true);ghost.traverse(o=>{if(!o.isMesh)return;const m=new THREE.MeshBasicMaterial({color:0x1d9ff6,transparent:true,opacity:.065,depthWrite:false,side:THREE.DoubleSide,wireframe:true});o.material=m});shellRoot.add(ghost);shellRoot.visible=false;$('load').style.display='none'},undefined,e=>{$('load').style.display='none';$('error').textContent='Exterior model unavailable; the interactive deck atlas still works.';console.error(e)});
+new GLTFLoader().load('assets/models/polaris.glb',g=>{exterior=g.scene;exterior.traverse(o=>{if(!o.isMesh)return;const amend=m=>{const c=m.clone();if(!c.map){c.color.set('#a2b4bf');c.metalness=.37;c.roughness=.55}c.side=THREE.DoubleSide;return c};o.material=Array.isArray(o.material)?o.material.map(amend):amend(o.material)});exteriorRoot.add(exterior);exteriorRoot.visible=false;const ghost=exterior.clone(true);ghost.traverse(o=>{if(!o.isMesh)return;const m=new THREE.MeshBasicMaterial({color:0x1167db,transparent:true,opacity:.09,depthWrite:false,side:THREE.DoubleSide,wireframe:true});o.material=m});shellRoot.add(ghost);shellRoot.visible=mode==='deck'&&shellEnabled;$('load').style.display='none'},undefined,e=>{$('load').style.display='none';$('error').textContent='Exterior model unavailable; the interactive deck atlas still works.';console.error(e)});
 applyDeck();cameraView('iso');renderList();setTimeout(()=>$('load').style.display='none',9000);
 const screen=new THREE.Vector3();function loop(){requestAnimationFrame(loop);orbit.update();for(const s of stations){const pin=pins.get(s.id),m=locatorMeshes.get(s.id);if(mode!=='deck'||!m.group.visible||!labelsVisible){pin.style.display='none';continue}screen.copy(m.group.position).project(camera);const w=$('labels').clientWidth,h=$('labels').clientHeight;pin.style.display=screen.z>=-1&&screen.z<=1?'':'none';pin.style.left=Math.max(42,Math.min(w-42,(screen.x+1)*w/2))+'px';pin.style.top=Math.max(178,Math.min(h-105,(1-screen.y)*h/2))+'px'}renderer.render(scene,camera)}loop();
 </script></body></html>
