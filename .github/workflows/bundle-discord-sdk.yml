@@ -1,0 +1,36 @@
+name: Bundle Discord Activity SDK
+on:
+  push:
+    paths:
+      - '.github/workflows/bundle-discord-sdk.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Bundle official Embedded App SDK
+        run: |
+          set -euo pipefail
+          mkdir -p discord-activity/vendor
+          npm install --no-save --no-package-lock esbuild@0.25.12 @discord/embedded-app-sdk@2
+          echo "export { DiscordSDK } from '@discord/embedded-app-sdk';" > /tmp/jmbn-sdk-entry.mjs
+          cp /tmp/jmbn-sdk-entry.mjs ./jmbn-sdk-entry.mjs
+          npx esbuild ./jmbn-sdk-entry.mjs --bundle --format=esm --platform=browser --target=es2020 --outfile=discord-activity/vendor/discord-sdk.mjs
+          rm ./jmbn-sdk-entry.mjs
+          test "$(wc -c < discord-activity/vendor/discord-sdk.mjs)" -gt 10000
+      - name: Commit bundled SDK
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add discord-activity/vendor/discord-sdk.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m "Bundle Discord Embedded App SDK for Activity"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
