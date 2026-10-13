@@ -190,7 +190,7 @@ scene.add(new THREE.HemisphereLight(0xf5f7fa,0x617783,2.65));
 const key=new THREE.DirectionalLight(0xfff7e8,2.6);key.position.set(3,8,5);scene.add(key);
 const fit=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false)};
 new ResizeObserver(fit).observe(host);fit();
-new GLTFLoader().load('https://delumenta.github.io/JMBN/assets/models/polaris.glb',gltf=>{
+new GLTFLoader().load(location.origin+'/models/polaris.glb',gltf=>{
  const model=gltf.scene;
  model.traverse(o=>{if(!o.isMesh)return;const convert=m=>{const n=m.clone();if(!n.map){n.color.set('#b3bfc2');n.metalness=.22;n.roughness=.65}else{n.color.multiplyScalar(1.12)}n.side=THREE.DoubleSide;return n};o.material=Array.isArray(o.material)?o.material.map(convert):convert(o.material)});
  scene.add(model);
