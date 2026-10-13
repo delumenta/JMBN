@@ -31,7 +31,7 @@ jobs:
           start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>\nwindow.__supabaseLoadErrors=')
           end=html.index('</script>',start)+len('</script>')
           sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
-          replacement='<script>/* JMBN embedded Supabase SDK */\\n'+sdk+'\\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
+          replacement='<script>/* JMBN embedded Supabase SDK */\n'+sdk+'\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
           html=html[:start]+replacement+html[end:]
           html=html.replace('build 20261013-c','build 20261013-d')
           page.write_text(html)
