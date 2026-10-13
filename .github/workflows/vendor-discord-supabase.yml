@@ -39,7 +39,7 @@ jobs:
               start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>window.__supabaseLoadErrors=')
               end=html.index('</script>',start)+len('</script>')
               sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
-              replacement=marker+'\\n'+sdk+'\\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
+              replacement=marker+chr(10)+sdk+chr(10)+'</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
               html=html[:start]+replacement+html[end:]
           page.write_text(html)
           PY
