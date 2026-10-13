@@ -33,7 +33,7 @@ jobs:
               start=html.index(marker)
               end=html.index('</script>',start)+len('</script>')
               sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
-              replacement=marker+'\\n'+sdk+'\\n</script>'
+              replacement=marker+chr(10)+sdk+chr(10)+'</script>'
               html=html[:start]+replacement+html[end:]
           else:
               start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>window.__supabaseLoadErrors=')
