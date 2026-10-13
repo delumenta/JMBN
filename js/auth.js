@@ -61,7 +61,7 @@ window.getSupabase = () => _sb;
         console.error("[auth] exchangeCodeForSession failed:", error);
       } else {
         // Clean the URL (remove ?code=...) but stay on auth.html
-        window.history.replaceState({}, document.title, BASE + "auth.html");
+        window.history.replaceState({}, document.title, location.pathname);
       }
     }
   } catch (err) {
