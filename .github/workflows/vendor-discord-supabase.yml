@@ -27,5 +27,6 @@ jobs:
           git add discord-activity/vendor/supabase.js
           if ! git diff --cached --quiet; then
             git commit -m "Vendor Supabase UMD bundle for Discord Activity"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
