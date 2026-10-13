@@ -80,7 +80,7 @@ const call=expectedCall();const expected=call?.key;const words=said.split(' ').m
 const isUnable=/\b(unable|cannot comply|can't comply|negative contact|cannot acquire)\b/.test(said);
 const isLost=/\b(lost contact|contact lost|lost track|lost visual)\b/.test(said);
 const isReport=/\b(bandit down|target destroyed|kill confirmed|splash|threat neutralized|report|status|target down)\b/.test(said);
-const isAffirm=/\b(guns affirm|weapons ready|guns ready|guns are ready|affirm guns|guns affirmative)\b/.test(said);
+const isAffirm=/\b(guns? (?:affirm|are firm|a firm|affirmed|affirmative|ready|are ready)|weapons ready|affirm guns|guns affirmative|forward|four word|for word)\b/.test(said);
 const isAcquire=/\b(target acquired|contact acquired|track acquired|locked on|target locked|acquired engaging|have the target|visual on target)\b/.test(said);
 const isAck=/\b(aye|roger|copy|wilco|acknowledge|acknowledged|affirmative|covering|engaging|understood|four one)\b/.test(said);
 let command=null;
