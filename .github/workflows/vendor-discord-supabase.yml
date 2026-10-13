@@ -20,11 +20,28 @@ jobs:
             -o discord-activity/vendor/supabase.js
           test "$(wc -c < discord-activity/vendor/supabase.js)" -gt 100000
           grep -q 'createClient' discord-activity/vendor/supabase.js
-      - name: Commit vendored library
+      - name: Embed Supabase SDK directly in Discord Activity
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          page=Path('discord-activity/index.html')
+          sdk=Path('discord-activity/vendor/supabase.js').read_text()
+          html=page.read_text()
+          start=html.index('<script>\\nwindow.__supabaseLoadErrors=') if '<script>\\nwindow.__supabaseLoadErrors=' in html else html.index('<script>\nwindow.__supabaseLoadErrors=')
+          end=html.index('</script>',start)+len('</script>')
+          sdk=sdk.replace('</script','<\\/script').replace('</SCRIPT','<\\/SCRIPT')
+          replacement='<script>/* JMBN embedded Supabase SDK */\\n'+sdk+'\\n</script><script>window.__supabaseLoadErrors=[];window.__loadSupabase=async()=>!!window.supabase?.createClient;</script>'
+          html=html[:start]+replacement+html[end:]
+          html=html.replace('build 20261013-c','build 20261013-d')
+          page.write_text(html)
+          PY
+      - name: Commit vendored library and embedded Activity
+
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add discord-activity/vendor/supabase.js
+          git add discord-activity/vendor/supabase.js discord-activity/index.html
           if ! git diff --cached --quiet; then
             git commit -m "Vendor Supabase UMD bundle for Discord Activity"
             git pull --rebase origin main
