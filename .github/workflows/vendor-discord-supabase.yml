@@ -1,0 +1,31 @@
+name: Vendor Supabase for Discord Activity
+on:
+  push:
+    paths:
+      - '.github/workflows/vendor-discord-supabase.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pinned official Supabase browser bundle
+        run: |
+          set -euo pipefail
+          mkdir -p discord-activity/vendor
+          curl --fail --location --retry 3 --max-time 60 \
+            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.js' \
+            -o discord-activity/vendor/supabase.js
+          test "$(wc -c < discord-activity/vendor/supabase.js)" -gt 100000
+          grep -q 'createClient' discord-activity/vendor/supabase.js
+      - name: Commit vendored library
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add discord-activity/vendor/supabase.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Vendor Supabase UMD bundle for Discord Activity"
+            git push
+          fi
