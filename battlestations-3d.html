@@ -16,6 +16,7 @@ body{background:#050504;color:#eadcc0}
 </style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
+import { FBXLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/FBXLoader.js';
 const $=id=>document.getElementById(id),scene=new THREE.Scene();scene.background=new THREE.Color(0x020712);scene.fog=new THREE.FogExp2(0x020712,.0009);
 const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,3000);let zoomHeld=false;const normalFov=75,aimFov=42;camera.position.set(0,3,0);
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;renderer.setClearColor(0x020712);document.body.prepend(renderer.domElement);
@@ -171,11 +172,32 @@ for(const side of [-1,1]){
 }
 const rear=mesh(enemyGeo,new THREE.BoxGeometry(2.7,1.7,3.8),armor,[0,.1,4.1]);
 enemyGeo.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
+// Optional genuine Star Citizen fighter geometry. Graceful fallback if the uploaded assets are not hosted yet.
+const fighterModels=[null,null],fighterNames=['AEGIS AVENGER','DRAKE BUCCANEER'];
+const fighterPaths=['assets/models/enemies/AEGIS-AVENGER.FBX','assets/models/enemies/DRAKE-BUCCANEER.FBX'];
+const enemyLoader=new FBXLoader();
+fighterPaths.forEach((path,index)=>enemyLoader.load(path,source=>{
+ const box=new THREE.Box3().setFromObject(source);
+ if(box.isEmpty())throw new Error('FBX contains no visible geometry: '+path);
+ const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+ const group=new THREE.Group();source.position.sub(center);
+ const scale=20/Math.max(size.x,size.y,size.z,1e-6);
+ source.scale.setScalar(scale);group.add(source);
+ source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;
+ if(!obj.material){obj.material=new THREE.MeshStandardMaterial({color:0x858d99,metalness:.65,roughness:.42})}
+ }});
+ fighterModels[index]=group;
+ for(const fighter of fighters){if(fighter.modelIndex===index&&!fighter.dead)applyEnemyModel(fighter)}
+ console.info('Battle Stations fighter loaded:',fighterNames[index]);
+},undefined,err=>console.info('Using procedural enemy fallback until FBX is uploaded:',path,err)));
+function applyEnemyModel(e){const template=fighterModels[e.modelIndex];if(!template)return;
+ e.group.clear();e.group.add(template.clone(true));e.group.userData.shipName=fighterNames[e.modelIndex];
+}
 const fighters=[],shots=[],sparks=[],raycaster=new THREE.Raycaster(),clock=new THREE.Clock();let active=false,wave=1,score=0,shields=100,hull=100,heat=0,yaw=0,pitch=0,assigned=null,marked=null,acked=false,acquired=false,affirmed=false,green=false,down=null,mouseFire=false,lastShot=0,lastAttack=0,spawnTimer=0,sound=false,missionEnded=false,tracking=false;
 function say(t){$('order').textContent=t;if(sound&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/(\d)-(\d)-(\d)-(\d)/g,'$1 $2 $3 $4'));u.rate=.93;u.pitch=.8;speechSynthesis.speak(u)}}
 function reply(t){$('radio').textContent='GUNNER: '+t}function notice(t){$('notice').textContent=t;clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('notice').textContent='',2500)}
 function track(){return Array.from({length:4},()=>Math.floor(Math.random()*10)).join('-')}
-function spawn(){const group=enemyGeo.clone();const a=Math.random()*Math.PI*2,r=190+Math.random()*160;group.position.set(Math.sin(a)*r,(Math.random()-.5)*130,-100-Math.cos(a)*r);scene.add(group);const e={group,track:track(),hp:100,speed:9+Math.random()*13,angle:Math.random()*6.28,phase:Math.random()*6.28,dead:false,attack:0};fighters.push(e);return e}
+function spawn(){const modelIndex=Math.floor(Math.random()*2);const group=enemyGeo.clone();const a=Math.random()*Math.PI*2,r=190+Math.random()*160;group.position.set(Math.sin(a)*r,(Math.random()-.5)*130,-100-Math.cos(a)*r);scene.add(group);const e={group,modelIndex,track:track(),hp:100,speed:9+Math.random()*13,angle:Math.random()*6.28,phase:Math.random()*6.28,dead:false,attack:0};fighters.push(e);applyEnemyModel(e);return e}
 function assign(){const e=fighters.find(e=>!e.dead);if(!e){assigned=null;return}assigned=e;marked=null;acked=acquired=affirmed=green=false;say('4-1, COVER TRACK '+e.track+' WITH GUNS. HOLD FIRE.');reply('RADIO CHECK · PRESS 1 TO ACKNOWLEDGE')}
 function explode(e){e.dead=true;scene.remove(e.group);for(let i=0;i<24;i++){const p=mesh(scene,new THREE.SphereGeometry(.6+Math.random()*1.6,5,4),new THREE.MeshBasicMaterial({color:i%2?0xff6c31:0xffd077}),e.group.position.toArray());sparks.push({o:p,v:new THREE.Vector3().randomDirection().multiplyScalar(12+Math.random()*35),life:1})}down=e;green=false;score+=150;say('4-1, SPLASH TRACK '+e.track+'. REPORT BANDIT DOWN.');$('stats').textContent='WAVE '+wave+' · SCORE '+score}
 function mark(){
