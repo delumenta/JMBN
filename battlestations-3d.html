@@ -21,7 +21,7 @@ body{background:#050504;color:#eadcc0}
 .contact-tag .track-id{padding:2px 5px;background:#02060bd9;border:1px solid currentColor;border-radius:3px}
 .contact-tag .range{font-size:9px;font-weight:400;opacity:.85}
 @media(max-width:650px){.contact-tag svg{width:27px;height:26px}.contact-tag.selected svg{width:35px;height:34px}.contact-tag{font-size:10px}}
-</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="contactLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
+#radar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:180px;height:180px;z-index:3;box-shadow:0 0 22px #000b}#bottom{justify-content:flex-start}#bottom #info{max-width:min(430px,calc((100vw - 230px)/2))}@media(max-width:800px){#radar{width:125px;height:125px;bottom:8px}#bottom #info{max-width:calc((100vw - 160px)/2);font-size:10px;line-height:1.5}}@media(max-width:550px){#radar{width:110px;height:110px}#bottom #info{max-width:calc((100vw - 135px)/2);font-size:9px;line-height:1.4;padding:6px}} </style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="contactLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import { FBXLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/FBXLoader.js';
@@ -288,7 +288,7 @@ function radar(){
  g.fillStyle='#f0cc80';g.strokeStyle='#fff0b1';g.lineWidth=1.5;
  g.beginPath();g.moveTo(cx,cy-10);g.lineTo(cx+7,cy+8);g.lineTo(cx,cy+4);g.lineTo(cx-7,cy+8);g.closePath();g.fill();g.stroke();
  const cos=Math.cos(yaw),sin=Math.sin(yaw);
- for(const e of fighters){if(e.dead)continue;
+ for(const e of [...fighters,...iffContacts]){if(e.dead)continue;
  const p=e.group.position.clone().sub(camera.position);
  // Rotate world-space X/Z by camera yaw; top of radar = current 3D forward heading.
  const rx=p.x*cos-p.z*sin,rz=p.x*sin+p.z*cos;
@@ -296,8 +296,10 @@ function radar(){
  const radius=Math.hypot(mx-cx,my-cy),scale=radius>81?81/radius:1;
  const x=cx+(mx-cx)*scale,y=cy+(my-cy)*scale;
  const selected=e===marked;
- g.fillStyle=selected?'#ffdc85':'#ff5148';g.shadowColor=selected?'#ffdf8f':'#ff2727';g.shadowBlur=selected?10:7;
- g.beginPath();g.arc(x,y,selected?5.3:4.3,0,Math.PI*2);g.fill();g.shadowBlur=0;
+ const tint=e.iff==='friendly'?'#5cbaff':e.iff==='bogey'?'#f0f2f5':'#ff5148';
+ g.fillStyle=tint;g.strokeStyle=tint;g.shadowColor=tint;g.shadowBlur=selected?12:7;
+ g.beginPath();g.moveTo(x,y-6);g.lineTo(x+5.5,y+4.5);g.lineTo(x-5.5,y+4.5);g.closePath();g.stroke();g.shadowBlur=0;
+ g.font='9px monospace';g.textAlign='center';g.fillText(e.track,x,y-10);
  if(selected){g.strokeStyle='#ffe0a2';g.beginPath();g.arc(x,y,9,0,Math.PI*2);g.stroke()}
  }
 }
