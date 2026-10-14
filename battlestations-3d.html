@@ -287,8 +287,12 @@ function fire(){
   let o=hits[0].object;while(o.parent&&!fighters.some(e=>e.group===o))o=o.parent;
   const target=fighters.find(e=>e.group===o);
   if(target){
-   if(!green||target!==assigned){score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}
-   else{target.hp-=20;score+=10;if(target.hp<=0)explode(target)}
+   // Firing discipline affects scoring, not whether a projectile damages its target.
+   const authorized=green&&target===assigned;
+   target.hp-=20;
+   if(authorized){score+=10}
+   else{score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}
+   if(target.hp<=0)explode(target)
   }
  }else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')}
 }
