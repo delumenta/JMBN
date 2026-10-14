@@ -304,19 +304,19 @@ let voiceEngine=null;
 const voiceStatus=()=>$('voiceStatus').textContent=!SpeechRecognition?'UNSUPPORTED':voiceListening?'LISTENING':voiceMode==='off'?'OFF':voiceMode==='continuous'?'READY':'PTT READY';
 // Normalize spoken digits, including "eight seven six two", "oh one five one" and 8-7-6-2.
 const digitWords={zero:'0',oh:'0',owe:'0',nought:'0',naught:'0',one:'1',won:'1',two:'2',too:'2',to:'2',three:'3',tree:'3',four:'4',for:'4',fore:'4',five:'5',fife:'5',six:'6',seven:'7',eight:'8',ate:'8',nine:'9',niner:'9'};
-function radioTokens(raw){return raw.toLowerCase().replace(/[-–—]/g,' ').replace(/[^a-z0-9\\s]/g,' ').split(/\\s+/).filter(Boolean)}
+function radioTokens(raw){return raw.toLowerCase().replace(/[-–—]/g,' ').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean)}
 function radioNormalize(raw){
  let w=radioTokens(raw).join(' ');
  const rules=[
- [/\\b(guns?|gunz|gunns)\\s+(a\\s*firm|affirm|a\\s*form|a\\s*farm|are\\s*firm|of\\s*firm|a\\s*fern|a\\s*firn)\\b/g,'guns affirm'],
- [/\\b(guns?|gunz|gunns)\\s+(ready|reddy|readied|operational|online)\\b/g,'guns affirm'],
- [/\\b(target|targit|targat|tarket|track|contact)\\s+(acquired|a\\s*quired|a\\s*quiet|a\\s*choired|a\\s*quire|sighted|locked|in\\s*sight)\\b/g,'target acquired'],
- [/\\b(bandit|bandits|banded|band\\s*it)\\s+(down|town|done|dawn)\\b/g,'bandit down'],
- [/\\b(target|hostile|enemy)\\s+(destroyed|down|eliminated|neutralized|neutralised)\\b/g,'bandit down'],
- [/\\b(covering|coverin|cover|copying)\\s+(track|trick|trak|truck|drag)\\b/g,'covering track'],
- [/\\b(eye|aye|ay|i|affirmative|roger|received|understood|acknowledged|acknowledge|copy\\s*that|copied)\\b/g,'aye'],
- [/\\b(gunz|gunns)\\b/g,'guns'],
- [/\\b(engagin|engageing|engaging|commencing\\s*fire|opening\\s*fire)\\b/g,'engaging']
+ [/\b(guns?|gunz|gunns)\s+(a\s*firm|affirm|a\s*form|a\s*farm|are\s*firm|of\s*firm|a\s*fern|a\s*firn)\b/g,'guns affirm'],
+ [/\b(guns?|gunz|gunns)\s+(ready|reddy|readied|operational|online)\b/g,'guns affirm'],
+ [/\b(target|targit|targat|tarket|track|contact)\s+(acquired|a\s*quired|a\s*quiet|a\s*choired|a\s*quire|sighted|locked|in\s*sight)\b/g,'target acquired'],
+ [/\b(bandit|bandits|banded|band\s*it)\s+(down|town|done|dawn)\b/g,'bandit down'],
+ [/\b(target|hostile|enemy)\s+(destroyed|down|eliminated|neutralized|neutralised)\b/g,'bandit down'],
+ [/\b(covering|coverin|cover|copying)\s+(track|trick|trak|truck|drag)\b/g,'covering track'],
+ [/\b(eye|aye|ay|i|affirmative|roger|received|understood|acknowledged|acknowledge|copy\s*that|copied)\b/g,'aye'],
+ [/\b(gunz|gunns)\b/g,'guns'],
+ [/\b(engagin|engageing|engaging|commencing\s*fire|opening\s*fire)\b/g,'engaging']
  ];
  for(const [pattern,value] of rules)w=w.replace(pattern,value);
  return w;
@@ -327,7 +327,7 @@ function spokenTracks(raw){
   let digits='';
   for(let j=i;j<t.length;j++){
    const word=t[j];
-   if(/^\\d+$/.test(word))digits+=word;
+   if(/^\d+$/.test(word))digits+=word;
    else if(Object.prototype.hasOwnProperty.call(digitWords,word))digits+=digitWords[word];
    else break;
    if(digits.length>=4){out.push(digits);break}
@@ -341,28 +341,28 @@ function voiceIntent(raw){
  const matchesTrack=!!expected&&tracks.some(t=>t.includes(expected));
  const hasOtherTrack=tracks.length>0&&!matchesTrack;
  const needsTrack=(label)=>{if(!assigned)return 'NO ASSIGNED TRACK';if(matchesTrack)return null;return hasOtherTrack?'INCORRECT TRACK NUMBER · REPEAT':label+' · INCLUDE TRACK NUMBER'};
- if(/\\bbandit down\\b/.test(words)){
+ if(/\bbandit down\b/.test(words)){
   if(!down)return 'NO CONFIRMED BANDIT DOWN';
   const reportTrack=down.track.replace(/-/g,'');
   if(!tracks.some(t=>t.includes(reportTrack)))return 'REPORT BANDIT TRACK NUMBER';
   report();return 'BANDIT DOWN · CORRECT';
  }
- if(/\\bguns affirm\\b/.test(words)){
+ if(/\bguns affirm\b/.test(words)){
   if(!acquired)return 'TARGET NOT YET ACQUIRED';
   affirm();return 'GUNS AFFIRM · CORRECT';
  }
- if(/\\btarget acquired\\b/.test(words)){
+ if(/\btarget acquired\b/.test(words)){
   if(!acked)return 'ACKNOWLEDGE WEPS FIRST';
   acquire();return 'TARGET ACQUIRED · CORRECT';
  }
- if(/\\b(aye|covering track)\\b/.test(words)){
+ if(/\b(aye|covering track)\b/.test(words)){
   if(acked)return 'ALREADY ACKNOWLEDGED';
   const problem=needsTrack('ACK');if(problem)return problem;
-  if(!/\\bcovering track\\b/.test(words))return 'REPEAT · SAY COVERING TRACK';
-  if(!/\\bguns?\\b/.test(words))return 'REPEAT · SAY WITH GUNS';
+  if(!/\bcovering track\b/.test(words))return 'REPEAT · SAY COVERING TRACK';
+  if(!/\bguns?\b/.test(words))return 'REPEAT · SAY WITH GUNS';
   ack();return 'ACKNOWLEDGEMENT · CORRECT';
  }
- if(/\\bengaging\\b/.test(words))return green?'ENGAGING · COPIED':'FIS NOT GREEN · HOLD FIRE';
+ if(/\bengaging\b/.test(words))return green?'ENGAGING · COPIED':'FIS NOT GREEN · HOLD FIRE';
  return 'UNRECOGNIZED · REPEAT RADIO CALL';
 }
 function stopVoice(){if(voiceEngine&&voiceListening)voiceEngine.stop()}
