@@ -30,6 +30,7 @@ body{background:#050504;color:#eadcc0}
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import { FBXLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/FBXLoader.js';
+import { GLTFLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/GLTFLoader.js';
 const $=id=>document.getElementById(id),scene=new THREE.Scene();scene.background=new THREE.Color(0x020712);scene.fog=new THREE.FogExp2(0x020712,.0009);
 const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,3000);let zoomHeld=false;const normalFov=75,aimFov=42;camera.position.set(0,3,0);
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;renderer.setClearColor(0x020712);document.body.prepend(renderer.domElement);
@@ -185,6 +186,20 @@ for(const side of [-1,1]){
 }
 const rear=mesh(enemyGeo,new THREE.BoxGeometry(2.7,1.7,3.8),armor,[0,.1,4.1]);
 enemyGeo.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
+// Prefer the uploaded Gladius GLB for hostile fighters, preserving the procedural fallback.
+let gladiusTemplate=null;
+new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
+ const source=gltf.scene;
+ const bounds=new THREE.Box3().setFromObject(source);
+ if(bounds.isEmpty()){console.warn('Gladius GLB has no visible geometry');return}
+ const size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3());
+ source.position.sub(center);
+ source.scale.setScalar(20/Math.max(size.x,size.y,size.z,1e-6));
+ source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true}});
+ gladiusTemplate=source;
+ for(const fighter of fighters)if(!fighter.dead)applyEnemyModel(fighter);
+ console.info('JMBN Gladius model loaded for hostile fighters');
+},undefined,err=>console.warn('Gladius model unavailable; keeping fallback fighters at assets/models/gladus.glb',err));
 // Optional genuine Star Citizen fighter geometry. Graceful fallback if the uploaded assets are not hosted yet.
 const fighterModels=[null,null],fighterNames=['AEGIS AVENGER','DRAKE BUCCANEER'];
 const fighterPaths=['assets/models/enemies/AEGIS-AVENGER.FBX','assets/models/enemies/DRAKE-BUCCANEER.FBX'];
@@ -203,8 +218,8 @@ fighterPaths.forEach((path,index)=>enemyLoader.load(path,source=>{
  for(const fighter of fighters){if(fighter.modelIndex===index&&!fighter.dead)applyEnemyModel(fighter)}
  console.info('Battle Stations fighter loaded:',fighterNames[index]);
 },undefined,err=>console.info('Using procedural enemy fallback until FBX is uploaded:',path,err)));
-function applyEnemyModel(e){const template=fighterModels[e.modelIndex];if(!template)return;
- e.group.clear();e.group.add(template.clone(true));e.group.userData.shipName=fighterNames[e.modelIndex];
+function applyEnemyModel(e){const template=gladiusTemplate||fighterModels[e.modelIndex];if(!template)return;
+ e.group.clear();e.group.add(template.clone(true));e.group.userData.shipName=gladiusTemplate?'AEGIS GLADIUS':fighterNames[e.modelIndex];
 }
 const fighters=[],shots=[],sparks=[],raycaster=new THREE.Raycaster(),clock=new THREE.Clock();let active=false,wave=1,score=0,shields=100,hull=100,heat=0,yaw=0,pitch=0,assigned=null,marked=null,acked=false,acquired=false,affirmed=false,green=false,down=null,mouseFire=false,lastShot=0,lastAttack=0,spawnTimer=0,sound=false,missionEnded=false,tracking=false;
 function say(t){$('order').textContent=t;if(sound&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/(\d)-(\d)-(\d)-(\d)/g,'$1 $2 $3 $4'));u.rate=.93;u.pitch=.8;speechSynthesis.speak(u)}}
