@@ -320,7 +320,12 @@ function spokenTracks(raw){
  return out;
 }
 function voiceIntent(raw){
- const words=radioTokens(raw).join(' ');
+ const heard=radioTokens(raw).join(' ');
+ // Correct frequent speech-to-text homophones only when the rest of the radio call supplies context.
+ let words=heard.replace(/\bcovering trick\b/g,'covering track').replace(/\bguns? a firm\b/g,'guns affirm').replace(/\btarget a quiet\b/g,'target acquired').replace(/\bbandit town\b/g,'bandit down');
+ if(/\bcovering track\b/.test(words)){
+  words=words.replace(/\b(i|eye)\b/g,'aye').replace(/\b(right|write|roger)\b/g,'copy');
+ }
  const tracks=spokenTracks(raw);
  const expected=assigned?.track.replace(/-/g,'')||'';
  const matchesTrack=expected&&tracks.some(t=>t.includes(expected));
