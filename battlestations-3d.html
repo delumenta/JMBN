@@ -196,7 +196,9 @@ new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
  source.position.sub(center);
  source.scale.setScalar(20/Math.max(size.x,size.y,size.z,1e-6));
  source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true}});
- gladiusTemplate=source;
+ // GLB forward-axis correction: model faces -Z while fighter root lookAt uses +Z.
+ const oriented=new THREE.Group();source.rotation.y=Math.PI;oriented.add(source);
+ gladiusTemplate=oriented;
  for(const fighter of fighters)if(!fighter.dead)applyEnemyModel(fighter);
  console.info('JMBN Gladius model loaded for hostile fighters');
 },undefined,err=>console.warn('Gladius model unavailable; keeping fallback fighters at assets/models/gladus.glb',err));
