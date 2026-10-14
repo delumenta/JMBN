@@ -57,6 +57,7 @@ const stations=[
  {
   "id": "helm",
   "name": "HELMSMAN",
+  "location": "BRIDGE · PORT / FORWARD",
   "cat": "command",
   "layer": "main",
   "node": "chair030",
@@ -65,6 +66,7 @@ const stations=[
  {
   "id": "ood",
   "name": "OFFICER OF THE DECK",
+  "location": "BRIDGE · STARBOARD / FORWARD",
   "cat": "command",
   "layer": "main",
   "node": "chair027",
@@ -73,6 +75,7 @@ const stations=[
  {
   "id": "cmd",
   "name": "COMMAND CHAIR",
+  "location": "BRIDGE · CENTRE",
   "cat": "command",
   "layer": "main",
   "node": "chair031",
@@ -81,6 +84,7 @@ const stations=[
  {
   "id": "air",
   "name": "CHIEF OF THE WATCH / AIR",
+  "location": "BRIDGE · PORT / AFT",
   "cat": "command",
   "layer": "main",
   "node": "chair033",
@@ -89,6 +93,7 @@ const stations=[
  {
   "id": "surface",
   "name": "SURFACE",
+  "location": "BRIDGE · STARBOARD / AFT",
   "cat": "command",
   "layer": "main",
   "node": "chair032",
@@ -97,6 +102,7 @@ const stations=[
  {
   "id": "icc",
   "name": "INTEGRATED COMMAND CENTRE",
+  "location": "BRIDGE · AFT / ICC",
   "cat": "command",
   "layer": "main",
   "node": "Sphere001",
@@ -105,6 +111,7 @@ const stations=[
  {
   "id": "41",
   "name": "MOUNT 4-1",
+  "location": "PORT SIDE · MIDSHIP",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_top_right",
@@ -114,6 +121,7 @@ const stations=[
  {
   "id": "42",
   "name": "MOUNT 4-2",
+  "location": "STARBOARD · MIDSHIP",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_top_left",
@@ -123,6 +131,7 @@ const stations=[
  {
   "id": "31",
   "name": "MOUNT 3-1",
+  "location": "PORT SIDE · AFT",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_side_right",
@@ -132,6 +141,7 @@ const stations=[
  {
   "id": "32",
   "name": "MOUNT 3-2",
+  "location": "STARBOARD · AFT",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_side_left",
@@ -141,6 +151,7 @@ const stations=[
  {
   "id": "61",
   "name": "MOUNT 6-1",
+  "location": "BOW · FORWARD",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_front",
@@ -150,6 +161,7 @@ const stations=[
  {
   "id": "torp",
   "name": "TORPEDO DIRECTOR",
+  "location": "FORWARD · TORPEDO CONSOLES",
   "cat": "support",
   "layer": "cargo",
   "nodes": [
@@ -161,6 +173,7 @@ const stations=[
  {
   "id": "med",
   "name": "MED BAY",
+  "location": "STERN · MEDICAL BAY",
   "cat": "support",
   "layer": "main",
   "nodes": [
@@ -172,6 +185,7 @@ const stations=[
  {
   "id": "edo",
   "name": "ENGINEERING DUTY OFFICER",
+  "location": "STERN · ENGINEERING",
   "cat": "support",
   "layer": "engineering",
   "node": "Plane091",
@@ -180,6 +194,7 @@ const stations=[
  {
   "id": "hangar",
   "name": "HANGAR",
+  "location": "MIDSHIP · HANGAR",
   "cat": "support",
   "layer": "main",
   "desc": "Main hangar; exact position not yet assigned to a mesh."
@@ -209,7 +224,7 @@ function renderList(){
  for(const s of stations){if(filter!=='all'&&filter!==s.cat)continue;
  const button=document.createElement('button');button.className='station'+(selected===s?' active':'');
  const label=s.cat==='turret'?s.id:s.cat==='command'?'⌖':'✧';
- button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.nodes?'DUAL CONSOLE':s.node?'LOCATED IN MODEL':s.groupCenter?'ENGINEERING SECTION':'POSITION PENDING')+'</small></span>';
+ button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.location||'LOCATION TO CONFIRM')+'</small></span>';
  button.onclick=()=>selectStation(s);$('stationList').append(button);buttons.set(s.id,button)}
 }
 function makePins(){
