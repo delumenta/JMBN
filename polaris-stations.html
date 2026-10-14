@@ -68,9 +68,9 @@ scene.add(new THREE.HemisphereLight(0xd6e7f0,0x46555e,2.5));const key=new THREE.
 const deckRoot=new THREE.Group(),exteriorRoot=new THREE.Group(),shellRoot=new THREE.Group();scene.add(deckRoot,exteriorRoot,shellRoot);let shellEnabled=true;
 // Independently reconstructed Polaris-style outer silhouette. Coordinates share
 // the deck atlas frame, rather than the exterior GLB's uncalibrated model frame.
-const silhouetteBlue=new THREE.MeshBasicMaterial({color:0x1469d5,transparent:true,opacity:.095,side:THREE.DoubleSide,depthWrite:false});
-const silhouetteEdge=new THREE.LineBasicMaterial({color:0x3989f4,transparent:true,opacity:.43,depthTest:true});
-const silhouetteAccent=new THREE.MeshBasicMaterial({color:0x237bdf,transparent:true,opacity:.12,depthWrite:false,side:THREE.DoubleSide});
+const silhouetteBlue=new THREE.MeshBasicMaterial({color:0xa98747,transparent:true,opacity:.095,side:THREE.DoubleSide,depthWrite:false});
+const silhouetteEdge=new THREE.LineBasicMaterial({color:0xd1aa61,transparent:true,opacity:.43,depthTest:true});
+const silhouetteAccent=new THREE.MeshBasicMaterial({color:0xb5924f,transparent:true,opacity:.12,depthWrite:false,side:THREE.DoubleSide});
 function hullLine(points,material=silhouetteEdge){
  const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points.map(p=>new THREE.Vector3(...p))),material);shellRoot.add(line);return line
 }
@@ -332,7 +332,7 @@ function usePolarisHull(source){
  const angle=Math.atan2(transformedUp.x,transformedUp.y);
  const q=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),angle).multiply(first);
  const wrap=new THREE.Group(),ghost=source.clone(true);
- ghost.position.sub(center);ghost.traverse(o=>{if(!o.isMesh)return;o.material=new THREE.MeshBasicMaterial({color:0x277ddc,transparent:true,opacity:.105,side:THREE.DoubleSide,depthWrite:false});o.renderOrder=2});
+ ghost.position.sub(center);ghost.traverse(o=>{if(!o.isMesh)return;o.material=new THREE.MeshBasicMaterial({color:0xc39a4f,transparent:true,opacity:.17,side:THREE.DoubleSide,depthWrite:false});o.renderOrder=2});
  ghostHull=ghost;wrap.add(ghost);wrap.quaternion.copy(q);updateTurretGold();wrap.scale.setScalar(216/values[long]);shellRoot.add(wrap);
  schematicShell.visible=false;
  $('legend').querySelector('div:last-child').textContent='Translucent hull is derived from the JMBN Polaris GLB; the internal deck rooms and station positions remain reconstructed approximations.';
@@ -345,7 +345,7 @@ function isTurretMesh(o){let n=o;while(n&&n!==exteriorRoot){if(/(?:^|[_\\s-])(?:
 function makeGold(m){const c=m.clone();if(c.color)c.color.setHex(JMBN_GOLD);if(c.emissive){c.emissive.setHex(0x302007);c.emissiveIntensity=.32}if('metalness'in c)c.metalness=.72;if('roughness'in c)c.roughness=.3;if('map'in c)c.map=null;c.transparent=false;c.opacity=1;c.depthWrite=true;return c}
 function updateTurretGold(){
  if(exterior)exterior.traverse(o=>{if(!o.isMesh||!isTurretMesh(o))return;if(!turretOriginalMaterials.has(o)){turretOriginalMaterials.set(o,o.material);turretGoldMaterials.set(o,Array.isArray(o.material)?o.material.map(makeGold):makeGold(o.material))}o.material=goldTurretsEnabled?turretGoldMaterials.get(o):turretOriginalMaterials.get(o)});
- if(ghostHull)ghostHull.traverse(o=>{if(!o.isMesh||!isTurretMesh(o))return;o.material=new THREE.MeshBasicMaterial({color:goldTurretsEnabled?JMBN_GOLD:0x277ddc,transparent:!goldTurretsEnabled,opacity:goldTurretsEnabled?1:.105,side:THREE.DoubleSide,depthWrite:goldTurretsEnabled});o.renderOrder=goldTurretsEnabled?5:2});
+ if(ghostHull)ghostHull.traverse(o=>{if(!o.isMesh||!isTurretMesh(o))return;o.material=new THREE.MeshBasicMaterial({color:goldTurretsEnabled?JMBN_GOLD:0xc39a4f,transparent:!goldTurretsEnabled,opacity:goldTurretsEnabled?1:.17,side:THREE.DoubleSide,depthWrite:goldTurretsEnabled});o.renderOrder=goldTurretsEnabled?5:2});
 }
 $('goldTurretsBtn').onclick=()=>{goldTurretsEnabled=!goldTurretsEnabled;$('goldTurretsBtn').textContent=goldTurretsEnabled?'GOLD TURRETS ON':'GOLD TURRETS OFF';$('goldTurretsBtn').classList.toggle('active',goldTurretsEnabled);$('goldTurretsBtn').setAttribute('aria-pressed',String(goldTurretsEnabled));updateTurretGold()};
 
@@ -364,7 +364,7 @@ function styleCustom(){
    if(!o.userData.originalPolarisMaterial)o.userData.originalPolarisMaterial=o.material;
    if(!o.userData.goldPolarisMaterial&&customTurret(o))o.userData.goldPolarisMaterial=Array.isArray(o.material)?o.material.map(makeGold):makeGold(o.material);
    if(!o.userData.ghostPolarisMaterial&&key==='base'){
-     const ghostMat=m=>{const v=m.clone();v.color.setHex(0x286bad);v.transparent=true;v.opacity=.13;v.depthWrite=false;v.side=THREE.DoubleSide;return v};
+     const ghostMat=m=>new THREE.MeshBasicMaterial({color:0xc39a4f,transparent:true,opacity:.17,depthWrite:false,side:THREE.DoubleSide});
      o.userData.ghostPolarisMaterial=Array.isArray(o.material)?o.material.map(ghostMat):ghostMat(o.material);
    }
    o.material=(goldTurretsEnabled&&o.userData.goldPolarisMaterial)?o.userData.goldPolarisMaterial:(key==='base'&&mode==='deck'&&o.userData.ghostPolarisMaterial)?o.userData.ghostPolarisMaterial:o.userData.originalPolarisMaterial;
