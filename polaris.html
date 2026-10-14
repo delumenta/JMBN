@@ -17,11 +17,27 @@
 #pins{position:fixed;inset:0;pointer-events:none;z-index:8}.pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);background:#10170fe5;color:#ffe3a0;border:1px solid #cb9e4d;border-radius:2px;padding:5px 8px;font-size:10px;font-weight:700;box-shadow:0 0 15px #b4853a55}.pin.active{background:#826125;color:#fff}
 @media(max-width:980px){#left{width:208px;left:10px}#right{width:210px;right:10px}#status{left:230px}.brand{font-size:21px}.brand b{display:none}}
 @media(max-width:740px){#top{height:68px;padding:10px 13px}.brand{font-size:19px}#topright .pill{display:none}#left{top:auto;bottom:75px;left:8px;right:8px;width:auto;height:160px;border-radius:6px}#left .panelhead{display:none}#stationList{display:flex;overflow:auto;padding:6px;gap:5px}#stationList .station{min-width:135px;width:135px;flex:0 0 135px;border:1px solid #665739;height:100%;padding:8px}#stationList .station .tag{display:none}#right{top:77px;right:8px;width:205px;padding:11px}#detailTitle{font-size:14px;margin:7px 0}#detailText{font-size:10px}#dock{left:8px;right:8px;bottom:7px;transform:none;overflow:auto;padding:6px;justify-content:flex-start}#dock .docklabel{display:none}#dock button{font-size:10px;padding:8px}#status,#axes{display:none}.pin{font-size:9px;padding:4px}#gate{padding:21px}#gate h2{font-size:20px}}
+
+/* JMBN compact tactical station overlay */
+#right{display:none}
+#bottomHud{position:fixed;left:310px;right:20px;bottom:88px;z-index:9;display:flex;gap:14px;align-items:flex-end;justify-content:space-between;pointer-events:none}
+#stationHud{max-width:480px;min-width:260px;padding:13px 16px;background:linear-gradient(125deg,#111a14ef,#070e0ce8);border:1px solid #b18d4e88;box-shadow:0 15px 45px #0009;border-left:3px solid #dfb76a;backdrop-filter:blur(12px)}
+#hudName{font-weight:700;font-size:17px;letter-spacing:.07em;color:#ffe2a1;margin:5px 0 4px}
+#hudMeta{font-size:10px;letter-spacing:.14em;color:#ceac68}
+#hudDesc{font-size:11px;line-height:1.5;color:#b6c4b9;margin:6px 0 0}
+#hudCredit{font-size:10px;color:#b49e76;line-height:1.5;text-align:right;padding:7px 0;text-shadow:0 2px 10px #000;max-width:280px}
+.pin{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;min-width:23px;min-height:23px;padding:3px 5px;border-radius:999px;background:#0a1510ed;border:1px solid #cfa85d;color:#e6c888;box-shadow:0 0 0 3px #b18a2820,0 3px 15px #0009;font-size:9px;letter-spacing:.02em}
+.pin:hover{z-index:2;background:#56401d;color:#fff}
+.pin.active{z-index:3;background:#d1a65b;color:#14180f;border-color:#ffe5a8;box-shadow:0 0 0 4px #f2c46f25,0 0 24px #e2b6617a}
+.pin.active:after{content:attr(data-full);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);font-size:10px;color:#ffe3a5;background:#101a13f5;border:1px solid #cda45d;padding:7px 10px;white-space:nowrap;box-shadow:0 6px 18px #000b;letter-spacing:.07em;pointer-events:none}
+#status{bottom:14px}
+@media(max-width:980px){#bottomHud{left:230px;right:12px}#stationHud{min-width:0;max-width:350px}#hudCredit{max-width:190px}}
+@media(max-width:740px){#bottomHud{left:8px;right:8px;bottom:250px;align-items:flex-start;flex-direction:column;gap:5px}#stationHud{width:min(325px,100%);padding:9px 12px}#hudName{font-size:13px}#hudDesc{font-size:10px;max-height:38px;overflow:hidden}#hudCredit{text-align:left;max-width:100%;padding:2px 0;font-size:9px}#left{bottom:77px}#dock{bottom:7px}.pin.active:after{max-width:180px;white-space:normal;text-align:center;font-size:9px}}
 </style></head><body>
 <div id="scene"></div><div id="grid"></div><div id="pins"></div>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span></div></header>
 <aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
-<aside id="right"><div class="small">SELECTED STATION</div><div id="detailTitle">NO STATION SELECTED</div><div id="detailMeta">RSI POLARIS // JMBN</div><p id="detailText">Select a mount in the station directory or tap a gold marker on the model.</p><div class="notice">Bridge seats and ICC follow your annotated diagram. Torpedo Director spans the opposing consoles; Engineering Duty Officer uses the central stern structure. Turret-number mesh matches remain provisional.</div></aside>
+<div id="bottomHud" aria-live="polite"><div id="stationHud"><div class="small">JMBN // SELECTED STATION</div><div id="hudName">SELECT A STATION</div><div id="hudMeta">POLARIS // TACTICAL REFERENCE</div><p id="hudDesc">Click a gold marker or choose a station from the directory.</p></div><div id="hudCredit">Ship layout references based on Atlas Defense Industries materials.</div></div>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div><div id="axes">BOW ◀ &nbsp; // &nbsp; STERN ▶</div>
 <div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button></div>
 <div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>INITIALIZING ATLAS</h2><p>Loading the Polaris tactical blueprint and ship stations.</p><div id="gateMsg" class="micro" role="status">Connecting to JMBN ship assets…</div></div>
@@ -176,10 +192,10 @@ function stationPosition(s){
  return null
 }
 function selectStation(s){
- selected=s;$('detailTitle').textContent=s.name;
+ selected=s;$('hudName').textContent=s.name;
  const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':'POSITION PENDING';
- $('detailMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
- $('detailText').textContent=s.desc;
+ $('hudMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
+ $('hudDesc').textContent=s.desc;
  for(const [id,button]of buttons)button.classList.toggle('active',id===s.id);
  for(const [id,button]of pins)button.classList.toggle('active',id===s.id);
  const position=stationPosition(s);
@@ -197,7 +213,7 @@ function makePins(){
  $('pins').innerHTML='';pins.clear();
  for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=s.name;pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
+ pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
 }
 function styleHull(){groups.base?.traverse(o=>{if(!o.isMesh)return;if(!o.userData.jmbnOriginal)o.userData.jmbnOriginal=o.material;const turret=/turret/i.test(o.name)||/turret/i.test(o.parent?.name||'');if(turret)return;if(!o.userData.jmbnGhost){const g=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});o.userData.jmbnGhost=g}o.material=o.userData.jmbnGhost})}
 function fit(view='iso'){const box=new THREE.Box3();let any=false;for(const [k,v]of Object.entries(groups))if(v&&visible[k]){box.expandByObject(v);any=true}if(!any)return;const center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),r=Math.max(size.length()*.5,.1);const vf=THREE.MathUtils.degToRad(camera.fov),hf=2*Math.atan(Math.tan(vf/2)*camera.aspect),distance=r/Math.sin(Math.min(vf,hf)/2)*1.16;const dir=view==='top'?new THREE.Vector3(0,1,.001):new THREE.Vector3(1,.9,1.1).normalize();ctl.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.001,distance/2000);camera.far=distance+r*25;camera.updateProjectionMatrix();camera.lookAt(center);ctl.minDistance=r*.08;ctl.maxDistance=r*25;ctl.update()}
