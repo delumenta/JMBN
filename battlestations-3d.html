@@ -19,8 +19,8 @@ import * as THREE from 'https://esm.sh/three@0.170.0';
 import { GLTFLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/GLTFLoader.js';
 const $=id=>document.getElementById(id),scene=new THREE.Scene();scene.background=new THREE.Color(0x020712);scene.fog=new THREE.FogExp2(0x020712,.0009);
 const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,3000);camera.position.set(0,3,0);
-const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.prepend(renderer.domElement);
-scene.add(new THREE.AmbientLight(0x6389a8,1.2));const light=new THREE.DirectionalLight(0xd7eaff,2.1);light.position.set(200,300,-200);scene.add(light);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;renderer.setClearColor(0x020712);document.body.prepend(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0x9cbad7,0x171c2b,1.35));const light=new THREE.DirectionalLight(0xdceaff,2.8);light.position.set(200,300,-200);scene.add(light);const rimLight=new THREE.DirectionalLight(0x5686cf,1.9);rimLight.position.set(-150,-35,180);scene.add(rimLight);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<2100;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(1100+Math.random()*700);stars.push(v.x,v.y,v.z)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xb8d2e5,size:2,sizeAttenuation:false})));
 // The real Polaris exterior provides an ownship frame behind the gunner viewpoint.
 const polarisHull=new THREE.Group();scene.add(polarisHull);
@@ -59,9 +59,34 @@ bar([-1.5,-.84,-2.3],[1.5,-.84,-2.3],.10,rimMat);
 plate(2.9,.6,.9,0,-1.39,-1.75,hullMat);
 plate(1.8,.16,.15,0,-1.02,-1.3,panelMat);
 for(const x of [-.8,.8]){const grip=mesh(cockpit,new THREE.CylinderGeometry(.10,.13,.47,9),rimMat,[x,-1.35,-1.18]);grip.rotation.z=x>0?-.22:.22}
-const lamp=new THREE.PointLight(0x668eaa,.9,4);lamp.position.set(0,-.7,-1.5);cockpit.add(lamp);
+const lamp=new THREE.PointLight(0x6baedc,1.4,5);lamp.position.set(0,-.7,-1.5);cockpit.add(lamp);const warmLamp=new THREE.PointLight(0xf2bc73,.65,4);warmLamp.position.set(1.7,-1.1,-1.3);cockpit.add(warmLamp);
 
-const enemyGeo=new THREE.Group();mesh(enemyGeo,new THREE.ConeGeometry(2.8,9,3),metal,[0,0,0]).rotation.x=-Math.PI/2;mesh(enemyGeo,new THREE.BoxGeometry(14,.35,2.5),trim,[0,0,1]);mesh(enemyGeo,new THREE.BoxGeometry(2,2.1,4),metal,[0,.5,1]);const glow=new THREE.MeshBasicMaterial({color:0xff7046});mesh(enemyGeo,new THREE.BoxGeometry(1.8,.6,.3),glow,[0,0,4.2]);
+// Detailed procedural fighter silhouette: plated fuselage, swept wings, nacelles, canopy and emissive thrusters.
+const enemyGeo=new THREE.Group();
+const armor=new THREE.MeshStandardMaterial({color:0x536475,metalness:.86,roughness:.29,flatShading:true});
+const edge=new THREE.MeshStandardMaterial({color:0x192836,metalness:.77,roughness:.43});
+const plating=new THREE.MeshStandardMaterial({color:0x9ba9af,metalness:.83,roughness:.25});
+const canopy=new THREE.MeshPhysicalMaterial({color:0x122b40,metalness:.48,roughness:.12,clearcoat:1,clearcoatRoughness:.08,emissive:0x0b2236,emissiveIntensity:.5});
+const thruster=new THREE.MeshBasicMaterial({color:0x68cfff,toneMapped:false});
+const engineGlow=new THREE.MeshBasicMaterial({color:0x1c70bd,transparent:true,opacity:.52,depthWrite:false,side:THREE.DoubleSide,toneMapped:false});
+function wing(points,material){const shape=new THREE.Shape();shape.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)shape.lineTo(points[i][0],points[i][1]);shape.closePath();const g=new THREE.ExtrudeGeometry(shape,{depth:.32,bevelEnabled:true,bevelThickness:.10,bevelSize:.12,bevelSegments:1});g.rotateX(Math.PI/2);return mesh(enemyGeo,g,material,[0,.0,0])}
+const body=mesh(enemyGeo,new THREE.CylinderGeometry(1.3,2.15,12,7),armor,[0,0,0]);body.rotation.x=Math.PI/2;
+const nose=mesh(enemyGeo,new THREE.ConeGeometry(1.32,5.2,7),plating,[0,0,-8.4]);nose.rotation.x=-Math.PI/2;
+const belly=mesh(enemyGeo,new THREE.BoxGeometry(3.2,.65,7),edge,[0,-.75,1]);
+const cockpitGlass=mesh(enemyGeo,new THREE.SphereGeometry(1.35,12,8),canopy,[0,.95,-2.5]);cockpitGlass.scale.set(.75,.48,1.65);
+for(const side of [-1,1]){
+ const w=wing([[side*1.1,-4],[side*3.7,-3],[side*10.8,3.3],[side*10.4,5.3],[side*2.2,3.4]],armor);
+ w.position.y=-.28;
+ const strip=mesh(enemyGeo,new THREE.BoxGeometry(5.3,.10,.27),plating,[side*5.4,-.04,1.7]);strip.rotation.y=side*.48;
+ const engine=mesh(enemyGeo,new THREE.CylinderGeometry(1.05,1.22,7.3,10),edge,[side*3.1,-.5,2.3]);engine.rotation.x=Math.PI/2;
+ const ring=mesh(enemyGeo,new THREE.TorusGeometry(.9,.14,8,20),plating,[side*3.1,-.5,6.1]);
+ const exhaust=mesh(enemyGeo,new THREE.CircleGeometry(.77,20),thruster,[side*3.1,-.5,6.17]);
+ const flame=mesh(enemyGeo,new THREE.ConeGeometry(.74,3.7,12,1,true),engineGlow,[side*3.1,-.5,8]);flame.rotation.x=Math.PI/2;
+ const fin=mesh(enemyGeo,new THREE.BoxGeometry(.28,2.1,3.6),armor,[side*3.4,1.0,4.1]);fin.rotation.z=side*.27;
+ const gun=mesh(enemyGeo,new THREE.CylinderGeometry(.18,.26,4.6,8),plating,[side*7.8,-.4,-1.6]);gun.rotation.x=Math.PI/2;
+}
+const rear=mesh(enemyGeo,new THREE.BoxGeometry(2.7,1.7,3.8),armor,[0,.1,4.1]);
+enemyGeo.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
 const fighters=[],shots=[],sparks=[],raycaster=new THREE.Raycaster(),clock=new THREE.Clock();let active=false,wave=1,score=0,shields=100,hull=100,heat=0,yaw=0,pitch=0,assigned=null,marked=null,acked=false,acquired=false,affirmed=false,green=false,down=null,mouseFire=false,lastShot=0,lastAttack=0,spawnTimer=0,sound=false,missionEnded=false,tracking=false;
 function say(t){$('order').textContent=t;if(sound&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/(\d)-(\d)-(\d)-(\d)/g,'$1 $2 $3 $4'));u.rate=.93;u.pitch=.8;speechSynthesis.speak(u)}}
 function reply(t){$('radio').textContent='GUNNER: '+t}function notice(t){$('notice').textContent=t;clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('notice').textContent='',2500)}
@@ -87,7 +112,7 @@ function ack(){if(!assigned||acked)return notice('NO PENDING ACKNOWLEDGMENT');ac
 function acquire(){if(!acked||!marked)return notice('ACKNOWLEDGE AND MARK TRACK FIRST');if(marked!==assigned){score=Math.max(0,score-50);return notice('WRONG TRACK · WEPS NEGATIVE')}acquired=true;reply('TARGET ACQUIRED.');notice('TRACK ACQUIRED · REPORT GUNS AFFIRM')}
 function affirm(){if(!acquired)return notice('TARGET NOT ACQUIRED');affirmed=true;reply('GUNS AFFIRM.');green=true;say('4-1, FIS GREEN TRACK '+assigned.track+'. ENGAGE.')}
 function report(){if(!down)return notice('NO CONFIRMED BANDIT DOWN');reply('BANDIT DOWN, TRACK '+down.track+'.');score+=50;down=null;const alive=fighters.filter(e=>!e.dead);if(alive.length)assign();else{wave++;if(wave>4){end(true);return}for(let i=0;i<Math.min(3+wave,7);i++)spawn();assign();notice('NEW HOSTILE WAVE INBOUND')}}
-function fire(){if(!active||missionEnded||heat>95||clock.elapsedTime-lastShot<.12)return;lastShot=clock.elapsedTime;heat=Math.min(100,heat+7);const dir=new THREE.Vector3();camera.getWorldDirection(dir);const beam=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,45,6),new THREE.MeshBasicMaterial({color:0x8afbd1}));beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);beam.position.copy(camera.position).addScaledVector(dir,27);scene.add(beam);shots.push({o:beam,life:.085});raycaster.setFromCamera(new THREE.Vector2(0,0),camera);const hits=raycaster.intersectObjects(fighters.filter(e=>!e.dead).map(e=>e.group),true);if(hits.length){let o=hits[0].object;while(o.parent&&!fighters.some(e=>e.group===o))o=o.parent;const target=fighters.find(e=>e.group===o);if(target){if(!green||target!==assigned){score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}else{target.hp-=20;score+=10;if(target.hp<=0)explode(target)}}}else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')} }
+function fire(){if(!active||missionEnded||heat>95||clock.elapsedTime-lastShot<.12)return;lastShot=clock.elapsedTime;heat=Math.min(100,heat+7);const dir=new THREE.Vector3();camera.getWorldDirection(dir);const beam=new THREE.Mesh(new THREE.CylinderGeometry(.10,.23,45,8),new THREE.MeshBasicMaterial({color:0x8afbd1,toneMapped:false}));beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);beam.position.copy(camera.position).addScaledVector(dir,27);scene.add(beam);shots.push({o:beam,life:.085});const flash=new THREE.Mesh(new THREE.SphereGeometry(.65,8,6),new THREE.MeshBasicMaterial({color:0xd5fff0,toneMapped:false}));flash.position.copy(camera.position).addScaledVector(dir,3.2);scene.add(flash);shots.push({o:flash,life:.055});raycaster.setFromCamera(new THREE.Vector2(0,0),camera);const hits=raycaster.intersectObjects(fighters.filter(e=>!e.dead).map(e=>e.group),true);if(hits.length){let o=hits[0].object;while(o.parent&&!fighters.some(e=>e.group===o))o=o.parent;const target=fighters.find(e=>e.group===o);if(target){if(!green||target!==assigned){score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}else{target.hp-=20;score+=10;if(target.hp<=0)explode(target)}}}else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')} }
 function end(win){missionEnded=true;active=false;document.exitPointerLock?.();$('overlay').style.display='grid';$('intro').innerHTML='<h1>'+(win?'MISSION COMPLETE':'POLARIS LOST')+'</h1><p>FINAL SCORE: '+score+' · WAVE '+wave+'</p><button id="again">REDEPLOY</button>';$('again').onclick=()=>location.reload()}
 function begin(){active=true;$('overlay').style.display='none';for(let i=0;i<4;i++)spawn();assign();renderer.domElement.requestPointerLock?.()}
 $('start').onclick=begin;$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊 WEPS VOICE ON':'🔇 ENABLE WEPS VOICE';if(sound)say($('order').textContent)};
