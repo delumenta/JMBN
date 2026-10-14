@@ -61,6 +61,71 @@ plate(1.8,.16,.15,0,-1.02,-1.3,panelMat);
 for(const x of [-.8,.8]){const grip=mesh(cockpit,new THREE.CylinderGeometry(.10,.13,.47,9),rimMat,[x,-1.35,-1.18]);grip.rotation.z=x>0?-.22:.22}
 const lamp=new THREE.PointLight(0x6baedc,1.4,5);lamp.position.set(0,-.7,-1.5);cockpit.add(lamp);const warmLamp=new THREE.PointLight(0xf2bc73,.65,4);warmLamp.position.set(1.7,-1.1,-1.3);cockpit.add(warmLamp);
 
+// JMBN turret-gunner station: angled armoured shroud and readable, live weapon displays.
+const stationDark=new THREE.MeshStandardMaterial({color:0x11191e,metalness:.8,roughness:.4});
+const stationEdge=new THREE.MeshStandardMaterial({color:0x65717b,metalness:.84,roughness:.27});
+const stationGold=new THREE.MeshStandardMaterial({color:0x9e7842,metalness:.75,roughness:.32});
+const stationGlass=new THREE.MeshStandardMaterial({color:0x091a24,metalness:.3,roughness:.19,emissive:0x0a2431,emissiveIntensity:.55});
+const stationDisplays=[];
+function display(side){
+ const canvas=document.createElement('canvas');canvas.width=512;canvas.height=320;
+ const ctx=canvas.getContext('2d'),texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+ const material=new THREE.MeshBasicMaterial({map:texture,toneMapped:false,side:THREE.DoubleSide});
+ const group=new THREE.Group();group.position.set(side*1.40,-.93,-1.53);group.rotation.y=side*.24;group.rotation.x=-.15;cockpit.add(group);
+ const surround=mesh(group,new THREE.BoxGeometry(1.32,.90,.15),stationDark,[0,0,-.09]);
+ mesh(group,new THREE.BoxGeometry(1.23,.80,.05),stationEdge,[0,0,-.015]);
+ mesh(group,new THREE.PlaneGeometry(1.12,.70),material,[0,0,.02]);
+ for(const x of [-.58,.58])for(const y of [-.37,.37])mesh(group,new THREE.CylinderGeometry(.023,.023,.02,8),stationGold,[x,y,.023]).rotation.x=Math.PI/2;
+ const led=mesh(group,new THREE.BoxGeometry(.55,.018,.012),accentMat,[0,.375,.026]);
+ stationDisplays.push({ctx,texture,side});
+}
+for(const side of [-1,1]){
+ // Outer armour cheeks and recessed machinery flank the gunner's forward viewport.
+ const cheek=plate(.60,1.45,.65,side*2.36,-.49,-1.97,stationDark);cheek.rotation.z=side*.18;
+ const cheekTrim=plate(.075,1.18,.68,side*2.04,-.41,-1.95,stationEdge);cheekTrim.rotation.z=side*.17;
+ for(let i=0;i<5;i++){
+   const vent=plate(.33,.028,.045,side*2.33,-.90+i*.16,-1.59,stationEdge);vent.rotation.z=side*.18;
+ }
+ bar([side*1.90,-1.20,-1.85],[side*2.30,.56,-2.28],.09,stationGold);
+ const lever=plate(.15,.34,.18,side*.93,-1.21,-1.22,stationEdge);lever.rotation.z=side*.24;
+ display(side);
+}
+// Low, wide control desk and twin weapon grip housings, without obscuring the sight.
+plate(3.8,.22,.85,0,-1.67,-1.65,stationDark);
+plate(2.8,.055,.14,0,-1.49,-1.27,stationEdge);
+for(const side of [-1,1]){
+ plate(.62,.25,.44,side*.85,-1.49,-1.22,stationDark);
+ for(let j=0;j<3;j++)plate(.08,.022,.025,side*(.68+j*.15),-1.33,-1.04,j===0?stationGold:accentMat);
+}
+function paintStationDisplays(){
+ for(const d of stationDisplays){
+  const c=d.ctx,w=512,h=320;
+  c.fillStyle='#07121a';c.fillRect(0,0,w,h);
+  c.strokeStyle='#446273';c.lineWidth=3;c.strokeRect(10,10,w-20,h-20);
+  c.fillStyle='#dfb970';c.font='bold 22px monospace';c.fillText(d.side<0?'JMBN // FIRE CONTROL':'JMBN // TRACK DATA',26,43);
+  c.strokeStyle='#294453';c.beginPath();c.moveTo(20,59);c.lineTo(492,59);c.stroke();
+  c.font='18px monospace';c.fillStyle='#b5d6dc';
+  if(d.side<0){
+   c.fillText('TURRET 4-1   //   GUNS',28,94);
+   c.fillText('WEAPON POSTURE',28,133);
+   c.fillStyle=green?'#8be8ad':'#e4ae73';c.font='bold 28px monospace';c.fillText(green?'FIS GREEN':'WEAPONS HOLD',28,168);
+   c.fillStyle='#b5d6dc';c.font='19px monospace';c.fillText('HEAT  '+Math.round(heat)+'%',28,210);
+   c.fillStyle='#1b343e';c.fillRect(28,224,440,15);
+   c.fillStyle=heat>80?'#e67c57':'#70c4ba';c.fillRect(28,224,440*Math.min(100,heat)/100,15);
+   c.fillStyle='#d8bc85';c.fillText('ACK 1  /  LOCK T  /  FIRE',28,275);
+  }else{
+   c.fillText('ASSIGNED TRACK',28,94);
+   c.fillStyle='#f4d28b';c.font='bold 30px monospace';c.fillText(assigned?.track||'----',28,132);
+   c.fillStyle='#a7c9d4';c.font='19px monospace';
+   c.fillText('LOCK    '+(marked&&!marked.dead?marked.track:'NONE'),28,171);
+   c.fillText('ACQUIRED  '+(acquired?'YES':'NO'),28,205);
+   c.fillText('GUNS READY '+(affirmed?'YES':'NO'),28,239);
+   c.fillStyle='#d8bc85';c.fillText('SHIELDS '+Math.ceil(shields)+'%  HULL '+Math.ceil(hull)+'%',28,280);
+  }
+  d.texture.needsUpdate=true;
+ }
+}
+let displayRefresh=0;
 // Detailed procedural fighter silhouette: plated fuselage, swept wings, nacelles, canopy and emissive thrusters.
 const enemyGeo=new THREE.Group();
 const armor=new THREE.MeshStandardMaterial({color:0x536475,metalness:.86,roughness:.29,flatShading:true});
@@ -177,5 +242,5 @@ function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta
  yaw+=wrap(desiredYaw-yaw)*Math.min(1,dt*3.5);
  pitch+= (Math.max(-1.25,Math.min(1.25,desiredPitch))-pitch)*Math.min(1,dt*3.5);
  }else if(tracking&&(!marked||marked.dead)){tracking=false;$('trackingState').textContent='TRACK LOST · T TO LOCK'}
- camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){if(e.dead)continue;e.phase+=dt*.8;const p=e.group.position;const approach=new THREE.Vector3().subVectors(new THREE.Vector3(0,0,0),p).normalize();p.addScaledVector(approach,dt*e.speed);p.x+=Math.sin(e.phase)*dt*10;p.y+=Math.cos(e.phase*.7)*dt*7;e.group.lookAt(0,0,0);if(p.length()<32){p.multiplyScalar(7);shields=Math.max(0,shields-12);notice('HOSTILE STRIKE · SHIELDS HIT')}}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave));if(shields<=0)hull=Math.max(0,hull-n*3);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+ camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();displayRefresh+=dt;if(displayRefresh>.12){paintStationDisplays();displayRefresh=0}spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){if(e.dead)continue;e.phase+=dt*.8;const p=e.group.position;const approach=new THREE.Vector3().subVectors(new THREE.Vector3(0,0,0),p).normalize();p.addScaledVector(approach,dt*e.speed);p.x+=Math.sin(e.phase)*dt*10;p.y+=Math.cos(e.phase*.7)*dt*7;e.group.lookAt(0,0,0);if(p.length()<32){p.multiplyScalar(7);shields=Math.max(0,shields-12);notice('HOSTILE STRIKE · SHIELDS HIT')}}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave));if(shields<=0)hull=Math.max(0,hull-n*3);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 </script></body></html>
