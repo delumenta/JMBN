@@ -58,14 +58,14 @@
 #testFlag{font-size:10px;color:#e7c786;border:1px solid #8c713c;background:#242018;padding:8px 10px;letter-spacing:.12em}
 @media(max-width:1100px){#stationPreview{width:255px;right:12px;top:140px}#previewImage{height:120px}}
 @media(max-width:740px){#stationPreview{width:min(260px,calc(100vw - 20px));right:10px;top:78px}#previewImage{height:95px}.previewPlaceholder{padding:8px 12px}#previewData{padding:10px}#previewStation{font-size:13px}#previewDescription{font-size:10px;max-height:50px;overflow:hidden}#previewNote{display:none}}
-</style></head><body>
-<div id="scene"></div><div id="grid"></div><div id="pins"></div><svg id="previewConnector" aria-hidden="true"><path id="previewLine"></path><circle id="previewDot" r="4"></circle></svg>
+#placeArm.placing{background:#9a7738!important;border-color:#ffe2a5!important;color:#0a110d!important;box-shadow:0 0 18px #d7aa5670}#placementHint{position:fixed;left:50%;top:96px;transform:translateX(-50%);z-index:16;background:#142018f0;border:1px solid #dcb76e;padding:12px 18px;color:#f6d89b;font-size:11px;letter-spacing:.06em;display:none;pointer-events:none;text-align:center;max-width:480px}#placementHint.show{display:block}@media(max-width:740px){#placementHint{left:12px;right:12px;top:74px;transform:none;font-size:10px}}</style></head><body>
+<div id="scene"></div><div id="placementHint" role="status">PLACEMENT MODE · Click the centre of the Armory room on the visible Main Deck. ESC to cancel.</div><div id="grid"></div><div id="pins"></div><svg id="previewConnector" aria-hidden="true"><path id="previewLine"></path><circle id="previewDot" r="4"></circle></svg>
 <section id="stationPreview" aria-label="In-game station preview"><div id="previewTop"><span>JMBN // STATION RECON</span><button id="previewClose" title="Close preview" aria-label="Close preview">×</button></div><div id="previewImage"><div class="previewPlaceholder"><strong>IN-GAME STATION IMAGE</strong><small>SCREENSHOT TO BE ADDED</small></div></div><div id="previewData"><div id="previewStation">INTEGRATED COMMAND CENTRE</div><div id="previewLocation">BRIDGE · ICC</div><p id="previewDescription">Hover a station to preview its real in-game position. Click to keep this reference open.</p><div id="previewNote">PREVIEW CONCEPT · JMBN POLARIS</div></div></section>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span><span id="testFlag">UI TEST</span></div></header>
 <aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
 <div id="bottomHud" aria-live="polite"><div id="stationHud"><div class="small">JMBN // SELECTED STATION</div><div id="hudName">SELECT A STATION</div><div id="hudMeta">POLARIS // TACTICAL REFERENCE</div><p id="hudDesc">Click a gold marker or choose a station from the directory.</p></div><div id="hudCredit">Ship layout references based on Atlas Defense Industries materials.</div></div>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div><div id="axes">BOW ◀ &nbsp; // &nbsp; STERN ▶</div>
-<div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button></div>
+<div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button><div class="sp"></div><button id="placeArm" title="Place ARM by clicking the ship">PLACE ARM</button><button id="copyArm" title="Copy saved Armory position">COPY POSITION</button></div>
 <div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>INITIALIZING ATLAS</h2><p>Loading the Polaris tactical blueprint and ship stations.</p><div id="gateMsg" class="micro" role="status">Connecting to JMBN ship assets…</div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
@@ -238,6 +238,42 @@ const stations=[
 let selected=stations[0],filter='all',markersOn=true;
 const buttons=new Map(),pins=new Map(),tmp=new THREE.Vector3();
 function stationNode(s,name=s.node){if(!name)return null;let result=null;groups[s.layer]?.traverse(o=>{if(o.name===name)result=o});return result}
+const ARMORY_STORAGE_KEY='jmbn-polaris-armory-placement-v1';
+const armoryStation=stations.find(s=>s.id==='armory');
+let placingArm=false;
+try{const saved=JSON.parse(localStorage.getItem(ARMORY_STORAGE_KEY)||'null');if(Array.isArray(saved)&&saved.length===3&&saved.every(Number.isFinite))armoryStation.point=saved}catch(e){console.warn('Armory position cache',e)}
+function placementMode(enabled){
+ placingArm=enabled;
+ $('placeArm').classList.toggle('placing',enabled);
+ $('placeArm').textContent=enabled?'CANCEL PLACEMENT':'PLACE ARM';
+ $('placementHint').classList.toggle('show',enabled);
+ renderer.domElement.style.cursor=enabled?'crosshair':'';
+ ctl.enabled=!enabled;
+ if(enabled){if(!visible.main){visible.main=true;syncLayers()}if(!markersOn){markersOn=true;$('labelsToggle').classList.add('active');$('labelsToggle').textContent='MARKERS ON'}}
+}
+$('placeArm').onclick=()=>placementMode(!placingArm);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&placingArm)placementMode(false)});
+$('copyArm').onclick=()=>{
+ const coords=JSON.stringify(armoryStation.point);
+ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(coords).then(()=>{$('copyArm').textContent='COPIED';setTimeout(()=>$('copyArm').textContent='COPY POSITION',1700)}).catch(()=>window.prompt('Copy these Armory coordinates',coords))}else window.prompt('Copy these Armory coordinates',coords)
+};
+const pickRaycaster=new THREE.Raycaster(),pickPointer=new THREE.Vector2();
+renderer.domElement.addEventListener('pointerdown',event=>{
+ if(!placingArm||event.button!==0)return;
+ const bounds=renderer.domElement.getBoundingClientRect();
+ pickPointer.set(((event.clientX-bounds.left)/bounds.width)*2-1,-((event.clientY-bounds.top)/bounds.height)*2+1);
+ pickRaycaster.setFromCamera(pickPointer,camera);
+ // Match only visible main-deck geometry, not turrets or ghost hull.
+ const meshes=[];groups.main?.traverse(o=>{if(o.isMesh&&o.visible)meshes.push(o)});
+ const hits=pickRaycaster.intersectObjects(meshes,false);
+ if(!hits.length){$('placementHint').textContent='No Main Deck surface at this spot. Click directly on the room floor or furniture.';return}
+ const local=groups.main.worldToLocal(hits[0].point.clone());
+ const precise=[local.x,local.y,local.z].map(v=>Number(v.toFixed(5)));
+ armoryStation.point=precise;
+ try{localStorage.setItem(ARMORY_STORAGE_KEY,JSON.stringify(precise))}catch(e){console.warn('Position cannot be saved',e)}
+ placementMode(false);selectStation(armoryStation);
+ $('placementHint').textContent='PLACEMENT MODE · Click the centre of the Armory room on the visible Main Deck. ESC to cancel.';
+});
 function stationPosition(s){
  if(s.point&&groups[s.layer])return groups[s.layer].localToWorld(new THREE.Vector3(...s.point));
  if(s.nodes){const points=s.nodes.map(n=>stationNode(s,n)).filter(Boolean).map(n=>n.getWorldPosition(new THREE.Vector3()));if(points.length===s.nodes.length)return points.reduce((sum,p)=>sum.add(p),new THREE.Vector3()).divideScalar(points.length)}
