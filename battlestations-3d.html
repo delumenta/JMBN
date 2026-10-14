@@ -106,7 +106,7 @@ function radar(){
  for(const e of fighters){if(e.dead)continue;
  const p=e.group.position.clone().sub(camera.position);
  // Rotate world-space X/Z by camera yaw; top of radar = current 3D forward heading.
- const rx=p.x*cos+p.z*sin,rz=-p.x*sin+p.z*cos;
+ const rx=p.x*cos-p.z*sin,rz=p.x*sin+p.z*cos;
  const mx=cx+rx/5,my=cy+rz/5;
  const radius=Math.hypot(mx-cx,my-cy),scale=radius>81?81/radius:1;
  const x=cx+(mx-cx)*scale,y=cy+(my-cy)*scale;
