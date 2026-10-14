@@ -221,7 +221,7 @@ function stationPosition(s){
 }
 function selectStation(s){
  selected=s;$('hudName').textContent=s.name;
- const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':s.point?'REFERENCE PLACEMENT':'POSITION PENDING';
+ const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':s.point?'SHIP LOCATION':'POSITION PENDING';
  $('hudMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
  $('hudDesc').textContent=s.desc;
  for(const [id,button]of buttons)button.classList.toggle('active',id===s.id);
