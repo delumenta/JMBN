@@ -204,7 +204,40 @@ function ack(){if(!assigned||acked)return notice('NO PENDING ACKNOWLEDGMENT');ac
 function acquire(){if(!acked||!marked)return notice('ACKNOWLEDGE AND MARK TRACK FIRST');if(marked!==assigned){score=Math.max(0,score-50);return notice('WRONG TRACK · WEPS NEGATIVE')}acquired=true;reply('TARGET ACQUIRED.');notice('TRACK ACQUIRED · REPORT GUNS AFFIRM')}
 function affirm(){if(!acquired)return notice('TARGET NOT ACQUIRED');affirmed=true;reply('GUNS AFFIRM.');green=true;say('4-1, FIS GREEN TRACK '+assigned.track+'. ENGAGE.')}
 function report(){if(!down)return notice('NO CONFIRMED BANDIT DOWN');reply('BANDIT DOWN, TRACK '+down.track+'.');score+=50;down=null;const alive=fighters.filter(e=>!e.dead);if(alive.length)assign();else{wave++;if(wave>4){end(true);return}for(let i=0;i<Math.min(3+wave,7);i++)spawn();assign();notice('NEW HOSTILE WAVE INBOUND')}}
-function fire(){if(!active||missionEnded||heat>95||clock.elapsedTime-lastShot<.12)return;lastShot=clock.elapsedTime;heat=Math.min(100,heat+7);const dir=new THREE.Vector3();camera.getWorldDirection(dir);const beam=new THREE.Mesh(new THREE.CylinderGeometry(.10,.23,45,8),new THREE.MeshBasicMaterial({color:0x8afbd1,toneMapped:false}));beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);beam.position.copy(camera.position).addScaledVector(dir,27);scene.add(beam);shots.push({o:beam,life:.085});const flash=new THREE.Mesh(new THREE.SphereGeometry(.65,8,6),new THREE.MeshBasicMaterial({color:0xd5fff0,toneMapped:false}));flash.position.copy(camera.position).addScaledVector(dir,3.2);scene.add(flash);shots.push({o:flash,life:.055});raycaster.setFromCamera(new THREE.Vector2(0,0),camera);const hits=raycaster.intersectObjects(fighters.filter(e=>!e.dead).map(e=>e.group),true);if(hits.length){let o=hits[0].object;while(o.parent&&!fighters.some(e=>e.group===o))o=o.parent;const target=fighters.find(e=>e.group===o);if(target){if(!green||target!==assigned){score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}else{target.hp-=20;score+=10;if(target.hp<=0)explode(target)}}}else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')} }
+// Twin-barrel turret fire: actual 3D bolts converge on the reticle / target.
+let barrelIndex=0;
+function fire(){
+ if(!active||missionEnded||heat>95||clock.elapsedTime-lastShot<.12)return;
+ lastShot=clock.elapsedTime;heat=Math.min(100,heat+7);
+ const dir=new THREE.Vector3();camera.getWorldDirection(dir);
+ raycaster.setFromCamera(new THREE.Vector2(0,0),camera);
+ const hits=raycaster.intersectObjects(fighters.filter(e=>!e.dead).map(e=>e.group),true);
+ const aimPoint=hits.length?hits[0].point.clone():camera.position.clone().addScaledVector(dir,520);
+ const barrelSide=(barrelIndex++%2===0)?-1:1;
+ const muzzleLocal=new THREE.Vector3(barrelSide*2.05,-.84,-2.7);
+ const muzzle=camera.localToWorld(muzzleLocal.clone());
+ const shotDir=aimPoint.clone().sub(muzzle),shotDistance=shotDir.length();
+ const shotUnit=shotDir.normalize();
+ const beamLength=Math.min(shotDistance,180);
+ const beam=new THREE.Mesh(new THREE.CylinderGeometry(.075,.15,beamLength,8),new THREE.MeshBasicMaterial({color:0xff6c4c,toneMapped:false,transparent:true,opacity:.98}));
+ beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),shotUnit);
+ beam.position.copy(muzzle).addScaledVector(shotUnit,beamLength/2);
+ scene.add(beam);shots.push({o:beam,life:.10});
+ const halo=new THREE.Mesh(new THREE.CylinderGeometry(.20,.32,beamLength,8),new THREE.MeshBasicMaterial({color:0xff4627,transparent:true,opacity:.22,depthWrite:false,toneMapped:false}));
+ halo.quaternion.copy(beam.quaternion);halo.position.copy(beam.position);scene.add(halo);shots.push({o:halo,life:.085});
+ const flash=new THREE.Mesh(new THREE.SphereGeometry(.45,10,8),new THREE.MeshBasicMaterial({color:0xffd4a2,toneMapped:false}));
+ flash.position.copy(muzzle);scene.add(flash);shots.push({o:flash,life:.065});
+ if(hits.length){
+  const impact=new THREE.Mesh(new THREE.SphereGeometry(1.1,12,8),new THREE.MeshBasicMaterial({color:0xffb06b,toneMapped:false,transparent:true,opacity:.9}));
+  impact.position.copy(hits[0].point);scene.add(impact);shots.push({o:impact,life:.14});
+  let o=hits[0].object;while(o.parent&&!fighters.some(e=>e.group===o))o=o.parent;
+  const target=fighters.find(e=>e.group===o);
+  if(target){
+   if(!green||target!==assigned){score=Math.max(0,score-30);notice('UNAUTHORIZED FIRE · −30')}
+   else{target.hp-=20;score+=10;if(target.hp<=0)explode(target)}
+  }
+ }else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')}
+}
 function end(win){missionEnded=true;active=false;document.exitPointerLock?.();$('overlay').style.display='grid';$('intro').innerHTML='<h1>'+(win?'MISSION COMPLETE':'POLARIS LOST')+'</h1><p>FINAL SCORE: '+score+' · WAVE '+wave+'</p><button id="again">REDEPLOY</button>';$('again').onclick=()=>location.reload()}
 function begin(){active=true;$('overlay').style.display='none';for(let i=0;i<4;i++)spawn();assign();renderer.domElement.requestPointerLock?.()}
 $('start').onclick=begin;$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊 WEPS VOICE ON':'🔇 ENABLE WEPS VOICE';if(sound)say($('order').textContent)};
