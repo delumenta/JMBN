@@ -90,6 +90,33 @@ for(const side of [-1,1]){
  const lever=plate(.15,.34,.18,side*.93,-1.21,-1.22,stationEdge);lever.rotation.z=side*.24;
  display(side);
 }
+// Reference-inspired enclosed gunner viewport: reinforced overhead arch, inset ribs and console housings.
+const frameBlack=new THREE.MeshStandardMaterial({color:0x0b1117,metalness:.85,roughness:.36});
+const frameHighlight=new THREE.MeshStandardMaterial({color:0x52616b,metalness:.83,roughness:.27});
+const statusAmber=new THREE.MeshBasicMaterial({color:0xe0ae65,toneMapped:false});
+const statusBlue=new THREE.MeshBasicMaterial({color:0x6faac8,toneMapped:false});
+bar([-3.15,1.54,-2.65],[3.15,1.54,-2.65],.18,frameBlack);
+bar([-2.65,1.31,-2.57],[2.65,1.31,-2.57],.07,frameHighlight);
+for(const side of [-1,1]){
+ bar([side*3.15,1.54,-2.65],[side*2.38,.94,-2.51],.18,frameBlack);
+ bar([side*2.38,.94,-2.51],[side*1.93,-.57,-2.22],.12,frameBlack);
+ bar([side*2.45,1.04,-2.58],[side*2.01,-.56,-2.24],.045,frameHighlight);
+ // Sculpted cheek fairings and stacked service covers.
+ const shoulder=plate(.83,.24,.50,side*2.74,.99,-2.45,frameBlack);shoulder.rotation.z=side*.23;
+ for(let i=0;i<4;i++){
+  const rib=plate(.52,.07,.20,side*2.60,.55-i*.23,-2.18,frameHighlight);rib.rotation.z=side*.17;
+ }
+ for(let i=0;i<6;i++)plate(.045,.018,.035,side*(2.37+(i%3)*.13),-.65+Math.floor(i/3)*.11,-1.60,i%3===0?statusAmber:statusBlue);
+ // Side-console keyboard and shallow mechanical mounting arms.
+ const arm=plate(.24,.22,.85,side*1.39,-1.29,-1.54,frameBlack);arm.rotation.y=side*.22;
+ const buttonShelf=plate(.83,.09,.43,side*1.40,-1.40,-1.19,stationEdge);buttonShelf.rotation.y=side*.24;
+ for(let row=0;row<2;row++)for(let col=0;col<5;col++){
+  plate(.075,.015,.060,side*(1.11+col*.14),-1.345,-1.35+row*.12,(col===0&&row===0)?statusAmber:statusBlue);
+ }
+}
+// Overhead tactical light bar, restrained so the centre reticle stays unobstructed.
+plate(2.45,.12,.26,0,1.54,-2.57,frameBlack);
+for(let i=0;i<9;i++)plate(.13,.026,.025,-.88+i*.22,1.44,-2.405,i===4?statusAmber:statusBlue);
 // Low, wide control desk and twin weapon grip housings, without obscuring the sight.
 plate(3.8,.22,.85,0,-1.67,-1.65,stationDark);
 plate(2.8,.055,.14,0,-1.49,-1.27,stationEdge);
