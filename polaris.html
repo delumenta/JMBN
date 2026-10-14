@@ -58,7 +58,50 @@
 
 @media(max-width:1100px){#stationPreview{width:255px;right:12px;top:140px}#previewImage{height:120px}}
 @media(max-width:740px){#stationPreview{width:min(260px,calc(100vw - 20px));right:10px;top:78px}#previewImage{height:95px}.previewPlaceholder{padding:8px 12px}#previewData{padding:10px}#previewStation{font-size:13px}#previewDescription{font-size:10px;max-height:50px;overflow:hidden}#previewNote{display:none}}
-#atlasTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 12px 4px}#atlasTabs button{font-weight:700;font-size:11px;letter-spacing:.09em;color:#bbbdad;background:#0b1712;border:1px solid #646244;padding:11px 8px;cursor:pointer}#atlasTabs button.active{background:linear-gradient(125deg,#705324,#3e311e);border-color:#e6bd6f;color:#ffe6a4;box-shadow:inset 0 0 14px #b78a3e22}#atlasTabs button:hover{border-color:#e6bd6f}#stationFilters{padding-top:6px}#stationList .station small{letter-spacing:.025em}@media(max-width:740px){#atlasTabs{padding:8px 6px 3px}#atlasTabs button{padding:7px 4px;font-size:10px}}</style></head><body>
+#atlasTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 12px 4px}#atlasTabs button{font-weight:700;font-size:11px;letter-spacing:.09em;color:#bbbdad;background:#0b1712;border:1px solid #646244;padding:11px 8px;cursor:pointer}#atlasTabs button.active{background:linear-gradient(125deg,#705324,#3e311e);border-color:#e6bd6f;color:#ffe6a4;box-shadow:inset 0 0 14px #b78a3e22}#atlasTabs button:hover{border-color:#e6bd6f}#stationFilters{padding-top:6px}#stationList .station small{letter-spacing:.025em}@media(max-width:740px){#atlasTabs{padding:8px 6px 3px}#atlasTabs button{padding:7px 4px;font-size:10px}}
+/* Mobile Polaris layout: full-width viewer with compact controls and non-overlapping station details. */
+@media(max-width:740px){
+ html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
+ #top{height:61px;padding:8px 12px;align-items:center}
+ .eyebrow{font-size:8px;letter-spacing:.16em}
+ .brand{font-size:18px;letter-spacing:.08em}
+ #scene{inset:61px 0 0}
+ #pins{inset:61px 0 0}
+ #grid{top:61px}
+ #left{top:auto;bottom:calc(53px + env(safe-area-inset-bottom,0px));left:8px;right:8px;height:134px;min-height:0;z-index:10;background:#09130ff5}
+ #atlasTabs{padding:6px 6px 2px;gap:5px}
+ #atlasTabs button{padding:6px 5px;font-size:10px}
+ .filters{padding:4px 6px;gap:4px}
+ .filters button{font-size:9px;padding:5px 3px}
+ #stationList{padding:3px 6px 6px;gap:5px;overflow-x:auto;overflow-y:hidden}
+ #stationList .station{height:100%;min-width:138px;width:138px;flex:0 0 138px;padding:7px;gap:6px}
+ #stationList .station strong{font-size:10px}
+ #stationList .station small{font-size:9px}
+ #stationList .station .num{min-width:28px;padding:5px 3px}
+ #dock{left:8px;right:8px;bottom:calc(5px + env(safe-area-inset-bottom,0px));height:42px;padding:4px;gap:5px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;z-index:12}
+ #dock button{flex:0 0 auto;font-size:9px;padding:7px 9px}
+ #dock .sp{flex:0 0 1px}
+ #bottomHud{left:8px;right:8px;bottom:calc(194px + env(safe-area-inset-bottom,0px));gap:0;pointer-events:none}
+ #stationHud{width:min(290px,78vw);max-width:290px;min-width:0;padding:8px 10px;background:#09130fe8;pointer-events:none}
+ #hudName{font-size:12px;margin:3px 0}
+ #hudMeta{font-size:9px;letter-spacing:.05em}
+ #hudDesc{font-size:10px;line-height:1.25;margin-top:4px;max-height:26px;overflow:hidden}
+ #hudCredit{display:none}
+ #stationPreview{position:fixed;left:8px;right:8px;top:69px;width:auto;max-width:none;z-index:13;max-height:min(32dvh,205px);overflow:auto;background:#09130ff7;transform:translateY(-8px)}
+ #stationPreview.show{transform:translateY(0)}
+ #previewTop{padding:7px 9px}
+ #previewTop span{font-size:9px}
+ #previewImage{display:none}
+ #previewData{padding:8px 10px 10px}
+ #previewStation{font-size:13px}
+ #previewLocation{font-size:9px;margin-top:3px}
+ #previewDescription{font-size:10px;line-height:1.35;margin:5px 0 0;max-height:44px;overflow:auto}
+ #previewConnector{display:none!important}
+ .pin{font-size:8px;min-width:19px;min-height:19px;padding:2px 4px}
+ .pin.active:after{display:none}
+}
+@media(max-width:390px){#stationHud{max-width:240px}#bottomHud{bottom:calc(192px + env(safe-area-inset-bottom,0px))}#stationPreview{max-height:170px}}
+</style></head><body>
 <div id="scene"></div><div id="grid"></div><div id="pins"></div><svg id="previewConnector" aria-hidden="true"><path id="previewLine"></path><circle id="previewDot" r="4"></circle></svg>
 <section id="stationPreview" aria-label="In-game station preview"><div id="previewTop"><span>JMBN // STATION RECON</span><button id="previewClose" title="Close preview" aria-label="Close preview">×</button></div><div id="previewImage"><div class="previewPlaceholder"><strong>IN-GAME STATION IMAGE</strong><small>SCREENSHOT TO BE ADDED</small></div></div><div id="previewData"><div id="previewStation">INTEGRATED COMMAND CENTRE</div><div id="previewLocation">BRIDGE · ICC</div><p id="previewDescription">Hover a station to preview its real in-game position. Click to keep this reference open.</p><div id="previewNote">IN-GAME SCREENSHOT PREVIEW · COMING SOON</div></div></section>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span></div></header>
