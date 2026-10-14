@@ -302,27 +302,61 @@ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition
 let voiceMode='off',voiceListening=false,voiceHeld=false,voiceStarting=false;
 let voiceEngine=null;
 const voiceStatus=()=>$('voiceStatus').textContent=!SpeechRecognition?'UNSUPPORTED':voiceListening?'LISTENING':voiceMode==='off'?'OFF':voiceMode==='continuous'?'READY':'PTT READY';
-function voiceIntent(raw){
- const words=raw.toLowerCase().replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
- const numbers=(words.match(/\d/g)||[]).join('');
- const expected=assigned?.track.replace(/-/g,'')||'';
- const hasTrack=expected&&numbers.includes(expected);
- if(/bandit (down|destroyed)|target (down|destroyed)/.test(words)){if(down){report();return 'BANDIT DOWN CONFIRMED'}return 'NO BANDIT DOWN TO REPORT'}
- if(/guns? affirm|weapons? (ready|affirm)/.test(words)){affirm();return 'GUNS AFFIRM RECEIVED'}
- if(/target acquired|track acquired|contact acquired/.test(words)){acquire();return 'TARGET ACQUIRED RECEIVED'}
- if(/\b(aye|acknowledge|acknowledged|copy|covering track)\b/.test(words)){
-  if(assigned&&numbers.length>=4&&!hasTrack)return 'TRACK NUMBER MISMATCH · REPEAT';
-  ack();return 'ACKNOWLEDGEMENT RECEIVED';
+// Normalize spoken digits, including "eight seven six two", "oh one five one" and 8-7-6-2.
+const digitWords={zero:'0',oh:'0',o:'0',one:'1',won:'1',two:'2',to:'2',too:'2',three:'3',four:'4',for:'4',five:'5',six:'6',seven:'7',eight:'8',ate:'8',nine:'9'};
+function radioTokens(raw){return raw.toLowerCase().replace(/[-–—]/g,' ').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean)}
+function spokenTracks(raw){
+ const t=radioTokens(raw),out=[];
+ for(let i=0;i<t.length;i++){
+  let digits='';
+  for(let j=i;j<t.length;j++){
+   const word=t[j];
+   if(/^\d+$/.test(word))digits+=word;
+   else if(Object.prototype.hasOwnProperty.call(digitWords,word))digits+=digitWords[word];
+   else break;
+   if(digits.length>=4){out.push(digits);break}
+  }
  }
- if(/engaging/.test(words))return 'ENGAGING REPORTED';
- return 'UNRECOGNIZED · USE RADIO PHRASEOLOGY';
+ return out;
+}
+function voiceIntent(raw){
+ const words=radioTokens(raw).join(' ');
+ const tracks=spokenTracks(raw);
+ const expected=assigned?.track.replace(/-/g,'')||'';
+ const matchesTrack=expected&&tracks.some(t=>t.includes(expected));
+ const hasOtherTrack=tracks.some(t=>!t.includes(expected));
+ const needsTrack=(label)=>{if(!assigned)return 'NO ASSIGNED TRACK';if(matchesTrack)return null;return hasOtherTrack?'INCORRECT TRACK NUMBER · REPEAT':label+' · INCLUDE TRACK NUMBER'};
+ if(/\b(bandit down|target destroyed|bandit destroyed)\b/.test(words)){
+  if(!down)return 'NO CONFIRMED BANDIT DOWN';
+  const reportTrack=down.track.replace(/-/g,'');
+  if(!tracks.some(t=>t.includes(reportTrack)))return 'REPORT BANDIT TRACK NUMBER';
+  report();return 'BANDIT DOWN · CORRECT';
+ }
+ if(/\b(guns? affirm|guns? ready)\b/.test(words)){
+  if(!acquired)return 'TARGET NOT YET ACQUIRED';
+  affirm();return 'GUNS AFFIRM · CORRECT';
+ }
+ if(/\b(target acquired|track acquired|contact acquired)\b/.test(words)){
+  if(!acked)return 'ACKNOWLEDGE WEPS FIRST';
+  acquire();return 'TARGET ACQUIRED · CORRECT';
+ }
+ if(/\b(aye|acknowledged|acknowledge|copy|covering track)\b/.test(words)){
+  if(acked)return 'ALREADY ACKNOWLEDGED';
+  const problem=needsTrack('ACK');
+  if(problem)return problem;
+  if(!/\bcovering\b/.test(words))return 'REPEAT · SAY COVERING TRACK';
+  if(!/\b(gun|guns)\b/.test(words))return 'REPEAT · SAY WITH GUNS';
+  ack();return 'ACKNOWLEDGEMENT · CORRECT';
+ }
+ if(/\bengaging\b/.test(words))return green?'ENGAGING · COPIED':'FIS NOT GREEN · HOLD FIRE';
+ return 'UNRECOGNIZED · REPEAT RADIO CALL';
 }
 function stopVoice(){if(voiceEngine&&voiceListening)voiceEngine.stop()}
 function startVoice(){
  if(!SpeechRecognition){$('voiceHeard').textContent='Speech recognition unavailable in this browser';voiceStatus();return}
  if(!active||voiceListening||voiceStarting)return;
  if(!voiceEngine){
-  voiceEngine=new SpeechRecognition();voiceEngine.lang='en-SG';voiceEngine.continuous=true;voiceEngine.interimResults=true;
+  voiceEngine=new SpeechRecognition();voiceEngine.lang='en-SG';voiceEngine.continuous=true;voiceEngine.interimResults=true;voiceEngine.maxAlternatives=3;
   voiceEngine.onstart=()=>{voiceListening=true;voiceStarting=false;voiceStatus()};
   voiceEngine.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const result=e.results[i],heard=result[0].transcript;$('voiceHeard').textContent=(result.isFinal?'HEARD: ':'LISTENING: ')+heard;if(result.isFinal){const status=voiceIntent(heard);$('voiceHeard').textContent=heard+' · '+status}}};
   voiceEngine.onerror=e=>{voiceStarting=false;$('voiceHeard').textContent='MIC: '+e.error;if(['not-allowed','service-not-allowed','audio-capture'].includes(e.error)){voiceMode='off';$('voiceToggle').textContent='🎙 CONTINUOUS: OFF'}voiceStatus()};
