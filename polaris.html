@@ -257,20 +257,30 @@ const stations=[
  {
   "id": "quarters",
   "name": "CREW QUARTERS",
-  "location": "MIDSHIP · ACCOMMODATION",
+  "location": "MIDSHIP · CREW ACCOMMODATION",
   "cat": "room",
   "atlas": "habitat",
   "layer": "main",
-  "desc": "Crew sleeping and personal quarters. Exact room marker to be added."
+  "desc": "Crew living quarters. Individual room assignments will be added later.",
+  "point": [
+   0.32458,
+   0.04745,
+   -0.48072
+  ]
  },
  {
   "id": "mess",
-  "name": "MESS / GALLEY",
-  "location": "MIDSHIP · CREW FACILITIES",
+  "name": "MESS HALL",
+  "location": "MIDSHIP · MESS HALL",
   "cat": "room",
   "atlas": "habitat",
   "layer": "main",
-  "desc": "Crew dining and shared facilities. Exact room marker to be added."
+  "desc": "Shared dining and gathering area for Polaris crew.",
+  "point": [
+   -0.29611,
+   0.04745,
+   -0.32026
+  ]
  },
  {
   "id": "rec",
@@ -280,6 +290,20 @@ const stations=[
   "atlas": "habitat",
   "layer": "main",
   "desc": "Shared crew recreation space. Exact room marker to be added."
+ },
+ {
+  "id": "captain",
+  "name": "CAPTAIN'S ROOM",
+  "location": "MIDSHIP · CAPTAIN’S QUARTERS",
+  "cat": "room",
+  "atlas": "habitat",
+  "layer": "main",
+  "point": [
+   0.20283,
+   0.04745,
+   -1.19345
+  ],
+  "desc": "Captain's private quarters aboard the Polaris."
  }
 ];
 let atlasMode='combat',selected=stations.find(s=>s.id==='helm'),filter='all',markersOn=true;
@@ -331,7 +355,7 @@ function makePins(){
  $('pins').innerHTML='';pins.clear();
  for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
+ pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CQ',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
  pin.onmouseleave=()=>{if(!previewPinned)hidePreview()};
  pin.onclick=()=>{previewPinned=false;selectStation(s)};$('pins').append(pin);pins.set(s.id,pin)}
 }
