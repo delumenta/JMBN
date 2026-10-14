@@ -20,8 +20,8 @@
 </style></head><body>
 <div id="scene"></div><div id="grid"></div><div id="pins"></div>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span><label id="loadBtn">LOAD GLBs <input id="files" type="file" accept=".glb" multiple hidden></label></div></header>
-<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
-<aside id="right"><div class="small">SELECTED STATION</div><div id="detailTitle">NO STATION SELECTED</div><div id="detailMeta">RSI POLARIS // JMBN</div><p id="detailText">Select a mount in the station directory or tap a gold marker on the model.</p><div class="notice">Turret locations are anchored to named meshes in the Base GLB. Mount-number mapping is provisional until confirmed against JMBN's in-game station guide.</div></aside>
+<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
+<aside id="right"><div class="small">SELECTED STATION</div><div id="detailTitle">NO STATION SELECTED</div><div id="detailMeta">RSI POLARIS // JMBN</div><p id="detailText">Select a mount in the station directory or tap a gold marker on the model.</p><div class="notice">Bridge seats and ICC follow your annotated diagram. Torpedo Director spans the opposing consoles; Engineering Duty Officer uses the central stern structure. Turret-number mesh matches remain provisional.</div></aside>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div><div id="axes">BOW ◀ &nbsp; // &nbsp; STERN ▶</div>
 <div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button></div>
 <div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>YOUR STATION AWAITS.</h2><p>Load the four Polaris models to reveal the gold-accented ship blueprint, interior decks and turret positions.</p><label id="loadBtn">SELECT POLARIS MODELS <input id="gateFiles" type="file" accept=".glb" multiple hidden></label><div id="gateMsg" class="micro">Select Base Gold Accents, Main Deck, Cargo and Engineering GLBs.<br>Models are loaded locally; your files aren't uploaded.</div></div>
@@ -38,22 +38,175 @@ const ctl=new OrbitControls(camera,renderer.domElement);ctl.enableDamping=true;c
 const groups={base:null,main:null,cargo:null,engineering:null},visible={base:true,main:true,cargo:true,engineering:true};
 const root=new THREE.Group();scene.add(root);
 const stations=[
-{id:'41',name:'MOUNT 4-1',cat:'turret',node:'polaris_turret_top_left',desc:'Forward port-side turret. Identified from ship geometry; JMBN mount-number association needs confirmation.'},
-{id:'42',name:'MOUNT 4-2',cat:'turret',node:'polaris_turret_top_right',desc:'Forward starboard-side turret. JMBN mount-number association needs confirmation.'},
-{id:'31',name:'MOUNT 3-1',cat:'turret',node:'polaris_turret_side_left',desc:'Aft port-side turret. JMBN mount-number association needs confirmation.'},
-{id:'32',name:'MOUNT 3-2',cat:'turret',node:'polaris_turret_side_right',desc:'Aft starboard-side turret. JMBN mount-number association needs confirmation.'},
-{id:'61',name:'MOUNT 6-1',cat:'turret',node:'polaris_turret_front',desc:'Forward turret at the bow, based on the named Base GLB mesh. Mount designation needs verification.'},
-{id:'torp',name:'TORPEDO DIRECTOR',cat:'support',node:null,desc:'Torpedo operations are forward on the cargo deck. Exact console coordinate has not been established.'},
-{id:'med',name:'MED BAY',cat:'support',node:null,desc:'Important medical location. Exact coordinate needs confirmation from an in-game reference.'},
-{id:'eng',name:'ENGINEERING / MEZZANINE',cat:'support',node:null,desc:'Engineering section is preserved from the separate Engineering GLB, including its mezzanine.'}
+ {
+  "id": "helm",
+  "name": "HELMSMAN",
+  "cat": "command",
+  "layer": "main",
+  "node": "chair030",
+  "desc": "Upper-left bridge seat, per your annotated bridge diagram."
+ },
+ {
+  "id": "ood",
+  "name": "OFFICER OF THE DECK",
+  "cat": "command",
+  "layer": "main",
+  "node": "chair027",
+  "desc": "Upper-right bridge seat, per your annotated bridge diagram."
+ },
+ {
+  "id": "cmd",
+  "name": "COMMAND CHAIR",
+  "cat": "command",
+  "layer": "main",
+  "node": "chair031",
+  "desc": "Middle bridge seat."
+ },
+ {
+  "id": "air",
+  "name": "CHIEF OF THE WATCH / AIR",
+  "cat": "command",
+  "layer": "main",
+  "node": "chair033",
+  "desc": "Lower-left bridge seat."
+ },
+ {
+  "id": "surface",
+  "name": "SURFACE",
+  "cat": "command",
+  "layer": "main",
+  "node": "chair032",
+  "desc": "Lower-right bridge seat."
+ },
+ {
+  "id": "icc",
+  "name": "INTEGRATED COMMAND CENTRE",
+  "cat": "command",
+  "layer": "main",
+  "node": "Sphere001",
+  "desc": "Large circular ICC behind the bridge seats."
+ },
+ {
+  "id": "41",
+  "name": "MOUNT 4-1",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_top_right",
+  "provisional": true,
+  "desc": "Port-side mount forward of hangar; mesh correspondence remains provisional."
+ },
+ {
+  "id": "42",
+  "name": "MOUNT 4-2",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_top_left",
+  "provisional": true,
+  "desc": "Starboard-side mount forward of hangar; mesh correspondence remains provisional."
+ },
+ {
+  "id": "31",
+  "name": "MOUNT 3-1",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_side_right",
+  "provisional": true,
+  "desc": "Port-side mount aft of hangar; mesh correspondence remains provisional."
+ },
+ {
+  "id": "32",
+  "name": "MOUNT 3-2",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_side_left",
+  "provisional": true,
+  "desc": "Starboard-side mount aft of hangar; mesh correspondence remains provisional."
+ },
+ {
+  "id": "61",
+  "name": "MOUNT 6-1",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_front",
+  "provisional": true,
+  "desc": "Forward turret near torpedo operations; mesh correspondence remains provisional."
+ },
+ {
+  "id": "torp",
+  "name": "TORPEDO DIRECTOR",
+  "cat": "support",
+  "layer": "cargo",
+  "nodes": [
+   "Plane066",
+   "Plane067"
+  ],
+  "desc": "Two consoles facing each other; marker centered between them."
+ },
+ {
+  "id": "med",
+  "name": "MED BAY",
+  "cat": "support",
+  "layer": "main",
+  "node": "med_bed",
+  "desc": "Medical bay marker anchored to the med-bed geometry."
+ },
+ {
+  "id": "eng",
+  "name": "ENGINEERING / MEZZANINE",
+  "cat": "support",
+  "layer": "engineering",
+  "groupCenter": true,
+  "desc": "Engineering structure at the stern, including mezzanine."
+ },
+ {
+  "id": "edo",
+  "name": "ENGINEERING DUTY OFFICER",
+  "cat": "support",
+  "layer": "engineering",
+  "node": "Plane091",
+  "desc": "Middle station in the stern engineering structure."
+ },
+ {
+  "id": "hangar",
+  "name": "HANGAR",
+  "cat": "support",
+  "layer": "main",
+  "desc": "Main hangar; exact position not yet assigned to a mesh."
+ }
 ];
 let selected=stations[0],filter='all',markersOn=true;
 const buttons=new Map(),pins=new Map(),tmp=new THREE.Vector3();
-function stationNode(name){let found=null;groups.base?.traverse(o=>{if(o.name===name)found=o});return found}
-function selectStation(s){selected=s;$('detailTitle').textContent=s.name;$('detailMeta').textContent=(s.cat==='turret'?'TURRET MOUNT':'SHIP FACILITY')+' // '+(s.node?'MESH-ANCHORED':'NOT YET CALIBRATED');$('detailText').textContent=s.desc;for(const [id,b] of buttons)b.classList.toggle('active',id===s.id);for(const [id,b] of pins)b.classList.toggle('active',id===s.id);
-const node=s.node&&stationNode(s.node);if(node){node.getWorldPosition(tmp);const dir=camera.position.clone().sub(ctl.target).normalize();ctl.target.copy(tmp);camera.position.copy(tmp).addScaledVector(dir,Math.max(1.4,camera.position.distanceTo(ctl.target)));camera.lookAt(tmp);ctl.update()}}
-function renderList(){$('stationList').innerHTML='';buttons.clear();for(const s of stations){if(filter!=='all'&&filter!==s.cat)continue;const b=document.createElement('button');b.className='station'+(selected===s?' active':'');b.innerHTML='<span class="num">'+(s.cat==='turret'?s.id:'✧')+'</span><span><strong>'+s.name+'</strong><small>'+(s.node?'MESH-ANCHORED':'POSITION PENDING')+'</small></span>';b.onclick=()=>selectStation(s);$('stationList').append(b);buttons.set(s.id,b)}}
-function makePins(){$('pins').innerHTML='';pins.clear();for(const s of stations.filter(x=>x.node)){const pin=document.createElement('button');pin.className='pin'+(s===selected?' active':'');pin.textContent=s.name;pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}}
+function stationNode(s,name=s.node){if(!name)return null;let result=null;groups[s.layer]?.traverse(o=>{if(o.name===name)result=o});return result}
+function stationPosition(s){
+ if(s.nodes){const points=s.nodes.map(n=>stationNode(s,n)).filter(Boolean).map(n=>n.getWorldPosition(new THREE.Vector3()));if(points.length===s.nodes.length)return points.reduce((sum,p)=>sum.add(p),new THREE.Vector3()).divideScalar(points.length)}
+ const node=stationNode(s);if(node)return node.getWorldPosition(new THREE.Vector3());
+ if(s.groupCenter&&groups[s.layer])return new THREE.Box3().setFromObject(groups[s.layer]).getCenter(new THREE.Vector3());
+ return null
+}
+function selectStation(s){
+ selected=s;$('detailTitle').textContent=s.name;
+ const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':'POSITION PENDING';
+ $('detailMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
+ $('detailText').textContent=s.desc;
+ for(const [id,button]of buttons)button.classList.toggle('active',id===s.id);
+ for(const [id,button]of pins)button.classList.toggle('active',id===s.id);
+ const position=stationPosition(s);
+ if(position){const offset=camera.position.clone().sub(ctl.target);const dir=offset.lengthSq()>.00001?offset.normalize():new THREE.Vector3(1,1,1).normalize();const box=new THREE.Box3().setFromObject(root);const radius=box.isEmpty()?2:box.getBoundingSphere(new THREE.Sphere()).radius;const distance=Math.max(radius*.32,.85);ctl.target.copy(position);camera.position.copy(position).addScaledVector(dir,distance);camera.lookAt(position);ctl.update()}
+}
+function renderList(){
+ $('stationList').innerHTML='';buttons.clear();
+ for(const s of stations){if(filter!=='all'&&filter!==s.cat)continue;
+ const button=document.createElement('button');button.className='station'+(selected===s?' active':'');
+ const label=s.cat==='turret'?s.id:s.cat==='command'?'⌖':'✧';
+ button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.nodes?'DUAL CONSOLE':s.node?'LOCATED IN MODEL':s.groupCenter?'ENGINEERING SECTION':'POSITION PENDING')+'</small></span>';
+ button.onclick=()=>selectStation(s);$('stationList').append(button);buttons.set(s.id,button)}
+}
+function makePins(){
+ $('pins').innerHTML='';pins.clear();
+ for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter)){
+ const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
+ pin.textContent=s.name;pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
+}
 function styleHull(){groups.base?.traverse(o=>{if(!o.isMesh)return;if(!o.userData.jmbnOriginal)o.userData.jmbnOriginal=o.material;const turret=/turret/i.test(o.name)||/turret/i.test(o.parent?.name||'');if(turret)return;if(!o.userData.jmbnGhost){const g=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});o.userData.jmbnGhost=g}o.material=o.userData.jmbnGhost})}
 function fit(view='iso'){const box=new THREE.Box3();let any=false;for(const [k,v]of Object.entries(groups))if(v&&visible[k]){box.expandByObject(v);any=true}if(!any)return;const center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),r=Math.max(size.length()*.5,.1);const vf=THREE.MathUtils.degToRad(camera.fov),hf=2*Math.atan(Math.tan(vf/2)*camera.aspect),distance=r/Math.sin(Math.min(vf,hf)/2)*1.16;const dir=view==='top'?new THREE.Vector3(0,1,.001):new THREE.Vector3(1,.9,1.1).normalize();ctl.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.001,distance/2000);camera.far=distance+r*25;camera.updateProjectionMatrix();camera.lookAt(center);ctl.minDistance=r*.08;ctl.maxDistance=r*25;ctl.update()}
 function syncLayers(){for(const [k,obj]of Object.entries(groups))if(obj)obj.visible=visible[k];document.querySelectorAll('[data-layer]').forEach(b=>b.classList.toggle('active',visible[b.dataset.layer]));fit()}
@@ -67,6 +220,6 @@ $('files').onchange=async e=>{await importFiles([...e.target.files]);e.target.va
 document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.dataset.layer]=!visible[b.dataset.layer];syncLayers()});document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
 $('fit').onclick=()=>fit();$('topview').onclick=()=>fit('top');$('iso').onclick=()=>fit();$('labelsToggle').onclick=()=>{markersOn=!markersOn;$('labelsToggle').classList.toggle('active',markersOn);$('labelsToggle').textContent=markersOn?'MARKERS ON':'MARKERS OFF'};
 (async()=>{try{const d=await db();let loaded=0;for(const k of ['base','main','cargo','engineering']){const bytes=await new Promise((ok,no)=>{const t=d.transaction('models','readonly'),req=t.objectStore('models').get(k);req.onsuccess=()=>ok(req.result);req.onerror=()=>no(req.error)});if(bytes){await loadBytes(k,bytes);loaded++}}d.close();if(loaded)finish()}catch(e){console.warn('No saved models yet',e)}})();
-function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node)){const p=pins.get(s.id),n=stationNode(s.node);if(!p)continue;if(!markersOn||!n||!groups.base?.visible){p.style.display='none';continue}n.getWorldPosition(tmp);tmp.project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
+function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
 function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}addEventListener('resize',resize);resize();renderList();
 </script></body></html>
