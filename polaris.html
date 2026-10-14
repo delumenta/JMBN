@@ -33,13 +33,39 @@
 #status{bottom:14px}
 @media(max-width:980px){#bottomHud{left:230px;right:12px}#stationHud{min-width:0;max-width:350px}#hudCredit{max-width:190px}}
 @media(max-width:740px){#bottomHud{left:8px;right:8px;bottom:250px;align-items:flex-start;flex-direction:column;gap:5px}#stationHud{width:min(325px,100%);padding:9px 12px}#hudName{font-size:13px}#hudDesc{font-size:10px;max-height:38px;overflow:hidden}#hudCredit{text-align:left;max-width:100%;padding:2px 0;font-size:9px}#left{bottom:77px}#dock{bottom:7px}.pin.active:after{max-width:180px;white-space:normal;text-align:center;font-size:9px}}
-</style></head><body>
-<div id="scene"></div><div id="grid"></div><div id="pins"></div>
+
+/* JMBN remote anchored in-game station preview */
+#stationPreview{position:fixed;right:24px;top:148px;width:302px;z-index:12;background:linear-gradient(145deg,#122019f5,#070e0bee);border:1px solid #d8b16b;box-shadow:0 18px 55px #000b,0 0 24px #b58b3420;overflow:hidden;opacity:0;transform:translateX(16px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+#stationPreview.show{opacity:1;transform:translateX(0);pointer-events:auto}
+#previewTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid #80633980}
+#previewTop span{font-size:9px;letter-spacing:.19em;color:#e6c487}
+#previewClose{border:0;background:transparent;color:#a9ac9c;cursor:pointer;font-size:18px;line-height:1;padding:1px 5px}
+#previewClose:hover{color:#fff}
+#previewImage{height:172px;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 40% 45%,#253628,#0b1613 70%);overflow:hidden;border-bottom:1px solid #6e593b}
+#previewImage:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 24px,#cba86b19 25px),repeating-linear-gradient(90deg,transparent 0 24px,#cba86b19 25px)}
+.previewPlaceholder{position:relative;z-index:1;text-align:center;border:1px dashed #b59a6380;background:#08120db8;padding:15px 22px}
+.previewPlaceholder strong{display:block;font-size:10px;letter-spacing:.12em;color:#f2d18b}
+.previewPlaceholder small{display:block;font-size:9px;letter-spacing:.07em;color:#a6afa3;margin-top:8px}
+#previewData{padding:15px 16px 17px}
+#previewStation{font-size:17px;font-weight:700;letter-spacing:.04em;color:#ffe0a1;line-height:1.25}
+#previewLocation{color:#d6b270;font-size:10px;letter-spacing:.1em;margin-top:7px}
+#previewDescription{font-size:11px;line-height:1.6;color:#c5cec5;margin:10px 0 0}
+#previewNote{margin-top:13px;border-top:1px solid #66553a;padding-top:10px;font-size:9px;letter-spacing:.08em;color:#a99c7e}
+#previewConnector{position:fixed;inset:0;pointer-events:none;z-index:11;overflow:visible;display:none}
+#previewConnector.show{display:block}
+#previewConnector path{fill:none;stroke:#e0b86b;stroke-width:1.5;filter:drop-shadow(0 0 5px #c79637)}
+#previewConnector circle{fill:#f6cc77}
+
+@media(max-width:1100px){#stationPreview{width:255px;right:12px;top:140px}#previewImage{height:120px}}
+@media(max-width:740px){#stationPreview{width:min(260px,calc(100vw - 20px));right:10px;top:78px}#previewImage{height:95px}.previewPlaceholder{padding:8px 12px}#previewData{padding:10px}#previewStation{font-size:13px}#previewDescription{font-size:10px;max-height:50px;overflow:hidden}#previewNote{display:none}}
+#atlasTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 12px 4px}#atlasTabs button{font-weight:700;font-size:11px;letter-spacing:.09em;color:#bbbdad;background:#0b1712;border:1px solid #646244;padding:11px 8px;cursor:pointer}#atlasTabs button.active{background:linear-gradient(125deg,#705324,#3e311e);border-color:#e6bd6f;color:#ffe6a4;box-shadow:inset 0 0 14px #b78a3e22}#atlasTabs button:hover{border-color:#e6bd6f}#stationFilters{padding-top:6px}#stationList .station small{letter-spacing:.025em}@media(max-width:740px){#atlasTabs{padding:8px 6px 3px}#atlasTabs button{padding:7px 4px;font-size:10px}}</style></head><body>
+<div id="scene"></div><div id="grid"></div><div id="pins"></div><svg id="previewConnector" aria-hidden="true"><path id="previewLine"></path><circle id="previewDot" r="4"></circle></svg>
+<section id="stationPreview" aria-label="In-game station preview"><div id="previewTop"><span>JMBN // STATION RECON</span><button id="previewClose" title="Close preview" aria-label="Close preview">×</button></div><div id="previewImage"><div class="previewPlaceholder"><strong>IN-GAME STATION IMAGE</strong><small>SCREENSHOT TO BE ADDED</small></div></div><div id="previewData"><div id="previewStation">INTEGRATED COMMAND CENTRE</div><div id="previewLocation">BRIDGE · ICC</div><p id="previewDescription">Hover a station to preview its real in-game position. Click to keep this reference open.</p><div id="previewNote">IN-GAME SCREENSHOT PREVIEW · COMING SOON</div></div></section>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span></div></header>
-<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
+<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2 id="directoryTitle">COMBAT STATIONS</h2><p id="directoryIntro">Select a battle station, command position or turret mount.</p></div><div id="atlasTabs"><button class="active" data-atlas="combat">⚔ COMBAT</button><button data-atlas="habitat">⌂ HABITAT</button></div><div class="filters" id="stationFilters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
 <div id="bottomHud" aria-live="polite"><div id="stationHud"><div class="small">JMBN // SELECTED STATION</div><div id="hudName">SELECT A STATION</div><div id="hudMeta">POLARIS // TACTICAL REFERENCE</div><p id="hudDesc">Click a gold marker or choose a station from the directory.</p></div><div id="hudCredit">Ship layout references based on Atlas Defense Industries materials.</div></div>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div><div id="axes">BOW ◀ &nbsp; // &nbsp; STERN ▶</div>
-<div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button></div>
+<div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button><div class="sp"></div></div>
 <div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>INITIALIZING ATLAS</h2><p>Loading the Polaris tactical blueprint and ship stations.</p><div id="gateMsg" class="micro" role="status">Connecting to JMBN ship assets…</div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
@@ -61,7 +87,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "chair030",
-  "desc": "Upper-left bridge seat, per your annotated bridge diagram."
+  "desc": "Upper-left bridge seat, per your annotated bridge diagram.",
+  "atlas": "combat"
  },
  {
   "id": "ood",
@@ -70,7 +97,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "chair027",
-  "desc": "Upper-right bridge seat, per your annotated bridge diagram."
+  "desc": "Upper-right bridge seat, per your annotated bridge diagram.",
+  "atlas": "combat"
  },
  {
   "id": "cmd",
@@ -79,7 +107,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "chair031",
-  "desc": "Middle bridge seat."
+  "desc": "Middle bridge seat.",
+  "atlas": "combat"
  },
  {
   "id": "air",
@@ -88,7 +117,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "chair033",
-  "desc": "Lower-left bridge seat."
+  "desc": "Lower-left bridge seat.",
+  "atlas": "combat"
  },
  {
   "id": "surface",
@@ -97,7 +127,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "chair032",
-  "desc": "Lower-right bridge seat."
+  "desc": "Lower-right bridge seat.",
+  "atlas": "combat"
  },
  {
   "id": "icc",
@@ -106,7 +137,8 @@ const stations=[
   "cat": "command",
   "layer": "main",
   "node": "Sphere001",
-  "desc": "Large circular ICC behind the bridge seats."
+  "desc": "Large circular ICC behind the bridge seats.",
+  "atlas": "combat"
  },
  {
   "id": "41",
@@ -116,7 +148,8 @@ const stations=[
   "layer": "base",
   "node": "polaris_turret_top_left",
   "provisional": false,
-  "desc": "Starboard-side mount forward of hangar; position corrected per JMBN reference."
+  "desc": "Starboard-side mount forward of hangar; position corrected per JMBN reference.",
+  "atlas": "combat"
  },
  {
   "id": "42",
@@ -126,7 +159,8 @@ const stations=[
   "layer": "base",
   "node": "polaris_turret_top_right",
   "provisional": false,
-  "desc": "Port-side mount forward of hangar; position corrected per JMBN reference."
+  "desc": "Port-side mount forward of hangar; position corrected per JMBN reference.",
+  "atlas": "combat"
  },
  {
   "id": "31",
@@ -136,7 +170,8 @@ const stations=[
   "layer": "base",
   "node": "polaris_turret_side_left",
   "provisional": false,
-  "desc": "Starboard-side mount aft of hangar; position corrected per JMBN reference."
+  "desc": "Starboard-side mount aft of hangar; position corrected per JMBN reference.",
+  "atlas": "combat"
  },
  {
   "id": "32",
@@ -146,7 +181,8 @@ const stations=[
   "layer": "base",
   "node": "polaris_turret_side_right",
   "provisional": false,
-  "desc": "Port-side mount aft of hangar; position corrected per JMBN reference."
+  "desc": "Port-side mount aft of hangar; position corrected per JMBN reference.",
+  "atlas": "combat"
  },
  {
   "id": "61",
@@ -156,7 +192,8 @@ const stations=[
   "layer": "base",
   "node": "polaris_turret_front",
   "provisional": true,
-  "desc": "Forward turret near torpedo operations; mesh correspondence remains provisional."
+  "desc": "Forward turret near torpedo operations; mesh correspondence remains provisional.",
+  "atlas": "combat"
  },
  {
   "id": "torp",
@@ -168,7 +205,8 @@ const stations=[
    "Plane066",
    "Plane067"
   ],
-  "desc": "Two consoles facing each other; marker centered between them."
+  "desc": "Two consoles facing each other; marker centered between them.",
+  "atlas": "combat"
  },
  {
   "id": "med",
@@ -180,7 +218,8 @@ const stations=[
    "Plane095",
    "Plane096"
   ],
-  "desc": "Medical Bay console: middle console to the left of the previous marker, anchored to Plane095 and Plane096."
+  "desc": "Medical Bay console: middle console to the left of the previous marker, anchored to Plane095 and Plane096.",
+  "atlas": "habitat"
  },
  {
   "id": "edo",
@@ -189,7 +228,8 @@ const stations=[
   "cat": "support",
   "layer": "engineering",
   "node": "Plane091",
-  "desc": "Middle station in the stern engineering structure."
+  "desc": "Middle station in the stern engineering structure.",
+  "atlas": "combat"
  },
  {
   "id": "armory",
@@ -202,7 +242,8 @@ const stations=[
    0.04745,
    -1.38519
   ],
-  "desc": "Weapons & Equipment Locker. Secure storage and staging point for JMBN crew weapons, armor, and mission gear."
+  "desc": "Weapons & Equipment Locker. Secure storage and staging point for JMBN crew weapons, armor, and mission gear.",
+  "atlas": "habitat"
  },
  {
   "id": "hangar",
@@ -210,10 +251,38 @@ const stations=[
   "location": "MIDSHIP · HANGAR",
   "cat": "support",
   "layer": "main",
-  "desc": "Main hangar; exact position not yet assigned to a mesh."
+  "desc": "Polaris hangar for embarked spacecraft and crew access. Precise room marker to be calibrated.",
+  "atlas": "habitat"
+ },
+ {
+  "id": "quarters",
+  "name": "CREW QUARTERS",
+  "location": "MIDSHIP · ACCOMMODATION",
+  "cat": "room",
+  "atlas": "habitat",
+  "layer": "main",
+  "desc": "Crew sleeping and personal quarters. Exact room marker to be added."
+ },
+ {
+  "id": "mess",
+  "name": "MESS / GALLEY",
+  "location": "MIDSHIP · CREW FACILITIES",
+  "cat": "room",
+  "atlas": "habitat",
+  "layer": "main",
+  "desc": "Crew dining and shared facilities. Exact room marker to be added."
+ },
+ {
+  "id": "rec",
+  "name": "RECREATION AREA",
+  "location": "CREW FACILITIES",
+  "cat": "room",
+  "atlas": "habitat",
+  "layer": "main",
+  "desc": "Shared crew recreation space. Exact room marker to be added."
  }
 ];
-let selected=stations[0],filter='all',markersOn=true;
+let atlasMode='combat',selected=stations.find(s=>s.id==='helm'),filter='all',markersOn=true;
 const buttons=new Map(),pins=new Map(),tmp=new THREE.Vector3();
 function stationNode(s,name=s.node){if(!name)return null;let result=null;groups[s.layer]?.traverse(o=>{if(o.name===name)result=o});return result}
 function stationPosition(s){
@@ -223,7 +292,24 @@ function stationPosition(s){
  if(s.groupCenter&&groups[s.layer])return new THREE.Box3().setFromObject(groups[s.layer]).getCenter(new THREE.Vector3());
  return null
 }
+let previewStation=null,previewPinned=false,previewHover=false;
+function previewFor(station,lock=false){
+ if(!station)return;
+ previewStation=station;if(lock)previewPinned=true;
+ $('previewStation').textContent=station.name;
+ $('previewLocation').textContent=station.location||'RSI POLARIS · STATION';
+ $('previewDescription').textContent=station.desc;
+ $('stationPreview').classList.add('show');$('previewConnector').classList.add('show');
+}
+function hidePreview(force=false){
+ if(previewPinned&&!force)return;
+ if(force)previewPinned=false;
+ previewStation=null;$('stationPreview').classList.remove('show');$('previewConnector').classList.remove('show');
+}
+$('previewClose').onclick=()=>hidePreview(true);
 function selectStation(s){
+ if(s.atlas!==atlasMode)setAtlasMode(s.atlas);
+ previewFor(s,true);
  selected=s;$('hudName').textContent=s.name;
  const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':s.point?'SHIP LOCATION':'POSITION PENDING';
  $('hudMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
@@ -235,9 +321,9 @@ function selectStation(s){
 }
 function renderList(){
  $('stationList').innerHTML='';buttons.clear();
- for(const s of stations){if(filter!=='all'&&filter!==s.cat)continue;
+ for(const s of stations){if(s.atlas!==atlasMode||(filter!=='all'&&filter!==s.cat))continue;
  const button=document.createElement('button');button.className='station'+(selected===s?' active':'');
- const label=s.cat==='turret'?s.id:s.cat==='command'?'⌖':'✧';
+ const label=s.cat==='turret'?s.id:s.cat==='command'?'⌖':s.cat==='room'?'⌂':'✧';
  button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.location||'LOCATION TO CONFIRM')+'</small></span>';
  button.onclick=()=>selectStation(s);$('stationList').append(button);buttons.set(s.id,button)}
 }
@@ -245,7 +331,9 @@ function makePins(){
  $('pins').innerHTML='';pins.clear();
  for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
+ pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
+ pin.onmouseleave=()=>{if(!previewPinned)hidePreview()};
+ pin.onclick=()=>{previewPinned=false;selectStation(s)};$('pins').append(pin);pins.set(s.id,pin)}
 }
 function styleHull(){groups.base?.traverse(o=>{if(!o.isMesh)return;if(!o.userData.jmbnOriginal)o.userData.jmbnOriginal=o.material;const turret=/turret/i.test(o.name)||/turret/i.test(o.parent?.name||'');if(turret)return;if(!o.userData.jmbnGhost){const g=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});o.userData.jmbnGhost=g}o.material=o.userData.jmbnGhost})}
 function fit(view='iso'){const box=new THREE.Box3();let any=false;for(const [k,v]of Object.entries(groups))if(v&&visible[k]){box.expandByObject(v);any=true}if(!any)return;const center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),r=Math.max(size.length()*.5,.1);const vf=THREE.MathUtils.degToRad(camera.fov),hf=2*Math.atan(Math.tan(vf/2)*camera.aspect),distance=r/Math.sin(Math.min(vf,hf)/2)*1.16;const dir=view==='top'?new THREE.Vector3(0,1,.001):new THREE.Vector3(1,.9,1.1).normalize();ctl.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.001,distance/2000);camera.far=distance+r*25;camera.updateProjectionMatrix();camera.lookAt(center);ctl.minDistance=r*.08;ctl.maxDistance=r*25;ctl.update()}
@@ -258,6 +346,22 @@ function finish(){styleHull();syncLayers();makePins();renderList();selectStation
 async function importFiles(files){let loaded=0;for(const file of files){const n=file.name.toLowerCase(),k=n.includes('engineering')?'engineering':n.includes('cargo')?'cargo':n.includes('main')?'main':(n.includes('base')||n.includes('gold'))?'base':null;if(!k)continue;$('gateMsg').textContent='Loading '+file.name+'…';try{const bytes=await file.arrayBuffer();await loadBytes(k,bytes);await cache(k,bytes);loaded++}catch(e){console.error(e);$('gateMsg').textContent='Could not read '+file.name}}if(loaded)finish();else $('gateMsg').textContent='No recognized Polaris files. Please select the four GLBs.'}
 
 document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.dataset.layer]=!visible[b.dataset.layer];syncLayers()});document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
+function setAtlasMode(next){
+ atlasMode=next;filter='all';
+ document.querySelectorAll('[data-atlas]').forEach(b=>b.classList.toggle('active',b.dataset.atlas===next));
+ $('directoryTitle').textContent=next==='combat'?'COMBAT STATIONS':'HABITAT & FACILITIES';
+ $('directoryIntro').textContent=next==='combat'?'Battle stations, command positions and turret mounts.':'Crew spaces, medical facilities, equipment and rooms.';
+ const filters=next==='combat'?[['all','ALL'],['turret','TURRETS'],['command','BRIDGE'],['support','SUPPORT']]:[['all','ALL'],['support','FACILITIES'],['room','ROOMS']];
+ $('stationFilters').innerHTML=filters.map(([id,label])=>'<button data-filter="'+id+'"'+(id==='all'?' class="active"':'')+'>'+label+'</button>').join('');
+ document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
+ renderList();
+ selected=stations.find(s=>s.atlas===next&&!!stationPosition(s))||stations.find(s=>s.atlas===next);
+ $('hudName').textContent=selected.name;$('hudMeta').textContent=selected.location||'RSI POLARIS';$('hudDesc').textContent=selected.desc;
+ for(const [id,pin]of pins)pin.classList.toggle('active',id===selected.id);
+ hidePreview(true);
+}
+document.querySelectorAll('[data-atlas]').forEach(b=>b.onclick=()=>setAtlasMode(b.dataset.atlas));
+
 $('fit').onclick=()=>fit();$('topview').onclick=()=>fit('top');$('iso').onclick=()=>fit();$('labelsToggle').onclick=()=>{markersOn=!markersOn;$('labelsToggle').classList.toggle('active',markersOn);$('labelsToggle').textContent=markersOn?'MARKERS ON':'MARKERS OFF'};
 async function autoLoadHostedModels(){
  const files={
@@ -287,6 +391,17 @@ async function autoLoadHostedModels(){
  }
 }
 autoLoadHostedModels();
-function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter||x.point)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
+function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter||x.point)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||s.atlas!==atlasMode||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}if(previewStation){
+ const point=stationPosition(previewStation),card=$('stationPreview');
+ if(point&&groups[previewStation.layer]?.visible){
+  const projected=point.clone().project(camera),px=(projected.x+1)*innerWidth/2,py=(1-projected.y)*innerHeight/2;
+  const rect=card.getBoundingClientRect(),endX=rect.left-8,endY=rect.top+Math.min(rect.height*.52,165);
+  const bendX=Math.min(endX-28,px+Math.max(40,(endX-px)*.58));
+  $('previewLine').setAttribute('d','M '+px+' '+py+' L '+bendX+' '+py+' L '+(endX-18)+' '+endY+' L '+endX+' '+endY);
+  $('previewDot').setAttribute('cx',px);$('previewDot').setAttribute('cy',py);
+  $('previewConnector').style.visibility=projected.z>=-1&&projected.z<=1?'visible':'hidden';
+ }else $('previewConnector').style.visibility='hidden';
+}
+renderer.render(scene,camera)}loop();
 function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}addEventListener('resize',resize);resize();renderList();
 </script></body></html>
