@@ -26,7 +26,7 @@ body{background:#050504;color:#eadcc0}
 #radar{left:50%;top:auto;bottom:clamp(85px,15vh,160px);transform:translateX(-50%) perspective(700px) rotateX(13deg);width:clamp(125px,12vw,175px);height:clamp(125px,12vw,175px);border:2px solid #486982;border-radius:50%;background:#06131be8;box-shadow:0 0 0 9px #09121bc9,0 0 0 11px #3b5360,0 0 26px #000d;pointer-events:none}
 @media(max-width:800px){#radar{bottom:clamp(78px,14vh,120px);width:120px;height:120px}}
 @media(max-width:550px){#radar{bottom:clamp(80px,17vh,135px);width:100px;height:100px}}
-</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="contactLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
+#voicePanel{position:absolute;right:16px;top:56px;z-index:10;pointer-events:auto;background:#080f16d9;border:1px solid #6b8ba0;padding:9px;max-width:290px;font:11px/1.5 monospace}#voicePanel button{padding:5px 8px;font:11px monospace;margin:3px;background:#203644;color:#e2d6b3;border:1px solid #8a744c}#voiceHeard{display:block;max-width:270px;white-space:normal;color:#9bd9b9}#voiceStatus{color:#e6c78a}@media(max-width:700px){#voicePanel{top:auto;bottom:160px;right:8px;max-width:210px;font-size:10px}} </style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="voicePanel"><b>GUNNER VOICE</b> · <span id="voiceStatus">OFF</span><div><button id="voiceToggle" type="button">🎙 CONTINUOUS: OFF</button><button id="voicePTT" type="button">HOLD TO TALK</button></div><small>Hold V to talk · hotkeys still work</small><span id="voiceHeard">MICROPHONE DISABLED</span></div><div id="center"></div><div id="directionLayer"></div><div id="contactLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import { FBXLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/FBXLoader.js';
@@ -297,6 +297,46 @@ function fire(){
  }else if(!green){score=Math.max(0,score-5);notice('WEAPONS HOLD · −5')}
 }
 function end(win){missionEnded=true;active=false;document.exitPointerLock?.();$('overlay').style.display='grid';$('intro').innerHTML='<h1>'+(win?'MISSION COMPLETE':'POLARIS LOST')+'</h1><p>FINAL SCORE: '+score+' · WAVE '+wave+'</p><button id="again">REDEPLOY</button>';$('again').onclick=()=>location.reload()}
+// Browser speech recognition: optional continuous listening or push-to-talk.
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let voiceMode='off',voiceListening=false,voiceHeld=false,voiceStarting=false;
+let voiceEngine=null;
+const voiceStatus=()=>$('voiceStatus').textContent=!SpeechRecognition?'UNSUPPORTED':voiceListening?'LISTENING':voiceMode==='off'?'OFF':voiceMode==='continuous'?'READY':'PTT READY';
+function voiceIntent(raw){
+ const words=raw.toLowerCase().replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
+ const numbers=(words.match(/\d/g)||[]).join('');
+ const expected=assigned?.track.replace(/-/g,'')||'';
+ const hasTrack=expected&&numbers.includes(expected);
+ if(/bandit (down|destroyed)|target (down|destroyed)/.test(words)){if(down){report();return 'BANDIT DOWN CONFIRMED'}return 'NO BANDIT DOWN TO REPORT'}
+ if(/guns? affirm|weapons? (ready|affirm)/.test(words)){affirm();return 'GUNS AFFIRM RECEIVED'}
+ if(/target acquired|track acquired|contact acquired/.test(words)){acquire();return 'TARGET ACQUIRED RECEIVED'}
+ if(/\b(aye|acknowledge|acknowledged|copy|covering track)\b/.test(words)){
+  if(assigned&&numbers.length>=4&&!hasTrack)return 'TRACK NUMBER MISMATCH · REPEAT';
+  ack();return 'ACKNOWLEDGEMENT RECEIVED';
+ }
+ if(/engaging/.test(words))return 'ENGAGING REPORTED';
+ return 'UNRECOGNIZED · USE RADIO PHRASEOLOGY';
+}
+function stopVoice(){if(voiceEngine&&voiceListening)voiceEngine.stop()}
+function startVoice(){
+ if(!SpeechRecognition){$('voiceHeard').textContent='Speech recognition unavailable in this browser';voiceStatus();return}
+ if(!active||voiceListening||voiceStarting)return;
+ if(!voiceEngine){
+  voiceEngine=new SpeechRecognition();voiceEngine.lang='en-SG';voiceEngine.continuous=true;voiceEngine.interimResults=true;
+  voiceEngine.onstart=()=>{voiceListening=true;voiceStarting=false;voiceStatus()};
+  voiceEngine.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const result=e.results[i],heard=result[0].transcript;$('voiceHeard').textContent=(result.isFinal?'HEARD: ':'LISTENING: ')+heard;if(result.isFinal){const status=voiceIntent(heard);$('voiceHeard').textContent=heard+' · '+status}}};
+  voiceEngine.onerror=e=>{voiceStarting=false;$('voiceHeard').textContent='MIC: '+e.error;if(['not-allowed','service-not-allowed','audio-capture'].includes(e.error)){voiceMode='off';$('voiceToggle').textContent='🎙 CONTINUOUS: OFF'}voiceStatus()};
+  voiceEngine.onend=()=>{voiceListening=false;voiceStarting=false;voiceStatus();if(active&&(voiceMode==='continuous'||voiceHeld)){setTimeout(()=>{if(active&&(voiceMode==='continuous'||voiceHeld))startVoice()},450)}};
+ }
+ try{voiceStarting=true;voiceEngine.start()}catch(e){voiceStarting=false;$('voiceHeard').textContent=e.message}
+}
+$('voiceToggle').onclick=()=>{voiceMode=voiceMode==='continuous'?'off':'continuous';$('voiceToggle').textContent=voiceMode==='continuous'?'🎙 CONTINUOUS: ON':'🎙 CONTINUOUS: OFF';if(voiceMode==='continuous')startVoice();else if(!voiceHeld)stopVoice();voiceStatus()};
+function pttDown(e){e.preventDefault();voiceHeld=true;startVoice();voiceStatus()}
+function pttUp(e){e.preventDefault();voiceHeld=false;if(voiceMode!=='continuous')stopVoice();voiceStatus()}
+$('voicePTT').addEventListener('pointerdown',pttDown);
+for(const ev of ['pointerup','pointercancel','pointerleave'])$('voicePTT').addEventListener(ev,pttUp);
+document.addEventListener('keydown',e=>{if(e.code==='KeyV'&&!e.repeat&&active)pttDown(e)});
+document.addEventListener('keyup',e=>{if(e.code==='KeyV')pttUp(e)});
 function begin(){active=true;$('overlay').style.display='none';for(let i=0;i<4;i++)spawn();assign();renderer.domElement.requestPointerLock?.()}
 $('start').onclick=begin;$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊 WEPS VOICE ON':'🔇 ENABLE WEPS VOICE';if(sound)say($('order').textContent)};
 renderer.domElement.addEventListener('click',()=>{if(active&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.()});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
