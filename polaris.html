@@ -192,6 +192,15 @@ const stations=[
   "desc": "Middle station in the stern engineering structure."
  },
  {
+  "id": "armory",
+  "name": "ARMORY",
+  "location": "MIDSHIP · FORWARD OF HANGAR",
+  "cat": "support",
+  "layer": "main",
+  "point": [0.38, 0.10, -0.42],
+  "desc": "Armory room circled in the JMBN reference, in the central midship section near Mounts 4-1 and 4-2. Marker placement is approximate pending a precise GLB mesh anchor."
+ },
+ {
   "id": "hangar",
   "name": "HANGAR",
   "location": "MIDSHIP · HANGAR",
@@ -204,6 +213,7 @@ let selected=stations[0],filter='all',markersOn=true;
 const buttons=new Map(),pins=new Map(),tmp=new THREE.Vector3();
 function stationNode(s,name=s.node){if(!name)return null;let result=null;groups[s.layer]?.traverse(o=>{if(o.name===name)result=o});return result}
 function stationPosition(s){
+ if(s.point&&groups[s.layer])return groups[s.layer].localToWorld(new THREE.Vector3(...s.point));
  if(s.nodes){const points=s.nodes.map(n=>stationNode(s,n)).filter(Boolean).map(n=>n.getWorldPosition(new THREE.Vector3()));if(points.length===s.nodes.length)return points.reduce((sum,p)=>sum.add(p),new THREE.Vector3()).divideScalar(points.length)}
  const node=stationNode(s);if(node)return node.getWorldPosition(new THREE.Vector3());
  if(s.groupCenter&&groups[s.layer])return new THREE.Box3().setFromObject(groups[s.layer]).getCenter(new THREE.Vector3());
@@ -211,7 +221,7 @@ function stationPosition(s){
 }
 function selectStation(s){
  selected=s;$('hudName').textContent=s.name;
- const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':'POSITION PENDING';
+ const accuracy=s.provisional?'MOUNT PAIRING PROVISIONAL':s.nodes?'DUAL CONSOLE':s.node?'MESH ANCHOR':s.groupCenter?'SECTION CENTRE':s.point?'REFERENCE PLACEMENT':'POSITION PENDING';
  $('hudMeta').textContent=(s.cat==='turret'?'TURRET':s.cat==='command'?'BRIDGE / COMMAND':'SUPPORT')+' // '+accuracy;
  $('hudDesc').textContent=s.desc;
  for(const [id,button]of buttons)button.classList.toggle('active',id===s.id);
@@ -229,9 +239,9 @@ function renderList(){
 }
 function makePins(){
  $('pins').innerHTML='';pins.clear();
- for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter)){
+ for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
+ pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onclick=()=>selectStation(s);$('pins').append(pin);pins.set(s.id,pin)}
 }
 function styleHull(){groups.base?.traverse(o=>{if(!o.isMesh)return;if(!o.userData.jmbnOriginal)o.userData.jmbnOriginal=o.material;const turret=/turret/i.test(o.name)||/turret/i.test(o.parent?.name||'');if(turret)return;if(!o.userData.jmbnGhost){const g=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});o.userData.jmbnGhost=g}o.material=o.userData.jmbnGhost})}
 function fit(view='iso'){const box=new THREE.Box3();let any=false;for(const [k,v]of Object.entries(groups))if(v&&visible[k]){box.expandByObject(v);any=true}if(!any)return;const center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),r=Math.max(size.length()*.5,.1);const vf=THREE.MathUtils.degToRad(camera.fov),hf=2*Math.atan(Math.tan(vf/2)*camera.aspect),distance=r/Math.sin(Math.min(vf,hf)/2)*1.16;const dir=view==='top'?new THREE.Vector3(0,1,.001):new THREE.Vector3(1,.9,1.1).normalize();ctl.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.001,distance/2000);camera.far=distance+r*25;camera.updateProjectionMatrix();camera.lookAt(center);ctl.minDistance=r*.08;ctl.maxDistance=r*25;ctl.update()}
@@ -273,6 +283,6 @@ async function autoLoadHostedModels(){
  }
 }
 autoLoadHostedModels();
-function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
+function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter||x.point)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
 function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}addEventListener('resize',resize);resize();renderList();
 </script></body></html>
