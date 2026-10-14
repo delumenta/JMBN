@@ -13,7 +13,15 @@ body{background:#050504;color:#eadcc0}
 .bearing-arrow .arrow{font-size:26px;line-height:1;color:#ff4949;filter:drop-shadow(0 0 6px #ff3737)}
 .bearing-arrow.locked,.bearing-arrow.locked .arrow{color:#ffdc88}
 #trackingState{position:absolute;top:calc(50% + 74px);left:50%;transform:translateX(-50%);color:#f1cc7d;font:12px monospace;text-align:center}
-</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
+#contactLayer{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.contact-tag{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;font:700 11px/1.1 monospace;white-space:nowrap;text-shadow:0 1px 4px #000,0 0 8px #000;will-change:left,top}
+.contact-tag svg{width:35px;height:34px;overflow:visible;filter:drop-shadow(0 0 4px currentColor)}
+.contact-tag.bandit{color:#ff514b}.contact-tag.bogey{color:#f0f2f5}.contact-tag.friendly{color:#5cbaff}
+.contact-tag.selected svg{width:46px;height:44px;filter:drop-shadow(0 0 9px currentColor)}
+.contact-tag .track-id{padding:2px 5px;background:#02060bd9;border:1px solid currentColor;border-radius:3px}
+.contact-tag .range{font-size:9px;font-weight:400;opacity:.85}
+@media(max-width:650px){.contact-tag svg{width:27px;height:26px}.contact-tag.selected svg{width:35px;height:34px}.contact-tag{font-size:10px}}
+</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="contactLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import { FBXLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/FBXLoader.js';
@@ -198,6 +206,17 @@ function say(t){$('order').textContent=t;if(sound&&'speechSynthesis'in window){s
 function reply(t){$('radio').textContent='GUNNER: '+t}function notice(t){$('notice').textContent=t;clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('notice').textContent='',2500)}
 function track(){return Array.from({length:4},()=>Math.floor(Math.random()*10)).join('-')}
 function spawn(){const modelIndex=Math.floor(Math.random()*2);const group=enemyGeo.clone();const a=Math.random()*Math.PI*2,r=190+Math.random()*160;group.position.set(Math.sin(a)*r,(Math.random()-.5)*130,-100-Math.cos(a)*r);scene.add(group);const e={group,modelIndex,track:track(),hp:100,speed:9+Math.random()*13,angle:Math.random()*6.28,phase:Math.random()*6.28,dead:false,attack:0};fighters.push(e);applyEnemyModel(e);return e}
+// Unidentified and allied contacts are visually present but are not hostile targets.
+const iffContacts=[];
+function createIFFContact(kind,trackNumber,position){
+ const group=enemyGeo.clone();
+ group.position.set(...position);group.scale.setScalar(.85);
+ scene.add(group);
+ const e={group,track:trackNumber,iff:kind,phase:Math.random()*6.28};
+ iffContacts.push(e);
+}
+createIFFContact('bogey','7-2-0-4',[-110,38,-240]);
+createIFFContact('friendly','2-1-0-8',[130,-24,-260]);
 function assign(){const e=fighters.find(e=>!e.dead);if(!e){assigned=null;return}assigned=e;marked=null;acked=acquired=affirmed=green=false;say('4-1, COVER TRACK '+e.track+' WITH GUNS. HOLD FIRE.');reply('RADIO CHECK · PRESS 1 TO ACKNOWLEDGE')}
 function explode(e){e.dead=true;scene.remove(e.group);for(let i=0;i<24;i++){const p=mesh(scene,new THREE.SphereGeometry(.6+Math.random()*1.6,5,4),new THREE.MeshBasicMaterial({color:i%2?0xff6c31:0xffd077}),e.group.position.toArray());sparks.push({o:p,v:new THREE.Vector3().randomDirection().multiplyScalar(12+Math.random()*35),life:1})}down=e;green=false;score+=150;say('4-1, SPLASH TRACK '+e.track+'. REPORT BANDIT DOWN.');$('stats').textContent='WAVE '+wave+' · SCORE '+score}
 function mark(){
@@ -282,6 +301,34 @@ function radar(){
  if(selected){g.strokeStyle='#ffe0a2';g.beginPath();g.arc(x,y,9,0,Math.PI*2);g.stroke()}
  }
 }
+// Tactical IFF markers stay attached to each projected ship while it is on-screen.
+const contactNodes=new Map();
+const triangleSVG='<svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 3 L41 37 L3 37 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M22 9 V16 M9 34 H15 M29 34 H35" stroke="currentColor" stroke-width="2"/></svg>';
+function renderContactMarkers(){
+ const layer=$('contactLayer');
+ if(!active||missionEnded){layer.replaceChildren();contactNodes.clear();return}
+ const contacts=[...fighters.filter(e=>!e.dead),...iffContacts];
+ const present=new Set();
+ for(const e of contacts){
+  const pos=e.group.position.clone().project(camera);
+  if(pos.z<0||pos.z>1||Math.abs(pos.x)>1.02||Math.abs(pos.y)>1.02)continue;
+  const distance=e.group.position.distanceTo(camera.position);
+  const kind=e.iff||'bandit';
+  present.add(e);
+  let el=contactNodes.get(e);
+  if(!el){
+   el=document.createElement('div');
+   el.innerHTML=triangleSVG+'<span class="track-id"></span><span class="range"></span>';
+   layer.append(el);contactNodes.set(e,el);
+  }
+  el.className='contact-tag '+kind+(e===marked||e===assigned?' selected':'');
+  el.style.left=((pos.x+1)*.5*innerWidth)+'px';
+  el.style.top=((1-pos.y)*.5*innerHeight)+'px';
+  el.querySelector('.track-id').textContent=(kind==='friendly'?'ALLY ':kind==='bogey'?'BOGEY ':'BANDIT ')+e.track;
+  el.querySelector('.range').textContent=Math.round(distance)+' m';
+ }
+ for(const [e,el] of contactNodes)if(!present.has(e)){el.remove();contactNodes.delete(e)}
+}
 function updateBearingIndicators(){
  const root=$('directionLayer');if(!active){root.replaceChildren();return}
  const width=innerWidth,height=innerHeight,pad=52;
@@ -318,5 +365,5 @@ function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta
  yaw+=wrap(desiredYaw-yaw)*Math.min(1,dt*3.5);
  pitch+= (Math.max(-1.25,Math.min(1.25,desiredPitch))-pitch)*Math.min(1,dt*3.5);
  }else if(tracking&&(!marked||marked.dead)){tracking=false;$('trackingState').textContent='TRACK LOST · T TO LOCK'}
- camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();displayRefresh+=dt;if(displayRefresh>.12){paintStationDisplays();displayRefresh=0}spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){if(e.dead)continue;e.phase+=dt*.8;const p=e.group.position;const approach=new THREE.Vector3().subVectors(new THREE.Vector3(0,0,0),p).normalize();p.addScaledVector(approach,dt*e.speed);p.x+=Math.sin(e.phase)*dt*10;p.y+=Math.cos(e.phase*.7)*dt*7;e.group.lookAt(0,0,0);if(p.length()<32){p.multiplyScalar(7);shields=Math.max(0,shields-12);notice('HOSTILE STRIKE · SHIELDS HIT')}}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave));if(shields<=0)hull=Math.max(0,hull-n*3);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+ camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();for(const e of iffContacts){e.phase+=dt*.25;e.group.position.x+=Math.sin(e.phase)*dt*1.8;e.group.lookAt(0,0,0)}displayRefresh+=dt;if(displayRefresh>.12){paintStationDisplays();displayRefresh=0}spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){if(e.dead)continue;e.phase+=dt*.8;const p=e.group.position;const approach=new THREE.Vector3().subVectors(new THREE.Vector3(0,0,0),p).normalize();p.addScaledVector(approach,dt*e.speed);p.x+=Math.sin(e.phase)*dt*10;p.y+=Math.cos(e.phase*.7)*dt*7;e.group.lookAt(0,0,0);if(p.length()<32){p.multiplyScalar(7);shields=Math.max(0,shields-12);notice('HOSTILE STRIKE · SHIELDS HIT')}}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave));if(shields<=0)hull=Math.max(0,hull-n*3);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators();renderContactMarkers()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 </script></body></html>
