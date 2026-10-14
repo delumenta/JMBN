@@ -137,42 +137,42 @@ const stations=[
  {
   "id": "41",
   "name": "MOUNT 4-1",
-  "location": "PORT SIDE · MIDSHIP",
-  "cat": "turret",
-  "layer": "base",
-  "node": "polaris_turret_top_right",
-  "provisional": true,
-  "desc": "Port-side mount forward of hangar; mesh correspondence remains provisional."
- },
- {
-  "id": "42",
-  "name": "MOUNT 4-2",
   "location": "STARBOARD · MIDSHIP",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_top_left",
-  "provisional": true,
-  "desc": "Starboard-side mount forward of hangar; mesh correspondence remains provisional."
+  "provisional": false,
+  "desc": "Starboard-side mount forward of hangar; position corrected per JMBN reference."
+ },
+ {
+  "id": "42",
+  "name": "MOUNT 4-2",
+  "location": "PORT SIDE · MIDSHIP",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_top_right",
+  "provisional": false,
+  "desc": "Port-side mount forward of hangar; position corrected per JMBN reference."
  },
  {
   "id": "31",
   "name": "MOUNT 3-1",
-  "location": "PORT SIDE · AFT",
-  "cat": "turret",
-  "layer": "base",
-  "node": "polaris_turret_side_right",
-  "provisional": true,
-  "desc": "Port-side mount aft of hangar; mesh correspondence remains provisional."
- },
- {
-  "id": "32",
-  "name": "MOUNT 3-2",
   "location": "STARBOARD · AFT",
   "cat": "turret",
   "layer": "base",
   "node": "polaris_turret_side_left",
-  "provisional": true,
-  "desc": "Starboard-side mount aft of hangar; mesh correspondence remains provisional."
+  "provisional": false,
+  "desc": "Starboard-side mount aft of hangar; position corrected per JMBN reference."
+ },
+ {
+  "id": "32",
+  "name": "MOUNT 3-2",
+  "location": "PORT SIDE · AFT",
+  "cat": "turret",
+  "layer": "base",
+  "node": "polaris_turret_side_right",
+  "provisional": false,
+  "desc": "Port-side mount aft of hangar; position corrected per JMBN reference."
  },
  {
   "id": "61",
@@ -220,10 +220,14 @@ const stations=[
  {
   "id": "armory",
   "name": "JMBN ARMORY",
-  "location": "STARBOARD · FORWARD OF MOUNT 4-2",
+  "location": "MIDSHIP · JMBN ARMORY",
   "cat": "support",
   "layer": "main",
-  "point": [-0.79, 0.06, -1.42],
+  "point": [
+   -0.21315,
+   0.04745,
+   -1.38519
+  ],
   "desc": "Weapons & Equipment Locker. Secure storage and staging point for JMBN crew weapons, armor, and mission gear."
  },
  {
@@ -238,7 +242,7 @@ const stations=[
 let selected=stations[0],filter='all',markersOn=true;
 const buttons=new Map(),pins=new Map(),tmp=new THREE.Vector3();
 function stationNode(s,name=s.node){if(!name)return null;let result=null;groups[s.layer]?.traverse(o=>{if(o.name===name)result=o});return result}
-const ARMORY_STORAGE_KEY='jmbn-polaris-armory-placement-v1';
+const ARMORY_STORAGE_KEY='jmbn-polaris-armory-placement-v2';
 const armoryStation=stations.find(s=>s.id==='armory');
 let placingArm=false;
 try{const saved=JSON.parse(localStorage.getItem(ARMORY_STORAGE_KEY)||'null');if(Array.isArray(saved)&&saved.length===3&&saved.every(Number.isFinite))armoryStation.point=saved}catch(e){console.warn('Armory position cache',e)}
