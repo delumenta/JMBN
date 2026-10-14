@@ -13,22 +13,14 @@ body{background:#050504;color:#eadcc0}
 .bearing-arrow .arrow{font-size:26px;line-height:1;color:#ff4949;filter:drop-shadow(0 0 6px #ff3737)}
 .bearing-arrow.locked,.bearing-arrow.locked .arrow{color:#ffdc88}
 #trackingState{position:absolute;top:calc(50% + 74px);left:50%;transform:translateX(-50%);color:#f1cc7d;font:12px monospace;text-align:center}
-</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse + keyboard</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
+</style></head><body><div id="hud"><div id="top"><div class="tag"><b>JMBN // POLARIS</b> · TURRET 4-1</div><div class="tag" id="stats">WAVE 1 · SCORE 0</div><div class="tag" id="health">SHIELDS 100% · HULL 100%</div></div><div id="weps"><small>AI WEPS // FIRE CONTROL</small><strong id="order">STANDBY FOR ORDERS</strong><div id="radio">RADIO STANDBY</div><button id="sound">🔊 ENABLE WEPS VOICE</button></div><div id="center"></div><div id="directionLayer"></div><div id="trackingState">T TO LOCK · X TO RELEASE</div><div id="target">NO TRACK ACQUIRED</div><div id="turretReadout" style="position:absolute;top:calc(50% - 48px);left:50%;transform:translateX(-50%);font:11px monospace;color:#b3d5e9;letter-spacing:.12em">PITCH 00° · YAW 000°</div><div id="notice"></div><div id="bottom"><div id="info"><b>WEAPON STATUS:</b> <span id="posture">HOLD</span><br><b>WEAPON HEAT:</b> <span id="heat">0%</span><br><b>CONTROLS:</b> MOUSE AIM · RIGHT-CLICK ZOOM · LEFT-CLICK / SPACE FIRE<br><b>RADIO:</b> 1 ACK · T AUTO-TRACK · X RELEASE · 2 ACQUIRED · 3 GUNS AFFIRM · 4 BANDIT DOWN<br><b>LOOK:</b> CLICK GAME TO LOCK POINTER · ESC RELEASE</div><canvas id="radar" width="180" height="180"></canvas></div><div id="overlay"><div id="intro"><h1>BATTLE STATIONS 3D</h1><p>JMBN POLARIS // LIVE GUNNERY SIMULATION</p><p>Intercept hostile fighters. Manually acquire your assigned track, complete WEPS radio procedure, then engage when authorized. Unauthorized fire is penalized.</p><p>Desktop browser recommended · Mouse aim · Hold right-click to zoom · Left-click/Space to fire</p><button id="start">DEPLOY TO TURRET</button></div></div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
-import { GLTFLoader } from 'https://esm.sh/three@0.170.0/examples/jsm/loaders/GLTFLoader.js';
 const $=id=>document.getElementById(id),scene=new THREE.Scene();scene.background=new THREE.Color(0x020712);scene.fog=new THREE.FogExp2(0x020712,.0009);
-const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,3000);camera.position.set(0,3,0);
+const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,3000);let zoomHeld=false;const normalFov=75,aimFov=42;camera.position.set(0,3,0);
 const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;renderer.setClearColor(0x020712);document.body.prepend(renderer.domElement);
 scene.add(new THREE.HemisphereLight(0x9cbad7,0x171c2b,1.35));const light=new THREE.DirectionalLight(0xdceaff,2.8);light.position.set(200,300,-200);scene.add(light);const rimLight=new THREE.DirectionalLight(0x5686cf,1.9);rimLight.position.set(-150,-35,180);scene.add(rimLight);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<2100;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(1100+Math.random()*700);stars.push(v.x,v.y,v.z)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xb8d2e5,size:2,sizeAttenuation:false})));
-// The real Polaris exterior provides an ownship frame behind the gunner viewpoint.
-const polarisHull=new THREE.Group();scene.add(polarisHull);
-new GLTFLoader().load('assets/models/polaris/JMBN_Polaris_Base.glb',gltf=>{
- const ship=gltf.scene,box=new THREE.Box3().setFromObject(ship),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
- ship.position.sub(center);const scale=120/Math.max(size.x,size.y,size.z,1);ship.scale.setScalar(scale);
- polarisHull.add(ship);polarisHull.position.set(0,-40,78);
-},undefined,e=>console.warn('Optional Polaris hull model unavailable:',e));
 const turret=new THREE.Group();scene.add(turret);const metal=new THREE.MeshStandardMaterial({color:0x586b74,metalness:.7,roughness:.35}),trim=new THREE.MeshStandardMaterial({color:0x182c37,metalness:.5,roughness:.5});function mesh(parent,geo,mat,pos){const o=new THREE.Mesh(geo,mat);o.position.set(...pos);parent.add(o);return o}
 mesh(turret,new THREE.CylinderGeometry(3.6,4.5,1.5,12),metal,[0,-4.4,0]);mesh(turret,new THREE.BoxGeometry(6,1.3,5),trim,[0,-3.4,-1]);for(const x of [-2.5,2.5]){const b=mesh(turret,new THREE.CylinderGeometry(.42,.58,8,12),metal,[x,-2.7,-5]);b.rotation.x=Math.PI/2}
 
@@ -54,8 +46,8 @@ for(const side of [-1,1]){
  plate(.6,.035,.027,side*1.55,-.91,-1.61,accentMat);
  for(let i=0;i<4;i++)plate(.055,.035,.04,side*(1.25+i*.18),-1.08,-1.59,accentMat);
 }
-bar([-3.55,.83,-2.5],[3.55,.83,-2.5],.13,hullMat);
-bar([-1.5,-.84,-2.3],[1.5,-.84,-2.3],.10,rimMat);
+
+
 plate(2.9,.6,.9,0,-1.39,-1.75,hullMat);
 plate(1.8,.16,.15,0,-1.02,-1.3,panelMat);
 for(const x of [-.8,.8]){const grip=mesh(cockpit,new THREE.CylinderGeometry(.10,.13,.47,9),rimMat,[x,-1.35,-1.18]);grip.rotation.z=x>0?-.22:.22}
@@ -95,8 +87,8 @@ const frameBlack=new THREE.MeshStandardMaterial({color:0x0b1117,metalness:.85,ro
 const frameHighlight=new THREE.MeshStandardMaterial({color:0x52616b,metalness:.83,roughness:.27});
 const statusAmber=new THREE.MeshBasicMaterial({color:0xe0ae65,toneMapped:false});
 const statusBlue=new THREE.MeshBasicMaterial({color:0x6faac8,toneMapped:false});
-bar([-3.15,1.54,-2.65],[3.15,1.54,-2.65],.18,frameBlack);
-bar([-2.65,1.31,-2.57],[2.65,1.31,-2.57],.07,frameHighlight);
+
+
 for(const side of [-1,1]){
  bar([side*3.15,1.54,-2.65],[side*2.38,.94,-2.51],.18,frameBlack);
  bar([side*2.38,.94,-2.51],[side*1.93,-.57,-2.22],.12,frameBlack);
@@ -115,8 +107,8 @@ for(const side of [-1,1]){
  }
 }
 // Overhead tactical light bar, restrained so the centre reticle stays unobstructed.
-plate(2.45,.12,.26,0,1.54,-2.57,frameBlack);
-for(let i=0;i<9;i++)plate(.13,.026,.025,-.88+i*.22,1.44,-2.405,i===4?statusAmber:statusBlue);
+
+
 // Low, wide control desk and twin weapon grip housings, without obscuring the sight.
 plate(3.8,.22,.85,0,-1.67,-1.65,stationDark);
 plate(2.8,.055,.14,0,-1.49,-1.27,stationEdge);
@@ -241,8 +233,10 @@ function fire(){
 function end(win){missionEnded=true;active=false;document.exitPointerLock?.();$('overlay').style.display='grid';$('intro').innerHTML='<h1>'+(win?'MISSION COMPLETE':'POLARIS LOST')+'</h1><p>FINAL SCORE: '+score+' · WAVE '+wave+'</p><button id="again">REDEPLOY</button>';$('again').onclick=()=>location.reload()}
 function begin(){active=true;$('overlay').style.display='none';for(let i=0;i<4;i++)spawn();assign();renderer.domElement.requestPointerLock?.()}
 $('start').onclick=begin;$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊 WEPS VOICE ON':'🔇 ENABLE WEPS VOICE';if(sound)say($('order').textContent)};
-renderer.domElement.addEventListener('click',()=>{if(active&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.()});renderer.domElement.addEventListener('mousedown',e=>{if(e.button===0)mouseFire=true});window.addEventListener('mouseup',()=>mouseFire=false);document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement||!active)return;yaw-=e.movementX*.0022;pitch=Math.max(-1.25,Math.min(1.25,pitch-e.movementY*.0022))});
-document.addEventListener('keydown',e=>{if(!active||e.repeat)return;if(e.code==='Space'){e.preventDefault();mouseFire=true}if(e.key==='1')ack();if(e.key.toLowerCase()==='t')mark();if(e.key.toLowerCase()==='x'){tracking=false;marked=null;$('trackingState').textContent='TRACK RELEASED · T TO LOCK'}if(e.key==='2')acquire();if(e.key==='3')affirm();if(e.key==='4')report()});document.addEventListener('keyup',e=>{if(e.code==='Space')mouseFire=false});window.addEventListener('blur',()=>mouseFire=false);
+renderer.domElement.addEventListener('click',()=>{if(active&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.()});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+renderer.domElement.addEventListener('mousedown',e=>{if(e.button===0)mouseFire=true;if(e.button===2&&active){e.preventDefault();zoomHeld=true}});
+window.addEventListener('mouseup',e=>{if(e.button===0)mouseFire=false;if(e.button===2)zoomHeld=false});document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement||!active)return;yaw-=e.movementX*.0022;pitch=Math.max(-1.25,Math.min(1.25,pitch-e.movementY*.0022))});
+document.addEventListener('keydown',e=>{if(!active||e.repeat)return;if(e.code==='Space'){e.preventDefault();mouseFire=true}if(e.key==='1')ack();if(e.key.toLowerCase()==='t')mark();if(e.key.toLowerCase()==='x'){tracking=false;marked=null;$('trackingState').textContent='TRACK RELEASED · T TO LOCK'}if(e.key==='2')acquire();if(e.key==='3')affirm();if(e.key==='4')report()});document.addEventListener('keyup',e=>{if(e.code==='Space')mouseFire=false});window.addEventListener('blur',()=>{mouseFire=false;zoomHeld=false});document.addEventListener('pointerlockchange',()=>{if(document.pointerLockElement!==renderer.domElement)zoomHeld=false});
 function radar(){
  const c=$('radar'),g=c.getContext('2d'),cx=c.width/2,cy=c.height/2;
  g.clearRect(0,0,c.width,c.height);g.fillStyle='#0b0906';g.fillRect(0,0,c.width,c.height);
@@ -294,7 +288,7 @@ function updateBearingIndicators(){
  const label=document.createElement('span');label.textContent=(p.e===selected?'LOCK ':'BANDIT ')+p.e.track;
  div.append(arrow,label);root.append(div)}
 }
-function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());if(active&&!missionEnded){
+function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());const fovTarget=(active&&zoomHeld)?aimFov:normalFov;const fovNext=THREE.MathUtils.damp(camera.fov,fovTarget,12,dt);if(Math.abs(fovNext-camera.fov)>.005){camera.fov=fovNext;camera.updateProjectionMatrix();}if(active&&!missionEnded){
  if(tracking&&marked&&!marked.dead){
  const v=marked.group.position.clone().sub(camera.position);
  const desiredYaw=Math.atan2(-v.x,-v.z),desiredPitch=Math.atan2(v.y,Math.hypot(v.x,v.z));
