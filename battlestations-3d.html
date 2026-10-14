@@ -196,7 +196,7 @@ new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
  source.position.sub(center);
  source.scale.setScalar(20/Math.max(size.x,size.y,size.z,1e-6));
  source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true}});
- // The Gladius GLB already faces +Z in its source coordinates. The fighter root's lookAt points +Z toward the gunner, so no 180-degree correction is needed.
+ // THREE.Object3D.lookAt aligns the root's local +Z toward the destination. The imported Gladius nose is +Z, so rotate its visual child 180 degrees to make the nose point toward the destination instead of flying backwards.
  gladiusTemplate=source;
  for(const fighter of fighters)if(!fighter.dead)applyEnemyModel(fighter);
  console.info('JMBN Gladius model loaded for hostile fighters');
@@ -220,7 +220,7 @@ fighterPaths.forEach((path,index)=>enemyLoader.load(path,source=>{
  console.info('Battle Stations fighter loaded:',fighterNames[index]);
 },undefined,err=>console.info('Using procedural enemy fallback until FBX is uploaded:',path,err)));
 function applyEnemyModel(e){const template=gladiusTemplate||fighterModels[e.modelIndex];if(!template)return;
- e.group.clear();e.group.add(template.clone(true));e.group.userData.shipName=gladiusTemplate?'AEGIS GLADIUS':fighterNames[e.modelIndex];
+ e.group.clear();const visual=template.clone(true);if(gladiusTemplate)visual.rotation.y+=Math.PI;e.group.add(visual);e.group.userData.shipName=gladiusTemplate?'AEGIS GLADIUS':fighterNames[e.modelIndex];
 }
 const fighters=[],shots=[],sparks=[],raycaster=new THREE.Raycaster(),clock=new THREE.Clock();let active=false,wave=1,score=0,shields=100,hull=100,heat=0,yaw=0,pitch=0,assigned=null,marked=null,acked=false,acquired=false,affirmed=false,green=false,down=null,mouseFire=false,lastShot=0,lastAttack=0,spawnTimer=0,sound=false,missionEnded=false,tracking=false;
 function say(t){$('order').textContent=t;if(sound&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/(\d)-(\d)-(\d)-(\d)/g,'$1 $2 $3 $4'));u.rate=.93;u.pitch=.8;speechSynthesis.speak(u)}}
