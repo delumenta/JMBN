@@ -19,12 +19,12 @@
 @media(max-width:740px){#top{height:68px;padding:10px 13px}.brand{font-size:19px}#topright .pill{display:none}#left{top:auto;bottom:75px;left:8px;right:8px;width:auto;height:160px;border-radius:6px}#left .panelhead{display:none}#stationList{display:flex;overflow:auto;padding:6px;gap:5px}#stationList .station{min-width:135px;width:135px;flex:0 0 135px;border:1px solid #665739;height:100%;padding:8px}#stationList .station .tag{display:none}#right{top:77px;right:8px;width:205px;padding:11px}#detailTitle{font-size:14px;margin:7px 0}#detailText{font-size:10px}#dock{left:8px;right:8px;bottom:7px;transform:none;overflow:auto;padding:6px;justify-content:flex-start}#dock .docklabel{display:none}#dock button{font-size:10px;padding:8px}#status,#axes{display:none}.pin{font-size:9px;padding:4px}#gate{padding:21px}#gate h2{font-size:20px}}
 </style></head><body>
 <div id="scene"></div><div id="grid"></div><div id="pins"></div>
-<header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span><label id="loadBtn">LOAD GLBs <input id="files" type="file" accept=".glb" multiple hidden></label></div></header>
+<header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span></div></header>
 <aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2>STATION DIRECTORY</h2><p>Identify your station. Click a marker to focus its position.</p></div><div class="filters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
 <aside id="right"><div class="small">SELECTED STATION</div><div id="detailTitle">NO STATION SELECTED</div><div id="detailMeta">RSI POLARIS // JMBN</div><p id="detailText">Select a mount in the station directory or tap a gold marker on the model.</p><div class="notice">Bridge seats and ICC follow your annotated diagram. Torpedo Director spans the opposing consoles; Engineering Duty Officer uses the central stern structure. Turret-number mesh matches remain provisional.</div></aside>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div><div id="axes">BOW ◀ &nbsp; // &nbsp; STERN ▶</div>
 <div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button></div>
-<div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>YOUR STATION AWAITS.</h2><p>Load the four Polaris models to reveal the gold-accented ship blueprint, interior decks and turret positions.</p><label id="loadBtn">SELECT POLARIS MODELS <input id="gateFiles" type="file" accept=".glb" multiple hidden></label><div id="gateMsg" class="micro">Checking hosted Polaris models automatically…<br>If unavailable, you can select local GLBs instead.</div></div>
+<div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>INITIALIZING ATLAS</h2><p>Loading the Polaris tactical blueprint and ship stations.</p><div id="gateMsg" class="micro" role="status">Connecting to JMBN ship assets…</div></div>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import {OrbitControls} from 'https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js';
@@ -216,38 +216,37 @@ async function cache(k,bytes){try{const d=await db();await new Promise((ok,no)=>
 async function loadBytes(k,bytes){const result=await new Promise((ok,no)=>new GLTFLoader().parse(bytes,'',ok,no));if(groups[k])root.remove(groups[k]);groups[k]=result.scene;groups[k].name='JMBN '+k;root.add(groups[k])}
 function finish(){styleHull();syncLayers();makePins();renderList();selectStation(selected);fit();$('gate').classList.add('hidden');$('gateMsg').textContent='Model ready.'}
 async function importFiles(files){let loaded=0;for(const file of files){const n=file.name.toLowerCase(),k=n.includes('engineering')?'engineering':n.includes('cargo')?'cargo':n.includes('main')?'main':(n.includes('base')||n.includes('gold'))?'base':null;if(!k)continue;$('gateMsg').textContent='Loading '+file.name+'…';try{const bytes=await file.arrayBuffer();await loadBytes(k,bytes);await cache(k,bytes);loaded++}catch(e){console.error(e);$('gateMsg').textContent='Could not read '+file.name}}if(loaded)finish();else $('gateMsg').textContent='No recognized Polaris files. Please select the four GLBs.'}
-$('files').onchange=async e=>{await importFiles([...e.target.files]);e.target.value=''};$('gateFiles').onchange=async e=>{await importFiles([...e.target.files]);e.target.value=''};
+
 document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.dataset.layer]=!visible[b.dataset.layer];syncLayers()});document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
 $('fit').onclick=()=>fit();$('topview').onclick=()=>fit('top');$('iso').onclick=()=>fit();$('labelsToggle').onclick=()=>{markersOn=!markersOn;$('labelsToggle').classList.toggle('active',markersOn);$('labelsToggle').textContent=markersOn?'MARKERS ON':'MARKERS OFF'};
 async function autoLoadHostedModels(){
- const api='https://api.github.com/repos/delumenta/JMBN/contents/assets/models/polaris';
- try{
- const response=await fetch(api,{headers:{Accept:'application/vnd.github+json'}});
- if(!response.ok)throw new Error('Cannot list hosted models ('+response.status+')');
- const items=await response.json();
- if(!Array.isArray(items))throw new Error('Unexpected model directory response');
- const files=items.filter(item=>item.type==='file'&&/\.glb$/i.test(item.name));
- const classifications={};
- for(const file of files){
- const n=file.name.toLowerCase();
- const key=/engineering/.test(n)?'engineering':/cargo/.test(n)?'cargo':/main[ _-]?deck|main/.test(n)?'main':/base|gold|polaris/.test(n)?'base':null;
- if(key&&!classifications[key])classifications[key]=file;
+ const files={
+  base:'JMBN_Polaris_Base.glb',
+  main:'JMBN Polaris Main Deck.glb',
+  cargo:'JMBN Polaris Cargo.glb',
+  engineering:'JMBN Polaris Engineering.glb'
+ };
+ const results=await Promise.all(Object.entries(files).map(async ([key,name])=>{
+  try{
+   const url='assets/models/polaris/'+encodeURIComponent(name);
+   const response=await fetch(url);
+   if(!response.ok)throw new Error('HTTP '+response.status);
+   const bytes=await response.arrayBuffer();
+   await loadBytes(key,bytes);
+   return {key,name,ok:true}
+  }catch(error){console.error('Polaris model could not load:',name,error);return {key,name,ok:false}}
+ }));
+ const succeeded=results.filter(r=>r.ok);
+ if(succeeded.length){
+  finish();
+  $('status').textContent=succeeded.length+'/4 POLARIS LAYERS LOADED · DRAG TO ORBIT · SCROLL TO ZOOM';
+  if(succeeded.length<4)console.warn('Missing Polaris model layers:',results.filter(r=>!r.ok).map(r=>r.name));
+ }else{
+  $('gate').querySelector('h2').textContent='SHIP MODELS UNAVAILABLE';
+  $('gateMsg').textContent='Could not retrieve the Polaris GLBs from assets/models/polaris/. Refresh the page or check that the files are published.';
  }
- let count=0;
- for(const key of ['base','main','cargo','engineering']){
- const item=classifications[key];if(!item)continue;
- try{
- $('gateMsg').textContent='Downloading '+item.name+'…';
- const url='assets/models/polaris/'+encodeURIComponent(item.name);
- const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);
- const bytes=await r.arrayBuffer();await loadBytes(key,bytes);count++;
- }catch(e){console.warn('Hosted Polaris layer failed',item.name,e)}
- }
- if(count){finish();$('status').textContent=count+' HOSTED POLARIS LAYER'+(count===1?'':'S')+' LOADED · DRAG TO ORBIT · SCROLL TO ZOOM';return true}
- return false;
- }catch(e){console.warn('Automatic model discovery unavailable',e);return false}
 }
-(async()=>{if(await autoLoadHostedModels())return;try{const d=await db();let loaded=0;for(const k of ['base','main','cargo','engineering']){const bytes=await new Promise((ok,no)=>{const t=d.transaction('models','readonly'),req=t.objectStore('models').get(k);req.onsuccess=()=>ok(req.result);req.onerror=()=>no(req.error)});if(bytes){await loadBytes(k,bytes);loaded++}}d.close();if(loaded)finish()}catch(e){console.warn('No saved models yet',e)}})();
+autoLoadHostedModels();
 function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}renderer.render(scene,camera)}loop();
 function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}addEventListener('resize',resize);resize();renderList();
 </script></body></html>
