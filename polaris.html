@@ -449,7 +449,7 @@ async function autoLoadHostedModels(){
  }
 }
 autoLoadHostedModels();
-function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter||x.point)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||s.atlas!==atlasMode||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=((1-tmp.y)/2*innerHeight)+'px'}if(previewStation){
+function loop(){requestAnimationFrame(loop);ctl.update();for(const s of stations.filter(x=>x.node||x.nodes||x.groupCenter||x.point)){const p=pins.get(s.id),position=stationPosition(s);if(!p)continue;if(!markersOn||s.atlas!==atlasMode||!position||!groups[s.layer]?.visible){p.style.display='none';continue}tmp.copy(position).project(camera);p.style.display=(tmp.z>-1&&tmp.z<1)?'':'none';p.style.left=((tmp.x+1)/2*innerWidth)+'px';p.style.top=(((1-tmp.y)/2*innerHeight)-(innerWidth<=740?Math.min(95,innerHeight*.105):0))+'px'}if(previewStation){
  const point=stationPosition(previewStation),card=$('stationPreview');
  if(point&&groups[previewStation.layer]?.visible){
   const projected=point.clone().project(camera),px=(projected.x+1)*innerWidth/2,py=(1-projected.y)*innerHeight/2;
