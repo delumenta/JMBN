@@ -365,27 +365,98 @@ function voiceIntent(raw){
  if(/\bengaging\b/.test(words))return green?'ENGAGING · COPIED':'FIS NOT GREEN · HOLD FIRE';
  return 'UNRECOGNIZED · REPEAT RADIO CALL';
 }
-function stopVoice(){if(voiceEngine&&voiceListening)voiceEngine.stop()}
+
+let radioOpen=false,radioSegments=new Map(),radioAlternatives=[],radioError=false;
+function voiceStatus(){
+ const el=$('voiceStatus');if(!el)return;
+ el.textContent=!SpeechRecognition?'UNSUPPORTED':radioOpen?'TRANSMITTING':voiceStarting?'CONNECTING':voiceListening?'PROCESSING':voiceMode==='continuous'?'READY':'PTT READY';
+}
+function chooseRadioCandidate(){
+ const candidates=[...new Set([Array.from(radioSegments.values()).join(' ').trim(),...radioAlternatives].filter(Boolean))];
+ if(!candidates.length)return '';
+ const expected=assigned?.track.replace(/-/g,'')||down?.track.replace(/-/g,'')||'';
+ const score=t=>{
+  const w=radioNormalize(t),digits=spokenTracks(t);
+  let n=0;
+  if(/\\bguns affirm\\b/.test(w))n+=acquired?12:5;
+  if(/\\btarget acquired\\b/.test(w))n+=acked?12:5;
+  if(/\\bbandit down\\b/.test(w))n+=down?12:5;
+  if(/\\bcovering track\\b/.test(w))n+=!acked?12:4;
+  if(/\\bengaging\\b/.test(w))n+=green?9:4;
+  if(expected&&digits.includes(expected))n+=8;
+  if(expected&&digits.length&&!digits.includes(expected))n-=5;
+  return n;
+ };
+ return candidates.sort((x,y)=>score(y)-score(x))[0];
+}
+function finishRadio(){
+ const heard=chooseRadioCandidate();
+ if(heard){
+  $('voiceHeard').textContent='YOU SAID: '+heard;
+  $('voiceHelp').textContent=voiceTestMode?'MIC TEST SUCCESS · '+radioNormalize(heard):'RADIO CHECK: '+voiceIntent(heard);
+ }else if(!radioError){$('voiceHelp').textContent='NO SPEECH DETECTED · TRY AGAIN'}
+ radioSegments.clear();radioAlternatives=[];
+}
+function stopVoice(){
+ if(!radioOpen&&!voiceListening&&!voiceStarting)return;
+ radioOpen=false;voiceHeld=false;voiceStatus();
+ if(voiceEngine&&(voiceListening||voiceStarting)){
+  try{voiceEngine.stop()}catch(err){voiceStarting=false;finishRadio()}
+ }else finishRadio();
+}
 function startVoice(){
  if(!SpeechRecognition){$('voiceHeard').textContent='Speech recognition unavailable in this browser';voiceStatus();return}
- if((!active&&!voiceTestMode)||voiceListening||voiceStarting)return;
+ if((!active&&!voiceTestMode)||radioOpen||voiceListening||voiceStarting)return;
+ radioOpen=true;radioError=false;radioSegments.clear();radioAlternatives=[];
  if(!voiceEngine){
-  voiceEngine=new SpeechRecognition();voiceEngine.lang='en-US';voiceEngine.continuous=true;voiceEngine.interimResults=true;voiceEngine.maxAlternatives=3;
+  voiceEngine=new SpeechRecognition();
+  voiceEngine.lang='en-SG';voiceEngine.continuous=true;voiceEngine.interimResults=true;voiceEngine.maxAlternatives=5;
   voiceEngine.onstart=()=>{voiceListening=true;voiceStarting=false;voiceStatus()};
-  voiceEngine.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const result=e.results[i],heard=result[0].transcript;$('voiceHeard').textContent=(result.isFinal?'HEARD: ':'LISTENING: ')+heard;if(result.isFinal){$('voiceHeard').textContent='YOU SAID: '+heard;if(active&&!voiceTestMode){const status=voiceIntent(heard);$('voiceHelp').textContent='RADIO CHECK: '+status}else{$('voiceHelp').textContent='MIC TEST SUCCESS · TRANSCRIPT RECEIVED'}}}};
-  voiceEngine.onerror=e=>{voiceStarting=false;$('voiceHeard').textContent='MIC: '+e.error;if(['not-allowed','service-not-allowed','audio-capture'].includes(e.error)){voiceMode='off';$('voiceToggle').textContent='🎙 CONTINUOUS: OFF'}voiceStatus()};
-  voiceEngine.onend=()=>{voiceListening=false;voiceStarting=false;voiceStatus();if((active||voiceTestMode)&&(voiceMode==='continuous'||voiceHeld||voiceTestMode)){setTimeout(()=>{if((active||voiceTestMode)&&(voiceMode==='continuous'||voiceHeld||voiceTestMode))startVoice()},450)}};
+  voiceEngine.onresult=e=>{
+   for(let i=e.resultIndex;i<e.results.length;i++){
+    const result=e.results[i],heard=result[0]?.transcript||'';
+    if(result.isFinal){
+     radioSegments.set(i,heard);
+     for(let j=0;j<result.length;j++)if(result[j]?.transcript)radioAlternatives.push(result[j].transcript);
+    }
+    $('voiceHeard').textContent=(result.isFinal?'HEARD: ':'LISTENING: ')+heard;
+   }
+  };
+  voiceEngine.onerror=e=>{
+   radioError=true;voiceStarting=false;radioOpen=false;
+   $('voiceHeard').textContent='MIC: '+e.error;
+   $('voiceHelp').textContent=e.error==='not-allowed'?'ALLOW MICROPHONE ACCESS TO USE RADIO':'MIC ERROR · TRY AGAIN';
+   voiceStatus();
+  };
+  voiceEngine.onend=()=>{
+   voiceListening=false;voiceStarting=false;
+   if(radioOpen){ // Browser may end recognition automatically after silence.
+    radioOpen=false;finishRadio();
+   }else if(!radioError)finishRadio();
+   voiceStatus();
+  };
  }
- try{voiceStarting=true;voiceEngine.start()}catch(e){voiceStarting=false;$('voiceHeard').textContent=e.message}
+ try{voiceStarting=true;voiceEngine.start();voiceStatus()}catch(err){voiceStarting=false;radioOpen=false;$('voiceHeard').textContent='MIC: '+err.message;voiceStatus()}
 }
-$('voiceToggle').onclick=()=>{voiceMode=voiceMode==='continuous'?'off':'continuous';$('voiceToggle').textContent=voiceMode==='continuous'?'🎙 CONTINUOUS: ON':'🎙 CONTINUOUS: OFF';if(voiceMode==='continuous')startVoice();else if(!voiceHeld)stopVoice();voiceStatus()};
-$('voiceTest').onclick=()=>{voiceTestMode=!voiceTestMode;$('voiceTest').textContent=voiceTestMode?'STOP TEST':'TEST MIC';$('voiceHelp').textContent=voiceTestMode?'Speak normally · microphone testing (no game commands)':'Chrome / Edge · Allow microphone permission';if(voiceTestMode){$('voiceHeard').textContent='Starting microphone…';startVoice()}else if(voiceMode!=='continuous'&&!voiceHeld)stopVoice();voiceStatus()};
-function pttDown(e){e.preventDefault();voiceHeld=true;startVoice();voiceStatus()}
-function pttUp(e){e.preventDefault();voiceHeld=false;if(voiceMode!=='continuous')stopVoice();voiceStatus()}
-$('voicePTT').addEventListener('pointerdown',pttDown);
-for(const ev of ['pointerup','pointercancel','pointerleave'])$('voicePTT').addEventListener(ev,pttUp);
-document.addEventListener('keydown',e=>{if(e.code==='KeyV'&&!e.repeat&&active)pttDown(e)});
-document.addEventListener('keyup',e=>{if(e.code==='KeyV')pttUp(e)});
+function toggleRadio(e){
+ if(e)e.preventDefault();
+ if(radioOpen)stopVoice();else startVoice();
+}
+$('voiceToggle').onclick=()=>{
+ voiceMode=voiceMode==='continuous'?'off':'continuous';
+ $('voiceToggle').textContent=voiceMode==='continuous'?'🎙 AUTO: ON':'🎙 AUTO: OFF';
+ $('voiceHelp').textContent=voiceMode==='continuous'?'AUTO MODE: USE V TO START / STOP TRANSMISSION':'PRESS V TO TRANSMIT · PRESS V AGAIN TO SEND';
+ voiceStatus();
+};
+$('voiceTest').onclick=()=>{
+ voiceTestMode=!voiceTestMode;
+ $('voiceTest').textContent=voiceTestMode?'STOP TEST':'TEST MIC';
+ if(voiceTestMode){$('voiceHelp').textContent='PRESS V OR RADIO BUTTON TO START · AGAIN TO STOP';$('voiceHeard').textContent='MIC TEST READY'}
+ else if(radioOpen)stopVoice();
+ voiceStatus();
+};
+$('voicePTT').addEventListener('click',toggleRadio);
+document.addEventListener('keydown',e=>{if(e.code==='KeyV'&&!e.repeat&&(active||voiceTestMode))toggleRadio(e)});
 function begin(){voiceTestMode=false;$('voiceTest').textContent='TEST MIC';active=true;$('overlay').style.display='none';for(let i=0;i<4;i++)spawn();assign();renderer.domElement.requestPointerLock?.()}
 $('start').onclick=begin;$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊 WEPS VOICE ON':'🔇 ENABLE WEPS VOICE';if(sound)say($('order').textContent)};
 renderer.domElement.addEventListener('click',()=>{if(active&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.()});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
