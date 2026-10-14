@@ -355,7 +355,7 @@ function makePins(){
  $('pins').innerHTML='';pins.clear();
  for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CQ',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
+ pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CREW',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
  pin.onmouseleave=()=>{if(!previewPinned)hidePreview()};
  pin.onclick=()=>{previewPinned=false;selectStation(s)};$('pins').append(pin);pins.set(s.id,pin)}
 }
