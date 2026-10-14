@@ -388,5 +388,49 @@ function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta
  yaw+=wrap(desiredYaw-yaw)*Math.min(1,dt*3.5);
  pitch+= (Math.max(-1.25,Math.min(1.25,desiredPitch))-pitch)*Math.min(1,dt*3.5);
  }else if(tracking&&(!marked||marked.dead)){tracking=false;$('trackingState').textContent='TRACK LOST · T TO LOCK'}
- camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();for(const e of iffContacts){e.phase+=dt*.25;e.group.position.x+=Math.sin(e.phase)*dt*1.8;e.group.lookAt(0,0,0)}displayRefresh+=dt;if(displayRefresh>.12){paintStationDisplays();displayRefresh=0}spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){if(e.dead)continue;e.phase+=dt*.8;const p=e.group.position;const approach=new THREE.Vector3().subVectors(new THREE.Vector3(0,0,0),p).normalize();p.addScaledVector(approach,dt*e.speed);p.x+=Math.sin(e.phase)*dt*10;p.y+=Math.cos(e.phase*.7)*dt*7;e.group.lookAt(0,0,0);if(p.length()<32){p.multiplyScalar(7);shields=Math.max(0,shields-6);notice('HOSTILE STRIKE · SHIELDS HIT')}}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave)*.5);if(shields<=0)hull=Math.max(0,hull-n*1.5);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators();renderContactMarkers()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+ camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;heat=Math.max(0,heat-dt*22);$('turretReadout').textContent='PITCH '+Math.round(pitch*180/Math.PI)+'° · YAW '+Math.round(((yaw*180/Math.PI)%360+360)%360)+'°';$('heat').textContent=Math.ceil(heat)+'%';$('posture').textContent=green?'FIS GREEN':'HOLD';if(mouseFire)fire();for(const e of iffContacts){e.phase+=dt*.25;e.group.position.x+=Math.sin(e.phase)*dt*1.8;e.group.lookAt(0,0,0)}displayRefresh+=dt;if(displayRefresh>.12){paintStationDisplays();displayRefresh=0}spawnTimer+=dt;lastAttack+=dt;for(const e of fighters){
+ if(e.dead)continue;
+ e.phase+=dt*.8;
+ const p=e.group.position;
+ // Attack runs: approach, strafe across the gunner's view, then break away and re-engage.
+ if(!e.flightMode){
+  e.flightMode='approach';e.flightTime=0;e.strafeSide=Math.random()<.5?-1:1;
+  e.velocity=new THREE.Vector3(0,0,-1);e.bank=0;
+ }
+ e.flightTime+=dt;
+ const dist=p.length();
+ if(e.flightMode==='approach'&&(dist<115||e.flightTime>14)){
+  e.flightMode='strafe';e.flightTime=0;e.strafeSide*=-1;
+ }else if(e.flightMode==='strafe'&&e.flightTime>5.5){
+  e.flightMode='break';e.flightTime=0;
+ }else if(e.flightMode==='break'&&(e.flightTime>5||dist>300)){
+  e.flightMode='approach';e.flightTime=0;
+ }
+ const toward=new THREE.Vector3().copy(p).multiplyScalar(-1).normalize();
+ const lateral=new THREE.Vector3(-toward.z,0,toward.x).normalize().multiplyScalar(e.strafeSide);
+ let desired;
+ if(e.flightMode==='approach'){
+  desired=toward.multiplyScalar(1).addScaledVector(lateral,.38);
+  desired.y+=Math.sin(e.phase*.75)*.16;
+ }else if(e.flightMode==='strafe'){
+  desired=lateral.multiplyScalar(1.25).addScaledVector(toward,.18);
+  desired.y+=Math.sin(e.phase*1.5)*.24;
+ }else{
+  desired=p.clone().normalize().multiplyScalar(.85).addScaledVector(lateral,.6);
+  desired.y+=Math.sin(e.phase)*.20;
+ }
+ desired.normalize();
+ // Smooth steering rather than snapping to a new heading.
+ const previous=e.velocity.clone();
+ e.velocity.lerp(desired,Math.min(1,dt*(e.flightMode==='strafe'?.85:.55))).normalize();
+ const speed=e.speed*(e.flightMode==='strafe'?2.1:e.flightMode==='break'?1.75:1.25);
+ p.addScaledVector(e.velocity,dt*speed);
+ // Three.js objects point +Z toward lookAt; aim the nose along actual travel.
+ const facing=p.clone().add(e.velocity);
+ e.group.lookAt(facing);
+ const turn=previous.clone().cross(e.velocity).y;
+ e.bank=THREE.MathUtils.lerp(e.bank,THREE.MathUtils.clamp(-turn*10,-.42,.42),Math.min(1,dt*3));
+ e.group.rotateZ(e.bank);
+ if(p.length()<32){p.addScaledVector(e.velocity,dt*e.speed*3)}
+}if(lastAttack>2.7){lastAttack=0;const n=fighters.filter(e=>!e.dead).length;if(n){shields=Math.max(0,shields-n*(2+wave)*.5);if(shields<=0)hull=Math.max(0,hull-n*1.5);$('health').textContent='SHIELDS '+Math.ceil(shields)+'% · HULL '+Math.ceil(hull)+'%';if(hull<=0)end(false)}}const forward=new THREE.Vector3();camera.getWorldDirection(forward);let nearest=null,best=-1;for(const e of fighters){if(e.dead)continue;const d=e.group.position.clone().sub(camera.position),dot=d.clone().normalize().dot(forward);if(dot>best){best=dot;nearest=e}}$('target').textContent=nearest&&best>.975?'CONTACT '+nearest.track+' · '+Math.round(nearest.group.position.length())+' M'+(nearest===marked?'\nMARKED':''):'NO TRACK UNDER RETICLE';radar();updateBearingIndicators();renderContactMarkers()}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;if(s.life<=0){scene.remove(s.o);shots.splice(i,1)}}for(let i=sparks.length-1;i>=0;i--){const s=sparks[i];s.life-=dt;s.o.position.addScaledVector(s.v,dt);s.o.scale.setScalar(Math.max(.01,s.life));if(s.life<=0){scene.remove(s.o);sparks.splice(i,1)}}renderer.render(scene,camera)}loop();window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 </script></body></html>
