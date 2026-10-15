@@ -196,7 +196,8 @@ new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
  source.position.sub(center);
  source.scale.setScalar(20/Math.max(size.x,size.y,size.z,1e-6));
  source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true}});
- // THREE.Object3D.lookAt aligns the root's local +Z toward the destination. The imported Gladius nose is +Z, so rotate its visual child 180 degrees to make the nose point toward the destination instead of flying backwards.
+ // The imported Gladius geometry faces opposite the flight-facing root; flip only its visual model.
+ source.rotation.y=Math.PI;
  gladiusTemplate=source;
  for(const fighter of fighters)if(!fighter.dead)applyEnemyModel(fighter);
  console.info('JMBN Gladius model loaded for hostile fighters');
