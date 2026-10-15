@@ -193,7 +193,7 @@ let gladiusFacingQuarterTurns=Number(localStorage.getItem('jmbn-gladius-facing')
 if(!Number.isInteger(gladiusFacingQuarterTurns)||gladiusFacingQuarterTurns<0||gladiusFacingQuarterTurns>3)gladiusFacingQuarterTurns=2;
 function cycleGladiusFacing(){gladiusFacingQuarterTurns=(gladiusFacingQuarterTurns+1)%4;localStorage.setItem('jmbn-gladius-facing',String(gladiusFacingQuarterTurns));if(gladiusTemplate)gladiusTemplate.rotation.y=gladiusFacingQuarterTurns*Math.PI/2;for(const f of fighters)if(!f.dead)applyEnemyModel(f);notice('GLADIUS FACING '+(gladiusFacingQuarterTurns*90)+'° · PRESS O TO ROTATE AGAIN');}
 
-new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
+new GLTFLoader().load('assets/models/Gladius.glb',gltf=>{
  const source=gltf.scene;
  const bounds=new THREE.Box3().setFromObject(source);
  if(bounds.isEmpty()){console.warn('Gladius GLB has no visible geometry');return}
@@ -206,7 +206,7 @@ new GLTFLoader().load('assets/models/gladus.glb',gltf=>{
  gladiusTemplate=source;
  for(const fighter of fighters)if(!fighter.dead)applyEnemyModel(fighter);
  console.info('JMBN Gladius model loaded for hostile fighters');
-},undefined,err=>console.warn('Gladius model unavailable; keeping fallback fighters at assets/models/gladus.glb',err));
+},undefined,err=>console.warn('Gladius model unavailable; keeping fallback fighters at assets/models/Gladius.glb',err));
 // Optional genuine Star Citizen fighter geometry. Graceful fallback if the uploaded assets are not hosted yet.
 const fighterModels=[null,null],fighterNames=['AEGIS AVENGER','DRAKE BUCCANEER'];
 const fighterPaths=['assets/models/enemies/AEGIS-AVENGER.FBX','assets/models/enemies/DRAKE-BUCCANEER.FBX'];
