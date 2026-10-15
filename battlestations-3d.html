@@ -200,7 +200,35 @@ new GLTFLoader().load('assets/models/Gladius.glb',gltf=>{
  const size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3());
  source.position.sub(center);
  source.scale.setScalar(20/Math.max(size.x,size.y,size.z,1e-6));
- source.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true}});
+ // Normalize imported materials: solid gunmetal hull, dark smoked canopy, no see-through armour.
+ source.traverse(obj=>{
+  if(!obj.isMesh)return;
+  obj.castShadow=true;obj.receiveShadow=true;
+  const materials=Array.isArray(obj.material)?obj.material:[obj.material];
+  const updated=materials.map(original=>{
+   if(!original)return original;
+   const mat=original.clone();
+   const name=((obj.name||'')+' '+(mat.name||'')).toLowerCase();
+   const isCanopy=/canopy|windscreen|windshield|cockpit.?glass|glass|visor/.test(name);
+   // GLB alpha-blended panels can expose the ship's internals. Keep both hull and canopy
+   // depth-writing and opaque; smoked glass is represented by a dark reflective surface.
+   mat.transparent=false;mat.opacity=1;mat.alphaTest=0;mat.depthWrite=true;
+   mat.side=THREE.FrontSide;
+   if(mat.color){
+    if(isCanopy){mat.color.setRGB(.095,.13,.17);mat.metalness=.28;mat.roughness=.24;}
+    else{
+     // Keep the imported texture's red/white details while shifting neutral hull
+     // materials toward a darker, less shiny gunmetal finish.
+     const c=mat.color.clone();const max=Math.max(c.r,c.g,c.b),min=Math.min(c.r,c.g,c.b);
+     if(max-min<.20 && max>.15){mat.color.lerp(new THREE.Color(0x505b65),.48);}
+     if('metalness' in mat)mat.metalness=.62;
+     if('roughness' in mat)mat.roughness=.48;
+    }
+   }
+   mat.needsUpdate=true;return mat;
+  });
+  obj.material=Array.isArray(obj.material)?updated:updated[0];
+ });
  // The imported Gladius geometry faces opposite the flight-facing root; flip only its visual model.
  source.rotation.y=gladiusFacingQuarterTurns*Math.PI/2;
  gladiusTemplate=source;
