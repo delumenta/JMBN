@@ -301,7 +301,6 @@ function end(win){missionEnded=true;active=false;document.exitPointerLock?.();$(
 const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 let voiceMode='off',voiceListening=false,voiceHeld=false,voiceStarting=false,voiceTestMode=false;
 let voiceEngine=null;
-const voiceStatus=()=>$('voiceStatus').textContent=!SpeechRecognition?'UNSUPPORTED':voiceListening?'LISTENING':voiceMode==='off'?'OFF':voiceMode==='continuous'?'READY':'PTT READY';
 // Normalize spoken digits, including "eight seven six two", "oh one five one" and 8-7-6-2.
 const digitWords={zero:'0',oh:'0',owe:'0',nought:'0',naught:'0',one:'1',won:'1',two:'2',too:'2',to:'2',three:'3',tree:'3',four:'4',for:'4',fore:'4',five:'5',fife:'5',six:'6',seven:'7',eight:'8',ate:'8',nine:'9',niner:'9'};
 function radioTokens(raw){return raw.toLowerCase().replace(/[-–—]/g,' ').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean)}
