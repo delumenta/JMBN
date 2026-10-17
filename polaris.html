@@ -58,7 +58,7 @@
 
 @media(max-width:1100px){#stationPreview{width:255px;right:12px;top:140px}#previewImage{height:120px}}
 @media(max-width:740px){#stationPreview{width:min(260px,calc(100vw - 20px));right:10px;top:78px}#previewImage{height:95px}.previewPlaceholder{padding:8px 12px}#previewData{padding:10px}#previewStation{font-size:13px}#previewDescription{font-size:10px;max-height:50px;overflow:hidden}#previewNote{display:none}}
-#atlasTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 12px 4px}#atlasTabs button{font-weight:700;font-size:11px;letter-spacing:.09em;color:#bbbdad;background:#0b1712;border:1px solid #646244;padding:11px 8px;cursor:pointer}#atlasTabs button.active{background:linear-gradient(125deg,#705324,#3e311e);border-color:#e6bd6f;color:#ffe6a4;box-shadow:inset 0 0 14px #b78a3e22}#atlasTabs button:hover{border-color:#e6bd6f}#stationFilters{padding-top:6px}#stationList .station small{letter-spacing:.025em}@media(max-width:740px){#atlasTabs{padding:8px 6px 3px}#atlasTabs button{padding:7px 4px;font-size:10px}}
+#atlasTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:12px 12px 4px}#atlasTabs button{font-weight:700;font-size:11px;letter-spacing:.09em;color:#bbbdad;background:#0b1712;border:1px solid #646244;padding:11px 8px;cursor:pointer}#atlasTabs button.active{background:linear-gradient(125deg,#705324,#3e311e);border-color:#e6bd6f;color:#ffe6a4;box-shadow:inset 0 0 14px #b78a3e22}#atlasTabs button:hover{border-color:#e6bd6f}#stationFilters{padding-top:6px}#stationList .station small{letter-spacing:.025em}@media(max-width:740px){#atlasTabs{padding:8px 6px 3px}#atlasTabs button{padding:7px 4px;font-size:10px}}
 /* Mobile Polaris layout: full-width viewer with compact controls and non-overlapping station details. */
 @media(max-width:740px){
  html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
@@ -105,7 +105,7 @@
 <div id="scene"></div><div id="grid"></div><div id="pins"></div><svg id="previewConnector" aria-hidden="true"><path id="previewLine"></path><circle id="previewDot" r="4"></circle></svg>
 <section id="stationPreview" aria-label="In-game station preview"><div id="previewTop"><span>JMBN // STATION RECON</span><button id="previewClose" title="Close preview" aria-label="Close preview">×</button></div><div id="previewImage"><div class="previewPlaceholder"><strong>IN-GAME STATION IMAGE</strong><small>SCREENSHOT TO BE ADDED</small></div></div><div id="previewData"><div id="previewStation">INTEGRATED COMMAND CENTRE</div><div id="previewLocation">BRIDGE · ICC</div><p id="previewDescription">Hover a station to preview its real in-game position. Click to keep this reference open.</p><div id="previewNote">IN-GAME SCREENSHOT PREVIEW · COMING SOON</div></div></section>
 <header id="top"><div><div class="eyebrow">THE JAMBANI COLLECTIVE // FLEET SYSTEMS</div><div class="brand">RSI POLARIS <b>TACTICAL BLUEPRINT</b></div></div><div id="topright"><span class="pill"><span class="online"></span>JMBN // STATION REFERENCE</span></div></header>
-<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2 id="directoryTitle">COMBAT STATIONS</h2><p id="directoryIntro">Select a battle station, command position or turret mount.</p></div><div id="atlasTabs"><button class="active" data-atlas="combat">⚔ COMBAT</button><button data-atlas="habitat">⌂ HABITAT</button></div><div class="filters" id="stationFilters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div></aside>
+<aside id="left"><div class="panelhead"><div class="small">VESSEL // CORVETTE</div><h2 id="directoryTitle">COMBAT STATIONS</h2><p id="directoryIntro">Select a battle station, command position or turret mount.</p></div><div id="atlasTabs"><button class="active" data-atlas="combat">⚔ COMBAT</button><button data-atlas="habitat">⌂ HABITAT</button><button data-atlas="assignments">✦ ASSIGN</button></div><div class="filters" id="stationFilters"><button class="active" data-filter="all">ALL</button><button data-filter="turret">TURRETS</button><button data-filter="command">BRIDGE</button><button data-filter="support">SUPPORT</button></div><div id="stationList"></div><div id="assignmentPanel" hidden style="padding:12px;overflow:auto;flex:1"></div></aside>
 <div id="bottomHud" aria-live="polite"><div id="stationHud"><div class="small">JMBN // SELECTED STATION</div><div id="hudName">SELECT A STATION</div><div id="hudMeta">POLARIS // TACTICAL REFERENCE</div><p id="hudDesc">Click a gold marker or choose a station from the directory.</p></div><div id="hudCredit">Ship layout references based on Atlas Defense Industries materials.</div></div>
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div>
 <div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button><div class="sp"></div></div>
@@ -404,7 +404,31 @@ function finish(){styleHull();syncLayers();makePins();renderList();selectStation
 async function importFiles(files){let loaded=0;for(const file of files){const n=file.name.toLowerCase(),k=n.includes('engineering')?'engineering':n.includes('cargo')?'cargo':n.includes('main')?'main':(n.includes('base')||n.includes('gold'))?'base':null;if(!k)continue;$('gateMsg').textContent='Loading '+file.name+'…';try{const bytes=await file.arrayBuffer();await loadBytes(k,bytes);await cache(k,bytes);loaded++}catch(e){console.error(e);$('gateMsg').textContent='Could not read '+file.name}}if(loaded)finish();else $('gateMsg').textContent='No recognized Polaris files. Please select the four GLBs.'}
 
 document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.dataset.layer]=!visible[b.dataset.layer];syncLayers()});document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
+const assignmentKey='jmbn-polaris-crew-assignments-v1';
+let crewAssignments={};
+try{crewAssignments=JSON.parse(localStorage.getItem(assignmentKey)||'{}')||{}}catch(e){}
+function renderAssignments(){
+ const panel=$('assignmentPanel');panel.replaceChildren();
+ for(const station of stations){
+  const row=document.createElement('div');row.style.cssText='padding:9px 0;border-bottom:1px solid #6a593a;display:grid;gap:5px';
+  const label=document.createElement('label');label.textContent=station.name;label.style.cssText='font-size:11px;color:#e9c781;font-weight:700';
+  const input=document.createElement('input');input.value=crewAssignments[station.id]||'';input.placeholder='Unassigned — enter callsign';input.maxLength=60;input.style.cssText='width:100%;padding:9px;background:#0b1511;border:1px solid #74603d;color:#f6e2b5';
+  input.addEventListener('change',()=>{const value=input.value.trim();if(value)crewAssignments[station.id]=value;else delete crewAssignments[station.id];try{localStorage.setItem(assignmentKey,JSON.stringify(crewAssignments))}catch(e){}});
+  label.onclick=()=>selectStation(station);
+  row.append(label,input);panel.append(row);
+ }
+}
 function setAtlasMode(next){
+ if(next==='assignments'){
+  document.querySelectorAll('[data-atlas]').forEach(b=>b.classList.toggle('active',b.dataset.atlas===next));
+  $('stationList').style.display='none';$('stationFilters').style.display='none';
+  $('assignmentPanel').hidden=false;
+  $('directoryTitle').textContent='CREW ASSIGNMENTS';
+  $('directoryIntro').textContent='Assign a callsign to each Polaris station. Saved on this device.';
+  renderAssignments();
+  return;
+ }
+ $('assignmentPanel').hidden=true;$('stationList').style.display='';$('stationFilters').style.display='';
  atlasMode=next;filter='all';
  document.querySelectorAll('[data-atlas]').forEach(b=>b.classList.toggle('active',b.dataset.atlas===next));
  $('directoryTitle').textContent=next==='combat'?'COMBAT STATIONS':'HABITAT & FACILITIES';
