@@ -18,6 +18,10 @@
 @media(max-width:980px){#left{width:208px;left:10px}#right{width:210px;right:10px}#status{left:230px}.brand{font-size:21px}.brand b{display:none}}
 @media(max-width:740px){#top{height:68px;padding:10px 13px}.brand{font-size:19px}#topright .pill{display:none}#left{top:auto;bottom:75px;left:8px;right:8px;width:auto;height:160px;border-radius:6px}#left .panelhead{display:none}#stationList{display:flex;overflow:auto;padding:6px;gap:5px}#stationList .station{min-width:135px;width:135px;flex:0 0 135px;border:1px solid #665739;height:100%;padding:8px}#stationList .station .tag{display:none}#right{top:77px;right:8px;width:205px;padding:11px}#detailTitle{font-size:14px;margin:7px 0}#detailText{font-size:10px}#dock{left:8px;right:8px;bottom:7px;transform:none;overflow:auto;padding:6px;justify-content:flex-start}#dock .docklabel{display:none}#dock button{font-size:10px;padding:8px}#status,#axes{display:none}.pin{font-size:9px;padding:4px}#gate{padding:21px}#gate h2{font-size:20px}}
 
+.pin.occupied{flex-direction:column;gap:2px;border-radius:7px;padding:5px 9px;min-width:55px;box-shadow:0 0 18px #b4853a66}
+.pin-crew{font-size:10px;font-weight:700;letter-spacing:.02em;color:#f6f3e9;text-shadow:0 1px 4px #000;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.crew-call{color:#e2bd73!important;font-weight:700;letter-spacing:.02em}
+@media(max-width:740px){.pin.occupied{padding:4px 6px}.pin-crew{font-size:9px;max-width:90px}}
 /* JMBN compact tactical station overlay */
 #right{display:none}
 #bottomHud{position:fixed;left:310px;right:20px;bottom:88px;z-index:9;display:flex;gap:14px;align-items:flex-end;justify-content:space-between;pointer-events:none}
@@ -377,19 +381,20 @@ function selectStation(s){
  const position=stationPosition(s);
  if(position){const offset=camera.position.clone().sub(ctl.target);const dir=offset.lengthSq()>.00001?offset.normalize():new THREE.Vector3(1,1,1).normalize();const box=new THREE.Box3().setFromObject(root);const radius=box.isEmpty()?2:box.getBoundingSphere(new THREE.Sphere()).radius;const distance=Math.max(radius*.32,.85);ctl.target.copy(position);camera.position.copy(position).addScaledVector(dir,distance);camera.lookAt(position);ctl.update()}
 }
+function escapeCrew(value){return String(value).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function renderList(){
  $('stationList').innerHTML='';buttons.clear();
  for(const s of stations){if(s.atlas!==atlasMode||(filter!=='all'&&filter!==s.cat))continue;
  const button=document.createElement('button');button.className='station'+(selected===s?' active':'');
  const label=s.cat==='turret'?s.id:s.cat==='command'?'⌖':s.cat==='room'?'⌂':'✧';
- button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.location||'LOCATION TO CONFIRM')+'</small></span>';
+ button.innerHTML='<span class="num">'+label+'</span><span><strong>'+s.name+'</strong><small>'+(s.location||'LOCATION TO CONFIRM')+'</small>'+(assignedName(s)?'<small class="crew-call">● '+escapeCrew(assignedName(s))+'</small>':'')+'</span>';
  button.onclick=()=>selectStation(s);$('stationList').append(button);buttons.set(s.id,button)}
 }
 function makePins(){
  $('pins').innerHTML='';pins.clear();
  for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
- pin.textContent=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CREW',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());pin.dataset.full=s.name;pin.title=s.name;pin.setAttribute('aria-label',s.name);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
+ const code=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CREW',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());const crew=assignedName(s);pin.textContent='';const stationLabel=document.createElement('span');stationLabel.textContent=code;pin.append(stationLabel);if(crew){const nameLabel=document.createElement('span');nameLabel.className='pin-crew';nameLabel.textContent=crew;pin.append(nameLabel);pin.classList.add('occupied')}pin.dataset.full=s.name;pin.title=s.name+(crew?' — '+crew:'');pin.setAttribute('aria-label',pin.title);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
  pin.onmouseleave=()=>{if(!previewPinned)hidePreview()};
  pin.onclick=()=>{previewPinned=false;selectStation(s)};$('pins').append(pin);pins.set(s.id,pin)}
 }
@@ -407,13 +412,15 @@ document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.da
 const assignmentKey='jmbn-polaris-crew-assignments-v1';
 let crewAssignments={};
 try{crewAssignments=JSON.parse(localStorage.getItem(assignmentKey)||'{}')||{}}catch(e){}
+function assignedName(s){return (crewAssignments[s.id]||'').trim()}
+function updateCrewDisplays(){renderList();makePins()}
 function renderAssignments(){
  const panel=$('assignmentPanel');panel.replaceChildren();
  for(const station of stations){
   const row=document.createElement('div');row.style.cssText='padding:9px 0;border-bottom:1px solid #6a593a;display:grid;gap:5px';
   const label=document.createElement('label');label.textContent=station.name;label.style.cssText='font-size:11px;color:#e9c781;font-weight:700';
   const input=document.createElement('input');input.value=crewAssignments[station.id]||'';input.placeholder='Unassigned — enter callsign';input.maxLength=60;input.style.cssText='width:100%;padding:9px;background:#0b1511;border:1px solid #74603d;color:#f6e2b5';
-  input.addEventListener('change',()=>{const value=input.value.trim();if(value)crewAssignments[station.id]=value;else delete crewAssignments[station.id];try{localStorage.setItem(assignmentKey,JSON.stringify(crewAssignments))}catch(e){}});
+  input.addEventListener('change',()=>{const value=input.value.trim();if(value)crewAssignments[station.id]=value;else delete crewAssignments[station.id];try{localStorage.setItem(assignmentKey,JSON.stringify(crewAssignments))}catch(e){}updateCrewDisplays()});
   label.onclick=()=>selectStation(station);
   row.append(label,input);panel.append(row);
  }
