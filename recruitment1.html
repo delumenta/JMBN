@@ -234,6 +234,36 @@ html,body,body *,body *::before,body *::after{font-family:'Play',Arial,sans-seri
 @media(max-width:1040px){.nav .brand-tagline{margin-left:4px;padding-left:9px}.nav .brand-tagline strong{font-size:9px}.nav .brand-tagline small{font-size:9px}}
 @media(max-width:760px){.nav .brand-tagline{display:none}.nav .brand-name{font-size:22px}.nav .brand-logo{width:38px;height:38px}}
 </style>
+
+<style>
+/* Chapter transitions: restrained motion, subtle gold signal and image reveals. */
+.chapter-reveal{position:relative}
+.chapter-reveal .section-top{position:relative}
+.chapter-reveal .section-top::before{content:'';position:absolute;left:0;top:-24px;width:clamp(70px,12vw,150px);height:1px;background:linear-gradient(90deg,rgba(231,183,110,.85),transparent);transform-origin:left center;transform:scaleX(.3);opacity:.25;transition:transform 1s ease,opacity .7s ease}
+.chapter-reveal.chapter-visible .section-top::before{transform:scaleX(1);opacity:.85}
+@media(prefers-reduced-motion:no-preference){
+.js-chapters .chapter-reveal .section-top>*{opacity:0;transform:translateY(19px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js-chapters .chapter-reveal.chapter-visible .section-top>*{opacity:1;transform:none}
+.js-chapters .chapter-reveal .section-top>*:nth-child(2){transition-delay:.09s}
+.js-chapters .chapter-reveal .section-top>*:nth-child(3){transition-delay:.17s}
+.js-chapters .chapter-reveal .activity-card,.js-chapters .chapter-reveal .career,.js-chapters .chapter-reveal .career-progression,.js-chapters .chapter-reveal .career-footer,.js-chapters .chapter-reveal .faq-list,.js-chapters .chapter-reveal .faq-end{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
+.js-chapters .chapter-reveal.chapter-visible .activity-card,.js-chapters .chapter-reveal.chapter-visible .career,.js-chapters .chapter-reveal.chapter-visible .career-progression,.js-chapters .chapter-reveal.chapter-visible .career-footer,.js-chapters .chapter-reveal.chapter-visible .faq-list,.js-chapters .chapter-reveal.chapter-visible .faq-end{opacity:1;transform:none}
+.js-chapters .chapter-reveal .activity-card:nth-child(2),.js-chapters .chapter-reveal .career:nth-child(2){transition-delay:.12s}
+.js-chapters .chapter-reveal .activity-card:nth-child(3),.js-chapters .chapter-reveal .career:nth-child(3){transition-delay:.22s}
+.js-chapters .chapter-reveal .activity-card:nth-child(4){transition-delay:.3s}
+.js-chapters .chapter-reveal .career-progression{transition-delay:.15s}
+.js-chapters .chapter-reveal .career-footer{transition-delay:.22s}
+.js-chapters #sessions .jmbn-photo-gallery .photo{opacity:0;transform:translateY(18px) scale(.975);transition:opacity .65s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js-chapters #sessions.chapter-visible .jmbn-photo-gallery .photo{opacity:1;transform:none}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n+2){transition-delay:.09s}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n+3){transition-delay:.17s}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n){transition-delay:.25s}
+.js-chapters #join .join-inner>div,.js-chapters #join .join-panel{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.7,.2,1)}
+.js-chapters #join.chapter-visible .join-inner>div,.js-chapters #join.chapter-visible .join-panel{opacity:1;transform:none}
+.js-chapters #join .join-panel{transition-delay:.15s}
+}
+@media(prefers-reduced-motion:reduce){.chapter-reveal .section-top::before{transition:none;transform:none;opacity:.7}}
+</style>
 </head><body><div aria-hidden="true" class="ambient-signals"><i class="trace v" style="--x:9%;--y:18%;--delay:-2s;--duration:7s"></i><i class="trace h" style="--x:21%;--y:62%;--delay:-5s;--duration:8s"></i><i class="trace v" style="--x:34%;--y:35%;--delay:-1s;--duration:9s"></i><i class="trace h" style="--x:47%;--y:81%;--delay:-6s;--duration:11s"></i><i class="trace h" style="--x:61%;--y:13%;--delay:-3s;--duration:7s"></i><i class="trace v" style="--x:77%;--y:53%;--delay:-4s;--duration:10s"></i><i class="trace v" style="--x:89%;--y:27%;--delay:-8s;--duration:12s"></i><i class="trace h" style="--x:94%;--y:78%;--delay:-1s;--duration:9s"></i><i class="trace v" style="--x:13%;--y:87%;--delay:-6s;--duration:10s"></i><i class="trace h" style="--x:69%;--y:89%;--delay:-2s;--duration:8s"></i><i class="trace v" style="--x:53%;--y:48%;--delay:-7s;--duration:12s"></i><i class="trace h" style="--x:29%;--y:9%;--delay:-3s;--duration:9s"></i><i class="trace h" style="--x:6%;--y:43%;--delay:-4.2s;--duration:13.5s"></i><i class="trace v" style="--x:16%;--y:74%;--delay:-8.7s;--duration:16s"></i><i class="trace h" style="--x:39%;--y:22%;--delay:-1.5s;--duration:14.5s"></i><i class="trace v" style="--x:58%;--y:67%;--delay:-11.2s;--duration:17s"></i><i class="trace h" style="--x:73%;--y:36%;--delay:-6.1s;--duration:15.5s"></i><i class="trace v" style="--x:85%;--y:84%;--delay:-3.4s;--duration:18s"></i><i class="trace h" style="--x:26%;--y:95%;--delay:-10.3s;--duration:16.5s"></i><i class="trace v" style="--x:96%;--y:16%;--delay:-7.6s;--duration:14s"></i><i class="trace h" style="--x:48%;--y:56%;--delay:-12.1s;--duration:19s"></i></div>
 <header class="nav cinematic-nav"><div class="wrap nav-inner"><a aria-label="JMBN homepage" class="brand" href="#home"><img alt="JMBN gold insignia" class="brand-logo" height="48" src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png/v1/fill/w_66,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/0_New_JMBN_Logo_Gold.png" width="48"/><span class="brand-name">JMBN</span><span class="brand-tagline"><strong>HILARITY · IMMERSION · TEAMWORK</strong><small>And the shenanigans in between.</small></span></a><button aria-controls="navlinks" aria-expanded="false" class="menu" id="menu">☰ Menu</button><nav aria-label="Main navigation" class="links" id="navlinks"><a class="active" href="#home">Homepage</a><a href="#activities">Activities</a><a href="#sessions">Sessions</a><a href="#career">Career Path</a><a href="#join">Join Us</a></nav></div></header>
 <main><section class="cinematic-scroll" id="home"><div class="hero cinematic-stage"><video aria-hidden="true" autoplay="" class="hero-video" loop="" muted="" playsinline="" poster="assets/Sessions1.png" preload="metadata" tabindex="-1"><source src="assets/JMBN-Test-Clearer.mp4" type="video/mp4"/></video><div aria-hidden="true" class="hero-video-shade"></div><div class="wrap cinematic-copy"><span class="eyebrow">Welcome to JMBN</span><h1>YOU KNOW STAR CITIZEN.<br/><em>NOW PLAY THE JMBN WAY.</em></h1><p class="lead">Come for the game. Stay for the crew.</p><p class="hero-explainer">A casual mil-sim organisation built around teamwork, coordinated operations and looking out for one another — without rigid commitments.</p><div class="actions"><a class="btn gold" href="#join">Join the Crew <span>→</span></a><a class="btn ghost" href="#activities">Explore JMBN <span>↗</span></a></div></div><a class="scroll-explore" href="#activities" aria-label="Scroll to explore JMBN activities"><span>SCROLL TO EXPLORE</span><span class="scroll-chevron" aria-hidden="true"></span></a><button aria-label="Unmute hero video" aria-pressed="false" class="hero-sound" type="button">◖  SOUND OFF</button></div></section>
@@ -313,6 +343,24 @@ b.addEventListener('click',()=>{v.muted=!v.muted;b.textContent=v.muted?'◖  SOU
  modal.querySelector('.gallery-prev').addEventListener('click',()=>show(index-1));
  modal.querySelector('.gallery-next').addEventListener('click',()=>show(index+1));
  document.addEventListener('keydown',e=>{if(!modal.classList.contains('open'))return;if(e.key==='ArrowLeft'){e.preventDefault();show(index-1)}if(e.key==='ArrowRight'){e.preventDefault();show(index+1)}});
+})();
+</script>
+
+<script>
+/* One-time section entrances; keep the cinematic hero's separate scroll fade untouched. */
+(()=>{
+ const ids=['activities','sessions','career','join','questions'];
+ const sections=ids.map(id=>document.getElementById(id)).filter(Boolean);
+ if(!sections.length||!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ sections.forEach(section=>section.classList.add('chapter-reveal'));
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(!entry.isIntersecting)return;entry.target.classList.add('chapter-visible');observer.unobserve(entry.target)});
+ },{rootMargin:'0px 0px -8% 0px',threshold:.06});
+ sections.forEach(section=>observer.observe(section));
+ // Enable hidden-to-visible transitions only after observing, avoiding invisible content without JS.
+ document.documentElement.classList.add('js-chapters');
+ // Account for deep links and browser scroll restoration.
+ requestAnimationFrame(()=>sections.forEach(section=>{const r=section.getBoundingClientRect();if(r.top<innerHeight*.92&&r.bottom>0){section.classList.add('chapter-visible');observer.unobserve(section)}}));
 })();
 </script>
 </body></html>
