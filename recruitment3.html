@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="#090a0a" name="theme-color"/><title>JMBN | Find Your Crew</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" rel="icon"/><style>
+:root{--bg:#090a0a;--panel:#151714;--panel2:#1a1b18;--gold:#e2b568;--gold2:#a88042;--text:#f4f1ea;--muted:#b8b6ac;--border:#4b4030}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 Inter,Arial,sans-serif}a{color:inherit;text-decoration:none}button{font:inherit}img{display:block;max-width:100%}.wrap{width:min(1200px,calc(100% - 48px));margin:auto}.nav{position:sticky;top:0;z-index:40;background:#090a0aeb;backdrop-filter:blur(18px);border-bottom:1px solid #6e542f55}.nav-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:25px}.brand{display:flex;align-items:center;gap:12px;white-space:nowrap}.brand-mark{font:800 34px Barlow Condensed;color:var(--gold);line-height:1}.brand-name{font:800 28px Barlow Condensed;letter-spacing:2px;line-height:1}.brand-sub{font-size:9px;letter-spacing:2.3px;color:#d2c9b7}.links{display:flex;gap:26px;align-items:center}.links a{font:600 13px Barlow Condensed;letter-spacing:1.2px;text-transform:uppercase;padding:30px 0;transition:color .2s}.links a:hover,.links a.active{color:var(--gold)}.menu{display:none;border:1px solid var(--border);background:transparent;color:var(--gold);padding:7px 12px;border-radius:4px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:13px;min-height:46px;padding:0 23px;border:1px solid var(--gold);font:700 15px Barlow Condensed;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:transform .2s,background .2s}.btn:hover{transform:translateY(-2px)}.btn.gold{background:linear-gradient(125deg,#f2cd8a,#c7954f);color:#10100e}.btn.ghost{background:#0b0d0dbb;color:var(--text)}.hero{position:relative;min-height:620px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid #a77e3f}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#070909 0%,#070909ee 23%,#0709098f 52%,#07090918 100%),linear-gradient(0deg,#090a0a 0%,transparent 40%),url('assets/Recruitment1.png') center/cover no-repeat;transform:scale(1.03)}.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 76% 45%,transparent 0%,#05060655 80%);pointer-events:none}.hero .wrap{position:relative;z-index:1;padding:90px 0}.eyebrow{color:var(--gold);font:700 12px Inter;letter-spacing:3px;text-transform:uppercase}.eyebrow:before{content:'// ';color:var(--gold)}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:Barlow Condensed,Impact,sans-serif;text-transform:uppercase;line-height:1.04}h1{font-size:clamp(54px,7.2vw,104px);letter-spacing:-1px;margin:20px 0 22px;max-width:820px}h1 em,h2 em{color:var(--gold);font-style:normal}.lead{font-size:17px;color:#d8d7d0;max-width:590px;line-height:1.8}.actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}.hero-note{display:flex;gap:24px;flex-wrap:wrap;margin-top:65px;color:#d8c9ab;font:600 12px Inter;letter-spacing:1px;text-transform:uppercase}.hero-note span:before{content:'◆';font-size:8px;color:var(--gold);margin-right:10px}.strip{border-bottom:1px solid #8e6d3755;background:linear-gradient(90deg,#111411,#181815,#101210)}.strip-inner{display:grid;grid-template-columns:repeat(4,1fr)}.strip-item{padding:24px 20px;text-align:center;border-right:1px solid #76604455}.strip-item:last-child{border:0}.strip-item strong{display:block;font:700 19px Barlow Condensed;text-transform:uppercase}.strip-item small{color:#aaa89f;font-size:12px}.strip-icon{font-size:22px;color:var(--gold);margin-bottom:6px}section.content{padding:108px 0}.section-top{max-width:820px;margin-bottom:34px}h2{font-size:clamp(42px,5vw,69px);letter-spacing:-.5px;margin:15px 0 20px}.section-top p{font-size:16px;color:var(--muted)}.activity-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.activity-card{min-height:238px;padding:30px;background:linear-gradient(150deg,#1b1c18,#121411);border:1px solid var(--border);position:relative;overflow:hidden;transition:border-color .2s,transform .2s}.activity-card:hover{border-color:var(--gold);transform:translateY(-3px)}.activity-card:after{content:'';position:absolute;width:150px;height:150px;right:-80px;bottom:-90px;border:1px solid #b88e492b;transform:rotate(45deg)}.number{color:var(--gold);font:700 11px Inter;letter-spacing:2.4px}.activity-card h3{font-size:30px;margin:22px 0 14px}.activity-card p{font-size:14px;color:#c4c1b6;line-height:1.8;max-width:530px}.gallery-section{background:#0d0f0e;border-top:1px solid #4b403055;border-bottom:1px solid #4b403055}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:17px}.photo{position:relative;background:#161815;border:1px solid var(--border);padding:0;color:var(--text);cursor:pointer;text-align:left;overflow:hidden}.photo img{width:100%;height:320px;object-fit:cover;transition:transform .4s,filter .4s}.photo:hover img{transform:scale(1.035);filter:brightness(1.12)}.photo-label{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:var(--gold);font:700 11px Inter;letter-spacing:2px;text-transform:uppercase}.photo-label span:last-child{font-size:18px}.gallery-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;min-height:370px;border:1px dashed #6d593b;color:#a9a396;background:linear-gradient(135deg,#191b18,#0e100f)}.gallery-empty strong{font:700 25px Barlow Condensed;text-transform:uppercase;color:#e3d9c7}.gallery-empty small{max-width:280px;text-align:center}.career-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.career{border:1px solid var(--border);background:linear-gradient(145deg,#1c1d19,#111311);padding:28px;min-height:220px}.career .symbol{font-size:29px;color:var(--gold)}.career h3{font-size:26px;margin:22px 0 12px}.career p{font-size:13px;color:var(--muted);line-height:1.8}.career-footer{margin-top:32px;padding:27px;border:1px solid #745937;background:linear-gradient(90deg,#29241b,#121412);display:flex;align-items:center;justify-content:space-between;gap:20px}.career-footer strong{font:700 26px Barlow Condensed;text-transform:uppercase}.career-footer p{margin:5px 0 0;color:#c4bcae;font-size:13px}.join{position:relative;background:radial-gradient(ellipse at 80% 50%,#3e301b55,transparent 55%),linear-gradient(140deg,#181b19,#090a0a);border-top:1px solid #8a6d40}.join-inner{padding:110px 0;display:grid;grid-template-columns:1.2fr .8fr;gap:70px;align-items:center}.join h2{font-size:clamp(48px,6vw,85px)}.join p{color:#c8c6bc}.join-panel{padding:34px;border:1px solid #79613f;background:#151714e8}.join-panel h3{font-size:30px;margin-bottom:20px}.join-panel ul{padding:0;margin:0 0 28px;list-style:none}.join-panel li{padding:10px 0;border-bottom:1px solid #54452f;color:#d4d0c5;font-size:14px}.join-panel li:before{content:'✓';color:var(--gold);margin-right:12px}footer{border-top:1px solid #56442c;padding:30px 0;color:#938f86;font-size:12px}.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.lightbox{position:fixed;inset:0;background:#000e;z-index:90;display:none;align-items:center;justify-content:center;padding:60px 20px 30px}.lightbox.open{display:flex}.lightbox img{max-width:min(1100px,100%);max-height:85vh;object-fit:contain;border:1px solid #81653c}.close{position:absolute;right:22px;top:16px;background:#161713;color:white;border:1px solid var(--gold);font-size:24px;width:44px;height:44px;cursor:pointer}.caption{position:absolute;bottom:12px;color:var(--gold);font-size:12px;letter-spacing:2px}.muted{color:var(--muted)}@media(max-width:850px){.menu{display:block}.links{display:none;position:absolute;top:78px;left:0;right:0;background:#10110f;padding:15px 24px 25px;flex-direction:column;align-items:stretch;gap:0;border-bottom:1px solid var(--border)}.links.open{display:flex}.links a{padding:13px 0}.strip-inner{grid-template-columns:repeat(2,1fr)}.strip-item:nth-child(2){border-right:0}.strip-item:nth-child(-n+2){border-bottom:1px solid #76604455}.career-grid{grid-template-columns:repeat(2,1fr)}.join-inner{grid-template-columns:1fr;gap:20px}}@media(max-width:620px){.wrap{width:min(100% - 32px,1200px)}.nav-inner{min-height:70px}.links{top:70px}.brand-name{font-size:25px}.hero{min-height:600px}.hero .wrap{padding:70px 0}.hero:before{background:linear-gradient(90deg,#070909ed,#0709099c),linear-gradient(0deg,#090a0a,transparent 60%),url('assets/Recruitment1.png') center/cover}.hero-note{margin-top:45px;gap:14px}section.content{padding:70px 0}.activity-grid,.gallery,.career-grid{grid-template-columns:1fr}.activity-card{min-height:210px}.photo img{height:250px}.career-footer{align-items:flex-start;flex-direction:column}.join-inner{padding:70px 0}}
+
+/* Cinematic recruitment edition */
+:root{--bg:#080a0b;--panel:#131617;--gold:#eac27e;--border:#56442e}
+body{background:radial-gradient(circle at 85% 8%,#18232b 0%,transparent 24%),#080a0b}
+.nav{background:#090b0def;border-bottom-color:#d1a65a45}
+.nav-inner{min-height:74px}.brand-mark{font-size:39px;text-shadow:0 0 24px #d6a85c70}.brand-name{font-size:30px}.links a{position:relative}.links a.active:after,.links a:hover:after{content:"";position:absolute;bottom:21px;left:0;right:0;height:2px;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.hero{min-height:700px;align-items:center}.hero:before{background:linear-gradient(90deg,#070a0dfc 0%,#070a0de8 24%,#070a0d91 47%,#070a0d15 78%),linear-gradient(0deg,#080a0b 0%,transparent 24%),url('assets/Recruitment1.png') 57% center/cover no-repeat;transform:none}.hero:after{background:linear-gradient(180deg,#090b0d00 65%,#090b0d 100%)}.hero .wrap{padding:125px 0 90px}.hero h1{font-size:clamp(57px,6.5vw,91px);max-width:700px;text-shadow:0 4px 25px #000}.hero .lead{max-width:495px;color:#ece9df}.hero-note{margin-top:70px}.hero .eyebrow{letter-spacing:4px}
+.btn{border-radius:3px;box-shadow:0 10px 35px #0005}.btn.gold{box-shadow:0 5px 25px #d8a35b2c}.btn.ghost{backdrop-filter:blur(12px)}
+.strip{background:linear-gradient(110deg,#12171a,#0c0e10,#151716);border-top:1px solid #c69a525e;border-bottom:1px solid #c69a5266}.strip-item{padding:28px 15px}.strip-icon{font-size:30px}.strip-item strong{font-size:21px}
+.intro-section{padding:100px 0 30px;background:radial-gradient(circle at 92% 65%,#59442217,transparent 35%)}.intro-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:70px}.intro-image{position:relative;min-height:385px;overflow:hidden;border:1px solid #947341}.intro-image img{width:100%;height:385px;object-fit:cover;filter:saturate(.88) contrast(1.08)}.intro-image:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#060808ad,transparent 40%)}.image-stamp{position:absolute;bottom:18px;left:20px;z-index:1;color:var(--gold);font-size:11px;letter-spacing:2px;font-weight:700}.intro-copy h2{font-size:clamp(42px,4vw,60px)}.intro-copy p{color:#c9c9c1;line-height:1.85}.check-list{list-style:none;padding:0;margin:24px 0}.check-list li{padding:7px 0;color:#e0ded7}.check-list li:before{content:'✓';color:var(--gold);font-weight:800;margin-right:14px}.inline-link{font:700 15px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);border-bottom:1px solid #a78551;padding-bottom:8px}.inline-link span{margin-left:10px}
+section.content{padding:95px 0}.section-top{max-width:900px}.section-top h2{font-size:clamp(48px,5.4vw,72px)}.activity-card{background:linear-gradient(145deg,#1b1d1b,#111515);border-color:#6a5637;min-height:225px}.activity-card:before{content:'';position:absolute;top:0;left:0;width:75px;height:2px;background:var(--gold)}.activity-card h3{font-size:31px}.gallery-section{background:linear-gradient(180deg,#101519,#090b0c)}.photo{border-color:#65543a}.photo img{height:345px}.photo-label{background:#161818}.gallery-empty{min-height:390px}
+#career{background:radial-gradient(ellipse at 95% 12%,#6a4d251e,transparent 45%),#090b0c}.career{min-height:270px;padding:32px;background:linear-gradient(140deg,#20211e,#121516);border-color:#6d5636}.career:before{content:'✦';display:block;font-size:23px;color:var(--gold);margin-bottom:17px}.career h3{font-size:31px;margin:15px 0}.career p{font-size:14px}.career-footer{background:linear-gradient(90deg,#2d2419,#101315)}
+.join{background:linear-gradient(90deg,#090b0df9 0%,#090b0de8 43%,#090b0d85 74%,#090b0d72 100%),url('assets/Crewhero2.png') center right/cover no-repeat;border-top:1px solid #a9834c}.join-inner{min-height:560px}.join-panel{background:#101311e8;backdrop-filter:blur(12px)}
+@media(max-width:850px){.intro-grid{grid-template-columns:1fr;gap:32px}.intro-section{padding:70px 0 10px}.hero{min-height:640px}.hero:before{background:linear-gradient(90deg,#070a0df0,#070a0d85),linear-gradient(0deg,#080a0b,transparent 40%),url('assets/Recruitment1.png') 58% center/cover}.links a.active:after,.links a:hover:after{display:none}}
+@media(max-width:620px){.hero h1{font-size:clamp(46px,12vw,65px)}.hero{min-height:650px}.hero .wrap{padding:100px 0 70px}.intro-image,.intro-image img{min-height:260px;height:260px}.photo img{height:250px}.career{min-height:210px}.join{background-position:65% center}}
+</style><style>
+/* JMBN cinematic framing and reduced-content recruitment pass */
+:root{--gold:#e9bd70;--border:#79603c}
+.hero{min-height:650px}
+.hero:before{background:linear-gradient(90deg,#060809f5 0%,#080b0de6 22%,#080b0d80 50%,#080b0d12 100%),linear-gradient(0deg,#07090b 0%,transparent 45%),url('assets/Recruitment1.png') center/cover no-repeat}
+.hero h1{max-width:710px;font-size:clamp(58px,6.6vw,94px)}
+.hero .lead{max-width:535px}
+.hero:after{background:linear-gradient(90deg,transparent 0%,#e8b96b55 10%,#e8b96b 30%,#e8b96b 65%,transparent 100%) bottom / 100% 2px no-repeat;opacity:.8}
+.strip{position:relative;background:linear-gradient(100deg,#101312,#1b1b17,#101211)}
+.strip:after,.content:after{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,#e9bd70 12%,#a57a3e 37%,transparent 37%,transparent 66%,#bd904c 79%,transparent);position:absolute;bottom:0;left:0;right:0;opacity:.75}
+.content{position:relative}
+.activity-card,.career,.photo,.join-panel{border:1px solid #7d603a99;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));box-shadow:inset 0 1px 0 #dfb26d18}
+.activity-card:before,.career:after{content:"";position:absolute;right:0;top:0;width:42px;height:1px;background:var(--gold);transform:rotate(45deg);transform-origin:right top;pointer-events:none}
+.activity-card{background:radial-gradient(circle at 100% 0,#8d6b3220,transparent 35%),linear-gradient(140deg,#1d201c,#101311)}
+.career{position:relative;background:linear-gradient(145deg,#25231e,#101416)}
+.join{background:linear-gradient(90deg,#070a0be8 0%,#070a0bc9 43%,#070a0b55 100%),url('assets/Crewhero2.png') center / cover no-repeat;min-height:550px}
+.join-panel{backdrop-filter:blur(8px);background:#10120fdb}
+.join-steps{list-style:none;padding:0;margin:20px 0 30px}
+.join-steps li{padding:15px 0;border-bottom:1px solid #a1804a55;color:#e6e1d6;display:flex;gap:16px}
+.join-steps b{color:var(--gold);font-size:12px;letter-spacing:2px}
+.discord-btn{width:100%}
+.faq-section{background:linear-gradient(135deg,#121512,#080a0b)}
+.faq-wrap{max-width:1000px}
+.faq-list{border-top:1px solid #8b6b40}
+.faq-list details{border-bottom:1px solid #735b3c;padding:0 12px}
+.faq-list summary{list-style:none;cursor:pointer;padding:21px 36px 21px 0;font:700 21px 'Barlow Condensed',Impact,sans-serif;letter-spacing:.5px;text-transform:uppercase;position:relative}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary:after{content:'+';position:absolute;right:5px;color:var(--gold);font-size:27px;top:15px}
+.faq-list details[open] summary:after{content:'−'}
+.faq-list details p{color:#c7c2b7;max-width:780px;padding:0 24px 19px 0}
+.faq-end{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:38px;flex-wrap:wrap}
+.faq-end span{font:700 27px 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase}
+@media(max-width:620px){.hero{min-height:580px}.hero h1{font-size:clamp(49px,11vw,72px)}.join{background-position:62% center}.faq-list summary{font-size:19px}}
+</style><style>.hero .hero-explainer{color:#d2d0c8;max-width:520px;font-size:15px;line-height:1.75;margin:12px 0 0}.hero h1{font-size:clamp(49px,6.2vw,86px);max-width:830px}@media(max-width:620px){.hero h1{font-size:clamp(43px,10.5vw,61px)}}</style><style>
+/* Cinematic JMBN Design System — independently sized images + CSS frames */
+:root{--frame-gold:#bd9355;--frame-light:#f1ce85;--space:#080c0f}
+html{scroll-padding-top:78px}body{background:var(--space)}
+.cinematic-nav{background:linear-gradient(180deg,#080b0ff8,#080b0feb)!important;border-bottom:1px solid #bb8e4b60;backdrop-filter:blur(16px)}
+.hero{min-height:clamp(590px,63vw,790px);position:relative;display:flex;align-items:center;isolation:isolate;overflow:hidden}
+.hero:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#06090ef7 0%,#070b11df 27%,#080c1275 56%,#080c1218 100%),linear-gradient(0deg,#070b0e 0%,transparent 25%),url('assets/Recruitment1.png') 60% 48%/cover no-repeat!important}
+.hero:after{content:'';position:absolute;bottom:0;left:0;right:0;height:18px;background:linear-gradient(90deg,transparent 0%,#7c6036 12%,#e1ab59 30%,#e1ab59 45%,transparent 55%,#b58c47 80%,transparent 100%) center bottom/100% 100% no-repeat;pointer-events:none}
+.hero h1{font-size:clamp(56px,6.8vw,105px);line-height:.94;max-width:880px;letter-spacing:.005em;text-shadow:0 3px 24px #000a}
+.hero .wrap{padding-block:85px}.hero-explainer{max-width:570px}
+.content{position:relative}.content:after,.join:after{content:'';display:block;height:18px;background:linear-gradient(90deg,transparent 0%,#7c6036 12%,#e1ab59 30%,#e1ab59 45%,transparent 55%,#b58c47 80%,transparent 100%) center/100% 100% no-repeat;position:absolute;bottom:0;left:0;right:0;pointer-events:none}
+.activity-card,.career,.photo,.join-panel{position:relative;border:1px solid #b58a4f9c!important;border-radius:0!important;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));box-shadow:inset 0 1px #f1c47e22,0 16px 40px #0004}
+.activity-card{isolation:isolate;background:#141817!important;min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.activity-card:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(0deg,#0b0e0ff5 0%,#0b0e0fdf 46%,#0b0e0f55 100%),var(--card-art,linear-gradient(140deg,#24231e,#111618)) center/cover no-repeat;transition:transform .35s}
+.activity-card:hover:before{transform:scale(1.04)}
+.activity-card:after,.career:after,.join-panel:after{content:'';position:absolute;right:0;top:0;width:28px;height:28px;background:linear-gradient(45deg,transparent 48%,#d9a95c 49%,#d9a95c 52%,transparent 53%);pointer-events:none}
+.career{min-height:260px;background:linear-gradient(140deg,#25251e,#101519)!important}
+.photo{overflow:hidden}.photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}.photo:hover img{transform:scale(1.04)}
+.join{position:relative;background:linear-gradient(90deg,#080c0ff3,#080c0fd9 44%,#080c0f38),url('assets/Crewhero2.png') 65% center/cover no-repeat!important;min-height:560px}
+.join-panel{background:#101411e8!important;backdrop-filter:blur(12px)}
+.btn.gold{box-shadow:0 0 18px #cf9b4622;background:linear-gradient(135deg,#f1cd87,#c99a51)!important}
+.btn.ghost{border-color:#e2b773!important}
+@media(max-width:760px){.hero{min-height:650px}.hero:before{background:linear-gradient(90deg,#06090eea,#06090ec9 52%,#06090e55),url('assets/Recruitment1.png') 58% center/cover no-repeat!important}.hero h1{font-size:clamp(49px,10vw,72px)}.activity-card{min-height:230px}.join{background-position:70% center!important}}
+.brand-logo{width:48px;height:48px;object-fit:contain;flex:none;filter:drop-shadow(0 0 8px rgba(219,171,91,.18))}@media(max-width:600px){.brand-logo{width:38px;height:38px}}
+</style><style>
+/* Ambient JMBN signature: faint crest and sparse signal traces only. */
+.jmbn-watermark{position:fixed;z-index:3;left:50%;top:50%;right:auto;width:min(92vw,1150px);height:min(90vh,950px);aspect-ratio:auto;transform:translate(-50%,-50%);background:url('https://raw.githubusercontent.com/delumenta/JMBN/main/assets/jmbn.png') center/contain no-repeat;opacity:.045;pointer-events:none;filter:grayscale(.2);will-change:auto}
+.ambient-signals{position:fixed;inset:0;z-index:4;pointer-events:none;overflow:hidden;contain:strict}
+.ambient-signals .trace{position:absolute;left:var(--x);top:var(--y);display:block;background:#d4a968;box-shadow:0 0 7px #d4a96845;opacity:.08;animation:trace-v var(--duration) ease-in-out var(--delay) infinite alternate}
+.ambient-signals .trace.v{width:2px;height:2px}
+.ambient-signals .trace.h{width:2px;height:1px;animation-name:trace-h}
+@keyframes trace-v{0%,100%{height:2px;opacity:.05}30%{height:2px;opacity:.2}52%{height:21px;opacity:.34}75%{height:4px;opacity:.08}}
+@keyframes trace-h{0%,100%{width:2px;opacity:.05}28%{width:2px;opacity:.19}55%{width:25px;opacity:.33}75%{width:5px;opacity:.08}}
+@media(max-width:650px){.jmbn-watermark{width:185px;right:-40px;top:46vh;opacity:.07}.ambient-signals .trace:nth-child(n+13){display:none}}
+@media(prefers-reduced-motion:reduce){.ambient-signals .trace{animation:none;opacity:.12}}
+@media(max-width:700px){.jmbn-watermark{width:125vw;height:75vh;opacity:.035}}
+</style><style>
+.featured-session-video{position:relative;margin:0 0 32px;padding:12px;background:linear-gradient(135deg,#161b1a,#080d0f);border:1px solid rgba(220,172,91,.55);box-shadow:0 15px 55px #0007,inset 0 1px #e6b96a22}
+.featured-video-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;padding:12px 12px 18px;flex-wrap:wrap}
+.featured-video-heading h3{font-size:clamp(23px,3vw,36px);margin:7px 0 0;line-height:1.05}
+.featured-video-meta{font-size:11px;letter-spacing:.17em;color:#d5b77c}
+.featured-session-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#030506;max-height:720px;outline:none}
+.featured-session-video video:focus-visible{outline:2px solid #d7ad62;outline-offset:3px}
+@media(max-width:600px){.featured-session-video{padding:6px}.featured-video-heading{padding:12px}.featured-video-meta{font-size:9px}}
+</style><style>
+/* Full-bleed cinematic video hero, based on the existing JMBN recruitment layout. */
+.hero{isolation:isolate;background:#06090d url('assets/Sessions1.png') center / cover no-repeat}
+.hero:before{display:none!important}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2;pointer-events:none}
+.hero-video-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(3,6,10,.89) 0%,rgba(3,6,10,.78) 27%,rgba(3,6,10,.38) 59%,rgba(3,6,10,.12) 100%),linear-gradient(0deg,rgba(3,6,10,.55),transparent 35%)}
+.hero-sound{position:absolute;right:clamp(20px,4vw,65px);bottom:35px;z-index:5;color:#e9c385;background:#090d11c9;border:1px solid #bd945c;border-radius:3px;padding:10px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer}
+.hero-sound:hover{background:#1c1b16}
+@media(max-width:700px){.hero-video{object-position:55% center}.hero-video-shade{background:linear-gradient(90deg,#04070ae8,#04070a8a),linear-gradient(0deg,#04070a8a,transparent 50%)}.hero-sound{bottom:23px;right:20px}}
+@media(prefers-reduced-motion:reduce){.hero-video{display:none}.hero{background-image:url('assets/Sessions1.png')}}
+</style>
+<style>
+/* Fine-line treatment: restore delicate JMBN HUD accents. */
+.hero:after,.content:after,.join:after{height:1px!important;background:linear-gradient(90deg,transparent 0%,rgba(233,189,112,.35) 12%,rgba(233,189,112,.75) 30%,rgba(233,189,112,.55) 45%,transparent 55%,rgba(181,140,71,.45) 80%,transparent 100%) center bottom/100% 1px no-repeat!important;opacity:.6}
+.ambient-signals .trace{box-shadow:0 0 3px rgba(212,169,104,.12);opacity:.04}
+.ambient-signals .trace.v{width:1px;height:1px}
+.ambient-signals .trace.h{width:1px;height:1px}
+@keyframes trace-v{0%,100%{height:1px;opacity:.025}30%{height:1px;opacity:.07}52%{height:10px;opacity:.15}75%{height:3px;opacity:.045}}
+@keyframes trace-h{0%,100%{width:1px;opacity:.025}28%{width:1px;opacity:.07}55%{width:12px;opacity:.15}75%{width:3px;opacity:.045}}
+</style>
+
+<style>
+/* Keep the crew's helmets and faces within the Join section crop. */
+.join{background-position:65% 18%!important}
+@media(max-width:850px){.join{background-position:62% 12%!important}}
+@media(max-width:620px){.join{background-position:58% 10%!important}}
+</style>
+
+<style>
+/* JMBN recruitment polish: no oversized background crest; refined HUD accents. */
+.jmbn-watermark{display:none!important}
+/* Delicate section dividers, no thick gold bars. */
+.hero:after,.content:after,.join:after{height:1px!important;opacity:.75!important;background:linear-gradient(90deg,transparent 0%,rgba(222,174,96,.24) 10%,rgba(222,174,96,.68) 25%,rgba(222,174,96,.35) 44%,transparent 47%,transparent 67%,rgba(222,174,96,.55) 81%,transparent 100%) center bottom/100% 1px no-repeat!important}
+/* Sparse signal lines that appear, linger, and fade. */
+.ambient-signals .trace{box-shadow:0 0 5px rgba(212,169,104,.18);animation-duration:var(--duration)}
+.ambient-signals .trace.v{width:1px;height:1px}
+.ambient-signals .trace.h{height:1px;width:1px}
+@keyframes trace-v{0%,15%,100%{height:1px;opacity:0}25%{height:2px;opacity:.12}35%,70%{height:22px;opacity:.28}84%{height:2px;opacity:.07}}
+@keyframes trace-h{0%,15%,100%{width:1px;opacity:0}25%{width:2px;opacity:.12}35%,70%{width:28px;opacity:.28}84%{width:2px;opacity:.07}}
+@media(prefers-reduced-motion:reduce){.ambient-signals .trace{animation:none;opacity:.06}}
+</style>
+
+<style>
+/* Unified Career Path: roles, progression and compact CTA. */
+#career .career-grid{gap:16px}
+#career .career{min-height:235px;padding:28px;display:flex;flex-direction:column;justify-content:flex-start}
+#career .career:before{display:none!important}
+#career .career h3{margin:18px 0 12px;font-size:clamp(25px,2.4vw,31px)}
+#career .career p{margin-bottom:0}
+#career .career-progression{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:center;padding:38px 0 30px;margin-top:25px;border-top:1px solid rgba(189,147,85,.32)}
+#career .career-progression-copy .eyebrow{margin-bottom:14px}
+#career .career-progression-copy h3{font-size:clamp(34px,4.1vw,55px);line-height:1.04;margin:0 0 18px}
+#career .career-progression-copy h3 em{font-style:normal;color:var(--gold)}
+#career .career-progression-copy p{color:#c8c3b8;font-size:14px;line-height:1.8;margin:0;max-width:570px}
+#career .career-progression-steps{list-style:none;padding:0;margin:0}
+#career .career-progression-steps li{display:flex;gap:20px;align-items:baseline;padding:18px 0;border-top:1px solid rgba(189,147,85,.38)}
+#career .career-progression-steps li:last-child{border-bottom:1px solid rgba(189,147,85,.38)}
+#career .career-progression-steps li span{font-size:12px;color:var(--gold);font-weight:700;flex:0 0 24px}
+#career .career-progression-steps li strong{font:700 clamp(17px,1.8vw,22px) 'Barlow Condensed',Impact,sans-serif;line-height:1.25;color:#f4f1ea}
+#career .career-footer{margin-top:0;padding:20px 26px;min-height:100px}
+#career .career-footer strong{font-size:23px}
+#career .career-footer .btn{white-space:nowrap}
+@media(max-width:850px){#career .career-progression{grid-template-columns:1fr;gap:24px}#career .career{padding:24px}}
+@media(max-width:620px){#career .career-progression{padding-top:30px;margin-top:22px}#career .career-progression-steps li{padding:15px 0}#career .career-footer{gap:15px}}
+</style>
+
+
+<style>
+/* Keep decorative signal traces behind interactive cards and their content. */
+.activity-card,.career,.photo,.join-panel,.career-footer,.career-progression{position:relative;z-index:6}
+/* The entire Join composition sits in front of the page-wide signal layer. */
+.join{z-index:5}
+/* Ensure cards have a solid surface so traces cannot show through them. */
+.activity-card,.career,.photo,.join-panel{background-color:#141817!important}
+</style>
+
+<style>
+/* Scroll-directed opening: footage gives way to the existing left-aligned JMBN hero. */
+.cinematic-scroll{height:195vh;position:relative;background:#07090b;isolation:isolate}
+.cinematic-scroll .cinematic-stage{position:sticky;top:0;height:100vh;min-height:620px;max-height:none;overflow:hidden;display:flex;align-items:center;background:#07090b!important;isolation:isolate}
+.cinematic-stage .hero-video{z-index:0!important;opacity:var(--cinematic-video-opacity,1);transform:scale(var(--cinematic-video-scale,1));will-change:opacity,transform}
+.cinematic-stage .hero-video-shade{z-index:1!important;opacity:var(--cinematic-shade-opacity,.22);background:linear-gradient(180deg,rgba(4,6,8,.08) 0%,rgba(4,6,8,.1) 50%,#07090b 100%)!important;pointer-events:none}
+.cinematic-stage:before{content:''!important;display:block!important;position:absolute;inset:0;background:#07090b;opacity:var(--cinematic-black-opacity,0);z-index:2;pointer-events:none}
+.cinematic-stage .cinematic-copy{position:relative;z-index:3;opacity:var(--cinematic-copy-opacity,0);transform:translateY(var(--cinematic-copy-shift,32px));will-change:opacity,transform;pointer-events:none}
+.cinematic-stage .cinematic-copy a{pointer-events:auto}
+.cinematic-stage .hero-sound{z-index:5;opacity:var(--cinematic-video-opacity,1);transition:opacity .2s}
+.cinematic-stage:after{z-index:4;pointer-events:none}
+@media(max-width:700px){.cinematic-scroll{height:175vh}.cinematic-scroll .cinematic-stage{min-height:0;height:100svh}.cinematic-stage .cinematic-copy{padding-top:75px;padding-bottom:35px}.cinematic-stage .cinematic-copy h1{font-size:clamp(37px,10vw,67px)}}
+@media(prefers-reduced-motion:reduce){.cinematic-scroll{height:auto;min-height:100vh}.cinematic-scroll .cinematic-stage{position:relative;min-height:100vh}.cinematic-stage .cinematic-copy{opacity:1!important;transform:none!important;pointer-events:auto}.cinematic-stage:before{opacity:.78!important}.cinematic-stage .hero-sound{display:none}}
+</style>
+
+<style>
+/* Real crew gallery: ten screenshots with consistent cinematic framing. */
+#sessions .jmbn-photo-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+#sessions .jmbn-photo-gallery .photo{display:block;position:relative;min-width:0;min-height:0;width:100%;height:auto;aspect-ratio:16/10;overflow:hidden;cursor:zoom-in;background:#141718;isolation:isolate}
+#sessions .jmbn-photo-gallery .photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .35s ease}
+#sessions .jmbn-photo-gallery .photo:hover img{transform:scale(1.055);filter:brightness(1.09)}
+#sessions .jmbn-photo-gallery .photo-label{position:absolute;inset:auto 0 0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.78));font-size:11px;letter-spacing:.09em}
+#sessions .jmbn-photo-gallery .photo:focus-visible{outline:2px solid #e7b76e;outline-offset:3px}
+@media(max-width:980px){#sessions .jmbn-photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){#sessions .jmbn-photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#sessions .jmbn-photo-gallery .photo-label{font-size:9px;padding:9px}}
+/* Viewer controls remain above the enlarged image. */
+.lightbox .gallery-prev,.lightbox .gallery-next{position:absolute;top:50%;transform:translateY(-50%);z-index:30;border:1px solid rgba(231,183,110,.65);background:rgba(5,8,10,.8);color:#f4d09b;font-size:28px;width:44px;height:54px;cursor:pointer}
+.lightbox .gallery-prev{left:clamp(8px,2vw,35px)}.lightbox .gallery-next{right:clamp(8px,2vw,35px)}
+.lightbox .gallery-prev:hover,.lightbox .gallery-next:hover{background:rgba(37,29,16,.96)}
+@media(max-width:650px){.lightbox .gallery-prev,.lightbox .gallery-next{width:32px;height:42px;font-size:21px}}
+</style>
+
+<style>
+/* Quiet scroll cue at the end of the revealed homepage hero. */
+.cinematic-copy .scroll-explore{display:flex;flex-direction:column;align-items:center;gap:12px;width:max-content;margin:clamp(28px,5vh,55px) auto 0;text-decoration:none;color:#b9955b;font-size:11px;font-weight:500;letter-spacing:.075em;line-height:1.3;opacity:.85;transition:opacity .2s}
+.cinematic-copy .scroll-explore:hover{opacity:1;color:#e7b96d}
+.cinematic-copy .scroll-chevron{display:block;width:10px;height:10px;border-right:1px solid #c99e5b;border-bottom:1px solid #c99e5b;transform:rotate(45deg);animation:scroll-chevron-drift 2.8s ease-in-out infinite}
+@keyframes scroll-chevron-drift{0%,100%{translate:0 0;opacity:.6}50%{translate:0 5px;opacity:1}}
+@media(max-width:700px){.cinematic-copy .scroll-explore{margin:24px auto 0;font-size:10px;gap:8px}}
+@media(prefers-reduced-motion:reduce){.cinematic-copy .scroll-chevron{animation:none}}
+</style>
+
+<style>
+/* Anchor the scroll prompt to the bottom of the hero, not below the text block. */
+.cinematic-stage>.scroll-explore{position:absolute;z-index:5;left:50%;bottom:clamp(24px,4vh,42px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;width:max-content;margin:0;color:#b9955b;text-decoration:none;font-size:11px;font-weight:500;letter-spacing:.075em;opacity:var(--cinematic-copy-opacity,0);pointer-events:none;transition:color .2s}
+.cinematic-stage>.scroll-explore .scroll-chevron{display:block;width:10px;height:10px;border-right:1px solid #c99e5b;border-bottom:1px solid #c99e5b;transform:rotate(45deg);animation:scroll-chevron-drift 2.8s ease-in-out infinite}
+.cinematic-stage>.scroll-explore:hover{color:#e7b96d}
+@media(max-width:700px){.cinematic-stage>.scroll-explore{bottom:18px;font-size:10px;gap:7px}}
+@media(prefers-reduced-motion:reduce){.cinematic-stage>.scroll-explore{opacity:1;pointer-events:auto}.cinematic-stage>.scroll-explore .scroll-chevron{animation:none}}
+</style>
+
+<style>
+/* Unified typography: Play for all site copy, navigation, cards and headlines. */
+html,body,body *,body *::before,body *::after{font-family:'Play',Arial,sans-serif!important}
+/* Header identity matches JMBN's original slogan lockup. */
+.nav .brand{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.nav .brand-logo{width:43px;height:43px;object-fit:contain;flex:none}
+.nav .brand-name{font-size:24px;font-weight:700;letter-spacing:2px;line-height:1.1;color:#f5f2e9}
+.nav .brand-tagline{display:flex;flex-direction:column;justify-content:center;gap:3px;margin-left:10px;padding-left:14px;border-left:1px solid rgba(226,181,104,.4);line-height:1.15}
+.nav .brand-tagline strong{font-size:11px;font-weight:700;letter-spacing:.045em;color:#e2b568}
+.nav .brand-tagline small{font-size:10px;font-style:italic;font-weight:400;letter-spacing:0;color:#e4dcd0}
+@media(max-width:1040px){.nav .brand-tagline{margin-left:4px;padding-left:9px}.nav .brand-tagline strong{font-size:9px}.nav .brand-tagline small{font-size:9px}}
+@media(max-width:760px){.nav .brand-tagline{display:none}.nav .brand-name{font-size:22px}.nav .brand-logo{width:38px;height:38px}}
+</style>
+
+<style>
+/* Chapter transitions: restrained motion, subtle gold signal and image reveals. */
+.chapter-reveal{position:relative}
+.chapter-reveal .section-top{position:relative}
+.chapter-reveal .section-top::before{content:'';position:absolute;left:0;top:-24px;width:clamp(70px,12vw,150px);height:1px;background:linear-gradient(90deg,rgba(231,183,110,.85),transparent);transform-origin:left center;transform:scaleX(.3);opacity:.25;transition:transform 1s ease,opacity .7s ease}
+.chapter-reveal.chapter-visible .section-top::before{transform:scaleX(1);opacity:.85}
+@media(prefers-reduced-motion:no-preference){
+.js-chapters .chapter-reveal .section-top>*{opacity:0;transform:translateY(19px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js-chapters .chapter-reveal.chapter-visible .section-top>*{opacity:1;transform:none}
+.js-chapters .chapter-reveal .section-top>*:nth-child(2){transition-delay:.09s}
+.js-chapters .chapter-reveal .section-top>*:nth-child(3){transition-delay:.17s}
+.js-chapters .chapter-reveal .activity-card,.js-chapters .chapter-reveal .career,.js-chapters .chapter-reveal .career-progression,.js-chapters .chapter-reveal .career-footer,.js-chapters .chapter-reveal .faq-list,.js-chapters .chapter-reveal .faq-end{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
+.js-chapters .chapter-reveal.chapter-visible .activity-card,.js-chapters .chapter-reveal.chapter-visible .career,.js-chapters .chapter-reveal.chapter-visible .career-progression,.js-chapters .chapter-reveal.chapter-visible .career-footer,.js-chapters .chapter-reveal.chapter-visible .faq-list,.js-chapters .chapter-reveal.chapter-visible .faq-end{opacity:1;transform:none}
+.js-chapters .chapter-reveal .activity-card:nth-child(2),.js-chapters .chapter-reveal .career:nth-child(2){transition-delay:.12s}
+.js-chapters .chapter-reveal .activity-card:nth-child(3),.js-chapters .chapter-reveal .career:nth-child(3){transition-delay:.22s}
+.js-chapters .chapter-reveal .activity-card:nth-child(4){transition-delay:.3s}
+.js-chapters .chapter-reveal .career-progression{transition-delay:.15s}
+.js-chapters .chapter-reveal .career-footer{transition-delay:.22s}
+.js-chapters #sessions .jmbn-photo-gallery .photo{opacity:0;transform:translateY(18px) scale(.975);transition:opacity .65s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js-chapters #sessions.chapter-visible .jmbn-photo-gallery .photo{opacity:1;transform:none}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n+2){transition-delay:.09s}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n+3){transition-delay:.17s}
+.js-chapters #sessions .jmbn-photo-gallery .photo:nth-child(4n){transition-delay:.25s}
+.js-chapters #join .join-inner>div,.js-chapters #join .join-panel{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.7,.2,1)}
+.js-chapters #join.chapter-visible .join-inner>div,.js-chapters #join.chapter-visible .join-panel{opacity:1;transform:none}
+.js-chapters #join .join-panel{transition-delay:.15s}
+}
+@media(prefers-reduced-motion:reduce){.chapter-reveal .section-top::before{transition:none;transform:none;opacity:.7}}
+</style>
+
+<style>
+/* Recruitment 2 experiment: one pinned scene, three scroll-controlled acts. */
+.cinematic-scroll{height:285vh!important}
+.cinematic-stage{background:#07090b!important}
+.jmbn-intro{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:none;opacity:var(--intro-opacity,1);transform:scale(var(--intro-scale,1));will-change:opacity,transform;background:radial-gradient(ellipse at 50% 43%,#242019 0%,#101114 36%,#07090b 78%)}
+.jmbn-intro-lines{position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(20% - 1px),rgba(199,157,83,.22) 20%);mask-image:linear-gradient(180deg,transparent,#000 28%,#000 73%,transparent)}
+.jmbn-intro-center{text-align:center;padding:24px;position:relative;z-index:1}
+.jmbn-intro-kicker{color:#dfb86e;font-size:clamp(10px,1vw,13px);letter-spacing:.3em;font-weight:700;margin-bottom:24px}
+.jmbn-intro h2{font-family:'Play',sans-serif!important;font-weight:700;line-height:.98;letter-spacing:-.045em;font-size:clamp(46px,8.1vw,128px);margin:0;color:#f0bd65;text-shadow:0 0 45px rgba(211,155,61,.25)}
+.jmbn-intro h2 span{color:#e8b669}
+.jmbn-intro-center p{font-size:clamp(10px,1vw,13px);letter-spacing:.38em;color:#bcb4a7;margin-top:25px}
+.jmbn-intro-hint{position:absolute;bottom:clamp(45px,9vh,95px);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:#b89b69;letter-spacing:.18em;font-size:10px;white-space:nowrap}
+.jmbn-intro-hint span{font-size:23px}
+.cinematic-stage .hero-video{opacity:var(--cinematic-video-opacity,0)}
+.cinematic-stage .hero-video-shade{opacity:var(--cinematic-shade-opacity,.16)}
+.cinematic-stage .hero-sound{opacity:var(--sound-opacity,0);pointer-events:var(--sound-pointer,none)}
+.cinematic-stage>.scroll-explore{opacity:var(--cinematic-copy-opacity,0)}
+@media(max-width:700px){.cinematic-scroll{height:265vh!important}.jmbn-intro h2{font-size:clamp(38px,10vw,68px)}.jmbn-intro-kicker{letter-spacing:.13em}.jmbn-intro-center p{letter-spacing:.18em}}
+@media(prefers-reduced-motion:reduce){.cinematic-scroll{height:auto!important}.jmbn-intro{display:none}.cinematic-stage .hero-video{opacity:1!important}}
+</style>
+
+<style>
+/* Recruitment 2: immersive intro and footage have no navigation chrome. */
+body:has(.cinematic-scroll) .cinematic-nav{position:fixed!important;top:0;left:0;right:0;width:100%;z-index:70;opacity:var(--intro-nav-opacity,0);visibility:var(--intro-nav-visibility,hidden);transform:translateY(var(--intro-nav-shift,-100%));pointer-events:var(--intro-nav-pointer,none);transition:opacity .35s ease,transform .35s ease,visibility .35s ease}
+/* Keep the opening title truly centred in the unobstructed viewport. */
+.jmbn-intro{align-items:center!important;justify-content:center!important}
+.jmbn-intro-center{max-width:95vw;margin:auto}
+.jmbn-intro-center h2{margin:0!important;padding:0!important;max-width:none!important;line-height:1.05!important}
+@media(prefers-reduced-motion:reduce){body:has(.cinematic-scroll) .cinematic-nav{opacity:1!important;visibility:visible!important;transform:none!important;pointer-events:auto!important}}
+</style>
+
+<style>
+/* Recruitment 2: hero first, then a dedicated video-led Sessions chapter. */
+body:has(.recruitment-hero) .cinematic-nav{position:sticky!important;top:0;opacity:1!important;visibility:visible!important;transform:none!important;pointer-events:auto!important}
+.recruitment-hero{position:relative;display:flex;align-items:center;min-height:calc(100svh - 72px);padding:100px 0 115px;background:linear-gradient(90deg,rgba(5,8,10,.94),rgba(5,8,10,.58) 60%,rgba(5,8,10,.25)),linear-gradient(0deg,#080b0d,transparent 32%),url('assets/Crewhero2.png') center 42%/cover no-repeat;border-bottom:1px solid rgba(218,168,83,.5)}
+.recruitment-hero-copy{position:relative;z-index:2}.recruitment-hero h1{font-size:clamp(45px,6.4vw,104px);line-height:.98;max-width:1050px;margin:20px 0}.recruitment-hero h1 em{color:#e7b76e;font-style:normal}.recruitment-hero .lead{font-size:clamp(16px,1.6vw,22px)}.recruitment-hero .hero-explainer{max-width:590px}.recruitment-hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.recruitment-hero>.scroll-explore{position:absolute;bottom:27px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:#cba468;text-decoration:none;font-size:10px;letter-spacing:.12em;white-space:nowrap;z-index:4}
+.recruitment-hero>.scroll-explore .scroll-chevron{display:block;width:10px;height:10px;border-right:1px solid #cba468;border-bottom:1px solid #cba468;transform:rotate(45deg);animation:scroll-chevron-drift 2.8s ease-in-out infinite}
+.jmbn-video-section{padding-top:clamp(65px,9vw,125px);padding-bottom:clamp(65px,9vw,125px)}
+.jmbn-video-layout{display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.3fr);gap:clamp(24px,4vw,68px);align-items:center}
+.jmbn-video-copy h2{font-size:clamp(38px,4.7vw,72px);line-height:1.04;margin:20px 0}.jmbn-video-copy h2 em{color:#e7b76e;font-style:normal}.jmbn-video-copy p{max-width:470px;color:#bcbfbe;line-height:1.8}.jmbn-video-copy .jmbn-video-meta{font-size:11px;letter-spacing:.09em;color:#d7ad67;margin:25px 0}.jmbn-video-meta span{padding:0 8px}.jmbn-video-copy .btn{display:inline-flex;margin-top:8px}
+.jmbn-video-frame{min-width:0;border:1px solid rgba(210,165,91,.55);background:#0c0f11;box-shadow:0 20px 60px rgba(0,0,0,.35)}.jmbn-sessions-video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000}.jmbn-video-caption{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;color:#c7a16c;font-size:10px;letter-spacing:.11em}
+@media(max-width:850px){.jmbn-video-layout{grid-template-columns:1fr}.jmbn-video-copy p{max-width:680px}.recruitment-hero{min-height:75svh;background-position:center center}}
+@media(max-width:600px){.recruitment-hero{padding:90px 0 110px}.recruitment-hero h1{font-size:clamp(39px,10vw,65px)}.jmbn-video-caption{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.recruitment-hero>.scroll-explore .scroll-chevron{animation:none}}
+</style>
+</head><body><div aria-hidden="true" class="ambient-signals"><i class="trace v" style="--x:9%;--y:18%;--delay:-2s;--duration:7s"></i><i class="trace h" style="--x:21%;--y:62%;--delay:-5s;--duration:8s"></i><i class="trace v" style="--x:34%;--y:35%;--delay:-1s;--duration:9s"></i><i class="trace h" style="--x:47%;--y:81%;--delay:-6s;--duration:11s"></i><i class="trace h" style="--x:61%;--y:13%;--delay:-3s;--duration:7s"></i><i class="trace v" style="--x:77%;--y:53%;--delay:-4s;--duration:10s"></i><i class="trace v" style="--x:89%;--y:27%;--delay:-8s;--duration:12s"></i><i class="trace h" style="--x:94%;--y:78%;--delay:-1s;--duration:9s"></i><i class="trace v" style="--x:13%;--y:87%;--delay:-6s;--duration:10s"></i><i class="trace h" style="--x:69%;--y:89%;--delay:-2s;--duration:8s"></i><i class="trace v" style="--x:53%;--y:48%;--delay:-7s;--duration:12s"></i><i class="trace h" style="--x:29%;--y:9%;--delay:-3s;--duration:9s"></i><i class="trace h" style="--x:6%;--y:43%;--delay:-4.2s;--duration:13.5s"></i><i class="trace v" style="--x:16%;--y:74%;--delay:-8.7s;--duration:16s"></i><i class="trace h" style="--x:39%;--y:22%;--delay:-1.5s;--duration:14.5s"></i><i class="trace v" style="--x:58%;--y:67%;--delay:-11.2s;--duration:17s"></i><i class="trace h" style="--x:73%;--y:36%;--delay:-6.1s;--duration:15.5s"></i><i class="trace v" style="--x:85%;--y:84%;--delay:-3.4s;--duration:18s"></i><i class="trace h" style="--x:26%;--y:95%;--delay:-10.3s;--duration:16.5s"></i><i class="trace v" style="--x:96%;--y:16%;--delay:-7.6s;--duration:14s"></i><i class="trace h" style="--x:48%;--y:56%;--delay:-12.1s;--duration:19s"></i></div>
+<header class="nav cinematic-nav"><div class="wrap nav-inner"><a aria-label="JMBN homepage" class="brand" href="#home"><img alt="JMBN gold insignia" class="brand-logo" height="48" src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png/v1/fill/w_66,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/0_New_JMBN_Logo_Gold.png" width="48"/><span class="brand-name">JMBN</span><span class="brand-tagline"><strong>HILARITY · IMMERSION · TEAMWORK</strong><small>And the shenanigans in between.</small></span></a><button aria-controls="navlinks" aria-expanded="false" class="menu" id="menu">☰ Menu</button><nav aria-label="Main navigation" class="links" id="navlinks"><a class="active" href="#home">Homepage</a><a href="#sessions">Sessions</a><a href="#activities">Activities</a><a href="#career">Career Path</a><a href="#join">Join Us</a></nav></div></header>
+<main><section class="recruitment-hero" id="home"><div class="wrap recruitment-hero-copy"><span class="eyebrow">Welcome to JMBN</span><h1>YOU KNOW STAR CITIZEN.<br/><em>NOW PLAY THE JMBN WAY.</em></h1><p class="lead">Come for the game. Stay for the crew.</p><p class="hero-explainer">A casual but organised mil-sim organisation built around teamwork, coordinated operations and looking out for one another — without rigid commitments.</p><div class="actions"><a class="btn gold" href="#join">Join the Crew <span>→</span></a><a class="btn ghost" href="#sessions">See JMBN in Action <span>↗</span></a></div></div><a class="scroll-explore" href="#sessions" aria-label="Scroll to JMBN sessions"><span>SCROLL TO EXPLORE</span><span class="scroll-chevron" aria-hidden="true"></span></a></section>
+<div class="strip"><div class="wrap strip-inner"><div class="strip-item"><div class="strip-icon">✧</div><strong>Casual Mil-Sim</strong><small>Organised, not rigid</small></div><div class="strip-item"><div class="strip-icon">♧</div><strong>One Crew</strong><small>Look out for each other</small></div><div class="strip-item"><div class="strip-icon">◎</div><strong>Coordinated Play</strong><small>Clear roles, good comms</small></div><div class="strip-item"><div class="strip-icon">◇</div><strong>Real Life First</strong><small>Play when you can</small></div></div></div>
+<section class="content jmbn-video-section" id="sessions"><div class="wrap jmbn-video-layout"><div class="jmbn-video-copy"><div class="eyebrow">Moments with JMBN</div><h2>SEE JMBN<br/><em>IN ACTION.</em></h2><p>Real moments from our Star Citizen sessions. From coordinated crew operations to unexpected adventures, see what it's like to be part of JMBN.</p><p class="jmbn-video-meta">CASUAL BUT ORGANISED <span>·</span> SATURDAYS FROM 8 PM SGT</p><a class="btn ghost" href="#activities">How We Play <span>↗</span></a></div><div class="jmbn-video-frame"><video class="jmbn-sessions-video" controls playsinline preload="metadata" poster="assets/Sessions1.png" aria-label="JMBN Star Citizen crew video"><source src="assets/JMBN-Test-Clearer.mp4" type="video/mp4"/>Your browser does not support HTML5 video.</video><div class="jmbn-video-caption"><span>JMBN / CREW FOOTAGE</span><span>WATCH OUR SESSIONS</span></div></div></div></section>
+<section class="content" id="activities"><div class="wrap"><div class="section-top"><div class="eyebrow">The JMBN Way</div><h2>HOW WE RUN THE 'VERSE.</h2><p>Form up. Look after the crew. Make the story worth coming back for.</p></div><div class="activity-grid"><article class="activity-card framed-panel" style='--card-art:url("assets/OpsBridge.png")'><span class="number">01 / HOME BASE — ARCCORP</span><h3>HOME BASE — ARCCORP</h3><p>ArcCorp is where we start. We form up, sort the ships and roles, then head out together — whether it's a planned operation or simply seeing where the night takes us.</p></article><article class="activity-card framed-panel" style='--card-art:url("assets/Polaris-BG.png")'><span class="number">02 / ONE CREW</span><h3>ONE CREW</h3><p>We play as a team. Pilots, gunners, engineers and ground teams all have a place — and we back each other when it matters.</p></article><article class="activity-card framed-panel" style='--card-art:url("assets/Crew1-bg.png")'><span class="number">03 / NO ONE LEFT BEHIND</span><h3>NO ONE LEFT BEHIND</h3><p>Plans change. Ships explode. Somebody always needs a lift. We regroup, recover our people and do our best to make sure everyone gets home.</p></article><article class="activity-card framed-panel"><span class="number">04 / SHENANIGANS</span><h3>SHENANIGANS, THE JMBN WAY</h3><p>Some of the best sessions are not on the schedule. Expect good comms, questionable ideas, unexpected detours and stories that become part of the org.</p></article></div></div></section>
+<section class="content" id="career"><div class="wrap">
+<div class="section-top"><div class="eyebrow">Career Path</div><h2>FIND YOUR PLACE.<br/><em>GROW TOGETHER.</em></h2><p>Explore different roles and find the path that suits you.</p></div>
+<div class="career-grid">
+<article class="career"><div class="number">01 / SHIP DEFENCE</div><h3>COMBAT SYSTEMS OPERATOR</h3><p>Be the ship’s eyes, ears and first line of defence. Track threats, share clear information and help your crew make fast decisions under pressure.</p></article>
+<article class="career"><div class="number">02 / SHIP SYSTEMS</div><h3>ELECTRONIC TECHNICIAN</h3><p>Keep the ship operational. Work with power and onboard systems, respond when things go wrong and help the crew stay in the fight.</p></article>
+<article class="career"><div class="number">03 / FIELD OPERATIONS</div><h3>SPECIAL WARFARE CREWMAN</h3><p>Deploy with a small team for reconnaissance, boarding and ground operations. Coordinate closely, cover your crew and carry the mission forward.</p></article>
+</div>
+<div class="career-progression">
+<div class="career-progression-copy"><div class="eyebrow">Our Approach</div><h3>YOUR ROLE.<br/><em>YOUR PROGRESSION.</em></h3><p>Whether you're interested in combat, engineering or field operations, there's room to develop your skills and take on greater responsibility. Your path isn't dictated by seniority — it's shaped by your commitment, contributions and the trust you earn.</p></div>
+<ol class="career-progression-steps"><li><span>01</span><strong>EXPLORE YOUR SPECIALISATION</strong></li><li><span>02</span><strong>DEVELOP YOUR SKILLS AND BUILD TRUST</strong></li><li><span>03</span><strong>STEP UP AND TAKE THE LEAD</strong></li></ol>
+</div>
+<div class="career-footer"><div><strong>Explore different roles. Find your own path.</strong><p>No pressure to be the best pilot or shot — teamwork and willingness to learn matter more.</p></div><a class="btn gold" href="#join">Join JMBN →</a></div>
+</div></section>
+<section class="join" id="join"><div class="wrap join-inner"><div><div class="eyebrow">Join JMBN</div><h2>FIND YOUR CREW.<br/><em>JOIN JMBN.</em></h2><p class="lead">You don't need to be the best pilot or shot. We value communication, thoughtful play and looking out for the crew.</p><p class="muted">We usually meet Saturdays from 8 PM Singapore time (SGT, GMT+8). Real life comes first.</p></div><aside class="join-panel"><div class="eyebrow">Getting Started</div><h3>THREE SIMPLE STEPS.</h3>
+<ol class="join-steps"><li><b>01</b> Join our Discord</li><li><b>02</b> Introduce yourself to the crew</li><li><b>03</b> Find your first activity together</li></ol>
+<a class="btn gold discord-btn" href="https://discord.gg/4z49bCXv5B" rel="noopener noreferrer" target="_blank">JOIN OUR DISCORD ↗</a></aside></div></section><section class="faq-section content" id="questions"><div class="wrap faq-wrap">
+<div class="section-top"><div class="eyebrow">Before You Join</div><h2>QUICK QUESTIONS.</h2><p>Everything you need to know before saying hello.</p></div>
+<div class="faq-list">
+<details><summary>What kind of organisation is JMBN?</summary><p>JMBN is a casual but organised mil-sim organisation in Star Citizen. We enjoy coordinated crew operations, clear communication and teamwork, while keeping the atmosphere relaxed and real-life commitments first.</p></details>
+<details><summary>Do I need experience, a ship or a specific role?</summary><p>No. New players are welcome. You don't need a particular ship, rank or career path to introduce yourself.</p></details>
+<details><summary>When do you play?</summary><p>We usually meet every Saturday from 8 PM Singapore time (GMT+8). If a session changes, we'll share an update in Discord.</p></details>
+<details><summary>Where are members based?</summary><p>Our members are based in Singapore, Malaysia and Australia. We welcome interested players from Southeast Asia and Australia.</p></details>
+<details><summary>What do you expect from members?</summary><p>Clear communication, thoughtful play, cooperation and looking out for one another. We know our members have lives beyond the 'verse.</p></details>
+</div><div class="faq-end"><span>Ready to meet the crew?</span><a class="btn gold" href="https://discord.gg/4z49bCXv5B" rel="noopener noreferrer" target="_blank">JOIN JMBN ON DISCORD ↗</a></div>
+</div></section></main>
+<footer><div class="wrap footer-inner"><span>© <span id="year"></span> JMBN · STAR CITIZEN ORGANISATION</span><span>CASUAL MIL-SIM. SERIOUS TEAMWORK.</span></div></footer><div aria-hidden="true" aria-label="Session photo viewer" aria-modal="true" class="lightbox" id="lightbox" role="dialog"><button aria-label="Close photo viewer" class="close" id="close">×</button><img alt="Enlarged JMBN session photograph" id="lightboxImg"/><button type="button" class="gallery-prev" aria-label="Previous photo">‹</button><button type="button" class="gallery-next" aria-label="Next photo">›</button><div class="caption" id="lightboxCaption"></div></div><script>
+const menu=document.getElementById('menu'),links=document.getElementById('navlinks');menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))});document.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false')}));const navLinks=[...document.querySelectorAll('.links a')];const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-25% 0px -60% 0px'});document.querySelectorAll('main section[id]').forEach(s=>observer.observe(s));const lightbox=document.getElementById('lightbox'),lightboxImg=document.getElementById('lightboxImg');function closeBox(){lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');lightboxImg.removeAttribute('src');document.body.style.overflow=''}document.querySelectorAll('.photo').forEach(b=>b.addEventListener('click',()=>{lightboxImg.src=b.dataset.src;lightboxImg.alt=b.querySelector('img').alt;document.getElementById('lightboxCaption').textContent=b.dataset.caption;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.getElementById('close').focus()}));document.getElementById('close').addEventListener('click',closeBox);lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeBox()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBox()});document.getElementById('year').textContent=new Date().getFullYear();
+</script><script>
+(()=>{const v=document.querySelector('.hero-video'),b=document.querySelector('.hero-sound');if(!v||!b)return;
+v.muted=true;
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){v.pause();b.hidden=true;return;}
+const play=v.play();if(play&&play.catch)play.catch(()=>{});
+b.addEventListener('click',()=>{v.muted=!v.muted;b.textContent=v.muted?'◖  SOUND OFF':'◖  SOUND ON';b.setAttribute('aria-pressed',String(!v.muted));b.setAttribute('aria-label',v.muted?'Unmute hero video':'Mute hero video');if(v.paused)v.play().catch(()=>{});});
+})();
+</script>
+
+
+<script>
+(()=>{
+ const photos=[...document.querySelectorAll('#sessions .photo')];
+ const modal=document.getElementById('lightbox'),img=document.getElementById('lightboxImg'),caption=document.getElementById('lightboxCaption');
+ if(!photos.length||!modal||!img)return;
+ let index=0;
+ const show=n=>{index=(n+photos.length)%photos.length;const p=photos[index];img.src=p.dataset.src;img.alt=p.querySelector('img').alt;caption.textContent=p.dataset.caption+' · '+(index+1)+' / '+photos.length;};
+ photos.forEach((p,i)=>p.addEventListener('click',()=>{show(i);},{capture:true}));
+ modal.querySelector('.gallery-prev').addEventListener('click',()=>show(index-1));
+ modal.querySelector('.gallery-next').addEventListener('click',()=>show(index+1));
+ document.addEventListener('keydown',e=>{if(!modal.classList.contains('open'))return;if(e.key==='ArrowLeft'){e.preventDefault();show(index-1)}if(e.key==='ArrowRight'){e.preventDefault();show(index+1)}});
+})();
+</script>
+
+<script>
+/* One-time section entrances; keep the cinematic hero's separate scroll fade untouched. */
+(()=>{
+ const ids=['activities','sessions','career','join','questions'];
+ const sections=ids.map(id=>document.getElementById(id)).filter(Boolean);
+ if(!sections.length||!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ sections.forEach(section=>section.classList.add('chapter-reveal'));
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(!entry.isIntersecting)return;entry.target.classList.add('chapter-visible');observer.unobserve(entry.target)});
+ },{rootMargin:'0px 0px -8% 0px',threshold:.06});
+ sections.forEach(section=>observer.observe(section));
+ // Enable hidden-to-visible transitions only after observing, avoiding invisible content without JS.
+ document.documentElement.classList.add('js-chapters');
+ // Account for deep links and browser scroll restoration.
+ requestAnimationFrame(()=>sections.forEach(section=>{const r=section.getBoundingClientRect();if(r.top<innerHeight*.92&&r.bottom>0){section.classList.add('chapter-visible');observer.unobserve(section)}}));
+})();
+</script>
+</body></html>
