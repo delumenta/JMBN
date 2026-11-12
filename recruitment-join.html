@@ -10,7 +10,7 @@
 <style>
 .faq-section{border-top:1px solid var(--line)}
 .faq-section h2{margin-bottom:28px}
-.faq-list{border-top:1px solid var(--line)}
+.faq-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,5vw,70px);border-top:1px solid var(--line)}
 .faq-item{border-bottom:1px solid var(--line)}
 .faq-item summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 0;cursor:pointer;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .faq-item summary::-webkit-details-marker{display:none}
@@ -19,7 +19,7 @@
 .faq-item summary:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
 .faq-answer{max-width:850px;padding:0 40px 18px 0;color:var(--muted);font-size:14px;line-height:1.7}
 .faq-answer p{margin:0}
-@media(max-width:750px){.faq-item summary{font-size:14px}.faq-answer{padding-right:12px}}
+@media(max-width:750px){.faq-list{grid-template-columns:1fr}.faq-item summary{font-size:14px}.faq-answer{padding-right:12px}}
 </style>
 
 <script src="recruitment-header.js" defer></script>
