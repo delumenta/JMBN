@@ -7,6 +7,21 @@
 <title>Join the Crew · JMBN</title>
 <link rel="stylesheet" href="recruitment-site.css">
 <link rel="stylesheet" href="recruitment-header.css">
+<style>
+.faq-section{border-top:1px solid var(--line)}
+.faq-section h2{margin-bottom:28px}
+.faq-list{border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 0;cursor:pointer;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"+";color:var(--gold);font-size:24px;font-weight:400}
+.faq-item[open] summary::after{content:"−"}
+.faq-item summary:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+.faq-answer{max-width:850px;padding:0 40px 18px 0;color:var(--muted);font-size:14px;line-height:1.7}
+.faq-answer p{margin:0}
+@media(max-width:750px){.faq-item summary{font-size:14px}.faq-answer{padding-right:12px}}
+</style>
+
 <script src="recruitment-header.js" defer></script>
 </head>
 <body>
@@ -24,21 +39,44 @@
     <div class="label">Who we're looking for</div>
     <h2>Play as a crew.<br>Grow as a crew.</h2>
     <p class="copy">We’re a casual mil-sim organization that values cooperation, consideration and camaraderie. We enjoy practical, immersive crew play, but we know members have lives beyond the game. Students, working adults and parents are all welcome here.</p>
-    <p class="copy">You don’t have to be the best pilot or shot. We value clear communication, teamwork, thoughtful play, and looking out for the crew instead of rushing in alone.</p>
     <p class="note">New players are welcome. You don’t need a particular ship, rank or career path to introduce yourself.</p>
   </div>
   <div>
-    <div class="label">How to join</div>
-    <p class="note"><strong>Every Saturday · 8 pm Singapore time (GMT+8)</strong><br>Coordinated Star Citizen sessions.</p>
-    <h2>Three simple steps.</h2>
-    <ol class="list">
-      <li><span>01</span><strong>Join our Discord</strong></li>
-      <li><span>02</span><strong>Introduce yourself to the crew</strong></li>
-      <li><span>03</span><strong>Find your first activity together</strong></li>
-    </ol>
-    <p class="copy">Tell us your callsign and what you enjoy doing in Star Citizen. An organization member can help you find your place and help you access the member login when you're ready.</p>
+    <div class="label">Join the crew</div>
+    <h2>Ready to fly with us?</h2>
+    <p class="copy">Come say hello in our Discord and tell us what you enjoy doing in Star Citizen.</p>
     <a class="btn" href="https://discord.gg/4z49bCXv5B" target="_blank" rel="noopener noreferrer" aria-label="Join the JMBN Discord, opens in a new tab">Join the JMBN Discord ↗</a>
     <p class="copy" style="margin-top:18px">Already have an organization account? <a href="https://delumenta.github.io/JMBN/" style="color:var(--bright)">Member login ↗</a></p>
+  </div>
+</section>
+<section class="section wrap faq-section" aria-labelledby="faq-title">
+  <div class="label">JMBN / Common questions</div>
+  <h2 id="faq-title">A few things to know.</h2>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>Who are we?</summary>
+      <div class="faq-answer"><p>JMBN is a casual mil-sim organization in Star Citizen, built around immersive crew operations and shared experiences.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>What are we looking for?</summary>
+      <div class="faq-answer"><p>Players based in Southeast Asia and Australia who want to enjoy Star Citizen as part of a crew. New players are welcome; you don’t need a specific ship, rank or career path.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>How do we play?</summary>
+      <div class="faq-answer"><p>We take part in coordinated, immersive gameplay. Teamwork, camaraderie and clear communication matter, and we look out for one another during operations.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>When do we play?</summary>
+      <div class="faq-answer"><p>We usually meet every Saturday from 8 pm Singapore time (GMT+8). If a session changes, we’ll share an update in Discord.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>Where are we based?</summary>
+      <div class="faq-answer"><p>Our members are based in Singapore, Malaysia and Australia. We use Singapore time for our regular session schedule.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>Why do we play?</summary>
+      <div class="faq-answer"><p>The ’verse is better with a crew. The adventure is more fun when you can count on others—and know someone has your back when things go sideways.</p></div>
+    </details>
   </div>
 </section>
 </main>
