@@ -993,3 +993,23 @@ body:has(#command.view.active)::before{
 /* Operations and Crew Manifest: black page background only; keep their hero artwork. */
 body:has(#operations.view.active),body:has(#crew.view.active){background:#000}
 body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{display:none!important}
+
+/* Fleet hero: same height, edge-to-edge placement and typography as Operations / Crew. */
+#fleet .operations-hero.fleet-hero{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
+  min-height:280px;margin:-30px -38px 0;padding:20px 38px 24px;overflow:hidden;
+  background-color:#080907;
+  background-size:cover,cover,cover;
+  background-position:center,center,center 20%;
+  background-repeat:no-repeat;border-bottom:0;
+}
+#fleet .fleet-hero .section-status{position:relative;padding:2px 0 0;border:0;color:#a1a597}
+#fleet .fleet-hero .view-intro{position:relative;align-items:center;gap:24px;padding:0;border:0}
+#fleet .fleet-hero .view-intro h2{font-size:clamp(46px,5vw,72px);margin:7px 0 9px;line-height:.9;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
+#fleet .fleet-hero .view-intro p:not(.eyebrow){max-width:500px;margin:0;color:#d0d2c9;font-size:13px}
+@media(max-width:800px){#fleet .operations-hero.fleet-hero{margin:-30px -16px 0;padding:18px 16px 20px}}
+@media(max-width:700px){
+ #fleet .operations-hero.fleet-hero{min-height:250px;margin:-18px -16px 0;padding:18px 16px 20px;background-size:cover,cover,auto 100%;background-position:center,center,65% center}
+ #fleet .fleet-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
+ #fleet .fleet-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
+}
