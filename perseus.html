@@ -18,8 +18,8 @@ function style(){
    };
    o.material=Array.isArray(o.material)?o.material.map(tint):tint(o.material);
   }else{
-   // Same translucent bronze hull treatment used in polaris.html.
-   o.material=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});
+   // Perseus has denser overlapping exterior meshes than Polaris; use a lighter ghost opacity.
+   o.material=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.045,depthWrite:true,side:THREE.FrontSide});
   }
  })
 }
