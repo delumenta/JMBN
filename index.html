@@ -142,10 +142,12 @@
 <div class="fleet-vessel-header"><div><p class="eyebrow">FLEET REGISTRY // SELECT VESSEL</p><h3>ACTIVE FLEET</h3></div><span>SHIP-SPECIFIC DEPLOYMENTS</span></div>
 <div class="fleet-vessel-grid" role="group" aria-label="Select fleet vessel">
 <button class="fleet-vessel-card active" type="button" data-fleet-ship="starfish" aria-pressed="true"><span class="fleet-vessel-art polaris-art" aria-hidden="true"></span><span class="fleet-vessel-content"><small>RSI POLARIS // CAPITAL CORVETTE</small><strong>JCS STARFISH</strong><em>STANDING CREW · MISSION DEPLOYMENT</em></span><span class="fleet-vessel-state">SELECTED</span></button>
+<button class="fleet-vessel-card" type="button" data-fleet-ship="perseus" aria-pressed="false"><span class="fleet-vessel-art perseus-art" aria-hidden="true"></span><span class="fleet-vessel-content"><small>RSI PERSEUS // GUNSHIP</small><strong>RSI PERSEUS</strong><em>TACTICAL BLUEPRINT · VIEW DECKS</em></span><span class="fleet-vessel-state">VIEW</span></button>
 <button class="fleet-vessel-card" type="button" data-fleet-ship="galaxy" aria-pressed="false"><span class="fleet-vessel-art galaxy-art" aria-hidden="true"></span><span class="fleet-vessel-content"><small>RSI GALAXY // MODULAR SHIP</small><strong>JCS GALAXY</strong><em>FUTURE REGISTRY · NOT CONFIGURED</em></span><span class="fleet-vessel-state">PLANNED</span></button>
 <div class="fleet-vessel-card fleet-vessel-empty"><span class="fleet-vessel-plus">+</span><span class="fleet-vessel-content"><small>FLEET EXPANSION</small><strong>ADDITIONAL VESSEL</strong><em>MORE SHIPS CAN BE REGISTERED LATER</em></span></div>
 </div>
 <div id="fleetShipNotice" class="fleet-ship-notice" hidden></div>
+<div id="fleetPerseusShip" hidden><div class="fleet-tactical-head"><div><p class="eyebrow">RSI PERSEUS // TACTICAL CONSOLE</p><h3>PERSEUS BLUEPRINT</h3></div><span>INTERACTIVE HULL · DECKS · STATIONS</span></div><div class="fleet-tactical-frame"><iframe id="fleetPerseusFrame" title="Interactive RSI Perseus tactical blueprint" data-src="perseus.html?fleet=1" loading="lazy"></iframe></div></div>
 <div id="fleetActiveShip">
 <div class="fleet-tactical-head"><div><p class="eyebrow">JCS STARFISH // TACTICAL CONSOLE</p><h3>POLARIS DEPLOYMENT</h3></div><span>SELECT STATION ON MODEL · ASSIGN BELOW</span></div><div class="fleet-tactical-frame"><iframe id="fleetPolarisFrame" title="Interactive JCS Starfish Polaris tactical schematic" src="polaris.html?fleet=1" loading="lazy"></iframe></div>
 <div class="toolbar fleet-toolbar"><div class="fleet-selector"><label class="eyebrow" for="fleetMission">SELECT OPERATION</label><select id="fleetMission"><option value="">Select an operation</option></select></div><div class="fleet-actions"><span id="fleetConnection">Awaiting Manifest</span><button class="primary" id="fleetRefresh" type="button">REFRESH</button></div></div>
@@ -162,5 +164,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261113-fleet-tactical-v10"></script>
+<script type="module" src="app.js?v=20261113-fleet-perseus-v11"></script>
 </body></html>
