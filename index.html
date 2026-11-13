@@ -65,7 +65,7 @@
 #fleet .fleet-schematic-link{display:inline-block;border:1px solid #827044;color:var(--gold);text-decoration:none;padding:12px 15px;margin-top:12px;font-size:11px}
 @media(max-width:850px){#fleet .fleet-vessel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#fleet .fleet-schematic{grid-template-columns:1fr}#fleet .fleet-schematic-image{min-height:210px}}
 @media(max-width:550px){#fleet .fleet-vessel-grid{grid-template-columns:1fr}#fleet .fleet-vessel-card{min-height:145px}#fleet .fleet-vessel-header>span{display:none}}
-</style></head><body>
+</style><style>#fleet .fleet-autofill-hint{font-size:10px;letter-spacing:.06em;color:var(--gold);margin-top:10px;line-height:1.5}#fleet .fleet-apply-suggestion{margin-top:12px;border:1px solid #8b7744;background:#1c1c12;color:#e4c980;font-size:10px;letter-spacing:.06em;padding:10px 13px;cursor:pointer}#fleet .fleet-apply-suggestion:hover{background:#33301b}#fleet .fleet-apply-suggestion:disabled{opacity:.5}</style></head><body>
 <div class="scan"></div>
 <aside class="rail">
   <a class="brand" href="#"><span class="sig"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"></span><span><b>JMBN</b><small>MANIFEST</small></span></a>
@@ -161,5 +161,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261113-internal-standing-v6"></script>
+<script type="module" src="app.js?v=20261113-fleet-autofill-v7"></script>
 </body></html>
