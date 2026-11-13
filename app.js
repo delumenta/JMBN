@@ -671,7 +671,13 @@ async function fleetSaveReview(item,decision,userId,station,role){
 /* Fleet vessel selector: Starfish is the only configured vessel. Other ships are placeholders, not duplicate Polaris records. */
 document.querySelectorAll("[data-fleet-ship]").forEach(button=>button.addEventListener("click",()=>{
  const ship=button.dataset.fleetShip;
- document.querySelectorAll("[data-fleet-ship]").forEach(x=>{x.classList.toggle("active",x===button);x.setAttribute("aria-pressed",String(x===button))});
+ document.querySelectorAll("[data-fleet-ship]").forEach(x=>{
+  const selected=x===button;
+  x.classList.toggle("active",selected);
+  x.setAttribute("aria-pressed",String(selected));
+  const badge=x.querySelector(".fleet-vessel-state");
+  if(badge)badge.textContent=selected?"SELECTED":x.dataset.fleetShip==="galaxy"?"PLANNED":"VIEW";
+ });
  const active=$("#fleetActiveShip"),notice=$("#fleetShipNotice");
  active.hidden=ship!=="starfish";
  const perseus=document.getElementById("fleetPerseusShip");
