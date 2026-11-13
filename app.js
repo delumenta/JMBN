@@ -547,7 +547,7 @@ const FLEET_ROLES=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Figh
 let fleetInitialized=false,fleetCanEdit=false,fleetSignups=[],fleetCurrent=null;
 function fleetNotice(msg){const e=$("#fleetMessage");if(e)e.textContent=msg}
 function fleetName(id){const p=state.crew.find(x=>x.user_id===id);return p?.callsign||p?.display_name||p?.handle||"Crew member"}
-function fleetMetric(label,value){return '<div style="padding:16px;background:#121510;border:1px solid #30382a"><div class="eyebrow">'+esc(label)+'</div><b style="display:block;font-size:24px;color:var(--gold);margin-top:9px">'+esc(String(value))+'</b></div>'}
+function fleetMetric(label,value){return '<div class="fleet-metric"><div class="eyebrow">'+esc(label)+'</div><b>'+esc(String(value))+'</b></div>'}
 async function fleetInit(){
  const sel=$("#fleetMission");if(!sel)return;
  const {data:{session}}=await sb.auth.getSession();
@@ -572,15 +572,15 @@ async function fleetLoad(){
  const used=fleetSignups.filter(x=>x.operational_station);
  $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
  const stations=$("#fleetStations");stations.replaceChildren();
- for(const [id,label] of FLEET_STATIONS){const member=fleetSignups.find(x=>x.operational_station===id);const el=document.createElement("div");el.style.cssText="border:1px solid "+(member?"#76633e":"#30382a")+";background:#10130e;padding:13px;min-width:0";const title=document.createElement("b");title.style.color="var(--gold)";title.textContent=label;const name=document.createElement("div");name.style.cssText="margin-top:6px;color:var(--muted);overflow-wrap:anywhere";name.textContent=member?fleetName(member.user_id):"VACANT";el.append(title,name);stations.append(el)}
+ for(const [id,label] of FLEET_STATIONS){const member=fleetSignups.find(x=>x.operational_station===id);const el=document.createElement("div");el.className="fleet-station-card"+(member?" occupied":"");const title=document.createElement("b");title.textContent=label;const name=document.createElement("div");name.textContent=member?fleetName(member.user_id):"VACANT";el.append(title,name);stations.append(el)}
  const roster=$("#fleetRoster");roster.replaceChildren();
- if(!fleetSignups.length)roster.textContent="No crew marked GOING for this operation.";
+ if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
  for(const member of fleetSignups){
-  const card=document.createElement("div");card.style.cssText="border:1px solid #30382a;background:#10130e;padding:14px;min-width:0";
+  const card=document.createElement("div");card.className="fleet-person-card";
   const name=document.createElement("b");name.textContent=fleetName(member.user_id);name.style.color="var(--text)";
-  const fields=document.createElement("div");fields.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px";
+  const fields=document.createElement("div");fields.className="fleet-person-fields";
   for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
-   const select=document.createElement("select");select.style.cssText="min-width:0;width:100%;padding:9px;background:#0d0f0d;color:#eef0e8;border:1px solid #454934";
+   const select=document.createElement("select");
    select.add(new Option(key==="operational_role"?"ROLE · UNASSIGNED":"STATION · UNASSIGNED",""));
    for(const [value,label] of values){const o=new Option(label,value);o.selected=member[key]===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
    select.disabled=!fleetCanEdit;select.setAttribute("aria-label",key+" for "+fleetName(member.user_id));
