@@ -2,7 +2,27 @@
 import * as THREE from 'https://esm.sh/three@0.170.0';import{OrbitControls}from'https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js';import{GLTFLoader}from'https://esm.sh/three@0.170.0/examples/jsm/loaders/GLTFLoader.js';
 const scene=new THREE.Scene();scene.background=new THREE.Color('#091813');const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.01,2000);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));document.getElementById('scene').append(renderer.domElement);scene.add(new THREE.HemisphereLight(0xe8e6cf,0x2a342e,2));const light=new THREE.DirectionalLight(0xffdc9a,3);light.position.set(10,20,10);scene.add(light);const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;const root=new THREE.Group();scene.add(root);const models={};const visible={base:true,deck0:true,deck1:true,deck2:true};
 const files={base:'JMBN_Perseus_Base.glb',deck0:'JMBN_Perseus_Deck_0.glb',deck1:'JMBN_Perseus_Deck_1.glb',deck2:'JMBN_Perseus_Deck_2.glb'};
-function style(){models.base?.traverse(o=>{if(!o.isMesh)return;const turret=/turret|pdc|weapon|gun|cannon/i.test(o.name+' '+(o.parent?.name||''));o.material=new THREE.MeshStandardMaterial({color:turret?0xcba65b:0xb49a63,metalness:turret?.75:.3,roughness:turret?.28:.55,transparent:!turret,opacity:turret?1:.15,side:THREE.DoubleSide,depthWrite:turret})})}
+function style(){
+ const gold=new THREE.Color(0xcba65b);
+ models.base?.traverse(o=>{
+  if(!o.isMesh)return;
+  // Identify complete turret assemblies, including unnamed child meshes.
+  let parent=o,turret=false;
+  while(parent&&parent!==models.base){if(/turret|pdc|weapon|gun|cannon/i.test(parent.name||'')){turret=true;break}parent=parent.parent}
+  if(turret){
+   // Preserve original GLB materials, texture maps, normal maps and roughness.
+   const tint=material=>{
+    const copy=material.clone();
+    if(copy.color)copy.color.lerp(gold,.65);
+    return copy;
+   };
+   o.material=Array.isArray(o.material)?o.material.map(tint):tint(o.material);
+  }else{
+   // Same translucent bronze hull treatment used in polaris.html.
+   o.material=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.10,depthWrite:true,side:THREE.FrontSide});
+  }
+ })
+}
 function fit(top=false){const box=new THREE.Box3().setFromObject(root);if(box.isEmpty())return;const c=box.getCenter(new THREE.Vector3()),r=Math.max(box.getSize(new THREE.Vector3()).length(),1);controls.target.copy(c);camera.position.copy(c).add(top?new THREE.Vector3(0,r,0.01):new THREE.Vector3(r*.65,r*.55,r*.8));camera.lookAt(c);controls.update()}
 const stations=[];function setupStations(){models.base?.traverse(o=>{if(/turret|pdc|bridge|chair/i.test(o.name)&&o.isMesh&&stations.length<32){stations.push(o);const b=document.createElement('button');b.textContent=o.name;b.onclick=()=>{document.getElementById('selected').textContent=o.name;const pos=o.getWorldPosition(new THREE.Vector3());controls.target.copy(pos);camera.position.copy(pos).add(new THREE.Vector3(2,2,3));controls.update()};document.getElementById('stations').append(b)}})}
 Promise.all(Object.entries(files).map(async([k,file])=>{const gltf=await new GLTFLoader().loadAsync('assets/models/perseus/'+file);models[k]=gltf.scene;root.add(gltf.scene)})).then(()=>{style();fit();setupStations();document.getElementById('notice').remove()}).catch(e=>{document.getElementById('notice').textContent='Perseus model files are not yet published in assets/models/perseus/. Upload the four GLBs to activate the viewer. '+e.message});
