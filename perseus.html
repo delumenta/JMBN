@@ -13,7 +13,15 @@ function style(){
    // Preserve original GLB materials, texture maps, normal maps and roughness.
    const tint=material=>{
     const copy=material.clone();
-    if(copy.color)copy.color.lerp(gold,.65);
+    if(copy.color)copy.color.lerp(gold,.55);
+    // Polaris-style solid turret silhouette, while retaining GLB textures and surface detail.
+    copy.transparent=false;
+    copy.opacity=1;
+    copy.depthWrite=true;
+    copy.depthTest=true;
+    copy.side=THREE.FrontSide;
+    if('metalness' in copy)copy.metalness=Math.max(copy.metalness||0,.48);
+    if('roughness' in copy)copy.roughness=Math.max(copy.roughness||0,.38);
     return copy;
    };
    o.material=Array.isArray(o.material)?o.material.map(tint):tint(o.material);
