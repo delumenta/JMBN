@@ -9,7 +9,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function base(){const p=location.pathname.split("/").filter(Boolean);return /github\.io$/.test(location.hostname)&&p.length?"/"+p[0]+"/":"/"}
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200)}
-function showView(id){$$(".view").forEach(v=>v.classList.toggle("active",v.id===id));$$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("#pageTitle").textContent={command:"COMMAND DECK",operations:"OPERATIONS",deployments:"FLEET DEPLOYMENT",crew:"CREW MANIFEST",academy:"ACADEMY",records:"RECORDS",profile:"PERSONNEL DOSSIER"}[id]||"JMBN";history.replaceState(null,"","#"+id);scrollTo(0,0)}
+function showView(id){$$(".view").forEach(v=>v.classList.toggle("active",v.id===id));$$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("#pageTitle").textContent={command:"COMMAND DECK",operations:"OPERATIONS",deployments:"FLEET DEPLOYMENT",crew:"CREW MANIFEST",academy:"ACADEMY",records:"RECORDS",profile:"PERSONNEL DOSSIER"}[id]||"JMBN";history.replaceState(null,"","#"+id);scrollTo(0,0);if(id==="deployments")fleetInit().catch(e=>fleetNotice(e.message))}
 function img(bucket,name){return URL+"/storage/v1/object/public/"+encodeURIComponent(bucket)+"/"+name.split("/").map(encodeURIComponent).join("/")}
 function fmtDate(v){if(!v)return"TBD";return new Date(v).toLocaleDateString("en-SG",{day:"2-digit",month:"short",year:"2-digit"}).toUpperCase()}
 function fmtTime(v){if(!v)return"";return new Date(v).toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false})}
@@ -538,4 +538,59 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 "COMMS: “Set Condition One.” — Sam/Freezern is still talking about food.",
 "SYSTEM: JMBN network operational. Competence not guaranteed."
 ];const styles={ALERT:"var(--gold2)",OPS:"var(--gold2)",COMMS:"#9ecbff",SECURITY:"tomato",CARGO:"#a0f0c0",SYSTEM:"#f7f1d0",CONTACT:"#f7f1d0"};let i=0,timer,playing=true;const type=line=>(line.match(/^([A-Z]+):/)||[])[1]||"OPS";function render(){const raw=lines[i],members=(state.crew||[]).filter(p=>String(p?.callsign||"").trim()),pick=exclude=>{const pool=members.filter(p=>crewCallsign(p)!==exclude);const p=(pool.length?pool:members)[Math.floor(Math.random()*Math.max((pool.length?pool:members).length,1))];return p?crewCallsign(p):"CREW"},user1=pick(),user2=pick(user1),user=pick(),line=raw.replaceAll("[user1]",user1).replaceAll("[user2]",user2).replaceAll("[user]",user),t=type(line);chip.textContent=`[${t}]`;chip.style.background=styles[t]||"var(--gold2)";chip.style.color="#000";msg.style.opacity=0;setTimeout(()=>{msg.textContent=line;msg.style.opacity=1},180);pause.textContent=playing?"Pause":"Play"}function nextL(){i=(i+1)%lines.length;render()}function prevL(){i=(i-1+lines.length)%lines.length;render()}function start(){if(timer)return;playing=true;timer=setInterval(nextL,4000);render()}function stop(){playing=false;clearInterval(timer);timer=null;render()}next.onclick=()=>{stop();nextL()};prev.onclick=()=>{stop();prevL()};pause.onclick=()=>playing?stop():start();function hideTicker(){el.style.display="none";if(restore)restore.hidden=false;sessionStorage.setItem("opsClosed","1");stop()}function showTicker(){el.style.display="";if(restore)restore.hidden=true;sessionStorage.removeItem("opsClosed");start()}close.onclick=hideTicker;if(restore)restore.onclick=showTicker;if(sessionStorage.getItem("opsClosed")==="1"){el.style.display="none";if(restore)restore.hidden=false;return}start()})();
+
+
+
+/* Fleet Deployment: native Manifest view; uses the same authenticated Supabase client and mission_signups as Operations. */
+const FLEET_STATIONS=[["air","AIR"],["helmsman","HELMSMAN"],["surface","SURFACE"],["ood","OOD"],["command_chair","COMMAND CHAIR"],["engineering_duty_officer","ENGINEER"],["torpedo_director","TORPEDO DIRECTOR"],["mount_3_1","MOUNT 3-1"],["mount_3_2","MOUNT 3-2"],["mount_4_1","MOUNT 4-1"],["mount_4_2","MOUNT 4-2"],["mount_6_1","MOUNT 6-1"]];
+const FLEET_ROLES=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
+let fleetInitialized=false,fleetCanEdit=false,fleetSignups=[],fleetCurrent=null;
+function fleetNotice(msg){const e=$("#fleetMessage");if(e)e.textContent=msg}
+function fleetName(id){const p=state.crew.find(x=>x.user_id===id);return p?.callsign||p?.display_name||p?.handle||"Crew member"}
+function fleetMetric(label,value){return '<div style="padding:16px;background:#121510;border:1px solid #30382a"><div class="eyebrow">'+esc(label)+'</div><b style="display:block;font-size:24px;color:var(--gold);margin-top:9px">'+esc(String(value))+'</b></div>'}
+async function fleetInit(){
+ const sel=$("#fleetMission");if(!sel)return;
+ const {data:{session}}=await sb.auth.getSession();
+ if(!session){$("#fleetConnection").textContent="Sign in required";fleetNotice("Please sign in to JMBN Manifest.");return}
+ const auth=await sb.rpc("is_elevated",{u:session.user.id});fleetCanEdit=auth.data===true&&!auth.error;
+ const q=await sb.from("missions").select("id,title,status,start_time").order("start_time",{ascending:false}).limit(100);
+ if(q.error){$("#fleetConnection").textContent="Connection error";fleetNotice(q.error.message);return}
+ const previous=sel.value;const missions=q.data||[];
+ sel.replaceChildren(new Option("Select an operation",""));
+ missions.forEach(m=>sel.add(new Option((m.title||"Untitled")+" · "+(m.start_time?new Date(m.start_time).toLocaleDateString("en-SG"):"TBD"),m.id)));
+ const selected=missions.find(m=>m.id===previous)||missions.find(m=>m.start_time&&new Date(m.start_time)>=new Date())||missions[0];
+ if(selected)sel.value=selected.id;
+ $("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · EDITING ENABLED":"CREW ACCESS · VIEW ONLY";
+ fleetInitialized=true;await fleetLoad();
+}
+async function fleetLoad(){
+ const id=$("#fleetMission")?.value;if(!id){$("#fleetStations").textContent="No operation selected.";$("#fleetRoster").textContent="No operation selected.";return}
+ $("#fleetConnection").textContent="SYNCING OPERATIONS";
+ const q=await sb.from("mission_signups").select("mission_id,user_id,status,operational_role,operational_station").eq("mission_id",id);
+ if(q.error){fleetNotice("Unable to load crew: "+q.error.message);$("#fleetConnection").textContent="SYNC ERROR";return}
+ fleetSignups=(q.data||[]).filter(x=>String(x.status).toLowerCase()==="going");
+ const used=fleetSignups.filter(x=>x.operational_station);
+ $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
+ const stations=$("#fleetStations");stations.replaceChildren();
+ for(const [id,label] of FLEET_STATIONS){const member=fleetSignups.find(x=>x.operational_station===id);const el=document.createElement("div");el.style.cssText="border:1px solid "+(member?"#76633e":"#30382a")+";background:#10130e;padding:13px;min-width:0";const title=document.createElement("b");title.style.color="var(--gold)";title.textContent=label;const name=document.createElement("div");name.style.cssText="margin-top:6px;color:var(--muted);overflow-wrap:anywhere";name.textContent=member?fleetName(member.user_id):"VACANT";el.append(title,name);stations.append(el)}
+ const roster=$("#fleetRoster");roster.replaceChildren();
+ if(!fleetSignups.length)roster.textContent="No crew marked GOING for this operation.";
+ for(const member of fleetSignups){
+  const card=document.createElement("div");card.style.cssText="border:1px solid #30382a;background:#10130e;padding:14px;min-width:0";
+  const name=document.createElement("b");name.textContent=fleetName(member.user_id);name.style.color="var(--text)";
+  const fields=document.createElement("div");fields.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px";
+  for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
+   const select=document.createElement("select");select.style.cssText="min-width:0;width:100%;padding:9px;background:#0d0f0d;color:#eef0e8;border:1px solid #454934";
+   select.add(new Option(key==="operational_role"?"ROLE · UNASSIGNED":"STATION · UNASSIGNED",""));
+   for(const [value,label] of values){const o=new Option(label,value);o.selected=member[key]===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
+   select.disabled=!fleetCanEdit;select.setAttribute("aria-label",key+" for "+fleetName(member.user_id));
+   select.addEventListener("change",async()=>{select.disabled=true;fleetNotice("Saving assignment…");const {error}=await sb.rpc(fn,{p_mission_id:$("#fleetMission").value,p_user_id:member.user_id,[arg]:select.value||null});if(error)fleetNotice("Save failed: "+error.message);else fleetNotice("Assignment saved to Operations.");await fleetLoad()});
+   fields.append(select);
+  }
+  card.append(name,fields);roster.append(card);
+ }
+ $("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
+}
+$("#fleetMission")?.addEventListener("change",fleetLoad);
+$("#fleetRefresh")?.addEventListener("click",fleetInit);
 
