@@ -604,7 +604,7 @@ async function fleetLoad(){
   }
   card.prepend(name);card.append(fields);if(suggestion&&fleetCanEdit){const apply=document.createElement("button");apply.type="button";apply.className="fleet-apply-suggestion";apply.textContent="ACCEPT SUGGESTION";apply.onclick=async()=>{apply.disabled=true;const item=standing.find(x=>x.priority===1&&(x.crew_user_id||fleetFindCrew(x.crew_label))===member.user_id&&x.station===suggestion.station);if(item)await fleetSaveReview(item,"accept",member.user_id,suggestion.station,suggestion.role);else fleetNotice("Standing assignment not found.");};card.append(apply)}roster.append(card);
  }
- await fleetRenderReady();$("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
+ $("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
 }
 $("#fleetMission")?.addEventListener("change",fleetLoad);
 $("#fleetRefresh")?.addEventListener("click",fleetInit);
