@@ -602,22 +602,13 @@ function fleetFindCrew(label){
  return state.crew.find(p=>[p.callsign,p.display_name,p.handle].some(v=>String(v||"").toLowerCase()===l))?.user_id||null;
 }
 async function fleetRenderReady(){
- const standing=$("#fleetStanding"),review=$("#fleetReview");if(!standing||!review)return;
+ const review=$("#fleetReview");if(!review)return;
  const missionId=$("#fleetMission").value;
  const [a,b]=await Promise.all([sb.from("fleet_standing_assignments").select("*").eq("vessel","JCS Starfish").order("priority",{ascending:true}).order("id",{ascending:true}),sb.from("fleet_mission_reviews").select("*").eq("mission_id",missionId)]);
  if(a.error||b.error){fleetNotice("Ready Deployment unavailable: "+(a.error?.message||b.error?.message));return}
  const defaults=a.data||[],decisions=new Map((b.data||[]).map(x=>[x.standing_id,x]));
- standing.replaceChildren();review.replaceChildren();
+ review.replaceChildren();
  const primary=defaults.filter(x=>x.priority===1);
- for(const item of primary){
-  const card=document.createElement("div");card.className="fleet-station-card";
-  const title=document.createElement("b");title.textContent=FLEET_STATIONS.find(x=>x[0]===item.station)?.[1]||item.station.toUpperCase();
-  const person=document.createElement("div");person.textContent=item.crew_label;
-  const note=document.createElement("p");note.className="fleet-standing-note";note.textContent=item.notes||"";
-  card.append(title,person,note);standing.append(card);
- }
- const pending=defaults.filter(x=>x.priority>1);
- if(pending.length){const card=document.createElement("div");card.className="fleet-station-card";const title=document.createElement("b");title.textContent="CONDITIONAL BACKUPS";card.append(title);for(const x of pending){const p=document.createElement("p");p.className="fleet-standing-note";p.textContent=x.crew_label+" · "+(FLEET_STATIONS.find(s=>s[0]===x.station)?.[1]||x.station)+" — "+(x.notes||"");card.append(p)}standing.append(card)}
  for(const item of primary){
   const saved=decisions.get(item.id),userId=item.crew_user_id||fleetFindCrew(item.crew_label);
   const attending=!!userId&&fleetSignups.some(x=>x.user_id===userId);
