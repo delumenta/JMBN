@@ -19,7 +19,8 @@ function style(){
   if(!o.isMesh)return;
   let ancestor=o,isTurret=false;
   while(ancestor&&ancestor!==models.base){
-   if(/turret|pdc|weapon|gun|cannon/i.test(ancestor.name||'')){isTurret=true;break}
+   if(/pdc/i.test(ancestor.name||'')){isTurret=false;break}
+   if(/turret|weapon|gun|cannon/i.test(ancestor.name||'')){isTurret=true;break}
    ancestor=ancestor.parent;
   }
   // Keep all original Perseus geometry. Only replace the material.
