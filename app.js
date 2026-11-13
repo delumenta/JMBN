@@ -673,8 +673,12 @@ document.querySelectorAll("[data-fleet-ship]").forEach(button=>button.addEventLi
  const ship=button.dataset.fleetShip;
  document.querySelectorAll("[data-fleet-ship]").forEach(x=>{x.classList.toggle("active",x===button);x.setAttribute("aria-pressed",String(x===button))});
  const active=$("#fleetActiveShip"),notice=$("#fleetShipNotice");
- active.hidden=ship!=="starfish";notice.hidden=ship==="starfish";
- if(ship!=="starfish"){notice.textContent="RSI Galaxy is reserved for future fleet configuration. No standing roster or mission assignments have been created for this vessel."}
+ active.hidden=ship!=="starfish";
+ const perseus=document.getElementById("fleetPerseusShip");
+ if(perseus)perseus.hidden=ship!=="perseus";
+ if(ship==="perseus"){const frame=document.getElementById("fleetPerseusFrame");if(frame&&!frame.src)frame.src=frame.dataset.src}
+ notice.hidden=ship!=="galaxy";
+ if(ship==="galaxy"){notice.textContent="RSI Galaxy is reserved for future fleet configuration. No standing roster or mission assignments have been created for this vessel."}
 }));
 
 /* Native fleet page ↔ interactive Polaris station reference. Live mission data only. */
