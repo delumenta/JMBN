@@ -32,8 +32,8 @@ function style(){
 function fit(top=false){const box=new THREE.Box3().setFromObject(root);if(box.isEmpty())return;const c=box.getCenter(new THREE.Vector3()),r=Math.max(box.getSize(new THREE.Vector3()).length(),1);controls.target.copy(c);camera.position.copy(c).add(top?new THREE.Vector3(0,r,0.01):new THREE.Vector3(r*.65,r*.55,r*.8));camera.lookAt(c);controls.update()}
 // Perseus stations are placeholders until their names and positions are verified.
 const stationEntries=[
- {id:'61',name:'PENDING STATION',location:'MOUNT 6-1 · LOCATION UNCONFIRMED',cat:'turrets'},
- {id:'62',name:'PENDING STATION',location:'MOUNT 6-2 · LOCATION UNCONFIRMED',cat:'turrets'}
+ {id:'pending-a',name:'PENDING STATION',location:'LOCATION UNCONFIRMED',cat:'turrets'},
+ {id:'pending-b',name:'PENDING STATION',location:'LOCATION UNCONFIRMED',cat:'turrets'}
 ];
 let atlas='combat',filter='all';
 function renderStations(){
@@ -45,10 +45,10 @@ function renderStations(){
  const entries=atlas==='combat'?stationEntries.filter(x=>filter==='all'||x.cat===filter):[];
  if(!entries.length){const note=document.createElement('p');note.style.cssText='color:#a7a18d;line-height:1.6;padding:8px';note.textContent='Stations not yet confirmed.';list.append(note);return}
  for(const entry of entries){const button=document.createElement('button');button.className='station';button.type='button';
- const num=document.createElement('span');num.className='num';num.textContent=entry.id;
+ const num=document.createElement('span');num.className='num';num.textContent='?';
  const info=document.createElement('span');const strong=document.createElement('strong');strong.textContent=entry.name;
  const small=document.createElement('small');small.textContent=entry.location;info.append(strong,small);button.append(num,info);
- button.onclick=()=>{list.querySelectorAll('.station').forEach(x=>x.classList.remove('active'));button.classList.add('active');intro.textContent='Mount '+entry.id+' is pending station and location confirmation.'};
+ button.onclick=()=>{list.querySelectorAll('.station').forEach(x=>x.classList.remove('active'));button.classList.add('active');intro.textContent='Station designation and location are pending confirmation.'};
  list.append(button)}
 }
 document.querySelectorAll('[data-atlas]').forEach(b=>b.onclick=()=>{atlas=b.dataset.atlas;document.querySelectorAll('[data-atlas]').forEach(x=>x.classList.toggle('active',x===b));renderStations()});
