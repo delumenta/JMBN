@@ -589,8 +589,76 @@ async function fleetLoad(){
   }
   card.append(name,fields);roster.append(card);
  }
- $("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
+ await fleetRenderReady();$("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
 }
 $("#fleetMission")?.addEventListener("change",fleetLoad);
 $("#fleetRefresh")?.addEventListener("click",fleetInit);
 
+
+
+/* Standing and Ready Deployment: persisted decisions, never alter the standing roster on mission review. */
+function fleetFindCrew(label){
+ const l=String(label||"").toLowerCase();
+ return state.crew.find(p=>[p.callsign,p.display_name,p.handle].some(v=>String(v||"").toLowerCase()===l))?.user_id||null;
+}
+async function fleetRenderReady(){
+ const standing=$("#fleetStanding"),review=$("#fleetReview");if(!standing||!review)return;
+ const missionId=$("#fleetMission").value;
+ const [a,b]=await Promise.all([sb.from("fleet_standing_assignments").select("*").eq("vessel","JCS Starfish").order("priority",{ascending:true}).order("id",{ascending:true}),sb.from("fleet_mission_reviews").select("*").eq("mission_id",missionId)]);
+ if(a.error||b.error){fleetNotice("Ready Deployment unavailable: "+(a.error?.message||b.error?.message));return}
+ const defaults=a.data||[],decisions=new Map((b.data||[]).map(x=>[x.standing_id,x]));
+ standing.replaceChildren();review.replaceChildren();
+ const primary=defaults.filter(x=>x.priority===1);
+ for(const item of primary){
+  const card=document.createElement("div");card.className="fleet-station-card";
+  const title=document.createElement("b");title.textContent=FLEET_STATIONS.find(x=>x[0]===item.station)?.[1]||item.station.toUpperCase();
+  const person=document.createElement("div");person.textContent=item.crew_label;
+  const note=document.createElement("p");note.className="fleet-standing-note";note.textContent=item.notes||"";
+  card.append(title,person,note);standing.append(card);
+ }
+ const pending=defaults.filter(x=>x.priority>1);
+ if(pending.length){const card=document.createElement("div");card.className="fleet-station-card";const title=document.createElement("b");title.textContent="CONDITIONAL BACKUPS";card.append(title);for(const x of pending){const p=document.createElement("p");p.className="fleet-standing-note";p.textContent=x.crew_label+" · "+(FLEET_STATIONS.find(s=>s[0]===x.station)?.[1]||x.station)+" — "+(x.notes||"");card.append(p)}standing.append(card)}
+ for(const item of primary){
+  const saved=decisions.get(item.id),userId=item.crew_user_id||fleetFindCrew(item.crew_label);
+  const attending=!!userId&&fleetSignups.some(x=>x.user_id===userId);
+  const card=document.createElement("article");card.className="fleet-review-card"+(saved?" reviewed":"");
+  const top=document.createElement("div");top.className="fleet-review-top";
+  const left=document.createElement("div");const name=document.createElement("b");name.textContent=item.crew_label+" · "+(FLEET_STATIONS.find(x=>x[0]===item.station)?.[1]||item.station);
+  const meta=document.createElement("div");meta.className="fleet-review-meta";meta.textContent=(attending?"GOING":"NOT GOING / NOT REGISTERED")+" · "+(item.notes||"Standing assignment");left.append(name,meta);
+  const status=document.createElement("span");status.className="fleet-review-status";status.textContent=saved?saved.decision.toUpperCase():"PENDING";top.append(left,status);card.append(top);
+  const actions=document.createElement("div");actions.className="fleet-review-actions";
+  const act=(label,fn,disabled=false)=>{const btn=document.createElement("button");btn.type="button";btn.textContent=label;btn.disabled=disabled||!fleetCanEdit;btn.onclick=fn;actions.append(btn)};
+  act("ACCEPT",()=>fleetSaveReview(item,"accept",userId,item.station,item.role),!attending);
+  act("EDIT",()=>{
+    const old=card.querySelector(".fleet-edit-fields");if(old){old.remove();return}
+    const fields=document.createElement("div");fields.className="fleet-edit-fields";
+    const person=document.createElement("select");person.add(new Option("SELECT GOING CREW",""));fleetSignups.forEach(x=>person.add(new Option(fleetName(x.user_id),x.user_id)));person.value=attending?userId:"";
+    const station=document.createElement("select");FLEET_STATIONS.forEach(x=>station.add(new Option(x[1],x[0])));station.value=item.station;
+    const save=document.createElement("button");save.textContent="SAVE MISSION CHANGE";save.type="button";save.className="primary";save.style.cssText="grid-column:1/-1;padding:11px";save.onclick=()=>fleetSaveReview(item,"edit",person.value,station.value,item.role);
+    fields.append(person,station,save);card.append(fields);
+  },!fleetSignups.length);
+  act("REJECT",()=>fleetSaveReview(item,"reject",null,null,null));
+  card.append(actions);review.append(card);
+ }
+ if(!primary.length){review.textContent="No standing deployment has been configured."}
+}
+async function fleetSaveReview(item,decision,userId,station,role){
+ const missionId=$("#fleetMission").value;if(!missionId||!fleetCanEdit)return;
+ if(decision!=="reject"&&!userId){fleetNotice("Choose a crew member who RSVP'd GOING.");return}
+ if(decision!=="reject"&&!fleetSignups.some(x=>x.user_id===userId)){fleetNotice("Only GOING crew can be assigned.");return}
+ if(decision!=="reject"&&fleetSignups.some(x=>x.user_id!==userId&&x.operational_station===station)){fleetNotice("That station is already occupied. Change the existing assignment first.");return}
+ fleetNotice("Saving "+decision+" decision…");
+ const old=fleetSignups.find(x=>x.user_id===item.crew_user_id);
+ if(decision!=="reject"){
+  const roleResult=await sb.rpc("command_assign_mission_role",{p_mission_id:missionId,p_user_id:userId,p_role:role||null});
+  if(roleResult.error){fleetNotice(roleResult.error.message);return}
+  const stationResult=await sb.rpc("command_assign_mission_station",{p_mission_id:missionId,p_user_id:userId,p_station:station});
+  if(stationResult.error){fleetNotice(stationResult.error.message);return}
+ }else if(old&&old.operational_station===item.station){
+  const clear=await sb.rpc("command_assign_mission_station",{p_mission_id:missionId,p_user_id:old.user_id,p_station:null});
+  if(clear.error){fleetNotice(clear.error.message);return}
+ }
+ const {error}=await sb.from("fleet_mission_reviews").upsert({mission_id:missionId,standing_id:item.id,decision,assigned_user_id:decision==="reject"?null:userId,assigned_station:decision==="reject"?null:station,assigned_role:decision==="reject"?null:role,updated_at:new Date().toISOString()},{onConflict:"mission_id,standing_id"});
+ if(error){fleetNotice("Mission assignment saved but review status failed: "+error.message);return}
+ await fleetLoad();fleetNotice("Mission deployment "+decision+" saved. Standing roster unchanged.");
+}
