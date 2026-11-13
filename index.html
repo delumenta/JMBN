@@ -148,7 +148,6 @@
 <div class="fleet-schematic"><div class="fleet-schematic-image" role="img" aria-label="Polaris station reference schematic"></div><div class="fleet-schematic-info"><p class="eyebrow">VESSEL BLUEPRINT // JCS STARFISH</p><h3>RSI POLARIS</h3><p>Standing assignments and mission stations for the Starfish. Open the interactive tactical blueprint to inspect the ship.</p><a href="polaris.html" class="fleet-schematic-link">EXPLORE 3D SCHEMATIC ↗</a></div></div>
 <div class="toolbar fleet-toolbar"><div class="fleet-selector"><label class="eyebrow" for="fleetMission">SELECT OPERATION</label><select id="fleetMission"><option value="">Select an operation</option></select></div><div class="fleet-actions"><span id="fleetConnection">Awaiting Manifest</span><button class="primary" id="fleetRefresh" type="button">REFRESH</button></div></div>
 <div id="fleetMetrics" class="fleet-metrics"></div>
-<div class="fleet-sections"><div class="fleet-section-title"><div><p class="eyebrow">JCS STARFISH // RSI POLARIS</p><h3>STATION READINESS</h3></div><span>MISSION DEPLOYMENT</span></div><div id="fleetStations" class="fleet-station-grid"></div></div>
 <div class="fleet-sections"><div class="fleet-section-title"><div><p class="eyebrow">OPERATIONS // CONFIRMED RSVP</p><h3>CREW ASSIGNMENTS</h3></div><span>MISSION ROSTER</span></div><div id="fleetRoster" class="fleet-roster-grid"></div></div>
 <p id="fleetMessage" role="status" class="fleet-message"></p></div>
 </section>
@@ -161,5 +160,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261113-fleet-clean-v8"></script>
+<script type="module" src="app.js?v=20261113-fleet-no-readiness-v9"></script>
 </body></html>
