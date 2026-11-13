@@ -584,6 +584,7 @@ async function fleetLoad(){
  }
  const used=fleetSignups.filter(x=>x.operational_station);
  $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
+ fleetSyncPolaris();
  const roster=$("#fleetRoster");roster.replaceChildren();
  if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
  for(const member of fleetSignups){
@@ -675,3 +676,20 @@ document.querySelectorAll("[data-fleet-ship]").forEach(button=>button.addEventLi
  active.hidden=ship!=="starfish";notice.hidden=ship==="starfish";
  if(ship!=="starfish"){notice.textContent="RSI Galaxy is reserved for future fleet configuration. No standing roster or mission assignments have been created for this vessel."}
 }));
+
+/* Native fleet page ↔ interactive Polaris station reference. Live mission data only. */
+function fleetSyncPolaris(){
+ const frame=document.getElementById("fleetPolarisFrame");if(!frame?.contentWindow)return;
+ const mapping={helmsman:"helm",command_chair:"cmd",ood:"ood",air:"air",surface:"surface",mount_4_1:"41",mount_4_2:"42",mount_3_1:"31",mount_3_2:"32",mount_6_1:"61",torpedo_director:"torp",engineering_duty_officer:"edo"};
+ const assignments={};
+ for(const member of fleetSignups){const station=mapping[member.operational_station];if(station)assignments[station]=fleetName(member.user_id)}
+ frame.contentWindow.postMessage({type:"jmbn-fleet-roster",assignments},location.origin);
+}
+document.getElementById("fleetPolarisFrame")?.addEventListener("load",()=>fleetSyncPolaris());
+window.addEventListener("message",event=>{
+ if(event.origin!==location.origin||event.source!==document.getElementById("fleetPolarisFrame")?.contentWindow||event.data?.type!=="jmbn-fleet-station")return;
+ const station=event.data.station;if(!station)return;
+ const card=[...document.querySelectorAll("#fleetRoster .fleet-person-card")].find(el=>el.querySelector('select[aria-label^="operational_station"]')?.value===station);
+ if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.style.outline="1px solid var(--gold)";setTimeout(()=>card.style.outline="",1800)}
+ else fleetNotice("Station selected: "+(FLEET_STATIONS.find(x=>x[0]===station)?.[1]||station)+". Assign a GOING crew member below.");
+});
