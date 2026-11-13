@@ -3,33 +3,29 @@ import * as THREE from 'https://esm.sh/three@0.170.0';import{OrbitControls}from'
 const scene=new THREE.Scene();scene.background=new THREE.Color('#091813');const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.01,2000);const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));document.getElementById('scene').append(renderer.domElement);scene.add(new THREE.HemisphereLight(0xe8e6cf,0x2a342e,2));const light=new THREE.DirectionalLight(0xffdc9a,3);light.position.set(10,20,10);scene.add(light);const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;const root=new THREE.Group();scene.add(root);const models={};const visible={base:true,deck0:true,deck1:true,deck2:true};
 const files={base:'JMBN_Perseus_Base.glb',deck0:'JMBN_Perseus_Deck_0.glb',deck1:'JMBN_Perseus_Deck_1.glb',deck2:'JMBN_Perseus_Deck_2.glb'};
 function style(){
- const gold=new THREE.Color(0xcba65b);
+ // Material parameters copied from JMBN_Polaris_Base.glb: JMBN Metallic Gold Turrets 5/6.
+ const turretGold=()=>new THREE.MeshStandardMaterial({
+  name:'JMBN Metallic Gold Turrets',
+  color:new THREE.Color().setRGB(.82,.59,.27),
+  metalness:.72,roughness:.28,
+  emissive:new THREE.Color().setRGB(.07,.045,.008),
+  transparent:false,opacity:1,depthWrite:true,side:THREE.DoubleSide
+ });
+ const hullGhost=()=>new THREE.MeshBasicMaterial({
+  color:0xb69658,transparent:true,opacity:.045,
+  depthWrite:true,side:THREE.FrontSide
+ });
  models.base?.traverse(o=>{
   if(!o.isMesh)return;
-  // Identify complete turret assemblies, including unnamed child meshes.
-  let parent=o,turret=false;
-  while(parent&&parent!==models.base){if(/turret|pdc|weapon|gun|cannon/i.test(parent.name||'')){turret=true;break}parent=parent.parent}
-  if(turret){
-   // Preserve original GLB materials, texture maps, normal maps and roughness.
-   const tint=material=>{
-    const copy=material.clone();
-    if(copy.color)copy.color.lerp(gold,.55);
-    // Polaris-style solid turret silhouette, while retaining GLB textures and surface detail.
-    copy.transparent=false;
-    copy.opacity=1;
-    copy.depthWrite=true;
-    copy.depthTest=true;
-    copy.side=THREE.FrontSide;
-    if('metalness' in copy)copy.metalness=Math.max(copy.metalness||0,.48);
-    if('roughness' in copy)copy.roughness=Math.max(copy.roughness||0,.38);
-    return copy;
-   };
-   o.material=Array.isArray(o.material)?o.material.map(tint):tint(o.material);
-  }else{
-   // Perseus has denser overlapping exterior meshes than Polaris; use a lighter ghost opacity.
-   o.material=new THREE.MeshBasicMaterial({color:0xb69658,transparent:true,opacity:.045,depthWrite:true,side:THREE.FrontSide});
+  let ancestor=o,isTurret=false;
+  while(ancestor&&ancestor!==models.base){
+   if(/turret|pdc|weapon|gun|cannon/i.test(ancestor.name||'')){isTurret=true;break}
+   ancestor=ancestor.parent;
   }
- })
+  // Keep all original Perseus geometry. Only replace the material.
+  const make=isTurret?turretGold:hullGhost;
+  o.material=Array.isArray(o.material)?o.material.map(make):make();
+ });
 }
 function fit(top=false){const box=new THREE.Box3().setFromObject(root);if(box.isEmpty())return;const c=box.getCenter(new THREE.Vector3()),r=Math.max(box.getSize(new THREE.Vector3()).length(),1);controls.target.copy(c);camera.position.copy(c).add(top?new THREE.Vector3(0,r,0.01):new THREE.Vector3(r*.65,r*.55,r*.8));camera.lookAt(c);controls.update()}
 const stations=[];function setupStations(){models.base?.traverse(o=>{if(/turret|pdc|bridge|chair/i.test(o.name)&&o.isMesh&&stations.length<32){stations.push(o);const b=document.createElement('button');b.textContent=o.name;b.onclick=()=>{document.getElementById('selected').textContent=o.name;const pos=o.getWorldPosition(new THREE.Vector3());controls.target.copy(pos);camera.position.copy(pos).add(new THREE.Vector3(2,2,3));controls.update()};document.getElementById('stations').append(b)}})}
