@@ -474,8 +474,22 @@ body:has(.r3-intro-scroll) .cinematic-nav{position:fixed!important;top:0;left:0;
 </style>
 
 <style id="join-soldier-shift-right-50px">
-@media(min-width:701px){.join.join-banner .join-banner-soldier{right:calc(3% - 50px)!important}}
-@media(max-width:700px){.join.join-banner .join-banner-soldier{right:calc(2% - 50px)!important}}
+/* Align the character group to the same centered 1440px layout as the text.
+   Fixed CSS-pixel sizing avoids viewport-width scaling at browser zoom levels. */
+@media(min-width:701px){
+ .join.join-banner{min-height:620px!important}
+ .join.join-banner .join-banner-soldier{
+   right:max(0px,calc((100% - 1440px)/2 - 30px))!important;
+   height:650px!important;
+   bottom:-110px!important;
+   top:auto!important;
+   width:auto!important;
+   max-width:none!important;
+ }
+}
+@media(max-width:700px){
+ .join.join-banner .join-banner-soldier{right:0!important;height:42%!important;top:15px!important;bottom:auto!important}
+}
 </style>
 </head><body><div aria-hidden="true" class="ambient-signals"><i class="trace v" style="--x:9%;--y:18%;--delay:-2s;--duration:7s"></i><i class="trace h" style="--x:21%;--y:62%;--delay:-5s;--duration:8s"></i><i class="trace v" style="--x:34%;--y:35%;--delay:-1s;--duration:9s"></i><i class="trace h" style="--x:47%;--y:81%;--delay:-6s;--duration:11s"></i><i class="trace h" style="--x:61%;--y:13%;--delay:-3s;--duration:7s"></i><i class="trace v" style="--x:77%;--y:53%;--delay:-4s;--duration:10s"></i><i class="trace v" style="--x:89%;--y:27%;--delay:-8s;--duration:12s"></i><i class="trace h" style="--x:94%;--y:78%;--delay:-1s;--duration:9s"></i><i class="trace v" style="--x:13%;--y:87%;--delay:-6s;--duration:10s"></i><i class="trace h" style="--x:69%;--y:89%;--delay:-2s;--duration:8s"></i><i class="trace v" style="--x:53%;--y:48%;--delay:-7s;--duration:12s"></i><i class="trace h" style="--x:29%;--y:9%;--delay:-3s;--duration:9s"></i><i class="trace h" style="--x:6%;--y:43%;--delay:-4.2s;--duration:13.5s"></i><i class="trace v" style="--x:16%;--y:74%;--delay:-8.7s;--duration:16s"></i><i class="trace h" style="--x:39%;--y:22%;--delay:-1.5s;--duration:14.5s"></i><i class="trace v" style="--x:58%;--y:67%;--delay:-11.2s;--duration:17s"></i><i class="trace h" style="--x:73%;--y:36%;--delay:-6.1s;--duration:15.5s"></i><i class="trace v" style="--x:85%;--y:84%;--delay:-3.4s;--duration:18s"></i><i class="trace h" style="--x:26%;--y:95%;--delay:-10.3s;--duration:16.5s"></i><i class="trace v" style="--x:96%;--y:16%;--delay:-7.6s;--duration:14s"></i><i class="trace h" style="--x:48%;--y:56%;--delay:-12.1s;--duration:19s"></i></div>
 <header class="nav cinematic-nav"><div class="wrap nav-inner"><a aria-label="JMBN homepage" class="brand" href="#home"><img alt="JMBN gold insignia" class="brand-logo" height="48" src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png/v1/fill/w_66,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/0_New_JMBN_Logo_Gold.png" width="48"/><span class="brand-name">JMBN</span><span class="brand-tagline"><strong>HILARITY · IMMERSION · TEAMWORK</strong><small>And the shenanigans in between.</small></span></a><button aria-controls="navlinks" aria-expanded="false" class="menu" id="menu">☰ Menu</button><nav aria-label="Main navigation" class="links" id="navlinks"><a class="active" href="#home">Homepage</a><a href="#sessions">Sessions</a><a href="#activities">Activities</a><a href="#career">Career Path</a><a href="#join">Join Us</a></nav></div></header>
