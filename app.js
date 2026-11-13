@@ -564,7 +564,7 @@ async function fleetInit(){
  fleetInitialized=true;await fleetLoad();
 }
 async function fleetLoad(){
- const id=$("#fleetMission")?.value;if(!id){$("#fleetStations").textContent="No operation selected.";$("#fleetRoster").textContent="No operation selected.";return}
+ const id=$("#fleetMission")?.value;if(!id){$("#fleetRoster").textContent="No operation selected.";return}
  $("#fleetConnection").textContent="SYNCING OPERATIONS";
  const q=await sb.from("mission_signups").select("mission_id,user_id,status,operational_role,operational_station").eq("mission_id",id);
  if(q.error){fleetNotice("Unable to load crew: "+q.error.message);$("#fleetConnection").textContent="SYNC ERROR";return}
@@ -584,8 +584,6 @@ async function fleetLoad(){
  }
  const used=fleetSignups.filter(x=>x.operational_station);
  $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
- const stations=$("#fleetStations");stations.replaceChildren();
- for(const [id,label] of FLEET_STATIONS){const member=fleetSignups.find(x=>x.operational_station===id);const el=document.createElement("div");el.className="fleet-station-card"+(member?" occupied":"");const title=document.createElement("b");title.textContent=label;const name=document.createElement("div");name.textContent=member?fleetName(member.user_id):"VACANT";el.append(title,name);stations.append(el)}
  const roster=$("#fleetRoster");roster.replaceChildren();
  if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
  for(const member of fleetSignups){
