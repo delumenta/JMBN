@@ -114,6 +114,19 @@
 <div id="status">ORBIT: DRAG &nbsp; · &nbsp; ZOOM: SCROLL/PINCH &nbsp; · &nbsp; PAN: RIGHT-DRAG / TWO FINGERS</div>
 <div id="dock"><span class="docklabel">BLUEPRINT</span><button data-layer="main" class="active">MAIN DECK</button><button data-layer="cargo" class="active">CARGO</button><button data-layer="engineering" class="active">ENGINEERING</button><button data-layer="base" class="active">HULL</button><div class="sp"></div><button id="fit">FIT SHIP</button><button id="topview">TOP VIEW</button><button id="iso">ISOMETRIC</button><button id="labelsToggle" class="active">MARKERS ON</button><div class="sp"></div></div>
 <div id="gate"><div class="eyebrow">JMBN // POLARIS</div><h2>INITIALIZING ATLAS</h2><p>Loading the Polaris tactical blueprint and ship stations.</p><div id="gateMsg" class="micro" role="status">Connecting to JMBN ship assets…</div></div>
+<script>
+(function(){
+if(!new URLSearchParams(location.search).has('fleet'))return;
+document.documentElement.classList.add('fleet-native');
+const css=document.createElement('style');
+css.textContent='html.fleet-native,html.fleet-native body{width:100%;height:100%;overflow:hidden}html.fleet-native #top,html.fleet-native #topright,html.fleet-native #hudCredit,html.fleet-native #status,html.fleet-native #stationPreview,html.fleet-native #previewConnector,html.fleet-native #assignmentPanel{display:none!important}html.fleet-native #left{top:14px;left:auto;right:14px;bottom:80px;width:265px;box-shadow:none;backdrop-filter:none;background:#0c130ff2}html.fleet-native #dock{bottom:10px;left:12px;right:12px;transform:none;justify-content:center;flex-wrap:wrap;padding:6px}html.fleet-native #dock button{padding:6px;font-size:9px}html.fleet-native #bottomHud{display:none!important}html.fleet-native #scene,html.fleet-native #grid,html.fleet-native #pins{position:absolute}html.fleet-native #gate{position:absolute}html.fleet-native #atlasTabs button[data-atlas="assignments"]{display:none!important}@media(max-width:740px){html.fleet-native #left{right:8px;top:8px;bottom:65px;width:205px}html.fleet-native #dock .docklabel,html.fleet-native #dock .sp{display:none}html.fleet-native #dock button{padding:5px}}';
+document.head.append(css);
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||!event.data||event.data.type!=='jmbn-fleet-roster')return;
+ window.dispatchEvent(new CustomEvent('jmbn-fleet-roster',{detail:event.data.assignments||{}}));
+});
+})();
+</script>
 <script type="module">
 import * as THREE from 'https://esm.sh/three@0.170.0';
 import {OrbitControls} from 'https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js';
@@ -370,6 +383,7 @@ function hidePreview(force=false){
 }
 $('previewClose').onclick=()=>hidePreview(true);
 function selectStation(s){
+ if(fleetNative&&s.atlas==='combat')parent.postMessage({type:'jmbn-fleet-station',station:({helm:'helmsman',cmd:'command_chair',ood:'ood',air:'air',surface:'surface',41:'mount_4_1',42:'mount_4_2',31:'mount_3_1',32:'mount_3_2',61:'mount_6_1',torp:'torpedo_director',edo:'engineering_duty_officer'})[s.id]||null},location.origin);
  if(s.atlas!==atlasMode)setAtlasMode(s.atlas);
  previewFor(s,true);
  selected=s;$('hudName').textContent=s.name;
@@ -409,9 +423,11 @@ function finish(){styleHull();syncLayers();makePins();renderList();selectStation
 async function importFiles(files){let loaded=0;for(const file of files){const n=file.name.toLowerCase(),k=n.includes('engineering')?'engineering':n.includes('cargo')?'cargo':n.includes('main')?'main':(n.includes('base')||n.includes('gold'))?'base':null;if(!k)continue;$('gateMsg').textContent='Loading '+file.name+'…';try{const bytes=await file.arrayBuffer();await loadBytes(k,bytes);await cache(k,bytes);loaded++}catch(e){console.error(e);$('gateMsg').textContent='Could not read '+file.name}}if(loaded)finish();else $('gateMsg').textContent='No recognized Polaris files. Please select the four GLBs.'}
 
 document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{visible[b.dataset.layer]=!visible[b.dataset.layer];syncLayers()});document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()});
+const fleetNative=new URLSearchParams(location.search).has('fleet');
 const assignmentKey='jmbn-polaris-crew-assignments-v1';
 let crewAssignments={};
-try{crewAssignments=JSON.parse(localStorage.getItem(assignmentKey)||'{}')||{}}catch(e){}
+if(!fleetNative){try{crewAssignments=JSON.parse(localStorage.getItem(assignmentKey)||'{}')||{}}catch(e){}}
+window.addEventListener('jmbn-fleet-roster',e=>{if(!fleetNative)return;crewAssignments=e.detail||{};updateCrewDisplays()});
 function assignedName(s){return (crewAssignments[s.id]||'').trim()}
 function updateCrewDisplays(){renderList();makePins()}
 function renderAssignments(){
@@ -426,6 +442,7 @@ function renderAssignments(){
  }
 }
 function setAtlasMode(next){
+ if(next==='assignments'&&fleetNative)return;
  if(next==='assignments'){
   document.querySelectorAll('[data-atlas]').forEach(b=>b.classList.toggle('active',b.dataset.atlas===next));
   $('stationList').style.display='none';$('stationFilters').style.display='none';
