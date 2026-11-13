@@ -662,3 +662,12 @@ async function fleetSaveReview(item,decision,userId,station,role){
  if(error){fleetNotice("Mission assignment saved but review status failed: "+error.message);return}
  await fleetLoad();fleetNotice("Mission deployment "+decision+" saved. Standing roster unchanged.");
 }
+
+/* Fleet vessel selector: Starfish is the only configured vessel. Other ships are placeholders, not duplicate Polaris records. */
+document.querySelectorAll("[data-fleet-ship]").forEach(button=>button.addEventListener("click",()=>{
+ const ship=button.dataset.fleetShip;
+ document.querySelectorAll("[data-fleet-ship]").forEach(x=>{x.classList.toggle("active",x===button);x.setAttribute("aria-pressed",String(x===button))});
+ const active=$("#fleetActiveShip"),notice=$("#fleetShipNotice");
+ active.hidden=ship!=="starfish";notice.hidden=ship==="starfish";
+ if(ship!=="starfish"){notice.textContent="RSI Galaxy is reserved for future fleet configuration. No standing roster or mission assignments have been created for this vessel."}
+}));
