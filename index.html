@@ -65,7 +65,7 @@
 #fleet .fleet-schematic-link{display:inline-block;border:1px solid #827044;color:var(--gold);text-decoration:none;padding:12px 15px;margin-top:12px;font-size:11px}
 @media(max-width:850px){#fleet .fleet-vessel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#fleet .fleet-schematic{grid-template-columns:1fr}#fleet .fleet-schematic-image{min-height:210px}}
 @media(max-width:550px){#fleet .fleet-vessel-grid{grid-template-columns:1fr}#fleet .fleet-vessel-card{min-height:145px}#fleet .fleet-vessel-header>span{display:none}}
-</style><style>#fleet .fleet-autofill-hint{font-size:10px;letter-spacing:.06em;color:var(--gold);margin-top:10px;line-height:1.5}#fleet .fleet-apply-suggestion{margin-top:12px;border:1px solid #8b7744;background:#1c1c12;color:#e4c980;font-size:10px;letter-spacing:.06em;padding:10px 13px;cursor:pointer}#fleet .fleet-apply-suggestion:hover{background:#33301b}#fleet .fleet-apply-suggestion:disabled{opacity:.5}</style></head><body>
+</style><style>#fleet .fleet-autofill-hint{font-size:10px;letter-spacing:.06em;color:var(--gold);margin-top:10px;line-height:1.5}#fleet .fleet-apply-suggestion{margin-top:12px;border:1px solid #8b7744;background:#1c1c12;color:#e4c980;font-size:10px;letter-spacing:.06em;padding:10px 13px;cursor:pointer}#fleet .fleet-apply-suggestion:hover{background:#33301b}#fleet .fleet-apply-suggestion:disabled{opacity:.5}</style><style>#fleet .fleet-tactical-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-top:22px;padding:12px 0;border-bottom:1px solid var(--line)}#fleet .fleet-tactical-head h3{margin:6px 0;font-size:22px}#fleet .fleet-tactical-head>span{font-size:10px;letter-spacing:.08em;color:var(--muted)}#fleet .fleet-tactical-frame{height:clamp(480px,68vw,760px);border:1px solid var(--line);background:#060d0a;overflow:hidden}#fleet .fleet-tactical-frame iframe{display:block;width:100%;height:100%;border:0}@media(max-width:700px){#fleet .fleet-tactical-frame{height:640px}#fleet .fleet-tactical-head>span{display:none}}</style></head><body>
 <div class="scan"></div>
 <aside class="rail">
   <a class="brand" href="#"><span class="sig"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"></span><span><b>JMBN</b><small>MANIFEST</small></span></a>
@@ -145,7 +145,7 @@
 </div>
 <div id="fleetShipNotice" class="fleet-ship-notice" hidden></div>
 <div id="fleetActiveShip">
-<div class="fleet-schematic"><div class="fleet-schematic-image" role="img" aria-label="Polaris station reference schematic"></div><div class="fleet-schematic-info"><p class="eyebrow">VESSEL BLUEPRINT // JCS STARFISH</p><h3>RSI POLARIS</h3><p>Standing assignments and mission stations for the Starfish. Open the interactive tactical blueprint to inspect the ship.</p><a href="polaris.html" class="fleet-schematic-link">EXPLORE 3D SCHEMATIC ↗</a></div></div>
+<div class="fleet-tactical-head"><div><p class="eyebrow">JCS STARFISH // TACTICAL CONSOLE</p><h3>POLARIS DEPLOYMENT</h3></div><span>SELECT STATION ON MODEL · ASSIGN BELOW</span></div><div class="fleet-tactical-frame"><iframe id="fleetPolarisFrame" title="Interactive JCS Starfish Polaris tactical schematic" src="polaris.html?fleet=1" loading="lazy"></iframe></div>
 <div class="toolbar fleet-toolbar"><div class="fleet-selector"><label class="eyebrow" for="fleetMission">SELECT OPERATION</label><select id="fleetMission"><option value="">Select an operation</option></select></div><div class="fleet-actions"><span id="fleetConnection">Awaiting Manifest</span><button class="primary" id="fleetRefresh" type="button">REFRESH</button></div></div>
 <div id="fleetMetrics" class="fleet-metrics"></div>
 <div class="fleet-sections"><div class="fleet-section-title"><div><p class="eyebrow">OPERATIONS // CONFIRMED RSVP</p><h3>CREW ASSIGNMENTS</h3></div><span>MISSION ROSTER</span></div><div id="fleetRoster" class="fleet-roster-grid"></div></div>
@@ -160,5 +160,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261113-fleet-no-readiness-v9"></script>
+<script type="module" src="app.js?v=20261113-fleet-tactical-v10"></script>
 </body></html>
