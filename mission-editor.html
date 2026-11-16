@@ -492,7 +492,9 @@ input:focus,select:focus,textarea:focus{
         </div>
       </div>
 
-      <!-- Origin + Start time -->
+      <!-- Single vessel for this mission. Stored with mission attachments metadata until a dedicated DB column is provisioned. -->
+<div class="form-grid full"><div><label for="assignedVessel">Assigned Vessel</label><select id="assignedVessel"><option value="">Not assigned</option><option value="starfish">RSI Polaris · JCS Starfish</option><option value="perseus">RSI Perseus</option></select><div class="subtle" style="margin-top:5px">One vessel per mission. Fleet Deployment uses this selection for its crew manifest.</div></div></div>
+<!-- Origin + Start time -->
       <div class="form-grid">
         <div>
           <label for="origin">Form-up (Origin)</label>
@@ -692,6 +694,7 @@ function clearForm(){
   currentId = null;
   $('#title').value = '';
   $('#type').value = '';
+  $('#assignedVessel').value = '';
   $('#status').value = '';
   $('#origin').value = '';
   $('#startTime').value = '';
@@ -711,6 +714,7 @@ function fillForm(m){
   currentId = m.id;
   $('#title').value = m.title || '';
   $('#type').value = (m.type || '').toLowerCase();
+  $('#assignedVessel').value = (m.attachments||[]).find(a=>a?.name==='__jmbn_assigned_vessel__')?.vessel || '';
   $('#status').value = (m.status || '').toLowerCase();
   $('#origin').value = m.origin || '';
   $('#startTime').value = isoToLocalInput(m.start_time);
@@ -725,7 +729,7 @@ function fillForm(m){
   $('#debriefLesson').value = debrief.lesson;
   $('#attachList').innerHTML = '';
   if(Array.isArray(m.attachments) && m.attachments.length){
-    m.attachments.forEach(a=>addAttachRow(a.name||'',a.url||''));
+    m.attachments.filter(a=>a?.name!=='__jmbn_assigned_vessel__').forEach(a=>addAttachRow(a.name||'',a.url||''));
   }else{
     addAttachRow();
   }
@@ -743,7 +747,7 @@ function payloadFromForm(){
     tags: ($('#tags').value||'').trim() || null,
     submitted_by: ($('#submittedBy').value||'').trim() || null,
     notes: buildDebrief(),
-    attachments: collectAttachments()
+    attachments: [...collectAttachments(), ...($('#assignedVessel').value?[{name:'__jmbn_assigned_vessel__',vessel:$('#assignedVessel').value}]:[])]
   };
 }
 
