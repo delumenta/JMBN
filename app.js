@@ -543,7 +543,7 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 
 
 /* Fleet Deployment: native Manifest view; uses the same authenticated Supabase client and mission_signups as Operations. */
-const PERSEUS_STATIONS=[{id:"pilot",label:"PILOT"},{id:"copilot",label:"CO-PILOT"},{id:"turret_port",label:"PORT TURRET"},{id:"turret_starboard",label:"STARBOARD TURRET"},{id:"engineering",label:"ENGINEERING"},{id:"command",label:"COMMAND"}];
+const PERSEUS_STATIONS=[{id:"ood",label:"OOD"},{id:"helmsman",label:"HELMSMAN"},{id:"command_chair",label:"COMMAND CHAIR"},{id:"stations_pending",label:"STATIONS PENDING"}];
 const FLEET_STATIONS=[["air","AIR"],["helmsman","HELMSMAN"],["surface","SURFACE"],["ood","OOD"],["command_chair","COMMAND CHAIR"],["engineering_duty_officer","ENGINEER"],["torpedo_director","TORPEDO DIRECTOR"],["mount_3_1","MOUNT 3-1"],["mount_3_2","MOUNT 3-2"],["mount_4_1","MOUNT 4-1"],["mount_4_2","MOUNT 4-2"],["mount_6_1","MOUNT 6-1"]];
 const FLEET_ROLES=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
 let fleetInitialized=false,fleetCanEdit=false,fleetSignups=[],fleetCurrent=null;
