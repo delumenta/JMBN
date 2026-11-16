@@ -282,15 +282,16 @@ async function openMission(id){
  if(sign.error){console.error("Operation signups:",sign.error);$("#detailBody").textContent="Unable to load this mission. Please try again.";return}const signups=sign.data||[], mine=signups.find(x=>x.user_id===uid);
  const people=new Map(); signups.forEach(x=>people.set(x.user_id,{...x,status:String(x.status||"").toLowerCase(),_source:"signup"}));
  const counts={going:0,maybe:0,not_going:0};signups.forEach(x=>{const s=String(x.status||"").toLowerCase();if(counts[s]!==undefined)counts[s]++});
+ const assignedVessel=(m.attachments||[]).find(a=>a?.name==='__jmbn_assigned_vessel__')?.vessel||'';const missionVesselName=assignedVessel==='perseus'?'RSI PERSEUS':assignedVessel==='starfish'?'RSI POLARIS':'UNASSIGNED VESSEL';
  const roles=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
  const officer=await sb.rpc("is_elevated",{u:uid});const canAssign=officer.data===true&&!officer.error;
- const stationOptions=(current,userId)=>'<option value="">Unassigned</option>'+POLARIS_STATIONS.map(s=>{const occupied=signups.some(x=>x.user_id!==userId&&x.operational_station===s.id);return '<option value="'+s.id+'" '+(current===s.id?'selected':'')+' '+(occupied?'disabled':'')+'>'+esc(s.label)+(occupied?' · OCCUPIED':'')+'</option>'}).join("");
+ const stationOptions=(current,userId)=>'<option value="">Unassigned</option>'+(assignedVessel==='perseus'?PERSEUS_STATIONS:POLARIS_STATIONS).map(s=>{const occupied=signups.some(x=>x.user_id!==userId&&x.operational_station===s.id);return '<option value="'+s.id+'" '+(current===s.id?'selected':'')+' '+(occupied?'disabled':'')+'>'+esc(s.label)+(occupied?' · OCCUPIED':'')+'</option>'}).join("");
  let overlayState=null;try{const q=await sb.from("overlay_operation_state").select("mission_id").eq("singleton",true).maybeSingle();overlayState=q.data}catch(e){console.warn("Overlay state unavailable",e)}
  const isOverlayActive=String(overlayState?.mission_id||"")===String(id);
  const locked=missionLocked(m);
 
  const roleSelect=x=>'<select aria-label="Operational role for '+esc(x.user_id)+'" data-assign-user="'+esc(x.user_id)+'"><option value="">Unassigned</option>'+roles.map(r=>'<option value="'+esc(r)+'" '+(x.operational_role===r?'selected':'')+'>'+esc(r)+'</option>').join("")+'</select>';
- const stationSelect=x=>'<select aria-label="Polaris station for '+esc(x.user_id)+'" data-station-user="'+esc(x.user_id)+'">'+stationOptions(x.operational_station,x.user_id)+'</select>';
+ const stationSelect=x=>'<select aria-label="'+missionVesselName+' station for '+esc(x.user_id)+'" data-station-user="'+esc(x.user_id)+'">'+stationOptions(x.operational_station,x.user_id)+'</select>';
  const going=[...people.values()].filter(x=>x.status==="going");
  const others=[...people.values()].filter(x=>x.status!=="going");
  const crewRow=x=>{const p=state.crew.find(z=>z.user_id===x.user_id);const name=esc(p?crewCallsign(p):"Crew");const mark=canAssign&&!locked?'<input class="op-attendance-tick" type="checkbox" aria-label="Mark '+name+' attended" title="Mark attended" data-attendance-user="'+esc(x.user_id)+'" '+(x.attendance_confirmed?'checked':'')+'>':'<span class="op-attendance-static '+(x.attendance_confirmed?'yes':'')+'" title="'+(x.attendance_confirmed?'Attended':'Not marked')+'">'+(x.attendance_confirmed?'✓':'○')+'</span>';return '<div class="op-roster-row"><div class="op-roster-person"><span class="op-roster-avatar">'+(p?.discord_avatar_url?'<img src="'+esc(p.discord_avatar_url)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">':'')+'<span>'+name.slice(0,1).toUpperCase()+'</span></span>'+mark+'<b>'+name+'</b></div><div class="op-roster-field">'+(canAssign&&!locked?roleSelect(x):'<span>'+esc(x.operational_role||"Unassigned")+'</span>')+'</div><div class="op-roster-field">'+(canAssign&&!locked?stationSelect(x):'<span>'+esc(x.operational_station?stationLabel(x.operational_station):"Unassigned")+'</span>')+'</div></div>'};
@@ -542,6 +543,7 @@ document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBod
 
 
 /* Fleet Deployment: native Manifest view; uses the same authenticated Supabase client and mission_signups as Operations. */
+const PERSEUS_STATIONS=[{id:"pilot",label:"PILOT"},{id:"copilot",label:"CO-PILOT"},{id:"turret_port",label:"PORT TURRET"},{id:"turret_starboard",label:"STARBOARD TURRET"},{id:"engineering",label:"ENGINEERING"},{id:"command",label:"COMMAND"}];
 const FLEET_STATIONS=[["air","AIR"],["helmsman","HELMSMAN"],["surface","SURFACE"],["ood","OOD"],["command_chair","COMMAND CHAIR"],["engineering_duty_officer","ENGINEER"],["torpedo_director","TORPEDO DIRECTOR"],["mount_3_1","MOUNT 3-1"],["mount_3_2","MOUNT 3-2"],["mount_4_1","MOUNT 4-1"],["mount_4_2","MOUNT 4-2"],["mount_6_1","MOUNT 6-1"]];
 const FLEET_ROLES=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
 let fleetInitialized=false,fleetCanEdit=false,fleetSignups=[],fleetCurrent=null;
@@ -585,7 +587,7 @@ async function fleetLoad(){
   reserved.add(item.station);
  }
  const used=fleetSignups.filter(x=>x.operational_station);
- $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
+ $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+(fleetSelectedShip==="perseus"?PERSEUS_STATIONS.length:FLEET_STATIONS.length))+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
  fleetSyncPolaris();fleetUpdateShipView();
  const roster=$("#fleetRoster");roster.replaceChildren();
  if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
@@ -595,7 +597,7 @@ async function fleetLoad(){
   const suggestion=proposed.get(member.user_id);
   if(suggestion){const hint=document.createElement("div");hint.className="fleet-autofill-hint";hint.textContent="SUGGESTED FROM STANDING ROSTER · "+(FLEET_STATIONS.find(x=>x[0]===suggestion.station)?.[1]||suggestion.station);card.append(hint)}
   const fields=document.createElement("div");fields.className="fleet-person-fields";
-  for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
+  for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",fleetSelectedShip==="perseus"?PERSEUS_STATIONS.map(x=>[x.id,x.label]):FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
    const select=document.createElement("select");
    select.add(new Option(key==="operational_role"?"ROLE · UNASSIGNED":"STATION · UNASSIGNED",""));
    for(const [value,label] of values){const o=new Option(label,value);o.selected=(member[key]||suggestion?.[key==="operational_role"?"role":"station"])===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
