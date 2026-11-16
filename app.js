@@ -584,7 +584,7 @@ async function fleetLoad(){
  }
  const used=fleetSignups.filter(x=>x.operational_station);
  $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+FLEET_STATIONS.length)+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
- fleetSyncPolaris();
+ fleetSyncPolaris();fleetUpdateShipView();
  const roster=$("#fleetRoster");roster.replaceChildren();
  if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
  for(const member of fleetSignups){
@@ -668,25 +668,10 @@ async function fleetSaveReview(item,decision,userId,station,role){
  await fleetLoad();fleetNotice("Mission deployment "+decision+" saved. Standing roster unchanged.");
 }
 
-/* Fleet vessel selector: Starfish is the only configured vessel. Other ships are placeholders, not duplicate Polaris records. */
-document.querySelectorAll("[data-fleet-ship]").forEach(button=>button.addEventListener("click",()=>{
- const ship=button.dataset.fleetShip;
- document.querySelectorAll("[data-fleet-ship]").forEach(x=>{
-  const selected=x===button;
-  x.classList.toggle("active",selected);
-  x.setAttribute("aria-pressed",String(selected));
-  const badge=x.querySelector(".fleet-vessel-state");
-  if(badge)badge.textContent=selected?"SELECTED":x.dataset.fleetShip==="galaxy"?"PLANNED":"VIEW";
- });
- const active=$("#fleetActiveShip"),notice=$("#fleetShipNotice");
- active.hidden=ship!=="starfish";
- const perseus=document.getElementById("fleetPerseusShip");
- if(perseus)perseus.hidden=ship!=="perseus";
- if(ship==="perseus"){const frame=document.getElementById("fleetPerseusFrame");if(frame&&!frame.src)frame.src=frame.dataset.src}
- notice.hidden=ship!=="galaxy";
- if(ship==="galaxy"){notice.textContent="RSI Galaxy is reserved for future fleet configuration. No standing roster or mission assignments have been created for this vessel."}
-}));
-
+/* Two-ship fleet selector on the native Manifest. */
+let fleetSelectedShip='starfish';
+function fleetUpdateShipView(){const pol=fleetSelectedShip==='starfish';const set=(id,value)=>{const x=document.getElementById(id);if(x)x.textContent=value};set('fleetFeatureName',pol?'RSI POLARIS':'RSI PERSEUS');set('fleetFeatureBadge',pol?'FLAGSHIP':'GUNSHIP');set('fleetFeatureTitle',pol?'RSI POLARIS':'RSI PERSEUS');set('fleetFeatureType',pol?'CAPITAL SHIP · FLAGSHIP':'CAPITAL SHIP · GUNSHIP');set('fleetFeatureDescription',pol?'JCS Starfish · Command / Mobile Base':'Heavy Combat / Escort');const assigned=fleetSignups.filter(x=>x.operational_station&&(pol?!String(x.operational_role||'').toLowerCase().includes('perseus'):String(x.operational_role||'').toLowerCase().includes('perseus'))).length;set('fleetFeatureCrew',assigned+' crew assigned for selected operation');const art=document.getElementById('fleetFeatureArt');if(art)art.className='fleet-native-art '+(pol?'is-polaris':'is-perseus');const active=document.getElementById('fleetActiveShip'),perseus=document.getElementById('fleetPerseusShip');if(active)active.hidden=!pol;if(perseus)perseus.hidden=pol;document.querySelectorAll('[data-fleet-ship]').forEach(button=>{const selected=button.dataset.fleetShip===fleetSelectedShip;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected));const badge=button.querySelector('.fleet-vessel-state');if(badge)badge.textContent=selected?'SELECTED':'VIEW'})}
+document.querySelectorAll('[data-fleet-ship]').forEach(button=>button.addEventListener('click',()=>{fleetSelectedShip=button.dataset.fleetShip;fleetUpdateShipView()}));document.getElementById('fleetBlueprintToggle')?.addEventListener('click',()=>{const wrap=document.getElementById('fleetBlueprintWrap');wrap.hidden=!wrap.hidden;document.getElementById('fleetBlueprintToggle').textContent=wrap.hidden?'OPEN TACTICAL BLUEPRINT':'HIDE TACTICAL BLUEPRINT'});
 /* Native fleet page ↔ interactive Polaris station reference. Live mission data only. */
 function fleetSyncPolaris(){
  const frame=document.getElementById("fleetPolarisFrame");if(!frame?.contentWindow)return;
