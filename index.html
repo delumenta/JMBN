@@ -218,6 +218,16 @@
 #fleet .fleet-board-blueprint-open>.fleet-board-roster #fleetRoster{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;align-content:start;scrollbar-width:thin;scrollbar-color:#74643f #101710;padding-right:4px}
 #fleet .fleet-board-blueprint-open>.fleet-blueprint-dropdown{align-self:stretch}
 @media(max-width:900px){#fleet .fleet-board-blueprint-open>.fleet-board-roster{height:440px;min-height:0;max-height:none}}
+</style><style>
+/* Fleet tactical roster: station -> callsign -> single crew picker */
+#fleet .fleet-board-blueprint-open #fleetRoster{display:flex;flex-direction:column;gap:0;padding-right:5px}
+#fleet .fleet-station-row{display:flex;flex-direction:column;gap:6px;padding:12px 9px 13px;border-bottom:1px solid #354137;cursor:pointer;min-width:0}
+#fleet .fleet-station-row:hover,#fleet .fleet-station-row.fleet-focused{background:#1a241a}
+#fleet .fleet-station-row strong{color:#e8dec7;font-size:12px;font-weight:800;line-height:1.3;letter-spacing:.025em}
+#fleet .fleet-station-callsign{color:#d2b46e;font-size:11px;font-weight:600;line-height:1.35}
+#fleet .fleet-station-row select{width:100%;height:32px;background:#0b110d;border:1px solid #435044;color:#e5e4d8;padding:0 9px;font-size:11px;cursor:pointer}
+#fleet .fleet-station-row select:disabled{opacity:.7;cursor:default}
+#fleet .fleet-station-row:focus-visible{outline:1px solid #d3b66d;outline-offset:-2px}
 </style></head><body>
 <div class="scan"></div>
 <aside class="rail">
@@ -306,5 +316,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261117-station-first-v1"></script>
+<script type="module" src="app.js?v=20261117-station-roster-v2"></script>
 </body></html>
