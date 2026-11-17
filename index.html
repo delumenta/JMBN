@@ -203,6 +203,13 @@
 #fleet .fleet-board-blueprint-open .fleet-tactical-frame{height:min(72vh,780px);min-height:540px}
 #fleet .fleet-board-blueprint-open .fleet-board-aside[hidden]{display:none!important}
 @media(max-width:900px){#fleet .fleet-board-layout.fleet-board-blueprint-open{grid-template-columns:1fr}#fleet .fleet-board-blueprint-open>.fleet-board-roster{max-height:none}#fleet .fleet-board-blueprint-open .fleet-roster-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}#fleet .fleet-board-blueprint-open .fleet-tactical-frame{min-height:390px;height:60vh}}
+</style><style>
+/* Tactical roster hierarchy: station first, assigned callsign second */
+#fleet .fleet-person-identity{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;min-width:0}
+#fleet .fleet-person-station{font-size:12px;line-height:1.35;color:#e5ddc7;font-weight:800;letter-spacing:.025em;text-transform:uppercase;overflow-wrap:anywhere}
+#fleet .fleet-person-callsign{font-size:11px;color:#c9ad6b;line-height:1.35;font-weight:600;overflow-wrap:anywhere}
+#fleet .fleet-board-blueprint-open .fleet-person-card{padding:12px 13px;border-left:2px solid #796741}
+#fleet .fleet-board-blueprint-open .fleet-person-identity{padding-bottom:10px;border-bottom:1px solid #303a30}
 </style></head><body>
 <div class="scan"></div>
 <aside class="rail">
@@ -291,5 +298,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261117-external-crew-panel-v2"></script>
+<script type="module" src="app.js?v=20261117-station-first-v1"></script>
 </body></html>
