@@ -572,9 +572,9 @@ async function fleetLoad(){
  if(!vesselResult.error){const configured=(vesselResult.data?.attachments||[]).find(a=>a?.name==="__jmbn_assigned_vessel__")?.vessel;fleetSelectedShip=configured==="perseus"?"perseus":"starfish";fleetAssignedVessel=configured||"";const vesselSel=document.getElementById("fleetVesselSelect");if(vesselSel)vesselSel.value=fleetSelectedShip;}
  if(q.error){fleetNotice("Unable to load crew: "+q.error.message);$("#fleetConnection").textContent="SYNC ERROR";return}
  fleetSignups=(q.data||[]).filter(x=>String(x.status).toLowerCase()==="going");
- const opt=document.querySelector('#fleetMission option:checked');const label=opt?.textContent||'—';const name=label.split(' · ')[0];const date=label.includes(' · ')?label.split(' · ').slice(1).join(' · '):'—';const ov=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};ov('fleetOverviewOperation',name);ov('fleetOverviewSchedule',date);ov('fleetOverviewGoing',fleetSignups.length);ov('fleetOverviewAssigned',fleetSignups.filter(x=>x.operational_station).length);ov('fleetOverviewStatus','SELECTED');
+ const opt=document.querySelector('#fleetMission option:checked');const label=opt?.textContent||'—';const name=label.split(' · ')[0];const date=label.includes(' · ')?label.split(' · ').slice(1).join(' · '):'—';const ov=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};ov('fleetOverviewOperation',name);ov('fleetOverviewSchedule',date);ov('fleetOverviewGoing',fleetSignups.length);ov('fleetOverviewAssigned',fleetSignups.filter(x=>x.operational_station&&(fleetSelectedShip==='perseus'?PERSEUS_STATIONS.some(s=>s.id===x.operational_station):FLEET_STATIONS.some(s=>s[0]===x.operational_station))).length);ov('fleetOverviewStatus','SELECTED');
  const [standingResult,reviewResult]=await Promise.all([sb.from("fleet_standing_assignments").select("*").eq("vessel","JCS Starfish").order("priority",{ascending:true}),sb.from("fleet_mission_reviews").select("standing_id,decision,assigned_user_id,assigned_station").eq("mission_id",id)]);
- const standing=standingResult.data||[],reviewed=new Map((reviewResult.data||[]).map(x=>[x.standing_id,x]));
+ const standing=fleetSelectedShip==="starfish"?(standingResult.data||[]):[],reviewed=new Map((reviewResult.data||[]).map(x=>[x.standing_id,x]));
  const proposed=new Map(),reserved=new Set(fleetSignups.map(x=>x.operational_station).filter(Boolean));
  for(const item of standing){
   if(item.priority!==1)continue;
@@ -586,8 +586,8 @@ async function fleetLoad(){
   proposed.set(uid,{station:item.station,role:item.role,label:item.crew_label});
   reserved.add(item.station);
  }
- const used=fleetSignups.filter(x=>x.operational_station);
- $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+(fleetSelectedShip==="perseus"?PERSEUS_STATIONS.length:FLEET_STATIONS.length))+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station).length);
+ const validStations=new Set((fleetSelectedShip==="perseus"?PERSEUS_STATIONS.map(x=>x.id):FLEET_STATIONS.map(x=>x[0])));const used=fleetSignups.filter(x=>x.operational_station&&validStations.has(x.operational_station));
+ $("#fleetMetrics").innerHTML=fleetMetric("GOING",fleetSignups.length)+fleetMetric("STATIONS ASSIGNED",used.length+" / "+(fleetSelectedShip==="perseus"?PERSEUS_STATIONS.length:FLEET_STATIONS.length))+fleetMetric("UNASSIGNED CREW",fleetSignups.filter(x=>!x.operational_station||!validStations.has(x.operational_station)).length);
  fleetSyncPolaris();fleetUpdateShipView();
  const roster=$("#fleetRoster");roster.replaceChildren();
  if(!fleetSignups.length){const empty=document.createElement("div");empty.className="fleet-empty";empty.textContent="No crew marked GOING for this operation.";roster.append(empty)}
@@ -595,17 +595,17 @@ async function fleetLoad(){
   const card=document.createElement("div");card.className="fleet-person-card";
   const name=document.createElement("b");name.textContent=fleetName(member.user_id);name.style.color="var(--text)";
   const suggestion=proposed.get(member.user_id);
-  if(suggestion){const hint=document.createElement("div");hint.className="fleet-autofill-hint";hint.textContent="SUGGESTED FROM STANDING ROSTER · "+(FLEET_STATIONS.find(x=>x[0]===suggestion.station)?.[1]||suggestion.station);card.append(hint)}
+  if(suggestion&&fleetSelectedShip==="starfish"){const hint=document.createElement("div");hint.className="fleet-autofill-hint";hint.textContent="SUGGESTED FROM STANDING ROSTER · "+(FLEET_STATIONS.find(x=>x[0]===suggestion.station)?.[1]||suggestion.station);card.append(hint)}
   const fields=document.createElement("div");fields.className="fleet-person-fields";
   for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",fleetSelectedShip==="perseus"?PERSEUS_STATIONS.map(x=>[x.id,x.label]):FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
    const select=document.createElement("select");
    select.add(new Option(key==="operational_role"?"ROLE · UNASSIGNED":"STATION · UNASSIGNED",""));
-   for(const [value,label] of values){const o=new Option(label,value);o.selected=(member[key]||suggestion?.[key==="operational_role"?"role":"station"])===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
+   for(const [value,label] of values){const o=new Option(label,value);o.selected=(member[key]||((fleetSelectedShip==='starfish')?suggestion?.[key==="operational_role"?"role":"station"]:null))===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
    select.disabled=!fleetCanEdit;select.setAttribute("aria-label",key+" for "+fleetName(member.user_id));
    select.addEventListener("change",async()=>{select.disabled=true;fleetNotice("Saving assignment…");const {error}=await sb.rpc(fn,{p_mission_id:$("#fleetMission").value,p_user_id:member.user_id,[arg]:select.value||null});if(error)fleetNotice("Save failed: "+error.message);else fleetNotice("Assignment saved to Operations.");await fleetLoad()});
    fields.append(select);
   }
-  card.prepend(name);card.append(fields);if(suggestion&&fleetCanEdit){const apply=document.createElement("button");apply.type="button";apply.className="fleet-apply-suggestion";apply.textContent="ACCEPT SUGGESTION";apply.onclick=async()=>{apply.disabled=true;const item=standing.find(x=>x.priority===1&&(x.crew_user_id||fleetFindCrew(x.crew_label))===member.user_id&&x.station===suggestion.station);if(item)await fleetSaveReview(item,"accept",member.user_id,suggestion.station,suggestion.role);else fleetNotice("Standing assignment not found.");};card.append(apply)}roster.append(card);
+  card.prepend(name);card.append(fields);if(suggestion&&fleetSelectedShip==="starfish"&&fleetCanEdit){const apply=document.createElement("button");apply.type="button";apply.className="fleet-apply-suggestion";apply.textContent="ACCEPT SUGGESTION";apply.onclick=async()=>{apply.disabled=true;const item=standing.find(x=>x.priority===1&&(x.crew_user_id||fleetFindCrew(x.crew_label))===member.user_id&&x.station===suggestion.station);if(item)await fleetSaveReview(item,"accept",member.user_id,suggestion.station,suggestion.role);else fleetNotice("Standing assignment not found.");};card.append(apply)}roster.append(card);
  }
  $("#fleetConnection").textContent=fleetCanEdit?"COMMAND ACCESS · LIVE":"CREW ACCESS · LIVE";
 }
