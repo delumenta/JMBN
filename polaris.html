@@ -407,7 +407,7 @@ function renderList(){
 }
 function makePins(){
  $('pins').innerHTML='';pins.clear();
- for(const s of stations.filter(st=>st.node||st.nodes||st.groupCenter||st.point)){
+ for(const s of stations.filter(st=>(st.node||st.nodes||st.groupCenter||st.point)&&(!fleetNative||assignedName(st)))){
  const pin=document.createElement('button');pin.className='pin'+(selected===s?' active':'');
  const code=({helm:'H',ood:'OOD',cmd:'CMD',air:'AIR',surface:'SUR',icc:'ICC',torp:'TD',med:'MED',edo:'EDO',armory:'ARM',hangar:'HGR',quarters:'CREW',mess:'MESS',captain:'CAPT'})[s.id]||(s.cat==='turret'?s.name.replace('MOUNT ',''):s.id.toUpperCase());const crew=assignedName(s);pin.textContent='';const stationLabel=document.createElement('span');stationLabel.textContent=code;pin.append(stationLabel);if(crew){const nameLabel=document.createElement('span');nameLabel.className='pin-crew';nameLabel.textContent=crew;pin.append(nameLabel);pin.classList.add('occupied')}pin.dataset.full=s.name;pin.title=s.name+(crew?' — '+crew:'');pin.setAttribute('aria-label',pin.title);pin.onmouseenter=()=>{if(s.atlas===atlasMode&&!previewPinned)previewFor(s)};
  pin.onmouseleave=()=>{if(!previewPinned)hidePreview()};
