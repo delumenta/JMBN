@@ -210,6 +210,14 @@
 #fleet .fleet-person-callsign{font-size:11px;color:#c9ad6b;line-height:1.35;font-weight:600;overflow-wrap:anywhere}
 #fleet .fleet-board-blueprint-open .fleet-person-card{padding:12px 13px;border-left:2px solid #796741}
 #fleet .fleet-board-blueprint-open .fleet-person-identity{padding-bottom:10px;border-bottom:1px solid #303a30}
+</style><style>
+/* Keep tactical crew panel level with the interactive blueprint; scroll crew only */
+#fleet .fleet-board-layout.fleet-board-blueprint-open{align-items:stretch}
+#fleet .fleet-board-blueprint-open>.fleet-board-roster{height:min(calc(72vh + 104px),884px);min-height:644px;max-height:none;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box}
+#fleet .fleet-board-blueprint-open>.fleet-board-roster .fleet-board-section-head{flex:0 0 auto}
+#fleet .fleet-board-blueprint-open>.fleet-board-roster #fleetRoster{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;align-content:start;scrollbar-width:thin;scrollbar-color:#74643f #101710;padding-right:4px}
+#fleet .fleet-board-blueprint-open>.fleet-blueprint-dropdown{align-self:stretch}
+@media(max-width:900px){#fleet .fleet-board-blueprint-open>.fleet-board-roster{height:440px;min-height:0;max-height:none}}
 </style></head><body>
 <div class="scan"></div>
 <aside class="rail">
