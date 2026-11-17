@@ -285,7 +285,7 @@ async function openMission(id){
  const assignedVessel=(m.attachments||[]).find(a=>a?.name==='__jmbn_assigned_vessel__')?.vessel||'';const missionVesselName=assignedVessel==='perseus'?'RSI PERSEUS':assignedVessel==='starfish'?'RSI POLARIS':'UNASSIGNED VESSEL';
  const roles=["Command","Pilot","Co-Pilot","Engineer","Turret Gunner","Fighter Pilot","Medical","Security / Boarding","Cargo / Logistics","Ground Team","Support"];
  const officer=await sb.rpc("is_elevated",{u:uid});const canAssign=officer.data===true&&!officer.error;
- const stationOptions=(current,userId)=>'<option value="">Unassigned</option>'+(assignedVessel==='perseus'?PERSEUS_STATIONS:POLARIS_STATIONS).map(s=>{const occupied=signups.some(x=>x.user_id!==userId&&x.operational_station===s.id);return '<option value="'+s.id+'" '+(current===s.id?'selected':'')+' '+(occupied?'disabled':'')+'>'+esc(s.label)+(occupied?' · OCCUPIED':'')+'</option>'}).join("");
+ const stationOptions=(current,userId)=>'<option value="">Unassigned</option>'+(assignedVessel==='perseus'?PERSEUS_STATIONS:POLARIS_STATIONS).map(s=>{const occupied=s.id!=='stations_pending'&&signups.some(x=>x.user_id!==userId&&x.operational_station===s.id);return '<option value="'+s.id+'" '+(current===s.id?'selected':'')+' '+(occupied?'disabled':'')+'>'+esc(s.label)+(occupied?' · OCCUPIED':'')+'</option>'}).join("");
  let overlayState=null;try{const q=await sb.from("overlay_operation_state").select("mission_id").eq("singleton",true).maybeSingle();overlayState=q.data}catch(e){console.warn("Overlay state unavailable",e)}
  const isOverlayActive=String(overlayState?.mission_id||"")===String(id);
  const locked=missionLocked(m);
@@ -600,7 +600,7 @@ async function fleetLoad(){
   for(const [key,values,fn,arg] of [["operational_role",FLEET_ROLES.map(x=>[x,x]),"command_assign_mission_role","p_role"],["operational_station",fleetSelectedShip==="perseus"?PERSEUS_STATIONS.map(x=>[x.id,x.label]):FLEET_STATIONS,"command_assign_mission_station","p_station"]]){
    const select=document.createElement("select");
    select.add(new Option(key==="operational_role"?"ROLE · UNASSIGNED":"STATION · UNASSIGNED",""));
-   for(const [value,label] of values){const o=new Option(label,value);o.selected=(member[key]||((fleetSelectedShip==='starfish')?suggestion?.[key==="operational_role"?"role":"station"]:null))===value;if(key==="operational_station"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
+   for(const [value,label] of values){const o=new Option(label,value);o.selected=(member[key]||((fleetSelectedShip==='starfish')?suggestion?.[key==="operational_role"?"role":"station"]:null))===value;if(key==="operational_station"&&value!=="stations_pending"&&value!==member[key]&&fleetSignups.some(x=>x.user_id!==member.user_id&&x.operational_station===value))o.disabled=true;select.add(o)}
    select.disabled=!fleetCanEdit;select.setAttribute("aria-label",key+" for "+fleetName(member.user_id));
    select.addEventListener("change",async()=>{select.disabled=true;fleetNotice("Saving assignment…");const {error}=await sb.rpc(fn,{p_mission_id:$("#fleetMission").value,p_user_id:member.user_id,[arg]:select.value||null});if(error)fleetNotice("Save failed: "+error.message);else fleetNotice("Assignment saved to Operations.");await fleetLoad()});
    fields.append(select);
