@@ -103,7 +103,7 @@ function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
-  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-charcoal8";sheet.dataset.jmbnGuestStyles="1";
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-frame-clean9";sheet.dataset.jmbnGuestStyles="1";
   document.head.appendChild(sheet);
  }
  document.body.innerHTML=`<main class="jmbn-guest-screen">
@@ -119,18 +119,18 @@ function renderPendingAccess(session,profile){
     <p class="jmbn-guest-kicker">PERSONNEL ACCESS</p>
     <h1 id="guestWelcome">WELCOME, ${esc(name.toUpperCase())}</h1>
     <div class="jmbn-guest-title-rule" aria-hidden="true"></div>
-    <p class="jmbn-guest-summary">Your JMBN identity has been verified and your personnel record has been created.</p>
+    <p class="jmbn-guest-summary">Identity verified. Your JMBN personnel clearance is awaiting Command approval.</p>
     <div class="jmbn-guest-warning" role="status">
      <div class="jmbn-guest-warning-icon" aria-hidden="true">⌛</div>
      <div class="jmbn-guest-warning-content">
       <b>ACCESS PENDING</b>
-      <span>The Command Team is currently attempting to recover your security clearance from a pack of Kopions that ate our network cables.</span>
-      <span style="margin-top:10px">We have dispatched a recovery team. Unfortunately, they have also stopped responding.</span>
-      <span style="margin-top:10px;color:#eac882">Please stand by.</span>
+      <span>Command is attempting to recover your security clearance after a pack of Kopions ate our network cables.</span>
+      <span>A recovery team was dispatched. Unfortunately, they have stopped responding too.</span>
+      <span class="jmbn-guest-standby">Please stand by.</span>
      </div>
     </div>
     <div class="jmbn-guest-social"><span class="jmbn-guest-social-symbol" aria-hidden="true">◈</span>
-     <p>In the meantime, feel free to join us on Discord and say hello to the crew!</p>
+     <p>While Command sorts that out, join us on Discord and say hello to the crew!</p>
     </div>
     <div class="jmbn-guest-actions">
      <a class="jmbn-guest-discord" href="https://discord.gg/4z49bCXv5B" target="_blank" rel="noopener noreferrer" aria-label="Join the JMBN Discord (opens in a new tab)">
