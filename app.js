@@ -103,7 +103,7 @@ function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
-  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-compact-hud3";sheet.dataset.jmbnGuestStyles="1";
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-guest-bg4";sheet.dataset.jmbnGuestStyles="1";
   document.head.appendChild(sheet);
  }
  document.body.innerHTML=`<main class="jmbn-guest-screen">

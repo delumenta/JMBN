@@ -11,7 +11,7 @@ body:has(.jmbn-guest-screen) {margin:0;background:#050c0e}
  background:
   radial-gradient(ellipse at 50% 50%,rgba(2,11,14,.35) 3%,rgba(1,9,12,.06) 42%,rgba(0,4,9,.44) 100%),
   linear-gradient(115deg,rgba(2,15,23,.28),rgba(3,11,13,.08) 48%,rgba(12,11,13,.25)),
-  url('assets/operation-modal-bg.png') center/cover no-repeat,
+  url('assets/guest-background.png') center/cover no-repeat,
   #071015;
 }
 .jmbn-guest-screen::before {
