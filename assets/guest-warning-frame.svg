@@ -1,32 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 270" preserveAspectRatio="none">
  <defs>
   <linearGradient id="border" x1="0" y1="0" x2="1" y2="0">
-   <stop stop-color="#d3a05b" stop-opacity=".78"/>
-   <stop offset=".15" stop-color="#bf9253" stop-opacity=".58"/>
-   <stop offset=".57" stop-color="#bb9968" stop-opacity=".56"/>
-   <stop offset=".85" stop-color="#c19a5d" stop-opacity=".58"/>
-   <stop offset="1" stop-color="#d0a268" stop-opacity=".75"/>
+   <stop stop-color="#d4b65b" stop-opacity=".78"/>
+   <stop offset=".15" stop-color="#ae9658" stop-opacity=".58"/>
+   <stop offset=".57" stop-color="#a38e57" stop-opacity=".56"/>
+   <stop offset=".85" stop-color="#b0985c" stop-opacity=".58"/>
+   <stop offset="1" stop-color="#d4b65b" stop-opacity=".75"/>
   </linearGradient>
   <linearGradient id="rail" x1="0" y1="0" x2="1" y2="0">
-   <stop stop-color="#d8a65c" stop-opacity=".68"/>
-   <stop offset=".9" stop-color="#a6793d" stop-opacity=".38"/>
-   <stop offset="1" stop-color="#7c693e" stop-opacity="0"/>
+   <stop stop-color="#d4b65b" stop-opacity=".68"/>
+   <stop offset=".9" stop-color="#806b3b" stop-opacity=".38"/>
+   <stop offset="1" stop-color="#4b4d40" stop-opacity="0"/>
   </linearGradient>
   <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-   <stop stop-color="#bd955e" stop-opacity="0"/>
-   <stop offset=".5" stop-color="#d2ad74" stop-opacity=".62"/>
-   <stop offset="1" stop-color="#bd955e" stop-opacity="0"/>
+   <stop stop-color="#b49a62" stop-opacity="0"/>
+   <stop offset=".5" stop-color="#d4b65b" stop-opacity=".62"/>
+   <stop offset="1" stop-color="#b49a62" stop-opacity="0"/>
   </linearGradient>
  </defs>
  <!-- A separately scaleable alert outline: NO baked-in background, text or buttons. -->
  <path d="M18 3H1178L1197 22V249L1179 267H19L3 249V20Z"
        fill="none" stroke="url(#border)" stroke-width="3"/>
  <path d="M19 13H1173L1187 28V245L1175 256H24L14 244V22Z"
-       fill="none" stroke="#5db3bd" stroke-opacity=".19" stroke-width="1.5"/>
+       fill="none" stroke="#35372d" stroke-opacity=".55" stroke-width="1.5"/>
  <path d="M11 26V243" fill="none" stroke="url(#rail)" stroke-width="12" stroke-linecap="square"/>
- <path d="M164 28V244" fill="none" stroke="#d0a46e" stroke-opacity=".52" stroke-width="2"/>
+ <path d="M164 28V244" fill="none" stroke="#d4b65b" stroke-opacity=".52" stroke-width="2"/>
  <path d="M235 4H935" fill="none" stroke="url(#shine)" stroke-width="4"/>
  <path d="M235 267H935" fill="none" stroke="url(#shine)" stroke-opacity=".65" stroke-width="3"/>
  <path d="M3 20L18 3M1180 3L1197 22M3 249L19 267M1197 249L1179 267"
-       fill="none" stroke="#edc28a" stroke-opacity=".72" stroke-width="3"/>
+       fill="none" stroke="#f1d77b" stroke-opacity=".72" stroke-width="3"/>
 </svg>

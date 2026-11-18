@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
  <defs>
-  <linearGradient id="gold" x1="0" x2="1"><stop stop-color="#a5742e"/><stop offset=".5" stop-color="#ffd88b"/><stop offset="1" stop-color="#9f742e"/></linearGradient>
-  <linearGradient id="cyan"><stop stop-color="#37bacc" stop-opacity="0"/><stop offset=".5" stop-color="#37bacc" stop-opacity=".76"/><stop offset="1" stop-color="#37bacc" stop-opacity="0"/></linearGradient>
-  <radialGradient id="glow"><stop stop-color="#008c97" stop-opacity=".15"/><stop offset="1" stop-color="#008c97" stop-opacity="0"/></radialGradient>
-  <pattern id="grid" width="122" height="122" patternUnits="userSpaceOnUse"><path d="M122 0H0V122" fill="none" stroke="#2ab5bb" stroke-opacity=".085" stroke-width="1"/></pattern>
-  <pattern id="ticks" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M0 0L0 6" stroke="#5ed8d3" stroke-opacity=".36" stroke-width="1"/></pattern>
+  <linearGradient id="gold" x1="0" x2="1"><stop stop-color="#806b3b"/><stop offset=".5" stop-color="#f1d77b"/><stop offset="1" stop-color="#745e36"/></linearGradient>
+  <linearGradient id="charcoal"><stop stop-color="#35372d" stop-opacity="0"/><stop offset=".5" stop-color="#35372d" stop-opacity=".76"/><stop offset="1" stop-color="#35372d" stop-opacity="0"/></linearGradient>
+  <radialGradient id="glow"><stop stop-color="#272b22" stop-opacity=".15"/><stop offset="1" stop-color="#272b22" stop-opacity="0"/></radialGradient>
+  <pattern id="grid" width="122" height="122" patternUnits="userSpaceOnUse"><path d="M122 0H0V122" fill="none" stroke="#35372d" stroke-opacity=".085" stroke-width="1"/></pattern>
+  <pattern id="ticks" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M0 0L0 6" stroke="#42483f" stroke-opacity=".50" stroke-width="1"/></pattern>
  </defs>
  <rect width="1920" height="1080" fill="url(#grid)"/>
  <ellipse cx="930" cy="510" rx="710" ry="540" fill="url(#glow)"/>
- <g fill="none" stroke="#2ba7b5" stroke-width="1">
+ <g fill="none" stroke="#343a32" stroke-width="1">
   <circle cx="965" cy="507" r="345" stroke-opacity=".16" stroke-dasharray="8 13"/>
   <circle cx="965" cy="507" r="445" stroke-opacity=".12"/>
   <circle cx="965" cy="507" r="545" stroke-opacity=".075"/>
@@ -17,7 +17,7 @@
   <path d="M1075 58A456 456 0 0 1 1398 318" stroke-opacity=".4" stroke-width="2"/>
   <path d="M472 507H520 M1408 507H1456 M965 28V64 M965 950V986" stroke-opacity=".28"/>
  </g>
- <g fill="none" stroke="#40bed0" stroke-width="1.4" stroke-opacity=".36">
+ <g fill="none" stroke="#353b34" stroke-width="1.4" stroke-opacity=".36">
   <path d="M-60 810Q530 750 835 582T1535 290Q1765 178 1990-8"/>
   <path d="M-60 816Q530 756 835 588T1535 296Q1765 184 1990-2" stroke-opacity=".13"/>
  </g>
@@ -26,23 +26,23 @@
   <path d="M30 908V1028L55 1053H244 M1675 1053H1862L1890 1027V907"/>
   <path d="M750 27H870 M1050 27H1170 M750 1053H870 M1050 1053H1170"/>
  </g>
- <g fill="none" stroke="#3fa9b6" stroke-width="1" stroke-opacity=".47">
+ <g fill="none" stroke="#3b4138" stroke-width="1" stroke-opacity=".47">
   <path d="M26 195V316L48 339V513 M1894 196V316L1872 339V513"/>
   <path d="M26 874V744L48 722V596 M1894 874V744L1872 722V596"/>
   <path d="M81 43H412L440 70H652 M1839 43H1508L1480 70H1268"/>
   <path d="M81 1037H412L440 1010H652 M1839 1037H1508L1480 1010H1268"/>
   <path d="M72 445H194 M1726 445H1848 M72 614H194 M1726 614H1848"/>
  </g>
- <g fill="#d9b36a" fill-opacity=".8">
+ <g fill="#d4b65b" fill-opacity=".8">
   <path d="M916 24L924 16H996L1004 24H996L986 36H934L924 24Z"/>
   <path d="M916 1056L924 1064H996L1004 1056H996L986 1044H934L924 1056Z"/>
   <path d="M28 450H36V486H28ZM1884 450H1892V486H1884Z" opacity=".5"/>
  </g>
- <g stroke="#3cc4cd" stroke-width="1" opacity=".38">
+ <g stroke="#454940" stroke-width="1" opacity=".38">
   <path d="M220 150h17m-8-8v17 M1660 790h17m-8-8v17 M290 884h17m-8-8v17 M1750 282h17m-8-8v17"/>
   <path d="M155 350h11m-5-5v11 M1730 660h11m-5-5v11"/>
  </g>
- <g fill="#64dbe5" opacity=".52">
+ <g fill="#62665b" opacity=".52">
   <circle cx="140" cy="220" r="1.5"/><circle cx="400" cy="250" r="1.1"/><circle cx="800" cy="180" r="1.2"/><circle cx="1510" cy="220" r="1.5"/><circle cx="1640" cy="400" r="1.2"/><circle cx="360" cy="800" r="1.3"/><circle cx="1520" cy="900" r="1.5"/>
  </g>
  <g fill="url(#gold)" opacity=".7">
