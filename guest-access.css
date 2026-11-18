@@ -46,7 +46,7 @@ body:has(.jmbn-guest-screen){margin:0;background:#070806}
 .jmbn-guest-signout{min-width:125px;min-height:30px;padding:6px 15px;font:700 10px Play,system-ui,sans-serif;letter-spacing:.1em;color:#d6b967;background:rgba(7,8,6,.74);border:1px solid #8d784b;border-radius:2px;cursor:pointer}
 .jmbn-guest-signout:hover{border-color:var(--guest-gold)}
 .jmbn-guest-discord:focus-visible,.jmbn-guest-signout:focus-visible{outline:2px solid var(--guest-gold-hi);outline-offset:3px}
-.jmbn-guest-meta{margin:7px 0 0;font-size:8px;letter-spacing:.14em;color:#b0b7ae;text-align:center;text-shadow:0 1px 6px #000}
+.jmbn-guest-meta{margin:7px 0 0;font-size:8px;letter-spacing:.14em;color:var(--guest-gold);text-align:center;text-shadow:0 1px 6px #000}
 @media(max-width:720px){
  .jmbn-guest-screen{padding:20px 12px;align-items:flex-start;overflow-y:auto}
  .jmbn-guest-brand{margin:6px 0 14px;gap:2px}
