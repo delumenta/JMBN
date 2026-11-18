@@ -8,6 +8,7 @@ function isAttendingSignup(s){return s?.attendance_confirmed===true}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function base(){const p=location.pathname.split("/").filter(Boolean);return /github\.io$/.test(location.hostname)&&p.length?"/"+p[0]+"/":"/"}
+function isMobileManifest(){return navigator.userAgentData?.mobile===true||/Android|iPhone|iPod|Windows Phone/i.test(navigator.userAgent||"")||(window.matchMedia("(pointer: coarse) and (max-width: 900px)").matches)}
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200)}
 let fleetRequestedMissionId=null;
 function showView(id){$$(".view").forEach(v=>v.classList.toggle("active",v.id===id));$$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("#pageTitle").textContent={command:"COMMAND DECK",operations:"OPERATIONS",fleet:"FLEET DEPLOYMENT",crew:"CREW MANIFEST",academy:"ACADEMY",records:"RECORDS",profile:"PERSONNEL DOSSIER"}[id]||"JMBN";history.replaceState(null,"",location.pathname+location.search+"#"+id);scrollTo(0,0);if(id==="fleet")fleetInit().catch(e=>fleetNotice(e.message))}
@@ -101,6 +102,9 @@ async function loadWelcomeProgress(uid){
 }
 function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
+ const mobilePending=isMobileManifest();
+ const pendingSummary=mobilePending?"Your JMBN account has not been verified yet. Please wait for Command approval.":"Identity verified. Your JMBN personnel clearance is awaiting Command approval.";
+ const pendingDetails=mobilePending?'<span>Your account is registered, but access has not been approved yet.</span><span>Please wait while Command reviews your status. You can check back later.</span>':'<span>Command is attempting to recover your security clearance after a pack of Kopions ate our network cables.</span><span>A recovery team was dispatched. Unfortunately, they have stopped responding too.</span>';
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
   sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-brand-match20";sheet.dataset.jmbnGuestStyles="1";
@@ -122,13 +126,12 @@ function renderPendingAccess(session,profile){
     <p class="jmbn-guest-kicker">PERSONNEL ACCESS</p>
     <h1 id="guestWelcome">WELCOME, ${esc(name.toUpperCase())}</h1>
     <div class="jmbn-guest-title-rule" aria-hidden="true"></div>
-    <p class="jmbn-guest-summary">Identity verified. Your JMBN personnel clearance is awaiting Command approval.</p>
+    <p class="jmbn-guest-summary">${pendingSummary}</p>
     <div class="jmbn-guest-warning" role="status">
      <div class="jmbn-guest-warning-icon" aria-hidden="true">⌛</div>
      <div class="jmbn-guest-warning-content">
-      <b>ACCESS PENDING</b>
-      <span>Command is attempting to recover your security clearance after a pack of Kopions ate our network cables.</span>
-      <span>A recovery team was dispatched. Unfortunately, they have stopped responding too.</span>
+      <b>${mobilePending?"NOT VERIFIED YET":"ACCESS PENDING"}</b>
+      ${pendingDetails}
       <span class="jmbn-guest-standby">Please stand by.</span>
      </div>
     </div>
@@ -526,7 +529,19 @@ if(["command","operations","fleet","crew","academy","records","profile"].include
 }
 let liveTimer;function liveRefresh(){clearTimeout(liveTimer);liveTimer=setTimeout(()=>load().then(()=>toast("Manifest updated")).catch(()=>{}),450)}
 sb.channel("jmbn-manifest-live").on("postgres_changes",{event:"*",schema:"public",table:"missions"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"profiles"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"announcements"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"mission_signups"},liveRefresh).subscribe();
-load().catch(e=>{console.error(e);if(document.documentElement.classList.contains("jmbn-session-pending")){const n=document.getElementById("jmbn-auth-gate-note");if(n)n.textContent="Unable to verify clearance. Refresh the page to retry.";}else toast("Manifest sync failed")});
+load().catch(e=>{console.error(e);if(document.documentElement.classList.contains("jmbn-session-pending")){
+ const n=document.getElementById("jmbn-auth-gate-note");
+ if(isMobileManifest()){
+  if(n)n.textContent="We could not complete verification right now. Please wait a moment, then try again.";
+  const gate=document.getElementById("jmbn-auth-gate");
+  if(gate&&!document.getElementById("jmbn-mobile-verification-actions")){
+   const controls=document.createElement("div");controls.id="jmbn-mobile-verification-actions";controls.style.cssText="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:18px";
+   const retry=document.createElement("button");retry.type="button";retry.textContent="TRY AGAIN";retry.style.cssText="padding:10px 15px;border:1px solid #d4b65b;background:#d4b65b;color:#070806;font:700 11px Play,sans-serif;letter-spacing:.08em;border-radius:6px";retry.addEventListener("click",()=>location.reload());
+   const signIn=document.createElement("a");signIn.href=base()+"auth.html";signIn.textContent="GO TO LOGIN";signIn.style.cssText="padding:10px 15px;border:1px solid #d4b65b;color:#d4b65b;text-decoration:none;font:700 11px Play,sans-serif;letter-spacing:.08em;border-radius:6px";
+   controls.append(retry,signIn);gate.append(controls);
+  }
+ }else if(n)n.textContent="Unable to verify clearance. Refresh the page to retry.";
+}else toast("Manifest sync failed")});
 document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBody select[data-assign-user]");if(role&&activeMissionId){assignCrewRole(activeMissionId,role.dataset.assignUser,role.value,role);return}const station=e.target.closest?.("#detailBody select[data-station-user]");if(station&&activeMissionId)assignCrewStation(activeMissionId,station.dataset.stationUser,station.value,station)});
 
 // Bottom JMBN operations ticker
