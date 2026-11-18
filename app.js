@@ -101,9 +101,49 @@ async function loadWelcomeProgress(uid){
 }
 function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
- document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#070806;color:#e8e5d8;font-family:Play,sans-serif"><section style="width:min(620px,100%);border:1px solid #665b2c;background:#0b0c09;padding:38px;box-shadow:0 0 60px #000"><p style="margin:0 0 12px;color:#bda54c;font-size:11px;letter-spacing:.18em">JMBN // PERSONNEL ACCESS</p><h1 style="margin:0 0 14px;font-size:32px;letter-spacing:.05em">WELCOME, '+esc(name.toUpperCase())+'</h1><p style="color:#aaa896;line-height:1.65">Your Discord identity has been verified and your JMBN personnel record has been created.</p><div style="margin:26px 0;padding:18px;border-left:2px solid #c6aa45;background:#11120d"><b style="display:block;color:#d8bf60;letter-spacing:.1em">ACCESS PENDING</b><span style="display:block;margin-top:8px;color:#aaa896;line-height:1.5">Command approval is required before the Manifest, Operations and Academy network becomes available.</span></div><p style="margin:0 0 16px;color:#aaa896;line-height:1.6">In the meantime, feel free to join us on Discord and say hello to the crew!</p><a href="https://discord.gg/4z49bCXv5B" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;border:1px solid #c6aa45;background:#c6aa45;color:#0b0c09;padding:11px 18px;font:700 12px Play,sans-serif;letter-spacing:.08em;margin:0 10px 10px 0">JOIN OUR DISCORD ↗</a><button id="pendingLogout" style="border:1px solid #665b2c;background:transparent;color:#d8bf60;padding:11px 18px;font:700 12px Play,sans-serif;letter-spacing:.12em;cursor:pointer">SIGN OUT</button></section></div>';
+ if(!document.querySelector('link[data-jmbn-guest-styles]')){
+  const sheet=document.createElement("link");
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-hud1";sheet.dataset.jmbnGuestStyles="1";
+  document.head.appendChild(sheet);
+ }
+ document.body.innerHTML=`<main class="jmbn-guest-screen">
+  <div class="jmbn-guest-scanline" aria-hidden="true"></div>
+  <div class="jmbn-guest-shell">
+   <header class="jmbn-guest-brand" aria-label="JMBN Manifest System">
+    <img src="assets/jmbn.png" alt="JMBN emblem">
+    <b>JMBN</b><small>MANIFEST SYSTEM</small>
+   </header>
+   <section class="jmbn-guest-panel" aria-labelledby="guestWelcome">
+    <i class="guest-notch guest-nw" aria-hidden="true"></i><i class="guest-notch guest-ne" aria-hidden="true"></i>
+    <i class="guest-notch guest-sw" aria-hidden="true"></i><i class="guest-notch guest-se" aria-hidden="true"></i>
+    <p class="jmbn-guest-kicker">PERSONNEL ACCESS</p>
+    <h1 id="guestWelcome">WELCOME, ${esc(name.toUpperCase())}</h1>
+    <div class="jmbn-guest-title-rule" aria-hidden="true"></div>
+    <p class="jmbn-guest-summary">Your Discord identity has been verified and your JMBN personnel record has been created.</p>
+    <div class="jmbn-guest-warning" role="status">
+     <div class="jmbn-guest-warning-icon" aria-hidden="true">⌛</div>
+     <div class="jmbn-guest-warning-content">
+      <b>ACCESS PENDING</b>
+      <span>Command approval is required before the Manifest, Operations and Academy network becomes available.</span>
+     </div>
+    </div>
+    <div class="jmbn-guest-social"><span class="jmbn-guest-social-symbol" aria-hidden="true">◈</span>
+     <p>In the meantime, feel free to join us on Discord and say hello to the crew!</p>
+    </div>
+    <div class="jmbn-guest-actions">
+     <a class="jmbn-guest-discord" href="https://discord.gg/4z49bCXv5B" target="_blank" rel="noopener noreferrer" aria-label="Join the JMBN Discord (opens in a new tab)">
+      <svg viewBox="0 0 127.14 96.36" aria-hidden="true"><path d="M104.4 8.19A101.7 101.7 0 0 0 79.1.3a70.7 70.7 0 0 0-3.2 6.6 94.2 94.2 0 0 0-28.7 0A70.7 70.7 0 0 0 44 .3a101.7 101.7 0 0 0-25.3 7.9C2.7 32.1-1.6 55.4.6 78.4a102.4 102.4 0 0 0 31 15.7c2.5-3.4 4.7-7 6.6-10.8-3.6-1.4-7.1-3.1-10.4-5.1.9-.6 1.7-1.3 2.5-2a72.5 72.5 0 0 0 66.5 0c.8.7 1.6 1.4 2.5 2-3.3 2-6.8 3.7-10.4 5.1 1.9 3.8 4.1 7.4 6.6 10.8a102.4 102.4 0 0 0 31-15.7c2.7-26.6-4.6-49.7-19.1-70.2ZM42.4 64.4c-6.3 0-11.4-5.8-11.4-13s5-13 11.4-13c6.4 0 11.5 5.8 11.4 13 0 7.2-5 13-11.4 13Zm42.3 0c-6.3 0-11.4-5.8-11.4-13s5-13 11.4-13c6.4 0 11.5 5.8 11.4 13 0 7.2-5 13-11.4 13Z"/></svg>
+      JOIN OUR DISCORD <span aria-hidden="true">↗</span>
+     </a>
+     <button id="pendingLogout" class="jmbn-guest-signout" type="button">SIGN OUT</button>
+    </div>
+   </section>
+   <p class="jmbn-guest-meta">JMBN // SECURE PERSONNEL NETWORK · AWAITING COMMAND APPROVAL</p>
+  </div>
+ </main>`;
  document.getElementById("pendingLogout")?.addEventListener("click",async()=>{await sb.auth.signOut();location.replace(base()+"auth.html")});
 }
+
 
 async function load(){
  const {data:{session}}=await sb.auth.getSession();
