@@ -1,104 +1,127 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#070806"><title>JMBN // Secure Access</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet"><script src="https://unpkg.com/@supabase/supabase-js@2"></script><style>
-
-:root{--gold:#d4b65b;--gold-light:#f1d77b;--metal:#35372d;--line:#2b2e26;--metal-dark:#272b22;--text:#eef0e8}
+:root{--gold:#d4b65b;--gold-hi:#f1d77b;--armour:#35372d;--line:#2b2e26;--shadow:#272b22;--white:#eef0e8}
 *{box-sizing:border-box}
 html{background:#070806}
-body{margin:0;min-height:100vh;min-height:100svh;display:flex;justify-content:center;align-items:center;padding:12px;background:#070806;color:var(--text);font-family:"Play",sans-serif;overflow-x:hidden}
-.auth-backdrop{position:fixed;inset:0;z-index:0;background:url("assets/auth-background.png") center/cover no-repeat;filter:brightness(.54) saturate(.62)}
-.auth-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(212,182,91,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,182,91,.03) 1px,transparent 1px);background-size:54px 54px}
-.auth-frame{position:relative;isolation:isolate;z-index:1;flex:0 0 auto;width:min(1120px,96vw,calc((100svh - 24px)*1.3));aspect-ratio:1430/1100}
-.auth-frame::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:url("assets/auth-panel.png") center/100% 100% no-repeat}
-.auth-content{position:absolute;z-index:2;inset:15.2% 12.4% 13% 16.7%;display:flex;flex-direction:column;min-width:0;padding:12px 16px 10px;background:linear-gradient(100deg,rgba(7,9,7,.78),rgba(7,9,7,.69));border:1px solid rgba(53,55,45,.24)}
-.auth-header{display:flex;align-items:center;gap:14px;min-height:59px;flex-shrink:0}
-.auth-header img{width:56px;height:56px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 9px rgba(212,182,91,.16))}
-.auth-header strong{display:block;color:var(--gold);font-size:30px;line-height:1.06;font-weight:700;letter-spacing:.24em}
-.auth-header small{display:block;color:#bfc0b2;font-size:10px;letter-spacing:.24em;margin-top:5px}
-.auth-header-side{margin-left:auto;padding-left:12px;text-align:right;color:var(--gold);font-size:9px;letter-spacing:.15em;line-height:1.8}
-.auth-header-side small{font-size:9px;letter-spacing:.08em;color:#8d9386;margin:0}
-.auth-rule{width:100%;height:1px;flex-shrink:0;margin:16px 0 5px;background:linear-gradient(90deg,rgba(212,182,91,.7),rgba(212,182,91,.17) 60%,transparent)}
-.auth-main{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:24px;align-items:center;flex:1;min-height:0}
-.auth-intro{min-width:0;padding:12px 0 16px}
-.eyebrow{margin:0 0 12px;color:var(--gold);font-size:10px;line-height:1.6;font-weight:700;letter-spacing:.14em}
-h1{margin:0 0 18px;font-size:clamp(30px,3.1vw,43px);line-height:1.07;letter-spacing:.01em;font-weight:700}
-h1 span{color:var(--gold-light)}
-.sub{max-width:310px;margin:0 0 23px;color:#b5baae;font-size:12px;line-height:1.75}
-.auth-intro-bottom{display:flex;align-items:center;gap:9px;color:#a4aa9d;font-size:9px;letter-spacing:.07em;line-height:1.5}
-.auth-intro-bottom::before{content:"";width:20px;height:1px;flex:none;background:var(--gold)}
-.auth-login{min-width:0;padding:23px 23px 18px;border:1px solid rgba(76,76,56,.7);border-top:2px solid rgba(212,182,91,.7);background:linear-gradient(145deg,rgba(10,13,10,.95),rgba(9,11,9,.86));box-shadow:0 15px 36px rgba(0,0,0,.25)}
-.auth-login-kicker{margin:0 0 4px;color:var(--gold);font-size:10px;letter-spacing:.17em;font-weight:700}
-.auth-login-caption{margin:0 0 19px;font-size:11px;color:#aeb2a7;line-height:1.45}
-.auth-fields{display:grid;gap:7px}
-label{display:block;color:#d6d8cb;font-size:10px;letter-spacing:.13em;margin:1px 0 1px}
-input{display:block;width:100%;height:43px;min-width:0;padding:10px 12px;border:1px solid var(--metal);border-radius:0;outline:none;background:rgba(3,5,4,.9);color:var(--text);font:13px "Play",sans-serif}
-input::placeholder{color:#858b7f}
-input:focus{border-color:var(--gold);box-shadow:0 0 0 1px rgba(212,182,91,.15)}
-button{width:100%;min-height:45px;margin-top:16px;padding:10px 12px;cursor:pointer;letter-spacing:.11em;font:700 12px "Play",sans-serif;transition:border-color .18s,background .18s}
-button:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
-.primary{background:linear-gradient(125deg,var(--gold-light),var(--gold));border:1px solid var(--gold-light);color:#101109}
-.primary:hover{background:var(--gold-light)}
-.divider{display:flex;align-items:center;gap:10px;justify-content:center;margin:12px 0 -3px;color:#9ca193;font-size:9px;letter-spacing:.11em}
-.divider::before,.divider::after{content:"";height:1px;flex:1;background:var(--line)}
-.discord{min-height:43px;margin-top:14px;color:#ebede4;background:var(--metal-dark);border:1px solid #62614c}
-.discord:hover{background:var(--metal);border-color:var(--gold)}
-.msg{min-height:14px;margin-top:8px;color:#f6aaa1;font-size:10px;line-height:1.4}
-.auth-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;margin-top:5px;padding-top:11px;border-top:1px solid rgba(53,55,45,.6);font-size:9px;letter-spacing:.08em;color:#9ea498}
+body{margin:0;min-height:100vh;min-height:100svh;padding:14px;display:flex;align-items:center;justify-content:center;overflow-x:hidden;background:#070806;color:var(--white);font-family:"Play",system-ui,sans-serif}
+.auth-backdrop{position:fixed;inset:0;z-index:0;background:url("assets/auth-background.png") center/cover no-repeat;filter:brightness(.48) saturate(.65)}
+.auth-shade{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(4,6,5,.16),rgba(4,6,5,.26)),radial-gradient(ellipse at center,transparent 30%,rgba(1,2,2,.40) 100%)}
+.auth-frame{position:relative;z-index:1;isolation:isolate;flex:0 0 auto;width:min(1080px,96vw,calc((100svh - 28px)*1.3));aspect-ratio:1430/1100}
+.auth-frame::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:url("assets/auth-panel.png?v=20261118-auth-hud-v3") center / 100% 100% no-repeat}
+.auth-tint{position:absolute;inset:12% 10.4% 11.2% 13.6%;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 41%,rgba(5,8,7,.95) 0%,rgba(5,8,7,.89) 37%,rgba(5,8,7,.80) 68%,rgba(5,8,7,.22) 100%)}
+.auth-inner{position:absolute;z-index:2;inset:16% 13.2% 13% 18.2%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-width:0}
+.auth-brand{display:flex;align-items:center;gap:13px;min-height:59px;padding:0 5px 14px;border-bottom:1px solid rgba(212,182,91,.37)}
+.auth-brand-mark{width:53px;height:53px;object-fit:contain;flex:none;filter:drop-shadow(0 0 8px rgba(212,182,91,.13))}
+.auth-wordmark{display:flex;flex-direction:column;gap:3px;min-width:0}
+.auth-wordmark b{font-size:31px;line-height:1.03;letter-spacing:.24em;color:var(--gold);font-weight:700}
+.auth-wordmark small{font-size:10px;letter-spacing:.25em;color:#c8c8b7;white-space:nowrap}
+.auth-terminal-label{margin-left:auto;align-self:center;color:var(--gold);font-size:10px;letter-spacing:.11em;text-align:right;line-height:1.5}
+.auth-terminal-label span{display:block;color:#a0a496;letter-spacing:.09em;font-size:9px}
+.auth-center{min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px 0 8px}
+.auth-login{width:min(100%,490px);min-width:0}
+.auth-kicker{margin:0 0 9px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.16em}
+h1{margin:0;font-size:clamp(29px,3.45vw,45px);line-height:1.06;letter-spacing:.018em;font-weight:700}
+h1 span{color:var(--gold-hi)}
+.auth-accent{width:62px;height:2px;margin:13px 0 11px;background:linear-gradient(90deg,var(--gold-hi),var(--gold))}
+.auth-description{margin:0 0 24px;color:#bbc0b5;font-size:12px;line-height:1.6;max-width:470px}
+.auth-fields{display:grid;gap:15px}
+.auth-field{min-width:0}
+.auth-field label{display:block;margin:0 0 7px;color:#d7d7c8;font-size:10px;letter-spacing:.15em;font-weight:700}
+.auth-fieldbox{display:flex;align-items:center;gap:0;height:46px;min-width:0;border:1px solid rgba(122,120,90,.53);background:rgba(3,5,4,.87);transition:border-color .18s,box-shadow .18s}
+.auth-fieldbox:focus-within{border-color:var(--gold);box-shadow:0 0 0 1px rgba(212,182,91,.16)}
+.auth-field-icon{display:flex;align-items:center;justify-content:center;align-self:stretch;width:47px;flex:none;border-right:1px solid var(--line);color:var(--gold)}
+.auth-field-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.auth-fieldbox input{display:block;width:100%;height:100%;min-width:0;padding:0 13px;appearance:none;border:0;outline:0;border-radius:0;color:var(--white);background:transparent;font:13px "Play",system-ui,sans-serif}
+.auth-fieldbox input::placeholder{color:#858b81}
+.auth-actions{margin-top:20px}
+.auth-actions button{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;height:48px;padding:11px 16px;border-radius:0;cursor:pointer;font:700 12px "Play",system-ui,sans-serif;letter-spacing:.13em;transition:background .17s,border-color .17s,filter .17s}
+.auth-actions button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+#login{border:1px solid var(--gold-hi);background:linear-gradient(135deg,var(--gold-hi),var(--gold));color:#17170e;clip-path:polygon(0 7px,7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px))}
+#login:hover{filter:brightness(1.09)}
+.auth-action-chevron{font-size:19px;line-height:1;letter-spacing:0}
+.auth-divider{display:flex;align-items:center;gap:14px;margin:13px 0;color:#a5aa9d;text-align:center;font-size:9px;letter-spacing:.14em}
+.auth-divider::before,.auth-divider::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(212,182,91,.35))}
+.auth-divider::after{transform:rotate(180deg)}
+#discord{border:1px solid rgba(212,182,91,.58);background:rgba(39,43,34,.74);color:#ecece3;height:45px}
+#discord:hover{border-color:var(--gold-hi);background:rgba(53,55,45,.85)}
+.auth-message{min-height:17px;margin-top:8px;color:#f9a59a;font-size:11px;line-height:1.4}
+.auth-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:29px;padding:7px 6px 0;border-top:1px solid rgba(212,182,91,.23);font-size:9px;letter-spacing:.08em;color:#a7ab9e}
 .auth-footer strong{font-weight:700;color:var(--gold)}
-@media(max-height:760px) and (min-width:721px){
-.auth-content{inset:14.5% 12.4% 12.5% 16.7%;padding:7px 13px}
-.auth-header{min-height:43px;gap:10px}.auth-header img{width:43px;height:43px}.auth-header strong{font-size:24px}.auth-header small{font-size:9px;margin-top:3px}
-.auth-rule{margin:8px 0 0}.auth-main{gap:15px}.auth-intro{padding:4px 0}.eyebrow{margin-bottom:7px;font-size:9px}h1{font-size:clamp(24px,2.9vw,37px);margin-bottom:9px}
-.sub{font-size:11px;line-height:1.5;margin-bottom:10px}.auth-login{padding:12px 15px 8px}.auth-login-caption{margin-bottom:9px}.auth-fields{gap:4px}
-input{height:34px;padding:6px 10px}button{min-height:35px;padding:6px 9px;margin-top:8px}.divider{margin:6px 0 -5px}.discord{min-height:35px;margin-top:9px}.msg{min-height:11px;margin-top:3px}.auth-footer{margin-top:2px;padding-top:6px}
+@media (max-height:790px) and (min-width:721px){
+.auth-frame{width:min(1020px,96vw,calc((100svh - 20px)*1.3))}
+.auth-inner{inset:16% 13.2% 12.7% 18.2%}
+.auth-brand{min-height:45px;padding-bottom:7px;gap:9px}
+.auth-brand-mark{width:43px;height:43px}.auth-wordmark b{font-size:24px}.auth-wordmark small{font-size:8.5px}
+.auth-center{padding:8px 0 2px}
+.auth-login{width:min(100%,435px)}.auth-kicker{font-size:9px;margin-bottom:6px}
+h1{font-size:clamp(25px,3.15vw,35px)}.auth-accent{margin:9px 0 7px}.auth-description{font-size:11px;margin-bottom:12px}
+.auth-fields{gap:9px}.auth-field label{font-size:9px;margin-bottom:5px}.auth-fieldbox{height:38px}
+.auth-field-icon{width:39px}.auth-field-icon svg{width:16px;height:16px}
+.auth-actions{margin-top:11px}.auth-actions button{height:39px;padding:7px 12px}
+#discord{height:38px}.auth-divider{margin:8px 0}.auth-message{min-height:13px;margin-top:3px;font-size:10px}
+.auth-footer{min-height:22px;padding-top:4px;font-size:8px}
 }
 @media(max-width:720px){
-body{padding:8px;align-items:center;overflow-y:auto}
-.auth-backdrop{filter:brightness(.4) saturate(.6)}
-.auth-frame{width:min(470px,100%);aspect-ratio:auto;min-height:790px;margin:8px auto}
-.auth-content{inset:10.7% 7.5% 10.2% 15%;padding:12px 10px 8px;background:linear-gradient(105deg,rgba(6,8,7,.85),rgba(7,9,7,.76))}
-.auth-header{gap:8px;min-height:43px}.auth-header img{width:44px;height:44px}.auth-header strong{font-size:23px;letter-spacing:.18em}.auth-header small{font-size:8px;letter-spacing:.16em;margin-top:2px}.auth-header-side{display:none}
-.auth-rule{margin:11px 0 2px}
-.auth-main{display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:center}
-.auth-intro{padding:0}.eyebrow{font-size:9px;margin:0 0 7px}h1{font-size:clamp(27px,7vw,36px);line-height:1.05;margin:0 0 8px}.sub{font-size:11px;line-height:1.42;margin:0}.auth-intro-bottom{display:none}
-.auth-login{padding:13px 12px 8px}.auth-login-kicker{font-size:9px}.auth-login-caption{font-size:10px;margin-bottom:9px}.auth-fields{gap:5px}label{font-size:9px}input{height:38px}
-button{min-height:39px;margin-top:10px;font-size:11px}.divider{margin:8px 0 -4px}.discord{min-height:39px;margin-top:10px}.msg{margin-top:5px}
-.auth-footer{font-size:8px;margin-top:5px;padding-top:7px}
+body{padding:8px;align-items:flex-start;overflow-y:auto}
+.auth-backdrop{filter:brightness(.38) saturate(.68)}
+.auth-frame{width:min(485px,100%);min-height:750px;aspect-ratio:auto;margin:auto}
+.auth-tint{inset:10% 7% 9% 13%;background:linear-gradient(90deg,rgba(3,5,4,.89),rgba(4,6,5,.84))}
+.auth-inner{inset:11.5% 8.5% 12% 16.5%}
+.auth-brand{min-height:48px;padding-bottom:11px;gap:9px}.auth-brand-mark{width:43px;height:43px}
+.auth-wordmark b{font-size:24px;letter-spacing:.18em}.auth-wordmark small{font-size:8px;letter-spacing:.15em}
+.auth-terminal-label{display:none}.auth-center{padding:9px 0 4px}
+.auth-login{width:100%}.auth-kicker{font-size:9px;margin-bottom:7px}h1{font-size:clamp(25px,7.2vw,34px)}
+.auth-accent{margin:12px 0 9px}.auth-description{font-size:11px;margin-bottom:20px;line-height:1.45}
+.auth-fields{gap:13px}.auth-field label{font-size:9px;margin-bottom:6px}.auth-fieldbox{height:43px}.auth-field-icon{width:41px}
+.auth-actions{margin-top:17px}.auth-actions button{height:46px;font-size:11px}
+#discord{height:43px}.auth-divider{margin:12px 0}.auth-message{margin-top:7px}
+.auth-footer{font-size:7.5px;letter-spacing:.02em;gap:8px}
 }
-@media(max-width:375px){
-.auth-frame{min-height:800px}.auth-content{inset:10.5% 6% 10% 15.3%;padding:8px 8px}
-.auth-header strong{font-size:21px}.auth-header img{width:39px;height:39px}.auth-login{padding:11px 9px 7px}
-h1{font-size:26px}.sub{font-size:10px}.auth-footer{font-size:7px}
+@media(max-width:365px){
+.auth-frame{min-height:745px}.auth-inner{inset:11.5% 7.5% 11.8% 17.6%}
+.auth-brand-mark{width:37px;height:37px}.auth-wordmark b{font-size:21px}
+.auth-description{margin-bottom:15px}.auth-fields{gap:11px}
+.auth-actions{margin-top:13px}.auth-footer{font-size:7px}
 }
-@media(prefers-reduced-motion:reduce){button{transition:none}}
-
+@media(prefers-reduced-motion:reduce){.auth-actions button,.auth-fieldbox{transition:none}}
 </style></head><body>
 <div class="auth-backdrop" aria-hidden="true"></div>
-<div class="auth-grid" aria-hidden="true"></div>
-<main class="auth-frame" aria-label="JMBN secure personnel access">
- <div class="auth-content">
-  <header class="auth-header">
-   <img src="assets/jmbn.png" alt="JMBN insignia">
-   <div><strong>JMBN</strong><small>MANIFEST SYSTEM</small></div>
-   <div class="auth-header-side">PERSONNEL NETWORK<small>/// SECURITY CLEARANCE</small></div>
+<div class="auth-shade" aria-hidden="true"></div>
+<main class="auth-frame" aria-label="JMBN personnel authentication">
+ <div class="auth-tint" aria-hidden="true"></div>
+ <div class="auth-inner">
+  <header class="auth-brand">
+   <img class="auth-brand-mark" src="assets/jmbn.png" alt="JMBN emblem">
+   <div class="auth-wordmark"><b>JMBN</b><small>MANIFEST SYSTEM</small></div>
+   <div class="auth-terminal-label">PERSONNEL NETWORK<span>/// SECURE ACCESS</span></div>
   </header>
-  <div class="auth-rule" aria-hidden="true"></div>
-  <div class="auth-main">
-   <section class="auth-intro">
-    <p class="eyebrow">/// SECURE PERSONNEL ACCESS</p>
-    <h1>REPORT TO<br><span>YOUR STATION.</span></h1>
-    <p class="sub">Authenticate to access your crew manifest, operations board and Academy records.</p>
-    <div class="auth-intro-bottom">JMBN PERSONNEL IDENTIFICATION SYSTEM</div>
-   </section>
-   <section class="auth-login" aria-label="Personnel login form">
-    <p class="auth-login-kicker">IDENTITY VERIFICATION</p>
-    <p class="auth-login-caption">Enter your callsign and credentials to proceed.</p>
+  <div class="auth-center">
+   <section class="auth-login" aria-label="Secure personnel login">
+    <p class="auth-kicker">/// PERSONNEL ACCESS</p>
+    <h1>WELCOME BACK,<br><span>JMBN CREW.</span></h1>
+    <div class="auth-accent" aria-hidden="true"></div>
+    <p class="auth-description">Authenticate to access your crew manifest, operations and Academy records.</p>
     <div class="auth-fields">
-     <label for="u">USERNAME</label><input id="u" autocomplete="username" placeholder="Callsign" aria-label="Username or callsign">
-     <label for="p">PASSWORD</label><input id="p" type="password" autocomplete="current-password" placeholder="••••••••" aria-label="Password">
+     <div class="auth-field">
+      <label for="u">USERNAME</label>
+      <div class="auth-fieldbox">
+       <span class="auth-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20v-2c0-3.1 2.4-5 7-5s7 1.9 7 5v2"></path></svg></span>
+       <input id="u" autocomplete="username" placeholder="Enter your callsign" aria-label="Username or callsign">
+      </div>
+     </div>
+     <div class="auth-field">
+      <label for="p">PASSWORD</label>
+      <div class="auth-fieldbox">
+       <span class="auth-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="1"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path><circle cx="12" cy="15.5" r="1"></circle></svg></span>
+       <input id="p" type="password" autocomplete="current-password" placeholder="Enter your password" aria-label="Password">
+      </div>
+     </div>
     </div>
-    <button id="login" class="primary" type="button">AUTHENTICATE</button>
-    <div class="divider">OR</div>
-    <button id="discord" class="discord" type="button">CONTINUE WITH DISCORD</button>
-    <div id="msg" role="status" aria-live="polite" class="msg"></div>
+    <div class="auth-actions">
+     <button id="login" type="button"><span class="auth-action-chevron" aria-hidden="true">››</span> AUTHENTICATE</button>
+     <div class="auth-divider">OR</div>
+     <button id="discord" type="button">CONTINUE WITH DISCORD</button>
+    </div>
+    <div class="auth-message" id="msg" role="status" aria-live="polite"></div>
    </section>
   </div>
   <footer class="auth-footer"><span>AUTHORIZED PERSONNEL ONLY</span><strong>JMBN // SECURE</strong></footer>
