@@ -339,3 +339,51 @@ body:has(.jmbn-guest-screen) {margin:0;background:#050c0e}
     would otherwise stretch and distort to fit a long mobile layout. */
  .jmbn-guest-panel::before,.jmbn-guest-panel::after{display:block}
 }
+
+
+/* 18 Nov · Guest dual-frame treatment
+   Outer = masked guest-panel.png (with baked-in middle box hidden).
+   Inner = its own independently scalable, transparent guest-warning-frame.svg.
+   Both borders are intentionally softer; backdrop and page HUD are untouched. */
+@media (min-width: 721px) {
+ .jmbn-guest-panel::after {
+   /* Four opaque strips combine to leave a transparent center cut-out
+      over the PNG's original built-in alert frame. */
+   -webkit-mask-image:
+     linear-gradient(#000 0 0),linear-gradient(#000 0 0),
+     linear-gradient(#000 0 0),linear-gradient(#000 0 0);
+   -webkit-mask-size:100% 22%,100% 43%,10% 100%,10% 100%;
+   -webkit-mask-position:top center,bottom center,left center,right center;
+   -webkit-mask-repeat:no-repeat;
+   mask-image:
+     linear-gradient(#000 0 0),linear-gradient(#000 0 0),
+     linear-gradient(#000 0 0),linear-gradient(#000 0 0);
+   mask-size:100% 22%,100% 43%,10% 100%,10% 100%;
+   mask-position:top center,bottom center,left center,right center;
+   mask-repeat:no-repeat;
+   filter:brightness(.72) saturate(.80);
+ }
+ .jmbn-guest-panel::before {
+   background:rgba(1,12,15,.19);
+   backdrop-filter:blur(2px);
+ }
+ .jmbn-guest-warning {
+   background:url('assets/guest-warning-frame.svg') center / 100% 100% no-repeat;
+   border:0;box-shadow:none;
+   isolation:isolate;
+ }
+ .jmbn-guest-warning::before,
+ .jmbn-guest-warning::after {display:none!important}
+ .jmbn-guest-warning-icon {
+   border:0;
+   color:#d1ac75;
+   filter:none;
+ }
+ .jmbn-guest-warning-content b {color:#dcb47d}
+ .jmbn-guest-discord {
+   background:linear-gradient(180deg,#e6ca91 0%,#c8a065 52%,#a37a3f 100%);
+   border-color:#cfa664;
+   box-shadow:0 3px 9px rgba(0,0,0,.4),inset 0 1px rgba(255,242,206,.45);
+ }
+ .jmbn-guest-signout {border-color:#947648;color:#ddbb81}
+}
