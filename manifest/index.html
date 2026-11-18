@@ -1,5 +1,15 @@
 <!doctype html>
 <html lang="en" class="jmbn-session-pending"><head>
+<script>
+/* Mobile canonical Manifest URL: avoid separate /manifest/index.html cache/session entry. */
+(function () {
+  var mobile = /Android|iPhone|iPod|Windows Phone/i.test(navigator.userAgent || "")
+    || (navigator.userAgentData && navigator.userAgentData.mobile === true);
+  if (mobile && /\/manifest\/index\.html$/i.test(location.pathname)) {
+    location.replace(new URL("./", location.href).href);
+  }
+})();
+</script>
 <!-- Resolve shared site assets and links from the single JMBN repository root. -->
 <base href="../">
 <link rel="icon" href="assets/jmbn.ico?v=2" type="image/x-icon"><link rel="apple-touch-icon" href="assets/jmbn.png">
