@@ -3,7 +3,7 @@
 // Supabase auth bootstrap for JMBN (GitHub Pages safe)
 //
 // - Handles PKCE Discord OAuth
-// - Redirects auth.html → index.html after login
+// - Redirects auth.html → manifest/ after login
 // - NO discord_links logic
 // ----------------------------------------------------
 
@@ -76,7 +76,7 @@ window.getSupabase = () => _sb;
     (location.pathname.endsWith("/auth.html") ||
       location.pathname.endsWith("auth.html"))
   ) {
-    goto("index.html");
+    goto("manifest/");
   }
 })();
 
@@ -134,7 +134,7 @@ window.requireAuth = async function requireAuth(options = {}) {
 
     // A promoted user should not remain stuck on the pending screen.
     if (onPending) {
-      goto("index.html");
+      goto("manifest/");
       return null;
     }
 
@@ -184,6 +184,6 @@ _sb.auth.onAuthStateChange((event, session) => {
     (location.pathname.endsWith("/auth.html") ||
       location.pathname.endsWith("auth.html"))
   ) {
-    goto("index.html");
+    goto("manifest/");
   }
 });
