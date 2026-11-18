@@ -103,7 +103,7 @@ function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
-  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-hud1";sheet.dataset.jmbnGuestStyles="1";
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-hud2";sheet.dataset.jmbnGuestStyles="1";
   document.head.appendChild(sheet);
  }
  document.body.innerHTML=`<main class="jmbn-guest-screen">
@@ -119,7 +119,7 @@ function renderPendingAccess(session,profile){
     <p class="jmbn-guest-kicker">PERSONNEL ACCESS</p>
     <h1 id="guestWelcome">WELCOME, ${esc(name.toUpperCase())}</h1>
     <div class="jmbn-guest-title-rule" aria-hidden="true"></div>
-    <p class="jmbn-guest-summary">Your Discord identity has been verified and your JMBN personnel record has been created.</p>
+    <p class="jmbn-guest-summary">Your JMBN identity has been verified and your personnel record has been created.</p>
     <div class="jmbn-guest-warning" role="status">
      <div class="jmbn-guest-warning-icon" aria-hidden="true">⌛</div>
      <div class="jmbn-guest-warning-content">
