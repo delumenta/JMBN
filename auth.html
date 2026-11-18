@@ -3,10 +3,12 @@
 :root{--auth-bg:#050707;--auth-armor:#35372d;--auth-line:#2b2e26;--auth-metal:#272b22;--auth-gold:#d4b65b;--auth-bright:#f1d77b;--auth-text:#f0efe8}
 *{box-sizing:border-box}
 html{background:var(--auth-bg)}
-body{margin:0;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow-x:hidden;padding:10px;background:radial-gradient(ellipse at 50% 50%,#101311 0%,#080a09 44%,#040505 100%);color:var(--auth-text);font-family:"Play",system-ui,sans-serif}
+body{margin:0;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow-x:hidden;padding:10px;background:#050707;color:var(--auth-text);font-family:"Play",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:url("assets/auth-background.png") center / cover no-repeat;filter:brightness(.62) saturate(.7)}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(4,7,7,.02) 15%,rgba(2,3,3,.34) 100%)}
 .auth-frame{position:relative;z-index:1;isolation:isolate;flex:0 0 auto;width:min(1340px,97vw,calc((100svh - 20px)*1.3));aspect-ratio:1430/1100}
 .auth-frame::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:url("assets/auth-panel.png?v=20261118-approved-layout1") center/100% 100% no-repeat}
-.auth-void{position:absolute;inset:8.8% 6.8% 9% 9.4%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 51% 36%,#0a1010 0%,#050808 54%,#030505 100%)}
+.auth-void{position:absolute;inset:8.8% 6.8% 9% 9.4%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 51% 36%,rgba(5,9,8,.83) 0%,rgba(5,8,8,.78) 48%,rgba(3,5,5,.84) 100%)}
 .auth-layout{position:absolute;z-index:2;inset:9.5% 18% 10.9% 23%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .auth-brand{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;gap:2px;text-align:center}
 .auth-brand img{display:block;width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(212,182,91,.22))}
