@@ -103,7 +103,7 @@ function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
-  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-gold-footer18";sheet.dataset.jmbnGuestStyles="1";
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-horizontal-brand19";sheet.dataset.jmbnGuestStyles="1";
   document.head.appendChild(sheet);
  }
  document.body.innerHTML=`<main class="jmbn-guest-screen">
@@ -111,7 +111,10 @@ function renderPendingAccess(session,profile){
   <div class="jmbn-guest-shell">
    <header class="jmbn-guest-brand" aria-label="JMBN Manifest System">
     <img src="assets/jmbn.png" alt="JMBN emblem">
-    <b>JMBN</b><small>MANIFEST SYSTEM</small>
+    <div class="jmbn-guest-brand-text">
+     <b>JMBN</b>
+     <small>MANIFEST SYSTEM</small>
+    </div>
    </header>
    <section class="jmbn-guest-panel" aria-labelledby="guestWelcome">
     <i class="guest-notch guest-nw" aria-hidden="true"></i><i class="guest-notch guest-ne" aria-hidden="true"></i>
