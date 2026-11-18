@@ -69,8 +69,8 @@ body:has(.jmbn-guest-screen){margin:0;background:#070806}
   .jmbn-guest-shell { width:min(860px,100%); }
   .jmbn-guest-panel {
     position:relative; isolation:isolate;
-    width:100%; aspect-ratio:1585 / 992; min-height:0;
-    padding:54px 10.5% 42px;
+    width:100%; aspect-ratio:1585 / 1090; min-height:0;
+    padding:76px 10.5% 42px;
     border:0; border-radius:0; background:transparent;
     box-shadow:none; filter:none; backdrop-filter:none;
   }
@@ -130,7 +130,7 @@ body:has(.jmbn-guest-screen){margin:0;background:#070806}
   }
   .jmbn-guest-shell { width:min(780px,100%); margin:auto; }
   .jmbn-guest-panel {
-    padding:40px 9.5% 28px; aspect-ratio:1585 / 1010;
+    padding:64px 9.5% 28px; aspect-ratio:1585 / 1110;
   }
   .jmbn-guest-panel h1 { font-size:30px; }
   .jmbn-guest-summary { margin-bottom:16px; font-size:11px; }
