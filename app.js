@@ -103,7 +103,7 @@ function renderPendingAccess(session,profile){
  const name=profile?.display_name||profile?.handle||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"CREW";
  if(!document.querySelector('link[data-jmbn-guest-styles]')){
   const sheet=document.createElement("link");
-  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-horizontal-brand19";sheet.dataset.jmbnGuestStyles="1";
+  sheet.rel="stylesheet";sheet.href=base()+"guest-access.css?v=20261118-brand-match20";sheet.dataset.jmbnGuestStyles="1";
   document.head.appendChild(sheet);
  }
  document.body.innerHTML=`<main class="jmbn-guest-screen">
@@ -147,6 +147,19 @@ function renderPendingAccess(session,profile){
   </div>
  </main>`;
  // Guest panel replaces the portal before it is allowed to become visible.
+ // Match MANIFEST SYSTEM's rendered width to JMBN, across browser sizes and fonts.
+ const matchGuestBrandWidth=()=>{
+  const title=document.querySelector(".jmbn-guest-brand-text b");
+  const subtitle=document.querySelector(".jmbn-guest-brand-text small");
+  if(!title||!subtitle)return;
+  subtitle.style.letterSpacing="0px";
+  const target=title.getBoundingClientRect().width;
+  const natural=subtitle.getBoundingClientRect().width;
+  const glyphs=subtitle.textContent.length||1;
+  subtitle.style.letterSpacing=Math.max(0,Math.min(9,(target-natural)/glyphs)).toFixed(2)+"px";
+ };
+ matchGuestBrandWidth();
+ document.fonts?.ready.then(matchGuestBrandWidth);
  document.documentElement.classList.remove("jmbn-session-pending");
  document.getElementById("pendingLogout")?.addEventListener("click",async()=>{await sb.auth.signOut();location.replace(base()+"auth.html")});
 }
