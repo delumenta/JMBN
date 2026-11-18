@@ -1,12 +1,28 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en" class="jmbn-session-pending"><head>
 <link rel="icon" href="assets/jmbn.ico?v=2" type="image/x-icon"><link rel="apple-touch-icon" href="assets/jmbn.png">
 
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070806"><title>JMBN // Manifest</title>
+<meta name="theme-color" content="#070806">
+<style id="jmbn-personnel-gate-styles">
+/* Prevent the Command Deck from flashing before the auth/profile check. */
+html.jmbn-session-pending body > :not(#jmbn-auth-gate) { display:none !important; }
+#jmbn-auth-gate {
+  display:none; position:fixed; inset:0; z-index:99999;
+  align-items:center; justify-content:center; flex-direction:column;
+  gap:11px; padding:24px; text-align:center;
+  background:#070806; color:#d4b65b;
+  font-family:Play,system-ui,sans-serif;
+}
+html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
+#jmbn-auth-gate img { width:60px; height:60px; object-fit:contain; margin-bottom:8px; }
+#jmbn-auth-gate strong { font-size:16px; font-weight:700; letter-spacing:.17em; }
+#jmbn-auth-gate p { color:#939988; font-size:10px; letter-spacing:.11em; margin:0; line-height:1.6; }
+</style><title>JMBN // Manifest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=onthego-20261009-command-bg123-v1">
+<link rel="stylesheet" href="guest-access.css?v=20261118-vertical-balance14" data-jmbn-guest-styles>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
 #fleet .fleet-hero{background-image:linear-gradient(90deg,#070806 0%,rgba(7,8,6,.93) 25%,rgba(7,8,6,.60) 52%,rgba(7,8,6,.10) 90%),linear-gradient(0deg,rgba(7,8,6,.6),transparent 60%),url("assets/OpsBridge.png")}
@@ -236,6 +252,7 @@
 #fleet .fleet-blueprint-dropdown .fleet-tactical-frame{height:min(72vh,780px);min-height:540px}
 @media(max-width:680px){#fleet .fleet-blueprint-dropdown .fleet-tactical-frame{height:58vh;min-height:360px}}
 </style></head><body>
+<div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
 <aside class="rail">
   <a class="brand" href="#"><span class="sig"><img src="https://static.wixstatic.com/media/08ea88_820ac3bc561d4233ad73a7af859f28bf~mv2.png" alt="JMBN"></span><span><b>JMBN</b><small>MANIFEST</small></span></a>
@@ -323,5 +340,5 @@
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261117-live-assign-tactical-view-v1"></script>
+<script type="module" src="app.js?v=20261118-guest-auth-gate1"></script>
 </body></html>

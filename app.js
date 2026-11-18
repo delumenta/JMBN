@@ -143,6 +143,8 @@ function renderPendingAccess(session,profile){
    <p class="jmbn-guest-meta">JMBN // SECURE PERSONNEL NETWORK · AWAITING COMMAND APPROVAL</p>
   </div>
  </main>`;
+ // Guest panel replaces the portal before it is allowed to become visible.
+ document.documentElement.classList.remove("jmbn-session-pending");
  document.getElementById("pendingLogout")?.addEventListener("click",async()=>{await sb.auth.signOut();location.replace(base()+"auth.html")});
 }
 
@@ -151,8 +153,15 @@ async function load(){
  const {data:{session}}=await sb.auth.getSession();
  if(!session){location.replace(base()+"auth.html");return}
  const uid=session.user.id;
- const [prof,missions,crew,discordLinks,certs,ann,mySignups]=await Promise.all([
-  sb.from("profiles").select("*").eq("user_id",uid).maybeSingle(),
+ // Resolve the access role before loading any member-only Manifest data.
+ const prof=await sb.from("profiles").select("*").eq("user_id",uid).maybeSingle();
+ if(prof.error)throw prof.error;
+ if(!prof.data||String(prof.data.role||"Guest").toLowerCase()==="guest"){
+  state.profile=prof.data||null;
+  renderPendingAccess(session,state.profile);
+  return;
+ }
+ const [missions,crew,discordLinks,certs,ann,mySignups]=await Promise.all([
   sb.from("missions").select("*").order("start_time",{ascending:true}),
   sb.from("profiles").select("*").order("display_name",{ascending:true}),
   sb.from("discord_links").select("*"),
@@ -164,12 +173,15 @@ async function load(){
  const avatarByUser=new Map((discordLinks.data||[]).map(x=>[x.user_id,x.avatar_url||""]));
  state.profile={...(prof.data||{}),discord_handle:handleByUser.get(uid)||""};state.missions=missions.data||[];state.crew=(crew.data||[]).map(p=>({...p,discord_handle:handleByUser.get(p.user_id)||"",discord_avatar_url:avatarByUser.get(p.user_id)||""}));state.certs=certs.data||[];state.announcements=ann.data||[];state.mySignups=mySignups.data||[];
  updateMemberNotices();
- if(!prof.data||String(state.profile.role||"Guest").toLowerCase()==="guest"){renderPendingAccess(session,state.profile);return}
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
  $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
  $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");await loadWelcomeProgress(uid);$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
- render();await loadAcademy();
+ render();
+ // Show the Command Deck only after a non-Guest profile was verified and painted.
+ document.documentElement.classList.remove("jmbn-session-pending");
+ document.getElementById("jmbn-auth-gate")?.remove();
+ await loadAcademy();
 }
 
 function syncDutyUI(status){
@@ -498,7 +510,7 @@ if(["command","operations","fleet","crew","academy","records","profile"].include
 }
 let liveTimer;function liveRefresh(){clearTimeout(liveTimer);liveTimer=setTimeout(()=>load().then(()=>toast("Manifest updated")).catch(()=>{}),450)}
 sb.channel("jmbn-manifest-live").on("postgres_changes",{event:"*",schema:"public",table:"missions"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"profiles"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"announcements"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"mission_signups"},liveRefresh).subscribe();
-load().catch(e=>{console.error(e);toast("Manifest sync failed")});
+load().catch(e=>{console.error(e);if(document.documentElement.classList.contains("jmbn-session-pending")){const n=document.getElementById("jmbn-auth-gate-note");if(n)n.textContent="Unable to verify clearance. Refresh the page to retry.";}else toast("Manifest sync failed")});
 document.addEventListener("change",e=>{const role=e.target.closest?.("#detailBody select[data-assign-user]");if(role&&activeMissionId){assignCrewRole(activeMissionId,role.dataset.assignUser,role.value,role);return}const station=e.target.closest?.("#detailBody select[data-station-user]");if(station&&activeMissionId)assignCrewStation(activeMissionId,station.dataset.stationUser,station.value,station)});
 
 // Bottom JMBN operations ticker
