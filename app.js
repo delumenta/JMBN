@@ -124,7 +124,9 @@ function renderPendingAccess(session,profile){
      <div class="jmbn-guest-warning-icon" aria-hidden="true">⌛</div>
      <div class="jmbn-guest-warning-content">
       <b>ACCESS PENDING</b>
-      <span>Command approval is required before the Manifest, Operations and Academy network becomes available.</span>
+      <span>The Command Team is currently attempting to recover your security clearance from a pack of Kopions that ate our network cables.</span>
+      <span style="margin-top:10px">We have dispatched a recovery team. Unfortunately, they have also stopped responding.</span>
+      <span style="margin-top:10px;color:#eac882">Please stand by.</span>
      </div>
     </div>
     <div class="jmbn-guest-social"><span class="jmbn-guest-social-symbol" aria-hidden="true">◈</span>
