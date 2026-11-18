@@ -75,8 +75,10 @@ async function loadAcademy(){
  document.querySelectorAll("#academy [data-acfilter]").forEach(b=>b.onclick=()=>{document.querySelectorAll("#academy [data-acfilter]").forEach(x=>x.classList.toggle("active",x===b));renderAcademyProgrammes(b.dataset.acfilter,earnedSet,reqs,assignment)});
 }
 function renderAcademyProgrammes(filter,earnedSet,reqs,assignment){
+ const certificationGrid=$("#certGrid");
+ if(!certificationGrid)return;
  const items=state.certs.filter(c=>filter==="all"||(["BMT","SOC"].includes((c.certification_code||"").toUpperCase())?"core":["GUNNERY","ENGINEERING"].includes((c.certification_code||"").toUpperCase())?"specialisation":"support")===filter);
- $("#certGrid").innerHTML=items.map(c=>{const code=(c.certification_code||c.code||"").toUpperCase(),done=earnedSet.has(code),total=reqs.filter(r=>(r.certification_code||"").toUpperCase()===code).length,kind=["BMT","SOC"].includes(code)?"CORE PATHWAY":["GUNNERY","ENGINEERING"].includes(code)?"SPECIALISATION PATHWAY":"SUPPORT PATHWAY",art=c.big_art_cover||c.image_url||img("certification","BMT.png");let status=done?"CERTIFIED":code==="SOC"&&!earnedSet.has("BMT")?"LOCKED":["GUNNERY","ENGINEERING"].includes(code)&&assignment?.specialisation_code!==code?"ASSIGNMENT REQUIRED":"AVAILABLE";return '<article class="academy-programme '+status.toLowerCase().replaceAll(" ","-")+'"><div class="academy-programme-art"><img src="'+esc(art)+'"><span>'+esc(code)+'</span></div><div class="academy-programme-body"><small>'+kind+'</small><h3>'+esc(c.name||code)+'</h3><p>'+esc(c.description||"JMBN Academy certification programme.")+'</p><div class="academy-programme-foot"><b>'+status+'</b><span>'+total+' TRAINING REQUIREMENTS</span></div></div></article>'}).join("")||'<div class="empty">No Academy programmes in this category.</div>';
+ certificationGrid.innerHTML=items.map(c=>{const code=(c.certification_code||c.code||"").toUpperCase(),done=earnedSet.has(code),total=reqs.filter(r=>(r.certification_code||"").toUpperCase()===code).length,kind=["BMT","SOC"].includes(code)?"CORE PATHWAY":["GUNNERY","ENGINEERING"].includes(code)?"SPECIALISATION PATHWAY":"SUPPORT PATHWAY",art=c.big_art_cover||c.image_url||img("certification","BMT.png");let status=done?"CERTIFIED":code==="SOC"&&!earnedSet.has("BMT")?"LOCKED":["GUNNERY","ENGINEERING"].includes(code)&&assignment?.specialisation_code!==code?"ASSIGNMENT REQUIRED":"AVAILABLE";return '<article class="academy-programme '+status.toLowerCase().replaceAll(" ","-")+'"><div class="academy-programme-art"><img src="'+esc(art)+'"><span>'+esc(code)+'</span></div><div class="academy-programme-body"><small>'+kind+'</small><h3>'+esc(c.name||code)+'</h3><p>'+esc(c.description||"JMBN Academy certification programme.")+'</p><div class="academy-programme-foot"><b>'+status+'</b><span>'+total+' TRAINING REQUIREMENTS</span></div></div></article>'}).join("")||'<div class="empty">No Academy programmes in this category.</div>';
 }
 async function loadWelcomeProgress(uid){
  const [{data:profile},{data:ranks},{data:signups},{data:missions},{data:certs}]=await Promise.all([
@@ -200,7 +202,8 @@ async function load(){
  // Show the Command Deck only after a non-Guest profile was verified and painted.
  document.documentElement.classList.remove("jmbn-session-pending");
  document.getElementById("jmbn-auth-gate")?.remove();
- await loadAcademy();
+ // Academy moved to its own page; do not initialize missing Academy UI here.
+ if(document.getElementById("academy")&&document.getElementById("certGrid")) await loadAcademy();
 }
 
 function syncDutyUI(status){
@@ -289,7 +292,7 @@ function render(){
  $("#nextOpTitle").textContent=upcoming?.title||"NO DEPLOYMENT SCHEDULED";$("#nextOpTitle").dataset.mission=upcoming?.id||"";$("#nextOpTitle").disabled=!upcoming;$("#nextOpWhen").textContent=upcoming?.start_time?(fmtDate(upcoming.start_time)+" / "+fmtTime(upcoming.start_time)):"STANDING BY";$("#nextOpOpen").dataset.mission=upcoming?.id||"";$("#nextOpOpen").style.visibility=upcoming?"visible":"hidden";
  $("#activeCount").textContent=active;$("#awolCount").textContent=awol;$("#readyPct").textContent=pct+"%";$("#crewOnline").textContent=active;$("#readyRing").style.background="conic-gradient(var(--gold) "+(pct*3.6)+"deg,#24271f 0deg)";
  $("#opPreview").classList.remove("skeleton");$("#opPreview").innerHTML=missionRows(state.missions.filter(m=>!m.start_time||new Date(m.start_time)>=new Date()),4);
- filterOps();$("#crewGrid").innerHTML=crewCards(state.crew);$("#certGrid").innerHTML=certCards(state.certs);const creditedIds=new Set(state.mySignups.filter(isAttendingSignup).map(x=>String(x.mission_id)));const credited=state.missions.filter(m=>missionLocked(m)&&creditedIds.has(String(m.id))).sort((a,b)=>new Date(b.start_time)-new Date(a.start_time));$("#recordMissions").innerHTML=missionRows(credited,50);
+ filterOps();$("#crewGrid").innerHTML=crewCards(state.crew);const certificationGrid=$("#certGrid");if(certificationGrid)certificationGrid.innerHTML=certCards(state.certs);const creditedIds=new Set(state.mySignups.filter(isAttendingSignup).map(x=>String(x.mission_id)));const credited=state.missions.filter(m=>missionLocked(m)&&creditedIds.has(String(m.id))).sort((a,b)=>new Date(b.start_time)-new Date(a.start_time));$("#recordMissions").innerHTML=missionRows(credited,50);
  $("#announcements").classList.remove("skeleton");$("#announcements").innerHTML=state.announcements.length?state.announcements.map(a=>'<div class="feed-item"><b>'+esc(a.title||"Command notice")+'</b><p>'+esc(a.body||a.message||a.content||"")+'</p></div>').join(""):'<div class="empty">No current signal traffic.</div>';
 }
 
