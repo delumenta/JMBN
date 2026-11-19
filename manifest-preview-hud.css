@@ -1,0 +1,290 @@
+/*
+  JMBN Manifest design-preview v2 — illuminated, restrained HUD framing.
+  Deliberately scoped to index2.html. No scripts, state, or database changes.
+*/
+body.manifest-preview{
+  --hud-glow:rgba(241,215,123,.55);
+  --hud-line:rgba(212,182,91,.65);
+  --hud-shadow:rgba(212,182,91,.17);
+  --hud-glint:rgba(255,236,156,.85);
+  --hud-surface:#111818;
+  font-family:"Play",system-ui,sans-serif;
+}
+body.manifest-preview .shell{
+  background:
+    radial-gradient(ellipse 75% 42% at 70% -5%,rgba(35,44,45,.26),transparent 75%),
+    linear-gradient(180deg,#0c1011 0%,#0b1010 45%,#090e0f 100%);
+}
+body.manifest-preview .rail{
+  border-right:1px solid rgba(214,179,94,.47)!important;
+  box-shadow:inset -1px 0 rgba(241,215,123,.16),6px 0 25px rgba(0,0,0,.36);
+}
+body.manifest-preview .brand{border-bottom:1px solid rgba(212,182,91,.30)!important}
+body.manifest-preview .rail .nav.active{
+  border-color:rgba(241,215,123,.83)!important;
+  background:linear-gradient(95deg,rgba(232,187,94,.27),rgba(158,120,53,.16) 62%,rgba(232,187,94,.075))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,227,143,.21),
+    inset 0 -1px 0 rgba(212,182,91,.20),
+    0 0 14px rgba(232,187,94,.24),
+    0 0 4px rgba(255,216,125,.21)!important;
+}
+body.manifest-preview .rail .nav.active::before{
+  content:"";position:absolute;left:10%;right:10%;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,220,133,.68),transparent);
+}
+body.manifest-preview .rail .nav{position:relative}
+body.manifest-preview .topbar{
+  border-bottom:1px solid rgba(212,182,91,.40)!important;
+  box-shadow:inset 0 -1px rgba(241,215,123,.08),0 6px 22px rgba(0,0,0,.30)!important;
+}
+body.manifest-preview .topbar h1{font-size:28px!important;letter-spacing:.095em!important}
+body.manifest-preview .topbar .eyebrow{color:var(--gold2)}
+/* Welcome status strip — a premium inset instrument panel, not a generic div */
+body.manifest-preview #command .welcome-panel{
+  border:1px solid rgba(212,182,91,.60)!important;
+  border-radius:9px!important;
+  background:linear-gradient(110deg,#202524,#12191a 64%,#171e1d)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(241,215,123,.13),
+    inset 0 -1px 0 rgba(212,182,91,.11),
+    0 4px 18px rgba(0,0,0,.25)!important;
+}
+body.manifest-preview #command .welcome-panel::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(ellipse 18% 8px at 18% 0,rgba(252,210,111,.40),transparent),
+             radial-gradient(ellipse 15% 8px at 91% 100%,rgba(252,210,111,.20),transparent);
+}
+body.manifest-preview #command .duty-control{border-left-color:rgba(212,182,91,.40)!important}
+body.manifest-preview #command .welcome-copy strong{color:#f5f5eb}
+body.manifest-preview #command .welcome-rank-art{
+  border:1px solid rgba(212,182,91,.64)!important;
+  box-shadow:0 0 10px rgba(212,182,91,.12),inset 0 0 7px rgba(212,182,91,.09);
+}
+/* Main hero — visible illuminated perimeter and two restrained reticle marks */
+body.manifest-preview #command .hero{
+  min-height:300px;
+  border:1px solid rgba(226,183,88,.78)!important;
+  border-radius:10px!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(241,215,123,.13),
+    0 0 0 1px rgba(212,182,91,.08),
+    0 0 17px rgba(212,182,91,.17),
+    0 9px 30px rgba(0,0,0,.42)!important;
+  isolation:isolate;
+}
+body.manifest-preview #command .hero::after{
+  content:"";display:block!important;position:absolute;inset:0;z-index:4;
+  border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(ellipse 14% 8px at 50% 0%,rgba(255,232,145,.72),transparent 77%),
+    radial-gradient(ellipse 12% 7px at 50% 100%,rgba(212,182,91,.37),transparent 82%),
+    radial-gradient(ellipse 7px 24% at 0 49%,rgba(241,215,123,.31),transparent 85%),
+    radial-gradient(ellipse 7px 24% at 100% 49%,rgba(241,215,123,.25),transparent 85%);
+}
+body.manifest-preview #command .hero-grid{
+  background-image:
+    radial-gradient(rgba(212,182,91,.21) .6px,transparent 1px),
+    linear-gradient(rgba(212,182,91,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,182,91,.045) 1px,transparent 1px)!important;
+  background-size:27px 27px,52px 52px,52px 52px!important;
+  opacity:.44;
+}
+body.manifest-preview #command .hero-copy{
+  z-index:5;left:40px;bottom:30px;
+}
+body.manifest-preview #command .hero-copy h2{
+  font-size:clamp(42px,4.6vw,67px)!important;
+  text-shadow:0 2px 20px rgba(0,0,0,.8);
+}
+body.manifest-preview #command .hero-actions .primary{
+  box-shadow:inset 0 1px rgba(255,255,255,.35),0 0 16px rgba(212,182,91,.10);
+}
+body.manifest-preview #command .hero-actions .ghost{
+  border:1px solid rgba(241,215,123,.80)!important;
+  box-shadow:inset 0 0 0 1px rgba(212,182,91,.09);
+}
+/* Next deployment — light strips, not thick wrapping strokes */
+body.manifest-preview #command .next-op-strip{
+  border:1px solid rgba(212,182,91,.64)!important;
+  border-radius:7px!important;
+  background:linear-gradient(105deg,#1d2322,#151c1c 72%,#1b2221)!important;
+  box-shadow:
+    inset 0 1px rgba(244,215,145,.17),
+    0 0 14px rgba(212,182,91,.10)!important;
+  position:relative;overflow:hidden;
+}
+body.manifest-preview #command .next-op-strip::before{
+  content:"";position:absolute;left:12%;right:12%;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,228,136,.8),transparent);pointer-events:none
+}
+/* Data cards — four illuminated instrument readouts */
+body.manifest-preview #command .metrics article{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(203,164,78,.65)!important;
+  border-radius:10px!important;
+  background:linear-gradient(145deg,#232826 0%,#1a201f 52%,#111818 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(241,215,123,.20),
+    inset 0 -18px 30px -26px rgba(255,198,99,.38),
+    0 0 0 1px rgba(241,215,123,.06),
+    0 7px 19px rgba(0,0,0,.23)!important;
+  padding:18px 17px 14px!important;
+}
+body.manifest-preview #command .metrics article::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(ellipse 27% 7px at 50% 100%,rgba(255,211,108,.90),transparent 86%),
+             radial-gradient(ellipse 24% 5px at 22% 0,rgba(255,222,132,.38),transparent 80%);
+}
+body.manifest-preview #command .metrics article small{
+  display:flex;align-items:center;min-height:26px;gap:10px;
+  font:700 11px "Play",sans-serif!important;
+  letter-spacing:.065em!important;color:#e4e8df!important;
+}
+body.manifest-preview #command .metrics article .v2-metric-icon{
+  display:inline-flex;width:26px;height:26px;flex:0 0 26px;color:var(--gold2);
+}
+body.manifest-preview #command .metrics article .v2-metric-icon svg{
+  display:block;width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+body.manifest-preview #command .metrics article b{
+  margin:9px 0 4px 35px!important;font-size:30px!important;
+  color:#f3d47f!important;text-shadow:0 0 17px rgba(212,182,91,.10);
+}
+body.manifest-preview #command .metrics article span:not(.v2-metric-icon){
+  margin-left:35px;display:block;font-size:11px!important;color:#aeb7ae!important;
+}
+/* The "nice frames": glowing amber edges, small edge lights and fine inset trim. */
+body.manifest-preview #command .dashboard-grid>.panel{
+  position:relative;
+  isolation:isolate;
+  border:1px solid rgba(209,169,80,.72)!important;
+  border-radius:9px!important;
+  background:linear-gradient(145deg,rgba(23,29,29,.98),rgba(14,20,21,.98))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,224,139,.07),
+    inset 0 -24px 45px -37px rgba(229,170,79,.24),
+    0 0 0 1px rgba(212,182,91,.05),
+    0 0 18px rgba(212,182,91,.13),
+    0 8px 26px rgba(0,0,0,.22)!important;
+}
+body.manifest-preview #command .dashboard-grid>.panel:not(.command-admin-panel)::before{
+  content:"";position:absolute;inset:0;z-index:3;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(ellipse 18% 8px at 50% 0%,rgba(255,219,122,.78),transparent 82%),
+    radial-gradient(ellipse 14% 7px at 50% 100%,rgba(247,189,88,.58),transparent 83%),
+    radial-gradient(ellipse 5px 21% at 0 48%,rgba(226,185,91,.21),transparent 88%),
+    radial-gradient(ellipse 5px 21% at 100% 50%,rgba(226,185,91,.21),transparent 88%);
+}
+body.manifest-preview #command .dashboard-grid>.panel .panel-head{
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(212,182,91,.33);
+  margin-bottom:15px!important;
+}
+body.manifest-preview #command .dashboard-grid>.panel .panel-head h3{
+  font:700 21px "Play",sans-serif!important;color:#f0f3ed;
+}
+body.manifest-preview #command .dashboard-grid>.panel .panel-head .eyebrow{
+  color:#ddb963;font:700 10px "Play",sans-serif!important;
+}
+body.manifest-preview #command .dashboard-grid>.panel .panel-head .text-btn{
+  color:#f0cf75;font:700 10px "Play",sans-serif!important;
+}
+body.manifest-preview #command #readinessPanel{
+  cursor:pointer;
+}
+body.manifest-preview #command #readinessPanel:hover,
+body.manifest-preview #command .dashboard-grid>.panel:hover{
+  border-color:rgba(255,219,121,.95)!important;
+  box-shadow:inset 0 0 0 1px rgba(241,215,123,.14),0 0 22px rgba(212,182,91,.21),0 8px 28px rgba(0,0,0,.27)!important;
+}
+body.manifest-preview #command .ring{
+  border:1px solid rgba(255,225,143,.32);box-shadow:0 0 15px rgba(212,182,91,.15)!important;
+}
+body.manifest-preview #command .ring b{
+  color:#f1f2ed;font-size:25px!important;
+}
+body.manifest-preview #command .command-admin-panel{
+  border:1px solid rgba(209,169,80,.74)!important;
+  background:#151c1c!important;
+}
+body.manifest-preview #command .command-admin-panel .command-admin-art{
+  opacity:.62!important;
+  filter:contrast(1.1) saturate(.88) brightness(1.12)!important;
+}
+body.manifest-preview #command .command-admin-overlay{
+  background:linear-gradient(90deg,rgba(8,12,12,.94) 0%,rgba(10,16,17,.70) 53%,rgba(8,12,12,.20) 100%)!important;
+}
+body.manifest-preview #command .command-admin-content{
+  position:relative;z-index:2;
+}
+body.manifest-preview #command .command-admin-panel::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+  background:
+    radial-gradient(ellipse 20% 7px at 50% 0%,rgba(255,219,122,.8),transparent 85%),
+    radial-gradient(ellipse 14% 6px at 50% 100%,rgba(255,195,92,.44),transparent 83%);
+}
+body.manifest-preview #command .command-admin-cta{
+  background:linear-gradient(110deg,#f1d77b,#ceaa51)!important;color:#0d1010!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.25),0 0 14px rgba(212,182,91,.14);
+}
+body.manifest-preview #command #announcements .feed-item{
+  border-top-color:rgba(212,182,91,.15);
+}
+body.manifest-preview #command #announcements .feed-item b{
+  color:#e9ede5;font:700 12px "Play",sans-serif;
+}
+/* Extend the same framing system to the other real Manifest sections */
+body.manifest-preview #operations .operations-hero,
+body.manifest-preview #fleet .operations-hero.fleet-hero,
+body.manifest-preview #crew .crew-manifest-hero{
+  border:1px solid rgba(212,182,91,.65)!important;
+  box-shadow:inset 0 0 0 1px rgba(241,215,123,.09),0 0 16px rgba(212,182,91,.16)!important;
+}
+body.manifest-preview .mission-card,
+body.manifest-preview .crew-card,
+body.manifest-preview #fleet .fleet-board-top,
+body.manifest-preview #fleet .fleet-board-vessel,
+body.manifest-preview #fleet .fleet-board-roster,
+body.manifest-preview #fleet .fleet-board-side,
+body.manifest-preview #fleet .fleet-board-metrics .fleet-metric,
+body.manifest-preview #records .panel{
+  border:1px solid rgba(212,182,91,.42)!important;
+  box-shadow:inset 0 1px rgba(241,215,123,.10),0 0 11px rgba(212,182,91,.055)!important;
+  background-color:#141a1a;
+}
+body.manifest-preview .mission-card:hover,
+body.manifest-preview .crew-card:hover{
+  border-color:rgba(241,215,123,.8)!important;
+  box-shadow:inset 0 1px rgba(241,215,123,.15),0 0 16px rgba(212,182,91,.16)!important;
+}
+@media(min-width:1001px){
+  body.manifest-preview .rail{width:196px!important}
+  body.manifest-preview .shell{margin-left:196px!important}
+  body.manifest-preview .rail .brand{height:146px!important}
+  body.manifest-preview .rail .brand .sig{width:58px!important;height:58px!important}
+  body.manifest-preview .rail .brand b{font-size:28px!important}
+  body.manifest-preview .rail .nav{height:49px!important}
+  body.manifest-preview .view{padding:17px 28px 48px}
+  body.manifest-preview #command .hero{height:332px!important}
+  body.manifest-preview #command .dashboard-grid>.panel{min-height:240px}
+}
+@media(min-width:701px) and (max-width:1000px){
+  body.manifest-preview #command .hero{height:310px!important}
+  body.manifest-preview #command .metrics article{padding:13px!important}
+  body.manifest-preview #command .metrics article b,
+  body.manifest-preview #command .metrics article span:not(.v2-metric-icon){margin-left:0!important}
+}
+@media(max-width:700px){
+  body.manifest-preview #command .hero{height:330px!important}
+  body.manifest-preview #command .hero-copy{left:18px;bottom:20px}
+  body.manifest-preview #command .metrics article{padding:13px!important}
+  body.manifest-preview #command .metrics article b,
+  body.manifest-preview #command .metrics article span:not(.v2-metric-icon){margin-left:0!important}
+  body.manifest-preview #command .metrics article small{font-size:10px!important}
+  body.manifest-preview #command .metrics article .v2-metric-icon{width:22px;height:22px;flex-basis:22px}
+  body.manifest-preview #command .metrics article .v2-metric-icon svg{width:21px;height:21px}
+  body.manifest-preview #command .dashboard-grid>.panel{min-height:180px}
+}
