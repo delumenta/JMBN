@@ -159,21 +159,29 @@ body.manifest-preview #command .hero{
     0 10px 26px rgba(0,0,0,.26),
     0 0 12px rgba(212,182,91,.035)!important;
 }
+/* Long left-side gold trace, curving around the corners then fading
+   along the upper and lower rails, as in the design mockup. */
 body.manifest-preview #command .hero::before{
-  content:"";position:absolute;inset:0;z-index:4;
+  content:"";position:absolute;inset:0;z-index:2;
   border-radius:inherit;pointer-events:none;
   background:
-    radial-gradient(ellipse 190px 21px at 18% 0%,rgba(246,208,123,.23),transparent 80%),
-    radial-gradient(ellipse 210px 24px at 78% 100%,rgba(240,188,93,.18),transparent 82%),
-    radial-gradient(ellipse 20px 96px at 100% 64%,rgba(224,175,91,.09),transparent 82%);
+    radial-gradient(ellipse 39px 76% at 0% 49%,rgba(232,175,77,.17),transparent 86%),
+    radial-gradient(ellipse 285px 34px at 4% 0%,rgba(252,204,112,.25),transparent 83%),
+    radial-gradient(ellipse 290px 34px at 4% 100%,rgba(235,175,86,.21),transparent 86%);
 }
 body.manifest-preview #command .hero::after{
-  content:"";display:block!important;position:absolute;inset:0;z-index:4;
-  border-radius:inherit;pointer-events:none;
-  background:
-    linear-gradient(90deg,transparent,rgba(255,221,151,.55),transparent) 18% 0 / 154px 1px no-repeat,
-    linear-gradient(90deg,transparent,rgba(248,200,116,.44),transparent) 78% 100% / 173px 1px no-repeat,
-    linear-gradient(180deg,transparent,rgba(245,193,108,.19),transparent) 100% 64% / 1px 68px no-repeat;
+  content:"";display:block!important;position:absolute;
+  top:0;bottom:0;left:0;width:min(42%,490px);z-index:4;
+  pointer-events:none;box-sizing:border-box;
+  border-left:1.5px solid rgba(253,214,137,.80);
+  border-top:1.5px solid rgba(253,214,137,.78);
+  border-bottom:1.5px solid rgba(250,203,127,.72);
+  border-right:0;
+  border-radius:14px 0 0 14px;
+  background:none;
+  filter:drop-shadow(0 0 3px rgba(249,190,92,.52));
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 12%,rgba(0,0,0,.80) 30%,rgba(0,0,0,.24) 72%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 12%,rgba(0,0,0,.80) 30%,rgba(0,0,0,.24) 72%,transparent 100%);
 }
 
 body.manifest-preview #command .hero>img{
