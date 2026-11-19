@@ -159,29 +159,41 @@ body.manifest-preview #command .hero{
     0 10px 26px rgba(0,0,0,.26),
     0 0 12px rgba(212,182,91,.035)!important;
 }
-/* Long left-side gold trace, curving around the corners then fading
-   along the upper and lower rails, as in the design mockup. */
+/* Illuminated left rail: the gold line IS the light source.
+   Restrained narrow bloom follows its full vertical length and fades along the
+   upper/lower edges. Avoid detached radial glow patches. */
 body.manifest-preview #command .hero::before{
-  content:"";position:absolute;inset:0;z-index:2;
-  border-radius:inherit;pointer-events:none;
+  content:"";position:absolute;top:0;bottom:0;left:0;
+  width:min(42%,490px);z-index:4;
+  box-sizing:border-box;
+  border-radius:14px 0 0 14px;
+  pointer-events:none;
   background:
-    radial-gradient(ellipse 39px 76% at 0% 49%,rgba(232,175,77,.17),transparent 86%),
-    radial-gradient(ellipse 285px 34px at 4% 0%,rgba(252,204,112,.25),transparent 83%),
-    radial-gradient(ellipse 290px 34px at 4% 100%,rgba(235,175,86,.21),transparent 86%);
+    linear-gradient(90deg,rgba(241,183,94,.105) 0%,rgba(231,169,77,.045) 14%,transparent 100%) left / 46px 100% no-repeat,
+    linear-gradient(180deg,rgba(253,204,114,.14),transparent 85%) top / 100% 18px no-repeat,
+    linear-gradient(0deg,rgba(247,188,103,.12),transparent 85%) bottom / 100% 18px no-repeat;
+  box-shadow:
+    inset 9px 0 12px -10px rgba(244,192,104,.44),
+    inset 0 8px 12px -10px rgba(245,189,96,.39),
+    inset 0 -8px 12px -10px rgba(236,171,88,.32);
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 13%,rgba(0,0,0,.78) 33%,rgba(0,0,0,.26) 73%,transparent);
+  mask-image:linear-gradient(90deg,#000 0%,#000 13%,rgba(0,0,0,.78) 33%,rgba(0,0,0,.26) 73%,transparent);
 }
 body.manifest-preview #command .hero::after{
   content:"";display:block!important;position:absolute;
-  top:0;bottom:0;left:0;width:min(42%,490px);z-index:4;
+  top:0;bottom:0;left:0;width:min(42%,490px);z-index:5;
   pointer-events:none;box-sizing:border-box;
-  border-left:1.5px solid rgba(253,214,137,.80);
-  border-top:1.5px solid rgba(253,214,137,.78);
-  border-bottom:1.5px solid rgba(250,203,127,.72);
+  border-left:1px solid rgba(255,219,155,.88);
+  border-top:1px solid rgba(254,216,150,.80);
+  border-bottom:1px solid rgba(246,199,126,.77);
   border-right:0;
   border-radius:14px 0 0 14px;
   background:none;
-  filter:drop-shadow(0 0 3px rgba(249,190,92,.52));
-  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 12%,rgba(0,0,0,.80) 30%,rgba(0,0,0,.24) 72%,transparent 100%);
-  mask-image:linear-gradient(90deg,#000 0%,#000 12%,rgba(0,0,0,.80) 30%,rgba(0,0,0,.24) 72%,transparent 100%);
+  filter:
+    drop-shadow(0 0 2px rgba(255,206,117,.72))
+    drop-shadow(0 0 5px rgba(225,159,79,.27));
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 13%,rgba(0,0,0,.78) 33%,rgba(0,0,0,.26) 73%,transparent);
+  mask-image:linear-gradient(90deg,#000 0%,#000 13%,rgba(0,0,0,.78) 33%,rgba(0,0,0,.26) 73%,transparent);
 }
 
 body.manifest-preview #command .hero>img{
