@@ -1033,3 +1033,27 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
   padding:0 !important;
   object-fit:contain;
 }
+
+/* Command welcome rank: suppress any dark square baked into the PNG. */
+#welcomePanel #welcomeRankArt{
+  background:none !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  overflow:visible;
+}
+#welcomePanel #welcomeRankArt img{
+  display:block;
+  background:none !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  object-fit:contain;
+  /* Screen blend clears the flat black image backing on the dark panel. */
+  mix-blend-mode:screen;
+  /* Feather off the outer image edges where the decorative tile border lives. */
+  -webkit-mask-image:radial-gradient(ellipse closest-side at center, #000 65%, transparent 100%);
+  mask-image:radial-gradient(ellipse closest-side at center, #000 65%, transparent 100%);
+}
