@@ -195,7 +195,33 @@ async function load(){
  state.profile={...(prof.data||{}),discord_handle:handleByUser.get(uid)||""};state.missions=missions.data||[];state.crew=(crew.data||[]).map(p=>({...p,discord_handle:handleByUser.get(p.user_id)||"",discord_avatar_url:avatarByUser.get(p.user_id)||""}));state.certs=certs.data||[];state.announcements=ann.data||[];state.mySignups=mySignups.data||[];
  updateMemberNotices();
  const name=state.profile.display_name||state.profile.handle||session.user.user_metadata?.full_name||session.user.email?.split("@")[0]||"CREW";
- $("#userName").textContent=name.toUpperCase();$(".avatar").textContent=name[0]?.toUpperCase()||"J";$("#net").textContent="SECURE";
+ $("#userName").textContent=name.toUpperCase();
+ const identityAvatar=$("#userBtn .avatar");
+ if(identityAvatar){
+  // Prefer the linked Discord avatar, then the Discord OAuth identity metadata.
+  identityAvatar.textContent=name[0]?.toUpperCase()||"J";
+  const discordIdentity=(session.user.identities||[]).find(identity=>identity.provider==="discord");
+  const avatarCandidates=[
+   avatarByUser.get(uid),
+   discordIdentity?.identity_data?.avatar_url,
+   session.user.user_metadata?.avatar_url,
+   session.user.user_metadata?.picture
+  ];
+  const avatarUrl=avatarCandidates.find(value=>{
+   if(typeof value!=="string"||!value)return false;
+   try{return new URL(value).protocol==="https:"}catch{return false}
+  });
+  if(avatarUrl){
+   const photo=document.createElement("img");
+   photo.alt="";
+   photo.decoding="async";
+   photo.referrerPolicy="no-referrer";
+   photo.src=avatarUrl;
+   photo.addEventListener("error",()=>photo.remove(),{once:true});
+   identityAvatar.append(photo);
+  }
+ }
+ $("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
  $("#welcomeName").textContent=name.toUpperCase();$("#welcomeRank").textContent=rankName.toUpperCase();$("#welcomeRankArt").innerHTML=rankArt?'<img src="'+esc(rankArt)+'" alt="">':'<span>'+esc((state.profile.rank_code||"J").slice(0,3))+'</span>';syncDutyUI(state.profile.availability_status||"active");await loadWelcomeProgress(uid);$("#syncText").textContent="Live sync · "+new Date().toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit"});
  render();
