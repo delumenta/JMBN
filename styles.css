@@ -1057,3 +1057,62 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
   -webkit-mask-image:none !important;
   mask-image:none !important;
 }
+
+/* Restore the original Oct 8 Crew Profile service-record presentation.
+   Scope strictly to the crew popup; all other Manifest visuals stay intact. */
+#detailDrawer.personnel-modal,
+#detailDrawer.personnel-modal.open{
+  width:min(920px,94vw)!important;
+  height:auto!important;
+  max-height:90vh!important;
+  left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  padding:34px 38px!important;
+  background:linear-gradient(145deg,#10130f,#080a09 70%)!important;
+  background-image:linear-gradient(145deg,#10130f,#080a09 70%)!important;
+  border:1px solid #ae914c!important;
+  border-radius:7px!important;
+  box-shadow:0 30px 100px rgba(0,0,0,.85)!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+}
+#detailDrawer.personnel-modal::before,
+#detailDrawer.personnel-modal::after{content:none!important;display:none!important}
+#detailDrawer.personnel-modal #detailBody{position:relative;z-index:1;max-width:none!important}
+#detailDrawer.personnel-modal .detail-hero{
+  display:flex!important;align-items:center!important;gap:22px!important;
+  padding:24px 0 28px!important;border-bottom:1px solid #34382d;
+}
+#detailDrawer.personnel-modal .detail-hero .rank-img{
+  width:94px!important;height:94px!important;
+  background:transparent!important;border:0!important;padding:0!important;
+  object-fit:contain!important;flex:0 0 auto!important;
+}
+#detailDrawer.personnel-modal .detail-hero h2{
+  font:700 clamp(25px,3vw,38px) Play,sans-serif!important;
+  transform:none!important;
+}
+#detailDrawer.personnel-modal .detail-section{
+  display:block!important;margin:0!important;padding:20px 0!important;
+  border-bottom:1px solid #34382d;
+}
+#detailDrawer.personnel-modal .detail-section h4{margin:0 0 13px!important;color:#d4b65b}
+#detailDrawer.personnel-modal .detail-grid{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;
+}
+#detailDrawer.personnel-modal .detail-list{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;
+}
+#detailDrawer.personnel-modal .detail-stat,
+#detailDrawer.personnel-modal .detail-item{
+  min-width:0;background:#111711!important;border:1px solid #30392c!important;
+  padding:13px!important;border-radius:4px!important;
+}
+#detailDrawer.personnel-modal .detail-close{
+  position:sticky!important;top:0!important;float:right!important;z-index:10!important;
+}
+@media(max-width:700px){
+  #detailDrawer.personnel-modal.open{width:96vw!important;max-height:93vh!important;padding:22px 16px!important}
+  #detailDrawer.personnel-modal .detail-grid,
+  #detailDrawer.personnel-modal .detail-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #detailDrawer.personnel-modal .detail-hero .rank-img{width:70px!important;height:70px!important}
+}
