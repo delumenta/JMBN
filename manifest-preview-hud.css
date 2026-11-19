@@ -540,3 +540,157 @@ body.manifest-preview footer{
   body.manifest-preview #command .v3-signal-layout{gap:12px}
   body.manifest-preview .rail .nav .v3-nav-icon svg{width:19px;height:19px}
 }
+
+
+/* JMBN all-views polish v7. Warm charcoal, inset frame, localized amber glints. */
+/* Shared raised instrument material, not a gold rectangular stroke */
+body.manifest-preview :is(
+ #operations .mission-card,#crew .crew-card,#records .panel,
+ #profile .panel,#profile .personnel-service-head,#profile .personnel-service-stats,
+ #profile .personnel-service-section,#fleet .fleet-board-top,
+ #fleet .fleet-board-vessel,#fleet .fleet-board-roster,
+ #fleet .fleet-board-side,#fleet .fleet-board-metrics .fleet-metric,
+ #fleet .fleet-person-card
+){
+ position:relative;isolation:isolate;
+ background:radial-gradient(ellipse 72% 58% at 77% 115%,rgba(166,116,51,.19),transparent 85%),
+ radial-gradient(ellipse 39% 28% at 0 -9%,rgba(231,196,113,.055),transparent 92%),
+ linear-gradient(147deg,#252822 0%,#1e2420 52%,#151b1a 100%)!important;
+ border:1px solid rgba(217,207,173,.13)!important;
+ border-radius:11px!important;
+ box-shadow:inset 0 1px rgba(246,224,164,.085),inset 0 -24px 30px -30px rgba(213,154,70,.18),0 8px 19px rgba(0,0,0,.20)!important;
+}
+/* Only small stretches of the edges catch the warm metallic light. */
+body.manifest-preview :is(
+ #operations .mission-card,#crew .crew-card,#records .panel,
+ #profile .panel,#profile .personnel-service-section,
+ #fleet .fleet-board-top,#fleet .fleet-board-roster,
+ #fleet .fleet-board-side,#fleet .fleet-board-metrics .fleet-metric
+)::after{
+ content:"";position:absolute;left:34%;right:13%;bottom:0;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(243,195,104,.16) 28%,rgba(241,206,124,.48) 64%,transparent);
+ pointer-events:none;z-index:2;
+}
+body.manifest-preview :is(#operations .mission-card,#crew .crew-card,#records .panel,#profile .panel,#fleet .fleet-person-card):hover{
+ border-color:rgba(225,190,116,.26)!important;
+ box-shadow:inset 0 1px rgba(246,224,164,.10),0 10px 22px rgba(0,0,0,.23)!important;
+}
+/* Operations: bigger missions, softer dividers, gold highlights within the surface */
+body.manifest-preview #operations .op-status-groups{gap:32px}
+body.manifest-preview #operations .op-status-head{border-bottom:1px solid rgba(221,209,178,.075)!important;padding-bottom:13px}
+body.manifest-preview #operations .op-status-head h3{color:#ede4cb!important;font:700 21px "Play",sans-serif!important}
+body.manifest-preview #operations .op-status-count{color:#b3bcb0;font-size:11px}
+body.manifest-preview #operations .op-status-cards{gap:15px!important}
+body.manifest-preview #operations .mission-card{min-height:198px!important;padding:21px 21px 17px!important;overflow:hidden;transition:border-color .18s,transform .18s}
+body.manifest-preview #operations .mission-card:hover{transform:translateY(-2px)}
+body.manifest-preview #operations .mission-card::before{
+ content:"";position:absolute;left:0;top:18px;width:2px;height:33px;
+ background:linear-gradient(180deg,transparent,rgba(237,196,110,.44),transparent)!important;opacity:.62!important;
+}
+body.manifest-preview #operations .mission-card .tag{
+ background:rgba(213,180,100,.045)!important;color:#d5bb7d;
+ border:1px solid rgba(218,186,106,.20)!important;border-radius:5px!important;
+ font:700 10px "Play",sans-serif!important;
+}
+body.manifest-preview #operations .mission-card h3{
+ color:#f0f1eb;font:700 19px/1.25 "Play",sans-serif!important;
+ letter-spacing:0;margin:16px 0 9px!important;
+}
+body.manifest-preview #operations .mission-card .route{color:#b4bdb2;font:400 12px "Play",sans-serif!important}
+body.manifest-preview #operations .mission-card .mission-meta{
+ border-top:1px solid rgba(218,215,194,.075)!important;
+ padding-top:12px;margin-top:14px;color:#adb6ac;font-size:11px!important;
+}
+/* Operations and Crew input controls */
+body.manifest-preview :is(#operations,#crew) .toolbar{margin-top:17px;margin-bottom:21px}
+body.manifest-preview :is(#operations,#crew) .toolbar input{
+ background:linear-gradient(135deg,#1b201d,#101716)!important;
+ border:1px solid rgba(213,206,174,.16)!important;
+ border-radius:7px!important;color:#e8ebe5!important;
+}
+body.manifest-preview :is(#operations,#crew) .seg button{
+ border-color:rgba(222,211,177,.12)!important;background:#19201d;color:#b5bcb1;
+}
+body.manifest-preview :is(#operations,#crew) .seg button.active{
+ background:linear-gradient(130deg,#2d2a20,#1d201c)!important;
+ border-color:rgba(235,201,119,.33)!important;
+ color:#ebcd82!important;
+}
+/* Fleet: separated, raised modules, subtle short amber seam */
+body.manifest-preview #fleet .fleet-board-top{padding:21px 24px!important;margin-bottom:11px}
+body.manifest-preview #fleet .fleet-board-title h3{font:700 24px "Play",sans-serif!important}
+body.manifest-preview #fleet .fleet-board-vessel{
+ margin-bottom:14px;padding:17px 24px!important;
+ border-top:1px solid rgba(217,207,173,.13)!important;
+}
+body.manifest-preview #fleet .fleet-board-vessel h3{color:#edcf82;font:700 23px "Play",sans-serif!important}
+body.manifest-preview #fleet .fleet-board-metrics{gap:13px!important;margin-bottom:15px}
+body.manifest-preview #fleet .fleet-board-metrics .fleet-metric{min-height:86px;padding:16px!important}
+body.manifest-preview #fleet .fleet-board-metrics .fleet-metric b{font:700 27px "Play",sans-serif!important;color:#efdcac!important}
+body.manifest-preview #fleet .fleet-board-roster,body.manifest-preview #fleet .fleet-board-side{padding:19px!important}
+body.manifest-preview #fleet .fleet-board-section-head,body.manifest-preview #fleet .fleet-side-row{border-color:rgba(215,210,180,.085)!important}
+body.manifest-preview #fleet .fleet-board-section-head h3,body.manifest-preview #fleet .fleet-board-side h3{color:#f1f0e8;font:700 18px "Play",sans-serif!important}
+body.manifest-preview #fleet .fleet-person-card{
+ padding:16px!important;border-radius:8px!important;
+ background:radial-gradient(ellipse at 65% 130%,rgba(156,110,49,.13),transparent 75%),linear-gradient(145deg,#1d231f,#121917)!important;
+}
+body.manifest-preview #fleet .fleet-board-controls select,body.manifest-preview #fleet .fleet-person-fields select{
+ background:#111817!important;border:1px solid rgba(214,209,179,.18)!important;border-radius:6px;
+}
+body.manifest-preview #fleet .fleet-blueprint-dropdown{
+ background:#171e1c!important;border-color:rgba(221,207,174,.17)!important;
+}
+/* Crew: distinct member name, warm rank badges, recessed card */
+body.manifest-preview #crew .crew-grid{gap:13px!important}
+body.manifest-preview #crew .crew-card{min-height:88px;padding:16px 18px!important;gap:15px;transition:transform .18s}
+body.manifest-preview #crew .crew-card:hover{transform:translateY(-1px)}
+body.manifest-preview #crew .crew-card h3{color:#f1f2ed;font:700 17px "Play",sans-serif!important;margin:0 0 4px}
+body.manifest-preview #crew .crew-card p{color:#dfbf74;font:700 11px "Play",sans-serif!important;margin:0 0 4px}
+body.manifest-preview #crew .crew-card small{color:#b3bdb2;font-size:11px}
+body.manifest-preview #crew .crew-card .rank-img{background:#111716;border-radius:6px}
+/* Records: same physical panel treatment, gentle separators */
+body.manifest-preview #records .dashboard-grid{gap:15px!important;margin-top:18px}
+body.manifest-preview #records .panel{padding:22px 24px!important;min-height:215px}
+body.manifest-preview #records .panel-head h3{color:#f1f0e8;font:700 22px "Play",sans-serif!important}
+body.manifest-preview #records .system-list p{
+ border-bottom:1px solid rgba(216,210,179,.07)!important;padding:13px 0;
+}
+body.manifest-preview #records .system-list p b{color:#e4c275}
+body.manifest-preview #records #recordMissions .empty{background:rgba(10,15,14,.15);border-color:rgba(217,211,180,.065)!important}
+/* Profile: service panels, medals, rank progress and operational history */
+body.manifest-preview #profile .profile-view{color:#eceee7}
+body.manifest-preview #profile .profile-layout{gap:15px}
+body.manifest-preview #profile .panel{padding:22px!important}
+body.manifest-preview #profile .panel-head h3{color:#efefe8;font:700 21px "Play",sans-serif!important}
+body.manifest-preview #profile .personnel-service-stats article{
+ background:rgba(15,20,18,.20)!important;border-color:rgba(220,208,174,.075)!important;
+}
+body.manifest-preview #profile .personnel-service-stats strong{color:#f0d37d;font:700 25px "Play",sans-serif!important}
+body.manifest-preview #profile .profile-rows p{border-color:rgba(220,211,181,.075)!important}
+body.manifest-preview #profile .profile-rank-box{
+ background:linear-gradient(145deg,#1d221e,#121817)!important;border-color:rgba(214,206,171,.12)!important;
+}
+body.manifest-preview #profile .profile-rank-box.current{
+ border-color:rgba(226,192,109,.39)!important;box-shadow:inset 0 1px rgba(241,215,123,.09)!important;
+}
+body.manifest-preview #profile .profile-cert-medals{gap:11px}
+body.manifest-preview #profile .profile-cert-medals>div{
+ background:linear-gradient(145deg,#1c211e,#121716);border-color:rgba(218,211,179,.08)!important;
+}
+/* All hero images keep the existing art; add a quiet material inset */
+body.manifest-preview #operations .operations-hero,
+body.manifest-preview #fleet .operations-hero.fleet-hero,
+body.manifest-preview #crew .crew-manifest-hero{
+ border:1px solid rgba(214,195,147,.15)!important;
+ border-radius:12px!important;
+ box-shadow:inset 0 1px rgba(241,215,123,.07),0 8px 21px rgba(0,0,0,.19)!important;
+}
+@media(max-width:700px){
+ body.manifest-preview #operations .mission-card{min-height:171px!important;padding:15px!important}
+ body.manifest-preview #operations .mission-card h3{font-size:16px!important}
+ body.manifest-preview #operations .op-status-cards{gap:10px!important}
+ body.manifest-preview #fleet .fleet-board-top,body.manifest-preview #fleet .fleet-board-vessel{padding:15px!important}
+ body.manifest-preview #fleet .fleet-board-metrics .fleet-metric{padding:12px!important}
+ body.manifest-preview #fleet .fleet-person-card,body.manifest-preview #crew .crew-card{padding:12px!important}
+ body.manifest-preview #profile .panel,body.manifest-preview #records .panel{padding:16px!important}
+}
