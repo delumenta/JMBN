@@ -17,10 +17,10 @@ body.manifest-preview .shell{
     radial-gradient(ellipse 75% 50% at 77% -10%,rgba(31,42,41,.22),transparent 80%),
     linear-gradient(180deg,#0a1011 0%,#0b1010 60%,#090d0e 100%);
 }
-body.manifest-preview .scan{opacity:.012}
+body.manifest-preview .scan{opacity:.004}
 /* Navigation becomes a distinct dark console, not another highlighted box */
 body.manifest-preview .rail{
-  border-right:1px solid #333c37!important;
+  border-right:1px solid rgba(188,198,189,.10)!important;
   background:linear-gradient(180deg,#111818 0%,#0e1515 57%,#0c1112 100%)!important;
   box-shadow:6px 0 28px rgba(0,0,0,.28)!important;
 }
@@ -84,7 +84,7 @@ body.manifest-preview .rail-bottom .rail-logout:hover{
 /* Structural header: wider clear typography and muted separator */
 body.manifest-preview .topbar{
   background:rgba(12,17,18,.96)!important;
-  border-bottom:1px solid #303936!important;
+  border-bottom:1px solid rgba(192,202,195,.08)!important;
   box-shadow:0 5px 19px rgba(0,0,0,.18)!important;
 }
 body.manifest-preview .topbar h1{
@@ -109,7 +109,7 @@ body.manifest-preview .member-notice-toggle{
 /* Shallow welcome / duty strip with subtle bevel, not a loud frame */
 body.manifest-preview #command .welcome-panel{
   min-height:63px!important;
-  border:1px solid #343d39!important;
+  border:1px solid rgba(198,205,195,.075)!important;
   border-radius:10px!important;
   background:linear-gradient(100deg,#1f2523 0%,#191f1f 60%,#151b1b 100%)!important;
   box-shadow:inset 0 1px 0 rgba(242,224,160,.08),0 4px 14px rgba(0,0,0,.14)!important;
@@ -129,11 +129,11 @@ body.manifest-preview #command .welcome-copy strong{
 }
 body.manifest-preview #command .welcome-copy strong span:first-child{color:var(--gold2)}
 body.manifest-preview #command .welcome-rank-art{
-  background:#131919;border:1px solid #393c32!important;border-radius:7px;
+  background:#131919;border:1px solid rgba(212,182,91,.18)!important;border-radius:7px;
   box-shadow:none!important;
 }
 body.manifest-preview #command .duty-control{
-  border-left:1px solid #4b524a!important;
+  border-left:1px solid rgba(212,182,91,.10)!important;
 }
 body.manifest-preview #command .duty-toggle-button{
   border-radius:7px!important;
@@ -143,7 +143,7 @@ body.manifest-preview #command .hero{
   position:relative;isolation:isolate;
   height:322px!important;
   border-radius:15px!important;
-  border:1px solid #4b4b3e!important;
+  border:1px solid rgba(212,182,91,.19)!important;
   background:#101718;
   box-shadow:inset 0 1px 0 rgba(240,222,150,.13),0 6px 17px rgba(0,0,0,.23)!important;
 }
@@ -158,7 +158,7 @@ body.manifest-preview #command .hero-shade{
     linear-gradient(0deg,rgba(3,6,8,.18),transparent 65%)!important;
 }
 body.manifest-preview #command .hero-grid{
-  opacity:.15!important;
+  opacity:.048!important;
   background-size:51px 51px!important;
 }
 body.manifest-preview #command .hero-copy{
@@ -199,7 +199,7 @@ body.manifest-preview .ghost:hover{background:#232a27!important}
 /* Deployment strip matte, with a narrow divider */
 body.manifest-preview #command .next-op-strip{
   min-height:46px;
-  border:1px solid #343e3b!important;
+  border:1px solid rgba(190,201,192,.075)!important;
   border-radius:9px!important;
   background:linear-gradient(90deg,#202625,#151b1c)!important;
   box-shadow:inset 0 1px rgba(255,255,255,.035)!important;
@@ -223,12 +223,12 @@ body.manifest-preview #command .metrics article{
   position:relative;overflow:hidden;
   min-height:112px;
   padding:18px 21px 15px!important;
-  border:1px solid #363f3b!important;
+  border:1px solid rgba(196,204,196,.075)!important;
   border-radius:13px!important;
   background:
     radial-gradient(ellipse 73% 53% at 87% 114%,rgba(170,114,46,.20),transparent 90%),
     linear-gradient(140deg,#222827 0%,#1b2121 56%,#151b1b 100%)!important;
-  box-shadow:inset 0 1px 0 rgba(240,230,180,.06),0 9px 21px rgba(0,0,0,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(240,230,180,.025),0 9px 21px rgba(0,0,0,.18)!important;
 }
 body.manifest-preview #command .metrics article::before{
   content:"";position:absolute;left:14%;right:14%;bottom:0;height:1px;
@@ -272,7 +272,7 @@ body.manifest-preview #command .dashboard-grid>.panel{
   overflow:hidden;
   min-height:218px;
   padding:22px 25px!important;
-  border:1px solid #37403d!important;
+  border:1px solid rgba(196,204,196,.085)!important;
   border-radius:11px!important;
   background:
     radial-gradient(ellipse 88% 55% at 88% 118%,rgba(58,54,42,.19),transparent 85%),
@@ -309,7 +309,7 @@ body.manifest-preview #command .dashboard-grid>.panel .panel-head .text-btn{
 }
 body.manifest-preview #command .op-row{
   grid-template-columns:110px 1fr auto;
-  border-top:1px solid rgba(171,184,174,.15);
+  border-top:1px solid rgba(171,184,174,.065);
   padding:14px 0;gap:12px;
 }
 body.manifest-preview #command .op-row:first-child{border-top:0}
@@ -317,14 +317,14 @@ body.manifest-preview #command .op-date{color:#efd179;font:700 12px "Play",sans-
 body.manifest-preview #command .op-row b{font:700 12px "Play",sans-serif;color:#ecefe8}
 body.manifest-preview #command .op-row small{font-size:11px;color:#aab3ad}
 body.manifest-preview #command .tag{
-  border:1px solid #505c55;
+  border:1px solid rgba(170,183,170,.14);
   border-radius:4px;
   color:#c4ccc5;
   background:rgba(8,12,13,.27);
 }
 body.manifest-preview #command #readinessPanel:hover,
 body.manifest-preview #command .dashboard-grid>.panel:hover{
-  border-color:#667269!important;
+  border-color:rgba(212,182,91,.24)!important;
   box-shadow:inset 0 1px rgba(241,215,123,.04),0 9px 22px rgba(0,0,0,.21)!important;
 }
 body.manifest-preview #command #readinessPanel .readiness{
@@ -350,7 +350,7 @@ body.manifest-preview #command .legend p{
 body.manifest-preview #command .legend b{font-size:13px}
 body.manifest-preview #command .command-admin-panel{
   padding:0!important;
-  border:1px solid #39413c!important;
+  border:1px solid rgba(196,204,196,.085)!important;
   background:#121919!important;
 }
 body.manifest-preview #command .command-admin-panel .command-admin-art{
@@ -392,7 +392,7 @@ body.manifest-preview #command .v3-signal-layout{
 body.manifest-preview #command .v3-signal-badge{
   width:52px;height:52px;flex:0 0 52px;
   display:grid;place-items:center;
-  border:1px solid #343c39;border-radius:9px;
+  border:1px solid rgba(192,202,195,.12);border-radius:9px;
   background:linear-gradient(145deg,#252c29,#1b2221);
   color:#efc66d;
 }
@@ -403,7 +403,7 @@ body.manifest-preview #command .v3-signal-badge svg{
 body.manifest-preview #command .v3-signal-layout .feed{flex:1;min-width:0}
 body.manifest-preview #command .feed-item{
   padding:6px 0!important;
-  border-top:1px solid rgba(171,184,174,.12);
+  border-top:1px solid rgba(171,184,174,.055);
 }
 body.manifest-preview #command .feed-item:first-child{border-top:0}
 body.manifest-preview #command .feed-item b{
@@ -416,7 +416,7 @@ body.manifest-preview #command .feed-item p{
 body.manifest-preview #operations .operations-hero,
 body.manifest-preview #fleet .operations-hero.fleet-hero,
 body.manifest-preview #crew .crew-manifest-hero{
-  border:1px solid #434b43!important;
+  border:1px solid rgba(188,198,188,.12)!important;
   border-radius:12px!important;
   box-shadow:inset 0 1px rgba(241,215,123,.09),0 7px 22px rgba(0,0,0,.17)!important;
 }
@@ -429,7 +429,7 @@ body.manifest-preview #fleet .fleet-board-side,
 body.manifest-preview #fleet .fleet-board-metrics .fleet-metric,
 body.manifest-preview #records .panel{
   background:#171e1e!important;
-  border:1px solid #3a4440!important;
+  border:1px solid rgba(192,202,195,.10)!important;
   border-radius:10px;
   box-shadow:inset 0 1px rgba(241,215,123,.035),0 6px 18px rgba(0,0,0,.12)!important;
 }
@@ -440,7 +440,7 @@ body.manifest-preview .crew-card:hover{
 }
 body.manifest-preview footer{
   background:#0b0f10;
-  border-top:1px solid #293530;
+  border-top:1px solid rgba(192,202,195,.065);
   color:#88918b;
 }
 /* Responsive layout keeps the same site navigation and database logic. */
