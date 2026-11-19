@@ -4,9 +4,9 @@
   This REPLACES the prior golden-border overlay; visual only, scoped to index2.
 */
 body.manifest-preview{
-  --surface:#181e1e;
-  --surface-low:#111717;
-  --edge:#343d3a;
+  --surface:#1e211e;
+  --surface-low:#141815;
+  --edge:#403f36;
   --warm:#d4b65b;
   --warm-hi:#f1d77b;
   font-family:"Play",system-ui,sans-serif;
@@ -109,10 +109,10 @@ body.manifest-preview .member-notice-toggle{
 /* Shallow welcome / duty strip with subtle bevel, not a loud frame */
 body.manifest-preview #command .welcome-panel{
   min-height:63px!important;
-  border:1px solid rgba(198,205,195,.075)!important;
+  border:1px solid rgba(218,200,153,.14)!important;
   border-radius:10px!important;
-  background:linear-gradient(100deg,#1f2523 0%,#191f1f 60%,#151b1b 100%)!important;
-  box-shadow:inset 0 1px 0 rgba(242,224,160,.08),0 4px 14px rgba(0,0,0,.14)!important;
+  background:linear-gradient(100deg,#242521 0%,#1d201d 60%,#151916 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(242,224,160,.09),0 6px 20px rgba(0,0,0,.18)!important;
 }
 body.manifest-preview #command .welcome-panel::before{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
@@ -199,9 +199,9 @@ body.manifest-preview .ghost:hover{background:#232a27!important}
 /* Deployment strip matte, with a narrow divider */
 body.manifest-preview #command .next-op-strip{
   min-height:46px;
-  border:1px solid rgba(190,201,192,.075)!important;
+  border:1px solid rgba(212,192,144,.12)!important;
   border-radius:9px!important;
-  background:linear-gradient(90deg,#202625,#151b1c)!important;
+  background:linear-gradient(90deg,#252622,#181c19)!important;
   box-shadow:inset 0 1px rgba(255,255,255,.035)!important;
 }
 body.manifest-preview #command .next-op-strip::before{display:none!important}
@@ -223,17 +223,18 @@ body.manifest-preview #command .metrics article{
   position:relative;overflow:hidden;
   min-height:112px;
   padding:18px 21px 15px!important;
-  border:1px solid rgba(196,204,196,.075)!important;
+  border:1px solid rgba(221,197,145,.16)!important;
   border-radius:13px!important;
   background:
-    radial-gradient(ellipse 73% 53% at 87% 114%,rgba(170,114,46,.20),transparent 90%),
-    linear-gradient(140deg,#222827 0%,#1b2121 56%,#151b1b 100%)!important;
-  box-shadow:inset 0 1px 0 rgba(240,230,180,.025),0 9px 21px rgba(0,0,0,.18)!important;
+    radial-gradient(ellipse 78% 60% at 85% 116%,rgba(186,134,61,.25),transparent 90%),
+    radial-gradient(ellipse 37% 25% at 2% 0%,rgba(215,178,108,.07),transparent 100%),
+    linear-gradient(145deg,#262722 0%,#1e211e 52%,#151917 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(242,219,158,.10),inset 1px 0 rgba(216,184,111,.03),0 8px 24px rgba(0,0,0,.23)!important;
 }
 body.manifest-preview #command .metrics article::before{
   content:"";position:absolute;left:14%;right:14%;bottom:0;height:1px;
   pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(241,188,96,.42) 45%,rgba(255,212,114,.75) 65%,transparent);
+  background:linear-gradient(90deg,transparent,rgba(241,188,96,.28) 45%,rgba(255,212,114,.57) 65%,transparent);
 }
 body.manifest-preview #command .metrics article::after{
   content:"";position:absolute;bottom:-15px;left:45%;width:100px;height:25px;
@@ -272,22 +273,24 @@ body.manifest-preview #command .dashboard-grid>.panel{
   overflow:hidden;
   min-height:218px;
   padding:22px 25px!important;
-  border:1px solid rgba(196,204,196,.085)!important;
+  border:1px solid rgba(218,202,163,.14)!important;
   border-radius:11px!important;
   background:
-    radial-gradient(ellipse 88% 55% at 88% 118%,rgba(58,54,42,.19),transparent 85%),
-    linear-gradient(140deg,#1c2323,#151d1e 92%)!important;
-  box-shadow:inset 0 1px rgba(255,255,255,.027),0 8px 19px rgba(0,0,0,.18)!important;
+    radial-gradient(ellipse 88% 55% at 88% 118%,rgba(113,90,52,.18),transparent 85%),
+    radial-gradient(ellipse 31% 28% at -2% -8%,rgba(209,175,102,.07),transparent 90%),
+    linear-gradient(145deg,#21231f 0%,#1a1e1b 54%,#151917 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(244,225,161,.085),0 9px 23px rgba(0,0,0,.23)!important;
 }
 body.manifest-preview #command .dashboard-grid>.panel:not(.command-admin-panel)::before{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
-  border-radius:0;pointer-events:none;z-index:2;
-  background:linear-gradient(90deg,transparent,rgba(202,153,79,.27) 22%,rgba(234,185,99,.50) 67%,transparent);
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse 28% 7px at 10% 0%,rgba(242,198,109,.25),transparent 87%),
+             radial-gradient(ellipse 34% 5px at 84% 100%,rgba(228,176,89,.37),transparent 88%);
 }
 body.manifest-preview #command .dashboard-grid>.panel::after{
   content:"";position:absolute;bottom:-12px;left:24%;right:12%;height:23px;
   pointer-events:none;z-index:2;filter:blur(12px);
-  background:rgba(226,166,77,.07);
+  background:rgba(226,166,77,.095);
 }
 body.manifest-preview #command .dashboard-grid>.panel .panel-head{
   padding:0!important;
@@ -350,23 +353,23 @@ body.manifest-preview #command .legend p{
 body.manifest-preview #command .legend b{font-size:13px}
 body.manifest-preview #command .command-admin-panel{
   padding:0!important;
-  border:1px solid rgba(196,204,196,.085)!important;
-  background:#121919!important;
+  border:1px solid rgba(218,202,163,.14)!important;
+  background:linear-gradient(145deg,#1d211e,#141815)!important;
 }
 body.manifest-preview #command .command-admin-panel .command-admin-art{
-  width:100%;height:100%;opacity:.82!important;
-  filter:saturate(.86) contrast(1.07) brightness(.90)!important;
+  width:100%;height:100%;opacity:.96!important;
+  filter:saturate(.90) contrast(1.07) brightness(1.07)!important;
   object-position:61% center;
 }
 body.manifest-preview #command .command-admin-panel .command-admin-overlay{
   background:
-    linear-gradient(90deg,rgba(13,20,20,.99) 0%,rgba(13,20,20,.91) 39%,rgba(13,20,20,.38) 75%,rgba(13,20,20,.12) 100%),
+    linear-gradient(90deg,rgba(11,15,14,.98) 0%,rgba(13,18,16,.90) 35%,rgba(11,15,14,.29) 72%,rgba(11,15,14,.06) 100%),
     linear-gradient(0deg,rgba(9,12,13,.22),transparent 75%)!important;
 }
 body.manifest-preview #command .command-admin-panel .command-admin-content{
   display:flex;justify-content:center;
-  min-height:225px;max-width:65%;
-  padding:19px 23px!important;
+  min-height:184px;max-width:70%;
+  padding:15px 23px!important;
   position:relative;z-index:3;
 }
 body.manifest-preview #command .command-admin-content h3{
@@ -387,13 +390,13 @@ body.manifest-preview #command .command-admin-panel::after{
   background:linear-gradient(90deg,transparent,rgba(212,158,74,.54),transparent);
 }
 body.manifest-preview #command .v3-signal-layout{
-  display:flex;align-items:center;gap:18px;margin-top:16px;
+  display:flex;align-items:center;gap:18px;margin-top:11px;
 }
 body.manifest-preview #command .v3-signal-badge{
   width:52px;height:52px;flex:0 0 52px;
   display:grid;place-items:center;
-  border:1px solid rgba(192,202,195,.12);border-radius:9px;
-  background:linear-gradient(145deg,#252c29,#1b2221);
+  border:1px solid rgba(218,202,163,.14);border-radius:9px;
+  background:linear-gradient(145deg,#282a23,#1b201c);
   color:#efc66d;
 }
 body.manifest-preview #command .v3-signal-badge svg{
@@ -428,7 +431,7 @@ body.manifest-preview #fleet .fleet-board-roster,
 body.manifest-preview #fleet .fleet-board-side,
 body.manifest-preview #fleet .fleet-board-metrics .fleet-metric,
 body.manifest-preview #records .panel{
-  background:#171e1e!important;
+  background:linear-gradient(145deg,#20231f,#171b19)!important;
   border:1px solid rgba(192,202,195,.10)!important;
   border-radius:10px;
   box-shadow:inset 0 1px rgba(241,215,123,.035),0 6px 18px rgba(0,0,0,.12)!important;
@@ -488,4 +491,31 @@ body.manifest-preview footer{
   body.manifest-preview #command .v3-signal-badge{width:42px;height:42px;flex-basis:42px}
   body.manifest-preview #command .v3-signal-layout{gap:12px}
   body.manifest-preview .rail .nav .v3-nav-icon svg{width:20px;height:20px}
+}
+
+
+/* The bottom row is content-driven, not as tall as the readiness / deployment row. */
+body.manifest-preview #command .dashboard-grid>.command-admin-panel,
+body.manifest-preview #command .dashboard-grid>.panel:last-child{
+  min-height:184px!important;
+}
+body.manifest-preview #command .command-admin-panel .command-admin-content{
+  min-height:184px!important;
+}
+body.manifest-preview #command .dashboard-grid>.panel:last-child{
+  padding:20px 24px!important;
+}
+/* Subtle warm polished rim at the top, no continuous gold outlines */
+body.manifest-preview #command .dashboard-grid>.panel{
+  background-clip:padding-box;
+}
+@media(max-width:700px){
+  body.manifest-preview #command .dashboard-grid>.command-admin-panel,
+  body.manifest-preview #command .dashboard-grid>.panel:last-child{
+    min-height:165px!important;
+  }
+  body.manifest-preview #command .command-admin-panel .command-admin-content{
+    min-height:165px!important;padding:14px 17px!important;
+  }
+  body.manifest-preview #command .dashboard-grid>.panel:last-child{padding:16px!important}
 }
