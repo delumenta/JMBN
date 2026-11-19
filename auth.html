@@ -3,70 +3,60 @@
 :root{--gold:#d4b65b;--bright:#f1d77b;--armor:#35372d;--dark:#272b22;--line:#2b2e26;--white:#eef0e8}
 *{box-sizing:border-box}
 html{background:#050706}
-body{margin:0;min-height:100vh;min-height:100svh;padding:12px;display:flex;align-items:center;justify-content:center;overflow-x:hidden;background:#050706;color:var(--white);font-family:"Play",system-ui,sans-serif}
+body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:12px;overflow-x:hidden;background:#050706;color:var(--white);font-family:"Play",system-ui,sans-serif}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:url("assets/auth-background.png") center/cover no-repeat;filter:brightness(.72) saturate(.76)}
 body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(2,4,3,.04),rgba(1,2,2,.30))}
-.auth-frame{position:relative;isolation:isolate;z-index:1;flex:0 0 auto;width:min(1340px,97vw,calc((100svh - 24px)*1.3));aspect-ratio:1430/1100;transform:scale(.56);transform-origin:center center}
+/* The frame itself is sized to the viewport; all text and trim uses its width as a unit.
+   No transform scale means browser zoom cannot detach the frame from its content. */
+.auth-frame{position:relative;isolation:isolate;z-index:1;width:min(680px,76vw,calc((100svh - 24px)*1.3));aspect-ratio:1430/1100;container-type:inline-size;min-width:0}
 .auth-frame::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:url("assets/auth-panel.png?v=20261118-member-discord1") center/100% 100% no-repeat}
 .auth-interior{position:absolute;z-index:1;inset:7.6% 6.1% 7.8% 7.9%;pointer-events:none;clip-path:polygon(7% 0,93% 0,100% 8%,100% 92%,93% 100%,7% 100%,0 92%,0 8%);background:linear-gradient(110deg,rgba(5,8,8,.64),rgba(5,8,8,.54) 50%,rgba(5,8,8,.61))}
-.auth-layout{position:absolute;z-index:3;inset:13.5% 17% 12.9% 17%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.auth-brand{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center}
-.auth-brand img{display:block;width:82px;height:82px;object-fit:contain;filter:drop-shadow(0 0 15px rgba(212,182,91,.19))}
-.auth-brand strong{font-size:33px;line-height:1.06;letter-spacing:.32em;padding-left:.32em;font-weight:700;color:var(--gold);margin-top:15px;text-align:center}
-.auth-brand-rule{display:block;width:174px;max-width:75%;height:1px;margin-top:13px;background:linear-gradient(90deg,transparent 0%,rgba(212,182,91,.35) 22%,rgba(241,215,123,.78) 50%,rgba(212,182,91,.35) 78%,transparent 100%);box-shadow:0 0 5px rgba(212,182,91,.15)}
-.auth-main{width:100%;margin:43px 0 0;text-align:center}
-.auth-main h1{margin:0;color:var(--white);font-size:clamp(43px,5.1vw,74px);font-weight:700;line-height:1.08;letter-spacing:.135em;padding-left:.135em;white-space:nowrap;text-shadow:0 3px 14px rgba(0,0,0,.7)}
-.auth-collective{margin:13px 0 0;color:var(--gold);font-size:clamp(13px,1.75vw,22px);line-height:1.5;letter-spacing:.38em;padding-left:.38em;white-space:nowrap}
-.auth-discord{position:relative;display:block;width:min(730px,100%);height:96px;padding:0;margin:47px auto 0;border:0;outline:none;background:transparent;color:var(--bright);cursor:pointer;font:700 20px "Play",system-ui,sans-serif;letter-spacing:.065em}
+.auth-layout{position:absolute;z-index:3;inset:0 12.5% 0 18%;min-width:0;text-align:center;pointer-events:none}
+.auth-brand{position:absolute;top:13.1%;left:0;right:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center}
+.auth-brand img{display:block;width:9.1cqw;height:9.1cqw;object-fit:contain;filter:drop-shadow(0 0 1.6cqw rgba(212,182,91,.19))}
+.auth-brand strong{display:block;color:var(--gold);font-size:3.95cqw;font-weight:700;line-height:1.06;letter-spacing:.30em;padding-left:.30em;margin-top:1.1cqw;text-align:center}
+.auth-brand-rule{display:block;width:24cqw;max-width:75%;height:1px;margin-top:1cqw;background:linear-gradient(90deg,transparent 0%,rgba(212,182,91,.35) 22%,rgba(241,215,123,.78) 50%,rgba(212,182,91,.35) 78%,transparent 100%);box-shadow:0 0 .7cqw rgba(212,182,91,.15)}
+.auth-main{position:absolute;top:39%;left:0;right:0;width:100%;margin:0;text-align:center;pointer-events:auto}
+.auth-main h1{margin:0;color:var(--white);font-size:5.35cqw;font-weight:700;line-height:1.08;letter-spacing:.12em;padding-left:.12em;white-space:nowrap;text-shadow:0 3px 14px rgba(0,0,0,.7)}
+.auth-collective{margin:1.7cqw 0 0;color:var(--gold);font-size:1.69cqw;line-height:1.5;letter-spacing:.31em;padding-left:.31em;white-space:nowrap}
+.auth-discord{position:relative;display:block;width:min(55cqw,100%);height:7.5cqw;min-height:0;margin:4cqw auto 0;border:0;outline:none;background:transparent;color:var(--bright);cursor:pointer;font:700 1.7cqw "Play",system-ui,sans-serif;letter-spacing:.055em}
 .auth-discord img{position:absolute;z-index:0;display:block;width:100%;height:auto;top:50%;left:0;transform:translateY(-50%);pointer-events:none;user-select:none;transition:filter .2s}
 .auth-discord span{position:absolute;z-index:1;top:50%;left:29%;right:10%;transform:translateY(-50%);white-space:nowrap;text-align:center;text-shadow:0 1px 2px #050505}
 .auth-discord:hover img{filter:brightness(1.13)}
 .auth-discord:focus-visible{outline:2px solid var(--bright);outline-offset:4px}
 .auth-discord:disabled{cursor:progress;opacity:.75}
-.auth-note{margin:43px 0 0;font-size:clamp(13px,1.5vw,18px);letter-spacing:.11em;font-style:italic;color:#c6c9c4;line-height:1.5}
-.auth-status{margin:12px 0 0;min-height:18px;color:#efbcb4;font-size:12px;line-height:1.45}
-@media(max-height:780px) and (min-width:721px){
-.auth-frame{width:min(1200px,96vw,calc((100svh - 18px)*1.3))}
-.auth-layout{inset:12.7% 17% 12% 17%}
-.auth-brand img{width:60px;height:60px}.auth-brand strong{font-size:25px;margin-top:12px}.auth-brand-rule{margin-top:10px;width:140px}
-.auth-main{margin-top:27px}.auth-main h1{font-size:clamp(36px,4.4vw,55px)}
-.auth-collective{font-size:clamp(12px,1.5vw,17px);margin-top:9px}
-.auth-discord{width:min(650px,100%);height:82px;margin-top:29px;font-size:17px}
-.auth-note{margin-top:26px;font-size:14px}.auth-status{margin-top:8px}
-}
-@media(max-width:720px){
-body{padding:6px;overflow-y:auto;align-items:flex-start}
-body::before{filter:brightness(.42) saturate(.65)}
-.auth-frame{width:min(490px,100%);aspect-ratio:auto;min-height:680px;margin:auto;transform:none}
-.auth-interior{inset:7.6% 6.1% 7.8% 7.9%;background:linear-gradient(110deg,rgba(5,8,8,.70),rgba(5,8,8,.62) 50%,rgba(5,8,8,.68))}
-.auth-layout{inset:12.4% 13.2% 11.5% 13.2%}
-.auth-brand img{width:62px;height:62px}.auth-brand strong{font-size:25px;margin-top:10px}.auth-brand-rule{width:125px;margin-top:10px}
-.auth-main{margin-top:37px}.auth-main h1{white-space:normal;font-size:clamp(29px,7vw,42px);line-height:1.12;letter-spacing:.07em;padding-left:.07em}
-.auth-collective{font-size:clamp(9px,2.5vw,13px);letter-spacing:.17em;padding-left:.17em;white-space:normal;margin-top:12px}
-.auth-discord{width:100%;height:62px;margin-top:38px;font-size:clamp(9px,2.8vw,13px);letter-spacing:.02em}
-.auth-note{margin-top:28px;font-size:12px;letter-spacing:.04em}
-.auth-status{font-size:10px;margin-top:8px}
-}
-@media(max-width:370px){
-.auth-frame{min-height:640px}.auth-layout{inset:12.2% 12.6% 11% 12.6%}
-.auth-brand img{width:51px;height:51px}.auth-brand strong{font-size:23px}
-.auth-main{margin-top:30px}.auth-main h1{font-size:28px}.auth-collective{font-size:9px;letter-spacing:.11em}
-.auth-discord{margin-top:31px;height:55px;font-size:9px}.auth-note{font-size:11px;margin-top:23px}
-}
-@media(min-width:721px){.auth-brand{transform:translateY(-12px) scale(1.3);transform-origin:center center}.auth-brand img{transform:scale(1.25);transform-origin:center center}}
-
-/* Decorative HUD layer, kept independent of the frame artwork and login controls */
+.auth-note{margin:3cqw 0 0;font-size:1.47cqw;letter-spacing:.09em;font-style:italic;color:#c6c9c4;line-height:1.5}
+.auth-status{margin:.8cqw 0 0;min-height:1.5cqw;color:#efbcb4;font-size:1.4cqw;line-height:1.4}
+/* The four corner markers and fading dots are independent HUD effects, not baked into PNG. */
 .auth-hud{position:absolute;z-index:2;inset:13.5% 10.3% 13% 12%;pointer-events:none;overflow:hidden}
-.auth-hud::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(212,182,91,.40) .75px,transparent 1.15px);background-size:28px 28px;background-position:2px 1px;opacity:.30;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.43) 31%,transparent 50%,rgba(0,0,0,.35) 75%,rgba(0,0,0,.78) 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.43) 31%,transparent 50%,rgba(0,0,0,.35) 75%,rgba(0,0,0,.78) 100%)}
-.auth-crosshair{position:absolute;width:19px;height:19px;opacity:.68;filter:drop-shadow(0 0 2px rgba(212,182,91,.25))}
+.auth-hud::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(212,182,91,.40) .09cqw,transparent .15cqw);background-size:2.9cqw 2.9cqw;background-position:.2cqw .1cqw;opacity:.30;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.43) 31%,transparent 50%,rgba(0,0,0,.35) 75%,rgba(0,0,0,.78) 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.43) 31%,transparent 50%,rgba(0,0,0,.35) 75%,rgba(0,0,0,.78) 100%)}
+.auth-crosshair{position:absolute;width:2cqw;height:2cqw;opacity:.68;filter:drop-shadow(0 0 .25cqw rgba(212,182,91,.25))}
 .auth-crosshair::before,.auth-crosshair::after{content:"";position:absolute;background:var(--gold)}
-.auth-crosshair::before{height:1px;width:19px;top:9px;left:0}
-.auth-crosshair::after{width:1px;height:19px;left:9px;top:0}
+.auth-crosshair::before{height:1px;width:100%;top:50%;left:0}
+.auth-crosshair::after{width:1px;height:100%;left:50%;top:0}
 .auth-crosshair-tl{top:5%;left:4%}
 .auth-crosshair-tr{top:5%;right:4%}
 .auth-crosshair-bl{bottom:5%;left:4%}
 .auth-crosshair-br{bottom:5%;right:4%}
-@media(max-width:720px){.auth-hud{inset:12% 8.5% 11% 12.5%}.auth-hud::before{background-size:23px 23px;opacity:.22}.auth-crosshair{width:13px;height:13px;opacity:.55}.auth-crosshair::before{width:13px;top:6px}.auth-crosshair::after{height:13px;left:6px}.auth-crosshair-tl,.auth-crosshair-bl{left:3%}.auth-crosshair-tr,.auth-crosshair-br{right:3%}}
+/* Actual phone portrait mode: allow a taller touch-friendly treatment. This does not
+   trigger merely because desktop browser zoom makes the CSS viewport narrower. */
+@media(max-width:600px) and (orientation:portrait) and (pointer:coarse){
+ body{padding:6px;overflow-y:auto}
+ body::before{filter:brightness(.45) saturate(.68)}
+ .auth-frame{width:min(490px,98vw);aspect-ratio:auto;height:min(680px,calc(100svh - 12px));min-height:500px}
+ .auth-layout{inset:0 12% 0 18%}
+ .auth-brand{top:15%}
+ .auth-brand img{width:clamp(45px,12vw,65px);height:clamp(45px,12vw,65px)}
+ .auth-brand strong{font-size:clamp(22px,6vw,29px);margin-top:9px}
+ .auth-brand-rule{width:140px;margin-top:9px}
+ .auth-main{top:42%}
+ .auth-main h1{font-size:clamp(24px,6.7vw,36px);white-space:normal}
+ .auth-collective{font-size:clamp(9px,2.5vw,12px);margin-top:10px;white-space:normal}
+ .auth-discord{width:100%;height:54px;margin-top:28px;font-size:clamp(10px,2.8vw,13px)}
+ .auth-note{font-size:11px;margin-top:24px}
+ .auth-status{font-size:10px;margin-top:8px;min-height:15px}
+ .auth-hud::before{opacity:.2}
+}
 @media(prefers-reduced-motion:reduce){.auth-discord img{transition:none}}
 
 </style></head><body>
