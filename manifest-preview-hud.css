@@ -5,25 +5,25 @@
   Scoped to body.manifest-preview (manifest/index2.html only).
 */
 body.manifest-preview{
-  --hud-charcoal:#171d1b;
-  --hud-deep:#0c1112;
-  --hud-warm:#22231f;
+  --hud-charcoal:#121110;
+  --hud-deep:#0b0e0f;
+  --hud-warm:#141512;
   --hud-gold:#d4b65b;
   --hud-highlight:#f1d77b;
   --hud-edge:rgba(185,182,157,.115);
   --hud-quiet:rgba(231,218,171,.07);
   font-family:"Play",system-ui,sans-serif;
-  background:#090d0e;
+  background:#080c0d;
 }
 body.manifest-preview .scan{opacity:.004}
 body.manifest-preview .shell{
   background:
     radial-gradient(ellipse 80% 48% at 86% -9%,rgba(44,48,40,.14),transparent 80%),
-    linear-gradient(180deg,#0b1011 0%,#090e0f 100%);
+    linear-gradient(180deg,#0a0d0e 0%,#080d0c 100%);
 }
 /* Console sidebar: charcoal metal and restrained gold selection glow */
 body.manifest-preview .rail{
-  background:linear-gradient(180deg,#121816 0%,#0d1313 52%,#0b1112 100%)!important;
+  background:linear-gradient(180deg,#0f0f12 0%,#0c0f0f 52%,#0a0e0f 100%)!important;
   border-right:1px solid rgba(226,208,162,.12)!important;
   box-shadow:8px 0 24px rgba(0,0,0,.22)!important;
 }
@@ -75,7 +75,7 @@ body.manifest-preview .rail .nav.active::before{
 }
 body.manifest-preview .rail-bottom{border-top:1px solid rgba(230,220,187,.07)!important}
 body.manifest-preview .rail .rail-logout{
-  background:linear-gradient(145deg,#1a211f,#101616);
+  background:linear-gradient(145deg,#101312,#0d1212);
   border:1px solid rgba(210,209,183,.10);
 }
 /* Toolbar: mostly matte, accents only on functional details */
@@ -95,10 +95,10 @@ body.manifest-preview .topbar .eyebrow{
 }
 body.manifest-preview .topbar .avatar{
   border-radius:50%;border:1px solid rgba(241,215,123,.22);
-  background:#1b2221;
+  background:#101413;
 }
 body.manifest-preview .topbar .member-notice-toggle{
-  background:linear-gradient(140deg,#1d2321,#111817);
+  background:linear-gradient(140deg,#111513,#0e0f12);
   border:1px solid rgba(216,209,183,.14);
   border-radius:8px;
 }
@@ -111,7 +111,7 @@ body.manifest-preview #command .welcome-panel{
   border-radius:12px!important;
   background:
     radial-gradient(ellipse 28% 150% at -6% -48%,rgba(218,187,108,.08),transparent 90%),
-    linear-gradient(110deg,#232522 0%,#1b201e 55%,#151b1b 100%)!important;
+    linear-gradient(110deg,#151614 0%,#101312 55%,#111010 100%)!important;
   box-shadow:inset 0 1px 0 rgba(247,225,176,.07),0 6px 16px rgba(0,0,0,.16)!important;
 }
 body.manifest-preview #command .welcome-panel::before{
@@ -130,7 +130,7 @@ body.manifest-preview #command .welcome-copy strong{
 }
 body.manifest-preview #command .welcome-copy strong span:first-child{color:var(--hud-highlight)}
 body.manifest-preview #command .welcome-rank-art{
-  background:#121717;
+  background:#0f1212;
   border:1px solid rgba(207,184,125,.19)!important;
   border-radius:8px;
   box-shadow:none!important;
@@ -147,7 +147,7 @@ body.manifest-preview #command .hero{
   height:320px!important;
   border:1px solid rgba(221,201,141,.20)!important;
   border-radius:15px!important;
-  background:#0a1114!important;
+  background:#090e10!important;
   box-shadow:inset 0 1px 0 rgba(245,226,164,.10),0 11px 25px rgba(0,0,0,.26)!important;
 }
 body.manifest-preview #command .hero::after{display:none!important}
@@ -182,7 +182,7 @@ body.manifest-preview .primary{
   background:linear-gradient(120deg,#f1d77b,#dbb85f)!important;
   border:1px solid #e4c36f!important;
   border-radius:6px!important;
-  color:#0d0f0b!important;
+  color:#0c0c0a!important;
   box-shadow:inset 0 1px rgba(255,255,255,.20),0 5px 13px rgba(0,0,0,.20);
 }
 body.manifest-preview .ghost{
@@ -191,13 +191,13 @@ body.manifest-preview .ghost{
   background:rgba(11,15,15,.77)!important;
   box-shadow:none!important;
 }
-body.manifest-preview .ghost:hover{background:#222924!important}
+body.manifest-preview .ghost:hover{background:#141815!important}
 /* Deployment: shallow band, reduced dividers, text leads */
 body.manifest-preview #command .next-op-strip{
   min-height:47px;
   border-radius:9px!important;
   border:1px solid rgba(218,212,178,.105)!important;
-  background:linear-gradient(105deg,#252621,#1a201e 62%,#151c1b)!important;
+  background:linear-gradient(105deg,#161613,#101312 62%,#111110)!important;
   box-shadow:inset 0 1px rgba(255,238,189,.055)!important;
 }
 body.manifest-preview #command .next-op-strip::before{display:none!important}
@@ -221,7 +221,7 @@ body.manifest-preview #command .metrics article{
   background:
     radial-gradient(ellipse 74% 55% at 74% 112%,rgba(173,117,49,.21),transparent 87%),
     radial-gradient(ellipse 37% 38% at 0 0,rgba(232,200,126,.052),transparent 92%),
-    linear-gradient(150deg,#262724 0%,#1d211f 48%,#141a1a 100%)!important;
+    linear-gradient(150deg,#161715 0%,#111312 48%,#101010 100%)!important;
   box-shadow:
     inset 0 1px 0 rgba(251,231,180,.12),
     inset 0 -22px 26px -27px rgba(220,163,80,.24),
@@ -277,7 +277,7 @@ body.manifest-preview #command .dashboard-grid>.panel{
   background:
     radial-gradient(ellipse 85% 60% at 91% 117%,rgba(105,82,46,.15),transparent 83%),
     radial-gradient(ellipse 49% 32% at 2% -11%,rgba(239,210,134,.041),transparent 95%),
-    linear-gradient(146deg,#212521 0%,#1a211f 45%,#121919 100%)!important;
+    linear-gradient(146deg,#131613 0%,#101312 45%,#0f0f0f 100%)!important;
   box-shadow:
     inset 0 1px 0 rgba(240,222,171,.080),
     inset 0 -20px 28px -27px rgba(207,157,86,.095),
@@ -357,7 +357,7 @@ body.manifest-preview #command #readinessPanel .ring{
 }
 body.manifest-preview #command #readinessPanel .ring::after{
   inset:13px;
-  background:radial-gradient(circle at 38% 29%,#202724,#171c1b)!important;
+  background:radial-gradient(circle at 38% 29%,#131715,#121110)!important;
 }
 body.manifest-preview #command #readinessPanel .ring b{
   color:#f2f2ed!important;font:700 28px "Play",sans-serif!important;
@@ -383,7 +383,7 @@ body.manifest-preview #command .dashboard-grid>.panel:last-child{
 body.manifest-preview #command .dashboard-grid>.command-admin-panel{
   padding:0!important;
   border:1px solid rgba(216,211,177,.115)!important;
-  background:#101717!important;
+  background:#0d1212!important;
 }
 body.manifest-preview #command .command-admin-panel .command-admin-art{
   width:100%;height:100%;object-fit:cover;object-position:62% 47%;
@@ -412,7 +412,7 @@ body.manifest-preview #command .command-admin-content p:not(.eyebrow){
 }
 body.manifest-preview #command .command-admin-cta{
   background:linear-gradient(110deg,#f1d77b,#d8b45d)!important;
-  border-radius:6px!important;color:#0d100e!important;
+  border-radius:6px!important;color:#0c0d0d!important;
   font:700 11px "Play",sans-serif;
   padding:10px 14px;box-shadow:none!important;
 }
@@ -432,7 +432,7 @@ body.manifest-preview #command .v3-signal-badge{
   width:52px;height:52px;flex:0 0 52px;
   display:grid;place-items:center;
   border:1px solid rgba(225,210,165,.12);border-radius:9px;
-  background:linear-gradient(145deg,#2b2d25,#1c221f);
+  background:linear-gradient(145deg,#191a16,#111412);
   color:#eac66e;
 }
 body.manifest-preview #command .v3-signal-badge svg{
@@ -471,18 +471,18 @@ body.manifest-preview #fleet .fleet-board-roster,
 body.manifest-preview #fleet .fleet-board-side,
 body.manifest-preview #fleet .fleet-board-metrics .fleet-metric,
 body.manifest-preview #records .panel{
-  background:linear-gradient(145deg,#242722,#191f1d 65%,#131a19)!important;
+  background:linear-gradient(145deg,#151714,#0f1211 65%,#0f100f)!important;
   border:1px solid rgba(212,207,176,.13)!important;
   border-radius:10px;
   box-shadow:inset 0 1px rgba(244,225,173,.08),0 7px 20px rgba(0,0,0,.17)!important;
 }
 body.manifest-preview .mission-card:hover,
 body.manifest-preview .crew-card:hover{
-  background:linear-gradient(145deg,#292b24,#1c2420)!important;
+  background:linear-gradient(145deg,#181915,#111513)!important;
   border-color:rgba(213,190,132,.26)!important;
 }
 body.manifest-preview footer{
-  background:#0b1010;
+  background:#0a0d0d;
   border-top:1px solid rgba(227,213,175,.07);
   color:#9da69c;
 }
@@ -555,7 +555,7 @@ body.manifest-preview :is(
  position:relative;isolation:isolate;
  background:radial-gradient(ellipse 72% 58% at 77% 115%,rgba(166,116,51,.19),transparent 85%),
  radial-gradient(ellipse 39% 28% at 0 -9%,rgba(231,196,113,.055),transparent 92%),
- linear-gradient(147deg,#252822 0%,#1e2420 52%,#151b1a 100%)!important;
+ linear-gradient(147deg,#161714 0%,#121513 52%,#111010 100%)!important;
  border:1px solid rgba(217,207,173,.13)!important;
  border-radius:11px!important;
  box-shadow:inset 0 1px rgba(246,224,164,.085),inset 0 -24px 30px -30px rgba(213,154,70,.18),0 8px 19px rgba(0,0,0,.20)!important;
@@ -604,15 +604,15 @@ body.manifest-preview #operations .mission-card .mission-meta{
 /* Operations and Crew input controls */
 body.manifest-preview :is(#operations,#crew) .toolbar{margin-top:17px;margin-bottom:21px}
 body.manifest-preview :is(#operations,#crew) .toolbar input{
- background:linear-gradient(135deg,#1b201d,#101716)!important;
+ background:linear-gradient(135deg,#101311,#0d1212)!important;
  border:1px solid rgba(213,206,174,.16)!important;
  border-radius:7px!important;color:#e8ebe5!important;
 }
 body.manifest-preview :is(#operations,#crew) .seg button{
- border-color:rgba(222,211,177,.12)!important;background:#19201d;color:#b5bcb1;
+ border-color:rgba(222,211,177,.12)!important;background:#0f1311;color:#b5bcb1;
 }
 body.manifest-preview :is(#operations,#crew) .seg button.active{
- background:linear-gradient(130deg,#2d2a20,#1d201c)!important;
+ background:linear-gradient(130deg,#1a1813,#111311)!important;
  border-color:rgba(235,201,119,.33)!important;
  color:#ebcd82!important;
 }
@@ -632,13 +632,13 @@ body.manifest-preview #fleet .fleet-board-section-head,body.manifest-preview #fl
 body.manifest-preview #fleet .fleet-board-section-head h3,body.manifest-preview #fleet .fleet-board-side h3{color:#f1f0e8;font:700 18px "Play",sans-serif!important}
 body.manifest-preview #fleet .fleet-person-card{
  padding:16px!important;border-radius:8px!important;
- background:radial-gradient(ellipse at 65% 130%,rgba(156,110,49,.13),transparent 75%),linear-gradient(145deg,#1d231f,#121917)!important;
+ background:radial-gradient(ellipse at 65% 130%,rgba(156,110,49,.13),transparent 75%),linear-gradient(145deg,#111512,#0f0f12)!important;
 }
 body.manifest-preview #fleet .fleet-board-controls select,body.manifest-preview #fleet .fleet-person-fields select{
- background:#111817!important;border:1px solid rgba(214,209,179,.18)!important;border-radius:6px;
+ background:#0e0f12!important;border:1px solid rgba(214,209,179,.18)!important;border-radius:6px;
 }
 body.manifest-preview #fleet .fleet-blueprint-dropdown{
- background:#171e1c!important;border-color:rgba(221,207,174,.17)!important;
+ background:#121211!important;border-color:rgba(221,207,174,.17)!important;
 }
 /* Crew: distinct member name, warm rank badges, recessed card */
 body.manifest-preview #crew .crew-grid{gap:13px!important}
@@ -647,7 +647,7 @@ body.manifest-preview #crew .crew-card:hover{transform:translateY(-1px)}
 body.manifest-preview #crew .crew-card h3{color:#f1f2ed;font:700 17px "Play",sans-serif!important;margin:0 0 4px}
 body.manifest-preview #crew .crew-card p{color:#dfbf74;font:700 11px "Play",sans-serif!important;margin:0 0 4px}
 body.manifest-preview #crew .crew-card small{color:#b3bdb2;font-size:11px}
-body.manifest-preview #crew .crew-card .rank-img{background:#111716;border-radius:6px}
+body.manifest-preview #crew .crew-card .rank-img{background:#0e1212;border-radius:6px}
 /* Records: same physical panel treatment, gentle separators */
 body.manifest-preview #records .dashboard-grid{gap:15px!important;margin-top:18px}
 body.manifest-preview #records .panel{padding:22px 24px!important;min-height:215px}
@@ -668,14 +668,14 @@ body.manifest-preview #profile .personnel-service-stats article{
 body.manifest-preview #profile .personnel-service-stats strong{color:#f0d37d;font:700 25px "Play",sans-serif!important}
 body.manifest-preview #profile .profile-rows p{border-color:rgba(220,211,181,.075)!important}
 body.manifest-preview #profile .profile-rank-box{
- background:linear-gradient(145deg,#1d221e,#121817)!important;border-color:rgba(214,206,171,.12)!important;
+ background:linear-gradient(145deg,#111412,#0f0f12)!important;border-color:rgba(214,206,171,.12)!important;
 }
 body.manifest-preview #profile .profile-rank-box.current{
  border-color:rgba(226,192,109,.39)!important;box-shadow:inset 0 1px rgba(241,215,123,.09)!important;
 }
 body.manifest-preview #profile .profile-cert-medals{gap:11px}
 body.manifest-preview #profile .profile-cert-medals>div{
- background:linear-gradient(145deg,#1c211e,#121716);border-color:rgba(218,211,179,.08)!important;
+ background:linear-gradient(145deg,#111312,#0f1212);border-color:rgba(218,211,179,.08)!important;
 }
 /* All hero images keep the existing art; add a quiet material inset */
 body.manifest-preview #operations .operations-hero,
