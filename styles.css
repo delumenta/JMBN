@@ -780,7 +780,7 @@ button,input,select,textarea{font-size:.95em}
   inset:0!important;
   z-index:0!important;
   pointer-events:none!important;
-  background:linear-gradient(90deg,rgba(3,8,9,.52),rgba(3,8,9,.14) 55%,rgba(3,8,9,.30))!important;
+  background:linear-gradient(90deg,rgba(3,8,9,.72),rgba(3,8,9,.58) 55%,rgba(3,8,9,.68))!important;
 }
 .detail-drawer.personnel-modal #detailBody,.detail-drawer.personnel-modal>.detail-close{position:relative;z-index:1}
 
@@ -1056,4 +1056,12 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
   /* No soft edge mask: preserve the insignia at full sharpness. */
   -webkit-mask-image:none !important;
   mask-image:none !important;
+}
+
+/* Crew Profile readability: more opaque surfaces, preserving cinematic artwork and frames. */
+#detailDrawer.personnel-modal .personnel-side-panels > .personnel-service-section,
+#detailDrawer.personnel-modal .personnel-info-section,
+#detailDrawer.personnel-modal .personnel-service > .personnel-service-section:last-child{
+  background:rgba(10,14,16,.82)!important;
+  background-image:none!important;
 }
