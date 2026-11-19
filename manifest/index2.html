@@ -306,17 +306,17 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
  border-color:var(--line);
 }
 </style><link rel="stylesheet" href="manifest-preview.css?v=20261119-simple-v1">
-<link rel="stylesheet" href="manifest-preview-hud.css?v=20261119-hudframes2"></head><body class="manifest-preview">
+<link rel="stylesheet" href="manifest-preview-hud.css?v=20261119-surface-redesign3"></head><body class="manifest-preview">
 <div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
 <aside class="rail">
   <a class="brand" href="manifest/index2.html#command"><span class="sig"><img src="assets/jmbn.png" alt="JMBN"></span><span><b>JMBN</b><small>MANIFEST</small></span></a>
   <nav>
-    <button class="nav active" data-view="command"><i>⌂</i><span>Command</span></button>
-    <button class="nav" data-view="operations"><i>◇</i><span>Operations</span></button>
-    <button class="nav" data-view="fleet"><i>♜</i><span>Fleet Deployment</span></button>
-    <button class="nav" data-view="crew"><i>◉</i><span>Crew</span></button>
-    <button class="nav" data-view="records"><i>▤</i><span>Records</span></button><button class="nav" data-view="profile"><i>◎</i><span>Profile</span></button>
+    <button class="nav active" data-view="command"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3z"/></svg></i><span>Command</span></button>
+    <button class="nav" data-view="operations"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 1v5m0 12v5M1 12h5m12 0h5"/></svg></i><span>Operations</span></button>
+    <button class="nav" data-view="fleet"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 9 9 2 13l7 2 3 7 3-7 7-2-7-4z"/><path d="M12 9v9M8 13h8"/></svg></i><span>Fleet Deployment</span></button>
+    <button class="nav" data-view="crew"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M2.5 20v-2.5A4.5 4.5 0 0 1 7 13h4a4.5 4.5 0 0 1 4.5 4.5V20z"/><circle cx="17.5" cy="9.2" r="2.3"/><path d="M17 14c2.8 0 4.5 1.7 4.5 4V20h-3.8"/></svg></i><span>Crew</span></button>
+    <button class="nav" data-view="records"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5zM3 11l9 5 9-5M3 16l9 5 9-5"/></svg></i><span>Records</span></button><button class="nav" data-view="profile"><i class="v3-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2z"/></svg></i><span>Profile</span></button>
   </nav>
   <div class="rail-bottom"><button id="railLogout" class="rail-logout" type="button" title="Sign out"><i>⇥</i><span>LOGOUT</span></button><span class="pulse"></span><small>JMBN NETWORK</small><b id="net">CONNECTING</b></div>
 </aside>
@@ -349,7 +349,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
   <div class="hero">
     <img src="assets/Polaris-BG.png" alt="JMBN Polaris">
     <div class="hero-shade"></div><div class="hero-grid"></div>
-    <div class="hero-copy"><div class="live-kicker"><span class="pulse"></span> LIVE COMMAND PICTURE</div><p class="eyebrow">FLEET STATUS / LIVE MANIFEST</p><h2>READY THE CREW.</h2><p>One operational picture for missions, personnel, training and readiness.</p>
+    <div class="hero-copy"><div class="live-kicker"><span class="pulse"></span> LIVE COMMAND PICTURE</div><p class="eyebrow">FLEET STATUS / LIVE MANIFEST</p><h2>READY THE<br class="v3-hero-break">CREW.</h2><p>One operational picture for missions, personnel, training and readiness.</p>
       <div class="hero-actions"><button class="primary" data-go="operations">VIEW OPERATIONS</button><button class="ghost" data-go="crew">OPEN MANIFEST</button></div>
     </div>
     
@@ -373,7 +373,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
   <a class="command-admin-cta" href="admins.html">OPEN ADMIN CONSOLE <span aria-hidden="true">↗</span></a>
 </div>
 </section>
-    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div id="announcements" class="feed skeleton"></div></section>
+    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div class="v3-signal-layout"><div class="v3-signal-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h4l10-5v14L7 14H3z"/><path d="m7 14 2 6h3l-2.4-5M20 9c1 1.5 1 4.5 0 6"/></svg></div><div id="announcements" class="feed skeleton"></div></div></section>
   </div>
 </section>
 <section id="operations" class="view"><div class="operations-hero"><div class="section-status"><span><i class="pulse"></i> OPERATIONS NETWORK</span><span id="opCount">0 FILES</span></div><div class="view-intro"><div><p class="eyebrow">OPERATIONS DATABASE</p><h2>OPERATIONS</h2><p>Deployments, resources and mission activity at a glance.</p></div><button class="primary" id="refreshOps">REFRESH FEED</button></div></div><div class="toolbar"><input id="opSearch" placeholder="Search operation, origin, destination…"><div class="seg"><button class="active" data-opfilter="all">ALL</button><button data-opfilter="operations">OPS</button><button data-opfilter="resource">RESOURCE</button></div></div><div id="operationsGrid" class="op-status-groups"></div></section>
