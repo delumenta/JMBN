@@ -170,6 +170,67 @@ function renderPendingAccess(session,profile){
 }
 
 
+
+// Render the signed-in member's actual Discord photo; fall back only on load failure.
+// Discord avatar URLs can become stale after profile changes, so check identity metadata
+// and try an alternative Discord media host before giving up.
+async function showDiscordIdentityPhoto(host,session,linkedAvatar){
+ const user=session?.user||{};
+ const initial=host.textContent||"J";
+ const urls=[];
+ const add=url=>{
+  if(typeof url!=="string"||!url.trim())return;
+  try{
+   const parsed=new URL(url);
+   if(parsed.protocol!=="https:")return;
+   const href=parsed.href;
+   if(!urls.includes(href))urls.push(href);
+   if(parsed.hostname==="cdn.discordapp.com"&&parsed.pathname.startsWith("/avatars/")){
+    const resized=parsed.origin+parsed.pathname+"?size=128";
+    if(!urls.includes(resized))urls.push(resized);
+    const alternate="https://media.discordapp.net"+parsed.pathname+"?size=128";
+    if(!urls.includes(alternate))urls.push(alternate);
+   }
+  }catch{}
+ };
+ const identity=(user.identities||[]).find(entry=>entry.provider==="discord");
+ add(linkedAvatar);
+ add(identity?.identity_data?.avatar_url);
+ add(user.user_metadata?.avatar_url);
+ add(user.user_metadata?.picture);
+ // getSession() may contain stale user metadata; getUser() fetches the current record.
+ try{
+  const {data,error}=await sb.auth.getUser();
+  if(!error&&data?.user?.id===user.id){
+   const current=data.user;
+   const discord=(current.identities||[]).find(entry=>entry.provider==="discord");
+   add(discord?.identity_data?.avatar_url);
+   add(current.user_metadata?.avatar_url);
+   add(current.user_metadata?.picture);
+  }
+ }catch(error){console.warn("[JMBN] Could not refresh avatar metadata",error)}
+ for(const url of urls){
+  const picture=await new Promise(resolve=>{
+   const img=new Image();
+   img.alt="";
+   img.decoding="async";
+   img.referrerPolicy="no-referrer";
+   img.onload=()=>resolve(img);
+   img.onerror=()=>resolve(null);
+   img.src=url;
+  });
+  if(picture){
+   // Guard against a subsequent logout / navigation before the image returns.
+   if(!host.isConnected)return;
+   host.replaceChildren(picture);
+   host.setAttribute("aria-label","Discord profile photo");
+   return;
+  }
+ }
+ console.warn("[JMBN] Discord profile picture unavailable from stored URLs; displaying callsign initial.");
+ if(host.isConnected)host.textContent=initial;
+}
+
 async function load(){
  const {data:{session}}=await sb.auth.getSession();
  if(!session){location.replace(base()+"auth.html");return}
@@ -198,28 +259,10 @@ async function load(){
  $("#userName").textContent=name.toUpperCase();
  const identityAvatar=$("#userBtn .avatar");
  if(identityAvatar){
-  // Prefer the linked Discord avatar, then the Discord OAuth identity metadata.
   identityAvatar.textContent=name[0]?.toUpperCase()||"J";
-  const discordIdentity=(session.user.identities||[]).find(identity=>identity.provider==="discord");
-  const avatarCandidates=[
-   avatarByUser.get(uid),
-   discordIdentity?.identity_data?.avatar_url,
-   session.user.user_metadata?.avatar_url,
-   session.user.user_metadata?.picture
-  ];
-  const avatarUrl=avatarCandidates.find(value=>{
-   if(typeof value!=="string"||!value)return false;
-   try{return new URL(value).protocol==="https:"}catch{return false}
-  });
-  if(avatarUrl){
-   const photo=document.createElement("img");
-   photo.alt="";
-   photo.decoding="async";
-   photo.referrerPolicy="no-referrer";
-   photo.src=avatarUrl;
-   photo.addEventListener("error",()=>photo.remove(),{once:true});
-   identityAvatar.append(photo);
-  }
+  // Image loading is asynchronous: keep the initial only if every image source fails.
+  // Do not put the fallback letter behind a potentially transparent Discord PNG.
+  void showDiscordIdentityPhoto(identityAvatar,session,avatarByUser.get(uid));
  }
  $("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
