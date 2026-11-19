@@ -262,7 +262,31 @@ async function load(){
   identityAvatar.textContent=name[0]?.toUpperCase()||"J";
   // Image loading is asynchronous: keep the initial only if every image source fails.
   // Do not put the fallback letter behind a potentially transparent Discord PNG.
-  void showDiscordIdentityPhoto(identityAvatar,session,avatarByUser.get(uid));
+  // Use the same exact discord_links row that #profile uses.
+  // Fetch by authenticated user ID rather than relying on the roster map.
+  void (async()=>{
+   const {data: discord, error} = await sb.from("discord_links")
+     .select("avatar_url")
+     .eq("user_id",uid)
+     .maybeSingle();
+   if(error) console.warn("[JMBN] Header Discord avatar lookup",error);
+   if(!identityAvatar.isConnected)return;
+   const url=String(discord?.avatar_url||"").trim();
+   if(!url){identityAvatar.textContent=name[0]?.toUpperCase()||"J";return;}
+   const image=document.createElement("img");
+   image.alt="";
+   image.decoding="async";
+   image.onload=()=>{
+    if(!identityAvatar.isConnected)return;
+    identityAvatar.replaceChildren(image);
+    identityAvatar.setAttribute("aria-label","Discord profile photo");
+   };
+   image.onerror=()=>{
+    if(!identityAvatar.isConnected)return;
+    identityAvatar.textContent=name[0]?.toUpperCase()||"J";
+   };
+   image.src=url;
+  })();
  }
  $("#net").textContent="SECURE";
  const rankName=state.profile.rank_code||state.profile.rank_category||"CREW", rankArt=state.profile.rank_image_url||(state.profile.rank_code?img("Ranks",state.profile.rank_code+".png"):"");
