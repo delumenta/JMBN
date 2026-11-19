@@ -1053,7 +1053,7 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
   object-fit:contain;
   /* Screen blend clears the flat black image backing on the dark panel. */
   mix-blend-mode:screen;
-  /* Feather off the outer image edges where the decorative tile border lives. */
-  -webkit-mask-image:radial-gradient(ellipse closest-side at center, #000 65%, transparent 100%);
-  mask-image:radial-gradient(ellipse closest-side at center, #000 65%, transparent 100%);
+  /* No soft edge mask: preserve the insignia at full sharpness. */
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
 }
