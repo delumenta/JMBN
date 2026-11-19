@@ -1013,3 +1013,23 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
  #fleet .fleet-hero .view-intro{align-items:flex-start;flex-direction:column;gap:14px}
  #fleet .fleet-hero .view-intro h2{font-size:clamp(42px,11vw,58px)}
 }
+
+
+/* Rank insignias: show artwork without the boxed black tile (Crew + Welcome). */
+#crew .crew-card .rank-img,
+#welcomePanel .welcome-rank-art{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+}
+#crew .crew-card img.rank-img,
+#welcomePanel .welcome-rank-art img{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  object-fit:contain;
+}
