@@ -150,7 +150,32 @@ body.manifest-preview #command .hero{
   background:#090e10!important;
   box-shadow:inset 0 1px 0 rgba(245,226,164,.10),0 11px 25px rgba(0,0,0,.26)!important;
 }
-body.manifest-preview #command .hero::after{display:none!important}
+/* Polaris hero only: isolated gleams of amber light embedded in the charcoal frame.
+   Layers are transparent except at three small edge hotspots; not a glowing box outline. */
+body.manifest-preview #command .hero{
+  border:1px solid rgba(216,193,139,.17)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(246,220,150,.075),
+    0 10px 26px rgba(0,0,0,.26),
+    0 0 12px rgba(212,182,91,.035)!important;
+}
+body.manifest-preview #command .hero::before{
+  content:"";position:absolute;inset:0;z-index:4;
+  border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(ellipse 190px 21px at 18% 0%,rgba(246,208,123,.23),transparent 80%),
+    radial-gradient(ellipse 210px 24px at 78% 100%,rgba(240,188,93,.18),transparent 82%),
+    radial-gradient(ellipse 20px 96px at 100% 64%,rgba(224,175,91,.09),transparent 82%);
+}
+body.manifest-preview #command .hero::after{
+  content:"";display:block!important;position:absolute;inset:0;z-index:4;
+  border-radius:inherit;pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent,rgba(255,221,151,.55),transparent) 18% 0 / 154px 1px no-repeat,
+    linear-gradient(90deg,transparent,rgba(248,200,116,.44),transparent) 78% 100% / 173px 1px no-repeat,
+    linear-gradient(180deg,transparent,rgba(245,193,108,.19),transparent) 100% 64% / 1px 68px no-repeat;
+}
+
 body.manifest-preview #command .hero>img{
   filter:saturate(.91) contrast(1.05) brightness(.96);
 }
