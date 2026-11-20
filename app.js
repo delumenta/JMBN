@@ -243,6 +243,19 @@ async function load(){
   renderPendingAccess(session,state.profile);
   return;
  }
+ // Use the same server-side elevation check as admins.html; never expose the nav by default.
+ const adminAccessNav=$("#adminAccessNav");
+ if(adminAccessNav){
+  adminAccessNav.hidden=true;
+  try{
+   const {data:isElevated,error:elevationError}=await sb.rpc("is_elevated",{u:uid});
+   if(elevationError)console.warn("[JMBN] Admin navigation clearance check failed",elevationError);
+   adminAccessNav.hidden=!!elevationError||isElevated!==true;
+  }catch(e){
+   console.warn("[JMBN] Unable to verify Admin navigation clearance",e);
+   adminAccessNav.hidden=true;
+  }
+ }
  const [missions,crew,discordLinks,certs,ann,mySignups]=await Promise.all([
   sb.from("missions").select("*").order("start_time",{ascending:true}),
   sb.from("profiles").select("*").order("display_name",{ascending:true}),
