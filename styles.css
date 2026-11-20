@@ -1065,3 +1065,7 @@ body:has(#operations.view.active)::before,body:has(#crew.view.active)::before{di
   background:rgba(10,14,16,.82)!important;
   background-image:none!important;
 }
+
+/* Sidebar Admin Access: preserve nav styling and never reveal before clearance. */
+.rail .admin-access-nav{text-decoration:none;box-sizing:border-box}
+.rail .admin-access-nav[hidden]{display:none!important}
