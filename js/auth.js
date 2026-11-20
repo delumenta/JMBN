@@ -3,7 +3,7 @@
 // Supabase auth bootstrap for JMBN (GitHub Pages safe)
 //
 // - Handles PKCE Discord OAuth
-// - Redirects auth.html → manifest/ after login
+// - Checks profile clearance, then animates auth.html → manifest/ for members
 // - NO discord_links logic
 // ----------------------------------------------------
 
@@ -42,6 +42,43 @@ const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 window.getSupabase = () => _sb;
 
+/***** POST-AUTH ROUTE (role gate BEFORE cinematic clearance) *****/
+let jmbnLoginRouting = null;
+async function routeAfterJmbnLogin(session) {
+  if (!session || !/\/auth\.html$/i.test(location.pathname)) return;
+  if (jmbnLoginRouting) return jmbnLoginRouting;
+  jmbnLoginRouting = (async () => {
+    const { data: profile, error } = await _sb
+      .from("profiles").select("role")
+      .eq("user_id", session.user.id).maybeSingle();
+    if (error) {
+      console.error("[auth] Could not verify clearance:", error);
+      const status = document.getElementById("msg");
+      if (status) status.textContent = "Unable to verify access. Please reload and try again.";
+      jmbnLoginRouting = null;
+      return;
+    }
+    const role = String(profile?.role || "Guest").trim().toLowerCase();
+    const destination = role === "guest" ? "pending.html" : "manifest/";
+    const navigate = () => location.replace(BASE + destination);
+    // Never show ACCESS GRANTED for Guest/Access Pending accounts.
+    if (role === "guest") { navigate(); return; }
+    if (typeof window.startJmbnAuthTransition === "function") {
+      window.startJmbnAuthTransition(navigate);
+    } else {
+      navigate();
+    }
+  })().catch(error => {
+    console.error("[auth] Post-login navigation failed:", error);
+    const status = document.getElementById("msg");
+    if (status) status.textContent = "Unable to open the Command Deck. Please reload.";
+    jmbnLoginRouting = null;
+  });
+  return jmbnLoginRouting;
+}
+window.routeAfterJmbnLogin = routeAfterJmbnLogin;
+
+
 /***** PKCE HANDLER: exchange ?code=... → session *****/
 (async () => {
   try {
@@ -76,7 +113,7 @@ window.getSupabase = () => _sb;
     (location.pathname.endsWith("/auth.html") ||
       location.pathname.endsWith("auth.html"))
   ) {
-    goto("manifest/");
+    await routeAfterJmbnLogin(data.session);
   }
 })();
 
@@ -184,6 +221,7 @@ _sb.auth.onAuthStateChange((event, session) => {
     (location.pathname.endsWith("/auth.html") ||
       location.pathname.endsWith("auth.html"))
   ) {
-    goto("manifest/");
+    // Defer profile lookup out of the Supabase auth callback.
+    setTimeout(() => routeAfterJmbnLogin(session), 0);
   }
 });
