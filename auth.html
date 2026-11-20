@@ -60,6 +60,40 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 }
 @media(prefers-reduced-motion:reduce){.auth-discord img{transition:none}}
 
+
+/* JMBN post-login Command Deck clearance sequence */
+.jmbn-access-transition{--seq-gold:#e2bb61;position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;visibility:hidden;opacity:0;pointer-events:none;background:radial-gradient(ellipse 74% 60% at center,#17190f 0%,#0b0e0a 44%,#030504 100%);color:#efdeab;transition:opacity .22s ease,visibility .22s ease}
+.jmbn-access-transition.is-running{visibility:visible;opacity:1;pointer-events:all}
+.jmbn-access-transition:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(220,183,82,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(220,183,82,.025) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse at center,#000,transparent 88%)}
+.jmbn-access-transition:after{content:"";position:absolute;inset:-100% 0;opacity:.45;background:linear-gradient(transparent 48%,rgba(245,213,115,.055) 50%,transparent 52%);animation:jmbn-scan 4s linear infinite;pointer-events:none}
+.jmbn-sequence-label{position:absolute;top:clamp(18px,4vh,38px);left:clamp(18px,4vw,56px);font-size:10px;letter-spacing:.24em;color:#c5a65e}
+.jmbn-sequence-id{position:absolute;top:clamp(18px,4vh,38px);right:clamp(18px,4vw,56px);font-size:10px;letter-spacing:.15em;color:#8a7c55}
+.jmbn-sequence-wheel{position:relative;width:min(82vw,70svh,460px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;filter:drop-shadow(0 0 18px rgba(212,173,72,.13))}
+.jmbn-sequence-wheel:before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(228,190,98,.28);box-shadow:0 0 26px rgba(220,172,63,.11),inset 0 0 28px rgba(227,171,58,.08)}
+.jmbn-sequence-orbit{position:absolute;border-radius:50%;pointer-events:none}
+.jmbn-sequence-orbit.outer{inset:3%;border:3px solid transparent;border-top-color:#efc15e;border-bottom-color:rgba(211,159,56,.37);border-left-color:rgba(213,171,66,.12);box-shadow:0 -4px 18px -12px #ffe49c;animation:jmbn-orbit 4s linear infinite}
+.jmbn-sequence-orbit.mid{inset:9%;border:1px dashed rgba(224,182,74,.46);animation:jmbn-orbit 12s linear infinite reverse}
+.jmbn-sequence-orbit.inner{inset:15%;border:2px solid transparent;border-right-color:#edcd79;border-left-color:rgba(196,144,54,.40);box-shadow:inset 0 0 12px rgba(222,165,57,.07);animation:jmbn-orbit 5.5s linear infinite reverse}
+.jmbn-sequence-wheel .jmbn-axis{position:absolute;inset:0;opacity:.72;background:linear-gradient(#c79b44,#c79b44) center top/1px 17px no-repeat,linear-gradient(#c79b44,#c79b44) center bottom/1px 17px no-repeat,linear-gradient(90deg,#c79b44,#c79b44) left center/17px 1px no-repeat,linear-gradient(90deg,#c79b44,#c79b44) right center/17px 1px no-repeat}
+.jmbn-sequence-core{position:relative;z-index:1;width:80%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:clamp(7px,1.3vh,13px)}
+.jmbn-sequence-logo{width:clamp(49px,12vw,75px);height:clamp(49px,12vw,75px);object-fit:contain;filter:drop-shadow(0 0 14px rgba(238,194,89,.30))}
+.jmbn-sequence-brand{font-size:clamp(15px,3vw,23px);font-weight:700;letter-spacing:.2em;padding-left:.2em;color:#e9c56d;line-height:1}
+.jmbn-sequence-step{font-size:clamp(8px,1.7vw,11px);letter-spacing:.23em;text-transform:uppercase;color:#bcaa79;margin-top:2px}
+.jmbn-sequence-title{font-size:clamp(16px,3.5vw,26px);font-weight:700;letter-spacing:.075em;color:#f2d484;text-shadow:0 0 17px rgba(225,179,65,.27);line-height:1.15}
+.jmbn-sequence-description{font-size:clamp(10px,1.7vw,12px);color:#d2c7ad;line-height:1.35}
+.jmbn-sequence-track{height:13px;width:85%;border:1px solid rgba(230,193,91,.72);border-radius:99px;padding:2px;background:#080b08;box-shadow:0 0 12px rgba(217,177,69,.18);overflow:hidden;margin-top:6px}
+.jmbn-sequence-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#a77730,#e9bf60 58%,#fff2b1);box-shadow:0 0 12px #cba650,0 0 6px #ffe28e;position:relative}
+.jmbn-access-transition.is-running .jmbn-sequence-fill{animation:jmbn-fill 2.25s linear forwards}
+.jmbn-sequence-detail{font-size:clamp(8px,1.4vw,10px);letter-spacing:.12em;color:#bc9d58;text-transform:uppercase;line-height:1.5}
+.jmbn-access-transition[data-phase="2"] .jmbn-sequence-wheel,.jmbn-access-transition[data-phase="3"] .jmbn-sequence-wheel{filter:drop-shadow(0 0 24px rgba(226,174,66,.25))}
+.jmbn-access-transition[data-phase="3"] .jmbn-sequence-orbit.outer{border-top-color:#ffe8a1;border-right-color:#ddb359}
+.jmbn-sequence-footer{position:absolute;bottom:clamp(24px,5vh,55px);left:0;right:0;text-align:center;letter-spacing:.22em;font-size:9px;color:#937f52}
+@keyframes jmbn-orbit{to{transform:rotate(360deg)}}
+@keyframes jmbn-fill{to{width:100%}}
+@keyframes jmbn-scan{to{transform:translateY(50%)}}
+@media(max-width:520px){.jmbn-sequence-wheel{width:min(94vw,65svh,380px)}.jmbn-sequence-core{gap:7px}.jmbn-sequence-track{height:11px}.jmbn-sequence-logo{width:52px;height:52px}.jmbn-sequence-title{font-size:clamp(15px,4.5vw,23px)}}
+@media(prefers-reduced-motion:reduce){.jmbn-sequence-orbit,.jmbn-access-transition:after,.jmbn-access-transition.is-running .jmbn-sequence-fill{animation:none!important}.jmbn-access-transition.is-running .jmbn-sequence-fill{width:100%}}
+
 </style></head><body>
 <main class="auth-frame" aria-label="JMBN member access">
  <div class="auth-interior" aria-hidden="true"></div>
@@ -87,15 +121,66 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
   </section>
  </div>
 </main>
-<script src="js/auth.js?v=jmbn-auth-20261118-manifest1"></script>
+
+<!-- Animated Command Deck clearance: shown only after successful member login. -->
+<div class="jmbn-access-transition" id="jmbnAccessTransition" aria-hidden="true" data-phase="0">
+ <div class="jmbn-sequence-label">JMBN // SECURE CONNECTION</div>
+ <div class="jmbn-sequence-id">PERSONNEL ACCESS // 01</div>
+ <div class="jmbn-sequence-wheel">
+  <div class="jmbn-sequence-orbit outer" aria-hidden="true"></div>
+  <div class="jmbn-sequence-orbit mid" aria-hidden="true"></div>
+  <div class="jmbn-sequence-orbit inner" aria-hidden="true"></div>
+  <div class="jmbn-axis" aria-hidden="true"></div>
+  <div class="jmbn-sequence-core" role="status" aria-live="polite">
+   <img class="jmbn-sequence-logo" src="assets/jmbn.png" alt="">
+   <div class="jmbn-sequence-brand">JMBN</div>
+   <div class="jmbn-sequence-step" id="jmbnSeqStep">01 // AUTHENTICATION</div>
+   <div class="jmbn-sequence-title" id="jmbnSeqTitle">IDENTITY VERIFIED</div>
+   <div class="jmbn-sequence-description" id="jmbnSeqDesc">Secure credentials confirmed.</div>
+   <div class="jmbn-sequence-track" role="progressbar" aria-label="Opening JMBN Command Deck" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="jmbnSeqProgress"><div class="jmbn-sequence-fill"></div></div>
+   <div class="jmbn-sequence-detail" id="jmbnSeqDetail">PERSONNEL AUTHENTICATION COMPLETE</div>
+  </div>
+ </div>
+ <div class="jmbn-sequence-footer">THE JAMBANI COLLECTIVE // COMMAND SYSTEM</div>
+</div>
+<script>
+(function(){
+ let started=false;
+ window.startJmbnAuthTransition=function(navigate){
+  if(started)return;
+  started=true;
+  const panel=document.getElementById('jmbnAccessTransition');
+  if(!panel){navigate();return;}
+  panel.classList.add('is-running');
+  panel.setAttribute('aria-hidden','false');
+  const title=document.getElementById('jmbnSeqTitle');
+  const step=document.getElementById('jmbnSeqStep');
+  const desc=document.getElementById('jmbnSeqDesc');
+  const detail=document.getElementById('jmbnSeqDetail');
+  const progress=document.getElementById('jmbnSeqProgress');
+  const phases=[
+   {at:0,step:'01 // AUTHENTICATION',title:'IDENTITY VERIFIED',desc:'Secure credentials confirmed.',detail:'PERSONNEL AUTHENTICATION COMPLETE',pct:0},
+   {at:600,step:'02 // CLEARANCE',title:'ACCESS GRANTED',desc:'Command clearance authorized.',detail:'ESTABLISHING SECURE CONNECTION',pct:27},
+   {at:1150,step:'03 // INITIALIZATION',title:'JMBN // COMMAND DECK',desc:'Initializing personnel interface.',detail:'LOADING OPERATIONS · FLEET · MANIFEST',pct:51},
+   {at:1800,step:'04 // READY',title:'WELCOME ABOARD',desc:'Command Deck online.',detail:'ALL SYSTEMS OPERATIONAL',pct:80}
+  ];
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(i){
+   const p=phases[i];panel.dataset.phase=String(i);
+   step.textContent=p.step;title.textContent=p.title;desc.textContent=p.desc;detail.textContent=p.detail;
+   progress.setAttribute('aria-valuenow',String(p.pct));
+  }
+  show(0);
+  if(reduced){show(3);progress.setAttribute('aria-valuenow','100');setTimeout(navigate,220);return;}
+  for(let i=1;i<phases.length;i++)setTimeout(()=>show(i),phases[i].at);
+  setTimeout(()=>{progress.setAttribute('aria-valuenow','100');navigate();},2350);
+ };
+})();
+</script>
+
+<script src="js/auth.js?v=jmbn-auth-20261121-clearance1"></script>
 <script>
 const msg=document.getElementById("msg");
-(async()=>{
- try {
-  const session=await getSession();
-  if(session) location.replace(getBasePath()+"manifest/");
- } catch(error){console.error("[auth.html] Session check:",error)}
-})();
 document.getElementById("discord").addEventListener("click",async()=>{
  const btn=document.getElementById("discord");
  btn.disabled=true;
