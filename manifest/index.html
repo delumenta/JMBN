@@ -316,6 +316,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
     <button class="nav" data-view="fleet"><i>♜</i><span>Fleet Deployment</span></button>
     <button class="nav" data-view="crew"><i>◉</i><span>Crew</span></button>
     <button class="nav" data-view="records"><i>▤</i><span>Records</span></button><button class="nav" data-view="profile"><i>◎</i><span>Profile</span></button>
+    <a class="nav admin-access-nav" id="adminAccessNav" href="admins.html" hidden aria-label="Admin Access Panel"><i>▣</i><span>Admin Access Panel</span></a>
   </nav>
   <div class="rail-bottom"><button id="railLogout" class="rail-logout" type="button" title="Sign out"><i>⇥</i><span>LOGOUT</span></button><span class="pulse"></span><small>JMBN NETWORK</small><b id="net">CONNECTING</b></div>
 </aside>
@@ -362,16 +363,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
   <div class="dashboard-grid">
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">OPERATIONS BOARD</p><h3>Next deployments</h3></div><button class="text-btn" data-go="operations">ALL OPERATIONS →</button></div><div id="opPreview" class="op-list skeleton"></div></section>
     <section id="readinessPanel" class="panel readiness-panel" tabindex="0" role="button" aria-label="Open crew readiness roster"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div><span class="readiness-open">VIEW CREW →</span></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
-    <section class="panel command-admin-panel" aria-labelledby="adminConsoleTitle">
-<img class="command-admin-art" src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20Admin.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCBBZG1pbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMDY5NjU4LCJleHAiOjMzMzI2MDY5NjU4fQ.BxG9Yl2cZRzDpMuUzLH6s5O_s2a4HPX6ZvZHnsuWHWw" alt="Armoured JMBN officer at the command console" loading="lazy">
-<div class="command-admin-overlay"></div>
-<div class="command-admin-content">
-  <p class="eyebrow"><span class="command-admin-mark">▣</span> OFFICER ACCESS // COMMAND SYSTEMS</p>
-  <h3 id="adminConsoleTitle">Admin Console</h3>
-  <p>Manage personnel, rank progression and certifications.</p>
-  <a class="command-admin-cta" href="admins.html">OPEN ADMIN CONSOLE <span aria-hidden="true">↗</span></a>
-</div>
-</section>
+
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div id="announcements" class="feed skeleton"></div></section>
   </div>
 </section>
@@ -394,5 +386,5 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
 </div>
 <div id="detailBackdrop" class="detail-backdrop"></div><aside id="detailDrawer" class="detail-drawer"><button id="detailClose" class="detail-close">×</button><div id="detailBody"></div></aside><div id="toast" class="toast"></div>
 <script>function openBattleStationsHash(){if(location.hash!=='#battlestations')return;document.querySelectorAll('main > section.view').forEach(el=>el.classList.toggle('active',el.id==='battlestations'));document.querySelectorAll('.rail .nav').forEach(el=>el.classList.remove('active'));const title=document.getElementById('pageTitle');if(title)title.textContent='BATTLE STATIONS'}window.addEventListener('hashchange',openBattleStationsHash);window.addEventListener('DOMContentLoaded',openBattleStationsHash);</script>
-<script type="module" src="app.js?v=20261119-crew-heading-removed"></script>
+<script type="module" src="app.js?v=20261120-admin-sidebar-access1"></script>
 </body></html>
