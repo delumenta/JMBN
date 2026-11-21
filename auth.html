@@ -94,6 +94,87 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 @media(max-width:520px){.jmbn-sequence-wheel{width:min(94vw,65svh,380px)}.jmbn-sequence-core{gap:7px}.jmbn-sequence-track{height:11px}.jmbn-sequence-logo{width:52px;height:52px}.jmbn-sequence-title{font-size:clamp(15px,4.5vw,23px)}}
 @media(prefers-reduced-motion:reduce){.jmbn-sequence-orbit,.jmbn-access-transition:after,.jmbn-access-transition.is-running .jmbn-sequence-fill{animation:none!important}.jmbn-access-transition.is-running .jmbn-sequence-fill{width:100%}}
 
+
+/* ───── HUD grid polish: telemetry, radar compass and framing (2026-11-21) ───── */
+.jmbn-access-transition{background:radial-gradient(circle at 50% 48%,#16180e 0%,#090c08 41%,#040604 78%,#020302 100%);isolation:isolate}
+.jmbn-access-transition:before{opacity:.28;background-size:30px 30px;background-image:linear-gradient(rgba(220,175,63,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(220,175,63,.055) 1px,transparent 1px);mask-image:radial-gradient(ellipse 78% 80% at center,#000 0%,transparent 95%)}
+.jmbn-hud-grid{position:absolute;inset:10% 2%;pointer-events:none;opacity:.23;background:repeating-linear-gradient(0deg,transparent 0 39px,rgba(206,152,52,.18) 40px),repeating-linear-gradient(90deg,transparent 0 39px,rgba(206,152,52,.12) 40px);mask-image:linear-gradient(180deg,transparent,black 26%,black 75%,transparent)}
+.jmbn-hud-perspective{position:absolute;z-index:0;left:-40%;right:-40%;bottom:-18%;height:57%;transform:perspective(440px) rotateX(64deg);transform-origin:center bottom;background-image:linear-gradient(rgba(227,176,70,.26) 1px,transparent 1px),linear-gradient(90deg,rgba(227,176,70,.26) 1px,transparent 1px);background-size:45px 45px;opacity:.36;mask-image:linear-gradient(to top,#000 0%,#000 35%,transparent 90%);pointer-events:none}
+.jmbn-hud-frame{position:absolute;inset:clamp(12px,2.3vw,28px);z-index:1;pointer-events:none;border-top:1px solid rgba(208,155,51,.23);border-bottom:1px solid rgba(208,155,51,.2);border-left:1px solid rgba(208,155,51,.1);border-right:1px solid rgba(208,155,51,.1);background:linear-gradient(90deg,transparent 49.95%,rgba(224,174,70,.10) 50%,transparent 50.05%);background-size:100% 100%}
+.jmbn-corner{position:absolute;display:block;width:24px;height:24px;border-color:#dfa940;border-style:solid;filter:drop-shadow(0 0 5px rgba(232,175,49,.25))}
+.jmbn-corner-tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.jmbn-corner-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.jmbn-corner-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+.jmbn-corner-br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.jmbn-hud-header{position:absolute;z-index:3;top:clamp(30px,4vh,52px);left:clamp(33px,6.2vw,82px);right:clamp(33px,6.2vw,82px);display:flex;justify-content:space-between;align-items:center;gap:18px;padding-bottom:13px;border-bottom:1px solid rgba(205,152,50,.37);white-space:nowrap}
+.jmbn-hud-header .jmbn-sequence-label,.jmbn-hud-header .jmbn-sequence-id{position:static;font-size:clamp(8px,1.05vw,12px);letter-spacing:.20em;color:#d9b46c}
+.jmbn-hud-header-mark{font-size:13px;color:#e5ad47;letter-spacing:.13em;flex:none}
+.jmbn-hud-telemetry{position:absolute;z-index:2;display:flex;flex-direction:column;gap:2px;color:#bfa05a;border:1px solid rgba(197,142,43,.4);background:rgba(10,12,8,.62);font:clamp(8px,1vw,10px)/1.25 ui-monospace,Consolas,monospace;letter-spacing:.1em;padding:9px 12px;white-space:nowrap}
+.jmbn-hud-telemetry-left{top:clamp(108px,13.5vh,164px);left:clamp(30px,5vw,85px);clip-path:polygon(0 0,85% 0,100% 30%,100% 100%,0 100%)}
+.jmbn-hud-telemetry-right{top:clamp(108px,13.5vh,164px);right:clamp(30px,5vw,85px);text-align:right;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%,0 30%)}
+.jmbn-hud-lower-left{bottom:clamp(105px,13vh,160px);left:clamp(30px,5vw,85px)}
+.jmbn-hud-lower-right{bottom:clamp(105px,13vh,160px);right:clamp(30px,5vw,85px);text-align:right}
+.jmbn-hud-lower-right b{font-weight:inherit;color:#f7cf70}
+.jmbn-hud-pips{display:flex;gap:4px;padding-top:3px}
+.jmbn-hud-pips i{width:10px;height:10px;border:1px solid #a37831;background:#090c07}
+.jmbn-hud-pips i:nth-child(-n+4){background:#e2b14f;box-shadow:0 0 6px rgba(239,191,86,.3)}
+.jmbn-sequence-wheel{z-index:2;width:min(80vw,65svh,510px);filter:drop-shadow(0 0 19px rgba(228,181,76,.17))}
+.jmbn-sequence-wheel:before{border-color:rgba(232,189,92,.35)}
+.jmbn-sequence-orbit.outer{inset:4%;border-width:4px;border-top-color:#f2be5a;border-right-color:rgba(229,171,65,.13);border-bottom-color:rgba(211,163,69,.62);box-shadow:0 0 16px rgba(214,168,72,.16),inset 0 0 12px rgba(214,168,72,.11)}
+.jmbn-sequence-orbit.mid{inset:12%;border:2px dotted rgba(225,175,72,.58)}
+.jmbn-sequence-orbit.inner{inset:22%;border-width:3px;border-right-color:#efbf57;border-left-color:rgba(233,175,74,.46);box-shadow:0 0 15px rgba(234,185,73,.08)}
+.jmbn-hud-dial{position:absolute;inset:1%;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(246,197,97,.60) 0deg .27deg,transparent .27deg 4.5deg);mask:radial-gradient(farthest-side,transparent calc(100% - 13px),#000 calc(100% - 12px),#000 calc(100% - 11px),transparent calc(100% - 10px));opacity:.8}
+.jmbn-hud-ring-ticks{position:absolute;inset:17%;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(240,179,62,.66) 0deg .5deg,transparent .5deg 8deg);mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px),#000 calc(100% - 5px),transparent calc(100% - 4px));opacity:.55;animation:jmbn-orbit 24s linear infinite reverse}
+.jmbn-hud-bearing{position:absolute;z-index:2;transform:translate(-50%,-50%);font:clamp(8px,1.45vw,11px) ui-monospace,Consolas,monospace;color:#d1ae67;letter-spacing:.04em;text-shadow:0 0 8px #060604;white-space:nowrap}
+.bearing-n{left:50%;top:-3%}.bearing-ne{left:89%;top:10%}.bearing-e{left:104%;top:50%}.bearing-se{left:89%;top:90%}.bearing-s{left:50%;top:103%}.bearing-sw{left:11%;top:90%}.bearing-w{left:-4%;top:50%}.bearing-nw{left:11%;top:10%}
+.jmbn-hud-reticle{position:absolute;inset:29% 18%;pointer-events:none}
+.jmbn-reticle{position:absolute;width:15px;height:15px;border:1px solid rgba(237,184,76,.75);filter:drop-shadow(0 0 5px rgba(237,184,76,.3))}
+.jmbn-reticle-tl{top:0;left:0;border-right:0;border-bottom:0}.jmbn-reticle-tr{top:0;right:0;border-left:0;border-bottom:0}.jmbn-reticle-bl{bottom:0;left:0;border-right:0;border-top:0}.jmbn-reticle-br{bottom:0;right:0;border-left:0;border-top:0}
+.jmbn-sequence-core{width:78%;gap:clamp(6px,1.1vh,11px)}
+.jmbn-sequence-track{height:16px;width:94%;border:1px solid #f0ba58;background:#0c0d08;box-shadow:0 0 15px rgba(237,182,71,.26),inset 0 0 8px rgba(217,159,50,.12);padding:2px}
+.jmbn-sequence-fill{background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(255,245,183,.24) 9px 12px,transparent 12px 17px),linear-gradient(90deg,#ce8730,#efb64c 50%,#ffdc74 90%,#fff4c8);box-shadow:0 0 12px #eeba50,inset 0 0 8px rgba(255,246,172,.6)}
+.jmbn-sequence-title{color:#f3cb71;text-shadow:0 0 14px rgba(226,181,62,.38)}
+.jmbn-sequence-detail{color:#d0aa63}
+.jmbn-sequence-footer{z-index:2;left:clamp(33px,6.2vw,82px);right:clamp(33px,6.2vw,82px);bottom:clamp(40px,5vh,70px);padding:15px 5px;border-top:1px solid rgba(208,159,65,.3);border-bottom:1px solid rgba(208,159,65,.24);font-size:clamp(8px,1vw,11px);letter-spacing:.2em;color:#caa35d}
+.jmbn-access-transition[data-phase="1"] .jmbn-sequence-orbit.outer{border-top-color:#ffcf70}
+.jmbn-access-transition[data-phase="2"] .jmbn-sequence-orbit.outer{border-top-color:#ffe69a;border-left-color:rgba(239,189,87,.6)}
+.jmbn-access-transition[data-phase="3"] .jmbn-sequence-orbit.outer{border-right-color:#ffd37c;border-top-color:#ffe6ac;box-shadow:0 0 32px rgba(233,183,74,.33)}
+@media(max-width:700px){
+ .jmbn-hud-frame{inset:12px}
+ .jmbn-hud-header{top:clamp(28px,5vh,45px);left:26px;right:26px;flex-direction:column;gap:5px;padding-bottom:12px}
+ .jmbn-hud-header .jmbn-sequence-label,.jmbn-hud-header .jmbn-sequence-id{font-size:clamp(9px,2.3vw,11px);letter-spacing:.13em;text-align:center}
+ .jmbn-hud-header-mark{display:none}
+ .jmbn-hud-telemetry{font-size:8px;padding:6px 7px;letter-spacing:.03em}
+ .jmbn-hud-telemetry-left,.jmbn-hud-telemetry-right{top:clamp(111px,15vh,149px)}
+ .jmbn-hud-telemetry-left,.jmbn-hud-lower-left{left:18px}
+ .jmbn-hud-telemetry-right,.jmbn-hud-lower-right{right:18px}
+ .jmbn-hud-lower-left,.jmbn-hud-lower-right{bottom:clamp(86px,12vh,119px)}
+ .jmbn-sequence-wheel{width:min(88vw,58svh,450px)}
+ .jmbn-sequence-core{width:79%;gap:clamp(4px,1vh,9px)}
+ .jmbn-sequence-track{height:13px}
+ .jmbn-sequence-footer{left:26px;right:26px;bottom:clamp(25px,4vh,45px);font-size:clamp(7px,1.8vw,9px);letter-spacing:.12em}
+ .jmbn-hud-bearing{font-size:8px}
+ .bearing-e{left:101%}.bearing-w{left:-1%}
+}
+@media(max-width:400px){
+ .jmbn-hud-telemetry{font-size:7px}
+ .jmbn-hud-telemetry-left,.jmbn-hud-telemetry-right{top:clamp(112px,15vh,142px)}
+ .jmbn-hud-telemetry-left,.jmbn-hud-lower-left{left:16px}
+ .jmbn-hud-telemetry-right,.jmbn-hud-lower-right{right:16px}
+ .jmbn-sequence-wheel{width:min(88vw,56svh)}
+ .jmbn-sequence-brand{font-size:16px}
+ .jmbn-sequence-logo{width:48px;height:48px}
+ .jmbn-sequence-title{font-size:clamp(14px,4.4vw,18px)}
+ .jmbn-hud-pips i{width:7px;height:8px}
+}
+@media(max-height:600px){
+ .jmbn-sequence-wheel{width:min(65vw,67svh,380px)}
+ .jmbn-hud-telemetry-left,.jmbn-hud-telemetry-right,.jmbn-hud-lower-left,.jmbn-hud-lower-right{display:none}
+ .jmbn-sequence-footer{bottom:15px;padding:6px}
+ .jmbn-hud-header{top:15px;padding-bottom:6px}
+}
+@media(prefers-reduced-motion:reduce){.jmbn-hud-ring-ticks{animation:none}}
+
 </style></head><body>
 <main class="auth-frame" aria-label="JMBN member access">
  <div class="auth-interior" aria-hidden="true"></div>
@@ -124,9 +205,38 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 
 <!-- Animated Command Deck clearance: shown only after successful member login. -->
 <div class="jmbn-access-transition" id="jmbnAccessTransition" aria-hidden="true" data-phase="0">
- <div class="jmbn-sequence-label">JMBN // SECURE CONNECTION</div>
- <div class="jmbn-sequence-id">PERSONNEL ACCESS // 01</div>
+ <div class="jmbn-hud-grid" aria-hidden="true"></div>
+ <div class="jmbn-hud-perspective" aria-hidden="true"></div>
+ <div class="jmbn-hud-frame" aria-hidden="true">
+  <i class="jmbn-corner jmbn-corner-tl"></i><i class="jmbn-corner jmbn-corner-tr"></i>
+  <i class="jmbn-corner jmbn-corner-bl"></i><i class="jmbn-corner jmbn-corner-br"></i>
+ </div>
+ <header class="jmbn-hud-header">
+  <div class="jmbn-sequence-label">JMBN // SECURE CONNECTION</div>
+  <span class="jmbn-hud-header-mark" aria-hidden="true">///</span>
+  <div class="jmbn-sequence-id">PERSONNEL ACCESS // 01</div>
+ </header>
+ <div class="jmbn-hud-telemetry jmbn-hud-telemetry-left" aria-hidden="true">
+  <span>NODE&nbsp; // JMBN-AX01</span><span>LINK&nbsp; // ENCRYPTED</span><span>MODE&nbsp; // COMMAND</span>
+ </div>
+ <div class="jmbn-hud-telemetry jmbn-hud-telemetry-right" aria-hidden="true">
+  <span>SIG&nbsp; // 98%</span><span>ENC&nbsp; // AES-256</span><span>CHN&nbsp; // SECURE</span>
+ </div>
  <div class="jmbn-sequence-wheel">
+  <div class="jmbn-hud-dial" aria-hidden="true"></div>
+  <div class="jmbn-hud-ring-ticks" aria-hidden="true"></div>
+  <span class="jmbn-hud-bearing bearing-n" aria-hidden="true">000°</span>
+  <span class="jmbn-hud-bearing bearing-ne" aria-hidden="true">045°</span>
+  <span class="jmbn-hud-bearing bearing-e" aria-hidden="true">090°</span>
+  <span class="jmbn-hud-bearing bearing-se" aria-hidden="true">135°</span>
+  <span class="jmbn-hud-bearing bearing-s" aria-hidden="true">180°</span>
+  <span class="jmbn-hud-bearing bearing-sw" aria-hidden="true">225°</span>
+  <span class="jmbn-hud-bearing bearing-w" aria-hidden="true">270°</span>
+  <span class="jmbn-hud-bearing bearing-nw" aria-hidden="true">315°</span>
+  <div class="jmbn-hud-reticle" aria-hidden="true">
+    <i class="jmbn-reticle jmbn-reticle-tl"></i><i class="jmbn-reticle jmbn-reticle-tr"></i>
+    <i class="jmbn-reticle jmbn-reticle-bl"></i><i class="jmbn-reticle jmbn-reticle-br"></i>
+  </div>
   <div class="jmbn-sequence-orbit outer" aria-hidden="true"></div>
   <div class="jmbn-sequence-orbit mid" aria-hidden="true"></div>
   <div class="jmbn-sequence-orbit inner" aria-hidden="true"></div>
@@ -140,6 +250,12 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
    <div class="jmbn-sequence-track" role="progressbar" aria-label="Opening JMBN Command Deck" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="jmbnSeqProgress"><div class="jmbn-sequence-fill"></div></div>
    <div class="jmbn-sequence-detail" id="jmbnSeqDetail">PERSONNEL AUTHENTICATION COMPLETE</div>
   </div>
+ </div>
+ <div class="jmbn-hud-telemetry jmbn-hud-lower-left" aria-hidden="true">
+  <span>CLR&nbsp; // L4</span><span class="jmbn-hud-pips"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+ </div>
+ <div class="jmbn-hud-telemetry jmbn-hud-lower-right" aria-hidden="true">
+  <span>TGT&nbsp; // CMD-SYS</span><span>SEQ&nbsp; // <b id="jmbnHudPhase">01</b> OF 04</span>
  </div>
  <div class="jmbn-sequence-footer">THE JAMBANI COLLECTIVE // COMMAND SYSTEM</div>
 </div>
@@ -168,6 +284,7 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
   function show(i){
    const p=phases[i];panel.dataset.phase=String(i);
    step.textContent=p.step;title.textContent=p.title;desc.textContent=p.desc;detail.textContent=p.detail;
+   const hudPhase=document.getElementById('jmbnHudPhase');if(hudPhase)hudPhase.textContent=String(i+1).padStart(2,'0');
    progress.setAttribute('aria-valuenow',String(p.pct));
   }
   show(0);
