@@ -339,6 +339,64 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
  .rail nav .nav .jmbn-tactical-icon{width:27px;height:27px}
 }
 @media(prefers-reduced-motion:reduce){.rail .jmbn-tactical-icon{transition:none!important}}
+</style><style id="jmbn-mobile-shell-fix-20261121">
+/* Mobile: Command Deck header, persistent navigation and ticker clearance. */
+@media (max-width:700px){
+  .shell{width:100%;max-width:100%;min-width:0;margin-left:0;padding-bottom:calc(128px + env(safe-area-inset-bottom, 0px));}
+  .topbar{
+    width:100%;min-width:0;max-width:100%;height:auto;min-height:112px;
+    display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;
+    gap:9px;align-content:center;align-items:center;
+    padding:12px 16px 11px;
+  }
+  .topbar>div:first-child{min-width:0;}
+  .topbar h1{font-size:clamp(20px,5.7vw,24px)!important;line-height:1.1;letter-spacing:.055em;overflow-wrap:anywhere;}
+  .topbar .top-actions{width:100%;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .topbar .clock{display:none;}
+  .topbar .member-notice-toggle{flex:0 0 auto;min-width:0;padding:8px 10px;font-size:9px;letter-spacing:0;}
+  .topbar .member-notice-toggle span{margin-left:5px;padding:2px 6px;}
+  .topbar .identity{flex:0 1 auto;min-width:0;max-width:61%;gap:8px;padding:0;}
+  .topbar .identity .avatar{width:32px;height:32px;flex:0 0 32px;}
+  .topbar .identity>span:last-child{min-width:0;overflow:hidden;}
+  .topbar .identity b{display:block;max-width:100%;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rail{
+    position:fixed;top:auto;left:0;right:0;bottom:0;z-index:140;
+    width:100%;height:calc(72px + env(safe-area-inset-bottom, 0px));
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+    background:#080b08;border-top:1px solid #5c4929;
+    border-right:0;box-shadow:0 -5px 20px rgba(0,0,0,.5);
+  }
+  .rail nav{display:flex;flex-wrap:nowrap;align-items:stretch;justify-content:space-between;gap:0;width:100%;height:72px;min-width:0;min-height:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .rail nav::-webkit-scrollbar{display:none;}
+  .rail nav .nav{
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    flex:1 0 0;min-width:45px;max-width:none;height:72px;min-height:0;
+    padding:4px 1px;gap:3px;border-left:0;border-top:2px solid transparent;
+    text-align:center;white-space:normal;
+  }
+  .rail nav .nav.active{border-top-color:var(--gold);}
+  .rail nav .nav[hidden]{display:none!important;}
+  .rail nav .nav .jmbn-tactical-icon{width:30px;height:30px;flex:0 0 30px;}
+  .rail nav .nav>span{font-size:clamp(7px,1.75vw,9px);line-height:1.1;letter-spacing:0;white-space:normal;overflow-wrap:anywhere;}
+  /* The ticker previously occupied bottom:0 and covered the navigation. */
+  .ops-ticker{
+    position:fixed;left:0!important;right:0!important;
+    bottom:calc(72px + env(safe-area-inset-bottom, 0px))!important;
+    min-height:44px!important;height:44px;
+    padding:0 10px!important;gap:9px!important;
+    z-index:100;box-sizing:border-box;
+  }
+  .ops-ticker .ops-msg{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px!important;}
+  body{padding-bottom:0!important;}
+  .member-notice-panel{top:108px;right:12px;max-width:calc(100vw - 24px);}
+}
+@media (max-width:380px){
+  .topbar{padding:11px 12px;}
+  .topbar .member-notice-toggle{padding:7px 8px;font-size:8px;}
+  .topbar .identity{max-width:56%;}
+  .rail nav .nav{min-width:43px;}
+  .rail nav .nav .jmbn-tactical-icon{width:27px;height:27px;flex-basis:27px;}
+}
 </style></head><body class="manifest-preview">
 <div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
