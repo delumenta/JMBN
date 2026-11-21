@@ -42,7 +42,7 @@ const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 window.getSupabase = () => _sb;
 
-/***** POST-AUTH ROUTE (role gate BEFORE cinematic clearance) *****/
+/***** POST-AUTH ROUTE (Manifest owns role gate; role lookup only controls animation) *****/
 let jmbnLoginRouting = null;
 async function routeAfterJmbnLogin(session) {
   if (!session || !/\/auth\.html$/i.test(location.pathname)) return;
@@ -51,17 +51,17 @@ async function routeAfterJmbnLogin(session) {
     const { data: profile, error } = await _sb
       .from("profiles").select("role")
       .eq("user_id", session.user.id).maybeSingle();
+    // The Manifest app performs the authoritative role check and renders its
+    // own Access Pending interface for Guests. No separate pending.html exists.
+    const navigate = () => location.replace(BASE + "manifest/");
     if (error) {
-      console.error("[auth] Could not verify clearance:", error);
-      const status = document.getElementById("msg");
-      if (status) status.textContent = "Unable to verify access. Please reload and try again.";
-      jmbnLoginRouting = null;
+      console.warn("[auth] Pre-animation role lookup failed; deferring to Manifest gate:", error);
+      navigate();
       return;
     }
     const role = String(profile?.role || "Guest").trim().toLowerCase();
-    const destination = role === "guest" ? "pending.html" : "manifest/";
-    const navigate = () => location.replace(BASE + destination);
-    // Never show ACCESS GRANTED for Guest/Access Pending accounts.
+    // Guests go straight to Manifest's built-in pending UI, not the
+    // member-only ACCESS GRANTED animation.
     if (role === "guest") { navigate(); return; }
     if (typeof window.startJmbnAuthTransition === "function") {
       window.startJmbnAuthTransition(navigate);
@@ -144,8 +144,8 @@ window.requireAuth = async function requireAuth(options = {}) {
       return null;
     }
 
-    // Guest accounts may authenticate, but may only remain on pending.html.
-    // Recruit / Member / Admin continue through the normal portal.
+    // Manifest is the canonical destination for authenticated personnel.
+    // Its own role gate renders the Access Pending interface for Guests.
     const { data: profile, error } = await _sb
       .from("profiles")
       .select("role")
@@ -157,21 +157,12 @@ window.requireAuth = async function requireAuth(options = {}) {
     }
 
     const role = String(profile?.role || "Guest").trim().toLowerCase();
-    const onPending =
-      location.pathname.endsWith("/pending.html") ||
-      location.pathname.endsWith("pending.html");
-
-    if (role === "guest") {
-      if (!options.allowGuest && !onPending) {
-        goto("pending.html");
-        return null;
+    if (role === "guest" && !options.allowGuest) {
+      // Protected subpages route back to Manifest's existing Guest screen.
+      // Avoid a reload loop if this helper is called on Manifest itself.
+      if (!/\/manifest\/(?:index(?:2)?\.html)?$/i.test(location.pathname)) {
+        goto("manifest/");
       }
-      return session;
-    }
-
-    // A promoted user should not remain stuck on the pending screen.
-    if (onPending) {
-      goto("manifest/");
       return null;
     }
 
