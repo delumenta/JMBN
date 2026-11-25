@@ -30,10 +30,10 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
 #jmbn-auth-gate img { width:60px; height:60px; object-fit:contain; margin-bottom:8px; }
 #jmbn-auth-gate strong { font-size:16px; font-weight:700; letter-spacing:.17em; }
 #jmbn-auth-gate p { color:#939988; font-size:10px; letter-spacing:.11em; margin:0; line-height:1.6; }
-</style><title>JMBN // Manifest</title>
+</style><title>JMBN // Manifest — Design Preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261120-admin-sidebar-access1">
+<link rel="stylesheet" href="styles.css?v=onthego-20261009-command-bg123-v1">
 <link rel="stylesheet" href="guest-access.css?v=20261118-brand-match20" data-jmbn-guest-styles>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
@@ -305,7 +305,8 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
  background:var(--panel);
  border-color:var(--line);
 }
-</style><style id="jmbn-tactical-sidebar-icons">
+</style><link rel="stylesheet" href="manifest-preview.css?v=20261119-charcoal8">
+<link rel="stylesheet" href="manifest-preview-hud.css?v=20261119-source-glow11"><style id="jmbn-tactical-sidebar-icons">
 /* JMBN Hex Core: purpose-built, resolution-independent sidebar insignia */
 .rail nav .nav .jmbn-tactical-icon,
 .rail .rail-logout .jmbn-tactical-icon{
@@ -517,7 +518,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
 @media(prefers-reduced-motion:reduce){
   .rail,body.manifest-preview .rail{transition:none!important}
 }
-</style></head><body>
+</style></head><body class="manifest-preview">
 <div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
 <div id="jmbnMobileOverlay" class="jmbn-menu-backdrop" hidden></div>
@@ -596,22 +597,31 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
   <div class="hero">
     <img src="assets/Polaris-BG.png" alt="JMBN Polaris">
     <div class="hero-shade"></div><div class="hero-grid"></div>
-    <div class="hero-copy"><div class="live-kicker"><span class="pulse"></span> LIVE COMMAND PICTURE</div><p class="eyebrow">FLEET STATUS / LIVE MANIFEST</p><h2>READY THE CREW.</h2><p>One operational picture for missions, personnel, training and readiness.</p>
+    <div class="hero-copy"><div class="live-kicker"><span class="pulse"></span> LIVE COMMAND PICTURE</div><p class="eyebrow">FLEET STATUS / LIVE MANIFEST</p><h2>READY THE<br class="v3-hero-break">CREW.</h2><p>One operational picture for missions, personnel, training and readiness.</p>
       <div class="hero-actions"><button class="primary" data-go="operations">VIEW OPERATIONS</button><button class="ghost" data-go="crew">OPEN MANIFEST</button></div>
     </div>
     
   </div><div id="nextOpStrip" class="next-op-strip"><span class="strip-label">NEXT DEPLOYMENT</span><button id="nextOpTitle" class="next-op-title" type="button">NO DEPLOYMENT SCHEDULED</button><span id="nextOpWhen">STANDING BY</span><button id="nextOpOpen" class="strip-open">OPEN FILE →</button></div>
   <div class="metrics">
-    <article><small>PERSONNEL</small><b id="mCrew">—</b><span>registered crew</span></article>
-    <article><small>ACTIVE DUTY</small><b id="mActive">—</b><span>available personnel</span></article>
-    <article><small>UPCOMING OPS</small><b id="mOps">—</b><span>scheduled missions</span></article>
-    <article><small>CERTIFICATIONS</small><b id="mCerts">—</b><span>training catalogue</span></article>
+    <article><small><span class="v2-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 19v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 19v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>PERSONNEL</small><b id="mCrew">—</b><span>registered crew</span></article>
+    <article><small><span class="v2-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12h5l3-8 4 16 3-8h5"/></svg></span>ACTIVE DUTY</small><b id="mActive">—</b><span>available personnel</span></article>
+    <article><small><span class="v2-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2M8 18h2"/></svg></span>UPCOMING OPS</small><b id="mOps">—</b><span>scheduled missions</span></article>
+    <article><small><span class="v2-metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="m8 13-2 9 6-3 6 3-2-9M12 4.5l1.2 2.4 2.6.4-1.9 1.8.5 2.6L12 10.5l-2.4 1.2.5-2.6-1.9-1.8 2.6-.4Z"/></svg></span>CERTIFICATIONS</small><b id="mCerts">—</b><span>training catalogue</span></article>
   </div>
   <div class="dashboard-grid">
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">OPERATIONS BOARD</p><h3>Next deployments</h3></div><button class="text-btn" data-go="operations">ALL OPERATIONS →</button></div><div id="opPreview" class="op-list skeleton"></div></section>
     <section id="readinessPanel" class="panel readiness-panel" tabindex="0" role="button" aria-label="Open crew readiness roster"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div><span class="readiness-open">VIEW CREW →</span></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
-
-    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div id="announcements" class="feed skeleton"></div></section>
+    <section class="panel command-admin-panel" aria-labelledby="adminConsoleTitle">
+<img class="command-admin-art" src="https://fcegavhipeaeihxegsnw.supabase.co/storage/v1/object/sign/UI%20Pictures/Index%20Admin.png?token=eyJraWQiOiIxYjQzZmFmMi04OGUyLTQ2YTQtYjNmYi03MTE0MmQxODJlMmEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJVSSBQaWN0dXJlcy9JbmRleCBBZG1pbi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkwMDY5NjU4LCJleHAiOjMzMzI2MDY5NjU4fQ.BxG9Yl2cZRzDpMuUzLH6s5O_s2a4HPX6ZvZHnsuWHWw" alt="Armoured JMBN officer at the command console" loading="lazy">
+<div class="command-admin-overlay"></div>
+<div class="command-admin-content">
+  <p class="eyebrow"><span class="command-admin-mark">▣</span> OFFICER ACCESS // COMMAND SYSTEMS</p>
+  <h3 id="adminConsoleTitle">Admin Console</h3>
+  <p>Manage personnel, rank progression and certifications.</p>
+  <a class="command-admin-cta" href="admins.html">OPEN ADMIN CONSOLE <span aria-hidden="true">↗</span></a>
+</div>
+</section>
+    <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div class="v3-signal-layout"><div class="v3-signal-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h4l10-5v14L7 14H3z"/><path d="m7 14 2 6h3l-2.4-5M20 9c1 1.5 1 4.5 0 6"/></svg></div><div id="announcements" class="feed skeleton"></div></div></section>
   </div>
 </section>
 <section id="operations" class="view"><div class="operations-hero"><div class="section-status"><span><i class="pulse"></i> OPERATIONS NETWORK</span><span id="opCount">0 FILES</span></div><div class="view-intro"><div><p class="eyebrow">OPERATIONS DATABASE</p><h2>OPERATIONS</h2><p>Deployments, resources and mission activity at a glance.</p></div><button class="primary" id="refreshOps">REFRESH FEED</button></div></div><div class="toolbar"><input id="opSearch" placeholder="Search operation, origin, destination…"><div class="seg"><button class="active" data-opfilter="all">ALL</button><button data-opfilter="operations">OPS</button><button data-opfilter="resource">RESOURCE</button></div></div><div id="operationsGrid" class="op-status-groups"></div></section>
