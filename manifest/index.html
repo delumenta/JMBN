@@ -518,7 +518,8 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
 @media(prefers-reduced-motion:reduce){
   .rail,body.manifest-preview .rail{transition:none!important}
 }
-</style></head><body class="manifest-preview">
+</style><style>body.manifest-preview #command .dashboard-grid>#coalitionNetworkPanel{grid-column:span 5;min-width:0}@media(max-width:1100px){body.manifest-preview #command .dashboard-grid>#coalitionNetworkPanel{grid-column:span 1}}</style>
+</head><body class="manifest-preview">
 <div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
 <div id="jmbnMobileOverlay" class="jmbn-menu-backdrop" hidden></div>
@@ -613,7 +614,7 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
     <section id="readinessPanel" class="panel readiness-panel" tabindex="0" role="button" aria-label="Open crew readiness roster"><div class="panel-head"><div><p class="eyebrow">CREW STATUS</p><h3>Readiness</h3></div><span class="readiness-open">VIEW CREW →</span></div><div class="readiness"><div class="ring" id="readyRing"><span><b id="readyPct">—</b><small>ACTIVE</small></span></div><div class="legend"><p><i class="dot green"></i>Active <b id="activeCount">—</b></p><p><i class="dot red"></i>AWOL <b id="awolCount">—</b></p></div></div></section>
     
     <section class="panel span2"><div class="panel-head"><div><p class="eyebrow">SIGNAL TRAFFIC</p><h3>Announcements</h3></div></div><div class="v3-signal-layout"><div class="v3-signal-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h4l10-5v14L7 14H3z"/><path d="m7 14 2 6h3l-2.4-5M20 9c1 1.5 1 4.5 0 6"/></svg></div><div id="announcements" class="feed skeleton"></div></div></section>
-    <section class="panel alliance-network-panel" aria-labelledby="allianceNetworkTitle"><div class="panel-head"><div><p class="eyebrow">DIPLOMATIC NETWORK</p><h3 id="allianceNetworkTitle">Alliance Network</h3></div><span class="eyebrow">STANDBY</span></div><div style="display:flex;align-items:center;gap:14px;padding:8px 0"><div class="v3-signal-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3 4 6v6c0 4 4 7 8 9 4-2 8-5 8-9V6z"/><path d="m8 12 3 3 5-6"/></svg></div><div><strong>Alliance registry pending</strong><p style="margin:4px 0 0;opacity:.7;font-size:.85em">Allied organisations and personnel will appear here once the network is connected.</p></div></div></section>
+    <section class="panel coalition-network-panel" id="coalitionNetworkPanel" aria-labelledby="coalitionNetworkTitle"><div class="panel-head"><div><p class="eyebrow">DIPLOMATIC NETWORK</p><h3 id="coalitionNetworkTitle">Coalition Network</h3></div><span class="eyebrow">STANDBY</span></div><div style="display:flex;align-items:center;gap:14px;padding:8px 0"><div class="v3-signal-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3 4 6v6c0 4 4 7 8 9 4-2 8-5 8-9V6z"/><path d="m8 12 3 3 5-6"/></svg></div><div><strong>Coalition registry pending</strong><p style="margin:4px 0 0;opacity:.7;font-size:.85em">Semper Sodalis Coalition · Organisation Registry and Coalition Command Network are under development.</p></div></div></section>
 
   </div>
 </section>
