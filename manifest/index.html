@@ -519,7 +519,8 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
   .rail,body.manifest-preview .rail{transition:none!important}
 }
 </style><style>body.manifest-preview #command .dashboard-grid>#coalitionNetworkPanel{grid-column:span 5;min-width:0}@media(max-width:1100px){body.manifest-preview #command .dashboard-grid>#coalitionNetworkPanel{grid-column:span 1}}</style>
-</head><body class="manifest-preview">
+<style>.ssc-personal-fleet .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.ssc-fleet-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}.ssc-fleet-actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 13px;border-radius:5px;white-space:nowrap}.ssc-fleet-actions .ghost{color:#d8b662}.ssc-fleet-actions .ghost:hover{background:rgba(216,182,98,.09)}@media(max-width:560px){.ssc-fleet-actions{margin-left:0;width:100%}.ssc-fleet-actions button{flex:1}}</style>
+<style>.ssc-ship-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.ssc-ship-card{display:flex;flex-direction:column;gap:9px;padding:14px;border:1px solid #353b34;border-radius:8px;background:linear-gradient(145deg,#1b201a,#111612);min-width:0}.ssc-ship-card.is-available{border-color:#857044}.ssc-ship-top{display:flex;align-items:center;justify-content:space-between;gap:6px;color:#d8b662}.ssc-ship-top button{font-size:9px;padding:5px 7px}.ssc-ship-card strong{font-size:15px;overflow-wrap:anywhere}.ssc-ship-card small{color:#d8b662;overflow-wrap:anywhere}.ssc-ship-card label{display:flex;align-items:center;gap:7px;border-top:1px solid #353b34;padding-top:10px;margin-top:auto;font-size:11px;color:#a9aaa2}.ssc-ship-card input{appearance:none;width:28px;height:15px;border-radius:12px;background:#454b45;position:relative;cursor:pointer;margin:0;flex:none}.ssc-ship-card input:before{content:"";position:absolute;width:11px;height:11px;left:2px;top:2px;border-radius:50%;background:#eee}.ssc-ship-card input:checked{background:#527c5b}.ssc-ship-card input:checked:before{left:15px}.ssc-ship-count{display:block;color:#a9aaa2;margin-top:5px}@media(max-width:900px){.ssc-ship-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.ssc-ship-grid{grid-template-columns:1fr}}</style></head><body class="manifest-preview">
 <div id="jmbn-auth-gate" role="status" aria-live="polite" aria-label="Verifying personnel access"><img src="assets/jmbn.png" alt=""><strong>JMBN // SECURE ACCESS</strong><p id="jmbn-auth-gate-note">VERIFYING PERSONNEL CLEARANCE…</p></div>
 <div class="scan"></div>
 <div id="jmbnMobileOverlay" class="jmbn-menu-backdrop" hidden></div>
@@ -667,5 +668,5 @@ html.jmbn-session-pending #jmbn-auth-gate { display:flex; }
  update(false,false);
 })();
 </script>
-<script type="module" src="app.js?v=20261120-admin-sidebar-access1"></script>
+<script type="module" src="app.js?v=20261126-personal-fleet1"></script>
 </body></html>
