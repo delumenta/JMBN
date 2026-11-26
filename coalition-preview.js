@@ -611,11 +611,11 @@ setInterval(()=>{$("#clock").textContent=new Date().toLocaleTimeString("en-SG",{
 const initialView=location.hash.replace("#","")==="deployments"?"fleet":location.hash.replace("#","");
 if(["command","operations","fleet","crew","academy","records","profile"].includes(initialView)){
  showView(initialView);
- if(initialView==="profile")loadMyProfile();
+ 
 }
 let liveTimer;function liveRefresh(){clearTimeout(liveTimer);liveTimer=setTimeout(()=>load().then(()=>toast("Manifest updated")).catch(()=>{}),450)}
 sb.channel("jmbn-manifest-live").on("postgres_changes",{event:"*",schema:"public",table:"missions"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"profiles"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"announcements"},liveRefresh).on("postgres_changes",{event:"*",schema:"public",table:"mission_signups"},liveRefresh).subscribe();
-load().catch(e=>{console.error(e);if(document.documentElement.classList.contains("jmbn-session-pending")){
+load().then(()=>{if(location.hash==="#profile")return loadMyProfile();if(location.hash==="#fleet")return fleetInit()}).catch(e=>{console.error(e);if(document.documentElement.classList.contains("jmbn-session-pending")){
  const n=document.getElementById("jmbn-auth-gate-note");
  if(isMobileManifest()){
   if(n)n.textContent="We could not complete verification right now. Please wait a moment, then try again.";
